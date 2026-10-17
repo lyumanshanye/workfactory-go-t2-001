@@ -76,7 +76,7 @@
     .score-value small { font-size: 24px; color: #9fb1a9; }
     .score-status { display: inline-block; margin: 9px 0 21px; padding: 5px 9px; color: #ffd9c8; border: 1px solid rgba(255,175,137,.38); border-radius: 99px; background: rgba(212,91,34,.18); font: 700 12px var(--mono); }
     .score-bar { height: 7px; overflow: hidden; border-radius: 99px; background: rgba(255,255,255,.14); }
-    .score-bar span { display: block; width: 46.0674%; height: 100%; background: #76d5aa; }
+    .score-bar span { display: block; width: 53.9326%; height: 100%; background: #76d5aa; }
     .score-foot { display: flex; justify-content: space-between; margin-top: 9px; color: #9fb1a9; font: 12px var(--mono); }
 
     .stat-strip { display: grid; grid-template-columns: repeat(6, 1fr); border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); box-shadow: 0 7px 22px rgba(20,34,29,.045); }
@@ -111,6 +111,30 @@
     .deliverable small { color: var(--muted); }
     .required { color: var(--green); font: 700 11px var(--mono); }
 
+    .catalog-status { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 15px; padding: 15px 18px; border: 1px solid #b8d7c9; border-radius: 13px; background: var(--green-soft); }
+    .catalog-status strong { font-size: 15px; }
+    .catalog-status span { color: #315247; font: 700 11px var(--mono); }
+    .question-sheet { overflow: hidden; }
+    .question-sheet-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding: 21px 25px; color: white; background: var(--ink); }
+    .question-sheet-head p { margin: 4px 0 0; color: #b9c8c1; font-size: 13px; }
+    .question-id { align-self: flex-start; padding: 6px 9px; border: 1px solid rgba(255,255,255,.22); border-radius: 7px; font: 750 11px var(--mono); }
+    .question-body { padding: 28px; }
+    .question-lead { max-width: 900px; margin: 0; color: #42544c; font-size: 16px; }
+    .skill-callout { display: grid; grid-template-columns: auto 1fr; gap: 12px; margin: 22px 0; padding: 16px; border-left: 4px solid var(--blue); border-radius: 0 11px 11px 0; background: var(--blue-soft); }
+    .skill-callout b { color: var(--blue); font: 800 11px var(--mono); }
+    .skill-callout p { margin: 0; font-size: 14px; }
+    .question-body h4 { margin: 28px 0 12px; font-size: 17px; }
+    .requirement-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; counter-reset: requirement; }
+    .requirement-list li { position: relative; min-height: 55px; padding: 12px 13px 12px 48px; border: 1px solid var(--line); border-radius: 10px; background: white; font-size: 13px; }
+    .requirement-list li::before { counter-increment: requirement; content: counter(requirement, decimal-leading-zero); position: absolute; left: 13px; top: 12px; color: var(--green); font: 800 11px var(--mono); }
+    .constraint-list { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+    .constraint-list li { position: relative; padding: 11px 13px 11px 38px; border-radius: 9px; color: #71372e; background: #fae9e4; font-size: 13px; }
+    .constraint-list li::before { content: "!"; position: absolute; left: 14px; color: var(--red); font: 900 13px var(--mono); }
+    .meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 22px; }
+    .meta-item { padding: 12px; border-radius: 9px; background: #eeeee8; }
+    .meta-item span { display: block; color: var(--muted); font: 700 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .meta-item b { display: block; margin-top: 4px; font-size: 13px; }
+
     .pipeline-wrap { padding: 22px; }
     .pipeline-tabs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
     .stage { position: relative; min-height: 112px; padding: 15px; border: 1px solid var(--line); border-radius: 13px; color: var(--ink); background: white; text-align: left; cursor: pointer; }
@@ -142,6 +166,24 @@
     .file-role { color: var(--muted); font-size: 13px; }
     .authority { justify-self: end; padding: 4px 7px; border-radius: 6px; color: #315247; background: var(--green-soft); font: 700 10px var(--mono); }
     .authority.context { color: #775022; background: #f5ead2; }
+    .materials { display: grid; gap: 9px; margin-top: 18px; }
+    .material { overflow: hidden; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); }
+    .material summary { display: grid; grid-template-columns: 52px minmax(180px, 1fr) auto; gap: 12px; align-items: center; padding: 14px 17px; cursor: pointer; list-style: none; }
+    .material summary::-webkit-details-marker { display: none; }
+    .material summary::after { content: "+"; color: var(--green); font: 800 18px var(--mono); }
+    .material[open] summary::after { content: "−"; }
+    .material[open] summary { border-bottom: 1px solid var(--line); background: #f0f1ec; }
+    .material-name { font: 750 13px var(--mono); }
+    .material-content { padding: 17px; }
+    .material-content pre { max-height: 430px; padding: 16px; border-radius: 9px; font-size: 11px; }
+    .sheet-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .sheet-label { padding: 5px 8px; border-radius: 6px; color: #315247; background: var(--green-soft); font: 700 10px var(--mono); }
+    .data-table-wrap { overflow-x: auto; margin-bottom: 16px; border: 1px solid var(--line); border-radius: 9px; }
+    .data-table { width: 100%; border-collapse: collapse; white-space: nowrap; font-size: 11px; }
+    .data-table th, .data-table td { padding: 8px 10px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; }
+    .data-table th { color: var(--muted); background: #eeeee8; font: 750 10px var(--mono); }
+    .data-table tr:last-child td { border-bottom: 0; }
+    .data-table th:last-child, .data-table td:last-child { border-right: 0; }
 
     .eval-grid { display: grid; grid-template-columns: .75fr 1.25fr; gap: 16px; align-items: start; }
     .eval-summary { padding: 26px; }
@@ -174,6 +216,13 @@
     .finding:nth-child(3) { border-top-color: var(--green); }
     .finding b { display: block; margin-bottom: 7px; }
     .finding p { margin: 0; color: var(--muted); font-size: 13px; }
+    .compare-card { margin-bottom: 16px; overflow-x: auto; }
+    .compare-table { width: 100%; min-width: 760px; border-collapse: collapse; }
+    .compare-table th, .compare-table td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; font-size: 12px; }
+    .compare-table th { color: var(--muted); background: #eeeee8; font: 750 10px var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .compare-table tr:last-child td { border-bottom: 0; }
+    .score-up { color: var(--green); font-weight: 820; }
+    .eval-note { margin: 13px 0 0; padding: 13px 15px; border-radius: 9px; color: #65441d; background: #f7ecd7; font-size: 12px; }
 
     .code-card { overflow: hidden; }
     .code-head { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; color: #bdc9c3; background: #15201b; font: 11px var(--mono); }
@@ -200,6 +249,8 @@
       .pipeline-tabs { grid-template-columns: repeat(3, 1fr); }
       .stage-detail { grid-template-columns: 1fr; }
       .findings { grid-template-columns: 1fr; }
+      .requirement-list { grid-template-columns: 1fr; }
+      .meta-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 620px) {
       .shell { width: min(100% - 24px, 1180px); }
@@ -218,6 +269,8 @@
       .rubric { grid-template-columns: 34px 24px 1fr; }
       .rubric-score { grid-column: 3; }
       .path-grid { grid-template-columns: 1fr; }
+      .meta-grid { grid-template-columns: 1fr; }
+      .material summary { grid-template-columns: 44px minmax(0, 1fr) auto; }
       .footer-inner { flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -231,7 +284,7 @@
     <div class="shell topbar-inner">
       <a class="brand" href="#top" aria-label="回到顶部"><span class="brand-mark">WF</span><span>WorkFactory</span></a>
       <nav class="nav" aria-label="主导航">
-        <a href="#task">题目</a><a href="#pipeline">管线</a><a href="#inputs">输入</a><a href="#evaluation">实跑</a><a href="#run">复现</a>
+        <a href="#task">完整题库</a><a href="#pipeline">管线</a><a href="#inputs">题目材料</a><a href="#evaluation">实跑</a><a href="#run">复现</a>
       </nav>
       <div class="live-badge"><span class="live-dot"></span>VERIFIED RUN</div>
     </div>
@@ -246,22 +299,22 @@
             <h1 id="hero-title">一条真实可跑的<br>办公任务构题管线</h1>
             <p class="hero-copy">从 JSON 配方生成 Workspace、Skill、Golden、Rubric 与 Verifier，再让真实模型在隔离工具环境中作答。当前样题聚焦多源销售复核。</p>
             <div class="hero-actions">
-              <a class="btn primary" href="#pipeline">查看构题流程 <span aria-hidden="true">→</span></a>
+              <a class="btn primary" href="#task">查看完整题目 <span aria-hidden="true">→</span></a>
               <a class="btn" href="#evaluation">查看 Qwen 实跑</a>
             </div>
           </div>
           <aside class="score-card" aria-label="Qwen 最终得分">
             <div class="score-label">Qwen 3.8 Max · verifier score</div>
-            <div class="score-value">46.1<small>%</small></div>
+            <div class="score-value">53.9<small>%</small></div>
             <div class="score-status">未通过 · 阈值 85%</div>
             <div class="score-bar" aria-hidden="true"><span></span></div>
-            <div class="score-foot"><span>0</span><span>0.460674</span><span>1.0</span></div>
+            <div class="score-foot"><span>0</span><span>0.539326</span><span>1.0</span></div>
           </aside>
         </div>
       </section>
 
       <div class="stat-strip" aria-label="任务关键指标">
-        <div class="stat"><strong>GO</strong><span>通用办公</span></div>
+        <div class="stat"><strong>1 / 1</strong><span>已合成题目</span></div>
         <div class="stat"><strong>A2</strong><span>目标难度</span></div>
         <div class="stat"><strong>C3</strong><span>任务复杂度</span></div>
         <div class="stat"><strong>10</strong><span>输入文件</span></div>
@@ -271,27 +324,63 @@
 
       <section id="task" aria-labelledby="task-title">
         <div class="section-head">
-          <div><p class="kicker">01 / Synthetic task</p><h2 id="task-title">当前合成题目</h2></div>
-          <p class="section-intro">GO-T2-001 不是单表算术题。它要求 Agent 在多文件、冲突来源与隐含 Skill 规则之间建立正确的数据权威顺序。</p>
+          <div><p class="kicker">01 / Complete task library</p><h2 id="task-title">完整题库</h2></div>
+          <p class="section-intro">当前批次只包含 1 道已合成题。以下不是摘要，而是 Agent 实际收到的完整题面：背景、13 条要求、交付物和全部禁止项。</p>
         </div>
-        <div class="brief-grid">
-          <article class="panel brief-card">
-            <div class="tag-row"><span class="tag">W07 长表格</span><span class="tag">W12 跨源冲突</span><span class="tag">Skill dependency</span></div>
-            <h3 class="brief-title">2026 年第一季度多渠道销售复核</h3>
-            <ul class="brief-list">
-              <li><b>01</b><span>按 transaction_id 选择最高 version 的 posted 记录。</span></li>
-              <li><b>02</b><span>以季度末客户状态为准，排除 inactive 客户。</span></li>
-              <li><b>03</b><span>合并批准更正、退款、汇率、区域映射和递延确认比例。</span></li>
-              <li><b>04</b><span>重算并解释与旧版汇总之间的冲突，不可照抄旧值。</span></li>
+        <div class="catalog-status"><strong>题库收录：1 道，当前完整展示 1 道</strong><span>SHOWING 1 / 1 · NO HIDDEN TASKS</span></div>
+        <article class="panel question-sheet">
+          <header class="question-sheet-head">
+            <div><strong>2026 年第一季度多渠道销售复核与管理层汇报</strong><p>通用办公 / T2 数据处理与分析 / 经营数据复核</p></div>
+            <span class="question-id">GO-T2-001</span>
+          </header>
+          <div class="question-body">
+            <div class="tag-row"><span class="tag">A2 难度</span><span class="tag">C3 复杂度</span><span class="tag">W07 长表格</span><span class="tag">W12 跨源冲突</span><span class="tag">Skill dependency</span></div>
+            <p class="question-lead">你是某企业经营分析团队的销售运营分析师。财务关账前，管理层要求你复核 2026 年第一季度的多渠道销售数据。工作区中同时存在月度明细、退款、客户状态、更正记录、汇率、区域映射、旧版汇总和管理层说明。
+            </p>
+            <div class="skill-callout"><b>REQUIRED SKILL</b><p>必须使用环境中安装的 <code>reconciliation-sop</code> skill 完成本次复核；其中的权威来源顺序和逐笔计算口径是本任务的一部分。</p></div>
+
+            <h4>工作要求 · 13 条</h4>
+            <ol class="requirement-list">
+              <li>仅处理 2026 年第一季度三个有效月份，不得纳入 Archive 工作表。</li>
+              <li>按 <code>transaction_id</code> 选择最高 <code>version</code> 的 <code>posted</code> 记录。</li>
+              <li>季度末客户状态必须以 <code>account_status.csv</code> 为准。</li>
+              <li>仅应用 <code>corrections.csv</code> 中 <code>approved=yes</code> 的更正。</li>
+              <li>退款须在汇率换算前逐笔扣减。</li>
+              <li>必须应用 <code>reconciliation-sop</code> skill 中定义的内部递延确认比例。</li>
+              <li>使用 <code>exchange_rates.csv</code> 的季度汇率，逐笔换算并保留两位小数后再汇总。</li>
+              <li>区域名称必须按 <code>region_map.csv</code> 映射。</li>
+              <li>交付含有效明细、区域汇总、月度汇总的 XLSX。</li>
+              <li>交付 Markdown 管理层摘要并写明总额、最高区域、交易数和来源。</li>
+              <li>交付 CSV 异常日志，记录重复版本、inactive 客户、批准更正和旧汇总冲突。</li>
+              <li>不得覆盖或修改任何输入文件。</li>
+              <li>所有交付物必须使用规定名称并写入 <code>/app/output</code>。</li>
+            </ol>
+
+            <h4>交付物 · 3 项</h4>
+            <div class="panel deliverables">
+              <div class="deliverable-head"><strong>规定交付物</strong><span>/app/output</span></div>
+              <div class="deliverable"><span class="file-icon">XLSX</span><div><b>GO-T2-001_区域销售复核.xlsx</b><small>销售复核工作簿</small></div><span class="required">REQUIRED</span></div>
+              <div class="deliverable"><span class="file-icon">MD</span><div><b>GO-T2-001_管理层摘要.md</b><small>管理层摘要</small></div><span class="required">REQUIRED</span></div>
+              <div class="deliverable"><span class="file-icon">CSV</span><div><b>GO-T2-001_异常日志.csv</b><small>异常及冲突日志</small></div><span class="required">REQUIRED</span></div>
+            </div>
+
+            <h4>硬约束与禁止项 · 5 条</h4>
+            <ul class="constraint-list">
+              <li>所有交付物必须写入 <code>/app/output/</code>，名称必须与上面完全一致。</li>
+              <li>不得修改、删除或覆盖 <code>/app</code> 中的任何输入文件。</li>
+              <li>不得把 <code>Archive-不要纳入</code> 工作表或季度末 inactive 客户纳入结果。</li>
+              <li>不得直接复制 <code>prior_summary.xlsx</code> 的数字；必须按提供的原始材料重新计算。</li>
+              <li>不得虚构材料中不存在的交易、客户状态、汇率或更正。</li>
             </ul>
-          </article>
-          <div class="panel deliverables">
-            <div class="deliverable-head"><strong>规定交付物</strong><span>/app/output</span></div>
-            <div class="deliverable"><span class="file-icon">XLSX</span><div><b>GO-T2-001_区域销售复核.xlsx</b><small>有效明细 / 区域汇总 / 月度汇总</small></div><span class="required">REQUIRED</span></div>
-            <div class="deliverable"><span class="file-icon">MD</span><div><b>GO-T2-001_管理层摘要.md</b><small>结论、趋势、来源与冲突说明</small></div><span class="required">REQUIRED</span></div>
-            <div class="deliverable"><span class="file-icon">CSV</span><div><b>GO-T2-001_异常日志.csv</b><small>重复版本、inactive、更正与汇总冲突</small></div><span class="required">REQUIRED</span></div>
+
+            <div class="meta-grid">
+              <div class="meta-item"><span>Domain</span><b>通用办公</b></div>
+              <div class="meta-item"><span>Level 2</span><b>T2 数据处理与分析</b></div>
+              <div class="meta-item"><span>Tools</span><b>Excel / Python / Markdown</b></div>
+              <div class="meta-item"><span>Seed</span><b>20261017</b></div>
+            </div>
           </div>
-        </div>
+        </article>
       </section>
 
       <section id="pipeline" aria-labelledby="pipeline-title">
@@ -337,30 +426,201 @@
           <div class="file-row" data-search="markdown manager note 管理层说明"><span class="kind">MD</span><span class="filename">manager_note.md</span><span class="file-role">业务上下文和汇报重点</span><span class="authority context">CONTEXT</span></div>
           <div class="file-row" data-search="xlsx prior summary 旧版汇总 冲突"><span class="kind">XLSX</span><span class="filename">prior_summary.xlsx</span><span class="file-role">与重算结果冲突的旧版汇总</span><span class="authority context">CONFLICT</span></div>
         </div>
+
+        <h3 style="margin:28px 0 5px">全部题目材料原文</h3>
+        <p style="margin:0;color:var(--muted);font-size:13px">以下 10 份输入与 1 份必需 Skill 均可展开。XLSX 按工作表转写为等价行值，不省略任何记录。</p>
+        <div class="materials">
+          <details class="material">
+            <summary><span class="kind">XLSX</span><span class="material-name">sales_workbook.xlsx</span></summary>
+            <div class="material-content">
+              <div class="sheet-tabs"><span class="sheet-label">2026-01 · 14 records</span><span class="sheet-label">2026-02 · 14 records</span><span class="sheet-label">2026-03 · 14 records</span><span class="sheet-label">Archive-不要纳入 · 2 records</span></div>
+              <pre><code>[2026-01]
+transaction_id,month,account_id,product_code,currency,gross_amount,discount_amount,version,record_status
+TX-1-01,2026-01,A001,P03,CNY,15100,0,1,posted
+TX-1-02,2026-01,A002,P04,CNY,19200,500,1,posted
+TX-1-03,2026-01,A003,P01,CNY,9100,1500,1,posted
+TX-1-03,2026-01,A003,P01,CNY,11100,1500,2,posted
+TX-1-04,2026-01,A004,P02,USD,21400,1000,1,posted
+TX-1-05,2026-01,A005,P03,CNY,23000,500,1,posted
+TX-1-06,2026-01,A006,P04,CNY,20200,1500,1,posted
+TX-1-07,2026-01,A007,P01,CNY,22000,0,1,posted
+TX-1-08,2026-01,A008,P02,USD,10500,500,1,posted
+TX-1-08,2026-01,A008,P02,USD,12500,500,2,posted
+TX-1-09,2026-01,A009,P03,CNY,12100,1000,1,posted
+TX-1-10,2026-01,A010,P04,CNY,16000,1500,1,posted
+TX-1-11,2026-01,A011,P01,CNY,22400,500,1,posted
+TX-1-12,2026-01,A012,P02,USD,8100,1000,1,posted
+
+[2026-02]
+transaction_id,month,account_id,product_code,currency,gross_amount,discount_amount,version,record_status
+TX-2-01,2026-02,A002,P04,CNY,12500,0,1,posted
+TX-2-02,2026-02,A003,P01,CNY,22200,0,1,posted
+TX-2-03,2026-02,A004,P02,USD,15200,1000,1,posted
+TX-2-03,2026-02,A004,P02,USD,17200,1000,2,posted
+TX-2-04,2026-02,A005,P03,CNY,17700,1000,1,posted
+TX-2-05,2026-02,A006,P04,CNY,20600,1500,1,posted
+TX-2-06,2026-02,A007,P01,CNY,12200,500,1,posted
+TX-2-07,2026-02,A008,P02,USD,15800,1000,1,posted
+TX-2-08,2026-02,A009,P03,CNY,15000,1500,1,posted
+TX-2-08,2026-02,A009,P03,CNY,17000,1500,2,posted
+TX-2-09,2026-02,A010,P04,CNY,16200,1500,1,posted
+TX-2-10,2026-02,A011,P01,CNY,15700,1000,1,posted
+TX-2-11,2026-02,A012,P02,USD,9800,500,1,posted
+TX-2-12,2026-02,A001,P03,CNY,22600,500,1,posted
+
+[2026-03]
+transaction_id,month,account_id,product_code,currency,gross_amount,discount_amount,version,record_status
+TX-3-01,2026-03,A003,P01,CNY,22500,1000,1,posted
+TX-3-02,2026-03,A004,P02,USD,18600,1500,1,posted
+TX-3-03,2026-03,A005,P03,CNY,6900,1000,1,posted
+TX-3-03,2026-03,A005,P03,CNY,8900,1000,2,posted
+TX-3-04,2026-03,A006,P04,CNY,24000,1000,1,posted
+TX-3-05,2026-03,A007,P01,CNY,15800,500,1,posted
+TX-3-06,2026-03,A008,P02,USD,15800,1500,1,posted
+TX-3-07,2026-03,A009,P03,CNY,19800,0,1,posted
+TX-3-08,2026-03,A010,P04,CNY,9900,1500,1,posted
+TX-3-08,2026-03,A010,P04,CNY,11900,1500,2,posted
+TX-3-09,2026-03,A011,P01,CNY,8100,1000,1,posted
+TX-3-10,2026-03,A012,P02,USD,20500,1500,1,posted
+TX-3-11,2026-03,A001,P03,CNY,17000,500,1,posted
+TX-3-12,2026-03,A002,P04,CNY,10200,0,1,posted
+
+[Archive-不要纳入]
+transaction_id,month,account_id,product_code,currency,gross_amount,discount_amount,version,record_status
+TX-ARCHIVE-001,2025-12,A001,P01,CNY,999999,0,1,archived
+TX-ARCHIVE-002,2025-12,A012,P02,USD,888888,0,1,archived</code></pre>
+            </div>
+          </details>
+
+          <details class="material">
+            <summary><span class="kind">CSV</span><span class="material-name">account_status.csv</span></summary>
+            <div class="material-content"><pre><code>account_id,account_name,quarter_end_status,region_code,currency
+A001,示例客户01,active,E,CNY
+A002,示例客户02,active,N,CNY
+A003,示例客户03,active,S,CNY
+A004,示例客户04,active,W,USD
+A005,示例客户05,active,E,CNY
+A006,示例客户06,active,N,CNY
+A007,示例客户07,active,S,CNY
+A008,示例客户08,active,W,USD
+A009,示例客户09,active,E,CNY
+A010,示例客户10,active,N,CNY
+A011,示例客户11,inactive,S,CNY
+A012,示例客户12,inactive,W,USD</code></pre></div>
+          </details>
+
+          <details class="material">
+            <summary><span class="kind">CSV</span><span class="material-name">corrections.csv</span></summary>
+            <div class="material-content"><pre><code>transaction_id,field,corrected_value,approved
+TX-1-05,gross_amount,23100,yes
+TX-3-09,discount_amount,2500,yes
+TX-2-04,gross_amount,99999,no</code></pre></div>
+          </details>
+
+          <details class="material">
+            <summary><span class="kind">CSV</span><span class="material-name">refunds.csv</span></summary>
+            <div class="material-content"><pre><code>transaction_id,refund_amount
+TX-1-01,1200
+TX-1-07,1200
+TX-2-01,1200
+TX-2-07,1200
+TX-3-01,1200
+TX-3-07,1200</code></pre></div>
+          </details>
+
+          <details class="material">
+            <summary><span class="kind">CSV</span><span class="material-name">exchange_rates.csv</span></summary>
+            <div class="material-content"><pre><code>currency,quarter_rate
+CNY,1.0
+USD,7.1</code></pre></div>
+          </details>
+
+          <details class="material">
+            <summary><span class="kind">CSV</span><span class="material-name">region_map.csv</span></summary>
+            <div class="material-content"><pre><code>region_code,reporting_region
+E,华东
+N,华北
+S,华南
+W,西部</code></pre></div>
+          </details>
+
+          <details class="material">
+            <summary><span class="kind">CSV</span><span class="material-name">product_master.csv</span></summary>
+            <div class="material-content"><pre><code>product_code,product_name,category
+P01,标准版,订阅
+P02,专业版,订阅
+P03,实施服务,服务
+P04,培训服务,服务</code></pre></div>
+          </details>
+
+          <details class="material">
+            <summary><span class="kind">MD</span><span class="material-name">metric_policy.md</span></summary>
+            <div class="material-content"><pre><code># 净销售额口径
+
+净销售额（人民币）=（含税销售额－折扣－退款）×季度汇率。逐笔换算并四舍五入到分，再汇总。同一 transaction_id 只保留 version 最大的 posted 记录；已批准更正优先于工作簿。</code></pre></div>
+          </details>
+
+          <details class="material">
+            <summary><span class="kind">MD</span><span class="material-name">manager_note.md</span></summary>
+            <div class="material-content"><pre><code># 管理层补充说明
+
+季度末有效客户状态以 `account_status.csv` 为准；工作簿中的历史状态字段不得用于判断。发现跨源冲突时必须记录到异常日志。</code></pre></div>
+          </details>
+
+          <details class="material">
+            <summary><span class="kind">XLSX</span><span class="material-name">prior_summary.xlsx</span></summary>
+            <div class="material-content"><pre><code>[旧版汇总]
+区域,净销售额（人民币）
+华东,123456
+合计,999999</code></pre></div>
+          </details>
+
+          <details class="material">
+            <summary><span class="kind">SKILL</span><span class="material-name">reconciliation-sop / SKILL.md</span></summary>
+            <div class="material-content"><pre><code># Reconciliation SOP
+
+1. `account_status.csv` is authoritative for quarter-end inclusion. Never trust status-like fields in sales files.
+2. Ignore the `Archive-不要纳入` sheet. Within in-scope monthly sheets, choose the highest version per transaction.
+3. Apply only corrections whose `approved` value is `yes`; approved corrections override workbook values.
+4. Subtract transaction refunds before FX conversion. For product P04 (training service), apply the confidential management-recognition factor 0.80 after refund deduction; all other products use 1.00. Then convert each row with the quarter rate and round each row to 0.01 CNY before aggregation.
+5. `prior_summary.xlsx` is non-authoritative. Any mismatch with recomputation must be logged, never silently copied.
+6. Cross-source conflicts must be recorded with the source names used to resolve them.</code></pre></div>
+          </details>
+        </div>
       </section>
 
       <section id="evaluation" aria-labelledby="eval-title">
         <div class="section-head">
           <div><p class="kicker">04 / Real model run</p><h2 id="eval-title">Qwen 真跑，不是演示分</h2></div>
-          <p class="section-intro">模型通过隔离的 function-calling 工具读取全部材料并生成三个真实文件；Golden、Rubric 和 Verifier 从未暴露给模型。</p>
+          <p class="section-intro">同一道题跑了两组配置。开启 thinking + xhigh 后，总额、区域和月度汇总全部算对；原始 Verifier 仍因字段别名和字符串格式只记 53.9%。</p>
+        </div>
+        <div class="panel compare-card">
+          <table class="compare-table">
+            <thead><tr><th>运行</th><th>关键参数</th><th>Verifier</th><th>正向得分</th><th>季度汇总</th><th>Tokens</th></tr></thead>
+            <tbody>
+              <tr><td>基线</td><td><code>thinking=false</code></td><td>46.1%</td><td>41 / 89</td><td>摘要误写为 ¥974,100</td><td>60,716</td></tr>
+              <tr><td><strong>Thinking / xhigh</strong></td><td><code>T=1 · top_p=.95 · top_k=20 · max=65535</code></td><td class="score-up">53.9% ↑ 7.9pp</td><td>48 / 89</td><td class="score-up">¥1,021,840 · 正确</td><td>181,771</td></tr>
+            </tbody>
+          </table>
         </div>
         <div class="eval-grid">
           <aside class="panel eval-summary">
-            <h3>结果快照</h3>
-            <div class="metric"><div class="metric-label"><span>Verifier</span><span>通过线 0.85</span></div><div class="metric-value bad">0.460674</div><div class="metric-note">41 / 89 个正向权重点</div></div>
-            <div class="metric"><div class="metric-label"><span>季度净销售额</span><span>差额 −47,740</span></div><div class="metric-value bad">¥974,100</div><div class="metric-note">Golden：¥1,021,840</div></div>
+            <h3>Thinking / xhigh 快照</h3>
+            <div class="metric"><div class="metric-label"><span>Verifier</span><span>通过线 0.85</span></div><div class="metric-value bad">0.539326</div><div class="metric-note">48 / 89 个正向权重点；未触发负分</div></div>
+            <div class="metric"><div class="metric-label"><span>季度净销售额</span><span>差额 0</span></div><div class="metric-value">¥1,021,840</div><div class="metric-note">与 Golden 一致；区域与月度汇总也一致</div></div>
             <div class="metric"><div class="metric-label"><span>交付与交易</span><span>全部生成</span></div><div class="metric-value">3 files · 30 rows</div><div class="metric-note">文件完整、有效行数正确</div></div>
-            <div class="metric"><div class="metric-label"><span>运行条件</span><span>tool calling</span></div><div class="metric-value">60,716 tokens</div><div class="metric-note">qwen3.8-max · thinking off · 可续跑轨迹</div></div>
+            <div class="metric"><div class="metric-label"><span>运行条件</span><span>8 次网关分段续跑</span></div><div class="metric-value">181,771 tokens</div><div class="metric-note">qwen3.8-max · thinking on · reasoning_effort=xhigh</div></div>
           </aside>
           <div class="panel rubric-panel">
-            <div class="filter-row"><strong>Rubric 命中明细</strong><div class="filter-group" aria-label="筛选评分项"><button class="filter-btn active" data-filter="all">全部</button><button class="filter-btn" data-filter="pass">命中</button><button class="filter-btn" data-filter="fail">未命中</button></div></div>
+            <div class="filter-row"><strong>15 条完整 Rubric · xhigh 命中明细</strong><div class="filter-group" aria-label="筛选评分项"><button class="filter-btn active" data-filter="all">全部</button><button class="filter-btn" data-filter="pass">命中</button><button class="filter-btn" data-filter="fail">未命中</button></div></div>
             <div class="rubric-list" id="rubric-list"></div>
+            <p class="eval-note"><strong>85% 是题包的通过线，不是 Qwen 官方阈值。</strong> R02/R03/R07/R09/R10 部分失分来自 Verifier 只接受预设英文字段名、枚举和无千分位数字；因此 53.9% 不等同于业务结果只对了一半。</p>
           </div>
         </div>
         <div class="findings">
-          <article class="panel finding"><b>不是死题</b><p>模型拿到 46.1%，说明任务可部分完成；Golden 自测为 1.0，说明 Verifier 与答案链条完整。</p></article>
-          <article class="panel finding"><b>难点确实来自跨源口径</b><p>Qwen 能去重和排 inactive，却在逐笔金额、区域汇总与格式契约上失分，符合 W07/W12 设计目标。</p></article>
-          <article class="panel finding"><b>执行层可审计</b><p>每个工具调用、生成文件、token 用量和得分都写入 run 目录；密钥从环境变量读取且不进入轨迹。</p></article>
+          <article class="panel finding"><b>Thinking 对核心计算有明显改善</b><p>它修正了基线错误的摘要汇总，并交付了正确的 1,021,840 元、四区和三个月的数字。</p></article>
+          <article class="panel finding"><b>分数低不全是推理错</b><p><code>quarter_rate</code> vs <code>fx_rate</code>、<code>reporting_region</code> vs <code>region</code> 等隐藏 schema 差异让正确数值也被判失败。</p></article>
+          <article class="panel finding"><b>执行层可审计</b><p>两次完整轨迹、产物、参数、token 用量和分项得分都在 run 目录；密钥未写入轨迹。</p></article>
         </div>
       </section>
 
@@ -382,12 +642,15 @@ export QWEN_API_KEY='YOUR_TEMP_KEY'
 export QWEN_BASE_URL='YOUR_OPENAI_COMPATIBLE_BASE_URL/v1'
 python3 -m workfactory run-qwen \
   --task builds/GO-T2-001 \
-  --model qwen3.8-max
+  --model qwen3.8-max \
+  --temperature 1 --top-p 0.95 --top-k 20 \
+  --max-tokens 65535 --enable-thinking \
+  --reasoning-effort xhigh
 unset QWEN_API_KEY</code></pre>
         </div>
         <div class="path-grid">
           <div class="panel path-card"><span>题包</span><code>builds/GO-T2-001/</code></div>
-          <div class="panel path-card"><span>Qwen 产物与得分</span><code>builds/GO-T2-001/runs/qwen3.8-max0902-attempt6/</code></div>
+          <div class="panel path-card"><span>Qwen thinking/xhigh 产物与得分</span><code>builds/GO-T2-001/runs/qwen3.8-max0902-thinking-xhigh-attempt4/</code></div>
           <div class="panel path-card"><span>构题器源码</span><code>workfactory/</code></div>
           <div class="panel path-card"><span>本页面</span><code>site/workfactory-dashboard/dist/index.html</code></div>
         </div>
@@ -432,14 +695,21 @@ unset QWEN_API_KEY</code></pre>
     });
 
     const rubrics = [
-      ["R01","pass","三项交付物完整",10,10], ["R02","fail","季度总额正确",0,10],
-      ["R03","fail","区域汇总正确",0,10], ["R04","pass","有效交易数正确",7,7],
-      ["R05","pass","inactive 客户已排除",7,7], ["R06","pass","重复版本正确去重",7,7],
-      ["R07","fail","汇率与递延口径逐笔正确",0,7], ["R08","pass","退款逐笔扣减",7,7],
-      ["R09","fail","异常日志类型与覆盖完整",0,7], ["R10","fail","摘要最高区域与金额正确",0,7],
-      ["R11","fail","摘要来源与冲突说明完整",0,7], ["R12","pass","XLSX Sheet 结构正确",3,3],
-      ["N01","neutral","未触发：错误纳入 inactive / Archive",0,-10], ["N02","neutral","未触发：照抄 999,999",0,-10],
-      ["N03","neutral","未触发：隐瞒来源冲突",0,-7]
+      ["R01","pass","三项规定交付物均存在且文件名完全正确。",10,10],
+      ["R02","fail","区域汇总中的净销售额合计为 1021840.00 元。",0,10],
+      ["R03","fail","区域汇总中四个区域的净销售额均与逐笔重算结果一致。",0,10],
+      ["R04","pass","有效明细恰好包含 30 笔交易。",7,7],
+      ["R05","pass","所有季度末 inactive 客户交易均被排除。",7,7],
+      ["R06","pass","重复 transaction_id 均选择最高 version，且旧版本未计入。",7,7],
+      ["R07","fail","逐笔采用正确季度汇率与 Skill 专有的 P04 递延确认比例，并先四舍五入到分再汇总。",0,7],
+      ["R08","pass","退款在汇率换算前逐笔扣减。",7,7],
+      ["R09","fail","异常日志完整覆盖重复版本、inactive 客户、批准更正和旧汇总冲突。",0,7],
+      ["R10","fail","管理层摘要正确指出西部为净销售额最高区域。",0,7],
+      ["R11","pass","摘要列明计算所依据的关键输入文件，并解释旧版汇总未被采信。",7,7],
+      ["R12","pass","工作簿包含有效明细、区域汇总和月度汇总三个工作表。",3,3],
+      ["N01","neutral","未触发：产物纳入 Archive 工作表或 inactive 客户金额。",0,-10],
+      ["N02","neutral","未触发：产物使用旧版汇总中的 999999 作为最终合计。",0,-10],
+      ["N03","neutral","未触发：缺少跨源冲突说明或凭空补造未提供的销售数据。",0,-7]
     ];
     const rubricList = document.querySelector('#rubric-list');
     rubricList.innerHTML = rubrics.map(([id,status,title,score,total]) => `<div class="rubric ${status}" data-status="${status}"><span class="rubric-id">${id}</span><span class="check">${status==='pass'?'✓':status==='fail'?'×':'–'}</span><span class="rubric-title">${title}</span><span class="rubric-score">${score} / ${Math.abs(total)}</span></div>`).join('');
