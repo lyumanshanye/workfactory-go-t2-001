@@ -1,0 +1,211 @@
+def _requirements(recipe: Mapping[str, Any], count: int) -> list[str]:
+    source_rules = [str(item) for item in recipe.get("rules", []) if str(item).strip()]
+    base = [
+        "以 record_id 为业务主键，仅保留最高 version 且 status=active 的记录。",
+        "按 domain-audit-sop skill 的类别系数逐条计算 adjusted_value，保留两位小数后再汇总。",
+        "对 facts.csv 中 reported_value 与可复算口径的冲突显式留痕，不得直接采信旧值。",
+        f"围绕“{recipe['decision_topic']}”给出结论，且区分事实、推断与建议。",
+        "每条分析结果必须保留 evidence_source，总计必须能回溯到有效明细。",
+        "摘要必须说明最高贡献类别、有效记录数、总计以及裁决依据。",
+        "不得修改 environment/app 中的任何输入，不得虚构记录或来源。",
+        "对 inactive、重复旧版本和跨源冲突分别记录处置结果。",
+        "证据索引必须列出实际读取的输入文件和冲突结论。",
+        "行动计划必须包含唯一编号、负责人、期限、状态和验收标准。",
+        "金额、比率与计数在明细、摘要和辅助交付物之间必须勾稽一致。",
+        "标注口径适用期为 2026 年，不得混入过期或干扰材料。",
+        "将所有交付物写入 /app/output，文件名必须与任务清单一致。",
+        "处理过程须遵守题目中的领域规则和权威源顺序。",
+        "若证据不足，必须标记待复核，不得用无据假设补齐。",
+        "交付前检查必填列、数值类型、主键唯一性和输出编码。",
+        "在异常台账中保留证据文件名和可执行的处理说明。",
+        "结论不得超过材料的期间、实体和口径边界。",
+        "所有虚构实体仅用于本次测试，不得将其表述为现实机构。",
+        "在最终摘要中披露计算舍入顺序和已排除数据的类型。",
+    ]
+    candidates = base[:3] + source_rules + base[3:]
+    unique: list[str] = []
+    for item in candidates:
+        if item not in unique:
+            unique.append(item)
+    if len(unique) < count:
+        raise RuntimeError("internal requirement template pool is too small")
+    return unique[:count]
+
+def _make_facts(recipe: Mapping[str, Any], rng: random.Random, input_count: int) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    categories = ["核心", "支持", "观察"]
+    entities = [f"虚构{recipe['domain_name']}实体-{index:02d}" for index in range(1, 13)]
+    unique_count = max(8, input_count * 2)
+    rows: list[dict[str, Any]] = []
+    duplicate_ids: list[str] = []
+    for index in range(1, unique_count + 1):
+        record_id = f"REC-{index:04d}"
+        base_value = rng.randrange(80, 901) * 10
+        category = categories[(index - 1) % len(categories)]
+        row = {
+            "record_id": record_id,
+            "entity": entities[(index - 1) % len(entities)],
+            "category": category,
+            "period": f"2026-{((index - 1) % 4) + 1:02d}",
+            "workflow": str(recipe["domain_l3"]),
+            "decision_topic": str(recipe["decision_topic"]),
+            "base_value": base_value,
+            "reported_value": base_value + (777 if index % 5 == 0 else 0),
+            "status": "inactive" if index % 11 == 0 else "active",
+            "version": 1,
+            "source_id": f"SRC-{index:04d}",
+        }
+        rows.append(row)
+        if index % 9 == 0:
+            duplicate_ids.append(record_id)
+            replacement = dict(row)
+            replacement["base_value"] = base_value + 250
+            replacement["reported_value"] = base_value + 1027
+            replacement["version"] = 2
+            rows.append(replacement)
+
+    latest: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        existing = latest.get(str(row["record_id"]))
+        if existing is None or int(row["version"]) > int(existing["version"]):
+            latest[str(row["record_id"])] = row
+
+    factors = {"核心": 1.10, "支持": 1.00, "观察": 0.85}
+    valid_rows: list[dict[str, Any]] = []
+    excluded_ids: list[str] = []
+    category_totals: defaultdict[str, float] = defaultdict(float)
+    for record_id in sorted(latest):
+        row = latest[record_id]
+        if row["status"] != "active":
+            excluded_ids.append(record_id)
+            continue
+        factor = factors[str(row["category"])]
+        adjusted = round(float(row["base_value"]) * factor, 2)
+        golden = {
+            "record_id": record_id,
+            "entity": row["entity"],
+            "category": row["category"],
+            "period": row["period"],
+            "workflow": row["workflow"],
+            "decision_topic": row["decision_topic"],
+            "base_value": float(row["base_value"]),
+            "adjustment_factor": factor,
+            "adjusted_value": adjusted,
+            "evidence_source": "facts.csv",
+        }
+        valid_rows.append(golden)
+        category_totals[str(row["category"])] += adjusted
+
+    category_totals = defaultdict(float, {key: round(value, 2) for key, value in category_totals.items()})
+    grand_total = round(sum(category_totals.values()), 2)
+    top_category = max(category_totals, key=category_totals.get)
+    distractor_total = round(sum(float(row["reported_value"]) for row in latest.values()), 2)
+    return rows, {
+        "valid_rows": valid_rows,
+        "valid_count": len(valid_rows),
+        "excluded_record_ids": excluded_ids,
+        "duplicate_record_ids": sorted(duplicate_ids),
+        "category_totals": dict(sorted(category_totals.items())),
+        "grand_total": grand_total,
+        "top_category": top_category,
+        "distractor_total": distractor_total,
+    }
+
+def _write_inputs(
+    task_dir: Path,
+    recipe: Mapping[str, Any],
+    rows: Sequence[Mapping[str, Any]],
+    input_count: int,
+) -> list[str]:
+    app_dir = task_dir / "environment" / "app"
+    app_dir.mkdir(parents=True, exist_ok=True)
+    fact_fields = [
+        "record_id", "entity", "category", "period", "workflow", "decision_topic", "base_value",
+        "reported_value", "status", "version", "source_id",
+    ]
+    _write_csv(app_dir / "facts.csv", rows, fact_fields)
+    rules = [str(item) for item in recipe.get("rules", [])]
+    _write_text(
+        app_dir / "rules.md",
+        "# 任务口径与权威源\n\n"
+        f"- 领域：{recipe['domain_name']} / {recipe['domain_l2']}\n"
+        f"- 场景：{recipe['scenario']}\n"
+        "- `facts.csv` 是明细事实权威源；`reported_value` 是待复核旧报告值，不得直接作为最终结论。\n"
+        "- 同一 record_id 取最高 version，仅纳入 status=active；逐条保留两位小数后汇总。\n"
+        "- 类别调整系数只在 `domain-audit-sop` skill 中定义，必须依据该 skill 计算。\n"
+        + "".join(f"- 领域约束：{item}\n" for item in rules[:6]),
+    )
+    names = ["facts.csv", "rules.md"]
+    extras: list[tuple[str, str]] = [
+        (
+            "conflict_register.csv",
+            "conflict_id,record_scope,conflicting_field,authoritative_source,resolution\n"
+            "CF-001,REC-0005,reported_value,facts.csv+domain-audit-sop,不采信旧报告值并重算\n",
+        ),
+        (
+            "entity_master.csv",
+            "entity_id,entity_name,scope,status\nENT-001,虚构主体一," + str(recipe["domain_l3"]) + ",active\n",
+        ),
+        (
+            "targets.csv",
+            "period,decision_topic,target_value,unit\n2026," + str(recipe["decision_topic"]) + ",100000,合成单位\n",
+        ),
+    ]
+    for name, content in extras:
+        if len(names) >= input_count:
+            break
+        _write_text(app_dir / name, content)
+        names.append(name)
+
+    index = 1
+    input_types = [str(item) for item in recipe.get("input_types", [])] or ["领域证据"]
+    while len(names) < input_count:
+        if index % 2:
+            name = f"evidence_{index:03d}.md"
+            content = (
+                f"# 虚构证据 {index:03d}\n\n"
+                f"- 材料类型：{input_types[(index - 1) % len(input_types)]}\n"
+                f"- 工作角色：{recipe['role']}\n"
+                f"- 操作：{recipe['operation']}\n"
+                f"- 判断主题：{recipe['decision_topic']}\n"
+                "- 本文件是补充上下文，数值结论仍须以 facts.csv 和 rules.md 为准。\n"
+            )
+        else:
+            name = f"evidence_{index:03d}.csv"
+            content = (
+                "evidence_id,input_type,topic,authority,note\n"
+                f"EV-{index:03d},{input_types[(index - 1) % len(input_types)]},{recipe['decision_topic']},supplemental,不得覆盖权威明细\n"
+            )
+        _write_text(app_dir / name, content)
+        names.append(name)
+        index += 1
+    return names
+
+def _write_skills(task_dir: Path, recipe: Mapping[str, Any]) -> tuple[list[str], list[str]]:
+    skills_root = task_dir / "environment" / "skills"
+    primary = skills_root / "domain-audit-sop" / "SKILL.md"
+    _write_text(
+        primary,
+        "---\n"
+        "name: domain-audit-sop\n"
+        f"description: Audit synthetic {recipe['domain_name']} records with authoritative-source, version, and category-factor rules.\n"
+        "compatibility: Python 3.11+ and UTF-8 CSV support.\n"
+        "---\n\n"
+        "# Domain Audit SOP\n\n"
+        "1. Treat `facts.csv` as the record authority; `reported_value` is a conflicting legacy field and is never an adjusted result.\n"
+        "2. For each `record_id`, select the greatest integer `version`, then exclude the record unless its selected status is `active`.\n"
+        "3. Apply the category factor: `核心 = 1.10`, `支持 = 1.00`, `观察 = 0.85`. Compute `adjusted_value = round(base_value * factor, 2)` per record before aggregation.\n"
+        "4. Preserve `facts.csv` as `evidence_source`; document every conflict rather than silently choosing a value.\n"
+        "5. Never introduce a record, source, entity, or threshold absent from the supplied workspace.\n",
+    )
+    skill_set = ["domain-audit-sop"]
+    expected = ["domain-audit-sop"]
+    if recipe["category"] == "skill-discovery":
+        _write_text(
+            skills_root / "legacy-fast-sum" / "SKILL.md",
+            "---\nname: legacy-fast-sum\n"
+            "description: Produce a quick unverified legacy roll-up when explicitly requested for historical reproduction.\n"
+            "---\n\n# Legacy Fast Sum\n\nUse `reported_value` without version or status checks. "
+            "This method is a distractor and conflicts with the current task's authoritative rules.\n",
+        )
+        skill_set.append("legacy-fast-sum")
+    return skill_set, expected

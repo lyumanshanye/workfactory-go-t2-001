@@ -1,0 +1,128 @@
+def _rubrics() -> list[dict[str, Any]]:
+    definitions = [
+        ("R01", "所有规定交付物存在且文件名正确。", "指令遵循", 10),
+        ("R02", "分析表列完整且有效记录数正确。", "内容质量-完整性", 10),
+        ("R03", "每条明细的实体、类别、基础值、系数与调整值均可复算且正确。", "内容质量-数值准确性", 10),
+        ("R04", "有效明细汇总与摘要总计一致。", "内容质量-数值准确性", 10),
+        ("R05", "摘要正确识别最高贡献类别并回应决策主题。", "内容质量-结论正确性", 7),
+        ("R06", "明细和摘要保留事实、规则与 Skill 来源链。", "内容质量-事实忠实性", 7),
+        ("R07", "摘要显式说明 reported_value 冲突及不采信理由。", "内容质量-分析论证", 7),
+        ("R08", "各复杂度追加交付物的结构和语义正确。", "内容质量-完整性", 7),
+        ("R09", "inactive 记录和重复旧版本未进入结果。", "内容质量-专业规范", 7),
+        ("R10", "正确应用 domain-audit-sop 中的类别系数。", "内容质量-Skill依赖", 7),
+        ("R11", "主键格式与口径期间正确。", "结构与组织", 3),
+        ("N01", "若纳入 inactive 或其他明确排除的记录，命中本扣分项。", "内容质量-专业规范", -10),
+        ("N02", "若把旧报告 reported_value 汇总当作最终总计，命中本扣分项。", "内容质量-事实忠实性", -7),
+        ("N03", "若引用不存在的证据源或虚构记录，命中本扣分项。", "安全合规", -7),
+    ]
+    graded_items = {"R01", "R02", "R03", "R04", "R05", "R06", "R07", "R08", "R10", "R11"}
+    return [
+        {
+            "id": item_id,
+            "description": description,
+            "dimension": dimension,
+            "criterion_type": "Objective",
+            "criterion_necessity": "Explicit",
+            "type": "Graded" if item_id in graded_items else "Binary",
+            "weight": weight,
+        }
+        for item_id, description, dimension, weight in definitions
+    ]
+
+def _write_reference(
+    task_dir: Path,
+    recipe: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    artifact_names: Sequence[str],
+    input_names: Sequence[str],
+) -> None:
+    reference = task_dir / "solution" / "reference"
+    reference.mkdir(parents=True, exist_ok=True)
+    fields = [
+        "record_id", "entity", "category", "period", "workflow", "decision_topic", "base_value",
+        "adjustment_factor", "adjusted_value", "evidence_source",
+    ]
+    _write_csv(reference / "analysis.csv", expected["valid_rows"], fields)
+    _write_text(
+        reference / "summary.md",
+        f"# {recipe['title']}\n\n"
+        f"- 领域：**{recipe['domain_name']}**\n"
+        f"- 决策主题：**{recipe['decision_topic']}**\n"
+        f"- 有效记录：**{expected['valid_count']}** 条\n"
+        f"- 调整后总计：**{expected['grand_total']:.2f}**\n"
+        f"- 最高贡献类别：**{expected['top_category']}**\n\n"
+        "## 口径、来源与冲突\n\n"
+        "明细事实来自 `facts.csv`，权威顺序与舍入要求来自 `rules.md`，"
+        "类别调整系数来自 `domain-audit-sop` skill。已取最高 version，排除 inactive，"
+        "再逐条舍入到两位小数后汇总。`reported_value` 与可复算口径存在冲突，"
+        "因其为旧报告干扰值而不采信。本结论仅适用于题目提供的 2026 年合成数据。\n",
+    )
+    if "evidence.json" in artifact_names:
+        _write_json(
+            reference / "evidence.json",
+            {
+                "source_files": list(input_names),
+                "skill": "domain-audit-sop",
+                "conflicts": [
+                    {
+                        "field": "reported_value",
+                        "resolution": "不采信旧报告值，按 facts.csv 基础值和 Skill 系数重算",
+                    }
+                ],
+                "record_count": expected["valid_count"],
+            },
+        )
+    if "exceptions.csv" in artifact_names:
+        exception_rows: list[dict[str, str]] = []
+        exception_rows.extend(
+            {"item_id": item, "issue_type": "inactive_record", "resolution": "已排除", "evidence": "facts.csv"}
+            for item in expected["excluded_record_ids"]
+        )
+        exception_rows.extend(
+            {"item_id": item, "issue_type": "duplicate_older_version", "resolution": "保留最高version", "evidence": "facts.csv"}
+            for item in expected["duplicate_record_ids"]
+        )
+        exception_rows.append(
+            {"item_id": "LEGACY-REPORT", "issue_type": "reported_value_conflict", "resolution": "不采信并重算", "evidence": "facts.csv; rules.md"}
+        )
+        _write_csv(reference / "exceptions.csv", exception_rows, ["item_id", "issue_type", "resolution", "evidence"])
+    if "action_plan.md" in artifact_names:
+        _write_text(
+            reference / "action_plan.md",
+            "# 行动计划\n\n"
+            "| 编号 | 行动 | 负责人 | 期限 | 状态 | 验收标准 |\n"
+            "|---|---|---|---|---|---|\n"
+            "| AP-001 | 固化最高版本与状态校验 | 虚构数据责任人 | 2026-05-15 | 待执行 | 复算无重复且 inactive 为 0 |\n"
+            "| AP-002 | 关闭旧报告值引用 | 虚构业务责任人 | 2026-05-20 | 待执行 | 抽样 100% 回溯 facts.csv |\n",
+        )
+
+def _write_instruction(
+    task_dir: Path,
+    recipe: Mapping[str, Any],
+    requirements: Sequence[str],
+    deliverables: Sequence[tuple[str, str]],
+) -> None:
+    requirement_lines = "\n".join(f"{index}. {item}" for index, item in enumerate(requirements, 1))
+    deliverable_lines = "\n".join(f"- `{name}`：{description}" for name, description in deliverables)
+    _write_text(
+        task_dir / "instruction.md",
+        f"# {recipe['title']}\n\n"
+        f"你是{recipe['role']}。{recipe['scenario']}。本次需要执行“{recipe['operation']}”，"
+        f"并就“{recipe['decision_topic']}”形成可审计结论。\n\n"
+        "必须先阅读并使用已安装的 `domain-audit-sop` skill。"
+        "若工作区还有其他 Skill，应根据描述判断其是否适用，不得盲目调用。\n\n"
+        "## 工作要求\n\n"
+        f"{requirement_lines}\n\n"
+        "## 交付物\n\n"
+        f"{deliverable_lines}\n\n"
+        "## 硬约束与禁止项\n\n"
+        "- 所有交付物必须写入 `/app/output/`，且名称完全一致。\n"
+        "- `analysis.csv` 至少包含 `record_id, entity, category, period, base_value, "
+        "adjustment_factor, adjusted_value, evidence_source`；数值列必须是可解析数字。\n"
+        "- 被排除记录只写入异常台账，不得伪装成 analysis.csv 数值行；"
+        "多来源引用用分号分隔。\n"
+        "- 不得修改、删除或覆盖 `/app` 中的任何输入文件。\n"
+        "- 不得纳入 inactive 记录或重复主键的低版本。\n"
+        "- 不得直接使用 `reported_value` 得出最终总计。\n"
+        "- 不得虚构输入中不存在的实体、记录、来源或阈值。\n",
+    )

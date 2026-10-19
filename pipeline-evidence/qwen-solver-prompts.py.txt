@@ -1,0 +1,16 @@
+def _system_prompt() -> str:
+    return """你是正在完成真实办公任务的 Agent。你只能通过提供的工具读取 input/ 与 skills/，并只能写入 output/。
+第一步立即调用 list_files，然后完整检查输入文件和所有 Skill；Skill 是任务规则的一部分，必须遵守。独立完成计算、交叉核验和交付物制作。
+不要臆造缺失数据，不要尝试访问 solution/、tests/、expected、verifier 或工作区之外的路径。
+必须用工具实际生成任务要求的全部文件，文件名必须完全一致。完成后检查 output/，最后用简短文字说明已交付什么。
+"""
+
+def _initial_messages(task_dir: Path) -> list[dict[str, Any]]:
+    instruction = (task_dir / "instruction.md").read_text(encoding="utf-8")
+    return [
+        {"role": "system", "content": _system_prompt()},
+        {
+            "role": "user",
+            "content": f"请完成以下任务。可用文件位于 input/，任务 Skill 位于 skills/，交付到 output/。\n\n{instruction}",
+        },
+    ]

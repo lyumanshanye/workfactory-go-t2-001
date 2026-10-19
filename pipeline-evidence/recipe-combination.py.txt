@@ -1,0 +1,105 @@
+def _pick(values: Sequence[str], index: int, stride: int = 1) -> str:
+    return values[(index * stride) % len(values)]
+
+def _rotated_unique(values: Sequence[str], index: int, count: int) -> list[str]:
+    count = min(max(1, count), len(values))
+    return [values[(index + offset) % len(values)] for offset in range(count)]
+
+def _workflow_dimensions(dimensions: Mapping[str, Sequence[str]], index: int) -> dict[str, Any]:
+    roles = dimensions["roles"]
+    subjects = dimensions["subjects"]
+    operations = dimensions["operations"]
+    input_types = dimensions["input_types"]
+    decision_topics = dimensions["decision_topics"]
+    rules = dimensions["rules"]
+
+    # Different co-prime-ish strides stop similarly sized dimension lists from
+    # moving in lockstep.  The explicit workflow number handles small products.
+    return {
+        "role": _pick(roles, index, 1),
+        "subject": _pick(subjects, index, 3),
+        "operation": _pick(operations, index, 5),
+        "inputs": _rotated_unique(input_types, index * 2, min(3, len(input_types))),
+        "decision_topic": _pick(decision_topics, index, 7),
+        "rules": _rotated_unique(rules, index * 3, min(2, len(rules))),
+    }
+
+def generate_full_plan() -> list[dict[str, Any]]:
+    """Generate the complete deterministic list of exactly 2,000 recipes."""
+
+    specs = _load_domain_specs()
+    domains = _spread_counts(DOMAIN_QUOTAS)
+    difficulties = _spread_counts(DIFFICULTY_QUOTAS)
+    specialist_complexities = _spread_counts(
+        {f"C{number}": 200 for number in range(1, 6)}
+    )
+    weakness_complexities = _spread_counts(WEAKNESS_COMPLEXITY_QUOTAS)
+    weaknesses = _spread_counts(WEAKNESS_QUOTAS)
+
+    domain_ordinals: Counter[str] = Counter()
+    l2_ordinals: Counter[tuple[str, str]] = Counter()
+    plan: list[dict[str, Any]] = []
+
+    for index, domain in enumerate(domains):
+        global_number = index + 1
+        domain_ordinals[domain] += 1
+        domain_number = domain_ordinals[domain]
+        spec = specs[domain]
+        l2_labels = list(spec["l2"])
+        l2_label = l2_labels[(domain_number - 1) % len(l2_labels)]
+        workflow_index = l2_ordinals[(domain, l2_label)]
+        l2_ordinals[(domain, l2_label)] += 1
+        dimensions = _workflow_dimensions(spec["l2"][l2_label], workflow_index)
+
+        if index < 1_000:
+            category = SPECIALIST_CATEGORIES[index % len(SPECIALIST_CATEGORIES)]
+            task_complexity = specialist_complexities[index]
+            weakness_tags: list[str] = []
+        else:
+            weakness_index = index - 1_000
+            category = "weakness-driven"
+            task_complexity = weakness_complexities[weakness_index]
+            weakness_tags = [weaknesses[weakness_index]]
+
+        workflow_number = workflow_index + 1
+        subject = dimensions["subject"]
+        operation = dimensions["operation"]
+        decision_topic = dimensions["decision_topic"]
+        domain_l3 = (
+            f"{subject}｜{operation}｜{decision_topic}｜流程{workflow_number:03d}"
+        )
+        domain_l4 = (
+            f"基于{'、'.join(dimensions['inputs'])}，按{dimensions['rules'][0]}"
+            f"完成{decision_topic}并留存证据"
+        )
+        title = f"{spec['name']}：{subject}{operation}与{decision_topic}（{global_number:04d}）"
+        task_id = f"{domain}-FULL-{domain_number:04d}"
+        recipe = {
+            "task_id": task_id,
+            "name": f"work/{task_id.lower()}",
+            "title": title,
+            "blueprint": "full-taxonomy-workflow",
+            "role": dimensions["role"],
+            "scenario": (
+                f"你作为{dimensions['role']}，需在{spec['name']}场景中对{subject}"
+                f"执行{operation}，最终支持{decision_topic}的可追溯决策。"
+            ),
+            "operation": operation,
+            "inputs": dimensions["inputs"],
+            "decision_topic": decision_topic,
+            "rules": dimensions["rules"],
+            "seed": 20_261_017_000 + global_number,
+            "category": category,
+            "difficulty": difficulties[index],
+            "task_complexity": task_complexity,
+            "weakness_tags": weakness_tags,
+            "domain": domain,
+            "domain_l2": l2_label,
+            "domain_l3": domain_l3,
+            "domain_l4": domain_l4,
+            "capabilities": _capabilities(category, operation),
+            "taxonomy_status": spec.get("taxonomy_status", "specified"),
+        }
+        plan.append(recipe)
+
+    return plan

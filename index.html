@@ -50,6 +50,3648 @@ button,input,select{font:inherit}.shell{width:min(1480px,calc(100% - 32px));marg
     </div>
     <div class="notice"><strong>已核对旧2000题实物：</strong>输入材料仅有CSV和Markdown；reference仅有CSV、Markdown和JSON，没有图片、DOCX、PPTX、PDF或XLSX。标题覆盖七个领域，不等于真实业务能力已覆盖。比如“品牌架构选择”实际仍在算表格，这类题需要重做业务内容，不是只改目录。</div>
 
+<h3>A4 · 原始 taxonomy、模板和 Prompt：可以直接展开核对</h3>
+      <div class="notice"><strong>如实说明：</strong>旧2000题的业务词表由我按需求框架编写和补充，没有逐题从真实案例或benchmark挖掘。Golden由Python确定性计算和字符串模板生成，<strong>没有调用大模型生成Golden的Prompt</strong>。下面展示当前仓库实现快照及实际旧题产物，不声称代码与首次生成时逐字一致；原题包的seed与文件摘要可用于追溯。</div>
+      <p><strong>三种东西不要混淆：</strong>①造题/造Golden：Python代码与模板；②旧批次Qwen做题：有system/user提示；③新版Qwen判分：另有规范要求的judge提示。后两种都不是旧2000题的Golden生成Prompt。</p>
+      <p>词表字段：roles=角色，subjects=业务对象，operations=操作，input_types=预期材料类型，decision_topics=决策主题，rules=约束。词表里写有“图片/品牌简报”等名称，并不代表旧生成器实际生成了这些格式。代码中的specified/proposed-gap-fill是内部标签，不是外部来源核验结论。</p>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">完整taxonomy · GO / 通用办公（我编写的词表）</summary><p><a href="pipeline-evidence/taxonomy-go.py.txt" download>下载原文快照</a></p><pre class="instruction">&quot;&quot;&quot;Domain vocabulary for general-office (GO) task synthesis.&quot;&quot;&quot;
+
+from __future__ import annotations
+
+
+DOMAIN_SPEC: dict[str, object] = {
+    &quot;code&quot;: &quot;GO&quot;,
+    &quot;name&quot;: &quot;通用办公&quot;,
+    &quot;l2&quot;: {
+        &quot;T1-信息获取与知识综合&quot;: {
+            &quot;roles&quot;: [
+                &quot;行业研究员&quot;,
+                &quot;战略分析专员&quot;,
+                &quot;竞争情报经理&quot;,
+                &quot;政策研究专员&quot;,
+                &quot;知识管理专员&quot;,
+                &quot;总经理办公室研究秘书&quot;,
+                &quot;市场洞察分析师&quot;,
+                &quot;采购寻源分析师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;行业规模与增长率&quot;,
+                &quot;竞争对手产品与定价&quot;,
+                &quot;监管政策与实施细则&quot;,
+                &quot;客户需求与典型痛点&quot;,
+                &quot;供应商能力与资质&quot;,
+                &quot;技术路线与专利布局&quot;,
+                &quot;区域市场进入条件&quot;,
+                &quot;公开招投标与中标记录&quot;,
+                &quot;公司制度与历史决策&quot;,
+                &quot;专家访谈与会议纪要&quot;,
+                &quot;舆情事件与媒体报道&quot;,
+                &quot;标杆企业经营指标&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;制定检索式并执行多源检索&quot;,
+                &quot;按权威性和时效性筛选来源&quot;,
+                &quot;抽取事实、数字、口径和发布日期&quot;,
+                &quot;识别跨来源矛盾并建立冲突表&quot;,
+                &quot;将结论映射到原文证据&quot;,
+                &quot;合并同义概念并统一术语&quot;,
+                &quot;按主题聚类研究发现&quot;,
+                &quot;区分事实、推断和待验证假设&quot;,
+                &quot;计算来源覆盖率与证据缺口&quot;,
+                &quot;形成带引文的综合结论&quot;,
+                &quot;维护检索日志和证据索引&quot;,
+                &quot;对关键结论执行反向核验&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;政策法规网页或PDF&quot;,
+                &quot;行业研究报告&quot;,
+                &quot;公司公告与年报&quot;,
+                &quot;新闻与舆情剪报&quot;,
+                &quot;内部知识库导出&quot;,
+                &quot;访谈纪要与录音转写&quot;,
+                &quot;招投标公告清单&quot;,
+                &quot;供应商官网与产品手册&quot;,
+                &quot;专利或论文检索结果&quot;,
+                &quot;历史项目复盘材料&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;行业机会扫描报告&quot;,
+                &quot;竞争格局与差异化建议&quot;,
+                &quot;政策影响评估备忘录&quot;,
+                &quot;供应商初筛长名单&quot;,
+                &quot;市场进入可行性摘要&quot;,
+                &quot;技术趋势证据图谱&quot;,
+                &quot;管理层一页纸简报&quot;,
+                &quot;关键假设与待验证事项清单&quot;,
+                &quot;知识库专题条目&quot;,
+                &quot;高管问答事实底稿&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;关键结论必须可追溯到具体来源和页码或段落&quot;,
+                &quot;不得用低权威二手材料覆盖最新的一手来源&quot;,
+                &quot;发布日期、统计期和数据口径必须显式记录&quot;,
+                &quot;相互冲突的信息不得静默择一，须保留冲突及判断依据&quot;,
+                &quot;受版权或保密限制的材料不得整段复制到交付物&quot;,
+                &quot;证据不足时必须标注不确定性，不得补造事实&quot;,
+                &quot;含个人信息的访谈材料必须按最小必要原则引用&quot;,
+                &quot;过期政策与已废止制度必须与现行版本隔离&quot;,
+            ],
+        },
+        &quot;T2-数据处理与分析&quot;: {
+            &quot;roles&quot;: [
+                &quot;经营分析师&quot;,
+                &quot;销售运营分析师&quot;,
+                &quot;财务数据专员&quot;,
+                &quot;人力资源分析师&quot;,
+                &quot;供应链数据分析师&quot;,
+                &quot;客户运营分析师&quot;,
+                &quot;质量数据专员&quot;,
+                &quot;项目管理办公室分析师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;订单与销售明细&quot;,
+                &quot;预算、实际与滚动预测&quot;,
+                &quot;客户主数据与账户状态&quot;,
+                &quot;库存、入库与出库流水&quot;,
+                &quot;员工编制、入离职与考勤&quot;,
+                &quot;采购订单、收货与发票&quot;,
+                &quot;项目工时与成本记录&quot;,
+                &quot;服务工单与响应时长&quot;,
+                &quot;营销活动与转化漏斗&quot;,
+                &quot;产品退货、退款与折让&quot;,
+                &quot;质量缺陷与整改记录&quot;,
+                &quot;区域、产品和组织映射表&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;校验文件结构、字段类型和必填值&quot;,
+                &quot;按业务主键去重并保留权威版本&quot;,
+                &quot;统一日期、币种、单位和编码&quot;,
+                &quot;关联事实表与多张主数据表&quot;,
+                &quot;依据状态和期间规则筛选有效记录&quot;,
+                &quot;逐笔应用更正、退款和汇率&quot;,
+                &quot;计算派生指标并执行分层汇总&quot;,
+                &quot;核对明细、分组小计与总计勾稽关系&quot;,
+                &quot;检测异常值、断点和跨源不一致&quot;,
+                &quot;生成透视表、趋势图和差异桥接&quot;,
+                &quot;维护处理日志和异常处置台账&quot;,
+                &quot;将计算结果与权威基准交叉复核&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;多工作表XLSX业务台账&quot;,
+                &quot;CSV交易流水&quot;,
+                &quot;JSON系统导出&quot;,
+                &quot;主数据映射表&quot;,
+                &quot;更正与冲销清单&quot;,
+                &quot;预算或目标版本文件&quot;,
+                &quot;指标口径说明书&quot;,
+                &quot;历史汇总报表&quot;,
+                &quot;数据库查询结果&quot;,
+                &quot;邮件附件中的补充数据&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;经营指标监控工作簿&quot;,
+                &quot;预算执行与差异分析&quot;,
+                &quot;销售业绩区域排名&quot;,
+                &quot;库存健康度与呆滞风险&quot;,
+                &quot;客户留存与流失分析&quot;,
+                &quot;人员效率与编制分析&quot;,
+                &quot;采购三单匹配异常清单&quot;,
+                &quot;项目成本与工时偏差报告&quot;,
+                &quot;数据质量问题台账&quot;,
+                &quot;管理层月度数据摘要&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;计算口径须明确分母、期间、状态、币种与舍入顺序&quot;,
+                &quot;汇总值必须可下钻到纳入计算的原始明细&quot;,
+                &quot;主键重复、空值和类型错误不得静默丢弃&quot;,
+                &quot;历史快照不得覆盖当前权威主数据&quot;,
+                &quot;对账差异超过既定阈值时必须阻断发布或升级复核&quot;,
+                &quot;不得修改原始输入，所有清洗应在副本或派生层完成&quot;,
+                &quot;个人敏感字段在非必要交付中必须脱敏或删除&quot;,
+                &quot;跨币种与跨单位汇总前必须完成逐笔转换&quot;,
+            ],
+        },
+        &quot;T3-建模与决策支持&quot;: {
+            &quot;roles&quot;: [
+                &quot;战略规划经理&quot;,
+                &quot;商业分析经理&quot;,
+                &quot;财务规划与分析专员&quot;,
+                &quot;产能规划师&quot;,
+                &quot;定价策略分析师&quot;,
+                &quot;采购决策分析师&quot;,
+                &quot;人力规划经理&quot;,
+                &quot;项目组合管理专员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;年度预算与滚动预测&quot;,
+                &quot;产品价格与折扣策略&quot;,
+                &quot;项目投资现金流&quot;,
+                &quot;产能、需求与资源约束&quot;,
+                &quot;供应商成本与交付表现&quot;,
+                &quot;门店或区域扩张方案&quot;,
+                &quot;人员编制与技能容量&quot;,
+                &quot;项目优先级与资源组合&quot;,
+                &quot;客户分群与服务策略&quot;,
+                &quot;库存安全水平与补货策略&quot;,
+                &quot;营销渠道投入与回报&quot;,
+                &quot;合同续约与替代方案&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;定义目标函数、边界条件和决策变量&quot;,
+                &quot;建立基准、乐观和压力情景&quot;,
+                &quot;计算净现值、回收期和盈亏平衡点&quot;,
+                &quot;执行敏感性与临界值分析&quot;,
+                &quot;按权重构建多准则评分模型&quot;,
+                &quot;估算需求、容量和资源缺口&quot;,
+                &quot;构造方案成本收益对比&quot;,
+                &quot;识别约束冲突与不可行组合&quot;,
+                &quot;验证模型公式和输入假设&quot;,
+                &quot;生成推荐方案及备选路径&quot;,
+                &quot;记录假设来源和模型版本&quot;,
+                &quot;将模型输出转为可执行决策门槛&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;历史经营数据集&quot;,
+                &quot;预算与预测工作簿&quot;,
+                &quot;成本费率和报价表&quot;,
+                &quot;资源容量与排班表&quot;,
+                &quot;市场情景假设文件&quot;,
+                &quot;供应商评分卡&quot;,
+                &quot;项目商业计划书&quot;,
+                &quot;风险概率与影响矩阵&quot;,
+                &quot;管理层决策约束备忘录&quot;,
+                &quot;模型参数与公式说明&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;投资立项建议书&quot;,
+                &quot;价格调整与折扣边界&quot;,
+                &quot;预算重分配方案&quot;,
+                &quot;产能扩张或外包决策&quot;,
+                &quot;供应商选择与份额分配&quot;,
+                &quot;项目组合优先级清单&quot;,
+                &quot;人员增补与冻结建议&quot;,
+                &quot;库存补货策略建议&quot;,
+                &quot;区域进入或退出方案&quot;,
+                &quot;情景分析决策仪表盘&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;假设、事实输入和管理层目标必须分层记录&quot;,
+                &quot;模型推荐不得超出明确的预算、合规和资源约束&quot;,
+                &quot;关键参数须有来源并提供可审计的版本标识&quot;,
+                &quot;单点预测必须同时给出敏感性或情景范围&quot;,
+                &quot;评分模型权重总和及方向性必须经过校验&quot;,
+                &quot;结论需披露未量化风险与模型适用边界&quot;,
+                &quot;存在多个近似最优方案时不得伪造唯一确定答案&quot;,
+                &quot;决策材料中的数字必须与模型输出版本一致&quot;,
+            ],
+        },
+        &quot;T4-内容生产与表达&quot;: {
+            &quot;roles&quot;: [
+                &quot;企业传播专员&quot;,
+                &quot;产品市场经理&quot;,
+                &quot;高管办公室文稿专员&quot;,
+                &quot;培训内容设计师&quot;,
+                &quot;投标文件经理&quot;,
+                &quot;客户成功内容专员&quot;,
+                &quot;内部编辑&quot;,
+                &quot;雇主品牌专员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;经营业绩与关键进展&quot;,
+                &quot;产品功能与客户价值&quot;,
+                &quot;公司战略与组织变革&quot;,
+                &quot;员工制度与操作指引&quot;,
+                &quot;客户案例与成功故事&quot;,
+                &quot;培训课程与知识测验&quot;,
+                &quot;招投标响应与技术方案&quot;,
+                &quot;会议发言与演讲叙事&quot;,
+                &quot;危机事件与回应口径&quot;,
+                &quot;品牌活动与传播主题&quot;,
+                &quot;项目成果与复盘经验&quot;,
+                &quot;可持续发展与社会责任&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;根据受众与渠道确定信息层级&quot;,
+                &quot;从事实底稿提炼核心论点&quot;,
+                &quot;设计大纲、叙事线和行动号召&quot;,
+                &quot;将技术内容改写为业务语言&quot;,
+                &quot;按品牌语调和术语表统一措辞&quot;,
+                &quot;生成图表标题、注释和替代文本&quot;,
+                &quot;压缩长文并保留关键限定条件&quot;,
+                &quot;对多版本文稿执行差异合并&quot;,
+                &quot;核对数字、引文和专有名词&quot;,
+                &quot;为不同渠道适配长度与格式&quot;,
+                &quot;标记待确认内容和占位符&quot;,
+                &quot;完成编辑、校对和发布清单&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;事实底稿与数据摘要&quot;,
+                &quot;品牌语调和视觉规范&quot;,
+                &quot;产品资料与技术白皮书&quot;,
+                &quot;领导批注和修订稿&quot;,
+                &quot;会议录音或逐字稿&quot;,
+                &quot;客户案例访谈材料&quot;,
+                &quot;投标要求与评分表&quot;,
+                &quot;历史演示文稿或模板&quot;,
+                &quot;术语表和禁用词清单&quot;,
+                &quot;图片、图表与版权说明&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;管理层汇报演示文稿&quot;,
+                &quot;全员公告与常见问题&quot;,
+                &quot;客户提案与解决方案说明&quot;,
+                &quot;产品发布新闻稿&quot;,
+                &quot;高管演讲稿与提词卡&quot;,
+                &quot;培训手册与课程讲义&quot;,
+                &quot;投标响应文件&quot;,
+                &quot;项目复盘与案例文章&quot;,
+                &quot;危机沟通声明草案&quot;,
+                &quot;多渠道内容发布包&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;所有事实性主张必须与批准的底稿一致&quot;,
+                &quot;未经确认的数字、客户名称和发布日期不得写成定论&quot;,
+                &quot;受众版本之间不得出现相互矛盾的核心口径&quot;,
+                &quot;外部材料必须遵守品牌、版权和保密要求&quot;,
+                &quot;演示文稿图表必须标注单位、期间和数据来源&quot;,
+                &quot;不得为追求文采删除必要的风险或限制说明&quot;,
+                &quot;无障碍要求适用时须提供替代文本和可读结构&quot;,
+                &quot;终稿必须经过拼写、链接和附件完整性检查&quot;,
+            ],
+        },
+        &quot;T5-规划与任务协调&quot;: {
+            &quot;roles&quot;: [
+                &quot;项目经理&quot;,
+                &quot;项目管理办公室专员&quot;,
+                &quot;活动运营经理&quot;,
+                &quot;行政统筹专员&quot;,
+                &quot;产品运营经理&quot;,
+                &quot;实施交付经理&quot;,
+                &quot;培训项目协调员&quot;,
+                &quot;采购项目协调员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;项目里程碑与工作分解&quot;,
+                &quot;人员、会议室和设备资源&quot;,
+                &quot;跨部门依赖与交付接口&quot;,
+                &quot;预算、采购与合同节点&quot;,
+                &quot;活动议程与嘉宾安排&quot;,
+                &quot;上线窗口与变更冻结期&quot;,
+                &quot;培训班次与参训名单&quot;,
+                &quot;风险、问题与行动项&quot;,
+                &quot;供应商进场和验收计划&quot;,
+                &quot;审批链与决策门禁&quot;,
+                &quot;假期、时区与可用性&quot;,
+                &quot;项目范围与变更请求&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;拆解工作包、任务和验收标准&quot;,
+                &quot;识别前置依赖与关键路径&quot;,
+                &quot;估算工期、工作量和资源需求&quot;,
+                &quot;检查人员与设施排期冲突&quot;,
+                &quot;分配责任人并设置截止时间&quot;,
+                &quot;建立里程碑、门禁和升级机制&quot;,
+                &quot;维护风险、问题、决策和行动台账&quot;,
+                &quot;模拟延期对下游计划的影响&quot;,
+                &quot;协调跨时区会议和交接窗口&quot;,
+                &quot;编制周计划和状态报告&quot;,
+                &quot;处理范围变更并重排基线&quot;,
+                &quot;核对交付物完成度与验收证据&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;项目章程与范围说明&quot;,
+                &quot;工作分解结构或任务清单&quot;,
+                &quot;团队日历与资源可用性&quot;,
+                &quot;预算及采购计划&quot;,
+                &quot;风险问题行动决策台账&quot;,
+                &quot;会议纪要和行动项&quot;,
+                &quot;供应商实施计划&quot;,
+                &quot;变更请求单&quot;,
+                &quot;里程碑验收标准&quot;,
+                &quot;历史项目排期模板&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;项目主计划与甘特表&quot;,
+                &quot;关键路径和延期恢复方案&quot;,
+                &quot;跨部门责任分工矩阵&quot;,
+                &quot;周度状态与红黄绿报告&quot;,
+                &quot;资源冲突解决方案&quot;,
+                &quot;上线倒排计划&quot;,
+                &quot;活动执行手册&quot;,
+                &quot;风险与升级清单&quot;,
+                &quot;变更影响评估&quot;,
+                &quot;阶段验收与关闭清单&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;任务日期必须满足前置依赖和资源可用性约束&quot;,
+                &quot;范围、工期或预算变化须保留审批和基线版本&quot;,
+                &quot;关键路径任务不得在无替代方案时压缩为零缓冲&quot;,
+                &quot;责任分工必须区分负责、批准、协助和知会角色&quot;,
+                &quot;状态报告中的完成度须以可验证交付物为依据&quot;,
+                &quot;跨时区排期必须使用明确时区并避开已知假期&quot;,
+                &quot;逾期或高风险事项必须按升级时限通知责任人&quot;,
+                &quot;个人日历与参会信息只能用于授权的协调目的&quot;,
+            ],
+        },
+        &quot;T6-沟通与协同&quot;: {
+            &quot;roles&quot;: [
+                &quot;客户成功经理&quot;,
+                &quot;跨部门项目协调员&quot;,
+                &quot;行政业务伙伴&quot;,
+                &quot;供应商关系经理&quot;,
+                &quot;员工关系专员&quot;,
+                &quot;合作伙伴运营经理&quot;,
+                &quot;销售支持专员&quot;,
+                &quot;服务台协调员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;会议议题、结论和行动项&quot;,
+                &quot;客户需求、承诺与异议&quot;,
+                &quot;部门间资源请求&quot;,
+                &quot;供应商交付与整改&quot;,
+                &quot;服务故障与恢复进展&quot;,
+                &quot;合同续约与商务条件&quot;,
+                &quot;组织变更与员工反馈&quot;,
+                &quot;伙伴联合项目与分工&quot;,
+                &quot;审批请求与决策依据&quot;,
+                &quot;投诉、升级与补救措施&quot;,
+                &quot;知识交接与接班安排&quot;,
+                &quot;销售机会与内部支持需求&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;识别利益相关方和沟通目标&quot;,
+                &quot;汇总邮件、聊天和会议中的上下文&quot;,
+                &quot;区分决定、承诺、建议和开放问题&quot;,
+                &quot;提取行动项、责任人和期限&quot;,
+                &quot;起草分层沟通与定向通知&quot;,
+                &quot;协调反馈并合并无冲突意见&quot;,
+                &quot;识别承诺冲突和未授权表述&quot;,
+                &quot;生成会议议程、纪要和跟进邮件&quot;,
+                &quot;维护利益相关方沟通矩阵&quot;,
+                &quot;为争议事项准备升级摘要&quot;,
+                &quot;追踪确认状态与逾期回复&quot;,
+                &quot;形成交接记录和共同理解检查&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;电子邮件线程&quot;,
+                &quot;即时通讯导出&quot;,
+                &quot;会议录音与逐字稿&quot;,
+                &quot;客户关系管理备注&quot;,
+                &quot;工单评论与升级记录&quot;,
+                &quot;组织通讯录和责任矩阵&quot;,
+                &quot;合同承诺与服务级别条款&quot;,
+                &quot;历史会议纪要&quot;,
+                &quot;审批意见与批注&quot;,
+                &quot;利益相关方反馈表&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;会议纪要与行动项清单&quot;,
+                &quot;客户跟进邮件包&quot;,
+                &quot;跨部门协调方案&quot;,
+                &quot;事项升级简报&quot;,
+                &quot;供应商整改通知&quot;,
+                &quot;组织变更沟通计划&quot;,
+                &quot;客户异议回应话术&quot;,
+                &quot;项目交接备忘录&quot;,
+                &quot;利益相关方沟通矩阵&quot;,
+                &quot;承诺与决策追踪台账&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;不得把提议、讨论或沉默误写成已批准决定&quot;,
+                &quot;对外承诺必须有授权依据并与合同条款一致&quot;,
+                &quot;行动项须同时包含明确责任人、期限和验收结果&quot;,
+                &quot;不同渠道中的结论冲突必须先升级确认再发布&quot;,
+                &quot;沟通材料应按收件人最小化披露敏感信息&quot;,
+                &quot;会议纪要必须区分事实记录和撰写者推断&quot;,
+                &quot;客户投诉和重大故障须遵守既定升级时限&quot;,
+                &quot;群发前必须核验收件人范围、附件和访问权限&quot;,
+            ],
+        },
+        &quot;T7-审阅与质量治理&quot;: {
+            &quot;roles&quot;: [
+                &quot;质量保证专员&quot;,
+                &quot;内控审阅经理&quot;,
+                &quot;文档控制专员&quot;,
+                &quot;合规运营专员&quot;,
+                &quot;数据质量经理&quot;,
+                &quot;投标质量评审员&quot;,
+                &quot;流程审计专员&quot;,
+                &quot;发布管理专员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;合同与投标响应文件&quot;,
+                &quot;经营报告与财务附表&quot;,
+                &quot;标准操作程序与制度&quot;,
+                &quot;客户交付物与验收证据&quot;,
+                &quot;主数据与指标口径&quot;,
+                &quot;监管报送与合规证明&quot;,
+                &quot;培训材料与考试题库&quot;,
+                &quot;系统上线与发布包&quot;,
+                &quot;供应商档案与资质&quot;,
+                &quot;项目文档与决策记录&quot;,
+                &quot;品牌内容与公开声明&quot;,
+                &quot;整改计划与关闭证据&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;对照检查表执行逐项审阅&quot;,
+                &quot;验证数字、公式和交叉引用&quot;,
+                &quot;检查版本号、审批状态和有效期&quot;,
+                &quot;比对文档差异并识别未授权修改&quot;,
+                &quot;测试必填项、格式和附件完整性&quot;,
+                &quot;抽样回溯结论到源证据&quot;,
+                &quot;按严重程度分类缺陷&quot;,
+                &quot;建立问题、责任人和整改期限&quot;,
+                &quot;复核整改证据并判断能否关闭&quot;,
+                &quot;检测隐私、保密和版权风险&quot;,
+                &quot;统计缺陷率与重复问题趋势&quot;,
+                &quot;生成发布准入或拒绝意见&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;待审文档或工作簿&quot;,
+                &quot;批准模板与检查清单&quot;,
+                &quot;源数据和证据附件&quot;,
+                &quot;版本历史与修订记录&quot;,
+                &quot;审批流导出&quot;,
+                &quot;合规政策与控制标准&quot;,
+                &quot;历史缺陷与整改台账&quot;,
+                &quot;发布清单和测试报告&quot;,
+                &quot;合同条款或招标评分标准&quot;,
+                &quot;数据字典与指标口径&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;质量审阅意见表&quot;,
+                &quot;缺陷与整改跟踪台账&quot;,
+                &quot;发布准入评估&quot;,
+                &quot;文档版本一致性报告&quot;,
+                &quot;数据质量评分卡&quot;,
+                &quot;内控执行证据包&quot;,
+                &quot;合规差距分析&quot;,
+                &quot;投标响应完整性矩阵&quot;,
+                &quot;根因分析与预防措施&quot;,
+                &quot;管理层质量趋势简报&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;关键缺陷未关闭时不得给出无保留通过结论&quot;,
+                &quot;审阅结论必须引用检查项和可复核证据&quot;,
+                &quot;不得自行改写受控文档来掩盖原始缺陷&quot;,
+                &quot;版本、审批人和生效日期必须形成完整审计链&quot;,
+                &quot;抽样范围、方法和局限性必须在报告中披露&quot;,
+                &quot;个人利益冲突或职责不相容时须转交独立复核&quot;,
+                &quot;敏感数据泄露风险须按最高严重级别及时升级&quot;,
+                &quot;整改关闭必须验证效果，不得仅凭口头确认&quot;,
+            ],
+        },
+        &quot;T8-系统执行与流程流转&quot;: {
+            &quot;roles&quot;: [
+                &quot;业务流程运营专员&quot;,
+                &quot;采购运营专员&quot;,
+                &quot;财务共享服务专员&quot;,
+                &quot;人力资源运营专员&quot;,
+                &quot;客户订单管理员&quot;,
+                &quot;合同运营专员&quot;,
+                &quot;IT服务台专员&quot;,
+                &quot;主数据管理员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;采购申请、订单与收货&quot;,
+                &quot;费用报销与付款申请&quot;,
+                &quot;客户订单、发货与开票&quot;,
+                &quot;合同创建、审批与归档&quot;,
+                &quot;员工入转调离手续&quot;,
+                &quot;账号开通、变更与停用&quot;,
+                &quot;客户或供应商主数据&quot;,
+                &quot;服务工单与故障升级&quot;,
+                &quot;价格、折扣与信用额度&quot;,
+                &quot;资产领用、调拨与盘点&quot;,
+                &quot;发票验真与三单匹配&quot;,
+                &quot;系统批量导入与处理回执&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;校验请求完整性和发起人权限&quot;,
+                &quot;依据条件路由到正确审批链&quot;,
+                &quot;将表单字段映射到目标系统&quot;,
+                &quot;创建、更新或提交业务记录&quot;,
+                &quot;检查重复记录和幂等性键&quot;,
+                &quot;处理系统校验错误与退回原因&quot;,
+                &quot;核对审批、执行和回执状态&quot;,
+                &quot;下载并归档凭证与系统日志&quot;,
+                &quot;执行跨系统字段与金额对账&quot;,
+                &quot;按服务级别追踪超时事项&quot;,
+                &quot;在失败后执行安全重试或人工升级&quot;,
+                &quot;生成批处理结果与异常队列&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;业务申请表或电子表单&quot;,
+                &quot;审批记录与授权矩阵&quot;,
+                &quot;合同、发票或收货凭证&quot;,
+                &quot;系统批量导入模板&quot;,
+                &quot;主数据创建或变更单&quot;,
+                &quot;工单队列和处理日志&quot;,
+                &quot;接口回执与错误报告&quot;,
+                &quot;服务级别与流程规则&quot;,
+                &quot;身份与权限清单&quot;,
+                &quot;对账报表和系统截图&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;可执行审批任务清单&quot;,
+                &quot;系统批量导入文件&quot;,
+                &quot;流程状态与超时看板&quot;,
+                &quot;失败记录重试计划&quot;,
+                &quot;主数据变更审计报告&quot;,
+                &quot;采购到付款异常队列&quot;,
+                &quot;订单到回款处理台账&quot;,
+                &quot;入离职系统执行清单&quot;,
+                &quot;权限开通与回收证明&quot;,
+                &quot;跨系统对账及闭环报告&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;执行前必须验证授权、审批完成度和职责分离要求&quot;,
+                &quot;不可逆或高影响操作必须设置人工确认门禁&quot;,
+                &quot;重复提交须通过业务键和幂等性规则阻断&quot;,
+                &quot;系统失败不得无限重试，须保留错误并按策略升级&quot;,
+                &quot;不得通过绕过必填校验或伪造凭证推进流程&quot;,
+                &quot;执行结果必须保留时间戳、操作者和回执编号&quot;,
+                &quot;权限只按最小必要范围授予并在到期后及时回收&quot;,
+                &quot;个人与财务数据在导出、传输和归档时必须受控&quot;,
+            ],
+        },
+    },
+}
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">完整taxonomy · FIN / 金融（我编写的词表）</summary><p><a href="pipeline-evidence/taxonomy-fin.py.txt" download>下载原文快照</a></p><pre class="instruction">&quot;&quot;&quot;金融领域的可组合任务元数据。
+
+每个二级领域都从角色、业务对象、操作、输入材料、决策议题和规则六个维度
+提供候选项，供构题器生成可验证的金融工作任务。
+&quot;&quot;&quot;
+
+from __future__ import annotations
+
+
+DOMAIN_SPEC: dict[str, object] = {
+    &quot;code&quot;: &quot;FIN&quot;,
+    &quot;name&quot;: &quot;金融&quot;,
+    &quot;l2&quot;: {
+        &quot;Fin1-投资银行&quot;: {
+            &quot;roles&quot;: [
+                &quot;并购顾问项目经理&quot;,
+                &quot;股权融资承销人&quot;,
+                &quot;债券资本市场分析师&quot;,
+                &quot;估值与建模分析师&quot;,
+                &quot;尽调与数据室管理人&quot;,
+                &quot;交易执行与申报经理&quot;,
+                &quot;投行合规复核专员&quot;,
+                &quot;交易后整合顾问&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;IPO发行人&quot;,
+                &quot;并购标的公司&quot;,
+                &quot;潜在战略买方&quot;,
+                &quot;私募配售投资人&quot;,
+                &quot;公司债发行人&quot;,
+                &quot;可转债融资方&quot;,
+                &quot;分拆与剥离资产&quot;,
+                &quot;重组债务人&quot;,
+                &quot;可比上市公司&quot;,
+                &quot;可比交易案例&quot;,
+                &quot;受监管审批交易&quot;,
+                &quot;交易后协同项目&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;搭建DCF与敏感性模型&quot;,
+                &quot;计算可比公司估值倍数&quot;,
+                &quot;整理可比交易估值区间&quot;,
+                &quot;编制三表联动预测&quot;,
+                &quot;拆分收益与成本驱动因素&quot;,
+                &quot;核对尽调数据室完整性&quot;,
+                &quot;起草管理层演示材料&quot;,
+                &quot;构建并购增厚摊薄分析&quot;,
+                &quot;评估资本结构与融资成本&quot;,
+                &quot;编制发行时间表与责任矩阵&quot;,
+                &quot;跟踪监管反馈与回复闭环&quot;,
+                &quot;复核交易文件数据一致性&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;审计财务报表及附注&quot;,
+                &quot;管理层预测模型&quot;,
+                &quot;交易条款清单&quot;,
+                &quot;尽调资料清单与问答记录&quot;,
+                &quot;股东名册与股权架构表&quot;,
+                &quot;市场与行业数据库导出&quot;,
+                &quot;已公告交易与估值报告&quot;,
+                &quot;招股书或募集说明书&quot;,
+                &quot;法律意见与监管反馈函&quot;,
+                &quot;路演反馈与订单簿&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;建议估值区间与报价上限&quot;,
+                &quot;交易对价与支付方式&quot;,
+                &quot;股权与债务融资组合&quot;,
+                &quot;发行窗口与定价区间&quot;,
+                &quot;关键尽调风险是否可接受&quot;,
+                &quot;并购交易是否增厚每股收益&quot;,
+                &quot;是否启动竞争性出售流程&quot;,
+                &quot;投资人分配与稳定价格方案&quot;,
+                &quot;监管审批前置条件&quot;,
+                &quot;交易后协同效应与整合节奏&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;估值日与市场数据截止日必须一致&quot;,
+                &quot;企业价值转换股权价值时必须逐项调整净债务&quot;,
+                &quot;不得将管理层预测伪装为已审计历史数据&quot;,
+                &quot;重大假设、数据来源和版本必须可追溯&quot;,
+                &quot;未公开重大信息按隔离墙与最小权限管理&quot;,
+                &quot;发行与交易文件中的核心数据必须交叉勾稽&quot;,
+                &quot;利益冲突和关联关系必须先识别再处置&quot;,
+                &quot;对外文件需完成法务、合规与质量控制复核&quot;,
+            ],
+        },
+        &quot;Fin2-股票研究&quot;: {
+            &quot;roles&quot;: [
+                &quot;卖方行业首席分析师&quot;,
+                &quot;买方股票研究员&quot;,
+                &quot;研究助理&quot;,
+                &quot;量化基本面分析师&quot;,
+                &quot;公司调研专员&quot;,
+                &quot;投资组合经理&quot;,
+                &quot;研究合规审阅人&quot;,
+                &quot;数据与估值模型管理员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;A股上市公司&quot;,
+                &quot;港股上市公司&quot;,
+                &quot;海外中概股&quot;,
+                &quot;行业与子行业&quot;,
+                &quot;上市公司管理层&quot;,
+                &quot;核心产品与业务线&quot;,
+                &quot;上下游供应链&quot;,
+                &quot;竞争对手与可比公司&quot;,
+                &quot;分析师一致预期&quot;,
+                &quot;机构持仓与资金流&quot;,
+                &quot;业绩与盈利预告&quot;,
+                &quot;重大公告事件&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;清洗并重构历史财务数据&quot;,
+                &quot;拆解收入、价格、销量与渗透率&quot;,
+                &quot;更新盈利预测与估值模型&quot;,
+                &quot;对比实际业绩与市场预期&quot;,
+                &quot;计算PE、PB、EV/EBITDA等倍数&quot;,
+                &quot;编制公司深度报告&quot;,
+                &quot;提炼业绩会与调研纪要&quot;,
+                &quot;跟踪产业高频与替代数据&quot;,
+                &quot;进行情景分析与压力测试&quot;,
+                &quot;识别会计质量与财务造假信号&quot;,
+                &quot;记录投资假设与催化剂进展&quot;,
+                &quot;复盘目标价与实际回报偏差&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;定期报告与临时公告&quot;,
+                &quot;业绩说明会逐字稿&quot;,
+                &quot;交易所问询函及回复&quot;,
+                &quot;公司调研纪要&quot;,
+                &quot;行业统计与政策文件&quot;,
+                &quot;价格、销量与渠道数据&quot;,
+                &quot;分析师一致预期数据&quot;,
+                &quot;股价、估值与成交数据&quot;,
+                &quot;公司与竞争对手财务模型&quot;,
+                &quot;新闻舆情与事件时间线&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;投资评级与目标价&quot;,
+                &quot;盈利预测上调或下调&quot;,
+                &quot;当前估值是否已反映预期&quot;,
+                &quot;业绩超预期的可持续性&quot;,
+                &quot;公司核心竞争优势是否强化&quot;,
+                &quot;关键假设的上下行风险&quot;,
+                &quot;事件催化剂的概率与时点&quot;,
+                &quot;建议仓位与调整条件&quot;,
+                &quot;同业估值溢价或折价合理性&quot;,
+                &quot;投资逻辑失效的触发条件&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;事实、预测和分析师判断必须明确区分&quot;,
+                &quot;目标价必须绑定估值日、方法和核心假设&quot;,
+                &quot;跨公司对比需统一会计口径与币种&quot;,
+                &quot;未公开重大信息不得写入研究报告或用于交易&quot;,
+                &quot;引用数据需标明来源、期间和提取日&quot;,
+                &quot;变更评级前必须执行模型与文字双重复核&quot;,
+                &quot;涉及投行客户时必须披露潜在利益冲突&quot;,
+                &quot;历史回测不得使用当时不可得的未来信息&quot;,
+            ],
+        },
+        &quot;Fin3-私募股权&quot;: {
+            &quot;roles&quot;: [
+                &quot;股权投资经理&quot;,
+                &quot;行业研究分析师&quot;,
+                &quot;投后管理经理&quot;,
+                &quot;基金运营与估值专员&quot;,
+                &quot;募资与投资者关系经理&quot;,
+                &quot;交易法务与合规经理&quot;,
+                &quot;投资决策委员会秘书&quot;,
+                &quot;产业并购整合负责人&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;成长期未上市企业&quot;,
+                &quot;初创企业与创始团队&quot;,
+                &quot;控股型并购标的&quot;,
+                &quot;少数股权投资标的&quot;,
+                &quot;被投企业管理层&quot;,
+                &quot;联合投资人&quot;,
+                &quot;有限合伙人&quot;,
+                &quot;特殊机会与困境资产&quot;,
+                &quot;行业平台与附加收购标的&quot;,
+                &quot;员工持股平台&quot;,
+                &quot;退出买方与中介机构&quot;,
+                &quot;私募基金投资组合&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;筛选项目并建立投资管线&quot;,
+                &quot;进行商业、财务、法务与税务尽调&quot;,
+                &quot;构建LBO与回报模型&quot;,
+                &quot;测算IRR、MOIC与现金回款节奏&quot;,
+                &quot;设计估值调整和对赌条款&quot;,
+                &quot;编制投资委员会备忘录&quot;,
+                &quot;监测被投企业经营KPI&quot;,
+                &quot;制定百日计划与价值创造方案&quot;,
+                &quot;执行季度估值与减值测试&quot;,
+                &quot;分析追加投资与防稀释影响&quot;,
+                &quot;规划IPO、并购或老股转让退出&quot;,
+                &quot;编制基金组合归因与LP报告&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;项目计划书与路演材料&quot;,
+                &quot;历史财务与管理报表&quot;,
+                &quot;客户、供应商与合同明细&quot;,
+                &quot;尽调报告与风险清单&quot;,
+                &quot;投资条款清单与股东协议&quot;,
+                &quot;组织架构与股权穿透图&quot;,
+                &quot;月度经营KPI与预算差异&quot;,
+                &quot;董事会材料与重大事项报告&quot;,
+                &quot;后续融资方案与资本表&quot;,
+                &quot;退出报价与买方尽调反馈&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;项目是否进入正式尽调&quot;,
+                &quot;投资估值、金额与持股比例&quot;,
+                &quot;关键保护性条款与治理权利&quot;,
+                &quot;风险调整后回报是否达标&quot;,
+                &quot;投后价值创造的优先级&quot;,
+                &quot;经营偏差是否触发干预&quot;,
+                &quot;是否参与后续轮融资&quot;,
+                &quot;季度公允价值与减值判断&quot;,
+                &quot;退出路径、时机与底价&quot;,
+                &quot;基金流动性与储备资金分配&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;投资决策必须经授权的投委会表决并留痕&quot;,
+                &quot;基金投资不得超越合伙协议的投资范围和集中度限制&quot;,
+                &quot;估值需使用可观察信息并记录方法变更&quot;,
+                &quot;关联交易、利益冲突和共同投资必须事先披露&quot;,
+                &quot;客户与个人数据只能用于授权的尽调目的&quot;,
+                &quot;回报模型必须展示基准、上行和下行情景&quot;,
+                &quot;投后重大风险须按协议时限升级至投委会&quot;,
+                &quot;对LP报告的业绩口径必须与基金账簿一致&quot;,
+            ],
+        },
+        &quot;Fin4-财富管理&quot;: {
+            &quot;roles&quot;: [
+                &quot;私人银行家&quot;,
+                &quot;财富顾问&quot;,
+                &quot;投资顾问&quot;,
+                &quot;家族办公室顾问&quot;,
+                &quot;产品筛选与准入专员&quot;,
+                &quot;投资组合管理人&quot;,
+                &quot;适当性与合规专员&quot;,
+                &quot;高净值客户服务经理&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;高净值个人&quot;,
+                &quot;超高净值家族&quot;,
+                &quot;企业家与公司股东&quot;,
+                &quot;慈善基金与家族基金会&quot;,
+                &quot;家族信托&quot;,
+                &quot;全权委托投资组合&quot;,
+                &quot;私募基金与结构性产品&quot;,
+                &quot;境内外资产组合&quot;,
+                &quot;家族企业股权&quot;,
+                &quot;保险与年金工具&quot;,
+                &quot;现金管理与短期融资&quot;,
+                &quot;艺术品与其他另类资产&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;完成客户身份与受益所有人识别&quot;,
+                &quot;评估风险承受能力与投资目标&quot;,
+                &quot;编制投资政策声明&quot;,
+                &quot;构建战略与战术资产配置&quot;,
+                &quot;筛选产品并执行适当性匹配&quot;,
+                &quot;计算组合收益、回撤与风险贡献&quot;,
+                &quot;执行定期再平衡与税损优化&quot;,
+                &quot;管理流动性桶与大额支出计划&quot;,
+                &quot;复核费用、返佣与产品利益冲突&quot;,
+                &quot;整合传承、税务、保险与慈善规划&quot;,
+                &quot;编制客户季度组合报告&quot;,
+                &quot;处理市场剧烈波动下的客户沟通&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;KYC与受益所有人材料&quot;,
+                &quot;资产负债清单&quot;,
+                &quot;现金流与大额支出预测&quot;,
+                &quot;风险问卷与投资偏好记录&quot;,
+                &quot;现有持仓与交易流水&quot;,
+                &quot;产品说明书与风险评级&quot;,
+                &quot;基金业绩与持仓披露&quot;,
+                &quot;税务居民身份与纳税资料&quot;,
+                &quot;家族治理文件与信托契约&quot;,
+                &quot;市场情景与资本市场假设&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;战略资产配置与风险预算&quot;,
+                &quot;产品是否符合客户适当性&quot;,
+                &quot;现金储备与非流动资产上限&quot;,
+                &quot;再平衡时机与容差区间&quot;,
+                &quot;集中持股的减持路径&quot;,
+                &quot;市场下跌时的风险缓释方案&quot;,
+                &quot;境内外资产配置与托管架构&quot;,
+                &quot;家族传承与控制权安排&quot;,
+                &quot;投资组合费用的合理性&quot;,
+                &quot;客户目标或风险状况变化后的重规划&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;任何推荐必须与客户目标、期限、经验和承受能力匹配&quot;,
+                &quot;客户身份、资金来源和受益所有人未完成核验不得开展业务&quot;,
+                &quot;复杂或高风险产品需充分揭示损失情景与流动性限制&quot;,
+                &quot;不得承诺保本、保收益或隐瞒尾部风险&quot;,
+                &quot;投资政策声明与重大变更须获客户确认&quot;,
+                &quot;客户信息必须按最小必要原则使用与共享&quot;,
+                &quot;业绩报告需扣除费用并使用一致基准&quot;,
+                &quot;跨境规划必须先确认客户的法域与税务居民身份&quot;,
+            ],
+        },
+        &quot;Fin5-零售证券投资&quot;: {
+            &quot;roles&quot;: [
+                &quot;零售证券投资顾问&quot;,
+                &quot;证券经纪业务客户经理&quot;,
+                &quot;投顾产品经理&quot;,
+                &quot;交易与运营支持专员&quot;,
+                &quot;信用与融资融券风控专员&quot;,
+                &quot;适当性管理专员&quot;,
+                &quot;投资者教育内容编辑&quot;,
+                &quot;零售客户投诉处理人&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;普通个人投资者&quot;,
+                &quot;专业个人投资者&quot;,
+                &quot;A股与存托凭证&quot;,
+                &quot;场内与场外基金&quot;,
+                &quot;交易所债券与可转债&quot;,
+                &quot;ETF与指数产品&quot;,
+                &quot;期权与其他衍生品&quot;,
+                &quot;融资融券账户&quot;,
+                &quot;网上新股申购&quot;,
+                &quot;组合投顾服务&quot;,
+                &quot;限制性或高风险证券&quot;,
+                &quot;客户资金与持仓&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;完成开户KYC与风险测评&quot;,
+                &quot;检查产品准入与客户权限&quot;,
+                &quot;生成分散化的投资组合建议&quot;,
+                &quot;比较基金费率、跟踪误差与回撤&quot;,
+                &quot;估算交易费用与税费&quot;,
+                &quot;执行委托与确认成交回报&quot;,
+                &quot;监控保证金比例与追加风险&quot;,
+                &quot;识别异常交易与账户安全事件&quot;,
+                &quot;记录投资建议与客户确认&quot;,
+                &quot;计算组合收益与业绩归因&quot;,
+                &quot;处理交易失败、红利与公司行动&quot;,
+                &quot;复核投诉中的通话、委托与成交记录&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;客户开户与身份验证材料&quot;,
+                &quot;风险承受能力问卷&quot;,
+                &quot;投资目标与收支信息&quot;,
+                &quot;证券持仓与资金流水&quot;,
+                &quot;行情、估值与公司行动数据&quot;,
+                &quot;产品要素表与风险揭示书&quot;,
+                &quot;委托、成交与交割记录&quot;,
+                &quot;保证金与担保品报表&quot;,
+                &quot;客户沟通与双录记录&quot;,
+                &quot;监管警示名单与交易所公告&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;客户可开通的产品与交易权限&quot;,
+                &quot;组合的股债比例与分散程度&quot;,
+                &quot;个别证券买入是否符合适当性&quot;,
+                &quot;是否应使用融资或衍生品&quot;,
+                &quot;委托类型与交易时点&quot;,
+                &quot;保证金风险的限仓或追加措施&quot;,
+                &quot;异常交易是否需要拦截与上报&quot;,
+                &quot;市场剧烈波动下是否再平衡&quot;,
+                &quot;客户投诉的责任归属与补救方案&quot;,
+                &quot;产品下架或限制销售的触发条件&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;产品风险等级不得高于客户可承受等级，法定例外除外&quot;,
+                &quot;交易建议必须揭示费用、主要风险和利益冲突&quot;,
+                &quot;不得代客决策、分享收益或承担损失&quot;,
+                &quot;高风险业务开通前必须完成知识测评与风险确认&quot;,
+                &quot;委托指令、适当性证据与客户沟通必须可追溯&quot;,
+                &quot;不得使用未公开重大信息或操纵市场&quot;,
+                &quot;客户账户异常登录或资金异动必须及时验证&quot;,
+                &quot;投资教育内容不得被包装为个性化保证性建议&quot;,
+            ],
+        },
+        &quot;Fin6-家庭财富规划&quot;: {
+            &quot;roles&quot;: [
+                &quot;注册财务策划师&quot;,
+                &quot;家庭理财顾问&quot;,
+                &quot;保险规划师&quot;,
+                &quot;退休与养老规划顾问&quot;,
+                &quot;教育金规划顾问&quot;,
+                &quot;遗产与传承规划协调员&quot;,
+                &quot;家庭负债管理顾问&quot;,
+                &quot;财务健康评估专员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;双职工薪家庭&quot;,
+                &quot;自雇与灵活就业家庭&quot;,
+                &quot;单收入或单亲家庭&quot;,
+                &quot;新婚与育儿家庭&quot;,
+                &quot;临近退休家庭&quot;,
+                &quot;已退休家庭&quot;,
+                &quot;房贷与消费贷款&quot;,
+                &quot;子女教育金目标&quot;,
+                &quot;家庭紧急备用金&quot;,
+                &quot;人身、医疗与财产保障&quot;,
+                &quot;退休账户与养老金&quot;,
+                &quot;家庭遗产与受益人安排&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;盘点家庭资产、负债、收入与支出&quot;,
+                &quot;编制家庭资产负债表与现金流量表&quot;,
+                &quot;评估紧急备用金充足度&quot;,
+                &quot;计算保险保障缺口&quot;,
+                &quot;优化房贷与高息债务偿还顺序&quot;,
+                &quot;测算教育金储备路径&quot;,
+                &quot;模拟退休期收支与长寿风险&quot;,
+                &quot;制定定投、储蓄与资产配置计划&quot;,
+                &quot;进行利率、通胀与失业压力测试&quot;,
+                &quot;核对遗嘱、受益人与紧急联系人&quot;,
+                &quot;设置家庭财务目标与里程碑&quot;,
+                &quot;定期复盘实际进度并滚动调整&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;家庭成员与抚养关系信息&quot;,
+                &quot;工资、经营与其他收入流水&quot;,
+                &quot;日常支出与预算明细&quot;,
+                &quot;银行、证券与养老账户对账单&quot;,
+                &quot;房贷、消费贷与信用卡账单&quot;,
+                &quot;保单、保额与受益人清单&quot;,
+                &quot;子女教育费与目标年限&quot;,
+                &quot;退休年龄与生活费目标&quot;,
+                &quot;遗嘱、授权书与财产权属文件&quot;,
+                &quot;家庭风险偏好与价值观访谈记录&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;紧急备用金的目标月数&quot;,
+                &quot;高息债务与投资的优先顺序&quot;,
+                &quot;家庭保险保额与保费预算&quot;,
+                &quot;租房、购房或提前还贷&quot;,
+                &quot;教育、退休与其他目标的资金优先级&quot;,
+                &quot;长期投资组合的风险水平&quot;,
+                &quot;退休时点与预期支取率&quot;,
+                &quot;家庭收入中断时的应急方案&quot;,
+                &quot;遗产分配与未成年人保护安排&quot;,
+                &quot;现金流变化后哪些目标需延后或缩减&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;先建立基础保障和紧急储备，再安排高风险长期投资&quot;,
+                &quot;家庭规划不得依赖无来源的收益率或收入增长假设&quot;,
+                &quot;名义收益、实际收益和通胀假设必须分开表达&quot;,
+                &quot;定投与偿债计划不得造成日常现金流为负&quot;,
+                &quot;涉及税务、法律和保险条款的结论须标明专业复核需求&quot;,
+                &quot;夫妻及其他共同权利人的重大决定需确认授权&quot;,
+                &quot;敏感家庭信息必须加密并仅用于约定的规划目的&quot;,
+                &quot;每次复盘须使用同一口径对比目标、计划与实际值&quot;,
+            ],
+        },
+        &quot;Fin7-消费金融&quot;: {
+            &quot;roles&quot;: [
+                &quot;个人信贷产品经理&quot;,
+                &quot;信用风险策略分析师&quot;,
+                &quot;信贷审批人&quot;,
+                &quot;反欺诈调查专员&quot;,
+                &quot;定价与额度策略经理&quot;,
+                &quot;贷后风险管理专员&quot;,
+                &quot;客户保护与投诉专员&quot;,
+                &quot;信贷数据模型分析师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;个人信用贷款申请人&quot;,
+                &quot;信用卡持卡人&quot;,
+                &quot;汽车与耐用品分期客户&quot;,
+                &quot;个体工商户小额贷款&quot;,
+                &quot;校园与年轻客群&quot;,
+                &quot;新市民与灵活就业者&quot;,
+                &quot;联合贷款与助贷客户&quot;,
+                &quot;逾期借款人&quot;,
+                &quot;疑似欺诈申请&quot;,
+                &quot;渠道与资金合作方&quot;,
+                &quot;信用评分模型&quot;,
+                &quot;消费信贷资产组合&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;验证客户身份与借款用途&quot;,
+                &quot;拉取并解析征信与多头借贷数据&quot;,
+                &quot;评估收入稳定性与偿债能力&quot;,
+                &quot;执行反欺诈规则与人工审核&quot;,
+                &quot;计算评分、额度、利率与期限&quot;,
+                &quot;生成审批决策与原因码&quot;,
+                &quot;执行借款合同签署与放款前核验&quot;,
+                &quot;监测首期逾期与风险迁徙&quot;,
+                &quot;制定分群催收与困难客户方案&quot;,
+                &quot;计算预期信用损失与拨备&quot;,
+                &quot;评估渠道质量与合作方风险&quot;,
+                &quot;复盘模型稳定性与策略效果&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;贷款申请表与身份材料&quot;,
+                &quot;人行与其他合规征信报告&quot;,
+                &quot;银行流水与收入证明&quot;,
+                &quot;设备、行为与反欺诈特征&quot;,
+                &quot;申请评分与规则命中记录&quot;,
+                &quot;借款合同与费率说明&quot;,
+                &quot;还款计划与实际入账流水&quot;,
+                &quot;催收联络与客户承诺记录&quot;,
+                &quot;渠道客群与通过率报表&quot;,
+                &quot;贷款组合迁徙率与损失数据&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;贷款申请的批准、拒绝或转人工&quot;,
+                &quot;授信额度、定价与还款期限&quot;,
+                &quot;疑似欺诈是否拦截与上报&quot;,
+                &quot;客户总负债是否可持续&quot;,
+                &quot;放款前条件是否全部满足&quot;,
+                &quot;账户是否降额、冻结或恢复额度&quot;,
+                &quot;逾期账户的催收策略与强度&quot;,
+                &quot;是否为困难客户重组还款计划&quot;,
+                &quot;风险策略或评分阈值的调整&quot;,
+                &quot;渠道、产品或客群是否缩量或停止&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;信贷决策只能使用经合法授权获取的数据&quot;,
+                &quot;审批拒绝必须生成可解释且与实际命中一致的原因&quot;,
+                &quot;年化综合资金成本、费用和逾期后果须充分披露&quot;,
+                &quot;不得因受保护的个人特征实施不公平差别定价&quot;,
+                &quot;自动决策模型需经版本审批、监控和定期验证&quot;,
+                &quot;催收不得骚扰、威胁或向无关第三方泄露债务&quot;,
+                &quot;逾期、核销与拨备口径必须保持时点和定义一致&quot;,
+                &quot;客户投诉和异议信息必须保留处理证据与复核记录&quot;,
+            ],
+        },
+        &quot;Fin8-个人税务与社保&quot;: {
+            &quot;roles&quot;: [
+                &quot;个人税务顾问&quot;,
+                &quot;薪酬与个税专员&quot;,
+                &quot;社会保险与公积金专员&quot;,
+                &quot;员工福利顾问&quot;,
+                &quot;税务申报复核人&quot;,
+                &quot;个税稽查应对顾问&quot;,
+                &quot;退休待遇测算专员&quot;,
+                &quot;个人税务数据分析师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;工资薪金所得&quot;,
+                &quot;劳务报酬与稿酬&quot;,
+                &quot;经营所得&quot;,
+                &quot;股权激励与年终奖&quot;,
+                &quot;利息、股息与资产转让所得&quot;,
+                &quot;专项附加扣除&quot;,
+                &quot;社会保险缴费基数&quot;,
+                &quot;住房公积金缴存与提取&quot;,
+                &quot;养老、医疗与失业待遇&quot;,
+                &quot;灵活就业与个体经营者&quot;,
+                &quot;年度汇算清缴纳税人&quot;,
+                &quot;税收协定待遇与非居民个人&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;归集全年分类收入与已缴税额&quot;,
+                &quot;核对申报身份、居住天数与税收居民状态&quot;,
+                &quot;计算综合所得应纳税额&quot;,
+                &quot;验证专项附加扣除资格与金额&quot;,
+                &quot;比对扣缴申报与银行入账差异&quot;,
+                &quot;计算年度汇算应补退税&quot;,
+                &quot;复核股权激励与奖金计税方式&quot;,
+                &quot;测算社保与公积金应缴金额&quot;,
+                &quot;估算退休后养老金与医保待遇&quot;,
+                &quot;编制税务异常解释与更正资料&quot;,
+                &quot;整理稽查或申诉的证据链&quot;,
+                &quot;对敏感个人信息执行脱敏与权限控制&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;个人所得税扣缴明细&quot;,
+                &quot;工资单与银行入账流水&quot;,
+                &quot;多处任职与其他收入证明&quot;,
+                &quot;专项附加扣除信息与凭证&quot;,
+                &quot;年终奖与股权激励明细&quot;,
+                &quot;社保与公积金缴存记录&quot;,
+                &quot;纳税记录与完税证明&quot;,
+                &quot;税务机关通知与风险提示&quot;,
+                &quot;身份、户籍、居住与出入境记录&quot;,
+                &quot;劳动合同、退休与离职文件&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;年度汇算是否必须办理&quot;,
+                &quot;哪些收入项目应并入综合所得&quot;,
+                &quot;专项附加扣除应由谁申报&quot;,
+                &quot;年终奖计税方式的选择&quot;,
+                &quot;股权激励的纳税时点与应税额&quot;,
+                &quot;税收居民或非居民身份判定&quot;,
+                &quot;社保与公积金缴费基数是否正确&quot;,
+                &quot;税务差异应自行更正还是申诉&quot;,
+                &quot;退休地与待遇领取方案&quot;,
+                &quot;哪些资料需留存以支持后续核查&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;税率、扣除标准和申报期限必须对应正确的纳税年度&quot;,
+                &quot;税务居民身份不得仅根据国籍或户籍推定&quot;,
+                &quot;扣除项目必须有资格、期间与凭证支持&quot;,
+                &quot;同一笔收入或扣除不得重复计算&quot;,
+                &quot;法规口径存疑时必须标记待核实而非自行补全&quot;,
+                &quot;纳税人身份、收入与家庭信息按敏感个人信息保护&quot;,
+                &quot;申报、更正和复核记录必须保留可审计轨迹&quot;,
+                &quot;给出规划建议时必须区分法定结论与假设情景&quot;,
+            ],
+        },
+        &quot;Fin9-跨境个人金融&quot;: {
+            &quot;roles&quot;: [
+                &quot;跨境财富顾问&quot;,
+                &quot;国际个人银行客户经理&quot;,
+                &quot;外汇与跨境汇款专员&quot;,
+                &quot;跨境税务协调顾问&quot;,
+                &quot;国际投资适当性专员&quot;,
+                &quot;反洗钱与制裁合规专员&quot;,
+                &quot;留学与移居金融服务顾问&quot;,
+                &quot;跨境家族传承顾问&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;多税务居民家庭&quot;,
+                &quot;海外留学与工作人员&quot;,
+                &quot;新移民与回流人员&quot;,
+                &quot;跨境企业家与股东&quot;,
+                &quot;境内外银行账户&quot;,
+                &quot;外币资产与负债&quot;,
+                &quot;海外证券与基金投资&quot;,
+                &quot;跨境保险与养老账户&quot;,
+                &quot;海外房产与租金收入&quot;,
+                &quot;跨境遗产与家族信托&quot;,
+                &quot;国际薪酬与股权激励&quot;,
+                &quot;跨境汇款与资金来源&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;识别税务居民身份与报告义务&quot;,
+                &quot;穿透核验客户与受益所有人&quot;,
+                &quot;检查制裁、PEP与反洗钱风险&quot;,
+                &quot;归集境内外资产负债与现金流&quot;,
+                &quot;计算汇率换算与外汇风险敞口&quot;,
+                &quot;审核跨境汇款用途与资金来源证明&quot;,
+                &quot;比对税收协定、抵免与申报口径&quot;,
+                &quot;构建多币种资产配置与套期情景&quot;,
+                &quot;评估境外产品的准入与适当性&quot;,
+                &quot;规划留学、移民或退休的跨境支出&quot;,
+                &quot;协调跨境继承、信托与受益人安排&quot;,
+                &quot;留存交易、税务与合规判断的证据链&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;护照、签证与税收居民证明&quot;,
+                &quot;境内外银行与托管账户对账单&quot;,
+                &quot;出入境天数与住所记录&quot;,
+                &quot;国际薪酬、完税与股权激励文件&quot;,
+                &quot;跨境汇款申请与用途证明&quot;,
+                &quot;公司、信托与受益所有人架构图&quot;,
+                &quot;海外证券、保险与房产权属文件&quot;,
+                &quot;双边税收协定与当地税务规则摘要&quot;,
+                &quot;制裁、PEP与负面新闻筛查结果&quot;,
+                &quot;汇率、利率与多币种资产市值&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;客户在各法域的税务居民身份&quot;,
+                &quot;跨境账户是否满足开立与持续尽调条件&quot;,
+                &quot;汇款的真实用途、合规路径与额度&quot;,
+                &quot;可疑交易是否拦截、升级或报告&quot;,
+                &quot;多币种现金流的兑换与套保方案&quot;,
+                &quot;境外投资产品是否可销售并适合客户&quot;,
+                &quot;双重征税的抵免、免税或协定待遇&quot;,
+                &quot;留学或移民资金的币种与到账时点&quot;,
+                &quot;跨境遗产与信托架构的可执行性&quot;,
+                &quot;法规或身份变化后哪些安排需重新审查&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;跨境业务必须同时检查客户所在地、产品注册地和服务提供地规则&quot;,
+                &quot;未完成制裁、PEP、受益所有人和资金来源审查不得交易&quot;,
+                &quot;不得为规避外汇、税务或报告义务拆分交易&quot;,
+                &quot;币种换算必须记录汇率来源、时点与买卖方向&quot;,
+                &quot;税收协定待遇必须由居民身份和受益所有人条件支持&quot;,
+                &quot;不得将一个法域的产品准入结论直接套用到另一法域&quot;,
+                &quot;跨境个人数据传输须满足授权、最小化和留存要求&quot;,
+                &quot;法律或税务待遇存在不确定性时必须按法域标记待专业确认&quot;,
+            ],
+        },
+    },
+}
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">完整taxonomy · LAW / 法律（我编写的词表）</summary><p><a href="pipeline-evidence/taxonomy-law.py.txt" download>下载原文快照</a></p><pre class="instruction">&quot;&quot;&quot;法律领域的任务合成词表。
+
+本模块只描述可从题目输入材料中验证的工作流，不预置任何实体
+法结论。合成器应把 ``rules`` 落到题包内的项目说明、流程文件或
+口径表中，使结果可追溯、可复核。
+&quot;&quot;&quot;
+
+from __future__ import annotations
+
+
+DOMAIN_SPEC: dict[str, object] = {
+    &quot;code&quot;: &quot;LAW&quot;,
+    &quot;name&quot;: &quot;法律&quot;,
+    &quot;l2&quot;: {
+        &quot;Law1-诉讼律师&quot;: {
+            &quot;roles&quot;: [
+                &quot;主办律师&quot;,
+                &quot;诉讼团队律师&quot;,
+                &quot;律师助理&quot;,
+                &quot;证据管理专员&quot;,
+                &quot;案件项目经理&quot;,
+                &quot;客户联络律师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;民商事合同纠纷&quot;,
+                &quot;公司治理纠纷&quot;,
+                &quot;劳动争议&quot;,
+                &quot;知识产权纠纷&quot;,
+                &quot;侵权责任纠纷&quot;,
+                &quot;金融与担保纠纷&quot;,
+                &quot;建设工程纠纷&quot;,
+                &quot;行政争议&quot;,
+                &quot;仲裁案件&quot;,
+                &quot;执行与财产保全&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;整理案件时间线&quot;,
+                &quot;编制争议焦点表&quot;,
+                &quot;建立证据目录与编号映射&quot;,
+                &quot;比对证据与主张&quot;,
+                &quot;检查程序节点完整性&quot;,
+                &quot;检索并整理类案材料&quot;,
+                &quot;起草诉讼文书工作稿&quot;,
+                &quot;制作庭审提纲与询问清单&quot;,
+                &quot;跟踪待办与截止日期&quot;,
+                &quot;生成案件进展汇报&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;起诉状、答辩状与代理词草稿&quot;,
+                &quot;合同、补充协议与订单&quot;,
+                &quot;邮件、即时通讯与会议纪要&quot;,
+                &quot;票据、账册与交易流水&quot;,
+                &quot;证据清单与电子数据导出&quot;,
+                &quot;受理通知、举证通知与庭审笔录&quot;,
+                &quot;时限表、送达记录与项目日历&quot;,
+                &quot;题包提供的法规、案例与内部检索摘要&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;哪些事实已有材料支持&quot;,
+                &quot;哪些主张存在证据缺口&quot;,
+                &quot;材料之间是否存在冲突&quot;,
+                &quot;哪些证据需要核验来源与完整性&quot;,
+                &quot;项目时限与前置节点是否满足&quot;,
+                &quot;应优先补充哪些材料&quot;,
+                &quot;文书中哪些陈述需要限定或留待核实&quot;,
+                &quot;进展汇报中哪些事项需要升级&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;事实、主张与反驳必须分栏记录，不得将当事人陈述当作已证实事实。&quot;,
+                &quot;每项关键事实必须回链到输入材料的文件名、页码或记录编号。&quot;,
+                &quot;时限只能按题包给定的起算日、日历和计算口径生成，缺项必须显式标注。&quot;,
+                &quot;对同一事项的冲突记录必须并列展示，不得在无授权依据时擅自选边。&quot;,
+                &quot;证据状态仅使用题包定义的枚举值，无法确定时记为待核验。&quot;,
+                &quot;输出中的个人识别信息按题包的脱敏表处理，保留未脱敏值需有明确授权标记。&quot;,
+            ],
+        },
+        &quot;Law2-非诉律师&quot;: {
+            &quot;roles&quot;: [
+                &quot;交易主办律师&quot;,
+                &quot;并购律师&quot;,
+                &quot;融资项目律师&quot;,
+                &quot;尽职调查律师&quot;,
+                &quot;律师助理&quot;,
+                &quot;交易文件管理专员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;股权投资与融资&quot;,
+                &quot;企业并购与资产收购&quot;,
+                &quot;债权融资与担保&quot;,
+                &quot;商业合同审阅&quot;,
+                &quot;公司设立与变更&quot;,
+                &quot;公司治理与股东事项&quot;,
+                &quot;知识产权许可与转让&quot;,
+                &quot;数据与技术合作&quot;,
+                &quot;不动产与建设工程交易&quot;,
+                &quot;跨境商业交易&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;搭建尽职调查清单&quot;,
+                &quot;追踪资料提供状态&quot;,
+                &quot;提取合同关键条款&quot;,
+                &quot;建立交易文件索引&quot;,
+                &quot;对比文件版本与修订点&quot;,
+                &quot;编制问题清单与风险台账&quot;,
+                &quot;起草条款修订建议&quot;,
+                &quot;制作签署与交割清单&quot;,
+                &quot;核对前置条件与交付物&quot;,
+                &quot;整理交易备忘录与进展报告&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;意向书、交易方案与项目时间表&quot;,
+                &quot;公司章程、登记文件与股权结构表&quot;,
+                &quot;主协议、附件与补充协议&quot;,
+                &quot;尽调资料室目录与问答记录&quot;,
+                &quot;董事会、股东会议案与决议&quot;,
+                &quot;财务报表、审计报告与重大合同清单&quot;,
+                &quot;批准、登记、许可与同意记录&quot;,
+                &quot;文件修订稿、谈判纪要与签署页&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;资料室哪些文件尚未提供&quot;,
+                &quot;哪些合同条款与交易方案不一致&quot;,
+                &quot;哪些声明事项缺少材料支持&quot;,
+                &quot;哪些前置条件已满足或待确认&quot;,
+                &quot;文件修订是否超出谈判纪要的授权范围&quot;,
+                &quot;应将哪些问题纳入风险台账&quot;,
+                &quot;签署包和交割包是否齐备&quot;,
+                &quot;哪些未决事项需要提交项目负责人&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;所有文件以题包指定的版本清单为准，无版本号或日期的文件不得标为定稿。&quot;,
+                &quot;问题清单每一项必须关联来源文件、责任人、状态和到期日。&quot;,
+                &quot;条款比对必须保留原文条款号和修订稿位置，不得只给出无引用的结论。&quot;,
+                &quot;前置条件只能按题包提供的满足凭证标记，材料缺失时标记待确认。&quot;,
+                &quot;风险等级仅使用项目规则文件中的评级矩阵，不得自行创设阈值。&quot;,
+                &quot;交割清单必须逐项记录已提供、待补充或不适用及其材料依据。&quot;,
+            ],
+        },
+        &quot;Law3-企业法务与合规&quot;: {
+            &quot;roles&quot;: [
+                &quot;总法律顾问&quot;,
+                &quot;法务经理&quot;,
+                &quot;合规经理&quot;,
+                &quot;合同管理专员&quot;,
+                &quot;内控与调查专员&quot;,
+                &quot;数据保护与隐私专员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;合同生命周期管理&quot;,
+                &quot;营销与宣传审核&quot;,
+                &quot;供应商与第三方管理&quot;,
+                &quot;商业行为与利益冲突&quot;,
+                &quot;反舞弊与举报处理&quot;,
+                &quot;数据保护与隐私&quot;,
+                &quot;知识产权运营与保护&quot;,
+                &quot;劳动用工与员工管理&quot;,
+                &quot;制裁、出口管制与贸易合规&quot;,
+                &quot;产品、安全与质量合规&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;审阅合同与标注偏离项&quot;,
+                &quot;维护合同台账与续约日历&quot;,
+                &quot;将业务事实映射到内部控制项&quot;,
+                &quot;执行第三方资料完整性检查&quot;,
+                &quot;核对审批权限与流程节点&quot;,
+                &quot;编制合规监测与例外报告&quot;,
+                &quot;整理内部调查时间线&quot;,
+                &quot;追踪整改事项和证据&quot;,
+                &quot;起草政策、流程与员工指引&quot;,
+                &quot;生成管理层合规简报&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;合同、订单、附件与标准条款库&quot;,
+                &quot;审批矩阵、授权表与系统流程导出&quot;,
+                &quot;内部政策、操作规程与控制清单&quot;,
+                &quot;第三方问卷、声明与背调材料&quot;,
+                &quot;举报记录、访谈笔录与调查材料&quot;,
+                &quot;合规事件、监测指标与例外台账&quot;,
+                &quot;数据处理活动记录与系统清单&quot;,
+                &quot;培训记录、整改凭证与复核结果&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;合同偏离项是否触发项目审批流程&quot;,
+                &quot;第三方材料是否达到内部准入条件&quot;,
+                &quot;哪些交易或事件命中监测规则&quot;,
+                &quot;哪些控制项缺少执行证据&quot;,
+                &quot;哪些例外尚未整改或复核&quot;,
+                &quot;数据清单与处理记录是否一致&quot;,
+                &quot;哪些内部调查事实仍缺乏交叉印证&quot;,
+                &quot;哪些高优先级事项需要上报管理层&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;合规命中与风险分级必须使用题包中给定的规则表和阈值。&quot;,
+                &quot;合同偏离必须同时记录标准条款、待审条款、差异类型和引用位置。&quot;,
+                &quot;审批结果只能依据提供的授权表和已完成流程记录，不得推定未记录审批。&quot;,
+                &quot;调查输出必须区分陈述、系统记录、书面证据与分析性推断。&quot;,
+                &quot;整改事项标记完成前，必须关联可打开的完成凭证和复核人记录。&quot;,
+                &quot;所有人员、客户和举报人标识符按题包的分级与脱敏口径输出。&quot;,
+            ],
+        },
+        &quot;Law4-法官与法院辅助&quot;: {
+            &quot;roles&quot;: [
+                &quot;承办法官&quot;,
+                &quot;法官助理&quot;,
+                &quot;书记员&quot;,
+                &quot;审判管理人员&quot;,
+                &quot;立案与诉讼服务人员&quot;,
+                &quot;司法行政与档案人员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;立案材料审查&quot;,
+                &quot;案件分流与排期&quot;,
+                &quot;送达与程序节点&quot;,
+                &quot;庭前会议与证据交换&quot;,
+                &quot;庭审记录与校对&quot;,
+                &quot;案件事实与争点整理&quot;,
+                &quot;裁判文书辅助起草&quot;,
+                &quot;关联案件与类案检索&quot;,
+                &quot;审限与长期未结案件管理&quot;,
+                &quot;结案、归档与质量评查&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;核对立案材料清单&quot;,
+                &quot;整理当事人与送达信息&quot;,
+                &quot;维护案件程序时间线&quot;,
+                &quot;归纳当事人主张与答辩&quot;,
+                &quot;建立证据与待证事实映射&quot;,
+                &quot;比对庭审笔录与录音转写&quot;,
+                &quot;检索并编制类案摘要&quot;,
+                &quot;生成文书格式与引用检查表&quot;,
+                &quot;扫描审限、延期与扣除记录&quot;,
+                &quot;开展卷宗完整性与归档检查&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;立案申请、当事人信息表与材料目录&quot;,
+                &quot;起诉状、答辩状与证据清单&quot;,
+                &quot;送达回证、电子送达记录与公告记录&quot;,
+                &quot;庭审笔录、音视频转写与庭审提纲&quot;,
+                &quot;合议笔记、文书工作稿与校对表&quot;,
+                &quot;审限台账、节点日历与系统操作日志&quot;,
+                &quot;类案检索结果与参考材料&quot;,
+                &quot;卷宗目录、扫描件与归档规范&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;材料清单是否完整且可识别&quot;,
+                &quot;当事人信息与送达记录是否一致&quot;,
+                &quot;哪些事实双方无争议、哪些仍待核实&quot;,
+                &quot;证据与待证事实之间是否有空缺或冲突&quot;,
+                &quot;庭审笔录与转写中哪些内容需要人工复核&quot;,
+                &quot;哪些程序节点接近题包设定的提醒阈值&quot;,
+                &quot;文书引用与卷宗材料是否能够对应&quot;,
+                &quot;卷宗中哪些必备文件缺失或重复&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;辅助材料仅整理题包已给信息，不代替任何应由指定主体作出的实体判断。&quot;,
+                &quot;主张、答辩、证据内容和辅助分析必须使用不同字段存储。&quot;,
+                &quot;案号、人员和文书的关联必须通过题包中的主键或映射表完成。&quot;,
+                &quot;审限提示只按提供的节点、扣除期和日历口径计算，不得补造日期。&quot;,
+                &quot;笔录差异项必须同时引用两个来源的位置，无法对应时标记为待复核。&quot;,
+                &quot;归档结果必须保留原文件名、类型、页数、校验状态和缺失原因。&quot;,
+            ],
+        },
+        &quot;Law5-检察官与检察辅助&quot;: {
+            &quot;roles&quot;: [
+                &quot;承办检察官&quot;,
+                &quot;检察官助理&quot;,
+                &quot;书记员&quot;,
+                &quot;案件管理人员&quot;,
+                &quot;控告申诉业务人员&quot;,
+                &quot;检察技术与档案辅助人员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;案件受理与分流&quot;,
+                &quot;审查逮捕辅助&quot;,
+                &quot;审查起诉辅助&quot;,
+                &quot;证据材料与事实要素整理&quot;,
+                &quot;讯问、询问与笔录校对&quot;,
+                &quot;羁押期限与办案节点管理&quot;,
+                &quot;退回补充调查事项跟踪&quot;,
+                &quot;刑事申诉与控告材料管理&quot;,
+                &quot;诉讼活动监督材料整理&quot;,
+                &quot;案件质量评查与归档&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;核对移送材料与卷宗目录&quot;,
+                &quot;绘制人员、事件与证据关系表&quot;,
+                &quot;整理案件事实时间线&quot;,
+                &quot;提取笔录中的陈述要点&quot;,
+                &quot;比对多份笔录与客观记录&quot;,
+                &quot;建立证据与事实要素映射&quot;,
+                &quot;追踪补充材料和待办事项&quot;,
+                &quot;计算项目时限并生成提醒&quot;,
+                &quot;编制审查报告的事实部分工作稿&quot;,
+                &quot;检查卷宗完整性与文书引用&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;受案登记表、移送函与卷宗目录&quot;,
+                &quot;讯问笔录、询问笔录与辨认记录&quot;,
+                &quot;书证、物证清单与电子数据摘要&quot;,
+                &quot;鉴定意见、勘验记录与视听资料转写&quot;,
+                &quot;强制措施文书与期限台账&quot;,
+                &quot;补充调查提纲、回复函与补充材料&quot;,
+                &quot;审查报告工作稿与内部复核记录&quot;,
+                &quot;申诉、控告、监督线索与处理台账&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;卷宗材料与移送目录是否一致&quot;,
+                &quot;哪些事实要素已有材料对应&quot;,
+                &quot;不同陈述之间存在哪些可核验差异&quot;,
+                &quot;哪些证据的来源、时间或关联关系缺失&quot;,
+                &quot;补充调查事项哪些已回复、哪些待跟踪&quot;,
+                &quot;哪些项目时限接近题包指定的提醒节点&quot;,
+                &quot;审查工作稿中哪些陈述缺少材料引用&quot;,
+                &quot;卷宗中哪些文书或记录需要补正&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;辅助输出仅做材料归纳、一致性检查和项目流程提醒，不生成超出材料的实体结论。&quot;,
+                &quot;每个事实要素必须列出支持、相反、未核验和缺失材料。&quot;,
+                &quot;笔录对比必须保留人员代号、笔录编号、页码和差异摘要。&quot;,
+                &quot;时限计算仅使用题包中的起算事件、扣除记录和日历文件。&quot;,
+                &quot;补充事项标记完成时必须关联回复材料和复核记录，不得仅依据状态字段。&quot;,
+                &quot;人员身份、联系方式和敏感案件标签按题包的分级规则脱敏。&quot;,
+            ],
+        },
+        &quot;Law6-立法与政策研究&quot;: {
+            &quot;roles&quot;: [
+                &quot;立法项目研究员&quot;,
+                &quot;政策分析师&quot;,
+                &quot;法规起草人员&quot;,
+                &quot;规范性文件审查人员&quot;,
+                &quot;公众意见分析员&quot;,
+                &quot;立法项目与资料管理人员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;立法调研与项目规划&quot;,
+                &quot;法规、规章与政策文本起草&quot;,
+                &quot;现行规范梳理&quot;,
+                &quot;条文对照与版本沿革&quot;,
+                &quot;政策问题与方案研究&quot;,
+                &quot;实施情况与影响评估&quot;,
+                &quot;征求意见与反馈处理&quot;,
+                &quot;跨部门职责与流程协调&quot;,
+                &quot;域外制度与比较材料研究&quot;,
+                &quot;政策文件宣贯与实施跟踪&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;建立现行文件库与效力状态表&quot;,
+                &quot;编制条文对照表&quot;,
+                &quot;提取政策问题、目标与约束&quot;,
+                &quot;整理调研材料和实施数据&quot;,
+                &quot;编码并聚类征求意见&quot;,
+                &quot;追踪意见采纳、部分采纳或未采纳状态&quot;,
+                &quot;起草调研报告与说明材料&quot;,
+                &quot;检查文本术语、引用和交叉引用一致性&quot;,
+                &quot;制作方案比较矩阵&quot;,
+                &quot;维护项目节点、交付物与审核记录&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;现行法规、规章、政策和废止清单&quot;,
+                &quot;草案文本、修改稿与条文说明&quot;,
+                &quot;立项材料、调研报告与专题简报&quot;,
+                &quot;行政、统计、调研与实施跟踪数据&quot;,
+                &quot;座谈会纪要、访谈笔记与专家意见&quot;,
+                &quot;公开征求意见表与反馈原文&quot;,
+                &quot;部门职责清单、流程图与会签记录&quot;,
+                &quot;域外文本、译文、来源信息与比较研究表&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;现行文件之间存在哪些重叠、冲突或空白&quot;,
+                &quot;哪些政策问题有材料与数据支持&quot;,
+                &quot;备选方案在项目设定的评估维度上如何比较&quot;,
+                &quot;条文术语、定义和交叉引用是否一致&quot;,
+                &quot;征求意见应归入哪个主题和处理状态&quot;,
+                &quot;哪些采纳或未采纳记录缺少说明与引用&quot;,
+                &quot;部门职责、项目任务和审核流程是否对应&quot;,
+                &quot;哪些项目节点或交付物尚未完成&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;文件效力状态、施行日期和废止关系只依据题包提供的目录与元数据。&quot;,
+                &quot;条文对照必须保留版本号、条款号、原文片段与变更类型。&quot;,
+                &quot;方案评估仅使用题包明示的维度、权重和数据，缺失项不得自行设值。&quot;,
+                &quot;征求意见必须保留来源代号、原文索引、主题编码和处理状态。&quot;,
+                &quot;意见采纳状态必须与项目记录一致，没有审核记录的不得标记为已完成。&quot;,
+                &quot;域外材料必须标注来源、访问日期、译文状态和可比性限制，不直接推导本地结论。&quot;,
+            ],
+        },
+    },
+}
+
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">完整taxonomy · MED / 医疗（我编写的词表）</summary><p><a href="pipeline-evidence/taxonomy-med.py.txt" download>下载原文快照</a></p><pre class="instruction">&quot;&quot;&quot;医疗领域的合成任务素材池。
+
+本模块不生成真实患者数据，也不把诊断、处方或个体化治疗决策作为
+任务目标。所有场景聚焦于材料核对、质量管理、科研行政、教学运营或医院管理。
+&quot;&quot;&quot;
+
+from __future__ import annotations
+
+
+DOMAIN_SPEC: dict[str, object] = {
+    &quot;code&quot;: &quot;MED&quot;,
+    &quot;name&quot;: &quot;医疗&quot;,
+    &quot;l2&quot;: {
+    &quot;Med1-患者服务&quot;: {
+        &quot;roles&quot;: [
+            &quot;门诊服务中心排班专员&quot;,
+            &quot;住院服务流程协调员&quot;,
+            &quot;预约与转诊质量管理专员&quot;,
+            &quot;医保材料初审员&quot;,
+            &quot;患者体验数据分析员&quot;,
+            &quot;健康教育内容运营专员&quot;,
+            &quot;随访项目行政协调员&quot;,
+            &quot;客服工单审核员&quot;,
+        ],
+        &quot;subjects&quot;: [
+            &quot;匿名预约记录与号源状态&quot;,
+            &quot;去标识化服务工单&quot;,
+            &quot;门诊指引与服务目录&quot;,
+            &quot;医保材料提交清单&quot;,
+            &quot;匿名满意度调查&quot;,
+            &quot;院内非临床随访任务&quot;,
+            &quot;匿名投诉分类台账&quot;,
+            &quot;患者权益告知文本&quot;,
+            &quot;多渠道服务响应时长&quot;,
+            &quot;虚构个案的流程节点记录&quot;,
+            &quot;无障碍服务资源目录&quot;,
+            &quot;出入院行政材料清单&quot;,
+        ],
+        &quot;operations&quot;: [
+            &quot;核对预约记录与号源台账的一致性&quot;,
+            &quot;识别重复工单并保留可追溯关联&quot;,
+            &quot;按服务类别汇总响应与办结时长&quot;,
+            &quot;检查材料清单的完整性与版本有效性&quot;,
+            &quot;将匿名反馈映射到标准服务分类&quot;,
+            &quot;标记超出承诺时限的流程节点&quot;,
+            &quot;对照正式文件检查告知文本变更&quot;,
+            &quot;生成不包含个人识别信息的服务周报&quot;,
+            &quot;检查跨渠道工单状态冲突&quot;,
+            &quot;建立异常项及来源文件的证据链&quot;,
+            &quot;按地点和时段分析服务负荷&quot;,
+            &quot;为需人工判断的记录生成复核队列&quot;,
+        ],
+        &quot;input_types&quot;: [
+            &quot;虚构预约台账 XLSX&quot;,
+            &quot;去标识化工单 CSV&quot;,
+            &quot;服务目录 PDF&quot;,
+            &quot;流程操作手册 DOCX&quot;,
+            &quot;匿名满意度问卷 JSON&quot;,
+            &quot;告知文本 Markdown&quot;,
+            &quot;排班与窗口配置 XLSX&quot;,
+            &quot;脱敏服务记录 TXT&quot;,
+            &quot;工单状态导出 JSONL&quot;,
+            &quot;版本变更日志 CSV&quot;,
+        ],
+        &quot;decision_topics&quot;: [
+            &quot;哪些预约状态需人工复核&quot;,
+            &quot;哪类服务环节出现超时集中&quot;,
+            &quot;哪些工单可能重复或相互冲突&quot;,
+            &quot;哪些材料项缺失或已过期&quot;,
+            &quot;哪些服务指标需列入质量改进议题&quot;,
+            &quot;哪些反馈应升级至服务负责人&quot;,
+            &quot;哪些告知文本存在版本不一致&quot;,
+            &quot;哪些时段需调整非临床服务资源&quot;,
+            &quot;哪些记录因证据不足应保持待定&quot;,
+            &quot;哪些服务口径需统一后再发布&quot;,
+        ],
+        &quot;rules&quot;: [
+            &quot;仅使用完全虚构且去标识化的人员与服务记录&quot;,
+            &quot;不推断疾病、不提供诊断、处方或个体化治疗建议&quot;,
+            &quot;不使用姓名、证件号、联系方式、详细地址等直接标识符&quot;,
+            &quot;跨源冲突时保留原值、注明来源并转人工复核&quot;,
+            &quot;所有结论必须可追溯到输入文件及具体记录&quot;,
+            &quot;不自行补齐缺失的预约、医保或服务事实&quot;,
+            &quot;输出仅用于行政流程和服务质量管理&quot;,
+            &quot;涉及危急描述或临床判断的内容必须停止处理并升级专业人员&quot;,
+        ],
+    },
+    &quot;Med2-科研与学术&quot;: {
+        &quot;roles&quot;: [
+            &quot;科研项目行政专员&quot;,
+            &quot;临床研究文档管理员&quot;,
+            &quot;科研数据质量专员&quot;,
+            &quot;伦理审查材料协调员&quot;,
+            &quot;学术会议事务专员&quot;,
+            &quot;科研经费合规助理&quot;,
+            &quot;文献证据整理员&quot;,
+            &quot;研究成果统计专员&quot;,
+        ],
+        &quot;subjects&quot;: [
+            &quot;虚构研究项目台账&quot;,
+            &quot;去标识化研究数据字典&quot;,
+            &quot;伦理审查材料版本记录&quot;,
+            &quot;知情同意文件模板&quot;,
+            &quot;项目里程碑与交付物&quot;,
+            &quot;合成受试者编码清单&quot;,
+            &quot;文献检索与筛选日志&quot;,
+            &quot;学术会议投稿台账&quot;,
+            &quot;科研经费预算与执行记录&quot;,
+            &quot;数据缺失与质疑记录&quot;,
+            &quot;成果署名与贡献确认表&quot;,
+            &quot;研究文档归档清单&quot;,
+        ],
+        &quot;operations&quot;: [
+            &quot;核对项目台账与批件中的版本和日期&quot;,
+            &quot;检查伦理申报材料的形式完整性&quot;,
+            &quot;对照数据字典执行字段与编码校验&quot;,
+            &quot;识别研究文档中的跨版本冲突&quot;,
+            &quot;汇总里程碑状态并标记逾期交付物&quot;,
+            &quot;核对经费科目映射与预算口径&quot;,
+            &quot;记录文献去重、筛选与排除原因&quot;,
+            &quot;从去标识化数据中生成缺失率报告&quot;,
+            &quot;检查投稿材料的文件命名与格式要求&quot;,
+            &quot;生成数据质疑列表并保留处理轨迹&quot;,
+            &quot;比对署名确认表与稿件作者列表&quot;,
+            &quot;按归档规则检查必备文档及其有效期&quot;,
+        ],
+        &quot;input_types&quot;: [
+            &quot;虚构项目台账 XLSX&quot;,
+            &quot;去标识化研究数据 CSV&quot;,
+            &quot;数据字典 YAML&quot;,
+            &quot;伦理材料清单 DOCX&quot;,
+            &quot;批件与修订记录 PDF&quot;,
+            &quot;文献题录 RIS&quot;,
+            &quot;筛选决策 JSONL&quot;,
+            &quot;经费执行表 XLSX&quot;,
+            &quot;文档仓库清单 CSV&quot;,
+            &quot;会议投稿要求 HTML&quot;,
+        ],
+        &quot;decision_topics&quot;: [
+            &quot;哪些申报材料因形式缺失需补正&quot;,
+            &quot;哪些文档版本与批件不一致&quot;,
+            &quot;哪些数据字段未通过字典校验&quot;,
+            &quot;哪些项目里程碑存在逾期风险&quot;,
+            &quot;哪些数据质疑可关闭或应升级&quot;,
+            &quot;哪些经费记录需要合规复核&quot;,
+            &quot;哪些文献因重复或预设条件应排除&quot;,
+            &quot;哪些投稿文件未满足形式要求&quot;,
+            &quot;哪些归档文档缺失或已失效&quot;,
+            &quot;哪些研究结论因证据不足不应作出&quot;,
+        ],
+        &quot;rules&quot;: [
+            &quot;仅使用虚构项目、合成受试者编码与去标识化研究数据&quot;,
+            &quot;不从科研数据生成个体诊疗结论或临床建议&quot;,
+            &quot;不伪造引文、审批、统计显著性或研究结果&quot;,
+            &quot;未见原文的文献只记录题录信息，不推测正文结论&quot;,
+            &quot;文档冲突时保留版本、时间戳与来源并转人工复核&quot;,
+            &quot;所有质疑、排除和归档判定必须有规则与证据链&quot;,
+            &quot;涉及真实人体研究信息时终止自动处理并转授权人员&quot;,
+            &quot;输出用途限于科研行政、数据质量与学术流程管理&quot;,
+        ],
+    },
+    &quot;Med3-教学与人才培养&quot;: {
+        &quot;roles&quot;: [
+            &quot;医学教务管理专员&quot;,
+            &quot;住院医师培训项目协调员&quot;,
+            &quot;继续教育学分审核员&quot;,
+            &quot;模拟教学中心运营专员&quot;,
+            &quot;课程质量评估专员&quot;,
+            &quot;师资档案管理员&quot;,
+            &quot;考务与题库运营专员&quot;,
+            &quot;教学数据分析员&quot;,
+        ],
+        &quot;subjects&quot;: [
+            &quot;课程计划与教学大纲&quot;,
+            &quot;虚构学员培训档案&quot;,
+            &quot;带教师资质台账&quot;,
+            &quot;轮转排程与出勤记录&quot;,
+            &quot;去标识化考核成绩&quot;,
+            &quot;模拟教学资源预约&quot;,
+            &quot;继续教育项目与学分规则&quot;,
+            &quot;课程反馈与改进项&quot;,
+            &quot;非临床能力评价指标&quot;,
+            &quot;教学材料版本库&quot;,
+            &quot;虚构考试安排与冲突记录&quot;,
+            &quot;培训结业材料清单&quot;,
+        ],
+        &quot;operations&quot;: [
+            &quot;核对课程大纲与排课台账&quot;,
+            &quot;检查虚构学员的轮转完成记录&quot;,
+            &quot;对照规则计算继续教育学分&quot;,
+            &quot;识别师资资质过期与档案缺失&quot;,
+            &quot;检查教学资源预约时段冲突&quot;,
+            &quot;按课程与班级汇总出勤和完成率&quot;,
+            &quot;生成去标识化的成绩分布报告&quot;,
+            &quot;将课程反馈映射至预定质量维度&quot;,
+            &quot;比对教学材料版本与发布清单&quot;,
+            &quot;核对结业条件的材料证据完整性&quot;,
+            &quot;识别考试排期中的场地与监考冲突&quot;,
+            &quot;跟踪教学改进项的责任人和截止日期&quot;,
+        ],
+        &quot;input_types&quot;: [
+            &quot;课程大纲 DOCX&quot;,
+            &quot;虚构学员档案 CSV&quot;,
+            &quot;轮转排程 XLSX&quot;,
+            &quot;去标识化成绩 JSON&quot;,
+            &quot;学分管理规则 PDF&quot;,
+            &quot;师资台账 XLSX&quot;,
+            &quot;教学反馈 JSONL&quot;,
+            &quot;模拟中心预约 ICS&quot;,
+            &quot;材料发布清单 CSV&quot;,
+            &quot;教学改进计划 Markdown&quot;,
+        ],
+        &quot;decision_topics&quot;: [
+            &quot;哪些虚构学员的形式性结业材料不完整&quot;,
+            &quot;哪些课程排程存在资源冲突&quot;,
+            &quot;哪些师资记录需更新或人工复核&quot;,
+            &quot;哪些学分记录与公布规则不一致&quot;,
+            &quot;哪些课程的出勤或完成率异常&quot;,
+            &quot;哪些教学材料版本不宜继续分发&quot;,
+            &quot;哪些课程反馈应形成质量改进项&quot;,
+            &quot;哪些考务冲突需调整排程&quot;,
+            &quot;哪些评价结果因样本不足只能标记待定&quot;,
+            &quot;哪些改进项已逾期且需升级跟踪&quot;,
+        ],
+        &quot;rules&quot;: [
+            &quot;仅使用虚构学员、教师与去标识化教学数据&quot;,
+            &quot;不设计要求学习者对具体患者作出诊断或治疗决策的任务&quot;,
+            &quot;成绩与资质判定仅按题内明示规则执行，不自创阈值&quot;,
+            &quot;小样本或缺失记录不作过度解读，应标记局限性&quot;,
+            &quot;任何教学判定都必须可追溯至课程规则与输入记录&quot;,
+            &quot;名单、成绩与反馈输出不得含可重识别个人的组合信息&quot;,
+            &quot;跨文件记录冲突时保留原始证据并转人工复核&quot;,
+            &quot;输出限于教学运营、资料核对与质量改进用途&quot;,
+        ],
+    },
+    &quot;Med4-医疗质量管理&quot;: {
+        &quot;roles&quot;: [
+            &quot;医疗质量管理专员&quot;,
+            &quot;医疗安全事件数据管理员&quot;,
+            &quot;病案首页质控专员&quot;,
+            &quot;感控数据质量协调员&quot;,
+            &quot;质量指标分析员&quot;,
+            &quot;制度与 SOP 文档管理员&quot;,
+            &quot;整改跟踪项目专员&quot;,
+            &quot;医疗质量会议秘书&quot;,
+        ],
+        &quot;subjects&quot;: [
+            &quot;去标识化质量指标台账&quot;,
+            &quot;虚构安全事件上报记录&quot;,
+            &quot;合成病案首页字段&quot;,
+            &quot;质控抽查清单与结果&quot;,
+            &quot;质量管理制度与 SOP&quot;,
+            &quot;整改措施与跟踪证据&quot;,
+            &quot;院科两级质控会议记录&quot;,
+            &quot;指标口径与数据字典&quot;,
+            &quot;数据报送批次与校验日志&quot;,
+            &quot;匿名环节时效与漏项记录&quot;,
+            &quot;文件版本与审批记录&quot;,
+            &quot;质量改进项目里程碑&quot;,
+        ],
+        &quot;operations&quot;: [
+            &quot;对照指标口径复算分子、分母与比率&quot;,
+            &quot;检查质量台账的时间、科室与范围一致性&quot;,
+            &quot;识别安全事件记录的重复上报&quot;,
+            &quot;按数据字典校验合成病案字段&quot;,
+            &quot;跟踪整改措施的责任人、时限与证据&quot;,
+            &quot;比对 SOP 现行版与业务清单中的版本号&quot;,
+            &quot;统计抽查问题的类别、频次与分布&quot;,
+            &quot;检查报送批次的缺失、重复与异常值&quot;,
+            &quot;将会议决议映射至整改任务台账&quot;,
+            &quot;生成不含个人信息的质量趋势报告&quot;,
+            &quot;标记超出预定范围但证据不足的指标&quot;,
+            &quot;构建从指标结果到原始记录的追溯表&quot;,
+        ],
+        &quot;input_types&quot;: [
+            &quot;去标识化质量台账 XLSX&quot;,
+            &quot;虚构安全事件 CSV&quot;,
+            &quot;指标口径 PDF&quot;,
+            &quot;数据字典 YAML&quot;,
+            &quot;合成病案字段 JSONL&quot;,
+            &quot;质量管理 SOP DOCX&quot;,
+            &quot;整改任务台账 XLSX&quot;,
+            &quot;会议记录 Markdown&quot;,
+            &quot;报送校验日志 TXT&quot;,
+            &quot;版本审批记录 CSV&quot;,
+        ],
+        &quot;decision_topics&quot;: [
+            &quot;哪些质量指标计算与口径不一致&quot;,
+            &quot;哪些异常值需数据负责人复核&quot;,
+            &quot;哪些安全事件记录可能重复&quot;,
+            &quot;哪些整改任务已逾期或缺少证据&quot;,
+            &quot;哪些 SOP 引用了非现行版本&quot;,
+            &quot;哪些抽查问题应进入质量改进项目&quot;,
+            &quot;哪些批次因完整性问题不宜报送&quot;,
+            &quot;哪些趋势因口径变更不可直接比较&quot;,
+            &quot;哪些会议决议尚未形成可跟踪任务&quot;,
+            &quot;哪些指标因样本或来源限制应标记待定&quot;,
+        ],
+        &quot;rules&quot;: [
+            &quot;仅使用合成、去标识化的质量与病案结构化数据&quot;,
+            &quot;不根据质控记录评价个体医务人员或提供诊疗建议&quot;,
+            &quot;指标只按题内明示口径计算，不自行创设标准、阈值或因果关系&quot;,
+            &quot;精度、舍入、缺失值与重复值处理须遵循明示规则&quot;,
+            &quot;源文件冲突不得擅自选边，应保留证据并转人工复核&quot;,
+            &quot;质量结论必须可追溯到口径文件和原始记录&quot;,
+            &quot;任何可能识别个人的稀有组合均应聚合或抑制&quot;,
+            &quot;输出仅用于质量监测、文档核对和改进跟踪&quot;,
+        ],
+    },
+    &quot;Med5-医院管理&quot;: {
+        &quot;roles&quot;: [
+            &quot;医院运营管理专员&quot;,
+            &quot;人力资源数据专员&quot;,
+            &quot;采购与合同管理专员&quot;,
+            &quot;设备资产台账管理员&quot;,
+            &quot;后勤服务运营专员&quot;,
+            &quot;绩效数据管理专员&quot;,
+            &quot;信息系统权限审计员&quot;,
+            &quot;行政督办与会议专员&quot;,
+        ],
+        &quot;subjects&quot;: [
+            &quot;院级运营指标与月报&quot;,
+            &quot;虚构员工与岗位编制台账&quot;,
+            &quot;采购需求、订单与验收记录&quot;,
+            &quot;合同台账与履约节点&quot;,
+            &quot;设备资产与维护计划&quot;,
+            &quot;去标识化科室工作量数据&quot;,
+            &quot;后勤工单与服务时效&quot;,
+            &quot;信息系统角色与权限清单&quot;,
+            &quot;行政会议决议与督办任务&quot;,
+            &quot;预算科目与执行记录&quot;,
+            &quot;供应商主数据与资质有效期&quot;,
+            &quot;应急物资库存台账&quot;,
+        ],
+        &quot;operations&quot;: [
+            &quot;核对月报与基础台账的汇总数据&quot;,
+            &quot;检查岗位编制、在岗与排班记录的一致性&quot;,
+            &quot;匹配采购需求、订单、验收和发票记录&quot;,
+            &quot;跟踪合同里程碑、到期日与缺失材料&quot;,
+            &quot;识别设备台账的重复编号和状态冲突&quot;,
+            &quot;按规则汇总后勤工单响应与办结时长&quot;,
+            &quot;检查权限清单中的离岗账号与不相容角色&quot;,
+            &quot;将会议决议转换为可追踪的督办项&quot;,
+            &quot;对照预算口径分析执行偏差&quot;,
+            &quot;检查供应商资质有效期与档案完整性&quot;,
+            &quot;计算应急物资库存台账的账龄与缺口&quot;,
+            &quot;生成含证据链的运营异常与待办清单&quot;,
+        ],
+        &quot;input_types&quot;: [
+            &quot;虚构人员与岗位台账 XLSX&quot;,
+            &quot;去标识化工作量 CSV&quot;,
+            &quot;采购与验收记录 JSONL&quot;,
+            &quot;合同台账 XLSX&quot;,
+            &quot;合同与制度 PDF&quot;,
+            &quot;设备资产清单 CSV&quot;,
+            &quot;后勤工单 JSON&quot;,
+            &quot;系统权限导出 CSV&quot;,
+            &quot;会议纪要 DOCX&quot;,
+            &quot;预算执行表 XLSX&quot;,
+            &quot;供应商档案 ZIP 清单&quot;,
+            &quot;库存流水 CSV&quot;,
+        ],
+        &quot;decision_topics&quot;: [
+            &quot;哪些运营指标与基础台账不一致&quot;,
+            &quot;哪些岗位或排班记录需人力资源复核&quot;,
+            &quot;哪些采购链路存在缺单、重复或金额冲突&quot;,
+            &quot;哪些合同节点即将到期或已逾期&quot;,
+            &quot;哪些资产记录存在编号或状态异常&quot;,
+            &quot;哪些后勤服务类别需进入改进计划&quot;,
+            &quot;哪些系统账号或权限组合需要治理&quot;,
+            &quot;哪些督办任务缺少责任人或时限&quot;,
+            &quot;哪些预算偏差需要财务口径复核&quot;,
+            &quot;哪些供应商或库存记录因证据不足不宜自动处理&quot;,
+        ],
+        &quot;rules&quot;: [
+            &quot;仅使用虚构机构、人员、供应商与去标识化运营数据&quot;,
+            &quot;不将行政运营数据用于诊断、治疗、用药或个体临床决策&quot;,
+            &quot;不在缺乏制度或口径时自行设定预算、绩效或库存阈值&quot;,
+            &quot;人员数据不得含姓名、证件号、联系方式或精确住址&quot;,
+            &quot;采购、合同与预算异常只作资料核对，最终决策转授权负责人&quot;,
+            &quot;跨源冲突时保留各源值、版本和时间戳并标记待定&quot;,
+            &quot;汇总报告必须保留指标口径、来源文件与计算轨迹&quot;,
+            &quot;输出仅用于医院行政、后勤、资产、合同和运营管理&quot;,
+        ],
+    },
+    },
+}
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">完整taxonomy · DA / 数据分析（我编写的词表）</summary><p><a href="pipeline-evidence/taxonomy-da.py.txt" download>下载原文快照</a></p><pre class="instruction">&quot;&quot;&quot;数据分析领域的构题素材规范。
+
+该分类用于填补原始需求中未提供二级树的 DA 领域，因此显式标记为
+``proposed-gap-fill``，不声称是来源文档中的正式分类。
+&quot;&quot;&quot;
+
+DOMAIN_SPEC = {
+    &quot;code&quot;: &quot;DA&quot;,
+    &quot;name&quot;: &quot;数据分析&quot;,
+    &quot;taxonomy_status&quot;: &quot;proposed-gap-fill&quot;,
+    &quot;l2&quot;: {
+        &quot;DA1-数据获取与治理&quot;: {
+            &quot;roles&quot;: [
+                &quot;数据治理专员&quot;,
+                &quot;数据管家&quot;,
+                &quot;数据工程师&quot;,
+                &quot;数据质量分析师&quot;,
+                &quot;隐私合规专员&quot;,
+                &quot;元数据管理员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;数据资产目录&quot;,
+                &quot;数据源接入&quot;,
+                &quot;数据血缘&quot;,
+                &quot;主数据&quot;,
+                &quot;指标口径&quot;,
+                &quot;数据字典&quot;,
+                &quot;访问权限&quot;,
+                &quot;数据合同&quot;,
+                &quot;保留周期&quot;,
+                &quot;敏感度分级&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;盘点与登记数据源&quot;,
+                &quot;校验接口与连接性&quot;,
+                &quot;比较并版本化模式&quot;,
+                &quot;编制数据字典&quot;,
+                &quot;追踪端到端血缘&quot;,
+                &quot;映射主数据标识&quot;,
+                &quot;配置分级访问权限&quot;,
+                &quot;标记并脱敏敏感字段&quot;,
+                &quot;设置刷新与保留策略&quot;,
+                &quot;记录来源授权与许可证&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;关系数据库模式&quot;,
+                &quot;API 接口文档&quot;,
+                &quot;CSV 与 Parquet 数据集&quot;,
+                &quot;Excel 工作簿&quot;,
+                &quot;数据字典与指标文档&quot;,
+                &quot;元数据平台导出&quot;,
+                &quot;访问控制矩阵&quot;,
+                &quot;血缘与调度日志&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;哪个系统是权威数据源&quot;,
+                &quot;数据应以何种频率刷新&quot;,
+                &quot;数据资产由哪个团队负责&quot;,
+                &quot;字段需要哪一级访问权限&quot;,
+                &quot;数据应保留多长时间&quot;,
+                &quot;何种质量门槛允许数据发布&quot;,
+                &quot;多个数据源应按何顺序接入&quot;,
+                &quot;如何处理敏感字段与跨境数据&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;默认遵循最小权限和用途限定原则&quot;,
+                &quot;所有发布数据必须可追溯到来源和处理步骤&quot;,
+                &quot;模式变更必须版本化并通知下游&quot;,
+                &quot;未授权的原始敏感值不得进入交付物&quot;,
+                &quot;数据来源、许可证和取得日期必须登记&quot;,
+                &quot;权威口径冲突时不得静默覆盖，必须留痕升级&quot;,
+            ],
+        },
+        &quot;DA2-数据清洗与集成&quot;: {
+            &quot;roles&quot;: [
+                &quot;数据工程师&quot;,
+                &quot;ETL 开发工程师&quot;,
+                &quot;数据质量工程师&quot;,
+                &quot;业务数据分析师&quot;,
+                &quot;主数据管理员&quot;,
+                &quot;BI 工程师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;缺失值&quot;,
+                &quot;重复记录&quot;,
+                &quot;字段类型&quot;,
+                &quot;编码与字符集&quot;,
+                &quot;度量单位&quot;,
+                &quot;时区与日期&quot;,
+                &quot;实体标识&quot;,
+                &quot;表间关联&quot;,
+                &quot;异常值&quot;,
+                &quot;跨源冲突&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;剖析字段分布与空值率&quot;,
+                &quot;标准化类型和格式&quot;,
+                &quot;规范化编码与文本&quot;,
+                &quot;按业务键去重&quot;,
+                &quot;匹配与合并同一实体&quot;,
+                &quot;换算币种与度量单位&quot;,
+                &quot;对齐时区和统计周期&quot;,
+                &quot;按权威键关联多表&quot;,
+                &quot;根据优先级解决跨源冲突&quot;,
+                &quot;运行完整性与参照约束校验&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;原始事务明细表&quot;,
+                &quot;多 Sheet Excel 文件&quot;,
+                &quot;半结构化 JSON 日志&quot;,
+                &quot;客户或产品主数据&quot;,
+                &quot;编码映射表&quot;,
+                &quot;汇率或单位换算表&quot;,
+                &quot;更正与撤回记录&quot;,
+                &quot;历史数据快照&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;缺失值应删除、填补还是保留&quot;,
+                &quot;哪条重复记录是有效版本&quot;,
+                &quot;跨源冲突信息以哪个来源为准&quot;,
+                &quot;实体匹配的阈值如何设定&quot;,
+                &quot;异常值是修正、截尾还是标记&quot;,
+                &quot;关联失败记录是否进入主数据集&quot;,
+                &quot;历史数据需要重算到什么范围&quot;,
+                &quot;清洗后数据是否达到发布标准&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;先保留不可变的原始快照再进行清洗&quot;,
+                &quot;去重键和版本优先级必须在运行前明示&quot;,
+                &quot;任何填补和校正都必须标记方法与原值&quot;,
+                &quot;关联不得无声产生多对多行数膨胀&quot;,
+                &quot;金额换算必须明确汇率日期和舍入层级&quot;,
+                &quot;质量校验失败记录必须进入隔离区或异常日志&quot;,
+            ],
+        },
+        &quot;DA3-探索分析与商业智能&quot;: {
+            &quot;roles&quot;: [
+                &quot;业务数据分析师&quot;,
+                &quot;BI 分析师&quot;,
+                &quot;经营分析经理&quot;,
+                &quot;产品分析师&quot;,
+                &quot;市场分析师&quot;,
+                &quot;决策支持顾问&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;核心经营指标&quot;,
+                &quot;趋势与季节性&quot;,
+                &quot;客户分群&quot;,
+                &quot;渠道表现&quot;,
+                &quot;产品组合&quot;,
+                &quot;转化漏斗&quot;,
+                &quot;留存与流失&quot;,
+                &quot;成本与利润&quot;,
+                &quot;同比与环比&quot;,
+                &quot;目标达成率&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;计算描述性统计量&quot;,
+                &quot;分解指标并校验口径&quot;,
+                &quot;对比同比、环比和预算&quot;,
+                &quot;按维度切片与下钻&quot;,
+                &quot;构建客户或产品分群&quot;,
+                &quot;识别趋势、拐点与季节模式&quot;,
+                &quot;分析漏斗阶段损失&quot;,
+                &quot;构建仪表板和下钻视图&quot;,
+                &quot;验证可视化与明细总额一致性&quot;,
+                &quot;归纳业务驱动因素与假设&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;指标宽表&quot;,
+                &quot;交易明细&quot;,
+                &quot;客户行为事件流&quot;,
+                &quot;广告与渠道数据&quot;,
+                &quot;预算与目标表&quot;,
+                &quot;产品与组织维表&quot;,
+                &quot;历史仪表板快照&quot;,
+                &quot;问卷与客户反馈&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;哪些指标应进入管理层仪表板&quot;,
+                &quot;业绩偏差由哪些维度驱动&quot;,
+                &quot;哪个客户或产品分群应优先行动&quot;,
+                &quot;漏斗中哪一环节是主要瓶颈&quot;,
+                &quot;指标变化是季节性还是结构性&quot;,
+                &quot;是否需要调整渠道或产品资源&quot;,
+                &quot;仪表板应使用何种颗粒度和刷新频率&quot;,
+                &quot;哪些发现需要进一步统计验证&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;每个指标必须附计算口径、时间窗和粒度&quot;,
+                &quot;不得将描述性关联表述为因果结论&quot;,
+                &quot;图表总计必须可与底层明细复算&quot;,
+                &quot;类别排序、单位和颜色语义必须一致&quot;,
+                &quot;小样本分组必须显示样本量或抑制展示&quot;,
+                &quot;结论必须区分已验证事实、解释和待验证假设&quot;,
+            ],
+        },
+        &quot;DA4-统计推断与实验&quot;: {
+            &quot;roles&quot;: [
+                &quot;统计分析师&quot;,
+                &quot;实验设计分析师&quot;,
+                &quot;产品数据科学家&quot;,
+                &quot;生物统计师&quot;,
+                &quot;因果推断研究员&quot;,
+                &quot;调研分析师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;总体与样本&quot;,
+                &quot;采样偏差&quot;,
+                &quot;假设检验&quot;,
+                &quot;置信区间&quot;,
+                &quot;效应量&quot;,
+                &quot;检验功效&quot;,
+                &quot;A/B 实验&quot;,
+                &quot;随机化与分层&quot;,
+                &quot;多重比较&quot;,
+                &quot;混杂与异质性&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;明确研究问题与可检验假设&quot;,
+                &quot;估算样本量与统计功效&quot;,
+                &quot;设计随机化、分层与分流方案&quot;,
+                &quot;检查组间基线平衡&quot;,
+                &quot;执行参数或非参数检验&quot;,
+                &quot;计算效应量与置信区间&quot;,
+                &quot;校正多重比较&quot;,
+                &quot;评估异质性和分组效应&quot;,
+                &quot;进行敏感性与稳健性分析&quot;,
+                &quot;记录停止准则与分析决策&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;实验分流日志&quot;,
+                &quot;受试者或用户特征表&quot;,
+                &quot;暴露与结局数据&quot;,
+                &quot;问卷抽样数据&quot;,
+                &quot;实验方案与预注册文档&quot;,
+                &quot;指标定义与排除规则&quot;,
+                &quot;历史基准率与方差估计&quot;,
+                &quot;实验期间异常事件日志&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;实验样本量与运行时长是否足够&quot;,
+                &quot;主指标与护栏指标如何定义&quot;,
+                &quot;实验是否可以提前停止&quot;,
+                &quot;观测到的差异是否具有实质意义&quot;,
+                &quot;哪些分组效应值得信任或后续验证&quot;,
+                &quot;多重比较应采用何种校正&quot;,
+                &quot;实验结果能否推广到目标总体&quot;,
+                &quot;是否需要重新实验或补充数据&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;必须在查看结果前固化主指标和排除规则&quot;,
+                &quot;报告显著性时必须同时报告效应量和不确定性&quot;,
+                &quot;不得将未随机的观测差异直接解释为因果&quot;,
+                &quot;中期查看与提前停止必须使用预定规则&quot;,
+                &quot;分组与多指标分析必须处理多重性问题&quot;,
+                &quot;数据剔除、假设变更和偏离方案都必须可审计&quot;,
+            ],
+        },
+        &quot;DA5-预测与机器学习&quot;: {
+            &quot;roles&quot;: [
+                &quot;数据科学家&quot;,
+                &quot;机器学习工程师&quot;,
+                &quot;预测分析师&quot;,
+                &quot;MLOps 工程师&quot;,
+                &quot;模型风险分析师&quot;,
+                &quot;业务模型负责人&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;特征工程&quot;,
+                &quot;目标标签&quot;,
+                &quot;训练验证切分&quot;,
+                &quot;分类与回归&quot;,
+                &quot;时间序列预测&quot;,
+                &quot;模型校准&quot;,
+                &quot;阈值选择&quot;,
+                &quot;解释性与公平性&quot;,
+                &quot;概念漂移&quot;,
+                &quot;模型版本与部署&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;定义预测目标和时间截点&quot;,
+                &quot;构造不泄漏未来信息的特征&quot;,
+                &quot;划分训练、验证和留出数据&quot;,
+                &quot;建立简单基线并训练候选模型&quot;,
+                &quot;执行交叉验证与超参数选择&quot;,
+                &quot;评估区分度、校准度与误差分布&quot;,
+                &quot;按业务成本设定决策阈值&quot;,
+                &quot;解释全局与单样本预测&quot;,
+                &quot;检查分组公平性与稳健性&quot;,
+                &quot;登记模型、数据和环境版本&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;标注训练样本&quot;,
+                &quot;特征表或特征库快照&quot;,
+                &quot;时序观测数据&quot;,
+                &quot;模型配置与超参数文件&quot;,
+                &quot;预测与实际结果日志&quot;,
+                &quot;错误成本与业务价值矩阵&quot;,
+                &quot;环境与依赖锁定文件&quot;,
+                &quot;模型卡与变更记录&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;哪个候选模型应进入下一阶段&quot;,
+                &quot;预测时间窗和目标定义是否合理&quot;,
+                &quot;哪些特征存在泄漏或不可用风险&quot;,
+                &quot;决策阈值应如何平衡误报与漏报&quot;,
+                &quot;模型表现是否超过可解释基线&quot;,
+                &quot;分组性能差异是否阻止部署&quot;,
+                &quot;模型应全量上线、灰度还是影子运行&quot;,
+                &quot;何时因漂移或性能衰减触发重训练&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;时序数据必须按时间切分并防止未来信息泄漏&quot;,
+                &quot;留出测试集在最终评估前不得参与调参&quot;,
+                &quot;模型比较必须包含可解释的简单基线&quot;,
+                &quot;阈值必须依据业务成本而非仅依据技术指标&quot;,
+                &quot;生产模型必须绑定数据、代码、配置与环境版本&quot;,
+                &quot;涉及人员权益的预测必须进行分组公平性审查&quot;,
+            ],
+        },
+        &quot;DA6-优化与决策分析&quot;: {
+            &quot;roles&quot;: [
+                &quot;运筹优化分析师&quot;,
+                &quot;供应链分析师&quot;,
+                &quot;定价分析师&quot;,
+                &quot;资源规划经理&quot;,
+                &quot;决策科学家&quot;,
+                &quot;运营策略经理&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;目标函数&quot;,
+                &quot;资源容量&quot;,
+                &quot;成本与收益&quot;,
+                &quot;需求预测&quot;,
+                &quot;库存与补货&quot;,
+                &quot;路由与调度&quot;,
+                &quot;人员排班&quot;,
+                &quot;产品定价&quot;,
+                &quot;情景与压力测试&quot;,
+                &quot;鲁棒性与敏感度&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;将业务目标转换为可量化目标函数&quot;,
+                &quot;编码容量、服务水平和政策约束&quot;,
+                &quot;建立可行基线方案&quot;,
+                &quot;求解线性、整数或启发式优化模型&quot;,
+                &quot;生成多情景决策方案&quot;,
+                &quot;计算边际价值与机会成本&quot;,
+                &quot;执行参数敏感性分析&quot;,
+                &quot;压测需求和资源波动&quot;,
+                &quot;校验方案可执行性与公平约束&quot;,
+                &quot;生成决策表与权衡说明&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;需求预测表&quot;,
+                &quot;产能与班次日历&quot;,
+                &quot;成本和价格矩阵&quot;,
+                &quot;库存与服务水平数据&quot;,
+                &quot;网络节点与路径数据&quot;,
+                &quot;业务规则与硬约束清单&quot;,
+                &quot;历史方案与实际结果&quot;,
+                &quot;情景概率与压力假设&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;有限资源应如何分配&quot;,
+                &quot;哪个方案在成本和服务之间最优&quot;,
+                &quot;需要增加哪种资源才能解除瓶颈&quot;,
+                &quot;库存、人员或路由应如何调度&quot;,
+                &quot;定价或促销方案是否值得执行&quot;,
+                &quot;哪些约束导致最大机会成本&quot;,
+                &quot;不确定性下哪个方案最稳健&quot;,
+                &quot;优化建议何时需要人工覆核或例外审批&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;硬约束不得为提高目标值而被静默放松&quot;,
+                &quot;方案必须同时报告目标改善和关键权衡&quot;,
+                &quot;每个结果必须通过约束重算和可行性检查&quot;,
+                &quot;不确定参数必须在备选情景中压测&quot;,
+                &quot;涉及人员排班或客户待遇时必须检查公平和政策约束&quot;,
+                &quot;求解器未达到最优性时必须披露最优差距或停止原因&quot;,
+            ],
+        },
+        &quot;DA7-风险监测与异常分析&quot;: {
+            &quot;roles&quot;: [
+                &quot;风险分析师&quot;,
+                &quot;反欺诈分析师&quot;,
+                &quot;数据质量监控工程师&quot;,
+                &quot;运营监控专员&quot;,
+                &quot;模型监控分析师&quot;,
+                &quot;事件响应经理&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;异常交易&quot;,
+                &quot;指标告警&quot;,
+                &quot;数据质量漂移&quot;,
+                &quot;模型性能衰减&quot;,
+                &quot;欺诈与滥用模式&quot;,
+                &quot;服务中断&quot;,
+                &quot;控制阈值&quot;,
+                &quot;告警优先级&quot;,
+                &quot;根因与影响范围&quot;,
+                &quot;事件升级与处置&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;建立指标基线与容忍带&quot;,
+                &quot;检测点异常、群体异常和变点&quot;,
+                &quot;将多条告警关联为事件&quot;,
+                &quot;按可能性与影响对风险排序&quot;,
+                &quot;区分数据问题、业务变化与系统故障&quot;,
+                &quot;下钻时间、地区、渠道与实体维度&quot;,
+                &quot;追踪根因和受影响下游&quot;,
+                &quot;调优告警阈值与抑制规则&quot;,
+                &quot;记录处置动作与恢复证据&quot;,
+                &quot;复盘误报、漏报和检测时延&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;交易与事件流&quot;,
+                &quot;指标时间序列&quot;,
+                &quot;应用与基础设施日志&quot;,
+                &quot;数据质量检查结果&quot;,
+                &quot;模型预测与反馈标签&quot;,
+                &quot;历史事件单与处置记录&quot;,
+                &quot;风险规则与告警阈值表&quot;,
+                &quot;部署、发布与变更日志&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;哪些异常是真实事件而非噪声&quot;,
+                &quot;事件风险等级与处置优先级如何&quot;,
+                &quot;是否需要中断流程、回滚或冻结交易&quot;,
+                &quot;异常源于数据、模型、系统还是业务变化&quot;,
+                &quot;哪些下游报表或决策需要撤回&quot;,
+                &quot;告警阈值是否应调整以降低误报&quot;,
+                &quot;事件何时符合关闭条件&quot;,
+                &quot;需要增加哪些监控以防止再发&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;告警必须附带基线、阈值、实际值和检测时间&quot;,
+                &quot;高风险自动处置必须有可回滚机制和权限边界&quot;,
+                &quot;事件调查不得覆盖或修改原始日志&quot;,
+                &quot;未证实的根因必须标记为假设而非事实&quot;,
+                &quot;风险分类必须同时考虑可能性、影响和可检测性&quot;,
+                &quot;事件关闭必须包含恢复验证、影响评估和后续责任人&quot;,
+            ],
+        },
+        &quot;DA8-分析交付与复现&quot;: {
+            &quot;roles&quot;: [
+                &quot;分析产品经理&quot;,
+                &quot;分析工程师&quot;,
+                &quot;数据可视化专家&quot;,
+                &quot;技术写作专员&quot;,
+                &quot;分析质量审核员&quot;,
+                &quot;数据平台运维工程师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;分析报告&quot;,
+                &quot;仪表板&quot;,
+                &quot;可执行建议&quot;,
+                &quot;代码与查询&quot;,
+                &quot;数据快照&quot;,
+                &quot;环境与依赖&quot;,
+                &quot;参数与配置&quot;,
+                &quot;图表无障碍性&quot;,
+                &quot;审批与版本历史&quot;,
+                &quot;复现与回归检查&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;将分析问题映射为交付物和验收标准&quot;,
+                &quot;固化数据快照与查询版本&quot;,
+                &quot;生成可重运的代码、参数与依赖文件&quot;,
+                &quot;编排从原始数据到交付物的端到端流程&quot;,
+                &quot;核对表格、图表与正文中的关键数字&quot;,
+                &quot;撰写方法、限制与决策说明&quot;,
+                &quot;设计可访问的图表和管理层摘要&quot;,
+                &quot;运行自动化复现与回归测试&quot;,
+                &quot;打包交付文件、运行日志和审批记录&quot;,
+                &quot;发布版本并记录变更、责任人与有效期&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;Jupyter Notebook 或分析脚本&quot;,
+                &quot;SQL 查询与建模文件&quot;,
+                &quot;快照数据集与校验和&quot;,
+                &quot;仪表板定义或 BI 工程文件&quot;,
+                &quot;环境锁定文件与容器配置&quot;,
+                &quot;分析报告与演示文稿&quot;,
+                &quot;运行日志与测试结果&quot;,
+                &quot;审批、变更与发布记录&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;交付物是否能由独立人员从头复现&quot;,
+                &quot;哪些结论应进入管理层摘要&quot;,
+                &quot;限制与不确定性是否充分披露&quot;,
+                &quot;图表与表格是否符合可访问性与一致性标准&quot;,
+                &quot;交付包是否包含足够的来源、口径与版本证据&quot;,
+                &quot;分析结果应按时、定期还是事件驱动发布&quot;,
+                &quot;哪些变更要求重新审核或重新建立基线&quot;,
+                &quot;交付物何时过期、应撤回或由新版本替代&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;交付中的每个核心数字必须可回链到查询与数据快照&quot;,
+                &quot;可复现包必须锁定代码、依赖、配置和随机种子&quot;,
+                &quot;任何人工修改的图表或数字都必须明示并可审计&quot;,
+                &quot;交付物不得包含未授权的敏感数据或凭据&quot;,
+                &quot;发布前必须通过从干净环境执行的端到端复现测试&quot;,
+                &quot;报告必须明确区分事实、假设、建议和尚未解决的问题&quot;,
+            ],
+        },
+    },
+}
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">完整taxonomy · GA / 游戏（我编写的词表）</summary><p><a href="pipeline-evidence/taxonomy-ga.py.txt" download>下载原文快照</a></p><pre class="instruction">&quot;&quot;&quot;Proposed task taxonomy and synthesis vocabulary for the games domain.&quot;&quot;&quot;
+
+from __future__ import annotations
+
+
+DOMAIN_SPEC: dict[str, object] = {
+    &quot;code&quot;: &quot;GA&quot;,
+    &quot;name&quot;: &quot;游戏&quot;,
+    &quot;taxonomy_status&quot;: &quot;proposed-gap-fill&quot;,
+    &quot;l2&quot;: {
+        &quot;GA1-系统与数值设计&quot;: {
+            &quot;roles&quot;: [
+                &quot;系统策划&quot;, &quot;数值策划&quot;, &quot;战斗策划&quot;, &quot;成长线策划&quot;, &quot;玩法策划&quot;, &quot;数据分析师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;角色属性&quot;, &quot;战斗公式&quot;, &quot;技能体系&quot;, &quot;装备体系&quot;, &quot;成长曲线&quot;, &quot;资源产出&quot;,
+                &quot;资源消耗&quot;, &quot;匹配机制&quot;, &quot;养成系统&quot;, &quot;难度梯度&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;建立数值模型&quot;, &quot;配置参数表&quot;, &quot;推演成长曲线&quot;, &quot;模拟战斗结果&quot;, &quot;分析资源循环&quot;,
+                &quot;校准概率分布&quot;, &quot;识别最优策略&quot;, &quot;设计保底机制&quot;, &quot;开展敏感性分析&quot;, &quot;输出平衡调整方案&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;系统策划案&quot;, &quot;数值配置表&quot;, &quot;战斗日志&quot;, &quot;玩家行为数据&quot;, &quot;角色属性表&quot;,
+                &quot;技能配置表&quot;, &quot;版本变更记录&quot;, &quot;平衡性测试报告&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;属性成长斜率&quot;, &quot;技能强度边界&quot;, &quot;资源投放节奏&quot;, &quot;付费与免费成长差距&quot;,
+                &quot;职业胜率区间&quot;, &quot;概率与保底参数&quot;, &quot;新旧系统衔接&quot;, &quot;平衡调整优先级&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;所有数值结论必须可追溯到配置版本&quot;, &quot;概率展示与实际实现必须一致&quot;, &quot;调整前后须保留可复现的模拟结果&quot;,
+                &quot;不得以单一均值替代分层玩家表现&quot;, &quot;平衡建议须评估存量玩家资产影响&quot;, &quot;关键公式必须注明单位、边界与取整规则&quot;,
+            ],
+        },
+        &quot;GA2-关卡与内容设计&quot;: {
+            &quot;roles&quot;: [
+                &quot;关卡策划&quot;, &quot;任务策划&quot;, &quot;剧情策划&quot;, &quot;文案策划&quot;, &quot;关卡美术&quot;, &quot;技术策划&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;主线关卡&quot;, &quot;支线任务&quot;, &quot;教程流程&quot;, &quot;谜题机关&quot;, &quot;敌人配置&quot;, &quot;场景叙事&quot;,
+                &quot;剧情分支&quot;, &quot;探索收集&quot;, &quot;副本机制&quot;, &quot;内容节奏&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;绘制关卡流程&quot;, &quot;编排遭遇序列&quot;, &quot;配置敌人与奖励&quot;, &quot;撰写任务条件&quot;, &quot;设计引导节点&quot;,
+                &quot;校验分支逻辑&quot;, &quot;布置交互物件&quot;, &quot;评审灰盒关卡&quot;, &quot;分析关卡漏斗&quot;, &quot;迭代内容节奏&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;世界观设定集&quot;, &quot;关卡流程图&quot;, &quot;灰盒地图&quot;, &quot;任务配置表&quot;, &quot;剧情脚本&quot;,
+                &quot;玩家热力图&quot;, &quot;通关漏斗数据&quot;, &quot;可玩性测试记录&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;关卡目标清晰度&quot;, &quot;探索与战斗占比&quot;, &quot;失败重试成本&quot;, &quot;教程信息密度&quot;,
+                &quot;剧情分支收束&quot;, &quot;敌人组合难度&quot;, &quot;奖励投放位置&quot;, &quot;内容复用边界&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;关键路径必须存在可验证的完成条件&quot;, &quot;关卡依赖须匹配当前版本可用资产&quot;, &quot;不可达分支和死循环必须在交付前清除&quot;,
+                &quot;教程不得依赖尚未解锁的操作&quot;, &quot;剧情文本须与任务状态和角色设定一致&quot;, &quot;难度结论必须覆盖目标玩家分层&quot;,
+            ],
+        },
+        &quot;GA3-经济与商业化&quot;: {
+            &quot;roles&quot;: [
+                &quot;经济系统策划&quot;, &quot;商业化策划&quot;, &quot;产品经理&quot;, &quot;数据分析师&quot;, &quot;用户增长经理&quot;, &quot;合规经理&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;虚拟货币&quot;, &quot;商品定价&quot;, &quot;付费礼包&quot;, &quot;抽取系统&quot;, &quot;订阅权益&quot;, &quot;广告变现&quot;,
+                &quot;交易市场&quot;, &quot;资源通胀&quot;, &quot;用户分层&quot;, &quot;生命周期价值&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;测算货币供需&quot;, &quot;设计价格梯度&quot;, &quot;配置礼包内容&quot;, &quot;分析付费漏斗&quot;, &quot;预测收入影响&quot;,
+                &quot;监测经济通胀&quot;, &quot;评估用户价值&quot;, &quot;设计促销实验&quot;, &quot;核查概率公示&quot;, &quot;制定异常处置方案&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;经济流水表&quot;, &quot;商品配置表&quot;, &quot;付费订单数据&quot;, &quot;用户分层报表&quot;, &quot;抽取概率表&quot;,
+                &quot;活动方案&quot;, &quot;市场竞品报告&quot;, &quot;合规检查清单&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;商品价格锚点&quot;, &quot;货币产销平衡&quot;, &quot;礼包性价比梯度&quot;, &quot;付费深度上限&quot;,
+                &quot;促销频率&quot;, &quot;抽取保底结构&quot;, &quot;免费用户体验&quot;, &quot;经济异常干预阈值&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;商品价格、折扣和权益描述必须一致&quot;, &quot;随机付费机制须满足适用地区公示要求&quot;, &quot;收入预测须区分新增、提前和蚕食效应&quot;,
+                &quot;不得使用无法追溯来源的用户财务数据&quot;, &quot;经济调整须评估玩家存量资产和补偿&quot;, &quot;未成年人相关设计须遵守支付与时长限制&quot;,
+            ],
+        },
+        &quot;GA4-运营活动与版本管理&quot;: {
+            &quot;roles&quot;: [
+                &quot;游戏运营&quot;, &quot;活动策划&quot;, &quot;版本经理&quot;, &quot;内容运营&quot;, &quot;现场运营负责人&quot;, &quot;数据运营分析师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;版本路线图&quot;, &quot;限时活动&quot;, &quot;日历排期&quot;, &quot;奖励配置&quot;, &quot;版本公告&quot;, &quot;热更新&quot;,
+                &quot;停服维护&quot;, &quot;玩家召回&quot;, &quot;跨服活动&quot;, &quot;事故响应&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;制定版本计划&quot;, &quot;编排活动日历&quot;, &quot;配置活动规则&quot;, &quot;核验奖励发放&quot;, &quot;组织上线评审&quot;,
+                &quot;撰写玩家公告&quot;, &quot;执行灰度发布&quot;, &quot;监控核心指标&quot;, &quot;处置线上事故&quot;, &quot;复盘版本效果&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;版本需求池&quot;, &quot;活动配置表&quot;, &quot;上线检查单&quot;, &quot;发布计划&quot;, &quot;监控看板&quot;,
+                &quot;客服工单&quot;, &quot;事故时间线&quot;, &quot;版本复盘报告&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;版本范围取舍&quot;, &quot;活动档期冲突&quot;, &quot;奖励强度&quot;, &quot;发布窗口&quot;,
+                &quot;灰度放量节奏&quot;, &quot;回滚触发条件&quot;, &quot;补偿范围&quot;, &quot;版本效果判定&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;活动时间须同时标明时区与开闭服边界&quot;, &quot;上线项必须绑定负责人和回滚方案&quot;, &quot;配置变更须经过双人复核&quot;,
+                &quot;事故公告不得包含未确认原因&quot;, &quot;玩家补偿须基于一致且可审计的规则&quot;, &quot;版本复盘须区分相关性与因果性&quot;,
+            ],
+        },
+        &quot;GA5-玩家研究与社区洞察&quot;: {
+            &quot;roles&quot;: [
+                &quot;用户研究员&quot;, &quot;社区运营&quot;, &quot;玩家洞察分析师&quot;, &quot;客户体验经理&quot;, &quot;舆情分析师&quot;, &quot;产品策划&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;玩家画像&quot;, &quot;游戏动机&quot;, &quot;新手体验&quot;, &quot;流失原因&quot;, &quot;社区舆情&quot;, &quot;功能满意度&quot;,
+                &quot;玩家反馈&quot;, &quot;可用性问题&quot;, &quot;创作者生态&quot;, &quot;无障碍体验&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;设计研究方案&quot;, &quot;招募目标玩家&quot;, &quot;开展深度访谈&quot;, &quot;组织可用性测试&quot;, &quot;编码开放反馈&quot;,
+                &quot;分析社区主题&quot;, &quot;建立玩家分群&quot;, &quot;验证洞察假设&quot;, &quot;排序体验问题&quot;, &quot;输出研究建议&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;访谈逐字稿&quot;, &quot;问卷数据&quot;, &quot;社区帖子&quot;, &quot;客服工单&quot;, &quot;玩家行为日志&quot;,
+                &quot;可用性录像&quot;, &quot;舆情日报&quot;, &quot;玩家画像文档&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;研究样本代表性&quot;, &quot;玩家需求优先级&quot;, &quot;流失驱动因素&quot;, &quot;社区议题响应&quot;,
+                &quot;体验痛点严重度&quot;, &quot;反馈采纳范围&quot;, &quot;创作者扶持方向&quot;, &quot;研究结论置信度&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;研究参与者须完成知情同意&quot;, &quot;可识别玩家信息必须最小化并脱敏&quot;, &quot;不得以社区声量直接代表全体玩家&quot;,
+                &quot;洞察须区分事实、推断和建议&quot;, &quot;引用玩家原话须移除身份线索&quot;, &quot;样本偏差和研究限制必须明确披露&quot;,
+            ],
+        },
+        &quot;GA6-质量保证与测试&quot;: {
+            &quot;roles&quot;: [
+                &quot;功能测试工程师&quot;, &quot;自动化测试工程师&quot;, &quot;兼容性测试工程师&quot;, &quot;性能测试工程师&quot;, &quot;测试负责人&quot;, &quot;缺陷经理&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;功能正确性&quot;, &quot;客户端稳定性&quot;, &quot;服务器性能&quot;, &quot;平台兼容性&quot;, &quot;网络弱环境&quot;, &quot;存档完整性&quot;,
+                &quot;支付链路&quot;, &quot;安全漏洞&quot;, &quot;回归范围&quot;, &quot;发布质量&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;设计测试用例&quot;, &quot;搭建测试环境&quot;, &quot;执行功能测试&quot;, &quot;运行自动化回归&quot;, &quot;开展压力测试&quot;,
+                &quot;复现并记录缺陷&quot;, &quot;分析崩溃日志&quot;, &quot;验证缺陷修复&quot;, &quot;评估发布风险&quot;, &quot;输出质量报告&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;需求规格&quot;, &quot;测试用例库&quot;, &quot;客户端日志&quot;, &quot;服务器日志&quot;, &quot;崩溃转储&quot;,
+                &quot;设备兼容矩阵&quot;, &quot;缺陷跟踪单&quot;, &quot;构建版本清单&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;缺陷严重级别&quot;, &quot;回归测试范围&quot;, &quot;性能容量门槛&quot;, &quot;设备支持边界&quot;,
+                &quot;发布阻断项&quot;, &quot;已知问题接受&quot;, &quot;修复验证充分性&quot;, &quot;上线质量结论&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;缺陷报告必须包含版本、环境和最小复现步骤&quot;, &quot;发布阻断结论须关联可验证证据&quot;, &quot;测试数据不得混入生产账户和真实支付凭据&quot;,
+                &quot;修复项必须执行针对性验证及必要回归&quot;, &quot;性能报告须注明负载模型和采样窗口&quot;, &quot;无法复现不得等同于缺陷已解决&quot;,
+            ],
+        },
+        &quot;GA7-发行本地化与合规&quot;: {
+            &quot;roles&quot;: [
+                &quot;发行经理&quot;, &quot;本地化项目经理&quot;, &quot;翻译编辑&quot;, &quot;区域市场经理&quot;, &quot;法务合规经理&quot;, &quot;平台认证专员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;语言资产&quot;, &quot;文化适配&quot;, &quot;年龄分级&quot;, &quot;隐私披露&quot;, &quot;平台政策&quot;, &quot;区域发行&quot;,
+                &quot;商店页面&quot;, &quot;敏感内容&quot;, &quot;知识产权&quot;, &quot;数据跨境&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;制定发行计划&quot;, &quot;提取本地化文本&quot;, &quot;维护术语库&quot;, &quot;执行语言审校&quot;, &quot;开展文化审查&quot;,
+                &quot;准备分级材料&quot;, &quot;核查隐私流程&quot;, &quot;提交平台认证&quot;, &quot;跟踪区域审批&quot;, &quot;管理合规整改&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;字符串资源表&quot;, &quot;术语库&quot;, &quot;风格指南&quot;, &quot;地区法规清单&quot;, &quot;年龄分级问卷&quot;,
+                &quot;平台审核指南&quot;, &quot;隐私政策&quot;, &quot;认证反馈单&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;目标市场优先级&quot;, &quot;翻译与转创边界&quot;, &quot;敏感内容替换&quot;, &quot;年龄分级目标&quot;,
+                &quot;区域功能差异&quot;, &quot;平台整改方案&quot;, &quot;发行延期条件&quot;, &quot;数据处理合法依据&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;翻译须遵循经批准的术语库和字符限制&quot;, &quot;不同地区合规结论必须绑定适用司法辖区&quot;, &quot;年龄分级材料必须准确覆盖可访问内容&quot;,
+                &quot;商店宣传不得承诺游戏内不存在的功能&quot;, &quot;个人数据流程须与隐私披露一致&quot;, &quot;平台拒审项必须闭环并留存版本证据&quot;,
+            ],
+        },
+        &quot;GA8-制作与项目管理&quot;: {
+            &quot;roles&quot;: [
+                &quot;游戏制作人&quot;, &quot;项目经理&quot;, &quot;研发经理&quot;, &quot;美术制作经理&quot;, &quot;外包经理&quot;, &quot;发布协调人&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;产品愿景&quot;, &quot;里程碑计划&quot;, &quot;需求范围&quot;, &quot;研发产能&quot;, &quot;跨团队依赖&quot;, &quot;资产管线&quot;,
+                &quot;外包交付&quot;, &quot;预算成本&quot;, &quot;项目风险&quot;, &quot;决策记录&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;拆解项目范围&quot;, &quot;估算工作量&quot;, &quot;制定里程碑&quot;, &quot;分配团队资源&quot;, &quot;跟踪任务进度&quot;,
+                &quot;协调跨组依赖&quot;, &quot;管理需求变更&quot;, &quot;审查外包交付&quot;, &quot;维护风险台账&quot;, &quot;组织里程碑复盘&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;产品路线图&quot;, &quot;工作分解结构&quot;, &quot;项目排期&quot;, &quot;资源计划&quot;, &quot;需求变更单&quot;,
+                &quot;依赖清单&quot;, &quot;风险台账&quot;, &quot;里程碑评审记录&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;范围时间成本权衡&quot;, &quot;里程碑准入&quot;, &quot;人员资源分配&quot;, &quot;关键路径保护&quot;,
+                &quot;需求变更接受&quot;, &quot;外包与自研选择&quot;, &quot;风险升级时点&quot;, &quot;版本延期与降级&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;里程碑状态必须以可验收产物为依据&quot;, &quot;范围变更须记录对时间、成本和质量的影响&quot;, &quot;跨团队依赖必须明确交付双方和截止时间&quot;,
+                &quot;高风险事项须指定责任人与缓解措施&quot;, &quot;不得将尚未验收的外包资产标记为完成&quot;, &quot;项目汇报须区分计划、预测和实际数据&quot;,
+            ],
+        },
+    },
+}
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">完整taxonomy · DE / 设计（我编写的词表）</summary><p><a href="pipeline-evidence/taxonomy-de.py.txt" download>下载原文快照</a></p><pre class="instruction">&quot;&quot;&quot;设计（DE）领域任务构造词表。
+
+这些二级类别用于填补原始领域文档未给出 DE 分类的空白，
+因此显式标记为 proposed-gap-fill，不冒充上游已定稿 taxonomy。
+&quot;&quot;&quot;
+
+DOMAIN_SPEC = {
+    &quot;code&quot;: &quot;DE&quot;,
+    &quot;name&quot;: &quot;设计&quot;,
+    &quot;taxonomy_status&quot;: &quot;proposed-gap-fill&quot;,
+    &quot;l2&quot;: {
+        &quot;DE1-品牌与视觉识别&quot;: {
+            &quot;roles&quot;: [
+                &quot;品牌设计师&quot;, &quot;视觉设计师&quot;, &quot;品牌策略师&quot;, &quot;创意总监&quot;,
+                &quot;艺术指导&quot;, &quot;品牌资产管理员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;品牌定位与品牌架构&quot;, &quot;标志及标准字&quot;, &quot;标准色与辅助色&quot;,
+                &quot;辅助图形与图标系统&quot;, &quot;摄影与插画风格&quot;, &quot;品牌语调与命名&quot;,
+                &quot;联合品牌锁定&quot;, &quot;品牌资产库&quot;, &quot;线上线下应用规范&quot;, &quot;品牌一致性治理&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;提炼品牌核心概念&quot;, &quot;构建视觉概念方案&quot;, &quot;设计与修正标志&quot;,
+                &quot;建立色彩与字体系统&quot;, &quot;定义图形语言&quot;, &quot;编制品牌指南&quot;,
+                &quot;开展竞品视觉审计&quot;, &quot;制作应用样机&quot;, &quot;检查资产合规性&quot;, &quot;维护资产版本&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;品牌策略简报&quot;, &quot;市场与受众研究&quot;, &quot;现有品牌资产&quot;, &quot;竞品样本&quot;,
+                &quot;应用场景清单&quot;, &quot;文案与命名方案&quot;, &quot;商标检索结果&quot;, &quot;利益相关方反馈&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;品牌架构选择&quot;, &quot;标志方案定稿&quot;, &quot;品牌区隔度&quot;, &quot;色彩可访问性&quot;,
+                &quot;跨媒介一致性&quot;, &quot;联合品牌主次关系&quot;, &quot;资产淘汰与迁移&quot;, &quot;应用例外审批&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;遵守商标与字体许可&quot;, &quot;标志须保留最小尺寸和安全空间&quot;,
+                &quot;关键文字与背景对比度应达到可访问标准&quot;, &quot;不得修改已批准的标志比例&quot;,
+                &quot;所有资产须包含版本与授权记录&quot;, &quot;涉及旧品牌时须提供迁移与回滚方案&quot;,
+            ],
+        },
+        &quot;DE2-用户体验与交互&quot;: {
+            &quot;roles&quot;: [
+                &quot;用户体验设计师&quot;, &quot;交互设计师&quot;, &quot;用户研究员&quot;, &quot;信息架构师&quot;,
+                &quot;可用性测试员&quot;, &quot;内容设计师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;用户旅程与服务触点&quot;, &quot;信息架构与导航&quot;, &quot;任务流与状态机&quot;,
+                &quot;线框图与高保真原型&quot;, &quot;表单与数据录入&quot;, &quot;搜索与筛选体验&quot;,
+                &quot;错误恢复与空状态&quot;, &quot;可访问性与包容性&quot;, &quot;响应式与跨端体验&quot;, &quot;可用性指标&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;访谈并综合用户需求&quot;, &quot;绘制旅程和任务流&quot;, &quot;设计信息架构&quot;,
+                &quot;制作线框图与原型&quot;, &quot;撰写交互与状态说明&quot;, &quot;组织可用性测试&quot;,
+                &quot;分析行为数据&quot;, &quot;修复无障碍问题&quot;, &quot;标注设计交付稿&quot;, &quot;跟踪上线后体验指标&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;产品需求文档&quot;, &quot;用户访谈纪录&quot;, &quot;行为埋点数据&quot;, &quot;客服与工单数据&quot;,
+                &quot;现有产品截图&quot;, &quot;技术约束清单&quot;, &quot;设计系统组件库&quot;, &quot;可访问性审计报告&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;优先解决的用户痛点&quot;, &quot;导航分类方案&quot;, &quot;任务步骤与默认值&quot;, &quot;数据输入防错&quot;,
+                &quot;响应式断点行为&quot;, &quot;异常与恢复路径&quot;, &quot;可访问性改造优先级&quot;, &quot;上线验收标准&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;关键任务须提供可恢复路径&quot;, &quot;交互不得仅依赖颜色传达信息&quot;,
+                &quot;键盘用户必须可完成主要流程&quot;, &quot;敏感操作须有确认或撤销机制&quot;,
+                &quot;原型须覆盖加载空值错误和成功状态&quot;, &quot;研究记录必须匿名化并遵守同意范围&quot;,
+            ],
+        },
+        &quot;DE3-产品与包装设计&quot;: {
+            &quot;roles&quot;: [
+                &quot;工业设计师&quot;, &quot;包装设计师&quot;, &quot;结构设计师&quot;, &quot;打样工程师&quot;,
+                &quot;材料研发专员&quot;, &quot;可持续设计顾问&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;产品形态与语义&quot;, &quot;人机尺寸与操作&quot;, &quot;包装结构与展开&quot;,
+                &quot;材料和表面工艺&quot;, &quot;制造可行性&quot;, &quot;保护与运输性能&quot;, &quot;货架陈列与开箱体验&quot;,
+                &quot;标签与法定信息&quot;, &quot;可持续材料与减量化&quot;, &quot;样机评审与批量验收&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;将需求转化为形态概念&quot;, &quot;绘制三视图与结构展开图&quot;, &quot;建立三维数字模型&quot;,
+                &quot;制作与评估实体样机&quot;, &quot;进行材料和工艺选型&quot;, &quot;执行跌落与运输测试&quot;,
+                &quot;检查包装信息层级&quot;, &quot;计算单位材料用量&quot;, &quot;编制量产规格&quot;, &quot;签批颜色和工艺样&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;产品功能需求&quot;, &quot;人体工程学数据&quot;, &quot;物料与工艺目录&quot;, &quot;供应商报价&quot;,
+                &quot;生产与模具约束&quot;, &quot;运输和陈列条件&quot;, &quot;法定标签要求&quot;, &quot;可持续性指标&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;形态方案与系列语言&quot;, &quot;材料与表面处理&quot;, &quot;结构安全系数&quot;, &quot;制造成本取舍&quot;,
+                &quot;包装体积与保护性&quot;, &quot;标签信息优先级&quot;, &quot;可持续方案证据&quot;, &quot;量产偏差接受标准&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;尺寸和公差须以可制造单位标注&quot;, &quot;食品医疗等包装须满足相应接触材料规定&quot;,
+                &quot;法定标签不得被裁切或遮挡&quot;, &quot;结构方案须经样机和运输测试验证&quot;,
+                &quot;材料环保声称须有可追溯证据&quot;, &quot;量产文件须锁定版本和签批状态&quot;,
+            ],
+        },
+        &quot;DE4-信息设计与数据可视化&quot;: {
+            &quot;roles&quot;: [
+                &quot;信息设计师&quot;, &quot;数据可视化设计师&quot;, &quot;编辑设计师&quot;, &quot;数据分析师&quot;,
+                &quot;地图制图员&quot;, &quot;视觉叙事编辑&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;数据编码与图表选型&quot;, &quot;信息层级与阅读顺序&quot;, &quot;仪表盘与决策视图&quot;,
+                &quot;时间序列与对比分析&quot;, &quot;关系网络与流程图&quot;, &quot;地理空间与地图&quot;,
+                &quot;表格与数值格式&quot;, &quot;数据故事与注释&quot;, &quot;不确定性与偏差表达&quot;, &quot;静态动态及交互输出&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;审计数据口径和质量&quot;, &quot;选择视觉编码和图表类型&quot;, &quot;设计信息层级&quot;,
+                &quot;构建图表与仪表盘&quot;, &quot;编写标题注释和结论&quot;, &quot;校验数值与单位&quot;,
+                &quot;表达缺失值和不确定性&quot;, &quot;进行色觉与对比度检查&quot;, &quot;优化打印和屏幕阅读&quot;, &quot;制作可复现图表规格&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;结构化数据表&quot;, &quot;数据字典与指标口径&quot;, &quot;分析脚本与查询结果&quot;, &quot;现有报表或仪表盘&quot;,
+                &quot;决策者问题清单&quot;, &quot;品牌视觉规范&quot;, &quot;可访问性要求&quot;, &quot;媒介尺寸与输出规格&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;图表类型适配&quot;, &quot;主要消息与次要信息&quot;, &quot;汇总层级和钻取粒度&quot;, &quot;颜色映射与阈值&quot;,
+                &quot;基线与比较组&quot;, &quot;不确定性呈现方式&quot;, &quot;交互筛选和联动方式&quot;, &quot;结论表述边界&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;图表中数值必须可追溯到数据源&quot;, &quot;坐标轴截断须显式披露&quot;,
+                &quot;不得用面积或体积夸大一维数值差异&quot;, &quot;颜色不得作为唯一分类手段&quot;,
+                &quot;缺失值不得默认当作零&quot;, &quot;指标口径版本和数据日期须随交付物说明&quot;,
+            ],
+        },
+        &quot;DE5-营销与编辑设计&quot;: {
+            &quot;roles&quot;: [
+                &quot;营销视觉设计师&quot;, &quot;编辑设计师&quot;, &quot;广告创意设计师&quot;, &quot;社交媒体设计师&quot;,
+                &quot;版式设计师&quot;, &quot;创意制片人&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;活动主视觉&quot;, &quot;广告创意与素材系列&quot;, &quot;社交媒体内容模板&quot;, &quot;登陆页与邮件视觉&quot;,
+                &quot;书刊与长文排版&quot;, &quot;封面与目录系统&quot;, &quot;图片编辑与版权&quot;, &quot;多语言版本管理&quot;,
+                &quot;印刷与数字出版&quot;, &quot;活动归因与素材优化&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;将活动策略转化为视觉概念&quot;, &quot;制作主视觉及尺寸延展&quot;, &quot;编排长文和图文页面&quot;,
+                &quot;选择与处理摄影素材&quot;, &quot;建立社媒与邮件模板&quot;, &quot;生成多语言版本&quot;,
+                &quot;执行印前检查&quot;, &quot;导出多渠道文件&quot;, &quot;管理文案和设计版本&quot;, &quot;根据表现数据迭代素材&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;营销活动简报&quot;, &quot;渠道和尺寸规格&quot;, &quot;审批文案&quot;, &quot;品牌资产包&quot;,
+                &quot;版权素材与授权记录&quot;, &quot;编辑大纲与稿件&quot;, &quot;印刷与数字出版规范&quot;, &quot;活动效果数据&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;主视觉方案与信息层级&quot;, &quot;渠道素材适配策略&quot;, &quot;图片选用与裁切&quot;, &quot;版式与阅读节奏&quot;,
+                &quot;号召用语突出方式&quot;, &quot;多语言版面容错&quot;, &quot;印刷工艺和成本&quot;, &quot;素材迭代与停用标准&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;仅可使用授权范围内的图片字体和音频&quot;, &quot;法律免责与必要声明不得隐藏&quot;,
+                &quot;网页与邮件交付物须适配指定屏幕尺寸&quot;, &quot;印刷交付物须通过出血分辨率和色彩检查&quot;,
+                &quot;广告声称必须与获批文案一致&quot;, &quot;多语言输出必须保留文案和设计的对应版本&quot;,
+            ],
+        },
+        &quot;DE6-空间与导视设计&quot;: {
+            &quot;roles&quot;: [
+                &quot;环境图形设计师&quot;, &quot;导视系统设计师&quot;, &quot;展陈设计师&quot;, &quot;空间体验设计师&quot;,
+                &quot;照明设计师&quot;, &quot;项目现场管理员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;空间动线与节点&quot;, &quot;导视信息架构&quot;, &quot;标识类型与编码系统&quot;, &quot;安装尺寸与视距&quot;,
+                &quot;材料工艺与耐候性&quot;, &quot;照明与夜间识读&quot;, &quot;无障碍导向&quot;, &quot;应急疏散与安全标识&quot;,
+                &quot;展陈内容与参观节奏&quot;, &quot;场地维护与更新&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;调研场地与人流路径&quot;, &quot;构建地点与目的地分级&quot;, &quot;规划导视点位&quot;,
+                &quot;绘制平面立面和安装图&quot;, &quot;设计标识牌和地图&quot;, &quot;进行视距与可读性测试&quot;,
+                &quot;选择材料照明和工艺&quot;, &quot;核对无障碍与消防要求&quot;, &quot;监修样牌和现场安装&quot;, &quot;编制点位和维护台账&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;建筑与总平面图&quot;, &quot;现场照片与勘察记录&quot;, &quot;人流和运营数据&quot;, &quot;导视点位清单&quot;,
+                &quot;品牌视觉规范&quot;, &quot;建筑消防与无障碍规范&quot;, &quot;材料与施工样本&quot;, &quot;安装和维护预算&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;动线分流与决策点&quot;, &quot;导视类型与密度&quot;, &quot;信息优先级与多语言&quot;, &quot;安装高度和视距&quot;,
+                &quot;材料耐久性和成本&quot;, &quot;昼夜识读方案&quot;, &quot;无障碍路径完整性&quot;, &quot;运营更新与维护方式&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;安全和疏散标识不得被品牌视觉覆盖&quot;, &quot;导视信息须与现场空间命名一致&quot;,
+                &quot;标识安装不得侵占通行净空&quot;, &quot;视觉文字尺寸须按预期视距校核&quot;,
+                &quot;无障碍路径须连续且同时提供非视觉线索&quot;, &quot;所有点位须具有编号版本和维护状态&quot;,
+            ],
+        },
+        &quot;DE7-动态与多媒体设计&quot;: {
+            &quot;roles&quot;: [
+                &quot;动效设计师&quot;, &quot;视频设计师&quot;, &quot;三维设计师&quot;, &quot;音频设计师&quot;,
+                &quot;分镜设计师&quot;, &quot;后期制作设计师&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;分镜与视听叙事&quot;, &quot;动画节奏与曲线&quot;, &quot;界面微交互与转场&quot;, &quot;视频包装与片头片尾&quot;,
+                &quot;三维建模材质与灯光&quot;, &quot;剪辑与合成&quot;, &quot;字幕与动态排版&quot;, &quot;音效与音乐配合&quot;,
+                &quot;交互媒体与实时渲染&quot;, &quot;编码格式与渠道发布&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;将脚本转化为分镜和节奏板&quot;, &quot;制作动画测试与动态原型&quot;, &quot;建模贴图并渲染&quot;,
+                &quot;剪辑视频并合成视觉元素&quot;, &quot;制作字幕和无障碍音轨&quot;, &quot;设计音效与混音&quot;,
+                &quot;优化时长帧率和文件大小&quot;, &quot;导出多渠道版本&quot;, &quot;检查闪烁和运动敏感风险&quot;, &quot;归档工程素材和渲染配置&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;创意脚本与旁白&quot;, &quot;分镜草图&quot;, &quot;品牌视听规范&quot;, &quot;原始视频音频与图像素材&quot;,
+                &quot;三维模型与纹理资产&quot;, &quot;动效原型和交互规格&quot;, &quot;发布平台技术规格&quot;, &quot;版权与音乐授权文件&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;叙事结构与时长&quot;, &quot;动画曲线和视觉节奏&quot;, &quot;二维与三维技术路线&quot;, &quot;剪辑与转场风格&quot;,
+                &quot;音画同步和响度策略&quot;, &quot;可访问版本配置&quot;, &quot;渲染质量与性能取舍&quot;, &quot;渠道裁切和编码方案&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;不得使用超出地域媒介和期限的授权素材&quot;, &quot;闪烁和快速运动必须满足无障碍安全限制&quot;,
+                &quot;关键口播信息必须提供字幕或文本替代&quot;, &quot;用户必须能暂停或禁用非必要动画&quot;,
+                &quot;交付规格须记录帧率色域编码和音频响度&quot;, &quot;工程归档必须包含素材链接字体和插件版本&quot;,
+            ],
+        },
+        &quot;DE8-设计系统与设计运营&quot;: {
+            &quot;roles&quot;: [
+                &quot;设计系统设计师&quot;, &quot;设计工程师&quot;, &quot;设计运营经理&quot;, &quot;组件库维护者&quot;,
+                &quot;设计质量负责人&quot;, &quot;设计项目管理员&quot;,
+            ],
+            &quot;subjects&quot;: [
+                &quot;设计令牌与主题&quot;, &quot;组件分类与接口&quot;, &quot;模式库与使用准则&quot;, &quot;文档站与代码示例&quot;,
+                &quot;设计与前端协作&quot;, &quot;版本发布与迁移&quot;, &quot;贡献与治理流程&quot;, &quot;采用率和覆盖指标&quot;,
+                &quot;设计评审与质量门禁&quot;, &quot;容量规划与需求优先级&quot;,
+            ],
+            &quot;operations&quot;: [
+                &quot;审计并盘点现有组件&quot;, &quot;定义令牌命名和层级&quot;, &quot;设计与封装可复用组件&quot;,
+                &quot;撰写用法反例和内容规则&quot;, &quot;建立贡献审核流程&quot;, &quot;执行视觉回归和无障碍测试&quot;,
+                &quot;发布组件库和变更日志&quot;, &quot;编制破坏性变更迁移指南&quot;, &quot;分析采用与偏离数据&quot;, &quot;管理设计需求队列和服务水平&quot;,
+            ],
+            &quot;input_types&quot;: [
+                &quot;现有设计文件和前端组件&quot;, &quot;产品界面截图库&quot;, &quot;品牌与可访问性标准&quot;, &quot;组件使用埋点&quot;,
+                &quot;缺陷与支持工单&quot;, &quot;设计和工程需求&quot;, &quot;版本历史与变更日志&quot;, &quot;团队容量与项目计划&quot;,
+            ],
+            &quot;decision_topics&quot;: [
+                &quot;令牌和组件抽象层级&quot;, &quot;新建扩展或拒绝组件&quot;, &quot;变体与参数接口&quot;, &quot;设计稿与代码一致性&quot;,
+                &quot;版本和破坏性变更策略&quot;, &quot;质量门禁和发布条件&quot;, &quot;采用率与偏离整治&quot;, &quot;路线图与资源分配&quot;,
+            ],
+            &quot;rules&quot;: [
+                &quot;公开组件接口变更必须遵循语义化版本&quot;, &quot;破坏性变更必须提供迁移指南和弃用期&quot;,
+                &quot;可交互组件须通过键盘和读屏测试&quot;, &quot;设计令牌必须有单一真源和可审计发布记录&quot;,
+                &quot;贡献内容须通过设计和工程双重审查&quot;, &quot;紧急修复后必须补齐文档测试和变更日志&quot;,
+            ],
+        },
+    },
+}
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">组合题目的真实代码：如何选角色、操作、规则并拼成recipe</summary><p><a href="pipeline-evidence/recipe-combination.py.txt" download>下载原文快照</a></p><pre class="instruction">def _pick(values: Sequence[str], index: int, stride: int = 1) -&gt; str:
+    return values[(index * stride) % len(values)]
+
+def _rotated_unique(values: Sequence[str], index: int, count: int) -&gt; list[str]:
+    count = min(max(1, count), len(values))
+    return [values[(index + offset) % len(values)] for offset in range(count)]
+
+def _workflow_dimensions(dimensions: Mapping[str, Sequence[str]], index: int) -&gt; dict[str, Any]:
+    roles = dimensions[&quot;roles&quot;]
+    subjects = dimensions[&quot;subjects&quot;]
+    operations = dimensions[&quot;operations&quot;]
+    input_types = dimensions[&quot;input_types&quot;]
+    decision_topics = dimensions[&quot;decision_topics&quot;]
+    rules = dimensions[&quot;rules&quot;]
+
+    # Different co-prime-ish strides stop similarly sized dimension lists from
+    # moving in lockstep.  The explicit workflow number handles small products.
+    return {
+        &quot;role&quot;: _pick(roles, index, 1),
+        &quot;subject&quot;: _pick(subjects, index, 3),
+        &quot;operation&quot;: _pick(operations, index, 5),
+        &quot;inputs&quot;: _rotated_unique(input_types, index * 2, min(3, len(input_types))),
+        &quot;decision_topic&quot;: _pick(decision_topics, index, 7),
+        &quot;rules&quot;: _rotated_unique(rules, index * 3, min(2, len(rules))),
+    }
+
+def generate_full_plan() -&gt; list[dict[str, Any]]:
+    &quot;&quot;&quot;Generate the complete deterministic list of exactly 2,000 recipes.&quot;&quot;&quot;
+
+    specs = _load_domain_specs()
+    domains = _spread_counts(DOMAIN_QUOTAS)
+    difficulties = _spread_counts(DIFFICULTY_QUOTAS)
+    specialist_complexities = _spread_counts(
+        {f&quot;C{number}&quot;: 200 for number in range(1, 6)}
+    )
+    weakness_complexities = _spread_counts(WEAKNESS_COMPLEXITY_QUOTAS)
+    weaknesses = _spread_counts(WEAKNESS_QUOTAS)
+
+    domain_ordinals: Counter[str] = Counter()
+    l2_ordinals: Counter[tuple[str, str]] = Counter()
+    plan: list[dict[str, Any]] = []
+
+    for index, domain in enumerate(domains):
+        global_number = index + 1
+        domain_ordinals[domain] += 1
+        domain_number = domain_ordinals[domain]
+        spec = specs[domain]
+        l2_labels = list(spec[&quot;l2&quot;])
+        l2_label = l2_labels[(domain_number - 1) % len(l2_labels)]
+        workflow_index = l2_ordinals[(domain, l2_label)]
+        l2_ordinals[(domain, l2_label)] += 1
+        dimensions = _workflow_dimensions(spec[&quot;l2&quot;][l2_label], workflow_index)
+
+        if index &lt; 1_000:
+            category = SPECIALIST_CATEGORIES[index % len(SPECIALIST_CATEGORIES)]
+            task_complexity = specialist_complexities[index]
+            weakness_tags: list[str] = []
+        else:
+            weakness_index = index - 1_000
+            category = &quot;weakness-driven&quot;
+            task_complexity = weakness_complexities[weakness_index]
+            weakness_tags = [weaknesses[weakness_index]]
+
+        workflow_number = workflow_index + 1
+        subject = dimensions[&quot;subject&quot;]
+        operation = dimensions[&quot;operation&quot;]
+        decision_topic = dimensions[&quot;decision_topic&quot;]
+        domain_l3 = (
+            f&quot;{subject}｜{operation}｜{decision_topic}｜流程{workflow_number:03d}&quot;
+        )
+        domain_l4 = (
+            f&quot;基于{&#x27;、&#x27;.join(dimensions[&#x27;inputs&#x27;])}，按{dimensions[&#x27;rules&#x27;][0]}&quot;
+            f&quot;完成{decision_topic}并留存证据&quot;
+        )
+        title = f&quot;{spec[&#x27;name&#x27;]}：{subject}{operation}与{decision_topic}（{global_number:04d}）&quot;
+        task_id = f&quot;{domain}-FULL-{domain_number:04d}&quot;
+        recipe = {
+            &quot;task_id&quot;: task_id,
+            &quot;name&quot;: f&quot;work/{task_id.lower()}&quot;,
+            &quot;title&quot;: title,
+            &quot;blueprint&quot;: &quot;full-taxonomy-workflow&quot;,
+            &quot;role&quot;: dimensions[&quot;role&quot;],
+            &quot;scenario&quot;: (
+                f&quot;你作为{dimensions[&#x27;role&#x27;]}，需在{spec[&#x27;name&#x27;]}场景中对{subject}&quot;
+                f&quot;执行{operation}，最终支持{decision_topic}的可追溯决策。&quot;
+            ),
+            &quot;operation&quot;: operation,
+            &quot;inputs&quot;: dimensions[&quot;inputs&quot;],
+            &quot;decision_topic&quot;: decision_topic,
+            &quot;rules&quot;: dimensions[&quot;rules&quot;],
+            &quot;seed&quot;: 20_261_017_000 + global_number,
+            &quot;category&quot;: category,
+            &quot;difficulty&quot;: difficulties[index],
+            &quot;task_complexity&quot;: task_complexity,
+            &quot;weakness_tags&quot;: weakness_tags,
+            &quot;domain&quot;: domain,
+            &quot;domain_l2&quot;: l2_label,
+            &quot;domain_l3&quot;: domain_l3,
+            &quot;domain_l4&quot;: domain_l4,
+            &quot;capabilities&quot;: _capabilities(category, operation),
+            &quot;taxonomy_status&quot;: spec.get(&quot;taxonomy_status&quot;, &quot;specified&quot;),
+        }
+        plan.append(recipe)
+
+    return plan</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">造数据与规则的真实代码：随机数、筛选、系数、冲突和Skill</summary><p><a href="pipeline-evidence/base-materials.py.txt" download>下载原文快照</a></p><pre class="instruction">def _requirements(recipe: Mapping[str, Any], count: int) -&gt; list[str]:
+    source_rules = [str(item) for item in recipe.get(&quot;rules&quot;, []) if str(item).strip()]
+    base = [
+        &quot;以 record_id 为业务主键，仅保留最高 version 且 status=active 的记录。&quot;,
+        &quot;按 domain-audit-sop skill 的类别系数逐条计算 adjusted_value，保留两位小数后再汇总。&quot;,
+        &quot;对 facts.csv 中 reported_value 与可复算口径的冲突显式留痕，不得直接采信旧值。&quot;,
+        f&quot;围绕“{recipe[&#x27;decision_topic&#x27;]}”给出结论，且区分事实、推断与建议。&quot;,
+        &quot;每条分析结果必须保留 evidence_source，总计必须能回溯到有效明细。&quot;,
+        &quot;摘要必须说明最高贡献类别、有效记录数、总计以及裁决依据。&quot;,
+        &quot;不得修改 environment/app 中的任何输入，不得虚构记录或来源。&quot;,
+        &quot;对 inactive、重复旧版本和跨源冲突分别记录处置结果。&quot;,
+        &quot;证据索引必须列出实际读取的输入文件和冲突结论。&quot;,
+        &quot;行动计划必须包含唯一编号、负责人、期限、状态和验收标准。&quot;,
+        &quot;金额、比率与计数在明细、摘要和辅助交付物之间必须勾稽一致。&quot;,
+        &quot;标注口径适用期为 2026 年，不得混入过期或干扰材料。&quot;,
+        &quot;将所有交付物写入 /app/output，文件名必须与任务清单一致。&quot;,
+        &quot;处理过程须遵守题目中的领域规则和权威源顺序。&quot;,
+        &quot;若证据不足，必须标记待复核，不得用无据假设补齐。&quot;,
+        &quot;交付前检查必填列、数值类型、主键唯一性和输出编码。&quot;,
+        &quot;在异常台账中保留证据文件名和可执行的处理说明。&quot;,
+        &quot;结论不得超过材料的期间、实体和口径边界。&quot;,
+        &quot;所有虚构实体仅用于本次测试，不得将其表述为现实机构。&quot;,
+        &quot;在最终摘要中披露计算舍入顺序和已排除数据的类型。&quot;,
+    ]
+    candidates = base[:3] + source_rules + base[3:]
+    unique: list[str] = []
+    for item in candidates:
+        if item not in unique:
+            unique.append(item)
+    if len(unique) &lt; count:
+        raise RuntimeError(&quot;internal requirement template pool is too small&quot;)
+    return unique[:count]
+
+def _make_facts(recipe: Mapping[str, Any], rng: random.Random, input_count: int) -&gt; tuple[list[dict[str, Any]], dict[str, Any]]:
+    categories = [&quot;核心&quot;, &quot;支持&quot;, &quot;观察&quot;]
+    entities = [f&quot;虚构{recipe[&#x27;domain_name&#x27;]}实体-{index:02d}&quot; for index in range(1, 13)]
+    unique_count = max(8, input_count * 2)
+    rows: list[dict[str, Any]] = []
+    duplicate_ids: list[str] = []
+    for index in range(1, unique_count + 1):
+        record_id = f&quot;REC-{index:04d}&quot;
+        base_value = rng.randrange(80, 901) * 10
+        category = categories[(index - 1) % len(categories)]
+        row = {
+            &quot;record_id&quot;: record_id,
+            &quot;entity&quot;: entities[(index - 1) % len(entities)],
+            &quot;category&quot;: category,
+            &quot;period&quot;: f&quot;2026-{((index - 1) % 4) + 1:02d}&quot;,
+            &quot;workflow&quot;: str(recipe[&quot;domain_l3&quot;]),
+            &quot;decision_topic&quot;: str(recipe[&quot;decision_topic&quot;]),
+            &quot;base_value&quot;: base_value,
+            &quot;reported_value&quot;: base_value + (777 if index % 5 == 0 else 0),
+            &quot;status&quot;: &quot;inactive&quot; if index % 11 == 0 else &quot;active&quot;,
+            &quot;version&quot;: 1,
+            &quot;source_id&quot;: f&quot;SRC-{index:04d}&quot;,
+        }
+        rows.append(row)
+        if index % 9 == 0:
+            duplicate_ids.append(record_id)
+            replacement = dict(row)
+            replacement[&quot;base_value&quot;] = base_value + 250
+            replacement[&quot;reported_value&quot;] = base_value + 1027
+            replacement[&quot;version&quot;] = 2
+            rows.append(replacement)
+
+    latest: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        existing = latest.get(str(row[&quot;record_id&quot;]))
+        if existing is None or int(row[&quot;version&quot;]) &gt; int(existing[&quot;version&quot;]):
+            latest[str(row[&quot;record_id&quot;])] = row
+
+    factors = {&quot;核心&quot;: 1.10, &quot;支持&quot;: 1.00, &quot;观察&quot;: 0.85}
+    valid_rows: list[dict[str, Any]] = []
+    excluded_ids: list[str] = []
+    category_totals: defaultdict[str, float] = defaultdict(float)
+    for record_id in sorted(latest):
+        row = latest[record_id]
+        if row[&quot;status&quot;] != &quot;active&quot;:
+            excluded_ids.append(record_id)
+            continue
+        factor = factors[str(row[&quot;category&quot;])]
+        adjusted = round(float(row[&quot;base_value&quot;]) * factor, 2)
+        golden = {
+            &quot;record_id&quot;: record_id,
+            &quot;entity&quot;: row[&quot;entity&quot;],
+            &quot;category&quot;: row[&quot;category&quot;],
+            &quot;period&quot;: row[&quot;period&quot;],
+            &quot;workflow&quot;: row[&quot;workflow&quot;],
+            &quot;decision_topic&quot;: row[&quot;decision_topic&quot;],
+            &quot;base_value&quot;: float(row[&quot;base_value&quot;]),
+            &quot;adjustment_factor&quot;: factor,
+            &quot;adjusted_value&quot;: adjusted,
+            &quot;evidence_source&quot;: &quot;facts.csv&quot;,
+        }
+        valid_rows.append(golden)
+        category_totals[str(row[&quot;category&quot;])] += adjusted
+
+    category_totals = defaultdict(float, {key: round(value, 2) for key, value in category_totals.items()})
+    grand_total = round(sum(category_totals.values()), 2)
+    top_category = max(category_totals, key=category_totals.get)
+    distractor_total = round(sum(float(row[&quot;reported_value&quot;]) for row in latest.values()), 2)
+    return rows, {
+        &quot;valid_rows&quot;: valid_rows,
+        &quot;valid_count&quot;: len(valid_rows),
+        &quot;excluded_record_ids&quot;: excluded_ids,
+        &quot;duplicate_record_ids&quot;: sorted(duplicate_ids),
+        &quot;category_totals&quot;: dict(sorted(category_totals.items())),
+        &quot;grand_total&quot;: grand_total,
+        &quot;top_category&quot;: top_category,
+        &quot;distractor_total&quot;: distractor_total,
+    }
+
+def _write_inputs(
+    task_dir: Path,
+    recipe: Mapping[str, Any],
+    rows: Sequence[Mapping[str, Any]],
+    input_count: int,
+) -&gt; list[str]:
+    app_dir = task_dir / &quot;environment&quot; / &quot;app&quot;
+    app_dir.mkdir(parents=True, exist_ok=True)
+    fact_fields = [
+        &quot;record_id&quot;, &quot;entity&quot;, &quot;category&quot;, &quot;period&quot;, &quot;workflow&quot;, &quot;decision_topic&quot;, &quot;base_value&quot;,
+        &quot;reported_value&quot;, &quot;status&quot;, &quot;version&quot;, &quot;source_id&quot;,
+    ]
+    _write_csv(app_dir / &quot;facts.csv&quot;, rows, fact_fields)
+    rules = [str(item) for item in recipe.get(&quot;rules&quot;, [])]
+    _write_text(
+        app_dir / &quot;rules.md&quot;,
+        &quot;# 任务口径与权威源\n\n&quot;
+        f&quot;- 领域：{recipe[&#x27;domain_name&#x27;]} / {recipe[&#x27;domain_l2&#x27;]}\n&quot;
+        f&quot;- 场景：{recipe[&#x27;scenario&#x27;]}\n&quot;
+        &quot;- `facts.csv` 是明细事实权威源；`reported_value` 是待复核旧报告值，不得直接作为最终结论。\n&quot;
+        &quot;- 同一 record_id 取最高 version，仅纳入 status=active；逐条保留两位小数后汇总。\n&quot;
+        &quot;- 类别调整系数只在 `domain-audit-sop` skill 中定义，必须依据该 skill 计算。\n&quot;
+        + &quot;&quot;.join(f&quot;- 领域约束：{item}\n&quot; for item in rules[:6]),
+    )
+    names = [&quot;facts.csv&quot;, &quot;rules.md&quot;]
+    extras: list[tuple[str, str]] = [
+        (
+            &quot;conflict_register.csv&quot;,
+            &quot;conflict_id,record_scope,conflicting_field,authoritative_source,resolution\n&quot;
+            &quot;CF-001,REC-0005,reported_value,facts.csv+domain-audit-sop,不采信旧报告值并重算\n&quot;,
+        ),
+        (
+            &quot;entity_master.csv&quot;,
+            &quot;entity_id,entity_name,scope,status\nENT-001,虚构主体一,&quot; + str(recipe[&quot;domain_l3&quot;]) + &quot;,active\n&quot;,
+        ),
+        (
+            &quot;targets.csv&quot;,
+            &quot;period,decision_topic,target_value,unit\n2026,&quot; + str(recipe[&quot;decision_topic&quot;]) + &quot;,100000,合成单位\n&quot;,
+        ),
+    ]
+    for name, content in extras:
+        if len(names) &gt;= input_count:
+            break
+        _write_text(app_dir / name, content)
+        names.append(name)
+
+    index = 1
+    input_types = [str(item) for item in recipe.get(&quot;input_types&quot;, [])] or [&quot;领域证据&quot;]
+    while len(names) &lt; input_count:
+        if index % 2:
+            name = f&quot;evidence_{index:03d}.md&quot;
+            content = (
+                f&quot;# 虚构证据 {index:03d}\n\n&quot;
+                f&quot;- 材料类型：{input_types[(index - 1) % len(input_types)]}\n&quot;
+                f&quot;- 工作角色：{recipe[&#x27;role&#x27;]}\n&quot;
+                f&quot;- 操作：{recipe[&#x27;operation&#x27;]}\n&quot;
+                f&quot;- 判断主题：{recipe[&#x27;decision_topic&#x27;]}\n&quot;
+                &quot;- 本文件是补充上下文，数值结论仍须以 facts.csv 和 rules.md 为准。\n&quot;
+            )
+        else:
+            name = f&quot;evidence_{index:03d}.csv&quot;
+            content = (
+                &quot;evidence_id,input_type,topic,authority,note\n&quot;
+                f&quot;EV-{index:03d},{input_types[(index - 1) % len(input_types)]},{recipe[&#x27;decision_topic&#x27;]},supplemental,不得覆盖权威明细\n&quot;
+            )
+        _write_text(app_dir / name, content)
+        names.append(name)
+        index += 1
+    return names
+
+def _write_skills(task_dir: Path, recipe: Mapping[str, Any]) -&gt; tuple[list[str], list[str]]:
+    skills_root = task_dir / &quot;environment&quot; / &quot;skills&quot;
+    primary = skills_root / &quot;domain-audit-sop&quot; / &quot;SKILL.md&quot;
+    _write_text(
+        primary,
+        &quot;---\n&quot;
+        &quot;name: domain-audit-sop\n&quot;
+        f&quot;description: Audit synthetic {recipe[&#x27;domain_name&#x27;]} records with authoritative-source, version, and category-factor rules.\n&quot;
+        &quot;compatibility: Python 3.11+ and UTF-8 CSV support.\n&quot;
+        &quot;---\n\n&quot;
+        &quot;# Domain Audit SOP\n\n&quot;
+        &quot;1. Treat `facts.csv` as the record authority; `reported_value` is a conflicting legacy field and is never an adjusted result.\n&quot;
+        &quot;2. For each `record_id`, select the greatest integer `version`, then exclude the record unless its selected status is `active`.\n&quot;
+        &quot;3. Apply the category factor: `核心 = 1.10`, `支持 = 1.00`, `观察 = 0.85`. Compute `adjusted_value = round(base_value * factor, 2)` per record before aggregation.\n&quot;
+        &quot;4. Preserve `facts.csv` as `evidence_source`; document every conflict rather than silently choosing a value.\n&quot;
+        &quot;5. Never introduce a record, source, entity, or threshold absent from the supplied workspace.\n&quot;,
+    )
+    skill_set = [&quot;domain-audit-sop&quot;]
+    expected = [&quot;domain-audit-sop&quot;]
+    if recipe[&quot;category&quot;] == &quot;skill-discovery&quot;:
+        _write_text(
+            skills_root / &quot;legacy-fast-sum&quot; / &quot;SKILL.md&quot;,
+            &quot;---\nname: legacy-fast-sum\n&quot;
+            &quot;description: Produce a quick unverified legacy roll-up when explicitly requested for historical reproduction.\n&quot;
+            &quot;---\n\n# Legacy Fast Sum\n\nUse `reported_value` without version or status checks. &quot;
+            &quot;This method is a distractor and conflicts with the current task&#x27;s authoritative rules.\n&quot;,
+        )
+        skill_set.append(&quot;legacy-fast-sum&quot;)
+    return skill_set, expected</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">造Golden和题面的真实代码/字符串模板（不是LLM Prompt）</summary><p><a href="pipeline-evidence/golden-and-instruction-templates.py.txt" download>下载原文快照</a></p><pre class="instruction">def _rubrics() -&gt; list[dict[str, Any]]:
+    definitions = [
+        (&quot;R01&quot;, &quot;所有规定交付物存在且文件名正确。&quot;, &quot;指令遵循&quot;, 10),
+        (&quot;R02&quot;, &quot;分析表列完整且有效记录数正确。&quot;, &quot;内容质量-完整性&quot;, 10),
+        (&quot;R03&quot;, &quot;每条明细的实体、类别、基础值、系数与调整值均可复算且正确。&quot;, &quot;内容质量-数值准确性&quot;, 10),
+        (&quot;R04&quot;, &quot;有效明细汇总与摘要总计一致。&quot;, &quot;内容质量-数值准确性&quot;, 10),
+        (&quot;R05&quot;, &quot;摘要正确识别最高贡献类别并回应决策主题。&quot;, &quot;内容质量-结论正确性&quot;, 7),
+        (&quot;R06&quot;, &quot;明细和摘要保留事实、规则与 Skill 来源链。&quot;, &quot;内容质量-事实忠实性&quot;, 7),
+        (&quot;R07&quot;, &quot;摘要显式说明 reported_value 冲突及不采信理由。&quot;, &quot;内容质量-分析论证&quot;, 7),
+        (&quot;R08&quot;, &quot;各复杂度追加交付物的结构和语义正确。&quot;, &quot;内容质量-完整性&quot;, 7),
+        (&quot;R09&quot;, &quot;inactive 记录和重复旧版本未进入结果。&quot;, &quot;内容质量-专业规范&quot;, 7),
+        (&quot;R10&quot;, &quot;正确应用 domain-audit-sop 中的类别系数。&quot;, &quot;内容质量-Skill依赖&quot;, 7),
+        (&quot;R11&quot;, &quot;主键格式与口径期间正确。&quot;, &quot;结构与组织&quot;, 3),
+        (&quot;N01&quot;, &quot;若纳入 inactive 或其他明确排除的记录，命中本扣分项。&quot;, &quot;内容质量-专业规范&quot;, -10),
+        (&quot;N02&quot;, &quot;若把旧报告 reported_value 汇总当作最终总计，命中本扣分项。&quot;, &quot;内容质量-事实忠实性&quot;, -7),
+        (&quot;N03&quot;, &quot;若引用不存在的证据源或虚构记录，命中本扣分项。&quot;, &quot;安全合规&quot;, -7),
+    ]
+    graded_items = {&quot;R01&quot;, &quot;R02&quot;, &quot;R03&quot;, &quot;R04&quot;, &quot;R05&quot;, &quot;R06&quot;, &quot;R07&quot;, &quot;R08&quot;, &quot;R10&quot;, &quot;R11&quot;}
+    return [
+        {
+            &quot;id&quot;: item_id,
+            &quot;description&quot;: description,
+            &quot;dimension&quot;: dimension,
+            &quot;criterion_type&quot;: &quot;Objective&quot;,
+            &quot;criterion_necessity&quot;: &quot;Explicit&quot;,
+            &quot;type&quot;: &quot;Graded&quot; if item_id in graded_items else &quot;Binary&quot;,
+            &quot;weight&quot;: weight,
+        }
+        for item_id, description, dimension, weight in definitions
+    ]
+
+def _write_reference(
+    task_dir: Path,
+    recipe: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    artifact_names: Sequence[str],
+    input_names: Sequence[str],
+) -&gt; None:
+    reference = task_dir / &quot;solution&quot; / &quot;reference&quot;
+    reference.mkdir(parents=True, exist_ok=True)
+    fields = [
+        &quot;record_id&quot;, &quot;entity&quot;, &quot;category&quot;, &quot;period&quot;, &quot;workflow&quot;, &quot;decision_topic&quot;, &quot;base_value&quot;,
+        &quot;adjustment_factor&quot;, &quot;adjusted_value&quot;, &quot;evidence_source&quot;,
+    ]
+    _write_csv(reference / &quot;analysis.csv&quot;, expected[&quot;valid_rows&quot;], fields)
+    _write_text(
+        reference / &quot;summary.md&quot;,
+        f&quot;# {recipe[&#x27;title&#x27;]}\n\n&quot;
+        f&quot;- 领域：**{recipe[&#x27;domain_name&#x27;]}**\n&quot;
+        f&quot;- 决策主题：**{recipe[&#x27;decision_topic&#x27;]}**\n&quot;
+        f&quot;- 有效记录：**{expected[&#x27;valid_count&#x27;]}** 条\n&quot;
+        f&quot;- 调整后总计：**{expected[&#x27;grand_total&#x27;]:.2f}**\n&quot;
+        f&quot;- 最高贡献类别：**{expected[&#x27;top_category&#x27;]}**\n\n&quot;
+        &quot;## 口径、来源与冲突\n\n&quot;
+        &quot;明细事实来自 `facts.csv`，权威顺序与舍入要求来自 `rules.md`，&quot;
+        &quot;类别调整系数来自 `domain-audit-sop` skill。已取最高 version，排除 inactive，&quot;
+        &quot;再逐条舍入到两位小数后汇总。`reported_value` 与可复算口径存在冲突，&quot;
+        &quot;因其为旧报告干扰值而不采信。本结论仅适用于题目提供的 2026 年合成数据。\n&quot;,
+    )
+    if &quot;evidence.json&quot; in artifact_names:
+        _write_json(
+            reference / &quot;evidence.json&quot;,
+            {
+                &quot;source_files&quot;: list(input_names),
+                &quot;skill&quot;: &quot;domain-audit-sop&quot;,
+                &quot;conflicts&quot;: [
+                    {
+                        &quot;field&quot;: &quot;reported_value&quot;,
+                        &quot;resolution&quot;: &quot;不采信旧报告值，按 facts.csv 基础值和 Skill 系数重算&quot;,
+                    }
+                ],
+                &quot;record_count&quot;: expected[&quot;valid_count&quot;],
+            },
+        )
+    if &quot;exceptions.csv&quot; in artifact_names:
+        exception_rows: list[dict[str, str]] = []
+        exception_rows.extend(
+            {&quot;item_id&quot;: item, &quot;issue_type&quot;: &quot;inactive_record&quot;, &quot;resolution&quot;: &quot;已排除&quot;, &quot;evidence&quot;: &quot;facts.csv&quot;}
+            for item in expected[&quot;excluded_record_ids&quot;]
+        )
+        exception_rows.extend(
+            {&quot;item_id&quot;: item, &quot;issue_type&quot;: &quot;duplicate_older_version&quot;, &quot;resolution&quot;: &quot;保留最高version&quot;, &quot;evidence&quot;: &quot;facts.csv&quot;}
+            for item in expected[&quot;duplicate_record_ids&quot;]
+        )
+        exception_rows.append(
+            {&quot;item_id&quot;: &quot;LEGACY-REPORT&quot;, &quot;issue_type&quot;: &quot;reported_value_conflict&quot;, &quot;resolution&quot;: &quot;不采信并重算&quot;, &quot;evidence&quot;: &quot;facts.csv; rules.md&quot;}
+        )
+        _write_csv(reference / &quot;exceptions.csv&quot;, exception_rows, [&quot;item_id&quot;, &quot;issue_type&quot;, &quot;resolution&quot;, &quot;evidence&quot;])
+    if &quot;action_plan.md&quot; in artifact_names:
+        _write_text(
+            reference / &quot;action_plan.md&quot;,
+            &quot;# 行动计划\n\n&quot;
+            &quot;| 编号 | 行动 | 负责人 | 期限 | 状态 | 验收标准 |\n&quot;
+            &quot;|---|---|---|---|---|---|\n&quot;
+            &quot;| AP-001 | 固化最高版本与状态校验 | 虚构数据责任人 | 2026-05-15 | 待执行 | 复算无重复且 inactive 为 0 |\n&quot;
+            &quot;| AP-002 | 关闭旧报告值引用 | 虚构业务责任人 | 2026-05-20 | 待执行 | 抽样 100% 回溯 facts.csv |\n&quot;,
+        )
+
+def _write_instruction(
+    task_dir: Path,
+    recipe: Mapping[str, Any],
+    requirements: Sequence[str],
+    deliverables: Sequence[tuple[str, str]],
+) -&gt; None:
+    requirement_lines = &quot;\n&quot;.join(f&quot;{index}. {item}&quot; for index, item in enumerate(requirements, 1))
+    deliverable_lines = &quot;\n&quot;.join(f&quot;- `{name}`：{description}&quot; for name, description in deliverables)
+    _write_text(
+        task_dir / &quot;instruction.md&quot;,
+        f&quot;# {recipe[&#x27;title&#x27;]}\n\n&quot;
+        f&quot;你是{recipe[&#x27;role&#x27;]}。{recipe[&#x27;scenario&#x27;]}。本次需要执行“{recipe[&#x27;operation&#x27;]}”，&quot;
+        f&quot;并就“{recipe[&#x27;decision_topic&#x27;]}”形成可审计结论。\n\n&quot;
+        &quot;必须先阅读并使用已安装的 `domain-audit-sop` skill。&quot;
+        &quot;若工作区还有其他 Skill，应根据描述判断其是否适用，不得盲目调用。\n\n&quot;
+        &quot;## 工作要求\n\n&quot;
+        f&quot;{requirement_lines}\n\n&quot;
+        &quot;## 交付物\n\n&quot;
+        f&quot;{deliverable_lines}\n\n&quot;
+        &quot;## 硬约束与禁止项\n\n&quot;
+        &quot;- 所有交付物必须写入 `/app/output/`，且名称完全一致。\n&quot;
+        &quot;- `analysis.csv` 至少包含 `record_id, entity, category, period, base_value, &quot;
+        &quot;adjustment_factor, adjusted_value, evidence_source`；数值列必须是可解析数字。\n&quot;
+        &quot;- 被排除记录只写入异常台账，不得伪装成 analysis.csv 数值行；&quot;
+        &quot;多来源引用用分号分隔。\n&quot;
+        &quot;- 不得修改、删除或覆盖 `/app` 中的任何输入文件。\n&quot;
+        &quot;- 不得纳入 inactive 记录或重复主键的低版本。\n&quot;
+        &quot;- 不得直接使用 `reported_value` 得出最终总计。\n&quot;
+        &quot;- 不得虚构输入中不存在的实体、记录、来源或阈值。\n&quot;,
+    )</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">旧Qwen做题时的system/user提示代码（非Golden生成）</summary><p><a href="pipeline-evidence/qwen-solver-prompts.py.txt" download>下载原文快照</a></p><pre class="instruction">def _system_prompt() -&gt; str:
+    return &quot;&quot;&quot;你是正在完成真实办公任务的 Agent。你只能通过提供的工具读取 input/ 与 skills/，并只能写入 output/。
+第一步立即调用 list_files，然后完整检查输入文件和所有 Skill；Skill 是任务规则的一部分，必须遵守。独立完成计算、交叉核验和交付物制作。
+不要臆造缺失数据，不要尝试访问 solution/、tests/、expected、verifier 或工作区之外的路径。
+必须用工具实际生成任务要求的全部文件，文件名必须完全一致。完成后检查 output/，最后用简短文字说明已交付什么。
+&quot;&quot;&quot;
+
+def _initial_messages(task_dir: Path) -&gt; list[dict[str, Any]]:
+    instruction = (task_dir / &quot;instruction.md&quot;).read_text(encoding=&quot;utf-8&quot;)
+    return [
+        {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: _system_prompt()},
+        {
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: f&quot;请完成以下任务。可用文件位于 input/，任务 Skill 位于 skills/，交付到 output/。\n\n{instruction}&quot;,
+        },
+    ]</pre></details>
+<h4>贯穿示例：品牌架构选择（0007）实际被生成成了什么</h4><p>这组文件展示旧模板的局限：recipe列出品牌研究和品牌资产，但实际材料仍是通用数值表，reference仍是数值摘要。SRC编号只是合成标识，不是现实参考文献。</p>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">实际recipe：标题、角色、预期材料、规则、seed</summary><p><a href="pipeline-evidence/DE-FULL-0001-recipe.json.txt" download>下载原文快照</a></p><pre class="instruction">{
+  &quot;blueprint&quot;: &quot;full-taxonomy-workflow&quot;,
+  &quot;capabilities&quot;: [
+    &quot;提炼品牌核心概念&quot;,
+    &quot;技能生成与编辑&quot;,
+    &quot;版本校验&quot;
+  ],
+  &quot;category&quot;: &quot;skill-generation-editing&quot;,
+  &quot;decision_topic&quot;: &quot;品牌架构选择&quot;,
+  &quot;difficulty&quot;: &quot;A1&quot;,
+  &quot;domain&quot;: &quot;DE&quot;,
+  &quot;domain_l2&quot;: &quot;DE1-品牌与视觉识别&quot;,
+  &quot;domain_l3&quot;: &quot;品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001&quot;,
+  &quot;domain_l4&quot;: &quot;基于品牌策略简报、市场与受众研究、现有品牌资产，按遵守商标与字体许可完成品牌架构选择并留存证据&quot;,
+  &quot;domain_name&quot;: &quot;设计&quot;,
+  &quot;input_types&quot;: [
+    &quot;品牌策略简报&quot;,
+    &quot;市场与受众研究&quot;,
+    &quot;现有品牌资产&quot;
+  ],
+  &quot;inputs&quot;: [
+    &quot;品牌策略简报&quot;,
+    &quot;市场与受众研究&quot;,
+    &quot;现有品牌资产&quot;
+  ],
+  &quot;name&quot;: &quot;work/de-full-0001&quot;,
+  &quot;operation&quot;: &quot;提炼品牌核心概念&quot;,
+  &quot;role&quot;: &quot;品牌设计师&quot;,
+  &quot;rules&quot;: [
+    &quot;遵守商标与字体许可&quot;,
+    &quot;标志须保留最小尺寸和安全空间&quot;
+  ],
+  &quot;scenario&quot;: &quot;你作为品牌设计师，需在设计场景中对品牌定位与品牌架构执行提炼品牌核心概念，最终支持品牌架构选择的可追溯决策。&quot;,
+  &quot;seed&quot;: 20261017007,
+  &quot;task_complexity&quot;: &quot;C2&quot;,
+  &quot;task_id&quot;: &quot;DE-FULL-0001&quot;,
+  &quot;taxonomy_status&quot;: &quot;proposed-gap-fill&quot;,
+  &quot;title&quot;: &quot;设计：品牌定位与品牌架构提炼品牌核心概念与品牌架构选择（0007）&quot;,
+  &quot;track&quot;: &quot;specialized&quot;,
+  &quot;weakness_tags&quot;: []
+}</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">实际旧题任务书</summary><p><a href="pipeline-evidence/DE-FULL-0001-instruction.md.txt" download>下载原文快照</a></p><pre class="instruction"># 设计：品牌定位与品牌架构提炼品牌核心概念与品牌架构选择（0007）
+
+你是品牌设计师。你作为品牌设计师，需在设计场景中对品牌定位与品牌架构执行提炼品牌核心概念，最终支持品牌架构选择的可追溯决策。。本次需要执行“提炼品牌核心概念”，并就“品牌架构选择”形成可审计结论。
+
+必须先阅读并使用已安装的 `domain-audit-sop` skill。若工作区还有其他 Skill，应根据描述判断其是否适用，不得盲目调用。
+
+## 工作要求
+
+1. 以 record_id 为业务主键，仅保留最高 version 且 status=active 的记录。
+2. 按 domain-audit-sop skill 的类别系数逐条计算 adjusted_value，保留两位小数后再汇总。
+3. 对 facts.csv 中 reported_value 与可复算口径的冲突显式留痕，不得直接采信旧值。
+4. 遵守商标与字体许可
+5. 标志须保留最小尺寸和安全空间
+6. 围绕“品牌架构选择”给出结论，且区分事实、推断与建议。
+
+## 交付物
+
+- `analysis.csv`：经去重、筛选和口径调整后的逐项分析表
+- `summary.md`：含结论、数值、冲突和来源的管理摘要
+
+## 硬约束与禁止项
+
+- 所有交付物必须写入 `/app/output/`，且名称完全一致。
+- 不得修改、删除或覆盖 `/app` 中的任何输入文件。
+- 不得纳入 inactive 记录或重复主键的低版本。
+- 不得直接使用 `reported_value` 得出最终总计。
+- 不得虚构输入中不存在的实体、记录、来源或阈值。
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">实际旧题输入facts.csv</summary><p><a href="pipeline-evidence/DE-FULL-0001-facts.csv.txt" download>下载原文快照</a></p><pre class="instruction">record_id,entity,category,period,workflow,decision_topic,base_value,reported_value,status,version,source_id
+REC-0001,虚构设计实体-01,核心,2026-01,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,3490,3490,active,1,SRC-0001
+REC-0002,虚构设计实体-02,支持,2026-02,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,5710,5710,active,1,SRC-0002
+REC-0003,虚构设计实体-03,观察,2026-03,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,6690,6690,active,1,SRC-0003
+REC-0004,虚构设计实体-04,核心,2026-04,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,6690,6690,active,1,SRC-0004
+REC-0005,虚构设计实体-05,支持,2026-01,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,3570,4347,active,1,SRC-0005
+REC-0006,虚构设计实体-06,观察,2026-02,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,2810,2810,active,1,SRC-0006
+REC-0007,虚构设计实体-07,核心,2026-03,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,2500,2500,active,1,SRC-0007
+REC-0008,虚构设计实体-08,支持,2026-04,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,7210,7210,active,1,SRC-0008
+REC-0009,虚构设计实体-09,观察,2026-01,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,4730,4730,active,1,SRC-0009
+REC-0009,虚构设计实体-09,观察,2026-01,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,4980,5757,active,2,SRC-0009
+REC-0010,虚构设计实体-10,核心,2026-02,品牌定位与品牌架构｜提炼品牌核心概念｜品牌架构选择｜流程001,品牌架构选择,5180,5957,active,1,SRC-0010
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">实际Golden摘要：并不是品牌策略方案</summary><p><a href="pipeline-evidence/DE-FULL-0001-golden-summary.md.txt" download>下载原文快照</a></p><pre class="instruction"># 设计：品牌定位与品牌架构提炼品牌核心概念与品牌架构选择（0007）
+
+- 领域：**设计**
+- 决策主题：**品牌架构选择**
+- 有效记录：**10** 条
+- 调整后总计：**48444.00**
+- 最高贡献类别：**核心**
+
+## 口径、来源与冲突
+
+明细事实来自 `facts.csv`，权威顺序与舍入要求来自 `rules.md`，类别调整系数来自 `domain-audit-sop` skill。已取最高 version，排除 inactive，再逐条舍入到两位小数后汇总。`reported_value` 与可复算口径存在冲突，因其为旧报告干扰值而不采信。本结论仅适用于题目提供的 2026 年合成数据。
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">实际来源声明：deterministic-synthetic</summary><p><a href="pipeline-evidence/DE-FULL-0001-lineage.json.txt" download>下载原文快照</a></p><pre class="instruction">{
+  &quot;contains_real_personal_data&quot;: false,
+  &quot;entities&quot;: &quot;All organizations, people, accounts, and records are fictional.&quot;,
+  &quot;license&quot;: &quot;CC0-1.0&quot;,
+  &quot;seed&quot;: 20261017007,
+  &quot;source_type&quot;: &quot;deterministic-synthetic&quot;,
+  &quot;source_uri&quot;: &quot;synthetic://workfactory/full/DE/DE-FULL-0001&quot;
+}
+</pre></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">新版Qwen judge使用的判分提示原文（只负责评分，不负责造题）</summary><p><a href="pipeline-evidence/rewardkit-judge-prompt.md.txt" download>下载原文快照</a></p><pre class="instruction">You are an evaluation judge with filesystem access. Working directory: `/app`.
+Evaluate the candidate&#x27;s deliverables against the criteria at the end of this prompt.
+
+[Material map]
+
+  /app/output/            THE SUBJECT OF EVALUATION — the candidate&#x27;s deliverables.
+                          Only these files can earn or lose points.
+  /app/input_files/       Task inputs given to the candidate (read-only). Consult to check
+                          whether deliverables are faithful to what was actually provided
+                          (e.g. a cited data source really exists; a stated fact is not fabricated).
+  /tests/__golden_output/   One acceptable reference solution. See policy below.
+
+[Reference-solution policy]
+
+The reference is for calibration only — expected structure, field naming, magnitude of
+numbers. It is NOT an answer key and NOT a diff target. Two hard rules:
+
+  - Never award points because the reference satisfies a criterion. If the candidate&#x27;s
+    file lacks something, it lacks it.
+  - Never deduct for differing from the reference. Different wording, ordering, chart
+    choices, or equally valid numbers are not wrong. Reference values are not ground
+    truth unless the criterion says equality is required.
+
+Where reference and criterion appear to disagree, the criterion wins.
+
+[Tool usage — technical only, does NOT change scoring policy]
+
+Inspect the deliverables however works best: shell commands, Python, any library in this
+container. Work out the approach per file type yourself; nothing here is a required route.
+`markitdown &lt;path&gt;` is a handy one-step text extractor for .xlsx/.docx/.pptx/.pdf. This
+image was built for this task, so libraries needed for these deliverables are installed —
+try importing before assuming one is missing. No network access; no Task/Explore subagents.
+
+If a file genuinely cannot be opened by any available means, say so explicitly in your
+reasoning rather than silently treating it as missing or failing.
+
+Fairness anchor:
+None of the above changes how strictly you judge. Score each criterion exactly as the rubric prescribes; data extracted with any tool counts the same as reading the original. If a deliverable referenced by a criterion does not exist, judge per its description (typically false). Score only `/app/output/` — inputs and reference are evidence, never the thing being scored.
+
+{criteria}
+</pre></details>
     <h3>B · 从 Base 补成完整工作任务，需要做什么？ <span class="badge">完整建设方案，未全部实现</span></h3>
     <p><strong>逐题审查 → 补参考素材 → 构建业务材料 → 生成专业Golden → 对齐题面与Rubric → 标准题包 → Golden验收 → 三模型校准 → 批量交付。</strong></p>
     <div class="pipeline-grid">
