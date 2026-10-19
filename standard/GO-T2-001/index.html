@@ -1,0 +1,664 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GO-T2-001 · RewardKit 标准题包 v1.0.1</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f2f5f9;color:#172033;font:15px/1.7 system-ui,-apple-system,"PingFang SC",sans-serif}main{max-width:1180px;margin:auto;padding:24px 18px 60px}a{color:#325eee}header{background:#111b33;color:white;border-radius:22px;padding:30px}header a{color:#9cceff}h1{line-height:1.4;font-size:28px;margin:14px 0}h2{margin-top:0;font-size:21px}h3{font-size:17px}section{background:white;border:1px solid #dfe4ec;border-radius:16px;padding:22px;margin-top:18px}nav{display:flex;flex-wrap:wrap;gap:16px;margin:18px 0}.badge{display:inline-block;border:1px solid #8ca7f8;border-radius:99px;padding:4px 12px;background:#edf2ff;color:#2548a7}.notice{background:#fff7e6;border:1px solid #efcf92;border-radius:12px;padding:14px;color:#795411}pre{white-space:pre-wrap;word-break:break-word;font:13px/1.7 ui-monospace,monospace;background:#f7f9fc;padding:16px;border-radius:10px;max-height:760px;overflow:auto}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:9px;border:1px solid #dfe4ec;text-align:left;vertical-align:top}th{background:#f2f5fb}summary{cursor:pointer;font-weight:650;padding:12px 0}details{border-top:1px solid #e5eaf0;padding:4px 0}.button{display:inline-block;padding:9px 14px;border:1px solid #b6c7ee;border-radius:9px;background:#edf2ff;text-decoration:none;margin:4px 8px 4px 0}.muted{color:#667085;font-size:13px}.rubric{padding:12px;border-left:3px solid #8ca7f8;background:#f7f9ff;margin:12px 0}code{word-break:break-all}@media(max-width:650px){main{padding:12px 10px}header,section{padding:17px}h1{font-size:23px}}
+</style></head><body><main>
+<header><a href="../../index.html#task">← 返回原题库</a><p>WORKFACTORY · REWARDKIT 标准化样板</p><h1>2026年第一季度多渠道销售复核与管理层汇报</h1><span class="badge">GO-T2-001 · v1.0.1 · 标准化改造完成</span><p>通用办公 / 经营数据复核 · Skill 依赖 · 规划难度 A2 / 复杂度 C3</p></header>
+<nav><a href="#changes">本次改造</a><a href="#instruction">完整题目</a><a href="#inputs">10份输入材料</a><a href="#deliverables">交付要求</a><a href="#rubrics">20项评分规则</a><a href="#validation">验收状态</a></nav>
+<div class="notice">标准化改造完成 ≠ 正式验收通过。正式 Oracle 运行中，尚未确认通过。本页仅展示这一道新版样板，下方旧题库的“Golden通过”来自旧版本地校验，不代表本题正式验收。</div>
+<section id="changes"><h2>本次改造了什么</h2><div class="table-scroll"><table><thead><tr><th>项目</th><th>本次改造</th></tr></thead><tbody><tr><td>业务与输入数据</td><td>沿用原销售复核题；10 份输入的数据内容不变，不是另合成一批题。</td></tr><tr><td>任务说明</td><td>补齐输入字段、Skill 路径、工作表和必需字段、计算口径及禁止项。</td></tr><tr><td>交付物</td><td>仍是 Excel、管理层摘要、异常日志三份，明确命名、字段及勾稽要求。</td></tr><tr><td>题包与判分</td><td>按交付规范整理目录，固定 test.sh / finalize.py / prompt.md，配套20项评分规则。</td></tr><tr><td>运行环境</td><td>RewardKit 0.1.7、Claude CLI 2.1.114、办公依赖及可选构建缓存。</td></tr><tr><td>覆盖范围</td><td>仅此一道完成标准化改造；原2000题不视为已升级。</td></tr></tbody></table></div><a class="button" href="GO-T2-001-v1.0.1-draft.zip" download>下载新版标准题包草稿（待正式验收）</a></section>
+<section id="instruction"><h2>新版完整题目</h2><pre># 2026年第一季度多渠道销售复核与管理层汇报
+
+你是销售运营分析师，需为2026年第一季度关账提供可复核的经营结果，读者为管理层。所有客户和交易均为合成测试材料，结论限于提供的数据。
+
+## 输入材料
+
+输入位于只读目录 `/app/input_files/`，不要修改、删除或覆盖。交易金额、折扣、退款以交易币种计，汇率表示人民币/交易币种，最终金额单位为人民币元。
+
+| 文件 | 字段与口径 |
+|---|---|
+| `/app/input_files/account_status.csv` | UTF-8 CSV；字段：account_id, account_name, quarter_end_status, region_code, currency |
+| `/app/input_files/corrections.csv` | UTF-8 CSV；字段：transaction_id, field, corrected_value, approved |
+| `/app/input_files/exchange_rates.csv` | UTF-8 CSV；字段：currency, quarter_rate |
+| `/app/input_files/manager_note.md` | 管理层说明：客户状态权威来源与冲突留痕要求 |
+| `/app/input_files/metric_policy.md` | 基础计算及版本口径；内部管理确认例外以已安装 Skill 为准 |
+| `/app/input_files/prior_summary.xlsx` | 旧版汇总表，仅用于识别并解释冲突，不具有权威性 |
+| `/app/input_files/product_master.csv` | UTF-8 CSV；字段：product_code, product_name, category |
+| `/app/input_files/refunds.csv` | UTF-8 CSV；字段：transaction_id, refund_amount |
+| `/app/input_files/region_map.csv` | UTF-8 CSV；字段：region_code, reporting_region |
+| `/app/input_files/sales_workbook.xlsx` | 2026-01/02/03 为有效月；Archive-不要纳入 为历史干扰；有效表字段：transaction_id, month, account_id, product_code, currency, gross_amount, discount_amount, version, record_status |
+
+## 可用技能
+
+| 名称 | 适用说明 | 入口 |
+|---|---|---|
+| reconciliation-sop | 季度销售复核：权威来源、内部管理确认口径与异常处置 | `/skills/reconciliation-sop/SKILL.md` |
+
+处理输入前先阅读此技能，并按其规则完成复核。技能内相对脚本或资料路径以 `/skills/reconciliation-sop/` 为基准；此技能无附加脚本。基础政策与内部管理确认例外不同时，以Skill中的专有例外为准。
+
+## 工作要求
+
+1. 交付规定的三个非空、可打开文件；工作簿包含有效明细、区域汇总、月度汇总三个工作表。
+2. 仅处理2026年第一季度有效月表中的 posted 交易，按 transaction_id 保留最高 version，并以 account_status.csv 的季度末 active 状态筛选。
+3. 仅应用 corrections.csv 中 approved=yes 的字段更正，approved=no 不得覆盖原值。
+4. 将 refunds.csv 中同一交易退款相加，在汇率转换之前扣减。
+5. 依据 reconciliation-sop 中内部管理确认口径处理有效交易，保留 recognition_factor。
+6. 采用 exchange_rates.csv 的季度汇率；逐笔计算人民币净销售额，按四舍五入保留两位小数后汇总。
+7. 以 region_map.csv 映射区域；区域汇总列出各区域金额与交易数及总计，月度汇总覆盖2026-01、2026-02、2026-03，均与有效明细勾稽。
+8. 摘要写明复核后总额、最高贡献区域及其金额、有效交易数；按结论、计算依据、冲突处置组织内容。
+9. 摘要引用实际用于复算的输入来源及 Skill，解释旧汇总与重算结果的冲突及采用依据。
+10. 异常日志逐项记录重复旧版本、inactive交易、批准更正、旧汇总冲突及处置依据。
+11. 摘要中的业务事实均应能追溯到提供的材料，不得编造未提供的客户、交易、外部市场数据或业务因果。
+
+## 交付文件
+
+工作目录为 `/app`；交付物只能写入 `/app/output/`，文件名必须逐字一致。
+
+| 必交文件 | 说明 |
+|---|---|
+| `/app/output/GO-T2-001_区域销售复核.xlsx` | 销售复核工作簿 |
+| `/app/output/GO-T2-001_管理层摘要.md` | 管理层摘要 |
+| `/app/output/GO-T2-001_异常日志.csv` | 异常及冲突日志 |
+
+工作簿三个工作表的必需字段如下，字段顺序可调整：
+
+- `有效明细`：transaction_id, month, account_id, region, product, currency, gross_amount, discount_amount, refund_amount, recognition_factor, fx_rate, net_sales_cny, selected_version。
+- `区域汇总`：region, net_sales_cny, transaction_count；含一行region为“合计”。
+- `月度汇总`：month, net_sales_cny。
+- 异常CSV：item_id, issue_type, details, evidence；issue_type分别使用duplicate_older_version、inactive_account、approved_correction、summary_conflict。
+
+不使用合并单元格承载数据字段；数值字段填写可解析数字。可保留计算公式，但文件应能在办公工具中正常读取并核验结果。不得将历史Archive行或inactive交易放入有效明细；它们的处置写入异常日志。
+</pre></section>
+<section id="inputs"><h2>输入材料 · 10份</h2><p>执行时位于只读目录 <code>/app/input_files/</code>。点击文件可查看完整内容或下载；工作簿展示各 Sheet 单元格数据。</p><details><summary>account_status.csv · 480 B</summary><a class="button" href="files/input/account_status.csv" download>下载原始文件</a><pre>account_id,account_name,quarter_end_status,region_code,currency
+A001,示例客户01,active,E,CNY
+A002,示例客户02,active,N,CNY
+A003,示例客户03,active,S,CNY
+A004,示例客户04,active,W,USD
+A005,示例客户05,active,E,CNY
+A006,示例客户06,active,N,CNY
+A007,示例客户07,active,S,CNY
+A008,示例客户08,active,W,USD
+A009,示例客户09,active,E,CNY
+A010,示例客户10,active,N,CNY
+A011,示例客户11,inactive,S,CNY
+A012,示例客户12,inactive,W,USD
+</pre></details><details><summary>corrections.csv · 147 B</summary><a class="button" href="files/input/corrections.csv" download>下载原始文件</a><pre>transaction_id,field,corrected_value,approved
+TX-1-05,gross_amount,23100,yes
+TX-3-09,discount_amount,2500,yes
+TX-2-04,gross_amount,99999,no
+</pre></details><details><summary>exchange_rates.csv · 44 B</summary><a class="button" href="files/input/exchange_rates.csv" download>下载原始文件</a><pre>currency,quarter_rate
+CNY,1.0
+USD,7.1
+</pre></details><details><summary>manager_note.md · 192 B</summary><a class="button" href="files/input/manager_note.md" download>下载原始文件</a><pre># 管理层补充说明
+
+季度末有效客户状态以 `account_status.csv` 为准；工作簿中的历史状态字段不得用于判断。发现跨源冲突时必须记录到异常日志。
+</pre></details><details><summary>metric_policy.md · 257 B</summary><a class="button" href="files/input/metric_policy.md" download>下载原始文件</a><pre># 净销售额口径
+
+净销售额（人民币）=（含税销售额－折扣－退款）×季度汇率。逐笔换算并四舍五入到分，再汇总。同一 transaction_id 只保留 version 最大的 posted 记录；已批准更正优先于工作簿。
+</pre></details><details><summary>prior_summary.xlsx · 2,781 B</summary><a class="button" href="files/input/prior_summary.xlsx" download>下载原始文件</a><h4>旧版汇总</h4><div class="table-scroll"><table><thead><tr><th>区域</th><th>净销售额（人民币）</th></tr></thead><tbody><tr><td>华东</td><td>123456</td></tr><tr><td>合计</td><td>999999</td></tr></tbody></table></div></details><details><summary>product_master.csv · 133 B</summary><a class="button" href="files/input/product_master.csv" download>下载原始文件</a><pre>product_code,product_name,category
+P01,标准版,订阅
+P02,专业版,订阅
+P03,实施服务,服务
+P04,培训服务,服务
+</pre></details><details><summary>refunds.csv · 117 B</summary><a class="button" href="files/input/refunds.csv" download>下载原始文件</a><pre>transaction_id,refund_amount
+TX-1-01,1200
+TX-1-07,1200
+TX-2-01,1200
+TX-2-07,1200
+TX-3-01,1200
+TX-3-07,1200
+</pre></details><details><summary>region_map.csv · 73 B</summary><a class="button" href="files/input/region_map.csv" download>下载原始文件</a><pre>region_code,reporting_region
+E,华东
+N,华北
+S,华南
+W,西部
+</pre></details><details><summary>sales_workbook.xlsx · 6,127 B</summary><a class="button" href="files/input/sales_workbook.xlsx" download>下载原始文件</a><h4>2026-01</h4><div class="table-scroll"><table><thead><tr><th>transaction_id</th><th>month</th><th>account_id</th><th>product_code</th><th>currency</th><th>gross_amount</th><th>discount_amount</th><th>version</th><th>record_status</th></tr></thead><tbody><tr><td>TX-1-01</td><td>2026-01</td><td>A001</td><td>P03</td><td>CNY</td><td>15100</td><td>0</td><td>1</td><td>posted</td></tr><tr><td>TX-1-02</td><td>2026-01</td><td>A002</td><td>P04</td><td>CNY</td><td>19200</td><td>500</td><td>1</td><td>posted</td></tr><tr><td>TX-1-03</td><td>2026-01</td><td>A003</td><td>P01</td><td>CNY</td><td>9100</td><td>1500</td><td>1</td><td>posted</td></tr><tr><td>TX-1-03</td><td>2026-01</td><td>A003</td><td>P01</td><td>CNY</td><td>11100</td><td>1500</td><td>2</td><td>posted</td></tr><tr><td>TX-1-04</td><td>2026-01</td><td>A004</td><td>P02</td><td>USD</td><td>21400</td><td>1000</td><td>1</td><td>posted</td></tr><tr><td>TX-1-05</td><td>2026-01</td><td>A005</td><td>P03</td><td>CNY</td><td>23000</td><td>500</td><td>1</td><td>posted</td></tr><tr><td>TX-1-06</td><td>2026-01</td><td>A006</td><td>P04</td><td>CNY</td><td>20200</td><td>1500</td><td>1</td><td>posted</td></tr><tr><td>TX-1-07</td><td>2026-01</td><td>A007</td><td>P01</td><td>CNY</td><td>22000</td><td>0</td><td>1</td><td>posted</td></tr><tr><td>TX-1-08</td><td>2026-01</td><td>A008</td><td>P02</td><td>USD</td><td>10500</td><td>500</td><td>1</td><td>posted</td></tr><tr><td>TX-1-08</td><td>2026-01</td><td>A008</td><td>P02</td><td>USD</td><td>12500</td><td>500</td><td>2</td><td>posted</td></tr><tr><td>TX-1-09</td><td>2026-01</td><td>A009</td><td>P03</td><td>CNY</td><td>12100</td><td>1000</td><td>1</td><td>posted</td></tr><tr><td>TX-1-10</td><td>2026-01</td><td>A010</td><td>P04</td><td>CNY</td><td>16000</td><td>1500</td><td>1</td><td>posted</td></tr><tr><td>TX-1-11</td><td>2026-01</td><td>A011</td><td>P01</td><td>CNY</td><td>22400</td><td>500</td><td>1</td><td>posted</td></tr><tr><td>TX-1-12</td><td>2026-01</td><td>A012</td><td>P02</td><td>USD</td><td>8100</td><td>1000</td><td>1</td><td>posted</td></tr></tbody></table></div><h4>2026-02</h4><div class="table-scroll"><table><thead><tr><th>transaction_id</th><th>month</th><th>account_id</th><th>product_code</th><th>currency</th><th>gross_amount</th><th>discount_amount</th><th>version</th><th>record_status</th></tr></thead><tbody><tr><td>TX-2-01</td><td>2026-02</td><td>A002</td><td>P04</td><td>CNY</td><td>12500</td><td>0</td><td>1</td><td>posted</td></tr><tr><td>TX-2-02</td><td>2026-02</td><td>A003</td><td>P01</td><td>CNY</td><td>22200</td><td>0</td><td>1</td><td>posted</td></tr><tr><td>TX-2-03</td><td>2026-02</td><td>A004</td><td>P02</td><td>USD</td><td>15200</td><td>1000</td><td>1</td><td>posted</td></tr><tr><td>TX-2-03</td><td>2026-02</td><td>A004</td><td>P02</td><td>USD</td><td>17200</td><td>1000</td><td>2</td><td>posted</td></tr><tr><td>TX-2-04</td><td>2026-02</td><td>A005</td><td>P03</td><td>CNY</td><td>17700</td><td>1000</td><td>1</td><td>posted</td></tr><tr><td>TX-2-05</td><td>2026-02</td><td>A006</td><td>P04</td><td>CNY</td><td>20600</td><td>1500</td><td>1</td><td>posted</td></tr><tr><td>TX-2-06</td><td>2026-02</td><td>A007</td><td>P01</td><td>CNY</td><td>12200</td><td>500</td><td>1</td><td>posted</td></tr><tr><td>TX-2-07</td><td>2026-02</td><td>A008</td><td>P02</td><td>USD</td><td>15800</td><td>1000</td><td>1</td><td>posted</td></tr><tr><td>TX-2-08</td><td>2026-02</td><td>A009</td><td>P03</td><td>CNY</td><td>15000</td><td>1500</td><td>1</td><td>posted</td></tr><tr><td>TX-2-08</td><td>2026-02</td><td>A009</td><td>P03</td><td>CNY</td><td>17000</td><td>1500</td><td>2</td><td>posted</td></tr><tr><td>TX-2-09</td><td>2026-02</td><td>A010</td><td>P04</td><td>CNY</td><td>16200</td><td>1500</td><td>1</td><td>posted</td></tr><tr><td>TX-2-10</td><td>2026-02</td><td>A011</td><td>P01</td><td>CNY</td><td>15700</td><td>1000</td><td>1</td><td>posted</td></tr><tr><td>TX-2-11</td><td>2026-02</td><td>A012</td><td>P02</td><td>USD</td><td>9800</td><td>500</td><td>1</td><td>posted</td></tr><tr><td>TX-2-12</td><td>2026-02</td><td>A001</td><td>P03</td><td>CNY</td><td>22600</td><td>500</td><td>1</td><td>posted</td></tr></tbody></table></div><h4>2026-03</h4><div class="table-scroll"><table><thead><tr><th>transaction_id</th><th>month</th><th>account_id</th><th>product_code</th><th>currency</th><th>gross_amount</th><th>discount_amount</th><th>version</th><th>record_status</th></tr></thead><tbody><tr><td>TX-3-01</td><td>2026-03</td><td>A003</td><td>P01</td><td>CNY</td><td>22500</td><td>1000</td><td>1</td><td>posted</td></tr><tr><td>TX-3-02</td><td>2026-03</td><td>A004</td><td>P02</td><td>USD</td><td>18600</td><td>1500</td><td>1</td><td>posted</td></tr><tr><td>TX-3-03</td><td>2026-03</td><td>A005</td><td>P03</td><td>CNY</td><td>6900</td><td>1000</td><td>1</td><td>posted</td></tr><tr><td>TX-3-03</td><td>2026-03</td><td>A005</td><td>P03</td><td>CNY</td><td>8900</td><td>1000</td><td>2</td><td>posted</td></tr><tr><td>TX-3-04</td><td>2026-03</td><td>A006</td><td>P04</td><td>CNY</td><td>24000</td><td>1000</td><td>1</td><td>posted</td></tr><tr><td>TX-3-05</td><td>2026-03</td><td>A007</td><td>P01</td><td>CNY</td><td>15800</td><td>500</td><td>1</td><td>posted</td></tr><tr><td>TX-3-06</td><td>2026-03</td><td>A008</td><td>P02</td><td>USD</td><td>15800</td><td>1500</td><td>1</td><td>posted</td></tr><tr><td>TX-3-07</td><td>2026-03</td><td>A009</td><td>P03</td><td>CNY</td><td>19800</td><td>0</td><td>1</td><td>posted</td></tr><tr><td>TX-3-08</td><td>2026-03</td><td>A010</td><td>P04</td><td>CNY</td><td>9900</td><td>1500</td><td>1</td><td>posted</td></tr><tr><td>TX-3-08</td><td>2026-03</td><td>A010</td><td>P04</td><td>CNY</td><td>11900</td><td>1500</td><td>2</td><td>posted</td></tr><tr><td>TX-3-09</td><td>2026-03</td><td>A011</td><td>P01</td><td>CNY</td><td>8100</td><td>1000</td><td>1</td><td>posted</td></tr><tr><td>TX-3-10</td><td>2026-03</td><td>A012</td><td>P02</td><td>USD</td><td>20500</td><td>1500</td><td>1</td><td>posted</td></tr><tr><td>TX-3-11</td><td>2026-03</td><td>A001</td><td>P03</td><td>CNY</td><td>17000</td><td>500</td><td>1</td><td>posted</td></tr><tr><td>TX-3-12</td><td>2026-03</td><td>A002</td><td>P04</td><td>CNY</td><td>10200</td><td>0</td><td>1</td><td>posted</td></tr></tbody></table></div><h4>Archive-不要纳入</h4><div class="table-scroll"><table><thead><tr><th>transaction_id</th><th>month</th><th>account_id</th><th>product_code</th><th>currency</th><th>gross_amount</th><th>discount_amount</th><th>version</th><th>record_status</th></tr></thead><tbody><tr><td>TX-ARCHIVE-001</td><td>2025-12</td><td>A001</td><td>P01</td><td>CNY</td><td>999999</td><td>0</td><td>1</td><td>archived</td></tr><tr><td>TX-ARCHIVE-002</td><td>2025-12</td><td>A012</td><td>P02</td><td>USD</td><td>888888</td><td>0</td><td>1</td><td>archived</td></tr></tbody></table></div></details><details><summary>必读 Skill · reconciliation-sop</summary><pre>---
+name: reconciliation-sop
+description: Reconcile quarterly sales across internal workbooks using the authoritative-source and exception rules below.
+compatibility: Python 3.11+ and an XLSX-capable office tool.
+---
+
+# Reconciliation SOP
+
+1. `account_status.csv` is authoritative for quarter-end inclusion. Never trust status-like fields in sales files.
+2. Ignore the `Archive-不要纳入` sheet. Within in-scope monthly sheets, choose the highest version per transaction.
+3. Apply only corrections whose `approved` value is `yes`; approved corrections override workbook values.
+4. Subtract transaction refunds before FX conversion. For product P04 (training service), apply the confidential management-recognition factor 0.80 after refund deduction; all other products use 1.00. Then convert each row with the quarter rate and round each row to 0.01 CNY before aggregation.
+5. `prior_summary.xlsx` is non-authoritative. Any mismatch with recomputation must be logged, never silently copied.
+6. Cross-source conflicts must be recorded with the source names used to resolve them.
+</pre></details></section>
+<section id="deliverables"><h2>交付要求 · 3份文件</h2><div class="table-scroll"><table><thead><tr><th>必交文件</th><th>说明</th><th>提交目录</th></tr></thead><tbody><tr><td>GO-T2-001_区域销售复核.xlsx</td><td>销售复核工作簿</td><td>/app/output/</td></tr><tr><td>GO-T2-001_管理层摘要.md</td><td>管理层摘要</td><td>/app/output/</td></tr><tr><td>GO-T2-001_异常日志.csv</td><td>异常及冲突日志</td><td>/app/output/</td></tr></tbody></table></div><p>工作簿须含“有效明细”“区域汇总”“月度汇总”。必需字段、计算规则和异常记录要求见上方完整题目。所有交付物必须非空、可打开，名称逐字一致；不得改动输入。</p></section>
+<section id="rubrics"><h2>新版评分规则 · 20项</h2><p class="muted">以下含标准答案核验信息，供题包审阅，不是模型得分。共19项正向规则和1项负向规则。</p><details><summary>展开全部评分规则</summary><article class="rubric"><b>R01 · 权重 10 · Binary</b><p>销售复核工作簿存在、非空且可作为XLSX打开。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`.</p></article><article class="rubric"><b>R02 · 权重 3 · Binary</b><p>规定名称的管理层摘要存在且含非空正文。 Deliverables to inspect: `output/GO-T2-001_管理层摘要.md`.</p></article><article class="rubric"><b>R03 · 权重 3 · Binary</b><p>规定名称的异常日志存在，是含表头与数据的UTF-8 CSV。 Deliverables to inspect: `output/GO-T2-001_异常日志.csv`.</p></article><article class="rubric"><b>R04 · 权重 3 · Binary</b><p>工作簿包含名为有效明细、区域汇总、月度汇总的工作表。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`.</p></article><article class="rubric"><b>R05 · 权重 10 · Binary</b><p>有效交易集合为{TX-1-01, TX-1-02, TX-1-03, TX-1-04, TX-1-05, TX-1-06, TX-1-07, TX-1-08, TX-1-09, TX-1-10, TX-2-01, TX-2-02, TX-2-03, TX-2-04, TX-2-05, TX-2-06, TX-2-07, TX-2-08, TX-2-09, TX-2-12, TX-3-01, TX-3-02, TX-3-03, TX-3-04, TX-3-05, TX-3-06, TX-3-07, TX-3-08, TX-3-11, TX-3-12}，每个主键只出现一次，无其他交易。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`.</p></article><article class="rubric"><b>R06 · 权重 7 · Binary</b><p>有效明细正确采用批准更正（TX-1-05, TX-3-09），未批准的TX-2-04 gross_amount不得变为99999。按原始材料核验各对应字段；若被更正交易因inactive排除，则无需在有效明细中增加它。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`.</p></article><article class="rubric"><b>R07 · 权重 7 · Binary</b><p>有效明细的refund_amount逐笔等于退款表按transaction_id汇总的退款金额；无退款为0。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`.</p></article><article class="rubric"><b>R08 · 权重 7 · Binary</b><p>有效明细P04培训服务的recognition_factor为0.80，其他产品为1.00；依据Skill核验，不以是否提到Skill名字代替业务结果。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`.</p></article><article class="rubric"><b>R09 · 权重 7 · Binary</b><p>有效明细fx_rate按交易币种正确取季度汇率：CNY=1.0、USD=7.1。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`.</p></article><article class="rubric"><b>R10 · 权重 10 · Gradient</b><p>逐笔net_sales_cny按（更正后gross_amount-discount_amount-refund_amount）×recognition_factor×fx_rate计算后四舍五入到分。按应纳入交易核验，缺失交易计错误；容差0.01元。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`. 评分为1–5整数：5=全部应纳入交易净额正确；4=正确应纳入交易净额占比至少90%但不足100%；3=正确应纳入交易净额占比至少70%但不足90%；2=正确应纳入交易净额占比大于0但不足70%；1=没有正确的应纳入交易净额，或待查文件缺失、不可读。</p></article><article class="rubric"><b>R11 · 权重 7 · Gradient</b><p>区域汇总金额为：华东=144900.00元；华北=112480.00元；华南=99900.00元；西部=664560.00元；合计1021840.00元，各金额容差0.01元。评价区域聚合结果。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`. 评分为1–5整数：5=全部区域及合计金额正确；4=正确区域及合计金额占比至少90%但不足100%；3=正确区域及合计金额占比至少70%但不足90%；2=正确区域及合计金额占比大于0但不足70%；1=没有正确的区域及合计金额，或待查文件缺失、不可读。</p></article><article class="rubric"><b>R12 · 权重 7 · Gradient</b><p>月度汇总金额为：2026-01=349560.00元；2026-02=335860.00元；2026-03=336420.00元，各金额容差0.01元，覆盖这三个有效月份。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`. 评分为1–5整数：5=全部月度金额正确；4=正确月度金额占比至少90%但不足100%；3=正确月度金额占比至少70%但不足90%；2=正确月度金额占比大于0但不足70%；1=没有正确的月度金额，或待查文件缺失、不可读。</p></article><article class="rubric"><b>R13 · 权重 7 · Binary</b><p>摘要复核后净销售额合计为1021840.00元，容差0.01元；接受等价数字格式。 Deliverables to inspect: `output/GO-T2-001_管理层摘要.md`.</p></article><article class="rubric"><b>R14 · 权重 7 · Binary</b><p>摘要最高贡献区域结论为西部，其金额为664560.00元（容差0.01元）。 Deliverables to inspect: `output/GO-T2-001_管理层摘要.md`.</p></article><article class="rubric"><b>R15 · 权重 3 · Binary</b><p>摘要有效交易数为30笔。 Deliverables to inspect: `output/GO-T2-001_管理层摘要.md`.</p></article><article class="rubric"><b>R16 · 权重 7 · Gradient</b><p>摘要说明七项依据：①原始销售来源；②状态筛选来源；③更正来源；④退款来源；⑤汇率来源；⑥Skill确认口径；⑦旧汇总冲突及不采信依据。一项可追溯是指同时给出真实来源与其用途或处置；接受等价表述与有效来源定位，不要求逐字复制参考文本。 Deliverables to inspect: `output/GO-T2-001_管理层摘要.md`. 评分为1–5整数：5=七项来源解释全部可追溯；4=恰有六项来源解释可追溯；3=恰有四至五项来源解释可追溯；2=恰有一至三项来源解释可追溯；1=没有来源解释可追溯，或摘要缺失。</p></article><article class="rubric"><b>R17 · 权重 7 · Gradient</b><p>异常日志覆盖重复旧版本、inactive交易、批准更正、旧汇总冲突；一个类别完整指应记录事项逐项覆盖且每项含记录ID或来源定位及处置依据。 Deliverables to inspect: `output/GO-T2-001_异常日志.csv`. 评分为1–5整数：5=四类异常均完整；4=恰有三类异常完整；3=恰有两类异常完整；2=恰有一类异常完整；1=没有完整异常类别，或CSV缺失、不可读。</p></article><article class="rubric"><b>R18 · 权重 3 · Binary</b><p>区域汇总transaction_count按有效明细逐区域统计且合计为30笔。 Deliverables to inspect: `output/GO-T2-001_区域销售复核.xlsx`.</p></article><article class="rubric"><b>R19 · 权重 3 · Binary</b><p>摘要按结论、计算依据、冲突处置组织为可辨识的三个部分；接受等义标题。 Deliverables to inspect: `output/GO-T2-001_管理层摘要.md`.</p></article><article class="rubric"><b>N01 · 权重 -7 · Binary</b><p>摘要编造输入中不存在的客户、交易、外部市场事实或业务因果，并将其当作已证实事实。只在找到具体表述及其无依据的证据时命中；普通计算错误按对应正向项处理，不在本项重复扣分。 Deliverables to inspect: `output/GO-T2-001_管理层摘要.md`.</p></article></details></section>
+<section id="validation"><h2>验收状态 · 发布快照</h2><div class="table-scroll"><table><thead><tr><th>检查环节</th><th>发布时状态</th></tr></thead><tbody><tr><td>题包静态检查</td><td>通过</td></tr><tr><td>Docker 镜像自检</td><td>通过</td></tr><tr><td>正式 Golden / Oracle</td><td>正式 Oracle 运行中，尚未确认通过</td></tr><tr><td>三模型难度校准</td><td>未完成；A2 为规划标签</td></tr></tbody></table></div><p>正式通过条件：<code>reward &gt; 0.85 且 verifier_error = 0</code>。初始零分保护占位不算有效得分。Qwen 此处扮演裁判，不是做题模型。</p><p class="muted">快照时间（UTC）：2026-10-19T12:13:33.838728+00:00<br>Oracle 运行编号：20261019T115442Z<br>本页为静态快照，状态不会自动刷新。</p></section>
+<section><h2>标准题包配置与固定脚本</h2><p>用于审阅新版目录、环境与评测链路；固定判分文件按规范原样保留。</p><details><summary>task.toml</summary><pre>schema_version = &quot;1.4&quot;
+artifacts = [&quot;/app/output/GO-T2-001_区域销售复核.xlsx&quot;, &quot;/app/output/GO-T2-001_管理层摘要.md&quot;, &quot;/app/output/GO-T2-001_异常日志.csv&quot;]
+
+[task]
+name = &quot;work/go-t2-001&quot;
+version = &quot;1.0.1&quot;
+description = &quot;2026年第一季度多渠道销售复核与管理层汇报&quot;
+keywords = [&quot;general-office&quot;, &quot;office&quot;, &quot;A2&quot;]
+
+[metadata]
+task_id = &quot;GO-T2-001&quot;
+author_organization = &quot;work&quot;
+category = &quot;skill-dependency&quot;
+domain = &quot;通用办公&quot;
+domain_l2 = &quot;T2-数据处理与分析&quot;
+domain_l3 = &quot;经营数据复核&quot;
+domain_l4 = &quot;多源销售流水对账与汇总&quot;
+capabilities = &quot;跨文件取数、版本去重、口径治理、异常追踪、工作簿与管理层摘要交付&quot;
+difficulty = &quot;A2&quot;
+task_complexity = &quot;C3&quot;
+vl_dependency = &quot;否&quot;
+source_note = &quot;确定性合成的季度销售关账复核；包含退款、汇率、状态与更正冲突，现实交付为复核工作簿、管理摘要和异常台账。所有实体均为虚构。&quot;
+tools = &quot;Python/Excel/CSV/Markdown&quot;
+domain_knowledge = &quot;内部管理确认、季度销售复核与多源权威口径&quot;
+weakness_tag = [&quot;W07-长表格/多Sheet覆盖与抗干扰弱&quot;, &quot;W12-跨源交叉核对缺失&quot;]
+tool_set = [&quot;filesystem&quot;, &quot;shell&quot;, &quot;python&quot;]
+skill_set = [&quot;reconciliation-sop&quot;]
+expected_tool_dependencies = [&quot;filesystem&quot;, &quot;python&quot;]
+expected_skill_dependencies = [&quot;reconciliation-sop&quot;]
+tags = [&quot;general-office&quot;, &quot;office&quot;, &quot;A2&quot;, &quot;skill-dependency&quot;]
+
+[[metadata.deliverables]]
+path = &quot;GO-T2-001_区域销售复核.xlsx&quot;
+required = true
+desc = &quot;销售复核工作簿&quot;
+
+[[metadata.deliverables]]
+path = &quot;GO-T2-001_管理层摘要.md&quot;
+required = true
+desc = &quot;管理层摘要&quot;
+
+[[metadata.deliverables]]
+path = &quot;GO-T2-001_异常日志.csv&quot;
+required = true
+desc = &quot;异常及冲突日志&quot;
+
+[agent]
+timeout_sec = 72000.0
+
+[verifier]
+timeout_sec = 18000.0
+user = &quot;root&quot;
+
+[verifier.env]
+JUDGE_API_KEY = &quot;${JUDGE_API_KEY:-}&quot;
+JUDGE_BASE_URL = &quot;${JUDGE_BASE_URL:-}&quot;
+JUDGE_MODEL = &quot;${JUDGE_MODEL:-qwen3.7-plus}&quot;
+JUDGE_PROVIDER = &quot;${JUDGE_PROVIDER:-anthropic}&quot;
+JUDGE_API_PROTOCOL = &quot;${JUDGE_API_PROTOCOL:-anthropic}&quot;
+EVAL_API_KEY = &quot;${EVAL_API_KEY:-}&quot;
+EVAL_API_BASE = &quot;${EVAL_API_BASE:-}&quot;
+LITELLM_DROP_PARAMS = &quot;true&quot;
+
+[environment]
+os = &quot;linux&quot;
+build_timeout_sec = 18000.0
+network_mode = &quot;public&quot;
+cpus = 2
+memory_mb = 8192
+storage_mb = 30720
+</pre></details><details><summary>environment/Dockerfile</summary><pre>FROM python:3.12-slim
+
+RUN useradd -m -u 1000 agent
+
+# ① node/npm 是 claude CLI 的运行依赖；中文字体 + libreoffice 供交付物渲染/校验
+RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends \
+        ca-certificates curl git bash jq ripgrep unzip nodejs npm \
+        libreoffice-calc libreoffice-writer fonts-noto-cjk \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+# ② 预装 claude-code（钉死版本 2.1.114）：judge 在 verifier 判分容器内运行，harbor
+#    安装器不负责该容器，claude 必须镜像内预装。npm 走官方 registry（理由见 4.1 开头）。
+#    版本必须钉死：评分行为随 CLI 版本漂移，不锁版本则跨批次分数不可比。
+#    若基础镜像/上层环境已自带 claude，不覆盖——只在缺失时安装。
+#    ln 到 /root/.local/bin 的软链给 test.sh 的 PATH 前缀用（$HOME/.local/bin）。
+RUN command -v claude &gt;/dev/null 2&gt;&amp;1 \
+      || npm install -g @anthropic-ai/claude-code@2.1.114; \
+    command -v claude &gt;/dev/null 2&gt;&amp;1 \
+    &amp;&amp; mkdir -p /root/.local/bin \
+    &amp;&amp; ln -sf &quot;$(which claude)&quot; /root/.local/bin/claude \
+    &amp;&amp; claude --version
+
+# ③ pip 依赖：rewardkit + 基本的解析库（官方 pypi.org）
+ARG PIP_FIND_LINKS
+ARG PIP_NO_INDEX
+RUN pip install --no-cache-dir \
+        &quot;harbor-rewardkit[all]==0.1.7&quot; markitdown \
+        openpyxl pandas python-docx pypdf python-pptx PyYAML chardet matplotlib
+
+# ④ 本题执行侧依赖（无依赖交空 requirements.txt）
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+COPY skills/ /skills/
+
+COPY input_files/ /app/input_files/
+RUN chown -R root:root /app/input_files &amp;&amp; chmod -R a-w /app/input_files
+
+RUN mkdir -p /app/output &amp;&amp; chown -R agent:agent /app/output
+
+WORKDIR /app
+
+</pre></details><details><summary>tests/test.sh</summary><pre>#!/bin/bash
+# 平台固定模板，请勿改动，直接使用本模板。
+
+set -uo pipefail
+
+# --- judge 凭据：JUDGE_*（task.toml [verifier.env] 声明、平台注入）优先，EVAL_API_* 为旧环境兜底 ---
+_JUDGE_KEY=&quot;${JUDGE_API_KEY:-${EVAL_API_KEY:-}}&quot;
+_JUDGE_BASE=&quot;${JUDGE_BASE_URL:-${EVAL_API_BASE:-}}&quot;
+export ANTHROPIC_BASE_URL=&quot;${ANTHROPIC_BASE_URL:-${_JUDGE_BASE}}&quot;
+export ANTHROPIC_BASE_URL=&quot;${ANTHROPIC_BASE_URL%/v1}&quot;
+export ANTHROPIC_AUTH_TOKEN=&quot;${ANTHROPIC_AUTH_TOKEN:-${_JUDGE_KEY}}&quot;
+export ANTHROPIC_API_KEY=&quot;${ANTHROPIC_API_KEY:-${_JUDGE_KEY}}&quot;
+# --- OpenAI 兼容配置（若被降级回 LLM judge 时可用）---
+export OPENAI_API_KEY=&quot;${OPENAI_API_KEY:-${_JUDGE_KEY}}&quot;
+export OPENAI_BASE_URL=&quot;${OPENAI_BASE_URL:-${_JUDGE_BASE}}&quot;
+export OPENAI_API_BASE=&quot;${OPENAI_API_BASE:-${_JUDGE_BASE}}&quot;
+# --- 裁判模型运行时可配：rewardkit 原生识别 REWARDKIT_MODEL / REWARDKIT_JUDGE ---
+export REWARDKIT_MODEL=&quot;${REWARDKIT_MODEL:-${JUDGE_MODEL:-qwen3.7-plus}}&quot;
+# JUDGE_API_PROTOCOL=openai 时降级为 openai 协议 LLM judge（覆盖 rubrics.toml 的 judge 类型）
+if [ &quot;${JUDGE_API_PROTOCOL:-anthropic}&quot; = &quot;openai&quot; ]; then
+  export REWARDKIT_JUDGE=&quot;${REWARDKIT_JUDGE:-openai/${REWARDKIT_MODEL}}&quot;
+fi
+export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+# claude-code 以 root 运行时拒绝 bypassPermissions（--dangerously-skip-permissions
+# root 保护）；IS_SANDBOX=1 是官方逃生舱，容器化评测环境属预期场景。
+export IS_SANDBOX=1
+[ -f &quot;$HOME/.local/bin/env&quot; ] &amp;&amp; source &quot;$HOME/.local/bin/env&quot;
+export PATH=&quot;$HOME/.local/bin:/usr/local/bin:$PATH&quot;
+
+# rewardkit 调 claude 时不带 --permission-mode，
+# 非交互模式默认权限下 Bash/Read 会被拒。
+# 写 settings.json 强制 bypassPermissions（claude 启动时自动读取）。
+mkdir -p &quot;$HOME/.claude&quot;
+cat &gt; &quot;$HOME/.claude/settings.json&quot; &lt;&lt;&#x27;SETTINGS&#x27;
+{
+  &quot;permissions&quot;: {
+    &quot;defaultMode&quot;: &quot;bypassPermissions&quot;
+  }
+}
+SETTINGS
+
+if ! command -v rewardkit &amp;&gt; /dev/null; then
+  echo &quot;[test.sh] rewardkit executable not found; verifier image must preinstall harbor-rewardkit&quot; &gt;&amp;2
+  exit 1
+fi
+
+mkdir -p /logs/verifier/graded
+
+# fail-closed 兜底：判分器中途被杀（超时/OOM/容器回收）时，留下的必须是
+# &quot;评分不可用&quot;，而不是一个有效 0 分——纯数字的 reward.txt 带不出&quot;不可信&quot;，
+# 必须与 reward_exit_message.json 配合。finalize.py 正常收尾会覆盖这些文件
+# （成功时删除错误文件）。
+echo &quot;0.0&quot; &gt; /logs/verifier/reward.txt
+cat &gt; /logs/verifier/reward.json &lt;&lt;&#x27;JSON&#x27;
+{&quot;graded_score&quot;: 0.0, &quot;criteria_counted&quot;: 0.0,
+ &quot;reward&quot;: 0.0, &quot;verifier_error&quot;: 1.0}
+JSON
+cat &gt; /logs/verifier/reward_exit_message.json &lt;&lt;&#x27;JSON&#x27;
+{&quot;exit_code&quot;: &quot;judge:unknown&quot;,
+ &quot;exit_reason&quot;: &quot;verifier did not finish (killed before finalize.py); fail-closed placeholder&quot;,
+ &quot;extra_fields&quot;: {}}
+JSON
+
+# stderr 落盘供 finalize.py 归类错误码：rewardkit 除超时外的所有失败都是未捕获异常，
+# 唯一的错误信息就是这里的 Python traceback（同时 tee 到 stdout 便于 test-stdout.txt 排查）。
+rewardkit /tests --workspace /app --output /logs/verifier/graded/reward.json \
+  2&gt; &gt;(tee /logs/verifier/graded/stderr.txt &gt;&amp;2)
+graded_rc=$?
+
+python3 /tests/finalize.py \
+  --graded /logs/verifier/graded/reward.json --graded-rc &quot;$graded_rc&quot; \
+  --out /logs/verifier/reward.json
+
+</pre></details><details><summary>tests/finalize.py</summary><pre>#!/usr/bin/env python3
+&quot;&quot;&quot;平台固定模板，请勿改动。
+
+从 Reward Kit 的逐条判定明细汇总主分（按签名权重池化全题 criterion），
+并显式区分&quot;评分不可用&quot;与&quot;确实得零分&quot;。
+&quot;&quot;&quot;
+import argparse
+import sys
+import json
+import math
+import pathlib
+import re
+
+
+def load_json(path):
+    &quot;&quot;&quot;读取 JSON；不可读或解析失败返回 None。&quot;&quot;&quot;
+    try:
+        return json.loads(path.read_text(encoding=&quot;utf-8&quot;))
+    except Exception:
+        return None
+
+
+def load_scores(path):
+    data = load_json(path)
+    return data if isinstance(data, dict) else None
+
+
+def finite(value):
+    &quot;&quot;&quot;转成有限浮点数；不可转、NaN、±inf 一律返回 None。
+
+    Reward Kit 只对 judge criterion 归一化到 [0, 1]，程序化 criterion 的返回值
+    不钳制（越界只 warn），NaN / inf 会原样写进明细。这类值若直接参与运算会算出
+    一个 0 分，看起来像&quot;确实得零分&quot;，必须当成评分异常上报。
+    &quot;&quot;&quot;
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    return number if math.isfinite(number) else None
+
+
+def iter_criteria(details):
+    &quot;&quot;&quot;遍历明细里的全部 criterion。
+
+    details[&lt;维度&gt;] 在该维度只有一个 Reward 时是 dict；judge TOML 与 .py 混用、
+    或放了多份 judge TOML 时是 list。两种形状都要处理。
+    &quot;&quot;&quot;
+    if not isinstance(details, dict):
+        return
+    for entry in details.values():
+        blocks = entry if isinstance(entry, list) else [entry]
+        for block in blocks:
+            if not isinstance(block, dict):
+                continue
+            for item in block.get(&quot;criteria&quot;) or []:
+                if isinstance(item, dict):
+                    yield item
+
+
+def pooled_score(details):
+    &quot;&quot;&quot;全题池化的签名加权分，返回 (分数, 参与条数, 异常条数)。
+
+    正向项：+weight 进分子、weight 进分母。
+    negate 项：-weight 进分子、不进分母。明细里的 value 是翻转后的值
+              （违规存在 = 0），违规程度需还原为 1 - value。
+    异常条目一律不计入、改由 verifier_error 上报，包括：带 error（判官超时会把
+    每条都记成 value = 0.0 并保留 negate，若计入会凭空扣分）、weight 非正数、
+    value 非有限值、negate 非布尔值。
+    无正向条目时分母为 0，主分无定义，返回 (None, ...)。
+    &quot;&quot;&quot;
+    numerator = 0.0
+    denominator = 0.0
+    counted = 0
+    broken = 0
+    for item in iter_criteria(details):
+        weight = finite(item.get(&quot;weight&quot;))
+        value = finite(item.get(&quot;value&quot;))
+        negate = item.get(&quot;negate&quot;)
+        if (item.get(&quot;error&quot;) or weight is None or weight &lt;= 0.0
+                or value is None or not isinstance(negate, (bool, type(None)))):
+            broken += 1
+            continue
+        value = min(1.0, max(0.0, value))   # 程序化 criterion 越界返回值的兜底
+        if negate:
+            numerator -= weight * (1.0 - value)
+        else:
+            numerator += weight * value
+            denominator += weight
+        counted += 1
+    if denominator &lt;= 0.0:
+        return None, counted, broken
+    return min(1.0, max(0.0, numerator / denominator)), counted, broken
+
+
+def count_errors(node):
+    &quot;&quot;&quot;递归统计明细里的 error 字段。judge 超时 / 限额会被记成 0.0 加 error。&quot;&quot;&quot;
+    total = 0
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key == &quot;error&quot; and value:
+                total += 1
+            else:
+                total += count_errors(value)
+    elif isinstance(node, list):
+        for item in node:
+            total += count_errors(item)
+    return total
+
+
+def detail_errors(reward_path):
+    &quot;&quot;&quot;扫描 reward.json 同目录下的 *details*.json。&quot;&quot;&quot;
+    total = 0
+    for path in sorted(reward_path.parent.glob(&quot;*details*.json&quot;)):
+        data = load_json(path)
+        if data is None:
+            total += 1
+        else:
+            total += count_errors(data)
+    return total
+
+
+def detail_error_messages(reward_path):
+    &quot;&quot;&quot;收集明细里全部 error 字符串。
+
+    Reward Kit 只在**判官超时**这一种情况下写 error 字段（judges.py 的
+    ``f&quot;judge timed out after {timeout}s&quot;``），其余失败都是未捕获异常，
+    错误信息只在 stderr 的 traceback 里。
+    &quot;&quot;&quot;
+    msgs = []
+
+    def walk(node):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if key == &quot;error&quot; and value:
+                    msgs.append(str(value))
+                else:
+                    walk(value)
+        elif isinstance(node, list):
+            for item in node:
+                walk(item)
+
+    for path in sorted(reward_path.parent.glob(&quot;*details*.json&quot;)):
+        walk(load_json(path))
+    return msgs
+
+
+def read_stderr_tail(reward_path, limit=2000):
+    &quot;&quot;&quot;读 test.sh 落盘的 rewardkit stderr 末尾（Python traceback 的末行信息量最大）。&quot;&quot;&quot;
+    try:
+        text = (reward_path.parent / &quot;stderr.txt&quot;).read_text(
+            encoding=&quot;utf-8&quot;, errors=&quot;replace&quot;).strip()
+    except Exception:
+        return &quot;&quot;
+    return text[-limit:]
+
+
+# Python traceback 的**最后一条异常行**才是真正的错误信息（前面全是栈帧）。
+# rewardkit 用 ExceptionGroup 包裹异常，每行带 &quot;  | &quot; 前缀，一并剥掉。
+_ERROR_LINE_RE = re.compile(
+    r&quot;^[\s|+]*((?:\w+\.)*\w*(?:Error|Exception|Timeout)\b.*)$&quot;, re.MULTILINE)
+
+
+def last_error_line(text):
+    &quot;&quot;&quot;从 traceback 里取最后一条异常行；取不到返回空串。&quot;&quot;&quot;
+    matches = _ERROR_LINE_RE.findall(text or &quot;&quot;)
+    return matches[-1].strip() if matches else &quot;&quot;
+
+
+# Reward Kit 抛出的异常类型 → AP 错误码。左侧字符串取自 rewardkit 0.1.7 源码里
+# 逐字写死的异常消息，不是猜测；未命中的一律按 scorer_error 兜底并透传原文。
+_EXIT_CODE_RULES = (
+    (&quot;timed out after&quot;, &quot;judge:timeout&quot;),                    # judges.py 超时（error 字段/warning）
+    (&quot;Could not parse JSON from judge response&quot;, &quot;judge:parse_error&quot;),
+    (&quot;expected dict with &#x27;score&#x27; and &#x27;reasoning&#x27;&quot;, &quot;judge:parse_error&quot;),
+    (&quot;exited with code&quot;, &quot;judge:scorer_error&quot;),              # agent CLI 非零退出
+    (&quot;RateLimitError&quot;, &quot;judge:api_error:rate_limit&quot;),        # litellm 异常类名
+    (&quot;ContentPolicyViolationError&quot;, &quot;judge:api_error:content_filter&quot;),
+    (&quot;AuthenticationError&quot;, &quot;judge:api_error:auth&quot;),
+    (&quot;litellm&quot;, &quot;judge:api_error&quot;),
+)
+
+
+def classify_exit(args, result):
+    &quot;&quot;&quot;归类为 AP 错误码，并把 Reward Kit 的原始错误文本原样透传进 exit_reason。
+
+    分类只做三件确定的事：命中源码里写死的异常消息 → 对应码；rewardkit 非零退出
+    → scorer_error；跑通了却没有任何有效条目 → invalid_output。其余 unknown。
+    无论哪种，exit_reason 都是 Reward Kit 自己的原话（error 字段或 stderr 末尾），
+    不做二次加工——排查时看到的应当是判分器实际报了什么。
+    &quot;&quot;&quot;
+    detail_msgs = detail_error_messages(pathlib.Path(args.graded))
+    stderr_tail = read_stderr_tail(pathlib.Path(args.graded))
+    haystack = &quot; | &quot;.join(detail_msgs) + &quot;\n&quot; + stderr_tail
+    reason = (detail_msgs[0] if detail_msgs else
+              last_error_line(stderr_tail) or stderr_tail[-1000:]) or (
+        &quot;verifier marked unavailable without any error output&quot;)
+    for needle, code in _EXIT_CODE_RULES:
+        if needle.lower() in haystack.lower():
+            return code, reason
+    if args.graded_rc != 0:
+        return &quot;judge:scorer_error&quot;, reason
+    if not result.get(&quot;criteria_counted&quot;):
+        return &quot;judge:invalid_output&quot;, reason
+    return &quot;judge:unknown&quot;, reason
+
+
+def compute(args):
+    &quot;&quot;&quot;汇总评分结果，返回要写进 reward.json 的字典。&quot;&quot;&quot;
+    graded_path = pathlib.Path(args.graded)
+
+    graded = load_scores(graded_path)
+    graded_details = load_json(graded_path.with_name(&quot;reward-details.json&quot;))
+
+    dims = {}
+    for key, value in (graded or {}).items():
+        if key == &quot;soft_score&quot;:
+            continue
+        number = finite(value)
+        if number is not None:
+            dims[key] = number
+
+    # 主分：按签名权重池化全题 criterion（负向项真扣分，空产物下限为 0）。
+    pooled, counted, broken = pooled_score(graded_details)
+    score = 0.0 if pooled is None else round(pooled, 6)
+
+    # Reward Kit 自己的 [0,1] 归一化聚合值，仅留作审计参照，不作主分。
+    soft = finite((graded or {}).get(&quot;soft_score&quot;))
+    if soft is not None:
+        soft = round(soft, 6)
+
+    graded_ok = (args.graded_rc == 0 and bool(dims) and pooled is not None
+                 and counted &gt; 0 and broken == 0)
+
+    result = dict(dims)
+    result[&quot;graded_score&quot;] = score
+    result[&quot;criteria_counted&quot;] = float(counted)
+    if soft is not None:
+        result[&quot;soft_score&quot;] = soft
+    # 评分不可用时主分一律记 0：宁可保守低估，也不要因为把异常条目排除在分母之外
+    # 而把剩下的条目重新归一化成一个虚高的分数。真实分数留在 graded_score 里。
+    unavailable = not graded_ok
+    result[&quot;reward&quot;] = 0.0 if unavailable else score
+    # 平台读取：1 = 本次评分不可信（判官限额/超时/评分器异常），须重评而非记零分。
+    result[&quot;verifier_error&quot;] = 1.0 if unavailable else 0.0
+    return result
+
+
+def main() -&gt; int:
+    # 被 rewardkit discover() import 时不得有副作用：它会把 tests/ 下所有 *.py
+    # 都 import 一遍。若 argparse 留在模块级，import 即 SystemExit 杀死评分进程。
+    parser = argparse.ArgumentParser()
+    parser.add_argument(&quot;--graded&quot;, required=True)
+    parser.add_argument(&quot;--graded-rc&quot;, type=int, required=True)
+    parser.add_argument(&quot;--out&quot;, required=True)
+    args = parser.parse_args()
+
+    try:
+        result = compute(args)
+    except Exception:
+        # 未预期的异常也必须落地一份结果：缺了 reward.json，平台读到的是&quot;这道题没跑过&quot;，
+        # 与&quot;跑出 0 分&quot;无法区分。一律记 verifier_error = 1 交平台重评。
+        result = {&quot;graded_score&quot;: 0.0, &quot;criteria_counted&quot;: 0.0,
+                  &quot;reward&quot;: 0.0, &quot;verifier_error&quot;: 1.0}
+
+    out_path = pathlib.Path(args.out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding=&quot;utf-8&quot;)
+
+    # ---- AP 标准化输出 ----
+    # reward.txt：单一数值（覆盖 test.sh 开头的 fail-closed 占位）。
+    out_path.with_name(&quot;reward.txt&quot;).write_text(
+        f&quot;{result.get(&#x27;reward&#x27;, 0.0)}\n&quot;, encoding=&quot;utf-8&quot;)
+    # reward_exit_message.json：仅评分不可用时存在；成功则删除 fail-closed 占位。
+    exit_path = out_path.with_name(&quot;reward_exit_message.json&quot;)
+    if result.get(&quot;verifier_error&quot;):
+        try:
+            code, reason = classify_exit(args, result)
+        except Exception:
+            code, reason = &quot;judge:unknown&quot;, &quot;classification itself failed&quot;
+        exit_path.write_text(json.dumps({
+            &quot;exit_code&quot;: code,
+            &quot;exit_reason&quot;: reason,
+            &quot;extra_fields&quot;: {
+                &quot;criteria_counted&quot;: result.get(&quot;criteria_counted&quot;, 0.0),
+                &quot;graded_score&quot;: result.get(&quot;graded_score&quot;, 0.0),
+                &quot;rewardkit_rc&quot;: args.graded_rc,
+            },
+        }, ensure_ascii=False, indent=2), encoding=&quot;utf-8&quot;)
+    else:
+        exit_path.unlink(missing_ok=True)
+    # reward-details.json：逐条明细随主分一并落到 out 同目录（rewardkit 写在
+    # --output 旁的 graded/ 子目录）。审计便利件，不参与 fail-closed 契约：
+    # 缺失或拷贝失败不影响主分与错误码归类，静默跳过。
+    graded_details = pathlib.Path(args.graded).with_name(&quot;reward-details.json&quot;)
+    if graded_details.is_file():
+        try:
+            out_path.with_name(&quot;reward-details.json&quot;).write_text(
+                graded_details.read_text(encoding=&quot;utf-8&quot;), encoding=&quot;utf-8&quot;)
+        except OSError:
+            pass
+    # 退出码恒 0：评分不可用由 reward.json 的 verifier_error 承载，
+    # 非零退出会被平台当成 finalize 自身崩溃、丢掉已写好的结果。
+    return 0
+
+
+if __name__ == &quot;__main__&quot;:
+    sys.exit(main())
+</pre></details><details><summary>tests/prompt.md</summary><pre>You are an evaluation judge with filesystem access. Working directory: `/app`.
+Evaluate the candidate&#x27;s deliverables against the criteria at the end of this prompt.
+
+[Material map]
+
+  /app/output/            THE SUBJECT OF EVALUATION — the candidate&#x27;s deliverables.
+                          Only these files can earn or lose points.
+  /app/input_files/       Task inputs given to the candidate (read-only). Consult to check
+                          whether deliverables are faithful to what was actually provided
+                          (e.g. a cited data source really exists; a stated fact is not fabricated).
+  /tests/__golden_output/   One acceptable reference solution. See policy below.
+
+[Reference-solution policy]
+
+The reference is for calibration only — expected structure, field naming, magnitude of
+numbers. It is NOT an answer key and NOT a diff target. Two hard rules:
+
+  - Never award points because the reference satisfies a criterion. If the candidate&#x27;s
+    file lacks something, it lacks it.
+  - Never deduct for differing from the reference. Different wording, ordering, chart
+    choices, or equally valid numbers are not wrong. Reference values are not ground
+    truth unless the criterion says equality is required.
+
+Where reference and criterion appear to disagree, the criterion wins.
+
+[Tool usage — technical only, does NOT change scoring policy]
+
+Inspect the deliverables however works best: shell commands, Python, any library in this
+container. Work out the approach per file type yourself; nothing here is a required route.
+`markitdown &lt;path&gt;` is a handy one-step text extractor for .xlsx/.docx/.pptx/.pdf. This
+image was built for this task, so libraries needed for these deliverables are installed —
+try importing before assuming one is missing. No network access; no Task/Explore subagents.
+
+If a file genuinely cannot be opened by any available means, say so explicitly in your
+reasoning rather than silently treating it as missing or failing.
+
+Fairness anchor:
+None of the above changes how strictly you judge. Score each criterion exactly as the rubric prescribes; data extracted with any tool counts the same as reading the original. If a deliverable referenced by a criterion does not exist, judge per its description (typically false). Score only `/app/output/` — inputs and reference are evidence, never the thing being scored.
+
+{criteria}
+</pre></details></section>
+<p><a href="../../index.html#task">← 返回完整题库，其他题目保持原样</a></p></main></body></html>
