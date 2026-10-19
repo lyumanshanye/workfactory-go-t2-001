@@ -3087,7 +3087,19 @@ DOMAIN_SPEC = {
     },
 }
 </pre></details>
-<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">组合题目的真实代码：如何选角色、操作、规则并拼成recipe</summary><p><a href="pipeline-evidence/recipe-combination.py.txt" download>下载原文快照</a></p><pre class="instruction">def _pick(values: Sequence[str], index: int, stride: int = 1) -&gt; str:
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">组合题目的真实代码：如何选角色、操作、规则并拼成recipe</summary><div class="block">
+<h4>先用一句话说明</h4><p>这段代码不是让大模型理解业务后出题，而是先安排领域配额，再从我写好的几个列表中按下标取词，拼成一个recipe（题目的配置清单）。recipe还不是完整材料或标准答案。</p>
+<ol class="clean-list">
+<li><strong>先排2000个名额。</strong>GO/FIN/LAW/MED/DA各286题，GA/DE各285题。程序按“当前最欠配额”的类别逐步分配，尽量交错排列，不是根据业务价值挑选。A1/A2/A3标签也按400/1200/400配额预分配，不是实测难度。</li>
+<li><strong>再选该领域的二级分类。</strong>同一领域第n题使用第(n−1) mod 分类数个L2。每个L2单独维护计数k：第一次出现k=0，下一次k=1。下面所有取词公式都使用这个k，不是全局题号。</li>
+<li><strong>按公式从词表取值。</strong>“mod N”就是除以列表长度N取余，走到结尾后回到开头。词表长度各不相同，每次按以下步长轮换：</li>
+</ol>
+<dl class="meta"><dt>角色 role</dt><dd>roles[k mod N]，步长1。</dd><dt>业务对象 subject</dt><dd>subjects[(3×k) mod N]，步长3。</dd><dt>操作 operation</dt><dd>operations[(5×k) mod N]，步长5。</dd><dt>决策主题</dt><dd>decision_topics[(7×k) mod N]，步长7。</dd><dt>预期材料 inputs</dt><dd>从input_types第(2×k)项开始，循环取最多3个名称。</dd><dt>领域约束 rules</dt><dd>从rules第(3×k)项开始，循环取最多2条约束。</dd></dl>
+<p>不同步长的目的只是让组合不总同步重复；代码没有判断“这个角色、操作、规则组合起来是否真的构成合理业务”。步长也不保证遍历所有可能组合。</p>
+<ol class="clean-list" start="4"><li><strong>补规划标签。</strong>前1000条轮换5种Skills/Workflow专项类别；后1000条为weakness-driven，并分配弱点标签。复杂度C1–C5按计划分配。写上某种类别，不代表相应真实业务和交互已经充分实现。</li><li><strong>用字符串拼题目。</strong>标题=领域＋业务对象＋操作＋决策主题＋全局序号；场景也按固定句式拼接。L3再加“流程001”等编号使标识区分，但编号不同不等于业务本质不同。</li><li><strong>形成recipe。</strong>写入task_id、角色、场景、inputs、rules、category、难度、复杂度等，seed=20261017000＋全局序号。它交给后面的材料生成器，不会自动去检索或下载inputs中列出的材料。</li></ol>
+<h4>用页面里的品牌题走一遍</h4><p>它是整批第7条、设计领域第1条、DE1分类第1次出现，所以k=0：每张词表都从第0项开始。</p>
+<dl class="meta"><dt>选中角色</dt><dd>品牌设计师</dd><dt>对象＋操作</dt><dd>品牌定位与品牌架构＋提炼品牌核心概念</dd><dt>决策主题</dt><dd>品牌架构选择</dd><dt>预期材料名称</dt><dd>品牌策略简报、市场与受众研究、现有品牌资产</dd><dt>两条约束</dt><dd>遵守商标与字体许可；标志须保留最小尺寸和安全空间</dd><dt>最终标识</dt><dd>DE-FULL-0001；标题末尾（0007）是全局序号；seed=20261017007</dd></dl>
+<p class="notice">关键局限：这里的inputs只是材料名称，后续旧生成器并没有真的生成品牌简报、研究报告或视觉资产。这就是“标题像设计题，实际仍算通用表格”的来源之一。</p></div><p><a href="pipeline-evidence/recipe-combination.py.txt" download>下载原文快照</a></p><details><summary style="cursor:pointer;font-weight:650">继续展开：对应的真实Python代码</summary><pre class="instruction">def _pick(values: Sequence[str], index: int, stride: int = 1) -&gt; str:
     return values[(index * stride) % len(values)]
 
 def _rotated_unique(values: Sequence[str], index: int, count: int) -&gt; list[str]:
@@ -3191,8 +3203,23 @@ def generate_full_plan() -&gt; list[dict[str, Any]]:
         }
         plan.append(recipe)
 
-    return plan</pre></details>
-<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">造数据与规则的真实代码：随机数、筛选、系数、冲突和Skill</summary><p><a href="pipeline-evidence/base-materials.py.txt" download>下载原文快照</a></p><pre class="instruction">def _requirements(recipe: Mapping[str, Any], count: int) -&gt; list[str]:
+    return plan</pre></details></details>
+<details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">造数据与规则的真实代码：随机数、筛选、系数、冲突和Skill</summary><div class="block">
+<h4>先用一句话说明</h4><p>这段代码接收recipe和seed，生成一张虚构数值表，再人为插入重复、失效和旧值冲突，最后用同一套确定规则算出标准结果。领域名称主要进入文本标签，不会使计算规则自动变成行业规则。</p>
+<ol class="clean-list">
+<li><strong>先决定数据量。</strong>输入文件目标数随C1–C5变化，依次为2/5/10/25/50；基础记录数=max(8，2×目标输入文件数)。这是人为规模参数，不是对真实任务复杂度的测量。</li>
+<li><strong>用seed产生数值。</strong>base_value从800到9000、以10为步长取伪随机数；相同seed和生成逻辑可复现。实体是“虚构设计实体-01”等占位名，SRC编号也是合成编号，没有对应外部文献。</li>
+<li><strong>其他字段按序号安排。</strong>类别循环“核心/支持/观察”，月份循环2026-01至2026-04。每第11个基础记录设为inactive；每第9个记录追加version=2，base_value比原版加250；并非所有异常都随机出现。</li>
+<li><strong>造旧值冲突。</strong>普通记录每第5个reported_value比base_value加777；追加的version=2把reported_value设为原base_value加1027，也就是新版base_value再加777。这个冲突是程序刻意安排的，要求做题者重算而不是照抄旧值。</li>
+<li><strong>确定应纳入的记录。</strong>先按record_id保留最高version，再排除非active记录。顺序是“先选版本、再看状态”，不是对全部行直接求和。</li>
+<li><strong>乘固定系数，算标准结果。</strong>核心=1.10、支持=1.00、观察=0.85；逐条计算round(base_value×系数, 2)，再汇总类别总计、总额和最高类别。系数是我写进模板的，不是从品牌研究中推导出来的。</li>
+</ol>
+<p class="notice">注意：这里“观察系数0.85”是一个人为乘数，与交付规范里“Golden评分必须大于0.85”的验收阈值完全无关。</p>
+<h4>品牌题的实际数字例子</h4><p>本题C2的输入文件目标数是5，因此先造10个基础主键；REC-0009多一个新版，总共11行原始数据。没有第11个基础主键，因此本题实际上没有inactive记录。去重后有10条有效记录。</p>
+<dl class="meta"><dt>REC-0001</dt><dd>核心，base=3490 → 3490×1.10=3839.00。</dd><dt>REC-0005</dt><dd>支持，base=3570、reported=4347（故意加777）→ 正确调整值仍为3570.00。</dd><dt>REC-0009</dt><dd>旧版base=4730；新版base=4980、reported=5757。只取version=2，再按观察系数算4980×0.85=4233.00；不能把两个版本都加进去。</dd><dt>本题最终结果</dt><dd>10条有效记录，总计48444.00，最高类别为“核心”。这只是这套合成数值规则的结果，不能据此推出品牌架构方案。</dd></dl>
+<h4>这些内容如何落成文件和Skill？</h4>
+<ul class="clean-list"><li><strong>facts.csv：</strong>存原始行，包括重复版本和旧值冲突。</li><li><strong>rules.md：</strong>写权威源、最高版本、active筛选和舍入规则，再拼入recipe里的领域约束，例如商标许可。添加这句话本身不会生成真实商标/字体授权材料。</li><li><strong>辅助文件：</strong>按目标数量依次添加conflict_register.csv、entity_master.csv、targets.csv。还不够时，交替增加evidence_*.md和evidence_*.csv，内容主要是角色、材料类型等补充说明，并非完整的专业参考资料。</li><li><strong>domain-audit-sop：</strong>把上述系数和处理顺序写进SKILL.md，让做题者按Skill执行；不是从外部技能库挖出的行业SOP。skill-discovery类别还额外生成legacy-fast-sum，作为直接使用reported_value的干扰Skill。</li><li><strong>标准答案：</strong>有效明细和汇总先由程序算进expected，再由后面的_write_reference写成CSV/Markdown/JSON；没有LLM在这里“想出”答案。</li></ul>
+<p>因此，旧版Golden本地通过主要说明生成数据、标准答案和旧验证器能自洽；它不能证明这些人工规则足以衡量品牌策略、法律分析等真实领域工作。</p></div><p><a href="pipeline-evidence/base-materials.py.txt" download>下载原文快照</a></p><details><summary style="cursor:pointer;font-weight:650">继续展开：对应的真实Python代码</summary><pre class="instruction">def _requirements(recipe: Mapping[str, Any], count: int) -&gt; list[str]:
     source_rules = [str(item) for item in recipe.get(&quot;rules&quot;, []) if str(item).strip()]
     base = [
         &quot;以 record_id 为业务主键，仅保留最高 version 且 status=active 的记录。&quot;,
@@ -3402,7 +3429,7 @@ def _write_skills(task_dir: Path, recipe: Mapping[str, Any]) -&gt; tuple[list[st
             &quot;This method is a distractor and conflicts with the current task&#x27;s authoritative rules.\n&quot;,
         )
         skill_set.append(&quot;legacy-fast-sum&quot;)
-    return skill_set, expected</pre></details>
+    return skill_set, expected</pre></details></details>
 <details style="margin:10px 0"><summary style="cursor:pointer;font-weight:650">造Golden和题面的真实代码/字符串模板（不是LLM Prompt）</summary><p><a href="pipeline-evidence/golden-and-instruction-templates.py.txt" download>下载原文快照</a></p><pre class="instruction">def _rubrics() -&gt; list[dict[str, Any]]:
     definitions = [
         (&quot;R01&quot;, &quot;所有规定交付物存在且文件名正确。&quot;, &quot;指令遵循&quot;, 10),
