@@ -37,15 +37,46 @@ button,input,select{font:inherit}.shell{width:min(1480px,calc(100% - 32px));marg
   <div id="planNotice"></div>
 
   <section class="panel" id="pipeline" aria-labelledby="pipeline-title">
-    <div class="panel-title"><div><h2 id="pipeline-title">从规范到可验证题包</h2><p>保留旧版 <code>#pipeline</code> 链接，展示当前 2000 题的真实合成路径。</p></div></div>
+    <div class="panel-title"><div><h2 id="pipeline-title">2000题 Base → 完整补全构建管线</h2><p>把“已经生成的原型”和“还要建设的交付流程”分开看。下面不是2000题已全部完成的声明。</p></div></div>
+    <div class="notice"><strong>一句话：</strong>先用2000题 Base 做候选清单，再逐题补齐领域业务、参考材料、专业交付物、评分与运行环境，经过正式验收后才能进入可交付题集。<br><strong>当前：</strong>旧版 Base 2000题；新版标准化样板1道（GO-T2-001），Docker自检已通过。正式 Golden 结果须查验收报告；三模型难度校准未完成。</div>
+    <p><span class="badge ok">已实现：旧版 Base</span> <span class="badge warn">仅单题打通：新版标准化样板</span> <span class="badge">待建设：批量业务补全与正式验收</span></p>
+
+    <h3>A · 旧2000题 Base 是怎么来的？ <span class="badge ok">已实现，但只是原型</span></h3>
+    <p>需求分类与人工补写词表 → 程序组合标题与规则 → 固定种子生成通用表格 → 程序计算 reference 并做旧版本地校验。</p>
     <div class="pipeline-grid">
-      <article class="pipe-step"><b>01 · 规范与配额</b><p>解析总量、领域、专项、Weakness、难度与复杂度约束。</p><code>需求文档 → full_batch/plan.json</code></article>
-      <article class="pipe-step"><b>02 · Recipe 规划</b><p>组合角色、对象、操作、决策主题和规则，产生唯一 workflow。</p><code>domain_specs + seed → 2000 recipes</code></article>
-      <article class="pipe-step"><b>03 · 材料构建</b><p>按 C1–C5 生成输入文件、Skill、干扰项、instruction 与交付契约。</p><code>full_builder.py → Harbor-style package</code></article>
-      <article class="pipe-step"><b>04 · Golden 与 Verifier</b><p>为每题生成 reference、Rubric 和可执行验证器，Golden 必须严格高于 85%。</p><code>solution/reference + tests/run_verifier.py</code></article>
-      <article class="pipe-step"><b>05 · 模型实跑</b><p>Qwen thinking+xhigh 并发运行、断点续跑；GPT/Claude 结果不齐前不冒充三模型验收。</p><code>runs/trajectory.json + result.json</code></article>
-      <article class="pipe-step" id="run"><b>06 · 审计与发布</b><p>校验配额、结构、哈希、Golden 和模型覆盖，然后生成单文件站点。</p><code>full_audit.py → catalog_site.py → GitHub Pages</code></article>
+      <article class="pipe-step"><b>A1 · 定分类、拼业务名称</b><p>分类框架参考需求文档；角色、业务对象、操作、决策主题和规则由人工编写成词表，再按配额组合。缺失分类显式标记为补充草案，不是从真实业务案例逐题挖掘。</p><code>domain_specs/*.py → full_plan.py → 2000 recipes</code></article>
+      <article class="pipe-step"><b>A2 · 通用模板造数据</b><p>Python按seed生成虚构实体、随机数值、重复版本、失效状态和冲突值。多数题共用“去重→筛选→乘系数→汇总”模板；没有把列举的GitHub数据源实际接成这批题的业务材料。</p><code>full_builder.py → facts.csv / rules.md / 配套文件</code></article>
+      <article class="pipe-step"><b>A3 · 生成旧答案、旧评分</b><p>程序按同一套规则生成CSV/Markdown/JSON标准产物，并用旧版Python验证器检查。页面旧题的“Golden通过”只表示这套本地校验通过，不是新版RewardKit正式验收。</p><code>solution/reference → tests/run_verifier.py → golden_validation.json</code></article>
     </div>
+    <div class="notice"><strong>已核对旧2000题实物：</strong>输入材料仅有CSV和Markdown；reference仅有CSV、Markdown和JSON，没有图片、DOCX、PPTX、PDF或XLSX。标题覆盖七个领域，不等于真实业务能力已覆盖。比如“品牌架构选择”实际仍在算表格，这类题需要重做业务内容，不是只改目录。</div>
+
+    <h3>B · 从 Base 补成完整工作任务，需要做什么？ <span class="badge">完整建设方案，未全部实现</span></h3>
+    <p><strong>逐题审查 → 补参考素材 → 构建业务材料 → 生成专业Golden → 对齐题面与Rubric → 标准题包 → Golden验收 → 三模型校准 → 批量交付。</strong></p>
+    <div class="pipeline-grid">
+      <article class="pipe-step"><b>B1 · 重新审题与业务契约</b><p>先判断旧题是否真的在做标题所说的工作。明确角色、业务目标、决策依据、边界条件和交付形式；保留合理题目，重写或淘汰只换领域名称的通用计算题。</p><code>输入：旧recipe → 输出：业务契约与保留/重写/淘汰决定</code><span class="badge">待批量建设</span></article>
+      <article class="pipe-step"><b>B2 · 获取参考素材与来源证据</b><p>按任务寻找可授权使用的公开资料、GitHub资源或明确标注的合成案例。记录来源URL、许可证、版本/commit、文件摘要和脱敏结论；来源不明确的素材不进入正式题包。</p><code>输出：素材清单 + 来源/授权记录 + 适用业务规则</code><span class="badge">待接入，不能把候选数据源当作已使用</span></article>
+      <article class="pipe-step"><b>B3 · 按业务构建多文件材料</b><p>由领域专用生成器保留业务结构、统一改写实体和数值，构建跨文件依赖、冲突和必要Skill。按实际需要使用XLSX、DOCX、PPTX、PDF、图片/SVG、CSV等，不要求每道题都有全部格式。</p><code>输出：/app/input_files/ + 必要Skill；材料须足以支持题目判断</code><span class="badge warn">销售复核已有；其他领域待补全</span></article>
+      <article class="pipe-step"><b>B4 · 做真正匹配业务的Golden</b><p>计算任务用程序独立复算；开放式任务拟定参考方案后做事实、来源和专业审阅。产物必须符合要求的格式和用途，例如品牌策略报告、汇报PPT和品牌架构图，而不是一律交数值汇总。</p><code>输出：标准交付物 + 证据依据；开放题允许其他合理解法</code><span class="badge warn">当前仅销售复核样板</span></article>
+      <article class="pipe-step"><b>B5 · 对齐完整题目与评分规则</b><p>从业务契约生成任务书、材料说明、准确文件名、字段及交付要求；逐项建立Rubric和依据。主观项给清晰档位锚点，计算项给核验口径；不靠出现关键词或复制参考答案得分。</p><code>输出：instruction.md + rubrics.json + tests/rubrics.toml</code><span class="badge warn">单题已实现；领域适配待扩展</span></article>
+      <article class="pipe-step"><b>B6 · 打包成标准执行环境</b><p>逐字保留固定test.sh、finalize.py，按规范保留判分提示的必需段落，准备两份一致的Golden、solve.sh、任务配置和Docker依赖。验证文件可打开、Skill路径和权限正确、工具可用，且题包不含真实密钥。</p><code>输出：RewardKit标准题包 + 静态检查与镜像自检报告</code><span class="badge warn">GO-T2-001 v1.0.1已打通；批量转换待建设</span></article>
+      <article class="pipe-step"><b>B7 · 正式Golden预检</b><p>Harbor Oracle将标准交付物作为候选输出，Qwen3.7-plus通过固定RewardKit链路逐项评分。要求reward严格大于0.85且verifier_error=0；失败要定位题面、Golden、Rubric或运行问题后复验，不能靠旧版得分代替。</p><code>harbor run -p 题目目录 -a oracle → 正式评分与逐项报告</code><span class="badge warn">单题链路已启动过；通过状态以正式报告为准</span></article>
+      <article class="pipe-step"><b>B8 · 三模型做题与难度校准</b><p>由gpt-5.6-sol、claude-opus-4-8、qwen3.8-max0902分别实际做题，再由Qwen3.7-plus裁判。三模型均分须小于0.7，且至少一个得分大于0；同时满足A1/A2/A3各自区间。未实跑不确认难度。</p><code>输出：三模型产物、轨迹、有效得分与难度校准结果</code><span class="badge">尚未完成</span></article>
+      <article class="pipe-step" id="run"><b>B9 · 批量调度、验收与发布</b><p>按领域适配器分批处理2000个候选，记录每题所在阶段、失败原因、重试和证据。最终只将完成所有门禁的题包计入交付量，复查领域配额、实际格式覆盖、版本、授权与文件摘要；未通过题目留在待办区。</p><code>候选Base ≠ 已补全 ≠ Golden通过 ≠ 难度已校准 ≠ 可交付</code><span class="badge">完整批量链路待建设</span></article>
+    </div>
+
+    <details style="margin-top:18px"><summary style="cursor:pointer;font-weight:700">展开：七大领域分别应补什么材料与产物？（建设示例，不是已生成清单）</summary>
+      <ul class="clean-list">
+        <li><strong>通用办公：</strong>业务表格、邮件/会议材料、制度说明 → 复核工作簿、报告或汇报文件。</li>
+        <li><strong>金融：</strong>财务报表、公告、交易假设与口径 → 财务模型、分析备忘录及可追溯结论。</li>
+        <li><strong>法律：</strong>合成合同、案例事实、适用资料 → 条款分析、修订稿、问题清单与依据。</li>
+        <li><strong>医疗：</strong>合成病例、研究资料、明确适用的参考文件 → 结构化分析与证据摘要。</li>
+        <li><strong>数据分析：</strong>业务数据、数据字典、查询或分析需求 → 代码/查询、图表、报告与可复算结果。</li>
+        <li><strong>游戏：</strong>玩法与设计文档、配置数据、界面/美术素材 → 策划方案、平衡模型、验证与迭代记录。</li>
+        <li><strong>设计：</strong>品牌简报、受众研究、竞品样本、授权视觉资产 → 策略DOCX/PPTX、品牌架构图或相应设计交付稿。</li>
+      </ul>
+    </details>
+    <p style="margin:18px 0 0"><a href="standard/GO-T2-001/">查看当前唯一新版标准化样板：GO-T2-001 →</a></p>
+    <p style="color:#667085;font-size:12px">输入参考素材给做题模型使用；Golden是另一份标准交付物。Qwen在Golden预检中担任裁判，不是在生成这2000道题。此处为构建现状与补全方案说明，不是实时评测看板。</p>
   </section>
 
   <section class="panel">
