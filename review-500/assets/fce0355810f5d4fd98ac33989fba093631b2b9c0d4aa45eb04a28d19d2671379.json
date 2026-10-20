@@ -1,0 +1,121 @@
+{
+  "delivery_order": [
+    {
+      "id": "D01",
+      "filename": "output_01.json",
+      "owner": "Team-4",
+      "format": "json",
+      "depends_on": []
+    },
+    {
+      "id": "D02",
+      "filename": "output_02.md",
+      "owner": "Team-4",
+      "format": "md",
+      "depends_on": [
+        "D01"
+      ]
+    },
+    {
+      "id": "D03",
+      "filename": "output_03.md",
+      "owner": "Team-4",
+      "format": "md",
+      "depends_on": []
+    },
+    {
+      "id": "D04",
+      "filename": "output_04.json",
+      "owner": "Team-3",
+      "format": "json",
+      "depends_on": [
+        "D02"
+      ]
+    },
+    {
+      "id": "D05",
+      "filename": "output_05.csv",
+      "owner": "Team-4",
+      "format": "csv",
+      "depends_on": []
+    },
+    {
+      "id": "D06",
+      "filename": "output_06.json",
+      "owner": "Team-2",
+      "format": "json",
+      "depends_on": []
+    },
+    {
+      "id": "D07",
+      "filename": "output_07.csv",
+      "owner": "Team-3",
+      "format": "csv",
+      "depends_on": [
+        "D03",
+        "D04",
+        "D06"
+      ]
+    },
+    {
+      "id": "D08",
+      "filename": "output_08.md",
+      "owner": "Team-4",
+      "format": "md",
+      "depends_on": [
+        "D06"
+      ]
+    },
+    {
+      "id": "D09",
+      "filename": "output_09.md",
+      "owner": "Team-3",
+      "format": "md",
+      "depends_on": [
+        "D01",
+        "D05",
+        "D07"
+      ]
+    },
+    {
+      "id": "D10",
+      "filename": "output_10.csv",
+      "owner": "Team-3",
+      "format": "csv",
+      "depends_on": [
+        "D08"
+      ]
+    },
+    {
+      "id": "D11",
+      "filename": "output_11.csv",
+      "owner": "Team-4",
+      "format": "csv",
+      "depends_on": [
+        "D06",
+        "D08"
+      ]
+    },
+    {
+      "id": "D12",
+      "filename": "output_12.md",
+      "owner": "Team-3",
+      "format": "md",
+      "depends_on": [
+        "D06",
+        "D08"
+      ]
+    }
+  ],
+  "required_ids": [
+    "D01",
+    "D02",
+    "D03",
+    "D05",
+    "D06",
+    "D07",
+    "D09",
+    "D10",
+    "D11"
+  ]
+}

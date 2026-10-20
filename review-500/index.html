@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>500 题横向审阅 · WorkFactory × GDPval</title>
+  <meta name="description" content="五个来源，各随机100道。直接查看完整题面、真实输入材料、参考产物与评分项。">
+  <link rel="stylesheet" href="styles.css">
+  <script src="data-index.js" defer></script><script src="app.js" defer></script>
+</head>
+<body>
+  <header class="masthead"><a class="brand" href="#"><span class="brand-icon">W</span><span>题目观察室<small>WORKFACTORY / SAMPLE REVIEW</small></span></a><div class="header-actions"><span class="private-label">原始内容 · 不自动评分</span><a href="../">原题库 ↗</a><a href="exports/sample-index.csv" download>下载清单 ↗</a><button id="export-notes">导出我的标记</button></div></header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">FIVE SOURCES, ONE READING DESK</p><h1>把题目打开，<span>直接比较。</span></h1><p class="intro-copy">新旧两版与南杨 GDPval 三批，各随机抽 100 道。题面、材料、参考产物放在一起，差异由你判断。</p></div><div class="sample-seal"><strong>500<span>道</span></strong><span>每来源 100 · 固定样本</span><span id="seed-label">SEED 20261020</span></div></section>
+    <nav id="groups" class="groups" aria-label="选择题目来源"></nav>
+    <div class="method"><span class="method-label">抽样口径</span><p id="method-text">各来源独立、无放回随机抽样；未按质量挑题。南杨第三批指 GDPval c0–c3 合并的新库，不是 TerminalBench。</p><button id="method-toggle" aria-expanded="false">查看细节 ＋</button></div>
+    <section id="method-details" class="method-details" hidden><p>main / b1：从公开题面存在的成品目录抽样。c0–c3：合并最终 verdict=validated 的清单后抽100道，不是每子批100道。所有候选按路径排序，再用固定种子均匀抽取；不人为排除跨批重复。</p><p><strong>状态不混用：</strong>Python 自检、文件齐全、材料验收，均不等于内容正确率或 RewardKit 正式通过。Office 预览只提取值和文字，不还原原始排版；有截断会明确标注，原文件可下载。</p><a href="exports/sample-manifest.json" download>下载抽样路径、种子与文件哈希 →</a><div id="batch-stats"></div></section>
+    <section class="desk" aria-label="题目审阅工作台">
+      <aside class="catalog"><div class="catalog-top"><div class="catalog-title"><h2 id="catalog-title">新 2000</h2><span id="list-count">100 道</span></div><label class="search"><span>⌕</span><input id="search" type="search" placeholder="搜标题、职业、原型" aria-label="搜索题目"></label><div class="filter-row"><select id="type-filter" aria-label="筛选任务原型"><option value="">全部原型</option></select><select id="format-filter" aria-label="筛选输入格式"><option value="">全部输入格式</option></select></div><div class="filter-row"><select id="mark-filter" aria-label="筛选个人标记"><option value="">全部标记</option><option value="keep">值得借鉴</option><option value="template">模板痕迹重</option><option value="review">待复核</option><option value="unmarked">未标记</option></select><button id="random-task">随机看一道 ↗</button></div></div><div id="task-list" class="task-list" role="list" aria-label="抽样题目列表"></div></aside>
+      <div class="workspace"><div class="workspace-toolbar"><span id="position">1 / 100</span><div><button id="previous" aria-label="上一题">← 上一题</button><button id="next" aria-label="下一题">下一题 →</button><button id="compare-toggle" class="compare-button" aria-pressed="false">并排比较</button></div></div><p id="compare-notice" class="compare-notice" hidden>左右是独立抽样题，不是同题改版。左侧固定，右侧可切换来源与题目。<button id="unpin">退出对照 ×</button></p><div id="readers" class="readers"><article id="reader-main" class="reader" aria-live="polite"><p class="loading">正在载入样本…</p></article></div></div>
+    </section>
+    <footer><span>看实际内容，不把“有文件”当成“做对了”。</span><a href="exports/sample-index.json" download>完整抽样索引 JSON ↗</a></footer>
+  </main>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
