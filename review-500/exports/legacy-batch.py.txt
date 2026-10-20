@@ -70,10 +70,7 @@ def make_plan(source=DEFAULT_SOURCE):
         }
         r["scenario"] += (
             f"\n\n职业分类参考：O*NET 31.0 {code} {occupation['Title']}。"
-            f"职业定义：{occupation['Description']}\n"
-            "此对应关系由本管线按原有二级领域编写，不是 O*NET 官方领域划分；"
-            "保留原业务角色和任务，不把该职业的任意官方任务强行当成本题。"
-            "材料与规则仍是旧管线构造的虚构案例，不是官方业务规范。"
+            f"职业定义：{occupation['Description']}"
         )
         assert all(r[k] == original[k] for k in PRESERVED)
         plan.append(r)
