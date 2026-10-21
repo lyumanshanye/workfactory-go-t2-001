@@ -1,0 +1,592 @@
+{
+  "title": "AICE2024会展项目结算核对与应收调节",
+  "request": "你是星跃会展服务有限公司的记账与审计文员。今天是2024年6月20日。我们刚完成“亚洲国际消费电子展 (AICE 2024)”中智创科技展台的项目交付。项目经理已提交现场验收与签证报告，财务系统的应收账款台账也已生成。\n\n你需要核对客户预付款、进度款的收付与开票情况，结合现场验收的扣款与增项签证，重新计算项目的最终结算总价、实际总成本及毛利。重点查明财务应收台账与最终结算价之间的差异，并评估验收单据的合规风险。\n\n请输出以下两份成果到 /app/output 目录：\n1. \"AICE2024_Project_Settlement_Summary.xlsx\"：项目结算汇总表。需包含合同基础金额、各项变更（扣款/增项）、最终结算价、已收金额、未收尾款、项目总成本及毛利。需清晰区分“合同内”与“变更”明细。\n2. \"AICE2024_AR_Reconciliation_Exceptions.csv\"：应收调节与异常说明表。记录财务台账与验收结算单的差异明细、单据合规风险提示（如缺签章），并给出后续催收或单据补齐的建议。\n\n相关项目合同付款记录、现场验收签证报告及财务应收台账已放在工作目录中。",
+  "as_of": "2024-06-20T09:00:00+08:00",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "无外部来源",
+      "limitations": "本次任务无外部真实来源，所有业务记录、合同金额、签证单据均为原创虚构的内部模拟材料，不涉及真实政策法规或外部机构数据。"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "AICE2024_Contract_Payments.csv",
+      "purpose": "提供项目基础合同金额、付款节点、实际收付款状态及已开票记录。",
+      "content_plan": "包含合同总额50万，预付款30%（15万，已收已开票），进度款50%（25万，已收已开票），尾款20%（10万，未收未开票）。",
+      "content": "Record_ID,Document_Type,Document_No,Date,Description,Amount_RMB,Status\nC-001,Contract,HT-AICE-2024-01,2024-03-01,会展服务总合同,500000,Executed\nP-001,Payment,PAY-2024-03-15,2024-03-15,预付款(30%),150000,Received\nP-002,Invoice,INV-2024-04-01,2024-04-01,预付款发票,150000,Issued\nP-003,Payment,PAY-2024-05-10,2024-05-10,进度款(50%),250000,Received\nP-004,Invoice,INV-2024-05-12,2024-05-12,进度款发票,250000,Issued"
+    },
+    {
+      "filename": "AICE2024_Site_Visuals_Acceptance.md",
+      "purpose": "提供项目现场验收结论、变更签证单（扣款与增项）及实际发生成本归集。",
+      "content_plan": "包含验收日期6月18日。扣款单SN-2024-009（8000元，缺正式盖章）；增项签证单VO-2024-015（15000元，双方签字）。总成本38万（含增项成本6000）。",
+      "content": "# AICE 2024 现场验收与签证报告\n项目：智创科技展台\n验收日期：2024-06-18\n\n## 1. 验收扣款单 (SN-2024-009)\n- 事项：主展示区顶部灯光未按图纸采用进口LED，降级使用国产灯带。\n- 扣款金额：8,000 RMB。\n- 状态：客户现场负责人口头同意，待补正式盖章。\n\n## 2. 增项签证单 (VO-2024-015)\n- 事项：展期内临时增加两个VIP封闭接待室（含物料及人工）。\n- 增项金额：15,000 RMB。\n- 状态：双方项目经理已签字确认。\n\n## 3. 项目成本归集表\n- 基础搭建及运营：374,000 RMB\n- VIP接待室增项成本：6,000 RMB\n- 总实际成本：380,000 RMB\n\n## 4. 验收结论\n除灯光降级外，整体合格，同意结算。"
+    },
+    {
+      "filename": "Finance_AR_Ledger_AICE2024.csv",
+      "purpose": "提供财务系统中当前记录的应收账款台账，用于与验收结算结果进行差异核对。",
+      "content_plan": "财务记录的合同额50万，已开票40万，已收40万，应收尾款10万（未考虑验收变更）。",
+      "content": "AR_ID,Customer,Project,Contract_Amount,Invoiced_Amount,Received_Amount,AR_Balance,Notes\nAR-8831,智创科技,AICE2024展台,500000,400000,400000,100000,尾款未开票"
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "AICE2024_Project_Settlement_Summary.xlsx",
+      "format": "Excel Workbook",
+      "purpose": "项目结算汇总表。清晰展示合同基础金额、变更明细（扣款/增项）、最终结算总价、已收/未收款项、总成本及毛利，供财务主管审核项目盈利及催收依据。"
+    },
+    {
+      "filename": "AICE2024_AR_Reconciliation_Exceptions.csv",
+      "format": "CSV",
+      "purpose": "应收调节与异常说明表。记录财务台账与最终结算价的差异原因、单据合规风险（如缺签章），并提供后续处理建议，供业务和财务跟进闭环。"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "text": "必须基于验收签证单重新计算最终结算总价，不得直接使用原合同金额作为结算依据。",
+      "visibility": "explicit",
+      "basis": "业务实质重于形式，变更签证是结算的法定依据。"
+    },
+    {
+      "id": "REQ-02",
+      "text": "结算汇总表必须将“合同内金额”与“变更金额（增项/扣款）”分项列示，不得直接合并计算一个总数而不展示构成。",
+      "visibility": "explicit",
+      "basis": "财务审计要求追溯结算价变动原因。"
+    },
+    {
+      "id": "REQ-03",
+      "text": "异常表必须识别出财务台账未包含的变更金额，并计算出准确的应收尾款差额。",
+      "visibility": "explicit",
+      "basis": "确保应收账款完整性。"
+    },
+    {
+      "id": "REQ-04",
+      "text": "必须审查验收单据的合规性，对缺少必要签章的扣款/结算单据提出风险提示。",
+      "visibility": "professional_practice",
+      "basis": "审计内控要求结算依据必须具备法律效力形式。"
+    }
+  ],
+  "authoring_plan": "本题考察记账文员在项目完工节点，面对财务台账与业务实际验收结果不一致时的核对与调节能力。\n\n核心推导逻辑：\n1. 最终结算价 = 原合同500,000 - 扣款8,000 + 增项15,000 = 507,000 RMB。\n2. 已收金额 = 预付款150,000 + 进度款250,000 = 400,000 RMB（与财务台账一致）。\n3. 应收尾款 = 最终结算价507,000 - 已收400,000 = 107,000 RMB。\n4. 财务台账记录的尾款为100,000 RMB，差异为+7,000 RMB（净增项7,000）。\n5. 总成本 = 基础374,000 + 增项6,000 = 380,000 RMB。\n6. 项目毛利 = 507,000 - 380,000 = 127,000 RMB。\n\n关键风险点（不确定性/专业判断）：\n验收扣款单 SN-2024-009（8,000 RMB）状态为“待补正式盖章”。在审计和财务合规上，无正式盖章的扣款单存在客户反悔或拒认风险。虽然目前按8,000计算尾款，但在异常表中必须将此标记为高风险，建议业务部补齐盖章，否则财务可能需按谨慎性原则暂不确认该扣款或计提坏账准备。增项单 VO-2024-015 双方已签字，效力完备。\n\n等价解：\n结算汇总表的版式不强制固定，只要逻辑层级包含“合同基础”、“减：扣款”、“加：增项”、“最终结算”、“已收”、“未收”、“成本”、“毛利”即可。异常表的列名可自定义，但必须包含差异原因、风险等级和处理建议。",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "准确计算项目最终结算总价为 507,000 RMB。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx"
+      ],
+      "evidence": "查看结算汇总表中最终结算总价/合计金额单元格，数值必须为 507,000。",
+      "numeric_tolerance": "0",
+      "weight_reason": "结算是所有后续应收和毛利计算的基础，核心业务事实。",
+      "criterion": [
+        "从合同500,000出发",
+        "减去SN-2024-009扣款8,000",
+        "加上VO-2024-015增项15,000",
+        "得出507,000"
+      ],
+      "acceptable_alternatives": "若表格采用多行明细展示，最终汇总行数值为507,000即可。",
+      "failure_examples": "直接沿用合同金额500,000作为结算价，忽略了验收变更。",
+      "anchors": {
+        "0": "结算总价计算错误或缺失变更调整",
+        "1": "结算总价准确为507,000"
+      }
+    },
+    {
+      "id": "R02",
+      "description": "准确计算调整后的应收尾款为 107,000 RMB，并识别出与财务台账100,000 RMB的差异。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx",
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "汇总表未收尾款为107,000；异常表中明确记录台账尾款100,000与结算尾款107,000的差异7,000。",
+      "numeric_tolerance": "0",
+      "weight_reason": "核对的核心目的，直接关系到公司现金流催收。",
+      "criterion": [
+        "计算507,000 - 400,000 = 107,000",
+        "对比财务台账的100,000",
+        "识别出7,000的差异"
+      ],
+      "acceptable_alternatives": "差异方向表述为“台账少计7,000”或“需调增应收7,000”均可。",
+      "failure_examples": "尾款仍按100,000计算，未将增项和扣款纳入尾款调节。",
+      "anchors": {
+        "0": "尾款计算错误或未与台账进行差异核对",
+        "1": "尾款107,000且差异7,000识别正确"
+      }
+    },
+    {
+      "id": "R03",
+      "description": "正确归集项目总成本 380,000 RMB 并计算毛利 127,000 RMB。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx"
+      ],
+      "evidence": "汇总表中总成本为380,000，毛利为127,000（507,000 - 380,000）。",
+      "numeric_tolerance": "0",
+      "weight_reason": "评估项目真实盈利能力。",
+      "criterion": [
+        "总成本 = 374,000 + 6,000 = 380,000",
+        "毛利 = 507,000 - 380,000 = 127,000"
+      ],
+      "acceptable_alternatives": "无",
+      "failure_examples": "遗漏增项成本6,000，导致总成本记为374,000，毛利虚高至133,000。",
+      "anchors": {
+        "0": "成本或毛利计算错误",
+        "1": "成本380,000且毛利127,000准确"
+      }
+    },
+    {
+      "id": "R04",
+      "description": "结算汇总表结构清晰，严格区分“合同内金额”与“变更金额（增项/扣款）”。",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx"
+      ],
+      "evidence": "查看Excel表格的行列结构，是否有明确的“合同基础/原合同”、“扣款明细”、“增项明细”分类。",
+      "numeric_tolerance": "N/A",
+      "weight_reason": "满足财务审计对结算价变动的追溯要求。",
+      "criterion": [
+        "包含合同基础金额500,000",
+        "单独列示扣款-8,000",
+        "单独列示增项15,000",
+        "加总得出最终结算价"
+      ],
+      "acceptable_alternatives": "可以通过备注列说明构成，或在主表中分节展示。",
+      "failure_examples": "将500,000与15,000直接相加记为515,000，未体现扣款逻辑；或只写一个总数507,000无任何明细拆解。",
+      "levels": {
+        "0": "完全没有区分，只有一个总数或完全照抄合同额",
+        "0.25": "区分了合同和变更，但漏掉了扣款或增项其中一项的单独列示",
+        "0.5": "列出了合同额和最终结算额，中间过程不清晰",
+        "0.75": "区分了合同、增项、扣款，但排版混乱或归类有小瑕疵",
+        "1": "清晰分节展示合同基础、各项变更及最终结算，逻辑严密"
+      }
+    },
+    {
+      "id": "R05",
+      "description": "准确识别并记录财务台账中已收金额（400,000）与已开票金额（400,000）的一致性。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "异常表或调节表中确认预付款和进度款的收付、开票状态与财务台账一致，无差异。",
+      "numeric_tolerance": "0",
+      "weight_reason": "确保已确认的现金流和税务凭证无误。",
+      "criterion": [
+        "核对预付款150,000已收已开票",
+        "核对进度款250,000已收已开票",
+        "确认台账已收/已开400,000无误"
+      ],
+      "acceptable_alternatives": "在异常表中注明“前期款项核对无误，无异常”。",
+      "failure_examples": "错误地将预付款或进度款标记为差异项。",
+      "anchors": {
+        "0": "对已收/已开票记录进行错误调节",
+        "1": "正确确认前期400,000收付及开票无异常"
+      }
+    },
+    {
+      "id": "R06",
+      "description": "准确计算未开票金额为 107,000 RMB。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx"
+      ],
+      "evidence": "汇总表中未开票金额/待开票金额列为 107,000。",
+      "numeric_tolerance": "0",
+      "weight_reason": "指导财务后续开具尾款发票。",
+      "criterion": [
+        "最终结算价507,000 - 已开票400,000 = 107,000"
+      ],
+      "acceptable_alternatives": "无",
+      "failure_examples": "未开票金额仍按原合同尾款100,000计算。",
+      "anchors": {
+        "0": "未开票金额计算错误",
+        "1": "未开票金额准确为107,000"
+      }
+    },
+    {
+      "id": "R07",
+      "description": "识别出验收扣款单 SN-2024-009 缺少正式盖章的合规风险，并在异常表中提示。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "异常表中包含对 SN-2024-009 的风险描述，明确指出“缺正式盖章”或“仅口头同意”。",
+      "numeric_tolerance": "N/A",
+      "weight_reason": "审计内控核心风险点，防范客户拒认扣款。",
+      "criterion": [
+        "引用单据号 SN-2024-009",
+        "指出状态为待补盖章/仅口头同意",
+        "定性为合规/法务风险"
+      ],
+      "acceptable_alternatives": "建议业务部补齐签章，或建议财务暂按谨慎性原则处理。",
+      "failure_examples": "完全忽略单据状态，直接将其作为确定性的结算扣款依据而未提示任何风险。",
+      "anchors": {
+        "0": "未识别出缺签章风险",
+        "1": "明确指出缺正式盖章的风险"
+      }
+    },
+    {
+      "id": "R08",
+      "description": "确认增项签证单 VO-2024-015 效力完备，无合规异常。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "异常表中未将 VO-2024-015 列为异常，或在备注中说明其“双方已签字，效力完备”。",
+      "numeric_tolerance": "N/A",
+      "weight_reason": "区分有效单据与瑕疵单据的能力。",
+      "criterion": [
+        "核对VO-2024-015",
+        "确认双方签字状态",
+        "未将其误判为风险项"
+      ],
+      "acceptable_alternatives": "在异常表中正常记录增项，备注“手续齐全”。",
+      "failure_examples": "将已双方签字的增项单错误标记为“需补齐手续”或“存在风险”。",
+      "anchors": {
+        "0": "对有效增项单据进行错误风险提示",
+        "1": "正确判断增项单据效力完备"
+      }
+    },
+    {
+      "id": "R09",
+      "description": "异常表包含针对扣款缺章风险的具体后续处理建议。",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "查看异常表“建议/下一步行动”列的内容。",
+      "numeric_tolerance": "N/A",
+      "weight_reason": "体现文员的专业闭环能力，不仅是发现问题，还要提出解决方案。",
+      "criterion": [
+        "建议业务/项目经理联系客户",
+        "要求补齐 SN-2024-009 正式盖章",
+        "建议财务部在拿到盖章前暂缓确认该扣款或做好催收准备"
+      ],
+      "acceptable_alternatives": "建议从尾款中暂扣该金额直至手续补齐，或建议按原合同100,000催收待手续补齐后调整。",
+      "failure_examples": "仅提示“有风险”，但没有任何具体的跟进动作或财务应对建议。",
+      "levels": {
+        "0": "没有给出任何后续处理建议",
+        "0.25": "建议模糊，如“请联系客户”（未指明具体单据和动作）",
+        "0.5": "建议补齐盖章，但未提及财务端的应对策略",
+        "0.75": "建议补齐盖章，并提及财务需关注收款风险",
+        "1": "明确提出业务端补齐签章，并给出财务端（如暂缓确认/催收策略）的具体联动建议"
+      }
+    },
+    {
+      "id": "R10",
+      "description": "准确引用项目基础信息（客户名、项目名、合同号）。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx",
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "表头或基础信息区域包含“智创科技”、“AICE2024展台”、“HT-AICE-2024-01”。",
+      "numeric_tolerance": "N/A",
+      "weight_reason": "基础数据准确性。",
+      "criterion": [
+        "客户：智创科技",
+        "项目：AICE2024展台",
+        "合同号：HT-AICE-2024-01"
+      ],
+      "acceptable_alternatives": "无",
+      "failure_examples": "客户名称写错或遗漏合同号。",
+      "anchors": {
+        "0": "基础信息引用错误或严重缺失",
+        "1": "准确引用客户、项目及合同号"
+      }
+    },
+    {
+      "id": "R11",
+      "description": "准确记录验收日期 2024-06-18 作为结算基准日。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx"
+      ],
+      "evidence": "汇总表表头或备注中包含验收日期 2024-06-18。",
+      "numeric_tolerance": "N/A",
+      "weight_reason": "确定收入确认和结算时点。",
+      "criterion": [
+        "引用日期 2024-06-18"
+      ],
+      "acceptable_alternatives": "无",
+      "failure_examples": "使用当天日期 2024-06-20 作为验收日期。",
+      "anchors": {
+        "0": "日期引用错误",
+        "1": "准确记录验收日期"
+      }
+    },
+    {
+      "id": "R12",
+      "description": "交付文件命名和格式完全符合要求。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx",
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "检查 /app/output 目录下的文件名。",
+      "numeric_tolerance": "N/A",
+      "weight_reason": "遵循工作规范。",
+      "criterion": [
+        "文件1名为 AICE2024_Project_Settlement_Summary.xlsx",
+        "文件2名为 AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "acceptable_alternatives": "无",
+      "failure_examples": "文件名拼写错误或格式不对（如将xlsx存为csv）。",
+      "anchors": {
+        "0": "文件名或格式错误",
+        "1": "文件名和格式完全正确"
+      }
+    },
+    {
+      "id": "R13",
+      "description": "错误地将扣款和增项直接抵消，掩盖业务实质。",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx"
+      ],
+      "evidence": "汇总表中仅有一项“净变更 7,000”，未分别列示 -8,000 和 +15,000。",
+      "numeric_tolerance": "0",
+      "weight_reason": "严重违反财务明细披露原则，导致审计无法追溯。",
+      "criterion": [
+        "将-8,000和+15,000合并为+7,000列示",
+        "未保留原始扣款和增项的独立明细"
+      ],
+      "acceptable_alternatives": "无",
+      "failure_examples": "结算价构成中只写“变更调整 7,000”，不写明具体是哪些扣款和增项。",
+      "anchors": {
+        "0": "未发生抵消行为，分别列示",
+        "1": "发生抵消行为，掩盖业务实质（触发此项得负分）"
+      }
+    },
+    {
+      "id": "R14",
+      "description": "异常表包含标准的异常日志字段（如异常ID、单据号、差异金额、原因、建议）。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "CSV文件表头包含至少5个逻辑字段。",
+      "numeric_tolerance": "N/A",
+      "weight_reason": "保证输出文件的可读性和系统性。",
+      "criterion": [
+        "包含唯一标识/ID",
+        "包含单据号/来源",
+        "包含差异金额",
+        "包含原因说明",
+        "包含处理建议"
+      ],
+      "acceptable_alternatives": "字段命名可自定义，但语义必须覆盖上述5点。",
+      "failure_examples": "CSV只有一列“异常说明”，所有信息混在一个单元格里。",
+      "anchors": {
+        "0": "字段缺失严重或结构混乱",
+        "1": "字段完整，结构清晰"
+      }
+    },
+    {
+      "id": "R15",
+      "description": "遗漏增项签证单对应的成本 6,000 RMB。",
+      "type": "Binary",
+      "weight": -3,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx"
+      ],
+      "evidence": "汇总表中总成本为 374,000。",
+      "numeric_tolerance": "0",
+      "weight_reason": "成本漏记导致毛利虚高，属于严重核算错误。",
+      "criterion": [
+        "总成本计算为 374,000",
+        "未包含 VIP接待室增项成本 6,000"
+      ],
+      "acceptable_alternatives": "无",
+      "failure_examples": "只看了基础搭建成本，忽略了验收报告中的“项目成本归集表”里的增项成本。",
+      "anchors": {
+        "0": "成本包含增项6,000，总计380,000",
+        "1": "成本遗漏增项6,000，总计374,000（触发此项得负分）"
+      }
+    },
+    {
+      "id": "R16",
+      "description": "在计算毛利时，使用错误的结算价或成本（如500,000 - 380,000 = 120,000）。",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_Project_Settlement_Summary.xlsx"
+      ],
+      "evidence": "汇总表中毛利计算未使用 507,000 和 380,000 的组合。",
+      "numeric_tolerance": "0",
+      "weight_reason": "基础逻辑错误，导致项目盈利评估完全失真。",
+      "criterion": [
+        "毛利 = 500,000 - 380,000 = 120,000",
+        "或 毛利 = 507,000 - 374,000 = 133,000",
+        "等非 127,000 的错误结果"
+      ],
+      "acceptable_alternatives": "无",
+      "failure_examples": "结算价算对了507,000，但毛利直接用 500,000 - 380,000 计算。",
+      "anchors": {
+        "0": "毛利计算逻辑正确（127,000）",
+        "1": "毛利计算逻辑错误（触发此项得负分）"
+      }
+    },
+    {
+      "id": "R17",
+      "description": "准确识别出财务台账中“尾款未开票”的状态。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "异常表或调节表中提及尾款 107,000 尚未开具发票。",
+      "numeric_tolerance": "0",
+      "weight_reason": "税务合规与开票计划。",
+      "criterion": [
+        "指出尾款状态为未开票",
+        "关联金额 107,000"
+      ],
+      "acceptable_alternatives": "无",
+      "failure_examples": "认为尾款已经开票，或遗漏开票状态说明。",
+      "anchors": {
+        "0": "未识别或错误识别开票状态",
+        "1": "准确识别尾款未开票"
+      }
+    },
+    {
+      "id": "R18",
+      "description": "综合结论：明确建议按 107,000 RMB 催收尾款，并在补齐扣款单签章后执行。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-03",
+        "REQ-04"
+      ],
+      "deliverables": [
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "异常表末尾或单独结论区域包含综合催收建议。",
+      "numeric_tolerance": "0",
+      "weight_reason": "考察文员对整个业务闭环的最终把控能力。",
+      "criterion": [
+        "明确催收金额 107,000",
+        "关联补齐 SN-2024-009 签章的前提条件",
+        "建议财务据此调整台账并开票"
+      ],
+      "acceptable_alternatives": "若认为风险过高，建议暂按 100,000 催收待签章后再调整 7,000，只要逻辑自洽且符合谨慎性原则也可接受。",
+      "failure_examples": "没有给出明确的催收金额建议，或建议按 100,000 催收且未提及后续调整机制。",
+      "anchors": {
+        "0": "无综合结论或结论逻辑混乱",
+        "1": "给出明确、合规的综合催收与账务处理结论"
+      }
+    },
+    {
+      "id": "R19",
+      "description": "异常说明的合理性与业务逻辑深度。",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [],
+      "deliverables": [
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "查看异常表中对差异原因的解释是否透彻。",
+      "numeric_tolerance": "N/A",
+      "weight_reason": "区分机械填表与真正理解业务逻辑的文员。",
+      "criterion": [
+        "解释台账少计7,000的原因（漏记增项与扣款的净影响）",
+        "解释为何需要调整台账",
+        "将业务动作（签证）与财务结果（应收变动）建立因果联系"
+      ],
+      "acceptable_alternatives": "使用“因现场增项及扣款未同步至财务系统”等专业表述。",
+      "failure_examples": "只写“金额不一致”，不解释为什么不一致（即未说明是业务端发生了变更而财务端未入账）。",
+      "levels": {
+        "0": "没有解释差异原因",
+        "0.25": "仅说明“有增项和扣款”，未与台账差异建立联系",
+        "0.5": "说明台账漏记了变更，但未计算净影响",
+        "0.75": "准确计算出净影响7,000，并说明是财务未同步",
+        "1": "深入解释业务端签证与财务端入账的脱节原因，逻辑严密，因果清晰"
+      }
+    },
+    {
+      "id": "R20",
+      "description": "准确计算应收尾款的调节过程（台账100,000 + 增项15,000 - 扣款8,000 = 107,000）。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "AICE2024_AR_Reconciliation_Exceptions.csv"
+      ],
+      "evidence": "异常表中包含具体的调节公式或步骤。",
+      "numeric_tolerance": "0",
+      "weight_reason": "展示调节过程的透明度，便于复核。",
+      "criterion": [
+        "起点：台账尾款 100,000",
+        "加项：增项 15,000",
+        "减项：扣款 8,000",
+        "终点：结算尾款 107,000"
+      ],
+      "acceptable_alternatives": "通过表格形式展示调节过程，或文字说明计算步骤。",
+      "failure_examples": "直接给出107,000的结果，没有任何从100,000推导到107,000的中间步骤。",
+      "anchors": {
+        "0": "缺乏调节过程或过程错误",
+        "1": "调节过程清晰、准确、完整"
+      }
+    }
+  ],
+  "checks_to_execute": [
+    "验证 AICE2024_Project_Settlement_Summary.xlsx 中最终结算价是否为 507,000。",
+    "验证 AICE2024_Project_Settlement_Summary.xlsx 中总成本是否为 380,000，毛利是否为 127,000。",
+    "验证 AICE2024_AR_Reconciliation_Exceptions.csv 是否包含 SN-2024-009 缺盖章的风险提示。",
+    "检查 CSV 文件的列数是否大于等于 5，且包含差异金额和处理建议字段。"
+  ],
+  "quality_risks": [
+    "模型可能忽略验收单中的成本归集表，导致总成本漏记增项成本 6,000 RMB。",
+    "模型可能将扣款和增项直接抵消，违反财务明细披露原则，导致 Rubric 13 触发负分。",
+    "模型可能无法识别 SN-2024-009 扣款单“待补正式盖章”的合规风险，仅将其作为普通业务数据处理。",
+    "模型在计算未开票金额时，可能直接沿用财务台账的 100,000，而未调整为 107,000。"
+  ],
+  "reference_solution": "【私有参考草稿，待复核】\n\n1. 结算总价推导：\n原合同：500,000\n扣款 (SN-2024-009)：-8,000\n增项 (VO-2024-015)：+15,000\n最终结算价 = 500,000 - 8,000 + 15,000 = 507,000 RMB。\n\n2. 应收尾款推导：\n已收金额 = 150,000 (预付) + 250,000 (进度) = 400,000 RMB。\n应收尾款 = 507,000 - 400,000 = 107,000 RMB。\n财务台账记录尾款为 100,000 RMB。\n差异调节：100,000 + 15,000 (增项) - 8,000 (扣款) = 107,000 RMB。台账需调增 7,000 RMB。\n\n3. 成本与毛利推导：\n基础成本：374,000\n增项成本：6,000\n总成本 = 380,000 RMB。\n毛利 = 507,000 - 380,000 = 127,000 RMB。\n\n4. 风险与合规判断：\nSN-2024-009 (扣款 8,000) 状态为“待补正式盖章”，存在客户反悔风险。财务在未取得正式盖章前，从谨慎性原则出发，可暂按 100,000 催收或计提相关坏账准备，业务端必须跟进补齐签章。\nVO-2024-015 (增项 15,000) 双方已签字，效力完备，可全额确认应收。\n\n5. 限制与替代解：\n若模型建议“暂按 100,000 开票催收，待扣款单补齐后再调整 7,000”，只要逻辑自洽且符合内控谨慎性原则，应视为合理替代解，不扣分。但核心结算总价 507,000 和总成本 380,000 不可妥协。"
+}

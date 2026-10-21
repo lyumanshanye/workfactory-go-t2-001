@@ -1,0 +1,435 @@
+[
+  {
+    "id": "R01",
+    "description": "准确识别Zone_B在08:00-09:00的严重拥堵，并计算出E03单兵作战的负荷超载及等待时间累积。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "Bottleneck_Analysis_Report.md"
+    ],
+    "evidence": "报告中明确指出08:00-09:00时段Zone_B（或T2业务）等待时间严重超标，并引用日志数据说明E03处理负荷（如处理总时长接近或超过60分钟，导致等待时间累积至10分钟以上）。",
+    "numeric_tolerance": "等待时间计算误差在1分钟内，处理负荷计算误差在5%以内。",
+    "weight_reason": "核心业务痛点识别，决定后续优化的方向。",
+    "levels": {
+      "0": "完全未识别Zone_B的拥堵问题，或未提及等待时间超标。",
+      "0.25": "提及Zone_B拥堵，但未提供数据支撑，或未计算E03的负荷。",
+      "0.5": "识别了Zone_B拥堵，计算了部分等待时间，但未准确关联到E03的单兵作战负荷。",
+      "0.75": "准确识别Zone_B拥堵，计算了平均等待时间，但未量化E03的处理总时长与负荷超载。",
+      "1": "准确识别Zone_B拥堵，量化了E03的处理负荷（如指出其处理时间占用了绝大部分时段），并准确计算出等待时间累积至10分钟以上的峰值。"
+    },
+    "acceptable_alternatives": "可使用表格或文字描述负荷，只要数据逻辑一致即可。",
+    "failure_examples": "仅笼统描述'Zone_B人多'，未引用日志中的具体等待时间或处理时长数据。"
+  },
+  {
+    "id": "R02",
+    "description": "准确识别Zone_C在同时段的闲置浪费，并指出E01的全能技能未被有效利用。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "Bottleneck_Analysis_Report.md"
+    ],
+    "evidence": "报告中指出08:00-09:00时段Zone_C业务量极少（如仅有1-2笔T3），E01处于闲置或低负荷状态，且其具备T2技能可支援Zone_B。",
+    "numeric_tolerance": "业务量统计误差为0。",
+    "weight_reason": "资源错配的另一面，是提出优化方案的前提。",
+    "levels": {
+      "0": "未识别Zone_C的闲置问题。",
+      "0.25": "提及Zone_C闲置，但未指出E01的技能浪费。",
+      "0.5": "识别了Zone_C闲置和E01技能浪费，但未与Zone_B的拥堵形成对比分析。",
+      "0.75": "准确识别Zone_C闲置及E01技能浪费，并指出其可支援Zone_B，但未计算具体闲置时长。",
+      "1": "准确识别Zone_C闲置，量化了E01的闲置时长（如指出08:00-09:00仅有不到10分钟的业务量），并明确指出其全能技能（含T2）未被用于缓解Zone_B压力。"
+    },
+    "acceptable_alternatives": "只要逻辑上指出了资源错配，具体措辞不限。",
+    "failure_examples": "认为Zone_C的E01在接待VIP，未根据日志数据核实其实际业务量为0或极低。"
+  },
+  {
+    "id": "R03",
+    "description": "正确计算当前Zone_A的平均窗口利用率。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "Bottleneck_Analysis_Report.md"
+    ],
+    "evidence": "报告中Zone_A的利用率计算正确。E02在07:30-09:00处理了约7笔T1，总时长约29分钟，利用率约在60%-70%之间（29/90）。",
+    "numeric_tolerance": "利用率误差在±5%以内。",
+    "weight_reason": "基础数据分析能力，确保对全局负荷有准确掌握。",
+    "anchors": {
+      "0": "未计算Zone_A利用率，或计算结果严重错误（如>100%或<30%）。",
+      "1": "正确计算Zone_A利用率，结果在合理区间（约60%-75%），且计算过程清晰。"
+    },
+    "acceptable_alternatives": "可按30分钟或60分钟为窗口计算，只要逻辑自洽。",
+    "failure_examples": "将Zone_A所有窗口的理论产能直接当作实际利用率，未考虑实际业务量。"
+  },
+  {
+    "id": "R04",
+    "description": "负分项：优化排班中，分配给特定区域窗口的员工，其技能标签必须严格包含该区域要求的业务类型。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Optimized_Schedule_20231023.csv"
+    ],
+    "evidence": "检查排班表，Zone_B的窗口必须分配具备T2技能的员工（E01, E02, E03, E05）。若将E04（仅T1/T3）分配至Zone_B，则触发此项。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "违反系统权限硬约束，导致方案完全不可执行。",
+    "anchors": {
+      "0": "排班表中存在员工技能与区域要求不匹配的严重错误（如E04被排入Zone_B）。得-10分。",
+      "1": "所有员工分配均严格符合技能与区域约束。不扣分。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "为了让Zone_B有两人，强行将无T2技能的E04排入Zone_B窗口5。"
+  },
+  {
+    "id": "R05",
+    "description": "优化排班中，Zone_B在08:00-09:30时段至少分配2名具备T2技能的员工。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "Optimized_Schedule_20231023.csv"
+    ],
+    "evidence": "排班表显示在08:00-09:30期间，Zone_B（窗口4和5）至少有2名员工（如E03和E02/E01）。",
+    "numeric_tolerance": "时段边界误差在15分钟内。",
+    "weight_reason": "解决Zone_B拥堵的核心排班动作。",
+    "anchors": {
+      "0": "08:00-09:30时段Zone_B仍只有1名员工，或未明确指定2名员工。",
+      "1": "08:00-09:30时段Zone_B明确分配了至少2名具备T2技能的员工。"
+    },
+    "acceptable_alternatives": "可以是E03+E01，或E03+E02，或调整E05班次。",
+    "failure_examples": "仅在报告中建议'增加人手'，但排班表中08:00-09:30的Zone_B仍只有E03一人。"
+  },
+  {
+    "id": "R06",
+    "description": "优化排班有效提升了Zone_C的利用率或合理分流了业务，避免E01闲置。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "Optimized_Schedule_20231023.csv",
+      "Bottleneck_Analysis_Report.md"
+    ],
+    "evidence": "排班表或报告显示E01在08:00-09:30被调往Zone_B，或Zone_C的业务被合理引导/分流，使得E01的工时得到利用。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "资源利用率的平衡。",
+    "levels": {
+      "0": "E01仍在Zone_C闲置，未做任何调整。",
+      "0.25": "提及调整E01，但未说明其去向或业务分流逻辑。",
+      "0.5": "将E01调往Zone_B，但未说明Zone_C的业务如何处理。",
+      "0.75": "将E01调往Zone_B，并简单说明Zone_C业务可由其他区域兼顾或引导至自助机。",
+      "1": "将E01调往Zone_B支援T2，同时明确指出Zone_C的T1/T3业务可由Zone_A的E02/E04分担，或通过物理引导分流，实现全局利用率平衡。"
+    },
+    "acceptable_alternatives": "调E02去Zone_B，E01留在Zone_C但接收入口分流业务，只要利用率提升即可。",
+    "failure_examples": "将E01调去Zone_A，导致Zone_A人员过剩，Zone_B依然拥堵。"
+  },
+  {
+    "id": "R07",
+    "description": "预期指标估算中，Zone_B T2业务预期平均等待时间降至3分钟以内。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "Queue_Simulation_Estimates.csv"
+    ],
+    "evidence": "估算表中08:00-09:30时段，Zone_B T2业务的预期等待时间 <= 3.0分钟。",
+    "numeric_tolerance": "等待时间误差在±0.5分钟内。",
+    "weight_reason": "验证优化方案是否达到管理目标。",
+    "anchors": {
+      "0": "预期等待时间 > 3.0分钟，或未提供Zone_B T2的等待时间估算。",
+      "1": "预期等待时间 <= 3.0分钟，且计算逻辑合理（基于2人并行处理）。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "估算等待时间仍为10分钟以上，说明排班调整未达到预期效果。"
+  },
+  {
+    "id": "R08",
+    "description": "预期指标估算中，各区域窗口利用率在60%-90%之间，无闲置或过载。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "Queue_Simulation_Estimates.csv"
+    ],
+    "evidence": "估算表中各区域/窗口的预期利用率均在60%-90%之间。",
+    "numeric_tolerance": "利用率误差在±5%以内。",
+    "weight_reason": "全局资源平衡的最终验证。",
+    "levels": {
+      "0": "存在利用率 < 60% 或 > 90% 的窗口，且未做说明。",
+      "0.25": "所有窗口利用率均在范围内，但未提供计算过程或数据支撑。",
+      "0.5": "大部分窗口利用率在范围内，但有个别窗口（如Zone_C）明显偏低或偏高。",
+      "0.75": "所有窗口利用率均在60%-90%之间，计算逻辑基本合理。",
+      "1": "所有窗口利用率严格在60%-90%之间，计算基于优化后的业务分配和2人并行逻辑，数据详实且逻辑严密。"
+    },
+    "acceptable_alternatives": "可按区域整体计算利用率，只要结果在范围内。",
+    "failure_examples": "Zone_C利用率仍低于30%，说明未解决闲置问题。"
+  },
+  {
+    "id": "R09",
+    "description": "严格遵守员工班次时间约束（不超时、不缺勤、符合班次起止时间）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Optimized_Schedule_20231023.csv"
+    ],
+    "evidence": "排班表中，Shift_A员工在07:30-12:00，Shift_B员工在09:00-13:30。无超时或缺勤。",
+    "numeric_tolerance": "时间误差在15分钟内。",
+    "weight_reason": "基本劳动纪律与排班规则。",
+    "anchors": {
+      "0": "存在员工班次时间错误（如E05被要求08:00上班，但其定义为Shift_B 09:00-13:30，且未说明调整班次）。",
+      "1": "所有员工班次时间严格符合定义，或合理调整了班次并明确标注。"
+    },
+    "acceptable_alternatives": "若solver提出将E05班次调整为07:30-12:00并在报告中说明，可接受。",
+    "failure_examples": "直接让E05在08:00-09:00上班，违反Shift_B的定义。"
+  },
+  {
+    "id": "R10",
+    "description": "报告结构完整，包含数据支撑、清晰的根因分析。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "Bottleneck_Analysis_Report.md"
+    ],
+    "evidence": "报告包含现状分析、数据引用、根因总结，结构清晰。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "文档专业性。",
+    "anchors": {
+      "0": "报告结构混乱，缺乏数据引用，或无根因分析。",
+      "1": "报告结构完整，逻辑清晰，引用了日志数据，并总结了物理约束与排班错配的根因。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "只列出了数据表格，没有任何文字分析。"
+  },
+  {
+    "id": "R11",
+    "description": "负分项：违反'员工不可跨区移动'的物理约束（如在排班表中让同一员工在同一时段出现在两个不同区域）。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Optimized_Schedule_20231023.csv"
+    ],
+    "evidence": "检查排班表，同一员工在同一时段（如08:00-09:00）不能被分配在两个不同的Zone或窗口。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "违反物理硬约束，导致方案无法落地。",
+    "anchors": {
+      "0": "排班表中存在同一员工在同一时段被分配在两个区域/窗口。得-7分。",
+      "1": "无跨区/重叠排班错误。不扣分。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "E01在08:00-08:30在Zone_C，08:30-09:00在Zone_B，但未明确划分时段，导致系统识别冲突。"
+  },
+  {
+    "id": "R12",
+    "description": "准确提取日志中的总业务量及各类型分布。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "Bottleneck_Analysis_Report.md"
+    ],
+    "evidence": "报告中提及的总业务量（如T1约8笔，T2约10笔，T3约4笔）与日志一致。",
+    "numeric_tolerance": "业务量统计误差为0。",
+    "weight_reason": "数据提取准确性。",
+    "anchors": {
+      "0": "总业务量统计错误超过20%，或未进行分类统计。",
+      "1": "准确统计总业务量及各类型分布。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将T2业务量统计为5笔，实际为10笔。"
+  },
+  {
+    "id": "R13",
+    "description": "优化方案中考虑了T1业务处理时间的波动性，预留了缓冲。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "Bottleneck_Analysis_Report.md",
+      "Queue_Simulation_Estimates.csv"
+    ],
+    "evidence": "报告或估算表中指出T1处理时间波动（3.8-4.5分钟），并在估算等待时间时考虑了此波动，或建议Zone_A预留缓冲。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "对业务特性的深入理解。",
+    "levels": {
+      "0": "未提及T1波动性，或估算时使用固定平均时间且未考虑风险。",
+      "0.25": "提及T1波动，但未在估算或排班中体现应对措施。",
+      "0.5": "在估算中使用了最大处理时间（4.5分钟）计算Zone_A利用率。",
+      "0.75": "指出T1波动性，并建议在Zone_A排班时避免安排复杂业务，或预留10%缓冲。",
+      "1": "准确分析T1波动性（3.8-4.5分钟），在估算中采用保守参数，并明确提出Zone_A需保持一定冗余度以应对波动，防止排队蔓延。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "假设T1处理时间恒定为2分钟，导致Zone_A预期利用率计算严重失真。"
+  },
+  {
+    "id": "R14",
+    "description": "交付物文件名完全符合要求。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "Bottleneck_Analysis_Report.md",
+      "Optimized_Schedule_20231023.csv",
+      "Queue_Simulation_Estimates.csv"
+    ],
+    "evidence": "三个文件名与request中指定的完全一致。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "遵循指令的基本要求。",
+    "anchors": {
+      "0": "文件名存在拼写错误或格式不符（如使用.xlsx代替.csv）。",
+      "1": "三个文件名完全正确。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将Optimized_Schedule_20231023.csv命名为schedule.csv。"
+  },
+  {
+    "id": "R15",
+    "description": "排班表列名和格式规范，包含必要字段。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "Optimized_Schedule_20231023.csv"
+    ],
+    "evidence": "排班表包含员工、班次/时段、区域、窗口等必要列，格式为有效CSV。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "数据可用性。",
+    "anchors": {
+      "0": "格式不是CSV，或缺少关键列（如未指定窗口）。",
+      "1": "格式为有效CSV，包含员工、时段、Zone、窗口等必要列。"
+    },
+    "acceptable_alternatives": "列名可使用英文或中文，只要含义清晰。",
+    "failure_examples": "排班表只有员工和区域，未指定具体窗口，导致系统无法分配权限。"
+  },
+  {
+    "id": "R16",
+    "description": "预期估算表包含各时段、各业务的等待时间和利用率。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03",
+      "REQ-04"
+    ],
+    "deliverables": [
+      "Queue_Simulation_Estimates.csv"
+    ],
+    "evidence": "估算表按时间段（如08:00-09:00）和业务类型（T1/T2/T3）列出预期等待时间和窗口利用率。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "全面验证优化效果。",
+    "anchors": {
+      "0": "未提供分时段/分业务的估算，或缺少等待时间/利用率指标。",
+      "1": "提供完整的分时段、分业务估算表，包含等待时间和利用率。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "只给出了一个全天的平均等待时间，未体现高峰期的改善情况。"
+  },
+  {
+    "id": "R17",
+    "description": "识别出E05中班开始时间（09:00）与08:00-09:00高峰的错位问题。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "Bottleneck_Analysis_Report.md"
+    ],
+    "evidence": "报告指出E05（Shift_B）09:00才上班，导致08:00-09:00的T2高峰仅有E03一人。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "对排班时间结构的深度分析。",
+    "anchors": {
+      "0": "未识别E05班次时间与高峰期的错位。",
+      "1": "明确指出E05的Shift_B班次（09:00开始）导致08:00-09:00 Zone_B人手不足。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为08:00-09:00 Zone_B有E03和E05两人。"
+  },
+  {
+    "id": "R18",
+    "description": "提出将具备T2技能的员工在08:00-09:30支援Zone_B的合理方案。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-03"
+    ],
+    "deliverables": [
+      "Optimized_Schedule_20231023.csv",
+      "Bottleneck_Analysis_Report.md"
+    ],
+    "evidence": "方案中明确将E01或E02（全能）在08:00-09:30分配至Zone_B，或调整E05班次。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "核心解决方案的提出。",
+    "anchors": {
+      "0": "未提出支援Zone_B的具体方案，或方案违反技能约束。",
+      "1": "提出将E01/E02调至Zone_B，或调整E05班次，且符合技能约束。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "建议让E04去Zone_B支援，但E04无T2技能。"
+  },
+  {
+    "id": "R19",
+    "description": "识别出T3业务在Zone_A的耗时过长导致排队。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "Bottleneck_Analysis_Report.md"
+    ],
+    "evidence": "报告指出T3业务处理时间较长（约5分钟），且集中在Zone_A，占用E02/E04较多时间。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "对业务细节的观察。",
+    "anchors": {
+      "0": "未提及T3业务的耗时特征。",
+      "1": "指出T3业务耗时较长（4.8-5.2分钟），对Zone_A的产能有显著占用。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为T3业务与T1耗时相同。"
+  },
+  {
+    "id": "R20",
+    "description": "整体方案的可行性与逻辑自洽，排班、估算与报告结论一致。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [],
+    "deliverables": [
+      "Bottleneck_Analysis_Report.md",
+      "Optimized_Schedule_20231023.csv",
+      "Queue_Simulation_Estimates.csv"
+    ],
+    "evidence": "报告指出的问题在排班中得到解决，排班的调整在估算中得到验证，三者逻辑闭环。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "综合业务解决能力。",
+    "levels": {
+      "0": "报告、排班、估算三者逻辑矛盾（如报告说Zone_B拥堵，排班未改，估算却说等待时间下降）。",
+      "0.25": "三者有一定关联，但存在明显逻辑断层（如排班改了，但估算未更新）。",
+      "0.5": "排班解决了报告指出的问题，但估算数据不够合理或未完全反映排班变化。",
+      "0.75": "排班、估算与报告逻辑基本一致，能自圆其说。",
+      "1": "报告精准定位问题，排班针对性调整，估算数据详实且完美反映排班优化效果，三者形成严密的逻辑闭环。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "报告中指出需要增加Zone_B人手，排班表却减少了Zone_B人手，且估算表依然显示等待时间达标。"
+  }
+]

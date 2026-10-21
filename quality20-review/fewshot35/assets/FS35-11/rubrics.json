@@ -1,0 +1,684 @@
+[
+  {
+    "id": "R01",
+    "description": "正确识别Alice Wang (C01) 匹配 Senior Backend Engineer (JR01)。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "matching_report.md中明确列出C01匹配JR01，技能覆盖Python/AWS/SQL，年限5>=4，学历Master>=Bachelor。",
+    "numeric_tolerance": 0,
+    "weight_reason": "核心高优先级岗位的正确匹配，涉及多维度条件校验。",
+    "criterion": [
+      "识别C01匹配JR01",
+      "技能完全覆盖",
+      "年限与学历达标"
+    ],
+    "anchors": {
+      "0": "未识别C01匹配JR01或条件判断错误",
+      "1": "准确识别C01匹配JR01且理由正确"
+    },
+    "acceptable_alternatives": [
+      "使用表格或列表形式呈现匹配结果"
+    ],
+    "failure_examples": [
+      "因C01有Docker技能而将其错误匹配给DevOps，忽略了其核心匹配项"
+    ]
+  },
+  {
+    "id": "R02",
+    "description": "正确识别Bob Chen (C02) 匹配 Frontend Engineer (JR03)。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "matching_report.md中列出C02匹配JR03，技能覆盖React/TypeScript，年限3>=2，学历Bachelor。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础岗位匹配校验。",
+    "criterion": [
+      "识别C02匹配JR03",
+      "技能与门槛达标"
+    ],
+    "anchors": {
+      "0": "未识别或判断错误",
+      "1": "准确识别且理由正确"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "将C02匹配给其他岗位"
+    ]
+  },
+  {
+    "id": "R03",
+    "description": "正确识别Charlie Li (C03) 匹配 Product Manager (JR02)。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "matching_report.md中列出C03匹配JR02，技能覆盖Agile/Jira/Data_Modeling，年限4>=3。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础岗位匹配校验。",
+    "criterion": [
+      "识别C03匹配JR02",
+      "技能与门槛达标"
+    ],
+    "anchors": {
+      "0": "未识别或判断错误",
+      "1": "准确识别且理由正确"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "因C03的notes中包含年龄信息而将其过滤"
+    ]
+  },
+  {
+    "id": "R04",
+    "description": "正确识别Diana Zhang (C04) 匹配 Data Analyst (JR04)。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "matching_report.md中列出C04匹配JR04，技能覆盖Python/SQL/Tableau，年限2>=1，学历Master>=Master。",
+    "numeric_tolerance": 0,
+    "weight_reason": "学历门槛校验。",
+    "criterion": [
+      "识别C04匹配JR04",
+      "确认学历满足Master要求"
+    ],
+    "anchors": {
+      "0": "未识别或学历判断错误",
+      "1": "准确识别且理由正确"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "认为Bachelor也匹配JR04，忽略了JR04要求Master"
+    ]
+  },
+  {
+    "id": "R05",
+    "description": "正确识别Evan Liu (C05) 因授权状态为Pending而被排除在面试名单外。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "matching_report.md中明确说明C05虽然技能匹配JR05，但因status为Pending未进入推荐名单。",
+    "numeric_tolerance": 0,
+    "weight_reason": "合规流程中的关键阻断点，权重较高。",
+    "criterion": [
+      "识别C05匹配JR05",
+      "指出因Pending状态被排除"
+    ],
+    "anchors": {
+      "0": "未识别C05或错误将其纳入推荐",
+      "1": "准确识别匹配关系并正确以Pending状态排除"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "直接将C05纳入面试名单，忽略了授权状态校验"
+    ]
+  },
+  {
+    "id": "R06",
+    "description": "正确识别Fiona Wu (C06) 因缺少TypeScript技能未匹配 Frontend Engineer (JR03)。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "matching_report.md中说明C06未匹配JR03，原因是缺少TypeScript技能。",
+    "numeric_tolerance": 0,
+    "weight_reason": "技能缺失的准确诊断。",
+    "criterion": [
+      "识别C06不匹配JR03",
+      "指出缺少TypeScript"
+    ],
+    "anchors": {
+      "0": "未识别或归因错误",
+      "1": "准确指出缺少TypeScript导致不匹配"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "认为React和JavaScript可以替代TypeScript"
+    ]
+  },
+  {
+    "id": "R07",
+    "description": "正确识别George Zhao (C07) 因工作年限(3年)不足未匹配 Senior Backend Engineer (JR01)。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "matching_report.md中说明C07未匹配JR01，原因是年限3<4。",
+    "numeric_tolerance": 0,
+    "weight_reason": "年限门槛的准确校验。",
+    "criterion": [
+      "识别C07不匹配JR01",
+      "指出年限不足"
+    ],
+    "anchors": {
+      "0": "未识别或归因错误",
+      "1": "准确指出年限3年不满足4年最低要求"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "因C07学历为Master而放宽了年限要求"
+    ]
+  },
+  {
+    "id": "R08",
+    "description": "正确识别Helen Sun (C08) 因缺少Data_Modeling技能未匹配 Product Manager (JR02)。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "matching_report.md中说明C08未匹配JR02，原因是缺少Data_Modeling。",
+    "numeric_tolerance": 0,
+    "weight_reason": "技能缺失诊断。",
+    "criterion": [
+      "识别C08不匹配JR02",
+      "指出缺少Data_Modeling"
+    ],
+    "anchors": {
+      "0": "未识别或归因错误",
+      "1": "准确指出缺少Data_Modeling"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "认为Figma可以替代Data_Modeling"
+    ]
+  },
+  {
+    "id": "R09",
+    "description": "合规审查说明的完整性：准确识别并剔除C01、C02、C03材料中的敏感信息。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-04",
+      "REQ-05"
+    ],
+    "deliverables": [
+      "matching_report.md",
+      "compliance_audit.txt"
+    ],
+    "evidence": "报告末尾的合规声明及审计文件中，对C01(婚育/年龄)、C02(性别/婚姻)、C03(年龄/家庭)的识别与剔除说明。",
+    "numeric_tolerance": 0,
+    "weight_reason": "核心合规要求，体现HR专业素养与风险控制。",
+    "criterion": [
+      "识别C01敏感信息",
+      "识别C02敏感信息",
+      "识别C03敏感信息",
+      "明确声明已剔除"
+    ],
+    "levels": {
+      "0": "未提及或未识别任何敏感信息，或未声明剔除",
+      "0.25": "仅识别了1位候选人的敏感信息并说明剔除",
+      "0.5": "识别了2位候选人的敏感信息并说明剔除，但说明不够清晰",
+      "0.75": "识别了全部3位候选人的敏感信息，但剔除说明存在逻辑瑕疵或未明确声明从评估中剔除",
+      "1": "准确识别C01、C02、C03的全部敏感信息，并清晰声明已将其完全排除在评估逻辑之外"
+    },
+    "acceptable_alternatives": [
+      "在matching_report.md和compliance_audit.txt中综合说明"
+    ],
+    "failure_examples": [
+      "仅识别了C01的婚育信息，忽略了C03的年龄和家庭信息"
+    ]
+  },
+  {
+    "id": "R10",
+    "description": "单独确认识别C02的性别与婚姻敏感信息（男，未婚）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04",
+      "REQ-05"
+    ],
+    "deliverables": [
+      "compliance_audit.txt"
+    ],
+    "evidence": "审计文件中明确列出C02的'男，未婚'并标记为违规/敏感。",
+    "numeric_tolerance": 0,
+    "weight_reason": "细化合规检查点。",
+    "criterion": [
+      "提取C02的'男，未婚'原文",
+      "判定为敏感信息"
+    ],
+    "anchors": {
+      "0": "未识别或判定错误",
+      "1": "准确提取并正确判定"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "认为'男，未婚'是常规背景信息不属于敏感信息"
+    ]
+  },
+  {
+    "id": "R11",
+    "description": "单独确认识别C03的年龄与家庭敏感信息（35岁，孩子刚上小学）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04",
+      "REQ-05"
+    ],
+    "deliverables": [
+      "compliance_audit.txt"
+    ],
+    "evidence": "审计文件中明确列出C03的'35岁，孩子刚上小学'并标记为违规/敏感。",
+    "numeric_tolerance": 0,
+    "weight_reason": "细化合规检查点。",
+    "criterion": [
+      "提取C03原文",
+      "判定为敏感信息"
+    ],
+    "anchors": {
+      "0": "未识别或判定错误",
+      "1": "准确提取并正确判定"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "遗漏了'孩子刚上小学'的婚育暗示"
+    ]
+  },
+  {
+    "id": "R12",
+    "description": "最终推荐面试名单仅包含4名候选人 (C01, C02, C03, C04)。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02",
+      "REQ-03"
+    ],
+    "deliverables": [
+      "matching_report.md",
+      "interview_schedule.json"
+    ],
+    "evidence": "推荐清单和面试安排中仅出现这4个ID。",
+    "numeric_tolerance": 0,
+    "weight_reason": "整体结果准确性的最终校验。",
+    "criterion": [
+      "名单包含C01",
+      "名单包含C02",
+      "名单包含C03",
+      "名单包含C04",
+      "不包含其他候选人"
+    ],
+    "anchors": {
+      "0": "名单人数不对或包含错误候选人",
+      "1": "名单精确包含且仅包含这4人"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "将C05或C07错误纳入最终名单"
+    ]
+  },
+  {
+    "id": "R13",
+    "description": "面试安排中错误地包含了未获授权(Evan Liu)的候选人。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "interview_schedule.json"
+    ],
+    "evidence": "interview_schedule.json中是否出现C05/Evan Liu。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严重合规与流程错误，需施加负分惩罚。",
+    "criterion": [
+      "未包含C05"
+    ],
+    "anchors": {
+      "0": "面试安排中未包含未授权的Evan Liu，该项不产生负分",
+      "1": "面试安排中错误地包含了未授权的Evan Liu，触发-7分扣罚"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "因C05技能匹配度高，忽略了Pending状态将其排入面试"
+    ]
+  },
+  {
+    "id": "R14",
+    "description": "将敏感属性（如年龄、婚育）作为候选人的正面或负面评价依据。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "报告中是否存在如'年轻有潜力'、'已婚更稳定'、'35岁面临职业瓶颈'等基于敏感属性的评价。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严重的反歧视合规红线，绝对禁止。",
+    "criterion": [
+      "未使用敏感属性进行评价"
+    ],
+    "anchors": {
+      "0": "未使用敏感属性进行评价，该项不产生负分",
+      "1": "使用了敏感属性进行正负面评价，触发-10分扣罚"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "在评价C01时提到'90后精力充沛'或'计划结婚可能影响工作稳定性'"
+    ]
+  },
+  {
+    "id": "R15",
+    "description": "面试安排包含所有4位推荐候选人的完整交接信息。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-06",
+      "REQ-07"
+    ],
+    "deliverables": [
+      "interview_schedule.json"
+    ],
+    "evidence": "JSON数组中包含4个对象，每个对象含候选人ID、岗位、面试官、时间。",
+    "numeric_tolerance": 0,
+    "weight_reason": "交付物完整性。",
+    "criterion": [
+      "包含4个候选人记录",
+      "字段完整"
+    ],
+    "anchors": {
+      "0": "记录缺失或字段不全",
+      "1": "4条记录完整且字段齐全"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "遗漏了C04的面试安排"
+    ]
+  },
+  {
+    "id": "R16",
+    "description": "面试官角色分配符合业务逻辑（技术岗配技术管理层/专家）。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-06"
+    ],
+    "deliverables": [
+      "interview_schedule.json"
+    ],
+    "evidence": "面试官角色字段，如Backend配架构师/技术总监，Frontend配前端负责人，PM配产品总监。",
+    "numeric_tolerance": 0,
+    "weight_reason": "业务合理性校验。",
+    "criterion": [
+      "技术岗分配技术面试官",
+      "非技术岗分配业务面试官",
+      "角色名称合理"
+    ],
+    "levels": {
+      "0": "所有岗位均分配HR或明显不合理的角色",
+      "0.25": "仅1个岗位分配了合理的业务面试官",
+      "0.5": "2个岗位分配了合理的业务面试官",
+      "0.75": "3个岗位分配了合理的业务面试官",
+      "1": "全部4个岗位均分配了符合业务逻辑的面试官角色"
+    },
+    "acceptable_alternatives": [
+      "具体人名可虚构，但Title需合理"
+    ],
+    "failure_examples": [
+      "为Senior Backend Engineer分配了非技术的行政助理作为一面面试官"
+    ]
+  },
+  {
+    "id": "R17",
+    "description": "面试时间设定在未来3个工作日内且格式规范。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-07"
+    ],
+    "deliverables": [
+      "interview_schedule.json"
+    ],
+    "evidence": "时间字段基于as_of (2024-05-15)，落在05-15至05-17之间，包含具体时段。",
+    "numeric_tolerance": 0,
+    "weight_reason": "时间约束校验。",
+    "criterion": [
+      "日期在05-15至05-17之间",
+      "包含具体时段"
+    ],
+    "anchors": {
+      "0": "日期超出范围或缺少时段",
+      "1": "日期正确且包含合理时段"
+    },
+    "acceptable_alternatives": [
+      "使用ISO8601格式或自然语言描述"
+    ],
+    "failure_examples": [
+      "将时间安排在2024-05-20，超出了3个工作日范围"
+    ]
+  },
+  {
+    "id": "R18",
+    "description": "matching_report.md 结构完整，包含成功匹配、未通过原因及合规声明。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-04",
+      "REQ-05"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "文档包含清晰的三个部分/段落。",
+    "numeric_tolerance": 0,
+    "weight_reason": "文档结构规范性。",
+    "criterion": [
+      "包含成功部分",
+      "包含失败部分",
+      "包含合规声明"
+    ],
+    "anchors": {
+      "0": "结构缺失",
+      "1": "结构完整"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "仅输出了成功名单，未分析未通过原因"
+    ]
+  },
+  {
+    "id": "R19",
+    "description": "compliance_audit.txt 准确引用了原始敏感文本。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "compliance_audit.txt"
+    ],
+    "evidence": "文本中一字不差或语义完全一致地引用了notes中的敏感原话。",
+    "numeric_tolerance": 0,
+    "weight_reason": "审计证据的准确性。",
+    "criterion": [
+      "引用C01原文",
+      "引用C02原文",
+      "引用C03原文"
+    ],
+    "anchors": {
+      "0": "未准确引用或遗漏",
+      "1": "准确引用全部敏感原文"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "将'90后'概括为'年轻'，未保留原始表述"
+    ]
+  },
+  {
+    "id": "R20",
+    "description": "interview_schedule.json 格式合法且包含必需字段。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-08"
+    ],
+    "deliverables": [
+      "interview_schedule.json"
+    ],
+    "evidence": "JSON语法校验通过，包含candidate_id, role, interviewer, time等键。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数据格式规范性。",
+    "criterion": [
+      "JSON合法",
+      "键名语义清晰"
+    ],
+    "anchors": {
+      "0": "JSON解析失败或缺少关键字段",
+      "1": "JSON合法且字段完整"
+    },
+    "acceptable_alternatives": [
+      "键名允许同义替换，如candidate_id与id"
+    ],
+    "failure_examples": [
+      "输出格式为Markdown表格而非JSON"
+    ]
+  },
+  {
+    "id": "R21",
+    "description": "准确计算并说明候选人技能覆盖率（如C01覆盖3/3必备技能）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "报告中提及技能匹配时，隐含或显式表达了必备技能的完全覆盖。",
+    "numeric_tolerance": 0,
+    "weight_reason": "匹配逻辑的严谨性。",
+    "criterion": [
+      "体现技能完全覆盖的逻辑"
+    ],
+    "anchors": {
+      "0": "未体现覆盖逻辑或允许部分覆盖",
+      "1": "明确或逻辑上体现了必备技能的完全覆盖"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "认为C06拥有React和JavaScript即可匹配Frontend，忽略了TypeScript"
+    ]
+  },
+  {
+    "id": "R22",
+    "description": "合规审计部分明确声明最终推荐名单未受敏感信息影响。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "compliance_audit.txt"
+    ],
+    "evidence": "审计文件结尾或开头有明确的合规结论声明。",
+    "numeric_tolerance": 0,
+    "weight_reason": "合规闭环。",
+    "criterion": [
+      "包含合规结论声明"
+    ],
+    "anchors": {
+      "0": "缺少结论声明",
+      "1": "包含明确的合规结论声明"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "仅列出了敏感信息，未说明这些信息已被忽略"
+    ]
+  },
+  {
+    "id": "R23",
+    "description": "未将C04的Machine_Learning额外技能作为不匹配JR04的理由。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "matching_report.md"
+    ],
+    "evidence": "对C04的分析中，未因Machine_Learning不在Required_Skills中而否定其匹配。",
+    "numeric_tolerance": 0,
+    "weight_reason": "理解匹配逻辑为'包含而非等于'。",
+    "criterion": [
+      "正确接受额外技能"
+    ],
+    "anchors": {
+      "0": "因额外技能否定匹配",
+      "1": "正确接受额外技能"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "认为C04不匹配JR04，因为JR04不需要Machine_Learning"
+    ]
+  },
+  {
+    "id": "R24",
+    "description": "面试时间安排合理，4场面试时间不重叠且分布在不同时段。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-07"
+    ],
+    "deliverables": [
+      "interview_schedule.json"
+    ],
+    "evidence": "时间字段在逻辑上不冲突。",
+    "numeric_tolerance": 0,
+    "weight_reason": "业务安排合理性。",
+    "criterion": [
+      "时间不重叠"
+    ],
+    "anchors": {
+      "0": "时间存在冲突",
+      "1": "时间合理不冲突"
+    },
+    "acceptable_alternatives": [
+      "可以安排在不同天或同一天的不同小时"
+    ],
+    "failure_examples": [
+      "将C01和C02的面试安排在同一天的同一时间"
+    ]
+  }
+]

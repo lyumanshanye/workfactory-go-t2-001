@@ -1,0 +1,595 @@
+[
+  {
+    "id": "R1",
+    "description": "准确识别SKU-M03为高危品（退货率>15%），并在交接文档中单列。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ3"
+    ],
+    "deliverables": [
+      "customer_service_handover.md"
+    ],
+    "evidence": "查看Markdown文档中是否有明确的“高危品”或类似标题，且内容包含SKU-M03（榉木砧板）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "高危品识别是客诉管控的核心，遗漏会导致严重客诉升级。",
+    "criterion": [
+      "文档中明确标识SKU-M03为高危品",
+      "标识位置醒目，未与其他常规商品混淆"
+    ],
+    "anchors": {
+      "0": "未识别M03为高危品或未在文档中单列",
+      "1": "准确识别并单列M03为高危品"
+    },
+    "acceptable_alternatives": "可使用'高危商品'、'重点监控品'等同义表述。",
+    "failure_examples": "将M03列为常规品，或仅提及退货率高但未定义为高危。"
+  },
+  {
+    "id": "R2",
+    "description": "准确计算SKU-M03的退货率为20%。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ3"
+    ],
+    "deliverables": [
+      "customer_service_handover.md"
+    ],
+    "evidence": "查看文档中关于M03的描述，是否提及退货率为20%（或16/80）。",
+    "numeric_tolerance": 0.01,
+    "weight_reason": "数据准确性是业务决策的基础。",
+    "criterion": [
+      "明确写出20%或16/80的计算结果"
+    ],
+    "anchors": {
+      "0": "未提及或计算错误",
+      "1": "准确写出20%"
+    },
+    "acceptable_alternatives": "16/80或20.0%。",
+    "failure_examples": "计算为16%或直接用退货量16作为比例。"
+  },
+  {
+    "id": "R3",
+    "description": "准确排除SKU-M01参与直接降价促销（退货率>=10%）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "检查CSV中是否不包含SKU-M01。",
+    "numeric_tolerance": 0,
+    "weight_reason": "违反选品规则会导致高退货率商品进一步放大售后成本。",
+    "criterion": [
+      "CSV中无SKU-M01"
+    ],
+    "anchors": {
+      "0": "包含了SKU-M01",
+      "1": "正确排除了SKU-M01"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为10%等于<10%而将M01纳入促销。"
+  },
+  {
+    "id": "R4",
+    "description": "准确排除SKU-M05参与直接降价促销（库存<=20）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "检查CSV中是否不包含SKU-M05。",
+    "numeric_tolerance": 0,
+    "weight_reason": "库存不足的商品促销会导致超卖或履约失败。",
+    "criterion": [
+      "CSV中无SKU-M05"
+    ],
+    "anchors": {
+      "0": "包含了SKU-M05",
+      "1": "正确排除了SKU-M05"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "忽略库存约束，仅看利润而纳入M05。"
+  },
+  {
+    "id": "R5",
+    "description": "准确计算SKU-M02的最低促销价（21.4元），且建议价格不低于此值。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "检查CSV中SKU-M02的建议促销价是否>=21.4。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "毛利底线是财务硬性约束，击穿会导致亏损。",
+    "criterion": [
+      "M02建议促销价 >= 21.4"
+    ],
+    "anchors": {
+      "0": "建议促销价 < 21.4",
+      "1": "建议促销价 >= 21.4"
+    },
+    "acceptable_alternatives": "21.40, 21.5, 25.0等。",
+    "failure_examples": "直接降价至20元或15元。"
+  },
+  {
+    "id": "R6",
+    "description": "准确计算SKU-M04的最低促销价（35.7元）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "检查CSV中SKU-M04的建议促销价是否>=35.7。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "毛利底线约束。",
+    "criterion": [
+      "M04建议促销价 >= 35.7"
+    ],
+    "anchors": {
+      "0": "建议促销价 < 35.7",
+      "1": "建议促销价 >= 35.7"
+    },
+    "acceptable_alternatives": "35.7, 36.0, 40.0等。",
+    "failure_examples": "降价至35元或更低。"
+  },
+  {
+    "id": "R7",
+    "description": "准确计算SKU-M06的最低促销价（57.1元）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "检查CSV中SKU-M06的建议促销价是否>=57.1。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "毛利底线约束。",
+    "criterion": [
+      "M06建议促销价 >= 57.1"
+    ],
+    "anchors": {
+      "0": "建议促销价 < 57.1",
+      "1": "建议促销价 >= 57.1"
+    },
+    "acceptable_alternatives": "57.1, 58.0, 60.0等。",
+    "failure_examples": "降价至55元。"
+  },
+  {
+    "id": "R8",
+    "description": "准确计算SKU-M07的最低促销价（11.4元）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "检查CSV中SKU-M07的建议促销价是否>=11.4。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "毛利底线约束。",
+    "criterion": [
+      "M07建议促销价 >= 11.4"
+    ],
+    "anchors": {
+      "0": "建议促销价 < 11.4",
+      "1": "建议促销价 >= 11.4"
+    },
+    "acceptable_alternatives": "11.4, 12.0, 15.0等。",
+    "failure_examples": "降价至10元。"
+  },
+  {
+    "id": "R9",
+    "description": "促销计划中所有商品的预计总补贴消耗不超过2000元资金池。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ2"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "计算CSV中“预计消耗资金”列的总和，是否<=2000。",
+    "numeric_tolerance": 0.01,
+    "weight_reason": "预算超支是运营大忌。",
+    "criterion": [
+      "总消耗 <= 2000"
+    ],
+    "anchors": {
+      "0": "总消耗 > 2000",
+      "1": "总消耗 <= 2000"
+    },
+    "acceptable_alternatives": "1800, 1950, 2000等。",
+    "failure_examples": "按最大补贴计算导致总消耗达到5000元以上。"
+  },
+  {
+    "id": "R10",
+    "description": "促销计划包含且仅包含符合所有条件的SKU（M02, M04, M06, M07）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "检查CSV的SKU列，是否精确包含这四个且无其他。",
+    "numeric_tolerance": 0,
+    "weight_reason": "选品完整性与准确性。",
+    "criterion": [
+      "包含M02, M04, M06, M07",
+      "不包含M01, M03, M05, M08"
+    ],
+    "anchors": {
+      "0": "数量不对或包含错误SKU",
+      "1": "精确包含这四个SKU"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "漏掉M06或错误加入M08。"
+  },
+  {
+    "id": "R11",
+    "description": "客服交接文档明确列出所有退货率>15%的高危品（仅M03）。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ3"
+    ],
+    "deliverables": [
+      "customer_service_handover.md"
+    ],
+    "evidence": "文档中高危品列表是否仅有M03，无其他误入。",
+    "numeric_tolerance": 0,
+    "weight_reason": "高危品界定需精准，避免扩大化或遗漏。",
+    "criterion": [
+      "高危品仅含M03",
+      "M01/M02等未误入高危品列表"
+    ],
+    "anchors": {
+      "0": "列表有误",
+      "1": "列表精准"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将退货率10%的M01也列入高危品。"
+  },
+  {
+    "id": "R12",
+    "description": "高危品（M03）的客服话术规范中，明确禁止使用推诿词汇。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ3"
+    ],
+    "deliverables": [
+      "customer_service_handover.md"
+    ],
+    "evidence": "查看M03话术指引，是否提及禁用“手工痕迹”、“完美主义”、“自然瑕疵”、“木材特性”等词。",
+    "numeric_tolerance": 0,
+    "weight_reason": "防止客服使用内部推诿话术激怒客户。",
+    "criterion": [
+      "明确列出禁止词汇或明确禁止推诿行为"
+    ],
+    "anchors": {
+      "0": "未提及禁令或允许使用",
+      "1": "明确禁止推诿词汇"
+    },
+    "acceptable_alternatives": "可表述为'严禁使用木材特性等推诿词汇'。",
+    "failure_examples": "话术中出现'木材发霉属于自然特性，不影响使用'。"
+  },
+  {
+    "id": "R13",
+    "description": "高危品（M03）的交接指引中，明确要求提供直接退换方案。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ3"
+    ],
+    "deliverables": [
+      "customer_service_handover.md"
+    ],
+    "evidence": "查看M03处理方案，是否包含'直接退换'、'退货退款'、'补发'等实质性方案。",
+    "numeric_tolerance": 0,
+    "weight_reason": "高危品必须快速止损，不可用小额优惠券敷衍。",
+    "criterion": [
+      "提供直接退换方案",
+      "未限制仅补偿优惠券"
+    ],
+    "anchors": {
+      "0": "仅提供优惠券补偿",
+      "1": "提供直接退换方案"
+    },
+    "acceptable_alternatives": "支持退货退款、换货、补发。",
+    "failure_examples": "规定'仅补偿5元优惠券，不支持退货'。"
+  },
+  {
+    "id": "R14",
+    "description": "客服交接文档包含常规品（如M02, M04, M06）的标准售后指引。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ5"
+    ],
+    "deliverables": [
+      "customer_service_handover.md"
+    ],
+    "evidence": "文档中是否有针对划痕、色差、物流破损等常规问题的处理指引。",
+    "numeric_tolerance": 0,
+    "weight_reason": "常规品售后是日常基本工作。",
+    "criterion": [
+      "包含常规品售后指引"
+    ],
+    "anchors": {
+      "0": "完全缺失常规品指引",
+      "1": "包含常规品指引"
+    },
+    "acceptable_alternatives": "可合并写或分类写。",
+    "failure_examples": "只写了高危品，没写常规品怎么处理。"
+  },
+  {
+    "id": "R15",
+    "description": "交付物文件名严格正确。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "promotion_plan.csv",
+      "customer_service_handover.md"
+    ],
+    "evidence": "检查输出目录下的文件名是否完全匹配。",
+    "numeric_tolerance": 0,
+    "weight_reason": "文件命名规范是自动化流转的基础。",
+    "criterion": [
+      "文件名精确匹配"
+    ],
+    "anchors": {
+      "0": "文件名错误",
+      "1": "文件名正确"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "命名为 promo_plan.csv 或 handover.txt。"
+  },
+  {
+    "id": "R16",
+    "description": "预计资金消耗计算逻辑正确（单均补贴×销量），且各项加总正确。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ2"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "抽查各行：预计消耗资金 = 单均补贴额 × 近30天销量。总和与总消耗行一致。",
+    "numeric_tolerance": 0.01,
+    "weight_reason": "计算逻辑错误会导致预算失控。",
+    "criterion": [
+      "行内计算正确",
+      "列求和正确"
+    ],
+    "anchors": {
+      "0": "计算存在错误",
+      "1": "计算完全正确"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "用原售价×销量计算消耗，或单均补贴计算错误。"
+  },
+  {
+    "id": "R17",
+    "description": "正确排除SKU-M08（虚拟服务）参与实物库存促销逻辑。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "检查CSV中是否不包含SKU-M08。",
+    "numeric_tolerance": 0,
+    "weight_reason": "虚拟服务不适用实物库存促销规则。",
+    "criterion": [
+      "CSV中无SKU-M08"
+    ],
+    "anchors": {
+      "0": "包含了SKU-M08",
+      "1": "正确排除了SKU-M08"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将M08作为实物商品纳入促销。"
+  },
+  {
+    "id": "R18",
+    "description": "交接文档针对M03（发霉）给出特定处理建议。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ5"
+    ],
+    "deliverables": [
+      "customer_service_handover.md"
+    ],
+    "evidence": "文档中M03部分是否提及'发霉'及对应的防潮/退换建议。",
+    "numeric_tolerance": 0,
+    "weight_reason": "针对性建议体现专业度。",
+    "criterion": [
+      "提及发霉原因",
+      "给出防潮或退换建议"
+    ],
+    "anchors": {
+      "0": "未提及发霉或无针对性建议",
+      "1": "提及发霉并给出专业建议"
+    },
+    "acceptable_alternatives": "建议客户检查存放环境，或直接提供退换。",
+    "failure_examples": "对发霉问题仅回复'请联系客服'，无实质指引。"
+  },
+  {
+    "id": "R19",
+    "description": "交接文档针对M06（物流破损）给出特定处理建议。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ5"
+    ],
+    "deliverables": [
+      "customer_service_handover.md"
+    ],
+    "evidence": "文档中是否包含物流破损的处理指引（如核实包装、联系物流）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "物流破损需明确责任方与处理流程。",
+    "criterion": [
+      "包含物流破损处理指引"
+    ],
+    "anchors": {
+      "0": "缺失物流破损指引",
+      "1": "包含物流破损指引"
+    },
+    "acceptable_alternatives": "可建议拍照留证并联系物流理赔。",
+    "failure_examples": "将物流破损归咎于客户。"
+  },
+  {
+    "id": "R20",
+    "description": "惩罚项：将不符合促销条件（退货率>=10%或库存<=20）的商品纳入直接降价促销。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "检查CSV中是否错误包含了M01、M03、M05或M08。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严重违规，必须负分惩罚。",
+    "criterion": [
+      "未包含任何违规商品"
+    ],
+    "anchors": {
+      "0": "正确排除了所有不符合条件的商品",
+      "1": "错误地将M01、M05或其他不符合条件的商品纳入了促销计划"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将M01纳入促销，认为10%属于<10%。"
+  },
+  {
+    "id": "R21",
+    "description": "惩罚项：促销计划中任何商品的建议促销价低于其30%毛利底线价格。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "验证所有促销商品的 (建议促销价-成本)/建议促销价 是否 >= 0.30。",
+    "numeric_tolerance": 0,
+    "weight_reason": "击穿毛利底线是财务红线。",
+    "criterion": [
+      "所有商品毛利 >= 30%"
+    ],
+    "anchors": {
+      "0": "所有促销商品的毛利均>=30%",
+      "1": "存在至少一个商品的促销价低于毛利底线"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "M02定价20元，毛利低于30%。"
+  },
+  {
+    "id": "R22",
+    "description": "惩罚项：客服交接文档遗漏高危品（M03）或将其错误归类为常规品。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ3"
+    ],
+    "deliverables": [
+      "customer_service_handover.md"
+    ],
+    "evidence": "文档中是否完全未提及M03的高危属性，或将其放在常规品列表中。",
+    "numeric_tolerance": 0,
+    "weight_reason": "高危品遗漏会导致严重客诉。",
+    "criterion": [
+      "M03被正确识别为高危"
+    ],
+    "anchors": {
+      "0": "正确识别并单列M03为高危品",
+      "1": "遗漏M03或将其作为常规品处理"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将M03与M02放在同一个'常规商品售后'章节中。"
+  },
+  {
+    "id": "R23",
+    "description": "促销资金分配合理性：是否根据库存深度和销量合理分配单均补贴，而非平均用力或严重偏离预算。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ2",
+      "REQ5"
+    ],
+    "deliverables": [
+      "promotion_plan.csv"
+    ],
+    "evidence": "分析各SKU的单均补贴额与销量/库存的匹配度，以及总资金利用率（总消耗/2000）。",
+    "numeric_tolerance": 0.05,
+    "weight_reason": "资源分配能力是运营核心价值。",
+    "criterion": [
+      "单均补贴与销量/库存匹配",
+      "总资金利用率在80%-100%"
+    ],
+    "levels": {
+      "0": "未分配资金或完全未考虑约束",
+      "0.25": "分配了资金但完全无视库存/销量差异，平均分配",
+      "0.5": "考虑了库存/销量，但计算有误或逻辑粗糙",
+      "0.75": "合理考虑了库存/销量，但资金利用率极低（<50%）或未充分利用预算",
+      "1": "结合库存周转与销量，合理分配补贴额度，资金利用率在80%-100%之间，逻辑严密"
+    },
+    "acceptable_alternatives": "允许不同的分配策略（如侧重高客单价或侧重高销量），只要逻辑自洽且不超预算。",
+    "failure_examples": "给销量400的M07和销量20的M06分配相同的单均补贴20元，导致预算严重超支或浪费。"
+  },
+  {
+    "id": "R24",
+    "description": "客服话术的专业度与共情度：高危品话术是否生硬、推诿，或过度承诺。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ5"
+    ],
+    "deliverables": [
+      "customer_service_handover.md"
+    ],
+    "evidence": "审阅M03及其他高危品话术模板，评估其语气、解决方案的实质性及专业度。",
+    "numeric_tolerance": 0,
+    "weight_reason": "话术质量直接影响客户留存与品牌声誉。",
+    "criterion": [
+      "语气共情不生硬",
+      "解决方案实质且专业",
+      "无推诿词汇"
+    ],
+    "levels": {
+      "0": "话术充满推诿（如'手工制品难免'）或拒绝退换",
+      "0.25": "话术生硬，仅提供机械的退货链接，无共情与具体解决方案",
+      "0.5": "话术基本礼貌，提供退换方案，但未针对具体缺陷（如发霉）给出明确解释或预防建议",
+      "0.75": "话术共情且提供退换方案，针对缺陷有解释，但略显冗长或不够精炼",
+      "1": "话术专业、共情、直击痛点，明确提供退换方案，并给出针对'发霉'等具体问题的专业处理建议（如防潮指导），无推诿词汇"
+    },
+    "acceptable_alternatives": "话术风格可多样，但必须满足不推诿、提供实质方案、针对具体缺陷的核心要求。",
+    "failure_examples": "话术为'木头发霉是自然现象，我们只能补偿5元，不能退货'。"
+  }
+]

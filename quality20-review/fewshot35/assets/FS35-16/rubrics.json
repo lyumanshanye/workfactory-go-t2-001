@@ -1,0 +1,515 @@
+[
+  {
+    "id": "R01",
+    "description": "正确计算选件的运行总重（干重+流体重量）并应用动载荷系数进行静/动载荷校核。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "selection_evaluation_report.md"
+    ],
+    "evidence": "检查评估报告中是否列出了 Option A (1439kg) 和 Option B (1034kg) 的运行重量，以及乘以 1.5 动载系数后的等效载荷（2158.5kg / 1551kg），并与 Z01 的 2500kg 限制进行对比。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "载荷校核是机械安装的核心安全前提，流体重量遗漏是常见致命错误。",
+    "criterion": [
+      "计算 Option A 运行重量：1250 + 180*1.05 = 1439 kg",
+      "计算 Option B 运行重量：950 + 80*1.05 = 1034 kg",
+      "计算等效动载荷：Option A 为 2158.5 kg，Option B 为 1551 kg",
+      "结论：两者均小于 Z01 的 2500 kg 限制，载荷合格"
+    ],
+    "anchors": {
+      "0": "未计算流体重量，或未应用 1.5 动载系数，或对比基准错误。",
+      "1": "准确计算运行重量与动载荷，并正确对比 Z01 限制得出结论。"
+    },
+    "acceptable_alternatives": "流体密度允许在 1.0~1.05 之间取值，只要逻辑一致即可。",
+    "failure_examples": "直接使用干重 1250kg 和 950kg 进行校核，遗漏了 180L 和 80L 冷却液的重量。"
+  },
+  {
+    "id": "R02",
+    "description": "准确识别 Option B 在 Z01 区域的高度空间干涉及 Z08 通道净空违规。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "selection_evaluation_report.md"
+    ],
+    "evidence": "检查报告中是否明确指出 Option B 高度 1850mm 超出了 Z01 可用高度 1800mm，并提及违反了 Z08 要求的 800mm 顶部净空。",
+    "numeric_tolerance": 0,
+    "weight_reason": "空间干涉是设备无法就位的硬性否决项，必须被识别。",
+    "criterion": [
+      "比对 Option B 高度 (1850mm) 与 Z01 可用高度 (1800mm)，识别出 50mm 的干涉",
+      "关联 Z08 约束，指出 Option B 无法提供所需的 800mm 顶部维护净空",
+      "得出 Option B 在 Z01 区域不可安装的结论"
+    ],
+    "anchors": {
+      "0": "仅比对了长宽，未检查高度，或未识别出 Option B 的高度干涉。",
+      "1": "准确指出 Option B 高度超限及违反 Z08 净空要求，判定其空间不合格。"
+    },
+    "acceptable_alternatives": "若候选人提出 Option B 可安装在 Z02（需核实 Z02 承重和尺寸），需逻辑自洽。",
+    "failure_examples": "只检查了长宽尺寸（1800x1200 < 3000x2000），得出 Option B 空间完全合格的错误结论。"
+  },
+  {
+    "id": "R03",
+    "description": "正确核对流体接口规格，识别 Option B 的 DN40 接口与平台 DN50 不匹配。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "selection_evaluation_report.md"
+    ],
+    "evidence": "检查报告中是否指出 Option A (DN50) 与 Z03 (DN50) 匹配，而 Option B (DN40) 需要变径法兰或管路改造。",
+    "numeric_tolerance": 0,
+    "weight_reason": "流体接口不匹配会导致现场无法直接连接，影响工期和成本。",
+    "criterion": [
+      "确认 Option A 进出口 (DN50 PN16) 与 Z03 完全匹配",
+      "指出 Option B 进出口 (DN40 PN16) 与 Z03 (DN50) 存在口径差异",
+      "提出 Option B 需增加 DN50 转 DN40 变径法兰的建议"
+    ],
+    "anchors": {
+      "0": "未提及流体接口规格，或错误认为两者均匹配。",
+      "1": "准确识别 Option B 的 DN40 接口不匹配，并提出合理的变径方案。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "声称 Option B 的 DN40 接口与平台的 DN50 接口可以直接连接。"
+  },
+  {
+    "id": "R04",
+    "description": "评估重心偏移对局部支撑点（Z07 减震基座）的载荷分配影响。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "selection_evaluation_report.md"
+    ],
+    "evidence": "检查报告中是否利用重心坐标和 Z07 的 8 个支撑点分布，估算了单点最大动载荷，并与 Z07 的 300kg/点 限制进行对比。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "整体合格不代表局部合格，重心偏移可能导致单点超载失效。",
+    "criterion": [
+      "提取重心坐标 (Option A: 1100,750,800; Option B: 900,600,950)",
+      "结合 Z07 支撑点分布 (2800x1600 区域内 8 个点)，分析载荷分布",
+      "估算单点最大等效动载荷，与 Z07 限制 (300kg/点) 对比"
+    ],
+    "levels": {
+      "0": "完全未提及重心偏移或对局部支撑点的影响。",
+      "0.25": "提及重心偏移，但未进行任何定量的单点载荷估算。",
+      "0.5": "进行了单点载荷估算，但未结合动载荷系数或未与 300kg/点 限制对比。",
+      "0.75": "正确计算了单点动载荷，但未考虑 Z07 支撑点实际布局与重心的相对位置（如直接平均分配）。",
+      "1": "基于重心位置和 Z07 支撑点布局，合理估算了单点最大动载荷，并确认其小于 300kg/点 的限制。"
+    },
+    "acceptable_alternatives": "由于未提供详细支撑点坐标，允许基于包络和重心进行保守的静力学假设（如假设偏心导致某侧承受 60% 载荷），只要逻辑合理即可。",
+    "failure_examples": "将总动载荷直接除以 8 得出平均单点载荷，忽略了重心偏移带来的偏心载荷放大效应。"
+  },
+  {
+    "id": "R05",
+    "description": "基于全面核对结果，给出逻辑一致的最终选件推荐。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "selection_evaluation_report.md"
+    ],
+    "evidence": "检查报告结论部分，推荐选件是否为 Option A，且理由是否基于前述的载荷、空间、接口核对结果。",
+    "numeric_tolerance": 0,
+    "weight_reason": "工程评估的最终目的是支持决策，推荐必须基于客观核对结果。",
+    "criterion": [
+      "明确推荐 Option A (ThermoMaster 5000)",
+      "推荐理由必须包含 Option B 的空间干涉否决项",
+      "提及 Option A 需配备转接板，但整体兼容性更优"
+    ],
+    "anchors": {
+      "0": "推荐 Option B，或未给出明确推荐，或推荐逻辑与核对结果矛盾。",
+      "1": "明确推荐 Option A，且理由充分涵盖了空间和接口等关键核对结论。"
+    },
+    "acceptable_alternatives": "若推荐 Option A 但强调 Option B 可通过平台改造（如降低甲板）解决干涉，且给出了详细的改造可行性分析，可酌情给分，但需指出改造成本和风险。",
+    "failure_examples": "因为 Option B 重量轻、孔位匹配，就忽略其高度干涉的致命缺陷，推荐 Option B。"
+  },
+  {
+    "id": "R06",
+    "description": "试装计划包含完整的阶段划分：吊装就位、接口连接、冷态试压、功能验证。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [],
+    "deliverables": [
+      "trial_installation_plan.md"
+    ],
+    "evidence": "检查计划文档的目录或章节结构，是否清晰涵盖了上述四个关键阶段，且顺序合理。",
+    "numeric_tolerance": 0,
+    "weight_reason": "试装计划的结构完整性直接决定现场执行的条理性。",
+    "criterion": [
+      "包含吊装与就位微调阶段",
+      "包含机械与流体接口连接阶段",
+      "包含冷态循环与试压阶段",
+      "包含电气与控制功能验证阶段"
+    ],
+    "anchors": {
+      "0": "缺失上述 2 个或以上关键阶段，或顺序严重颠倒（如先试压后连接）。",
+      "1": "完整包含四个阶段，且逻辑顺序正确。"
+    },
+    "acceptable_alternatives": "阶段名称可不同（如'机械固定'代替'接口连接'），但实质内容必须覆盖。",
+    "failure_examples": "计划中只有吊装和通电测试，完全没有提及流体管路的连接和试压。"
+  },
+  {
+    "id": "R07",
+    "description": "试装计划中明确了安全与质量停止点（Hold Points）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "trial_installation_plan.md"
+    ],
+    "evidence": "检查计划中是否使用了'Hold Point'、'停止点'、'见证点'或类似术语，并明确了具体的检查内容（如力矩确认、保压检查）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "停止点是海工/高风险作业质量控制的通用专业惯例。",
+    "criterion": [
+      "至少定义了 2 个明确的停止点",
+      "停止点内容具体（如：螺栓终紧力矩确认、试压保压 15 分钟无泄漏确认）"
+    ],
+    "anchors": {
+      "0": "未提及任何停止点或检查确认环节。",
+      "1": "明确定义了至少 2 个具体的停止点及其检查内容。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "仅写'检查螺栓是否拧紧'，未将其定义为需签字确认的停止点。"
+  },
+  {
+    "id": "R08",
+    "description": "负分项：是否擅自进行或假称已进行有限元分析（FEA）。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "selection_evaluation_report.md",
+      "trial_installation_plan.md"
+    ],
+    "evidence": "全文搜索'FEA'、'有限元'、'Ansys'、'Abaqus'、'应力云图'等关键词，检查是否有违反任务限制的分析。",
+    "numeric_tolerance": 0,
+    "weight_reason": "违反任务明确限制，且前期评估阶段进行FEA既无必要也缺乏输入条件。",
+    "criterion": [
+      "文档中不得出现基于FEA的应力分析结论",
+      "不得假称已对平台甲板或转接板进行了FEA验证"
+    ],
+    "anchors": {
+      "0": "未发现任何FEA相关表述。",
+      "1": "发现擅自进行或假称进行了FEA分析（触发此分，总分扣除）。"
+    },
+    "acceptable_alternatives": "提及'后续详细设计阶段需进行FEA'是允许的，但本题评估阶段不得以此作为结论依据。",
+    "failure_examples": "在评估报告中写道：'通过Ansys对转接板进行有限元分析，最大应力为120MPa，满足屈服强度要求。'"
+  },
+  {
+    "id": "R09",
+    "description": "试装计划中冷态试压参数设置合理，符合 PN16 法兰标准。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "trial_installation_plan.md"
+    ],
+    "evidence": "检查试压阶段，是否明确了试验压力（通常为 1.5 倍设计压力，即 PN16 对应约 24 bar 或 2.4 MPa）和保压时间。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "试压参数直接关系到管路系统的安全性和密封验证的有效性。",
+    "criterion": [
+      "明确试验压力值（约 2.4 MPa / 24 bar 或 1.5 倍 PN16 额定压力）",
+      "明确保压时间（通常不少于 10-30 分钟）",
+      "明确合格标准（无压降、无泄漏）"
+    ],
+    "levels": {
+      "0": "未提及试压，或试压参数完全错误（如直接用工作压力 1.6MPa 试压）。",
+      "0.25": "提及试压，但未给出具体压力值和保压时间。",
+      "0.5": "给出了试压压力，但未基于 PN16 标准计算（如随意写 10 bar），或缺少保压时间。",
+      "0.75": "正确计算了 1.5 倍 PN16 的试验压力，但保压时间或合格标准表述不严谨。",
+      "1": "准确给出试验压力（约 2.4 MPa），明确保压时间（如 15 分钟），并定义了清晰的无泄漏合格标准。"
+    },
+    "acceptable_alternatives": "若采用气压试验，需明确安全系数降低（如 1.1 倍），并增加安全防护措施。",
+    "failure_examples": "将试验压力设定为系统工作压力 1.6 MPa，无法有效验证密封可靠性。"
+  },
+  {
+    "id": "R10",
+    "description": "针对 Option A 的安装孔位不匹配，提出具体的转接板工程整改建议。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-06"
+    ],
+    "deliverables": [
+      "selection_evaluation_report.md"
+    ],
+    "evidence": "检查报告中关于 Option A 孔位问题的描述，是否提出了 20mm 转接板的材质、固定方式或防松脱要求。",
+    "numeric_tolerance": 0,
+    "weight_reason": "提出可落地的整改方案是机械工程师的核心能力。",
+    "criterion": [
+      "明确提出制作/采购 20mm 厚度的转接板",
+      "提及转接板的材质要求（如与平台甲板同材质或防腐处理）",
+      "提及转接板的固定与防松脱措施（如高强螺栓、防松垫圈）"
+    ],
+    "anchors": {
+      "0": "仅指出孔位不匹配，未提出转接板方案或方案缺乏工程细节。",
+      "1": "提出完整的转接板方案，包含厚度、材质及固定防松措施。"
+    },
+    "acceptable_alternatives": "若提出在 Option A 底座现场钻孔扩孔，需评估对设备底座强度的影响及防腐修补，逻辑自洽亦可。",
+    "failure_examples": "建议在现场用气割对 Option A 底座进行切割扩孔，未考虑破坏设备防腐和结构强度。"
+  },
+  {
+    "id": "R11",
+    "description": "校验选件功耗是否超出 Z04 电气柜预留容量。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "selection_evaluation_report.md"
+    ],
+    "evidence": "检查报告中是否将 Option A (45kW) 和 Option B (30kW) 与 Z04 的最大容量 (55kW) 进行对比。",
+    "numeric_tolerance": 0,
+    "weight_reason": "电气超载会导致断路器跳闸或电缆过热，是关键的接口校验。",
+    "criterion": [
+      "提取 Z04 限制：400V 3相 100A，约 55kW",
+      "对比 Option A (45kW) 和 Option B (30kW)",
+      "得出电气容量均合格的结论"
+    ],
+    "anchors": {
+      "0": "未进行电气功耗校验，或计算错误导致误判。",
+      "1": "准确对比功耗与 Z04 容量，得出正确结论。"
+    },
+    "acceptable_alternatives": "使用 P = √3 * U * I * cosφ (假设 cosφ=0.8~0.85) 计算容量，结果在 55kW 左右均可接受。",
+    "failure_examples": "直接将 45kW 与 100A 进行数值对比，未考虑电压和相数，得出错误的超载结论。"
+  },
+  {
+    "id": "R12",
+    "description": "评估报告格式规范，包含清晰的结论、数据表格和逻辑推导。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "selection_evaluation_report.md"
+    ],
+    "evidence": "检查报告是否使用了 Markdown 标题、列表、表格等元素，结构清晰，易于阅读。",
+    "numeric_tolerance": 0,
+    "weight_reason": "工程报告的规范性直接影响信息传递效率。",
+    "criterion": [
+      "包含明确的执行摘要/结论",
+      "使用表格对比关键参数（重量、尺寸、接口等）",
+      "章节划分合理（载荷、空间、接口、结论）"
+    ],
+    "anchors": {
+      "0": "纯文本堆砌，无结构，无表格，结论不明确。",
+      "1": "结构清晰，使用了表格和标题，结论突出。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "将核对数据写成一大段无标点的长文本，结论隐藏在文末。"
+  },
+  {
+    "id": "R13",
+    "description": "试装计划包含吊装索具选择与吊点确认的安全要求。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "trial_installation_plan.md"
+    ],
+    "evidence": "检查吊装阶段，是否根据设备重量和重心提出了索具额定载荷要求、吊点确认及防摇摆措施。",
+    "numeric_tolerance": 0,
+    "weight_reason": "海上/高空吊装作业风险极高，索具和吊点管理是安全核心。",
+    "criterion": [
+      "根据设备重量（约 1.5~2.5 吨）及动载系数，提出索具安全系数（通常 5:1 或 6:1）或额定载荷要求",
+      "强调需确认设备制造商指定的吊点，严禁随意绑扎",
+      "提及牵引绳（Tagline）控制防摇摆"
+    ],
+    "levels": {
+      "0": "未提及吊装安全要求，或仅写'使用吊车吊装'。",
+      "0.25": "提及使用吊车，但未考虑索具额定载荷或吊点确认。",
+      "0.5": "提出了索具载荷要求，但未提及吊点确认或防摇摆措施。",
+      "0.75": "明确了索具安全系数和吊点确认，但未提及牵引绳控制。",
+      "1": "综合考虑了索具安全系数、指定吊点确认及防摇摆牵引绳措施。"
+    },
+    "acceptable_alternatives": "若设备无指定吊点，提出需由专业起重工程师设计吊装方案并使用专用横梁（Spreader beam）。",
+    "failure_examples": "计划中写道：'使用叉车将设备挑至平台'，对于海上风机平台改造，此方案严重违规且不可行。"
+  },
+  {
+    "id": "R14",
+    "description": "试装计划包含现场偏差处理预案（如发现干涉或孔位不符）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "trial_installation_plan.md"
+    ],
+    "evidence": "检查计划中是否包含'异常处理'或'偏差管理'章节，明确了现场发现问题的上报和处置流程。",
+    "numeric_tolerance": 0,
+    "weight_reason": "现场施工必然存在偏差，预案体现了工程师的风险管理意识。",
+    "criterion": [
+      "明确发现干涉/孔位不符时的停止作业要求",
+      "明确上报流程（联系平台结构工程师/供应商）",
+      "提出临时处置建议（如使用垫片微调、严禁现场气割等）"
+    ],
+    "anchors": {
+      "0": "未包含任何偏差处理预案，假定一切完美。",
+      "1": "包含完整的偏差处理流程，明确停止、上报和规范处置原则。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "预案中写道：'如发现孔位偏差 5mm，现场使用角磨机扩孔处理'，未评估对防腐和结构的影响。"
+  },
+  {
+    "id": "R15",
+    "description": "对 Option A 和 Option B 的长期维护性与系统独立性进行定性分析。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [],
+    "deliverables": [
+      "selection_evaluation_report.md"
+    ],
+    "evidence": "检查报告中是否超越了基础的物理接口核对，对设备的维护便利性、自带泵的优势/劣势进行了工程层面的定性分析。",
+    "numeric_tolerance": 0,
+    "weight_reason": "优秀的机械工程师不仅关注'装得上'，还关注'用得好、修得快'。",
+    "criterion": [
+      "分析 Option A 自带泵对平台冷却水系统的独立性优势（解耦）",
+      "分析 Option B 无内置泵需依赖平台主循环系统的风险（单点故障）",
+      "对比两者的维护空间（Option A 前/右侧，Option B 顶部/前侧，结合 Z08 净空分析）"
+    ],
+    "levels": {
+      "0": "仅进行了物理尺寸和重量的核对，未涉及维护性和系统架构分析。",
+      "0.25": "提及了自带泵或维护空间，但未分析其对系统可靠性的影响。",
+      "0.5": "分析了自带泵的独立性，但未结合平台实际环境（如 Option B 顶部维护受 Z08 净空限制）进行综合评价。",
+      "0.75": "准确分析了系统解耦优势和维护空间限制，但缺乏对长期运维成本或备件通用性的延伸思考。",
+      "1": "深入分析了系统解耦优势、维护空间限制，并结合海上运维特点（如备件通用性、减少平台依赖）给出了有深度的工程判断。"
+    },
+    "acceptable_alternatives": "若指出 Option B 无内置泵可节省设备内部空间，但需评估平台主泵冗余度，逻辑自洽亦可。",
+    "failure_examples": "认为 Option B 无内置泵更好，理由是'减少了设备故障点'，而忽略了平台主循环系统一旦故障将导致整个冷却模块失效的系统性风险。"
+  },
+  {
+    "id": "R16",
+    "description": "整个计算和报告中物理单位统一且正确（kg, mm, MPa/bar, kW）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "selection_evaluation_report.md",
+      "trial_installation_plan.md"
+    ],
+    "evidence": "抽查报告中的关键数值，检查是否遗漏单位或单位混用（如将 mm 写成 m，将 kg 写成 N）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "单位错误是工程计算中的低级但致命的失误。",
+    "criterion": [
+      "重量单位统一为 kg",
+      "尺寸单位统一为 mm（或明确转换为 m 并保持一致）",
+      "压力单位统一为 MPa 或 bar",
+      "功率单位统一为 kW"
+    ],
+    "anchors": {
+      "0": "出现 2 处以上单位混用或遗漏单位。",
+      "1": "所有关键数值均带有正确且统一的单位。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "将 Z01 的 2500 kg 限制与 Option A 的 1439 kg 对比时，错误地写成 2500 N 和 1439 N。"
+  },
+  {
+    "id": "R17",
+    "description": "在静载荷校核中，正确应用了 Z01 的 1.5 动载荷系数。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "selection_evaluation_report.md"
+    ],
+    "evidence": "检查报告中是否明确写出了 1.5 的动载系数，并将其应用于运行总重的计算中。",
+    "numeric_tolerance": 0,
+    "weight_reason": "海上风机平台受风浪载荷影响，动载系数是结构安全的核心参数。",
+    "criterion": [
+      "明确引用 Z01 的 dynamic_load_factor = 1.5",
+      "在计算等效载荷时，将运行重量乘以 1.5",
+      "使用动载荷结果与 Z01 的 max_static_load_kg (2500) 进行对比（注：此处的 max_static_load_kg 通常指等效静载荷限制，逻辑上需对比动载计算值）"
+    ],
+    "anchors": {
+      "0": "未使用 1.5 动载系数，或仅用静载直接对比。",
+      "1": "正确应用 1.5 动载系数，并完成对比校核。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "计算了 1439 kg 的运行重量后，直接与 2500 kg 对比得出结论，完全忽略了动载荷系数。"
+  },
+  {
+    "id": "R18",
+    "description": "负分项：是否编造了不存在的平台结构图纸或虚构供应商未提供的参数。",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [],
+    "deliverables": [
+      "selection_evaluation_report.md",
+      "trial_installation_plan.md"
+    ],
+    "evidence": "检查报告中是否引用了附件中不存在的参数（如设备的材质屈服强度、平台甲板的具体厚度等）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基于虚构参数进行决策违反了工程设计的真实性原则。",
+    "criterion": [
+      "不得虚构设备的材质参数（如 S355 屈服强度）",
+      "不得虚构平台甲板的具体厚度或加强筋布置",
+      "不得虚构供应商未提供的接口法兰孔距"
+    ],
+    "anchors": {
+      "0": "所有引用的参数均来自附件或合理的工程常识（如 PN16 标准）。",
+      "1": "发现编造了附件中未提供的关键结构或材料参数（触发此分，总分扣除）。"
+    },
+    "acceptable_alternatives": "提及'假设平台甲板厚度满足 PN16 法兰安装要求'是允许的，但不得将其作为已确认的事实。",
+    "failure_examples": "在报告中写道：'根据平台结构图纸，Z01 甲板厚度为 20mm，满足 M20 螺栓的抗剪切要求'，而附件中从未提供甲板厚度。"
+  },
+  {
+    "id": "R19",
+    "description": "试装计划中明确了海上/高空作业的风速限制或环境安全约束。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "trial_installation_plan.md"
+    ],
+    "evidence": "检查计划的开头或吊装阶段，是否明确了作业环境限制（如风速、浪高、能见度）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "海上作业受环境影响极大，环境约束是试装计划的前提条件。",
+    "criterion": [
+      "明确吊装作业的风速限制（通常 <= 10~12 m/s 或具体等级）",
+      "提及浪高或能见度的限制",
+      "明确环境不满足时的停止作业原则"
+    ],
+    "anchors": {
+      "0": "未提及任何环境或气象限制条件。",
+      "1": "明确了风速、浪高等环境限制，并设定了停止作业原则。"
+    },
+    "acceptable_alternatives": "若设定为陆上风机平台，则需提及阵风限制或防雷要求。",
+    "failure_examples": "计划中未考虑天气因素，假定随时可以吊装。"
+  },
+  {
+    "id": "R20",
+    "description": "交付物文件命名严格符合要求。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "selection_evaluation_report.md",
+      "trial_installation_plan.md"
+    ],
+    "evidence": "检查输出的文件名是否完全匹配 request 中指定的名称。",
+    "numeric_tolerance": 0,
+    "weight_reason": "文件命名规范是工程文档管理的基础。",
+    "criterion": [
+      "包含 selection_evaluation_report.md",
+      "包含 trial_installation_plan.md",
+      "文件扩展名为 .md"
+    ],
+    "anchors": {
+      "0": "文件名错误、缺失或扩展名错误。",
+      "1": "两个文件名完全正确且为 .md 格式。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "将文件命名为 'report.md' 和 'plan.docx'。"
+  }
+]

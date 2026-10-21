@@ -1,0 +1,581 @@
+[
+  {
+    "id": "R01",
+    "description": "升级指南是否准确说明了 API 端点的废弃与迁移，包括 v1 移除和 v2 新路径。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Upgrade_Guide.md 中的 API 变更章节。",
+    "numeric_tolerance": 0,
+    "weight_reason": "核心架构变更，直接影响系统集成，权重最高。",
+    "criterion": [
+      "明确指出 POST /api/v1/sync 已在 v2.0 中完全移除。",
+      "提供新端点 POST /api/v2/devices/{device_id}/sync 的完整路径。",
+      "说明新端点包含设备 ID 路径参数。"
+    ],
+    "acceptable_alternatives": [
+      "可以补充说明新端点支持的具体 HTTP 方法或请求头，但不强制。"
+    ],
+    "failure_examples": [
+      "仅提到 v1 接口废弃，但未提供 v2 新接口的具体路径；或编造了如 /api/v2/sync 的错误路径。"
+    ],
+    "anchors": {
+      "0": "未提及 API 变更，或提供了错误的 v2 端点路径。",
+      "1": "准确说明了 v1 移除，并提供了正确的 v2 端点路径 /api/v2/devices/{device_id}/sync。"
+    }
+  },
+  {
+    "id": "R02",
+    "description": "升级指南是否详细说明了 mTLS 证书的配置要求及路径。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Upgrade_Guide.md 中的认证/安全配置章节。",
+    "numeric_tolerance": 0,
+    "weight_reason": "认证机制变更是升级的核心阻碍点，必须准确提供路径。",
+    "criterion": [
+      "明确说明废弃了旧的 PIN 码认证。",
+      "指定设备证书路径为 /etc/edgsync/certs/device.pem。",
+      "指定 CA 证书路径为 /etc/edgsync/certs/ca.pem。"
+    ],
+    "acceptable_alternatives": [
+      "如果文档中同时提供了证书生成的命令示例，可接受。"
+    ],
+    "failure_examples": [
+      "遗漏了具体的文件路径；或仍建议用户配置 PIN 码。"
+    ],
+    "anchors": {
+      "0": "未提供证书配置路径，或路径错误（如 /etc/ssl/）。",
+      "1": "准确提供了 device.pem 和 ca.pem 在 /etc/edgsync/certs/ 下的路径，并说明废弃 PIN 码。"
+    }
+  },
+  {
+    "id": "R03",
+    "description": "故障排除手册是否解释了 401/TLS 错误与时间偏差的关联，并给出具体阈值。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02",
+      "REQ-04"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Troubleshooting_FAQ.md 中关于 401 或 TLS 错误的排查项。",
+    "numeric_tolerance": 0,
+    "weight_reason": "时间偏差是导致 mTLS 失败的隐蔽原因，梯度评分考察解释的深度和准确性。",
+    "criterion": [
+      "将 401/TLS error 与设备系统时间不同步关联。",
+      "明确指出 mTLS 握手失败的时间偏差容差阈值为 5 分钟。",
+      "提供检查或同步 NTP 的具体建议。"
+    ],
+    "acceptable_alternatives": [
+      "将 401 和 TLS error 分为两个 FAQ 条目，但都在原因中指向了时间/NTP 问题。"
+    ],
+    "failure_examples": [
+      "仅提到检查证书是否过期，完全遗漏了时间偏差导致 TLS 失败的已知问题；或写成了 10 分钟容差。"
+    ],
+    "levels": {
+      "0": "未提及时间偏差或 NTP 问题。",
+      "0.25": "提到了时间问题，但未说明会导致 TLS 失败，或未提及具体阈值。",
+      "0.5": "说明了时间偏差会导致 TLS 失败，但阈值错误（非 5 分钟）。",
+      "0.75": "准确说明了 5 分钟阈值，但未提供检查/修复 NTP 的具体操作建议。",
+      "1": "准确说明 5 分钟阈值，并提供了清晰的 NTP 检查/同步排查步骤。"
+    }
+  },
+  {
+    "id": "R04",
+    "description": "故障排除手册是否解释了增量同步机制导致的数据“丢失”假象。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Troubleshooting_FAQ.md 中关于数据同步/丢失的排查项。",
+    "numeric_tolerance": 0,
+    "weight_reason": "这是 v2 机制变更带来的典型用户误解，梯度评分考察对业务逻辑的解释清晰度。",
+    "criterion": [
+      "将“数据丢失”现象与 v2 增量合并机制关联。",
+      "解释原因：设备时间不准确导致旧数据覆盖新数据（基于时间戳/哈希）。",
+      "指出解决此问题的根本方法是确保设备 NTP 时间同步。"
+    ],
+    "acceptable_alternatives": [
+      "使用“数据覆盖”或“假性丢失”等词汇，只要逻辑链条完整即可。"
+    ],
+    "failure_examples": [
+      "仅建议用户“重新同步”或“检查网络”，未解释 v2 增量机制与时间戳覆盖的底层逻辑。"
+    ],
+    "levels": {
+      "0": "未解释数据丢失的原因，或归咎于网络/服务器故障。",
+      "0.25": "提到了增量同步，但未解释时间戳/哈希导致覆盖的机制。",
+      "0.5": "解释了时间不准确会导致覆盖，但未明确指出这是 v2 增量机制的特性。",
+      "0.75": "完整解释了增量机制与时间戳覆盖，但未强调 NTP 同步是最终解决方案。",
+      "1": "完整解释了 v2 增量机制、时间戳覆盖原理，并明确建议检查/配置 NTP。"
+    }
+  },
+  {
+    "id": "R05",
+    "description": "故障排除手册是否涵盖了离线队列优先级（HIGH/NORMAL）的生效条件及客户端版本要求。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Troubleshooting_FAQ.md 中关于离线队列/优先级上传的排查项。",
+    "numeric_tolerance": 0,
+    "weight_reason": "涉及业务逻辑（紧急订单优先）和版本兼容性，是关键排障点。",
+    "criterion": [
+      "说明优先级字段（priority: HIGH/NORMAL）需要在请求 payload 中显式传递。",
+      "指出如果客户端仍为 v1.x 版本，将不支持优先级解析。",
+      "建议检查客户端版本和业务系统接口调用。"
+    ],
+    "acceptable_alternatives": [
+      "可以建议用户查看 API 文档确认 payload 字段格式。"
+    ],
+    "failure_examples": [
+      "声称 v2 会自动根据数据内容识别优先级；或遗漏了旧版客户端不兼容的提示。"
+    ],
+    "anchors": {
+      "0": "未提及优先级配置，或声称系统自动识别优先级。",
+      "1": "准确说明了需在 payload 传递 priority 字段，并提示了 v1 客户端不兼容的问题。"
+    }
+  },
+  {
+    "id": "R06",
+    "description": "升级指南是否指出了 Payload 大小限制从 1000 降至 500 的变更。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Upgrade_Guide.md 中的 API 限制或同步变更章节。",
+    "numeric_tolerance": 0,
+    "weight_reason": "直接影响业务代码的批处理逻辑，属于重要技术约束。",
+    "criterion": [
+      "明确指出 v2 单次请求 payload 限制为 500 条记录。",
+      "对比或提及 v1 的 1000 条限制以作参考。"
+    ],
+    "acceptable_alternatives": [
+      "如果文档中使用了 500 records 或 500 items 等同义表述。"
+    ],
+    "failure_examples": [
+      "未提及 payload 限制变更；或写成了 1000 条/800 条等错误数值。"
+    ],
+    "anchors": {
+      "0": "未提及 payload 限制，或数值错误。",
+      "1": "准确说明了 v2 限制为 500 条记录。"
+    }
+  },
+  {
+    "id": "R07",
+    "description": "交付物是否包含了所有指定的文件名并放在正确的输出目录。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md",
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "检查 /app/output 目录下的文件列表。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基本的交付规范。",
+    "criterion": [
+      "存在文件 EdgeSync_v2_Upgrade_Guide.md。",
+      "存在文件 EdgeSync_v2_Troubleshooting_FAQ.md。",
+      "文件位于 /app/output 目录下。"
+    ],
+    "acceptable_alternatives": [
+      "无。"
+    ],
+    "failure_examples": [
+      "文件名拼写错误（如 Upgrade_Guid.md）；或文件放在了根目录而非 /app/output。"
+    ],
+    "anchors": {
+      "0": "缺失任一文件，或文件路径/名称错误。",
+      "1": "两份文件名称完全正确且位于 /app/output。"
+    }
+  },
+  {
+    "id": "R08",
+    "description": "文档中是否编造了不存在的 API 端点或虚构的配置参数。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-06"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md",
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "全局审查两份文档中的 API 路径和配置项。",
+    "numeric_tolerance": 0,
+    "weight_reason": "技术文档严禁幻觉，编造 API 会导致严重生产事故，予以重罚。",
+    "criterion": [
+      "未出现如 /api/v3/、/api/v2/records 等未提供的端点。",
+      "未出现如 max_retry_count=10 等未提供的虚构配置参数。"
+    ],
+    "acceptable_alternatives": [
+      "使用占位符（如 <config_value>）是允许的，不算编造。"
+    ],
+    "failure_examples": [
+      "在 FAQ 中建议用户修改未提及的 timeout 参数；或在指南中提供了 /api/v2/batch 接口。"
+    ],
+    "anchors": {
+      "0": "文档中出现了至少一处编造的 API 端点或具体的虚构配置参数。",
+      "1": "文档内容严格基于提供的内部材料，无虚构技术细节。"
+    }
+  },
+  {
+    "id": "R09",
+    "description": "故障排除手册是否解决了“queue overflow”问题并指出 v2 默认队列上限变更。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Troubleshooting_FAQ.md 中关于 queue overflow 的排查项。",
+    "numeric_tolerance": 0,
+    "weight_reason": "直接影响离线作业连续性，需准确说明配置变更。",
+    "criterion": [
+      "将 queue overflow 与 v2 默认 max_queue_size 变更关联。",
+      "明确指出 v2 默认上限从 10000 降至 5000。",
+      "提供在 edgsync.conf 中修改 max_queue_size 的建议。"
+    ],
+    "acceptable_alternatives": [
+      "如果文档建议通过清理旧队列来解决，只要同时说明了配置上限变更即可。"
+    ],
+    "failure_examples": [
+      "仅建议重启设备；或声称 v2 默认队列上限是 10000。"
+    ],
+    "anchors": {
+      "0": "未提及 max_queue_size 变更，或数值错误。",
+      "1": "准确说明了默认值降至 5000，并指导修改 edgsync.conf。"
+    }
+  },
+  {
+    "id": "R10",
+    "description": "升级指南是否说明了日志路径变更及磁盘空间排查建议。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Upgrade_Guide.md 中的日志/存储章节。",
+    "numeric_tolerance": 0,
+    "weight_reason": "路径变更是导致运维脚本失效和磁盘打满的常见原因。",
+    "criterion": [
+      "指出默认日志路径从 /var/log/ 变更为 /var/log/edgsync/。",
+      "警告 DEBUG 级别日志会导致磁盘快速占满并引发重启。"
+    ],
+    "acceptable_alternatives": [
+      "可以补充建议配置 logrotate 策略。"
+    ],
+    "failure_examples": [
+      "仍建议用户检查 /var/log/ 目录；或未提及 DEBUG 级别的风险。"
+    ],
+    "anchors": {
+      "0": "未提及日志路径变更，或路径错误。",
+      "1": "准确提供了 /var/log/edgsync/ 路径，并警告了 DEBUG 级别的磁盘风险。"
+    }
+  },
+  {
+    "id": "R11",
+    "description": "文档语言是否专业、清晰，适合目标受众，无工单原始粗糙描述。",
+    "type": "Gradient",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md",
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "全局审查文档的语言风格和专业度。",
+    "numeric_tolerance": 0,
+    "weight_reason": "技术文档的基本质量要求。",
+    "criterion": [
+      "未直接复制 CSV 中的口语化描述（如“一直报 401”、“疑似丢数据”）。",
+      "使用了规范的技术术语（如 mTLS, NTP, payload, queue overflow）。",
+      "结构清晰，逻辑连贯。"
+    ],
+    "acceptable_alternatives": [
+      "允许保留必要的业务背景描述，但需转换为专业句式。"
+    ],
+    "failure_examples": [
+      "直接照搬工单中的“昨晚断网期间扫码了 50 条”作为文档标题或正文。"
+    ],
+    "levels": {
+      "0": "大量直接复制工单原始粗糙描述，缺乏专业重写。",
+      "0.25": "部分重写，但仍残留明显的口语化或非标准术语。",
+      "0.5": "语言基本专业，但结构不够清晰，或受众定位模糊。",
+      "0.75": "语言专业清晰，但个别地方仍不够简练。",
+      "1": "语言高度专业、准确，完全符合目标受众（IT/运维）的阅读习惯。"
+    }
+  },
+  {
+    "id": "R12",
+    "description": "是否涵盖了所有 8 个工单的核心问题，无关键故障场景遗漏。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03",
+      "REQ-04"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "对比 EdgeSync_v2_Troubleshooting_FAQ.md 与 support_tickets_q3.csv 的覆盖度。",
+    "numeric_tolerance": 0,
+    "weight_reason": "工单是 FAQ 的唯一来源，覆盖率决定了文档的实用性。",
+    "criterion": [
+      "涵盖了 401/认证问题 (TKT-101, TKT-104)。",
+      "涵盖了 数据丢失/增量同步问题 (TKT-102)。",
+      "涵盖了 优先级/客户端版本问题 (TKT-103)。",
+      "涵盖了 404/API 迁移问题 (TKT-105)。",
+      "涵盖了 payload size 限制问题 (TKT-106)。",
+      "涵盖了 日志/磁盘/重启问题 (TKT-107)。",
+      "涵盖了 queue overflow 问题 (TKT-108)。"
+    ],
+    "acceptable_alternatives": "可以将相似问题（如 TKT-101 和 TKT-104 都涉及时间/认证）合并为一个综合排查项。",
+    "failure_examples": "遗漏了 payload size 限制 (TKT-106) 或日志路径变更 (TKT-107) 等关键配置问题。",
+    "levels": {
+      "0": "遗漏了 3 个及以上的核心工单场景。",
+      "0.25": "遗漏了 2 个核心工单场景。",
+      "0.5": "遗漏了 1 个核心工单场景。",
+      "0.75": "涵盖了所有场景，但部分场景的解释不够充分或未完全对应材料。",
+      "1": "完美涵盖所有 8 个工单的核心问题，且解释准确对应材料。"
+    }
+  },
+  {
+    "id": "R13",
+    "description": "升级指南是否包含了回滚或降级建议（或明确说明不支持）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Upgrade_Guide.md 中是否有关于版本回退的说明。",
+    "numeric_tolerance": 0,
+    "weight_reason": "升级指南的完整性补充，考察作者的风险意识。",
+    "criterion": [
+      "提供了回滚步骤，或明确声明 v2.0 不支持降级/回滚并说明原因（如数据格式变更）。"
+    ],
+    "acceptable_alternatives": "如果材料未明确提供回滚步骤，作者基于专业惯例明确提示风险也是可接受的。",
+    "failure_examples": "完全未提及版本回退或降级风险。",
+    "anchors": {
+      "0": "完全未提及回滚/降级。",
+      "1": "明确说明了回滚策略或降级限制。"
+    }
+  },
+  {
+    "id": "R14",
+    "description": "故障排除手册是否提供了针对 TLS error 的具体排查步骤（检查 NTP、证书有效期）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Troubleshooting_FAQ.md 中 TLS 错误的排查步骤。",
+    "numeric_tolerance": 0,
+    "weight_reason": "TLS 错误是高频问题，需要可操作的排查步骤。",
+    "criterion": [
+      "步骤中包含检查系统时间/NTP 同步状态。",
+      "步骤中包含检查证书路径是否正确（/etc/edgsync/certs/）。",
+      "步骤中包含检查证书是否过期或格式是否正确。"
+    ],
+    "acceptable_alternatives": "如果文档提供了具体的命令行检查示例（如 date, openssl 命令），可接受。",
+    "failure_examples": "仅建议“重新安装证书”，未提供具体的排查顺序或检查点。",
+    "anchors": {
+      "0": "排查步骤缺失或完全不相关。",
+      "1": "提供了包含时间、路径、有效期等关键检查点的结构化排查步骤。"
+    }
+  },
+  {
+    "id": "R15",
+    "description": "交付物是否准确反映了 v2.0.0 的特性，没有混入 v1.x 的旧逻辑。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-06"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md",
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "全局审查文档，确认无 v1 逻辑残留。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保文档的时效性和准确性，混淆版本是严重错误。",
+    "criterion": [
+      "未建议用户使用 PIN 码认证。",
+      "未建议使用 /api/v1/sync 接口。",
+      "未声称 payload 限制为 1000 或队列上限为 10000。"
+    ],
+    "acceptable_alternatives": "仅在“从 v1 迁移”的对比上下文中提及 v1 旧逻辑是允许的。",
+    "failure_examples": "在 FAQ 中建议用户“检查 PIN 码是否输入正确”；或在升级指南中写明“队列上限仍为 10000”。",
+    "anchors": {
+      "0": "文档中混入了至少一处 v1 的旧逻辑作为当前推荐做法。",
+      "1": "文档严格基于 v2.0 特性，无旧逻辑残留或误导。"
+    }
+  },
+  {
+    "id": "R16",
+    "description": "文档格式是否使用了清晰的 Markdown 标题、列表和代码块。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md",
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "审查文档的 Markdown 语法和排版。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基本的文档排版要求。",
+    "criterion": [
+      "使用了层级分明的 Markdown 标题（#, ##, ###）。",
+      "使用了列表（- 或 1.）组织步骤或要点。",
+      "API 路径、配置项、文件路径使用了行内代码块（`）或代码块（```）。"
+    ],
+    "acceptable_alternatives": "如果 FAQ 使用了表格形式呈现，只要清晰可读也可接受。",
+    "failure_examples": "全文无标题层级；或 API 路径未使用代码格式，导致阅读困难。",
+    "anchors": {
+      "0": "排版混乱，缺乏基本的 Markdown 结构。",
+      "1": "排版清晰，合理使用了标题、列表和代码块。"
+    }
+  },
+  {
+    "id": "R17",
+    "description": "升级指南是否说明了如何验证 mTLS 配置是否成功。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Upgrade_Guide.md 中 mTLS 配置后的验证说明。",
+    "numeric_tolerance": 0,
+    "weight_reason": "配置后验证是标准操作流程，考察文档的闭环完整性。",
+    "criterion": [
+      "提供了验证 mTLS 握手或连接状态的方法（如查看日志、使用 curl 测试、检查服务状态）。"
+    ],
+    "acceptable_alternatives": "如果文档建议通过执行一次成功的同步来验证，也可接受。",
+    "failure_examples": "仅提供配置步骤，完全未提及如何确认配置已生效。",
+    "anchors": {
+      "0": "未提供任何验证配置成功的方法。",
+      "1": "提供了明确的验证步骤或检查点。"
+    }
+  },
+  {
+    "id": "R18",
+    "description": "故障排除手册是否解释了旧接口 404 错误的原因及代码迁移指引。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "查看 EdgeSync_v2_Troubleshooting_FAQ.md 中关于 404 Not Found 的排查项。",
+    "numeric_tolerance": 0,
+    "weight_reason": "自动化脚本迁移是常见场景，需明确指引。",
+    "criterion": [
+      "解释 404 是因为 v1 接口已被物理移除。",
+      "指引用户将代码/脚本中的端点修改为 v2 新路径。"
+    ],
+    "acceptable_alternatives": "可以附带新旧路径的对比表格。",
+    "failure_examples": "仅建议“检查网络”或“检查 URL 拼写”，未指出接口已废弃的根本原因。",
+    "anchors": {
+      "0": "未指出接口废弃原因，或未提供 v2 迁移指引。",
+      "1": "准确解释了 404 原因，并提供了向 v2 端点迁移的指引。"
+    }
+  },
+  {
+    "id": "R19",
+    "description": "是否避免了直接复制内部工单中的员工姓名或未脱敏的敏感信息。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-06"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md",
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "全局审查文档，确认无内部隐私信息泄露。",
+    "numeric_tolerance": 0,
+    "weight_reason": "信息安全与合规基本要求。",
+    "criterion": [
+      "文档中未出现工单中可能隐含的内部员工姓名、具体车间编号或敏感 IP。",
+      "设备型号（如 PDA-X1）作为通用示例保留是允许的。"
+    ],
+    "acceptable_alternatives": "无。",
+    "failure_examples": "在 FAQ 中写道“请联系张三处理”或“检查 192.168.1.100 服务器”。",
+    "anchors": {
+      "0": "文档中泄露了具体的内部人员姓名或敏感网络信息。",
+      "1": "文档内容已脱敏，仅保留通用的设备型号和技术参数。"
+    }
+  },
+  {
+    "id": "R20",
+    "description": "交付物中是否明确指出了设备时间误差超过 5 分钟会导致 mTLS 失败的具体阈值。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "EdgeSync_v2_Upgrade_Guide.md",
+      "EdgeSync_v2_Troubleshooting_FAQ.md"
+    ],
+    "evidence": "在两份文档中搜索关于时间偏差阈值的明确数值说明。",
+    "numeric_tolerance": 0,
+    "weight_reason": "5 分钟是核心已知限制，必须在文档中显式传达。",
+    "criterion": [
+      "在升级指南或故障手册中，明确写出“5 分钟”这一具体阈值。",
+      "说明超过此阈值会导致 mTLS 握手失败或 TLS error。"
+    ],
+    "acceptable_alternatives": "使用“300 秒”等同于“5 分钟”是可接受的。",
+    "failure_examples": "仅模糊提示“请确保时间同步”，未给出 5 分钟的具体容差数值。",
+    "anchors": {
+      "0": "未提及 5 分钟阈值，或数值错误。",
+      "1": "明确指出了 5 分钟的时间偏差容差阈值及其后果。"
+    }
+  }
+]

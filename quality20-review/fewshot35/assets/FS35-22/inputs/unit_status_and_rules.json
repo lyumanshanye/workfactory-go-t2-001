@@ -1,0 +1,27 @@
+{
+  "units": [
+    {"unit_id": "E1", "type": "Fire_Engine", "initial_location": "消防总站", "status": "Available", "capabilities": ["Water_Rescue", "HazMat", "Extrication"]},
+    {"unit_id": "M1", "type": "Ambulance", "initial_location": "医疗中心", "status": "Available", "capabilities": ["ALS", "Cardiac"]},
+    {"unit_id": "M2", "type": "Ambulance", "initial_location": "中央公园", "status": "Available", "capabilities": ["ALS"]},
+    {"unit_id": "R1", "type": "Rescue", "initial_location": "港口", "status": "Available", "capabilities": ["HazMat", "Confined_Space"]},
+    {"unit_id": "P1", "type": "Patrol", "initial_location": "街头", "status": "Enroute", "available_time": "09:25", "capabilities": ["Patrol"]},
+    {"unit_id": "P2", "type": "Patrol", "initial_location": "购物中心", "status": "Available", "capabilities": ["Patrol"]},
+    {"unit_id": "U1", "type": "Utility", "initial_location": "变电站", "status": "Available", "capabilities": ["Power_Rescue"]}
+  ],
+  "exercise_rules": [
+    "Rule_1: 化工厂火灾(STRUCTURE_FIRE at 化工厂)或危化品泄漏(HAZMAT)必须指派至少1个具备HazMat能力的单位和1个具备ALS能力的急救单位。",
+    "Rule_2: 水域救援(WATER_RESCUE)必须指派具备Water_Rescue能力的单位。",
+    "Rule_3: 活跃射手(ACTIVE_SHOOTER)必须指派至少2个Police单位，且第一响应时间不得超过3分钟。",
+    "Rule_4: 连环车祸(MULTI_VEHICLE_ACCIDENT)需指派至少1个具备Extrication(破拆)能力的消防/救援单位，以及至少2个ALS单位。",
+    "Rule_5: 所有P1级别事件，必须在调度决策中明确备注'已通知指挥中心'或分配指挥车(BC)，若无BC则必须备注报备。"
+  ],
+  "travel_time_matrix": {
+    "消防总站": {"化工厂A区": 4, "港口码头": 8, "游艇俱乐部": 6, "跨海大桥": 10},
+    "医疗中心": {"化工厂A区": 6, "港口码头": 10, "中央公园": 3, "购物中心": 5, "跨海大桥": 12},
+    "中央公园": {"中央公园南门": 1, "购物中心": 4, "跨海大桥": 8},
+    "港口": {"化工厂A区": 8, "港口码头": 2, "游艇俱乐部": 5},
+    "街头": {"滨海大道": 3, "购物中心": 6, "老城区": 5, "跨海大桥": 9},
+    "购物中心": {"购物中心": 0, "跨海大桥": 7},
+    "变电站": {"老城区变电站": 0, "跨海大桥": 11}
+  }
+}

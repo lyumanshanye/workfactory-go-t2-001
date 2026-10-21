@@ -1,0 +1,5 @@
+{
+  "key_facts_and_deductions": "1. 缓冲规则：总占用 = [Start - 15m, Start + Duration + 15m]。\n2. REQ-101 (Smith, 09:00 -> 11:00): 匹配到APT-001 (John) 和 APT-002 (Mary)。结论：Pending Manual Review。\n3. REQ-102 (Jones, 15m, 13:00): 占用 12:45-13:30。Dr. Lee 05-10 至 16:00。无冲突。结论：Approved。\n4. REQ-103 (Chen, 45m, 14:00): 占用 13:45-14:45。Dr. Evans 14:00有APT-007 (Wilson, 60m, 13:45-15:15)。13:45重叠。结论：Rejected (Buffer Conflict)。\n5. REQ-104 (Brown, 30m, 05-11 10:00): 占用 09:45-10:45。Dr. Lee 05-11 09:00-15:00。在班。结论：Approved。\n6. REQ-105 (Davis, 45m, 15:00): 占用 14:45-16:00。Dr. Patel 05-10 至 14:00。超班。结论：Rejected (Outside working hours)。\n7. REQ-106 (Wilson, 60m, 16:00): 占用 15:45-17:15。Dr. Evans 05-10 至 17:00。超班。结论：Rejected (Outside working hours)。\n8. REQ-107 (White, 45m, 16:30): 占用 16:15-17:30。Dr. Lee 05-10 至 16:00。超班。结论：Rejected (Outside working hours)。",
+  "alternative_solutions": "备忘录的格式可以是列表或表格，只要清晰区分了Approved, Rejected, Pending三类即可。拒绝理由的措辞可以有多种，只要核心原因（缓冲冲突 vs 超班）准确即可。",
+  "limitations": "本题未提供诊室可用性数据，因此冲突验证仅基于医生时间和缓冲规则。实际业务中可能还需考虑特定检查所需的特殊诊室，但本题设定为简化场景。"
+}

@@ -1,0 +1,537 @@
+[
+  {
+    "id": "R01",
+    "description": "The product matching matrix correctly calculates the 'Term Match' score component for all 32 client-product combinations based on the horizon and term years.",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx"
+    ],
+    "evidence": "Check the 'Term Match' column/row in the matrix. Verify calculations: e.g., C01 (1-2 yrs) + P1 (1 yr) = +20; C01 + P4 (5 yrs) = 50 - 5*(5-2) = +35? No, rule is: > max horizon = -10 per year diff. C01 max=2, P4 term=5. Diff=3. -10*3 = -30. C02 (3-5 yrs) + P3 (3 yrs) = +20.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Core quantitative logic of the internal scoring model.",
+    "criterion": [
+      "Term match scores are calculated exactly as: within horizon = +20; term > max horizon = -10 * (term - max); term < min horizon = -5 * (min - term).",
+      "All 32 combinations have the correct term match score."
+    ],
+    "acceptable_alternatives": "Matrix can be oriented with clients as rows or columns.",
+    "failure_examples": "Using a flat penalty for any mismatch instead of the per-year calculation.",
+    "anchors": {
+      "1": "All 32 term match scores are calculated exactly according to the rules.",
+      "0": "One or more term match scores are incorrect."
+    }
+  },
+  {
+    "id": "R02",
+    "description": "The product matching matrix correctly calculates the 'Risk Map' score component based on the mapping between client risk levels and product risk levels.",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx"
+    ],
+    "evidence": "Check the 'Risk Map' column/row. Verify: Match (e.g., C01 Conservative + P1 Conservative) = +30. C01 (Cons) + P2 (Mod) = 0. C01 (Cons) + P4 (Agg) = -50. C02 (Mod) + P4 (Agg) = -20. C03 (Agg) + P1 (Cons) = -30.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Core risk assessment logic.",
+    "criterion": [
+      "Risk mapping scores are calculated exactly as: Match = +30; Cons client + Mod product = 0; Cons + Agg = -50; Mod + Agg = -20; Agg + Cons = -30.",
+      "All 32 combinations have the correct risk map score."
+    ],
+    "acceptable_alternatives": "None for the numerical values, but orientation can vary.",
+    "failure_examples": "Assigning 0 for all non-exact matches, or ignoring the asymmetry between Aggressive+Conservative vs Moderate+Aggressive.",
+    "anchors": {
+      "1": "All 32 risk map scores are correct.",
+      "0": "One or more risk map scores are incorrect."
+    }
+  },
+  {
+    "id": "R03",
+    "description": "Correctly identifies that Client C01 (Conservative) cannot be matched with any product containing 'Leverage' or 'Commodities' tags due to exclusions, regardless of score.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ2"
+    ],
+    "deliverables": [
+      "compliance_exception_report.json"
+    ],
+    "evidence": "Check exception report. P6 (Commodities), P7 (Leverage) must be flagged as hard exclusions for C01. The report must explicitly state 'Exclusion tag matched'.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Hard compliance constraint.",
+    "criterion": [
+      "C01 vs P6 and C01 vs P7 are flagged as hard exclusions.",
+      "The reason explicitly mentions the matching exclusion tag."
+    ],
+    "acceptable_alternatives": "May also flag other exclusion matches for C01 if any exist (none do in this data, but P6/P7 are the targets).",
+    "failure_examples": "Only flagging exclusions if the final score is below 60, ignoring the hard exclusion rule.",
+    "anchors": {
+      "1": "Hard exclusions for C01 are correctly identified and reported.",
+      "0": "Hard exclusions for C01 are missed or misreported."
+    }
+  },
+  {
+    "id": "R04",
+    "description": "Correctly calculates the 'Liquidity' adjustment, specifically identifying that C01, C04 (High liquidity need) are penalized for products with term > 2 years.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx"
+    ],
+    "evidence": "Check 'Liquidity' column. C01 and C04 must have -15 for P2(3y), P3(3y), P4(5y), P6(3y), P7(7y). Must have 0 for P1(1y), P5(2y), P8(0.5y).",
+    "numeric_tolerance": 0,
+    "weight_reason": "Specific business rule application.",
+    "criterion": [
+      "High liquidity clients (C01, C04) receive -15 for product terms > 2 years.",
+      "High liquidity clients receive 0 for product terms <= 2 years."
+    ],
+    "acceptable_alternatives": "None.",
+    "failure_examples": "Applying the liquidity penalty to Medium liquidity clients (C02).",
+    "anchors": {
+      "1": "Liquidity adjustments are perfectly applied to C01 and C04.",
+      "0": "Liquidity adjustments are incorrectly applied or missing."
+    }
+  },
+  {
+    "id": "R05",
+    "description": "Client pitch draft for the top-matched Aggressive client (C03) accurately adapts the high volatility and early redemption penalty terms into accessible, risk-appropriate language.",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "client_pitch_drafts.docx"
+    ],
+    "evidence": "Read the pitch draft for C03. Check if it mentions the specific early redemption penalty (e.g., 5% or 8%) and high yield range (8-15% or 10-25%) without using prohibited absolute terms. Assess tone.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Core 'information adaptation' quality for the most complex profile.",
+    "criterion": [
+      "Draft accurately reflects the specific penalty percentage and yield range of the matched product.",
+      "Language tone is appropriate for an Aggressive client (emphasizing upside potential while clearly stating mechanics).",
+      "No prohibited absolute guarantee terms are used."
+    ],
+    "acceptable_alternatives": "Acceptable alternative products if a tie exists, but the draft must match the chosen product's specific numbers.",
+    "failure_examples": "Using a generic template that omits the specific penalty percentage, or using overly conservative warning language that mismatches the client's Aggressive profile.",
+    "levels": {
+      "0": "Completely omits high volatility/penalty terms, or uses prohibited absolute guarantee terms (e.g., 'risk-free'), or uses completely mismatched conservative tone.",
+      "0.25": "Mentions the product but completely omits the specific early redemption penalty mechanics or the yield range, or makes critical factual errors about the product structure.",
+      "0.5": "Includes both penalty and yield range, but the language is a dry copy-paste of the CSV data without any 'adaptation' to the client, or uses slightly mismatched tone.",
+      "0.75": "Accurately conveys the penalty and yield mechanics with a generally appropriate tone for an Aggressive client, but has minor redundancies or slight stylistic imperfections.",
+      "1": "Perfectly adapts the complex terms (penalty, leverage, yield) into clear, engaging language that fits an Aggressive client's expectations, highlighting upside while transparently explaining the mechanics, with zero factual errors."
+    }
+  },
+  {
+    "id": "R06",
+    "description": "Client pitch draft for the top-matched Conservative client (C01) accurately adapts the capital protection and fixed income terms into accessible, secure language.",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "client_pitch_drafts.docx"
+    ],
+    "evidence": "Read the pitch draft for C01. Check if it explains the 'Capital Protection' tag conditionally (e.g., 'held to maturity') and mentions the fixed yield (3.5%). Assess tone.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Core 'information adaptation' quality for the most cautious profile.",
+    "criterion": [
+      "Draft explains 'Capital Protection' conditionally, not absolutely.",
+      "Accurately states the fixed yield range.",
+      "Tone is secure, clear, and appropriate for a Conservative client."
+    ],
+    "acceptable_alternatives": "Acceptable alternative products if a tie exists.",
+    "failure_examples": "Stating 'Your money is 100% guaranteed' (violates REQ4), or failing to mention the yield.",
+    "levels": {
+      "0": "Uses prohibited absolute guarantee terms (e.g., '100% guaranteed', 'no risk whatsoever'), completely omits yield, or uses an inappropriately aggressive tone.",
+      "0.25": "Attempts to explain protection but uses factually incorrect conditions (e.g., wrong maturity condition), or omits the fixed yield entirely.",
+      "0.5": "Correctly states the yield and mentions protection, but uses dry CSV language without adaptation, or fails to adequately clarify the conditional nature of the protection.",
+      "0.75": "Clearly explains the conditional nature of the protection and the yield with a secure tone, but has minor stylistic flaws or slight omissions in context.",
+      "1": "Perfectly adapts the fixed income and conditional protection terms into reassuring, clear language suitable for a Conservative client, explicitly stating the conditions for protection and the exact yield, with zero factual errors."
+    }
+  },
+  {
+    "id": "R07",
+    "description": "The compliance exception report correctly lists ALL client-product combinations that fall below the minimum threshold score of 60.",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "compliance_exception_report.json"
+    ],
+    "evidence": "Calculate total scores for all 32 cells. Count how many are < 60. Verify the exception report JSON contains exactly this number of entries with correct client/product IDs.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Completeness of compliance reporting.",
+    "criterion": [
+      "All combinations with total score < 60 are included in the report.",
+      "No combinations with score >= 60 are incorrectly included."
+    ],
+    "acceptable_alternatives": "None.",
+    "failure_examples": "Missing combinations that score exactly 55, or including a combination that scores 62.",
+    "anchors": {
+      "1": "The exception report perfectly captures all sub-60 combinations.",
+      "0": "The exception report misses sub-60 combinations or includes valid ones."
+    }
+  },
+  {
+    "id": "R08",
+    "description": "Correctly applies preference/exclusion tag logic, specifically ensuring Client C02's exclusion of 'Leverage' correctly impacts scores and flags.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1",
+      "REQ2"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx",
+      "compliance_exception_report.json"
+    ],
+    "evidence": "Check C02 vs P7. P7 has 'Leverage'. C02 excludes 'Leverage'. Score must have -30, and it must be flagged as a hard exclusion in the exception report.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Correct application of tag-based constraints.",
+    "criterion": [
+      "C02 vs P7 receives -30 in the matrix.",
+      "C02 vs P7 is flagged as a hard exclusion in the exception report."
+    ],
+    "acceptable_alternatives": "None.",
+    "failure_examples": "Applying only the -30 score penalty but failing to flag it as a hard exclusion in the report.",
+    "anchors": {
+      "1": "C02 vs P7 is correctly penalized and flagged as a hard exclusion.",
+      "0": "C02 vs P7 penalty or hard exclusion flag is missing/incorrect."
+    }
+  },
+  {
+    "id": "R09",
+    "description": "The product matching matrix includes all required columns for the score breakdown (Term, Risk, Pref, Liq, Total) and correctly identifies the top match for each client.",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx"
+    ],
+    "evidence": "Inspect Excel file structure. Must have columns for score components. Must have a clear indicator (e.g., highlight, 'Top Match' column) for the best product per client.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Basic deliverable formatting and usability.",
+    "criterion": [
+      "Matrix contains all score breakdown columns.",
+      "Top match for each of the 4 clients is clearly identified."
+    ],
+    "acceptable_alternatives": "Orientation (rows/cols) can vary. Indicator method (color, text) can vary.",
+    "failure_examples": "Providing only the final total score without the breakdown, or failing to identify the top match.",
+    "anchors": {
+      "1": "Matrix has all breakdown columns and clearly identifies top matches.",
+      "0": "Matrix is missing breakdown columns or top match identification."
+    }
+  },
+  {
+    "id": "R10",
+    "description": "All client pitch drafts include the exact standard disclaimer placeholder: '[Insert Standard Aegis Risk Disclosure Here]' at the end.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ3"
+    ],
+    "deliverables": [
+      "client_pitch_drafts.docx"
+    ],
+    "evidence": "Check the end of each pitch document in the docx file for the exact string '[Insert Standard Aegis Risk Disclosure Here]'.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Strict adherence to internal documentation standards.",
+    "criterion": [
+      "Every pitch draft ends with the exact disclaimer placeholder string."
+    ],
+    "acceptable_alternatives": "None, exact string match required.",
+    "failure_examples": "Omitting the placeholder, or altering the text (e.g., 'Insert Risk Disclosure Here').",
+    "anchors": {
+      "1": "All drafts contain the exact disclaimer placeholder.",
+      "0": "One or more drafts miss or alter the disclaimer placeholder."
+    }
+  },
+  {
+    "id": "R11",
+    "description": "Correctly calculates and references the expected yield range for P3 (Aegis Green Energy Note) as 5.0% to 8.0% in the matching matrix and relevant pitches.",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx",
+      "client_pitch_drafts.docx"
+    ],
+    "evidence": "Check P3's yield in the matrix (if a yield column exists) or in the pitch draft if P3 is matched to C02 or C04. Must state 5.0% - 8.0%.",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "Accurate data extraction and representation.",
+    "criterion": [
+      "P3 yield range is correctly identified as 5.0% to 8.0% wherever referenced."
+    ],
+    "acceptable_alternatives": "Formatting as '5-8%' or '5.0%-8.0%' is acceptable.",
+    "failure_examples": "Stating the yield is fixed at 5%, or confusing it with P2's 4-6% range.",
+    "anchors": {
+      "1": "P3 yield range is perfectly accurate in all references.",
+      "0": "P3 yield range is inaccurate in any reference."
+    }
+  },
+  {
+    "id": "R12",
+    "description": "Accurately parses and explains the 'early_redemption_penalty_pct' mechanics in the pitch drafts, differentiating between the 0% (Cash Shield), 1.5-3% (Moderate), and 5-8% (Aggressive) structures.",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "client_pitch_drafts.docx"
+    ],
+    "evidence": "Review all pitch drafts. Check if the specific penalty percentage of the matched product is correctly stated and contextualized (e.g., 'If you need to exit before 3 years, a 2% penalty applies').",
+    "numeric_tolerance": 0,
+    "weight_reason": "Depth of product term understanding and client communication.",
+    "criterion": [
+      "Specific penalty percentages are correctly stated for each matched product.",
+      "The mechanics (when it applies) are clearly explained."
+    ],
+    "acceptable_alternatives": "Acceptable to group similar penalties if products are tied, but must be accurate.",
+    "failure_examples": "Stating a flat 5% penalty for all products, or omitting the penalty for P3 (2%).",
+    "levels": {
+      "0": "Completely omits early redemption penalties for all drafts, or states a single incorrect flat rate for all.",
+      "0.25": "Mentions penalties exist but gets the specific percentages wrong for the majority of the matched products.",
+      "0.5": "Correctly states the penalty percentages for the matched products, but fails to explain the mechanics (i.e., that it only applies if redeemed early).",
+      "0.75": "Correctly states percentages and explains the mechanics, but the explanation is slightly confusing or uses overly technical jargon.",
+      "1": "Perfectly states the exact penalty percentages for each matched product and clearly, simply explains that these apply only upon early exit, ensuring client comprehension."
+    }
+  },
+  {
+    "id": "R13",
+    "description": "The compliance exception report correctly calculates and states the total number of unique client-product combinations that failed (score < 60 or hard exclusion).",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ1",
+      "REQ2"
+    ],
+    "deliverables": [
+      "compliance_exception_report.json"
+    ],
+    "evidence": "Count the total number of failed combinations (including hard exclusions and score < 60). The JSON must include a 'total_exceptions' field matching this exact count.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Summary accuracy for compliance reporting.",
+    "criterion": [
+      "The total exception count in the report matches the actual number of failed combinations."
+    ],
+    "acceptable_alternatives": "None.",
+    "failure_examples": "Hard exclusions that also have a score < 60 are double-counted, or hard exclusions with a score >= 60 are missed.",
+    "anchors": {
+      "1": "Total exception count is perfectly accurate.",
+      "0": "Total exception count is incorrect."
+    }
+  },
+  {
+    "id": "R14",
+    "description": "In client pitch drafts, the use of prohibited absolute guarantee terms (e.g., 'absolute principal protection', 'risk-free', 'guaranteed return') is strictly avoided.",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "client_pitch_drafts.docx"
+    ],
+    "evidence": "Text search the docx file for terms like 'absolute', 'risk-free', 'guaranteed', '100% safe'.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Critical compliance violation in financial marketing.",
+    "criterion": [
+      "No prohibited absolute guarantee terms are present in any pitch draft."
+    ],
+    "acceptable_alternatives": "Using conditional terms like 'designed to protect', 'subject to conditions' is acceptable.",
+    "failure_examples": "Writing 'This product offers a risk-free guaranteed return' for P1.",
+    "anchors": {
+      "1": "Prohibited terms are found (triggering penalty).",
+      "0": "No prohibited terms found (no penalty)."
+    }
+  },
+  {
+    "id": "R15",
+    "description": "The product matching matrix omits any client or product records, failing to cover the complete 4x8=32 combinations.",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx"
+    ],
+    "evidence": "Count the rows/columns in the matrix. Must be exactly 4 clients and 8 products, resulting in 32 data cells.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Completeness of the core analytical deliverable.",
+    "criterion": [
+      "Matrix contains exactly 32 combination evaluations."
+    ],
+    "acceptable_alternatives": "None.",
+    "failure_examples": "Missing P8 because it's 'too short', or missing C04.",
+    "anchors": {
+      "1": "Matrix is incomplete (triggering penalty).",
+      "0": "Matrix is complete with 32 combinations (no penalty)."
+    }
+  },
+  {
+    "id": "R16",
+    "description": "Correctly identifies Client C04's 'ESG' preference and matches it with P3 (Aegis Green Energy Note), which carries the 'ESG' tag.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx"
+    ],
+    "evidence": "Check C04 vs P3. It must receive +10 for the 'ESG' preference match. P3 should be identified as the top match for C04.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Accurate application of preference matching logic.",
+    "criterion": [
+      "C04 vs P3 receives +10 for ESG match.",
+      "P3 is selected as top match for C04."
+    ],
+    "acceptable_alternatives": "If P5 ties with P3 due to other factors, selecting P3 is correct due to ESG preference weight.",
+    "failure_examples": "Missing the ESG tag match, resulting in P3 not being the top recommendation for C04.",
+    "anchors": {
+      "1": "C04's ESG preference is correctly matched with P3.",
+      "0": "ESG preference match is missed or incorrectly applied."
+    }
+  },
+  {
+    "id": "R17",
+    "description": "The matching matrix correctly applies the 'Leverage' exclusion penalty (-30) for C01 and C02 when evaluating P7.",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx"
+    ],
+    "evidence": "Check C01 vs P7 and C02 vs P7. Both must have -30 in the preference/exclusion column due to the 'Leverage' exclusion.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Specific constraint application.",
+    "criterion": [
+      "C01 vs P7 and C02 vs P7 both receive -30 for Leverage exclusion."
+    ],
+    "acceptable_alternatives": "None.",
+    "failure_examples": "Applying the -30 only to C01 but forgetting C02, or applying it to C03 (who has no leverage exclusion).",
+    "anchors": {
+      "1": "Leverage exclusion penalty correctly applied to C01 and C02 for P7.",
+      "0": "Penalty incorrectly applied or missing."
+    }
+  },
+  {
+    "id": "R18",
+    "description": "Correctly parses the 'leverage_factor' of 1.5 for P7 (Aegis Tech Innovation Warrants) and reflects this amplified risk/return profile in the matching and pitch.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx",
+      "client_pitch_drafts.docx"
+    ],
+    "evidence": "Check if P7's leverage factor is noted in the matrix (if a column exists) and if the pitch draft for C03 (if matched to P7 or similar) mentions the leveraged nature.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Understanding of complex product features.",
+    "criterion": [
+      "Leverage factor of 1.5 for P7 is correctly identified.",
+      "The pitch draft contextualizes the leverage for the client."
+    ],
+    "acceptable_alternatives": "If P7 is not the top match for C03 (e.g., P4 is better), the leverage factor still needs to be correctly parsed in the matrix.",
+    "failure_examples": "Ignoring the leverage_factor column entirely, or stating P7 has no leverage.",
+    "anchors": {
+      "1": "Leverage factor for P7 is correctly parsed and reflected.",
+      "0": "Leverage factor is ignored or misstated."
+    }
+  },
+  {
+    "id": "R19",
+    "description": "The overall information adaptation in the pitch drafts successfully translates the dry CSV data into cohesive, professional, and client-centric narratives without losing technical accuracy.",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "client_pitch_drafts.docx"
+    ],
+    "evidence": "Holistic review of all pitch drafts. Do they read like professional financial advisory documents? Do they integrate yield, term, risk, and penalties smoothly?",
+    "numeric_tolerance": 0,
+    "weight_reason": "Overall quality of the primary output artifact.",
+    "criterion": [
+      "Drafts are cohesive, professional, and client-centric.",
+      "All technical data from CSV is integrated smoothly without reading like a raw data dump."
+    ],
+    "acceptable_alternatives": "Variations in structure (e.g., bullet points vs paragraphs) are acceptable.",
+    "failure_examples": "Simply copy-pasting the CSV rows into the document with a 'Dear Client' header.",
+    "anchors": {
+      "1": "Drafts are highly professional, cohesive, and well-adapted.",
+      "0": "Drafts are disjointed, overly technical, or read like raw data dumps."
+    }
+  },
+  {
+    "id": "R20",
+    "description": "All deliverables are saved with the exact specified filenames in the /app/output directory.",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "product_matching_matrix.xlsx",
+      "client_pitch_drafts.docx",
+      "compliance_exception_report.json"
+    ],
+    "evidence": "Check file names in /app/output. Must be exactly 'product_matching_matrix.xlsx', 'client_pitch_drafts.docx', 'compliance_exception_report.json'.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Basic instruction following for file management.",
+    "criterion": [
+      "All three files exist with exact names."
+    ],
+    "acceptable_alternatives": "None.",
+    "failure_examples": "Naming the files 'matrix.xlsx' or 'pitches.docx'.",
+    "anchors": {
+      "1": "All filenames are exact.",
+      "0": "One or more filenames are incorrect."
+    }
+  },
+  {
+    "id": "R21",
+    "description": "Correctly calculates the 'Preference' score component, accurately tallying +10 for each matching tag between client preferences and product tags.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "product_matching_matrix.xlsx"
+    ],
+    "evidence": "Check 'Preference/Exclusion' column. E.g., C02 (Fixed Income, ESG) vs P3 (ESG, Tech) = +10. C03 (Tech, High Yield, Commodities) vs P4 (Tech, High Yield, Commodities) = +30.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Core preference matching logic.",
+    "criterion": [
+      "Preference scores correctly add +10 for each matching tag.",
+      "Exclusion scores correctly subtract -30 for each matching tag.",
+      "Combined net score is correct."
+    ],
+    "acceptable_alternatives": "None.",
+    "failure_examples": "Capping the preference score at +20, or failing to count multiple matching tags (e.g., C03 vs P4 should be +30, not +10).",
+    "anchors": {
+      "1": "Preference/Exclusion scores are perfectly calculated for all 32 cells.",
+      "0": "Preference/Exclusion scores contain calculation errors."
+    }
+  }
+]

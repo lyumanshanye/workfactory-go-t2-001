@@ -1,0 +1,30 @@
+{
+  "key_metrics": {
+    "Total_Tickets": 20,
+    "Expense": {
+      "Count": 8,
+      "Avg_Queue_h": 2.03,
+      "Avg_Process_h": 1.0,
+      "Rework_Rate": "50%",
+      "Top_Reasons": "Receipt_Missing(2), Category_Error(2)"
+    },
+    "Access": {
+      "Count": 6,
+      "Avg_Queue_h": 0.23,
+      "Avg_Process_h": 0.5,
+      "Rework_Rate": "0%",
+      "Top_Reasons": "None"
+    },
+    "Contract": {
+      "Count": 6,
+      "Avg_Queue_h": 0.16,
+      "Avg_Process_h": 2.68,
+      "Rework_Rate": "83.3%",
+      "Top_Reasons": "Missing_Signature(3), Wrong_Clause(2)"
+    }
+  },
+  "hypothesis_verification": "总监假设合同组人手不足。数据表明合同组平均排队时间仅0.16h，远低于Expense的2.03h，说明后端并未积压。根因是前端提交质量差导致返工率高达83.3%，而非人力不足。盲目增加HC是错误的。",
+  "sla_analysis": "按首次完成时间（FirstCompletedAt - CreatedAt）计算，所有工单均未超过各自SLA（Expense 4h, Access 2h, Contract 8h），表面达标率100%。但Contract因返工导致最终交付跨天，隐性体验差。",
+  "optimization_logic": "Expense瓶颈在排队，需前置校验或削峰；Contract瓶颈在处理与返工，需标准模板与前端预审。",
+  "pilot_design": "建议选取Sales部作为实验组实施前置校验，其他部门对照。周期2-4周。验收指标：实验组报销返工率降至20%以下，合同平均处理时间缩短30%。"
+}

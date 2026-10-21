@@ -1,0 +1,496 @@
+[
+  {
+    "id": "R01",
+    "description": "正确合并数据并计算派生字段（抽样比例、总缺陷率）。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "检查 Raw_Data_Merged sheet，确认包含所有12条记录，且新增列 sampling_ratio 和 defect_rate 计算正确。例如 B-1001 的 sampling_ratio 应为 50/2000=0.025，defect_rate 应为 8/50=0.16。",
+    "numeric_tolerance": 0.001,
+    "weight_reason": "数据准备是后续所有分析的基础，权重高。",
+    "criterion": [
+      "正确通过 batch_id 合并两个文件",
+      "正确计算抽样比例 (sample_size / total_volume_kg)",
+      "正确计算总缺陷率 ((spoilage + damage) / sample_size)"
+    ],
+    "anchors": {
+      "0": "合并失败或计算逻辑错误，如用总到货量做分母计算缺陷率。",
+      "1": "完全正确合并且派生字段计算无误。"
+    },
+    "acceptable_alternatives": "允许使用 R, Python(pandas), 或 Excel 公式进行计算，只要结果一致。",
+    "failure_examples": "将 defect_rate 计算为 (spoilage + damage) / total_volume_kg，导致率值极小且逻辑错误。"
+  },
+  {
+    "id": "R02",
+    "description": "检查数据逻辑一致性，确保 sample_size = pass_count + spoilage_count + damage_count。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "在 Raw_Data_Merged 或数据质量检查部分，验证每行的数量加总是否等于 sample_size。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数据质量检查是统计师的基本专业实践。",
+    "criterion": [
+      "验证 sample_size 等于 pass, spoilage, damage 之和",
+      "发现并报告任何不一致（本数据集无不一致，但需有验证动作）"
+    ],
+    "anchors": {
+      "0": "未进行数据一致性校验。",
+      "1": "进行了校验并确认数据逻辑一致。"
+    },
+    "acceptable_alternatives": "在代码注释、工作簿单独Sheet或备忘录中说明已校验。",
+    "failure_examples": "直接跳过数据校验进行建模，未确认分母（sample_size）的准确性。"
+  },
+  {
+    "id": "R03",
+    "description": "计算各班组、各货物类别的加权平均缺陷率及标准差。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "检查 Descriptive_Stats sheet，确认按 team 和 product_category 分组统计了缺陷率。",
+    "numeric_tolerance": 0.01,
+    "weight_reason": "描述性统计是理解数据分布的必要步骤。",
+    "criterion": [
+      "按 team 分组计算加权缺陷率",
+      "按 product_category 分组计算加权缺陷率",
+      "提供标准差或方差指标"
+    ],
+    "anchors": {
+      "0": "未分组或仅计算了简单算术平均（未加权）。",
+      "1": "正确分组并计算了加权缺陷率（总缺陷/总抽样）。"
+    },
+    "acceptable_alternatives": "加权平均可表示为 sum(defects)/sum(samples)，也可使用加权平均函数。",
+    "failure_examples": "直接对各批次的 defect_rate 求算术平均，忽略了批次抽样量不同的权重差异。"
+  },
+  {
+    "id": "R04",
+    "description": "识别出 Beta 班组抽样量最小且方差最大的特征。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "analysis_workbook.xlsx",
+      "operational_memo.md"
+    ],
+    "evidence": "在描述性统计或备忘录中，明确指出 Beta 班组的平均 sample_size 最小，且其缺陷率的方差/标准差最大。",
+    "numeric_tolerance": null,
+    "weight_reason": "考察对数据分布特征的敏锐度。",
+    "criterion": [
+      "指出 Beta 班组平均抽样量最小",
+      "指出 Beta 班组缺陷率方差最大"
+    ],
+    "anchors": {
+      "0": "未提及 Beta 班组的抽样特征。",
+      "1": "准确指出 Beta 班组的抽样量小和方差大。"
+    },
+    "acceptable_alternatives": "通过图表直观展示 Beta 班组数据点最分散也可接受。",
+    "failure_examples": "认为三个班组的抽样代表性一致，忽略了 Beta 班组样本量不足的问题。"
+  },
+  {
+    "id": "R05",
+    "description": "构建广义线性模型（GLM）评估班组效应，控制货物类别和抽样比例。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "检查 GLM_Results sheet，确认使用了合适的模型（如 binomial family with logit link，或 beta regression），因变量为缺陷数/总抽样数（或比例），自变量包含 team, product_category, sampling_ratio。",
+    "numeric_tolerance": null,
+    "weight_reason": "核心统计建模任务，考察处理比例数据和混杂变量的能力。",
+    "criterion": [
+      "选择适合比例数据的模型（GLM Binomial 或 Beta regression）",
+      "因变量设置正确（cbind(defects, passes) 或 proportion with weights）",
+      "自变量包含 team, product_category, sampling_ratio"
+    ],
+    "anchors": {
+      "0": "使用了普通线性回归（OLS）直接对比例进行回归，或未控制关键混杂变量。",
+      "1": "正确构建并拟合了 GLM 或 Beta 回归模型。"
+    },
+    "acceptable_alternatives": "使用 quasibinomial 处理过度离散也是可接受的替代方案。",
+    "failure_examples": "使用 OLS 回归，且未将 product_category 放入模型，导致班组效应被货物类别混淆。"
+  },
+  {
+    "id": "R06",
+    "description": "正确解释 GLM 中班组效应的 p 值和效应量，不将相关性等同于因果性。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "analysis_workbook.xlsx",
+      "operational_memo.md"
+    ],
+    "evidence": "在 GLM_Results 或备忘录中，解释 team 变量的系数和 p 值。说明在控制货物类别后，班组差异是否依然显著。",
+    "numeric_tolerance": null,
+    "weight_reason": "统计解释的准确性是核心交付价值。",
+    "criterion": [
+      "报告 team 变量的系数、标准误和 p 值",
+      "解释系数方向（如 Alpha 相比 Gamma 的 log-odds 变化）",
+      "明确说明这是控制混杂后的净效应"
+    ],
+    "anchors": {
+      "0": "未报告 p 值，或错误解释系数方向，或暗示因果关系。",
+      "1": "准确报告并解释统计显著性和效应方向，保持因果推断的谨慎。"
+    },
+    "acceptable_alternatives": "使用优势比（Odds Ratio）解释系数也是完全可接受的。",
+    "failure_examples": "直接断言“Alpha班组检验标准宽松导致缺陷率高”，而未说明这可能是由于货物类别差异造成的。"
+  },
+  {
+    "id": "R07",
+    "description": "检查模型残差或拟合优度，评估模型假设。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "在 GLM_Results 或代码中，包含对模型拟合度的检查（如 Deviance residuals, 或 Beta regression 的 pseudo R-squared）。",
+    "numeric_tolerance": null,
+    "weight_reason": "模型诊断是专业统计实践的必备环节。",
+    "criterion": [
+      "计算或提取残差/拟合优度指标",
+      "对模型假设或拟合情况进行简要评估"
+    ],
+    "anchors": {
+      "0": "完全缺失模型诊断步骤。",
+      "1": "进行了合理的模型诊断并记录了结果。"
+    },
+    "acceptable_alternatives": "对于 Beta 回归，报告 McFadden's pseudo R-squared 或 AIC/BIC 均可。",
+    "failure_examples": "直接采信模型结果，未检查是否存在过度离散或异常残差。"
+  },
+  {
+    "id": "R08",
+    "description": "使用二项分布或正态近似正确计算各批次缺陷率的95%置信区间。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "检查 Confidence_Intervals sheet，确认每个批次都有 95% CI 的上下限。计算公式应基于二项分布（如 Clopper-Pearson 或 Wilson score）或合理的正态近似。",
+    "numeric_tolerance": 0.02,
+    "weight_reason": "量化不确定性是本题的另一核心要求。",
+    "criterion": [
+      "为所有12个批次计算 95% CI",
+      "使用正确的统计分布（二项分布或近似）",
+      "CI 上下限逻辑正确（下限>=0，上限<=1）"
+    ],
+    "anchors": {
+      "0": "未计算 CI，或计算公式完全错误（如使用错误的样本量）。",
+      "1": "正确计算并报告了所有批次的 95% CI。"
+    },
+    "acceptable_alternatives": "允许使用 exact binomial (Clopper-Pearson), Wilson score, 或 Agresti-Coull 近似。",
+    "failure_examples": "使用总体积（total_volume_kg）作为样本量来计算标准误，导致置信区间极窄且完全错误。"
+  },
+  {
+    "id": "R09",
+    "description": "识别出抽样量小于30的批次，并指出其置信区间过宽，不具备管理决策参考价值。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "analysis_workbook.xlsx",
+      "operational_memo.md"
+    ],
+    "evidence": "在 Confidence_Intervals 或备忘录中，明确标记 sample_size < 30 的批次（B-1002:30, B-1005:25, B-1011:20，注：30通常作为边界，若严格按<30则为25和20，若<=30则包含30。接受合理界定），并说明其 CI 宽度。",
+    "numeric_tolerance": null,
+    "weight_reason": "考察将统计结果转化为业务风险警告的能力。",
+    "criterion": [
+      "识别出小样本批次（如 B-1005, B-1011）",
+      "指出其置信区间宽度较大",
+      "得出其不具备管理决策参考价值的结论"
+    ],
+    "anchors": {
+      "0": "未识别小样本批次，或未对 CI 宽度进行业务解读。",
+      "1": "准确识别并正确解读了小样本批次的统计局限性。"
+    },
+    "acceptable_alternatives": "设定阈值在 25 或 30 均可，只要逻辑一致且有明确说明。",
+    "failure_examples": "将所有批次的置信区间同等对待，建议管理层依据 B-1011 的窄区间或点估计进行决策。"
+  },
+  {
+    "id": "R10",
+    "description": "备忘录明确区分了“批次固有差异”（货物类别）和“班组测量误差”。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "operational_memo.md"
+    ],
+    "evidence": "在备忘录的分析部分，明确讨论 product_category 对缺陷率的基础影响（如 berries 天然高于 root_vegs），并将其与 team 的效应分开讨论。",
+    "numeric_tolerance": null,
+    "weight_reason": "考察业务沟通中区分混杂因素和核心关注点的能力。",
+    "criterion": [
+      "讨论货物类别对缺陷率的基线影响",
+      "讨论班组效应在控制货物类别后的表现",
+      "明确区分两者对最终缺陷率的贡献"
+    ],
+    "anchors": {
+      "0": "将货物差异和班组差异混为一谈，未进行区分。",
+      "1": "清晰、逻辑严密地区分了批次固有差异和班组效应。"
+    },
+    "acceptable_alternatives": "使用因果图（DAG）概念或简单的文字逻辑推导均可。",
+    "failure_examples": "直接说“Alpha班组检出的缺陷多是因为他们运气不好抽到了坏批次”，而未从货物类别的统计显著性角度进行论证。"
+  },
+  {
+    "id": "R11",
+    "description": "备忘录中关于班组差异的结论是谨慎的，考虑了抽样比例的混杂。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "operational_memo.md"
+    ],
+    "evidence": "在结论或建议部分，提及抽样比例（sampling_ratio）可能对结果的影响，或说明当前数据不足以完全排除抽样偏差。",
+    "numeric_tolerance": null,
+    "weight_reason": "体现统计师的严谨性和对业务复杂性的理解。",
+    "criterion": [
+      "提及抽样比例/抽样代表性的潜在影响",
+      "结论使用谨慎措辞（如“可能”、“需进一步验证”）"
+    ],
+    "anchors": {
+      "0": "给出绝对化结论，忽略了抽样比例这一关键设计因素。",
+      "1": "结论谨慎，充分考虑了抽样设计的局限性。"
+    },
+    "acceptable_alternatives": "建议未来进行分层抽样或固定抽样比例以消除混杂。",
+    "failure_examples": "断言“GLM模型已完全控制混杂，Alpha班组确实存在系统性漏检”，忽略了抽样比例本身的非随机性。"
+  },
+  {
+    "id": "R12",
+    "description": "运营建议的合理性与可操作性。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [],
+    "deliverables": [
+      "operational_memo.md"
+    ],
+    "evidence": "评估备忘录最后部分的建议质量。",
+    "numeric_tolerance": null,
+    "weight_reason": "最终交付物的业务价值体现。",
+    "criterion": [
+      "建议是否针对统计发现（如统一抽样标准、增加小批次抽样量）",
+      "建议是否可落地（如修改SOP、增加培训）",
+      "是否避免了不合理的惩罚性建议"
+    ],
+    "levels": {
+      "0": "无建议，或建议完全脱离统计发现（如建议更换所有质检员）。",
+      "0.25": "建议空泛（如“加强管理”、“提高意识”），无具体统计依据支撑。",
+      "0.5": "建议部分合理，但忽略了抽样设计问题（如只建议培训班组，未提及调整抽样比例）。",
+      "0.75": "建议合理且基于统计发现，但缺乏具体的实施步骤或优先级。",
+      "1": "建议高度可操作，针对班组校准、抽样SOP修订、小批次特殊处理均有明确且合理的落地方案。"
+    },
+    "acceptable_alternatives": "允许建议引入自动化抽检设备或第三方盲测作为补充。",
+    "failure_examples": "建议直接扣除 Beta 班组绩效，而未指出其样本量不足是系统设计问题而非人员问题。"
+  },
+  {
+    "id": "R13",
+    "description": "工作簿包含要求的四个Sheet，且命名正确。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "检查 Excel 文件的 Sheet 标签，确认包含 Raw_Data_Merged, Descriptive_Stats, GLM_Results, Confidence_Intervals。",
+    "numeric_tolerance": null,
+    "weight_reason": "基本的交付格式规范。",
+    "criterion": [
+      "包含4个指定的Sheet",
+      "Sheet命名与要求完全一致"
+    ],
+    "anchors": {
+      "0": "Sheet数量不对或命名有误。",
+      "1": "完全符合命名和结构要求。"
+    },
+    "acceptable_alternatives": "Sheet名称大小写不敏感，或允许极微小的拼写变体（如 Confidence_Interval）。",
+    "failure_examples": "将所有内容放在一个Sheet中，或使用默认的Sheet1, Sheet2命名。"
+  },
+  {
+    "id": "R14",
+    "description": "数据Sheet中包含原始字段和所有派生字段。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "检查 Raw_Data_Merged sheet，确认列包含原始字段及 sampling_ratio, defect_rate, total_defects 等。",
+    "numeric_tolerance": null,
+    "weight_reason": "确保数据的可复核性和完整性。",
+    "criterion": [
+      "保留所有原始列",
+      "包含所有计算出的派生列"
+    ],
+    "anchors": {
+      "0": "删除了原始列或遗漏了关键派生列。",
+      "1": "完整保留原始数据并清晰展示派生数据。"
+    },
+    "acceptable_alternatives": "派生列可以命名为英文或中文，只要含义明确。",
+    "failure_examples": "为了“整洁”删除了 supplier_id 或 transit_hours 等原始字段，导致无法追溯。"
+  },
+  {
+    "id": "R15",
+    "description": "直接将班组检出率差异归结为“员工故意作弊/渎职”，缺乏统计证据支持。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "operational_memo.md"
+    ],
+    "evidence": "在备忘录中搜索“作弊”、“渎职”、“故意”、“放水”等词汇，且未加任何统计限定条件。",
+    "numeric_tolerance": null,
+    "weight_reason": "严重的专业伦理错误，可能导致严重的管理事故。负分惩罚。",
+    "criterion": [
+      "未做出无证据的主观恶意推断"
+    ],
+    "anchors": {
+      "0": "在备忘录中做出了无证据的恶意推断。",
+      "1": "未发生此类错误（注意：此题中1为合格，0为触发惩罚）。"
+    },
+    "acceptable_alternatives": "如果提到“可能存在人为偏差”，必须伴随“需进一步通过盲测验证”等谨慎措辞。",
+    "failure_examples": "在备忘录中写道：“Alpha班组缺陷率高，说明该班组员工存在故意放水、渎职行为，建议立即停职调查。”"
+  },
+  {
+    "id": "R16",
+    "description": "在计算置信区间时，使用了错误的公式导致区间完全错误。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "检查 Confidence_Intervals sheet 中的计算公式或代码逻辑。",
+    "numeric_tolerance": null,
+    "weight_reason": "核心计算错误，导致不确定性量化完全失效。负分惩罚。",
+    "criterion": [
+      "未使用错误的分母（如 total_volume_kg）",
+      "未使用错误的分布假设"
+    ],
+    "anchors": {
+      "0": "使用了根本错误的公式（如用总体积做样本量）。",
+      "1": "未发生此类错误。"
+    },
+    "acceptable_alternatives": "正态近似在 np>=5 时是可接受的，不算错误。",
+    "failure_examples": "计算标准误时使用 sqrt(p*(1-p)/total_volume_kg)，导致置信区间窄到失去意义。"
+  },
+  {
+    "id": "R17",
+    "description": "在模型中引入了导致严重多重共线性或模型不收敛的变量设置。",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "检查 GLM_Results 中的变量设置。",
+    "numeric_tolerance": null,
+    "weight_reason": "建模基础错误，导致结果不可信。负分惩罚。",
+    "criterion": [
+      "未将绝对数（如 spoilage_count）和比例同时作为自变量",
+      "未引入完全共线的虚拟变量"
+    ],
+    "anchors": {
+      "0": "引入了导致共线性的变量组合。",
+      "1": "未发生此类错误。"
+    },
+    "acceptable_alternatives": "如果只使用比例数据，或使用绝对数但不混用，均可接受。",
+    "failure_examples": "将 sample_size, pass_count, spoilage_count, damage_count 全部作为独立连续变量放入 GLM，导致完全共线性。"
+  },
+  {
+    "id": "R18",
+    "description": "在描述性统计中，正确计算了加权缺陷率。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "检查 Descriptive_Stats sheet 中班组或类别的平均缺陷率计算逻辑。",
+    "numeric_tolerance": 0.01,
+    "weight_reason": "加权平均是处理不等样本量比例数据的标准做法。",
+    "criterion": [
+      "使用总缺陷数/总抽样数计算平均率",
+      "未使用简单算术平均"
+    ],
+    "anchors": {
+      "0": "使用了简单算术平均（各批次缺陷率的平均）。",
+      "1": "正确使用了加权平均。"
+    },
+    "acceptable_alternatives": "在代码或注释中明确说明了加权计算的逻辑。",
+    "failure_examples": "计算 Alpha 班组平均缺陷率时，直接将 0.16, 0.20, 0.25, 0.22 相加除以 4，忽略了各批次样本量（50, 60, 40, 45）的不同。"
+  },
+  {
+    "id": "R19",
+    "description": "备忘录格式规范，包含清晰的标题、日期、收件人和专业签名。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "operational_memo.md"
+    ],
+    "evidence": "检查 operational_memo.md 的头部和尾部格式。",
+    "numeric_tolerance": null,
+    "weight_reason": "基本的商务文档规范。",
+    "criterion": [
+      "包含 To, From, Date, Subject 等标准头部",
+      "包含专业的结尾签名"
+    ],
+    "anchors": {
+      "0": "缺乏标准备忘录格式，像是一篇普通文章。",
+      "1": "格式规范，符合商务备忘录标准。"
+    },
+    "acceptable_alternatives": "使用 Markdown 的引用块或表格来展示头部信息也是可接受的。",
+    "failure_examples": "直接以“大家好”开头，没有明确的收件人和日期。"
+  },
+  {
+    "id": "R20",
+    "description": "对“抽样比例”作为混杂变量的分析深度。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "operational_memo.md",
+      "analysis_workbook.xlsx"
+    ],
+    "evidence": "评估备忘录或分析中对 sampling_ratio 的讨论深度。",
+    "numeric_tolerance": null,
+    "weight_reason": "考察对业务抽样设计的深入理解。",
+    "criterion": [
+      "指出不同班组/批次抽样比例的差异",
+      "分析抽样比例对缺陷率估计的影响",
+      "提出改进抽样设计的建议"
+    ],
+    "levels": {
+      "0": "完全未提及抽样比例。",
+      "0.25": "仅提及计算了抽样比例，未分析其影响。",
+      "0.5": "指出抽样比例存在差异，但未深入分析其对班组效应评估的混杂作用。",
+      "0.75": "深入分析了抽样比例的混杂作用，但未提出改进抽样设计的建议。",
+      "1": "全面分析抽样比例的混杂作用，并提出了具体、合理的抽样设计改进建议（如按批次规模分层抽样）。"
+    },
+    "acceptable_alternatives": "如果数据中抽样比例差异不大，指出其影响有限并给出合理理由也可得高分。",
+    "failure_examples": "认为抽样比例只是一个无关紧要的辅助指标，未将其纳入任何分析或讨论。"
+  }
+]

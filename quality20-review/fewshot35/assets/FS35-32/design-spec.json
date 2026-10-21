@@ -1,0 +1,622 @@
+{
+  "title": "供应链经理原创工作任务：跨仓补货排程与短缺应对权衡",
+  "request": "你是某重型机械维修集团的供应链经理。公司设有一个中央仓（CDC）和三个区域维修仓（RDC-A, RDC-B, RDC-C）。当前正值季度末设备大修高峰，备件需求激增。\n\n由于部分核心供应商产能受限，实际交货期比合同承诺晚了2-3天，导致CDC当前可用库存无法立即满足各RDC未来14天的预测需求。同时，CDC到各RDC的常规运输班次存在严格的物理容量限制，且每日仅有固定两个班次。\n\n你需要制定一份未来14天的跨仓补货排程计划，并针对无法通过常规班次满足的缺口，提出应对方案（包括RDC间的横向调拨、紧急专车发运或产线等待），量化服务与费用的取舍。\n\n请基于提供的《备件需求与库存快照》和《供应商交货与运输班次计划》，完成以下任务：\n1. 编制14天补货排程表（.xlsx），明确每日、每班次发往各RDC的SKU及数量，确保不违反班次容量限制，并合理推演CDC每日可用库存。\n2. 撰写成本与服务权衡分析报告（.md），计算常规运输、横向调拨、紧急专车的总成本，量化订单满足率（Fill Rate），并对供应商延迟带来的停机风险进行财务评估，提出后续供应链优化建议。\n\n所有输出文件请保存至 /app/output 目录。",
+  "as_of": "2024-05-15T08:00:00+08:00",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "本次任务无外部真实来源",
+      "limitations": "所有业务数据、供应商信息、运输班次及费率均为原创虚构，旨在测试候选人在多约束条件下的供应链规划与权衡能力。不适用外部法规或行业基准校验。"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "inventory_and_demand_snapshot.csv",
+      "purpose": "提供各仓库当前库存、未来14天预测需求、安全库存及备件单位价值，用于计算净需求和优先级。",
+      "content_plan": "包含8个关键备件的库存与需求数据，部分备件存在明显的总需求大于总库存的缺口。",
+      "content": "SKU_ID,Desc,Unit_Value_CNY,CDC_Stock,RDC_A_Stock,RDC_A_Demand_14d,RDC_B_Stock,RDC_B_Demand_14d,RDC_C_Stock,RDC_C_Demand_14d,Safety_Stock_Per_RDC\nSKU-101,液压主泵,12000,15,2,5,1,4,0,6,2\nSKU-102,控制阀组,4500,20,5,12,4,10,3,8,3\nSKU-103,履带链节,800,100,30,60,25,50,20,45,15\nSKU-104,高压油管,350,50,10,25,15,30,12,20,10\nSKU-105,回转马达,25000,8,1,3,0,4,2,3,1\nSKU-106,散热风扇,1500,40,10,20,8,15,5,18,5\nSKU-107,先导手柄,600,60,15,20,10,25,12,15,8\nSKU-108,主滤芯,120,200,50,80,40,100,30,90,20"
+    },
+    {
+      "filename": "supply_and_transport_plan.json",
+      "purpose": "提供供应商延迟后的实际到货计划、CDC到RDC的常规运输班次容量与费率、RDC间横向调拨规则及紧急专车费率，用于约束排程和计算成本。",
+      "content_plan": "JSON格式，包含供应商到货时间、运输路线容量/费率、紧急运输费率及停机成本。",
+      "content": "{\n  \"supplier_arrivals\": [\n    {\"sku\": \"SKU-101\", \"expected_arrival_day\": 4, \"qty\": 10},\n    {\"sku\": \"SKU-102\", \"expected_arrival_day\": 3, \"qty\": 15},\n    {\"sku\": \"SKU-103\", \"expected_arrival_day\": 1, \"qty\": 50},\n    {\"sku\": \"SKU-104\", \"expected_arrival_day\": 5, \"qty\": 40},\n    {\"sku\": \"SKU-105\", \"expected_arrival_day\": 6, \"qty\": 5},\n    {\"sku\": \"SKU-106\", \"expected_arrival_day\": 2, \"qty\": 20},\n    {\"sku\": \"SKU-107\", \"expected_arrival_day\": 1, \"qty\": 30},\n    {\"sku\": \"SKU-108\", \"expected_arrival_day\": 2, \"qty\": 150}\n  ],\n  \"transport_routes\": {\n    \"CDC_to_RDC_A\": {\"daily_capacity_units\": 40, \"cost_per_unit\": 50, \"transit_days\": 1},\n    \"CDC_to_RDC_B\": {\"daily_capacity_units\": 35, \"cost_per_unit\": 65, \"transit_days\": 1},\n    \"CDC_to_RDC_C\": {\"daily_capacity_units\": 30, \"cost_per_unit\": 80, \"transit_days\": 2}\n  },\n  \"horizontal_transfers\": {\n    \"RDC_A_to_RDC_B\": {\"daily_capacity_units\": 10, \"cost_per_unit\": 30, \"transit_days\": 1},\n    \"RDC_B_to_RDC_C\": {\"daily_capacity_units\": 10, \"cost_per_unit\": 45, \"transit_days\": 1},\n    \"RDC_A_to_RDC_C\": {\"daily_capacity_units\": 8, \"cost_per_unit\": 60, \"transit_days\": 2}\n  },\n  \"emergency_transport\": {\n    \"flat_cost_per_dispatch\": 3500,\n    \"max_weight_units\": 20,\n    \"transit_days\": 1\n  },\n  \"downtime_cost_per_unit_per_day\": {\n    \"SKU-101\": 5000, \"SKU-102\": 2000, \"SKU-103\": 500, \"SKU-104\": 200,\n    \"SKU-105\": 12000, \"SKU-106\": 800, \"SKU-107\": 300, \"SKU-108\": 100\n  }\n}"
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "replenishment_schedule.xlsx",
+      "format": "Excel (.xlsx)",
+      "purpose": "14天跨仓补货排程表，包含每日发运计划、班次分配及CDC库存推演，需满足容量约束。"
+    },
+    {
+      "filename": "cost_service_tradeoff_report.md",
+      "format": "Markdown (.md)",
+      "purpose": "成本与服务权衡分析报告，量化常规/调拨/紧急运输成本、订单满足率、停机风险，并提供优化建议。"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "text": "排程表必须确保每日每条路线的发货量不超过该路线的daily_capacity_units限制。",
+      "visibility": "explicit",
+      "basis": "input_data_constraint"
+    },
+    {
+      "id": "REQ-02",
+      "text": "CDC可用库存推演必须严格遵循供应商实际到货时间（expected_arrival_day），不可提前使用未到货库存。",
+      "visibility": "explicit",
+      "basis": "input_data_constraint"
+    },
+    {
+      "id": "REQ-03",
+      "text": "在满足物理约束的前提下，高单位价值或高停机成本的SKU应优先分配早期班次和CDC库存。",
+      "visibility": "professional_practice",
+      "basis": "supply_chain_priority_logic"
+    },
+    {
+      "id": "REQ-04",
+      "text": "当CDC某日某SKU库存不足以满足所有RDC需求时，必须触发横向调拨或紧急专车，并在报告中说明决策逻辑。",
+      "visibility": "explicit",
+      "basis": "task_brief"
+    }
+  ],
+  "authoring_plan": "本题设计核心在于多约束下的时序资源分配。候选人需首先计算各RDC的14天净需求（预测需求 - 当前库存 + 安全库存）。其次，根据供应商延迟到货计划，推演CDC每日的可用库存流入。核心难点在于CDC到RDC的运输班次存在严格的每日物理容量限制（如CDC_to_RDC_C仅30单位/天），当总需求超过CDC初始库存+到货，或单日需求超过班次容量时，候选人必须进行取舍：1）优先保障高价值/高停机成本SKU；2）利用RDC间横向调拨（受限于横向容量）；3）使用昂贵的紧急专车；4）承受停机损失。评分将重点考察约束满足情况（不超容量、不超库存）、优先级逻辑、成本计算准确性以及权衡分析的深度。",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "准确计算各RDC未来14天的净需求缺口（预测需求 - 当前库存 + 安全库存）。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "replenishment_schedule.xlsx",
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "检查排程表或报告中的需求计算部分，核对8个SKU在3个RDC的净需求计算结果（例如SKU-101在RDC_A的净需求应为 5 - 2 + 2 = 5）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "净需求是所有后续排程和成本计算的基础，错误将导致全盘皆输。",
+      "criterion": [
+        "计算公式正确：净需求 = 14d需求 - 当前库存 + 安全库存",
+        "8个SKU * 3个RDC = 24个数据点计算无误",
+        "结果清晰展示在排程表或报告中"
+      ],
+      "anchors": {
+        "0": "存在多处计算错误或公式应用错误",
+        "1": "所有24个净需求数据点计算完全正确"
+      },
+      "acceptable_alternatives": "可在排程表的隐藏Sheet或报告的附录中展示计算过程，只要最终引用数值正确即可。",
+      "failure_examples": "直接拿14d需求减去当前库存，忘记加上安全库存，导致低估缺口。"
+    },
+    {
+      "id": "R02",
+      "description": "正确推演CDC每日可用库存，严格遵循供应商延迟到货时间。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "replenishment_schedule.xlsx"
+      ],
+      "evidence": "检查排程表中的CDC库存推演列。例如SKU-101在第1-3天只能使用初始库存15，第4天加入10，变为可用25（扣除已发运）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "供应商延迟是本题核心冲突源，错误推演会导致超发或虚假缺货。",
+      "criterion": [
+        "初始库存正确扣减每日发运量",
+        "供应商到货量在expected_arrival_day当天准确加入可用库存",
+        "未出现提前使用未到货库存的负库存情况"
+      ],
+      "anchors": {
+        "0": "出现提前使用未到货库存或未按天扣减的情况",
+        "1": "14天内的CDC可用库存推演逻辑和数值完全正确"
+      },
+      "acceptable_alternatives": "采用连续库存流水账形式或每日快照形式展示，只要逻辑等价即可。",
+      "failure_examples": "在第1天就将第4天才到货的SKU-101的10个单位纳入可用库存进行分配。"
+    },
+    {
+      "id": "R03",
+      "description": "排程计划严格遵守各条运输路线的每日物理容量限制。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "replenishment_schedule.xlsx"
+      ],
+      "evidence": "汇总排程表中每日、每条路线（如CDC_to_RDC_C）的发运总件数，核对是否 <= daily_capacity_units（如30）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "物理容量是硬约束，违反则计划在实际中不可执行。",
+      "criterion": [
+        "每日每条路线发运总量 <= 对应路线的daily_capacity_units",
+        "横向调拨也严格遵守其每日容量限制",
+        "无超限分配"
+      ],
+      "anchors": {
+        "0": "存在任意一条路线在任意一天超过容量限制",
+        "1": "所有路线所有天数的发运量均在容量限制内"
+      },
+      "acceptable_alternatives": "如果某日需求超限，候选人选择将部分货物顺延至次日，只要逻辑合理且未超限即可。",
+      "failure_examples": "在第5天向RDC_C发运了35个单位的SKU-103和10个单位的SKU-108，总计45单位，超过了CDC_to_RDC_C的30单位限制。"
+    },
+    {
+      "id": "R04",
+      "description": "补货排程的优先级分配合理性，高价值/高停机成本SKU优先获得稀缺资源。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "replenishment_schedule.xlsx"
+      ],
+      "evidence": "在CDC库存或班次容量受限的天数（如前3天），检查SKU-105（回转马达，单价25000，停机12000）和SKU-101（液压主泵）是否被优先分配，而SKU-108（主滤芯，单价120）是否被延后或截断。",
+      "numeric_tolerance": 0,
+      "weight_reason": "体现供应链经理在资源受限时的业务价值判断能力。",
+      "criterion": [
+        "高单价/高停机成本SKU（如SKU-105, SKU-101）在早期资源紧张时被优先满足",
+        "低单价SKU（如SKU-108）在容量冲突时被合理延后",
+        "优先级逻辑与业务价值（单价*需求或停机成本）正相关"
+      ],
+      "levels": {
+        "0": "完全没有优先级概念，按SKU编号或随机顺序分配，导致高价值SKU严重缺货。",
+        "0.25": "有微弱的优先级意识，但在关键冲突点（如第3天）仍将资源分配给了低价值SKU。",
+        "0.5": "基本按单价排序，但未考虑停机成本（如忽略了SKU-105的极高停机成本）或未考虑需求紧急度。",
+        "0.75": "综合考虑了单价和停机成本，优先级排序合理，但在容量极度紧张时未能果断截断低价值SKU。",
+        "1": "完美综合单价、停机成本和净需求缺口，在资源受限时果断优先保障核心高价值备件，逻辑严密。"
+      },
+      "acceptable_alternatives": "如果候选人采用'最小化总停机损失'的运筹学逻辑进行分配，且结果合理，等同于满足此标准。",
+      "failure_examples": "在第1天班次容量不足时，优先发运了100个单位的SKU-108（主滤芯），导致SKU-105（回转马达）无法发运，引发巨额停机损失。"
+    },
+    {
+      "id": "R05",
+      "description": "横向调拨逻辑的正确性，在CDC缺货时合理触发RDC间调拨。",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "replenishment_schedule.xlsx",
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "检查当CDC某日某SKU可用库存为0时，是否从有富余库存的RDC发起横向调拨（如RDC_A调往RDC_B），并核对调拨量不超过调出方当前可用库存及路线容量。",
+      "numeric_tolerance": 0,
+      "weight_reason": "横向调拨是缓解CDC压力的关键策略，逻辑错误会导致二次缺货或成本计算错误。",
+      "criterion": [
+        "准确识别CDC库存耗尽的SKU和日期",
+        "调拨方向合理（从有富余的RDC到缺货的RDC）",
+        "调拨量不超过调出方扣除自身安全库存后的可用量",
+        "调拨量不超过横向路线的daily_capacity_units"
+      ],
+      "levels": {
+        "0": "未进行任何横向调拨，或调拨方向/数量完全错误。",
+        "0.25": "进行了调拨，但忽略了调出方的安全库存约束，导致调出方自身缺货。",
+        "0.5": "调拨逻辑基本正确，但未遵守横向路线的每日容量限制。",
+        "0.75": "遵守了所有库存和容量约束，但未选择成本最优的调拨路径（如绕远了）。",
+        "1": "完美触发横向调拨，严格遵守所有库存和容量约束，且路径选择成本最优。"
+      },
+      "acceptable_alternatives": "如果CDC有货但距离远、成本高，候选人主动选择横向调拨以节省运费，只要逻辑自洽且满足约束即可。",
+      "failure_examples": "从RDC_A向RDC_B调拨SKU-102，但RDC_A当前库存仅有4个，且其14天需求为12，调拨后导致RDC_A严重缺货。"
+    },
+    {
+      "id": "R06",
+      "description": "紧急专车成本计算准确，触发条件合理。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "核对报告中紧急专车总成本。每次触发计3500元，每次最多20单位。计算触发次数是否合理（如缺口大于20单位时是否拆分为多次或结合其他方案）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "紧急运输成本高昂，准确计算是财务评估的基础。",
+      "criterion": [
+        "触发条件合理（常规和调拨无法满足且停机成本>运费时）",
+        "每次专车装载量 <= 20单位",
+        "总成本 = 触发次数 * 3500，计算无误"
+      ],
+      "anchors": {
+        "0": "触发次数计算错误或单次装载超限",
+        "1": "触发逻辑合理，总成本计算完全正确"
+      },
+      "acceptable_alternatives": "如果缺口为25单位，候选人选择1次专车（20单位）+ 延期5单位，或2次专车（40单位），只要成本计算正确且逻辑自洽均可。",
+      "failure_examples": "缺口为40个SKU-105，直接计算1次专车成本3500元，忽略了单次最多20单位的限制，应至少需要2次。"
+    },
+    {
+      "id": "R07",
+      "description": "常规运输成本汇总计算准确。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "核对排程表中各路线发运总量乘以对应cost_per_unit的汇总结果。",
+      "numeric_tolerance": 0.01,
+      "weight_reason": "基础财务数据准确性。",
+      "criterion": [
+        "各路线发运总量统计正确",
+        "乘以对应费率计算正确",
+        "加总无误"
+      ],
+      "anchors": {
+        "0": "计算存在错误",
+        "1": "计算完全准确"
+      },
+      "acceptable_alternatives": "无",
+      "failure_examples": "将CDC_to_RDC_B的费率65误用为50进行计算。"
+    },
+    {
+      "id": "R08",
+      "description": "量化订单满足率（Fill Rate）并准确评估服务水平。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "报告中需明确给出14天内的整体或分SKU的订单满足率公式和结果（如：总满足需求 / 总净需求）。",
+      "numeric_tolerance": 0.01,
+      "weight_reason": "服务水平是供应链核心KPI，需准确量化。",
+      "criterion": [
+        "明确定义Fill Rate的计算公式",
+        "分子（已满足需求）和分母（总净需求）取值正确",
+        "百分比结果计算无误"
+      ],
+      "anchors": {
+        "0": "未计算或公式/数值错误",
+        "1": "计算准确，定义清晰"
+      },
+      "acceptable_alternatives": "可按价值加权计算Fill Rate，只要定义清晰且计算正确即可。",
+      "failure_examples": "将发货件数除以预测需求件数，未考虑当前已有库存对需求的抵消。"
+    },
+    {
+      "id": "R09",
+      "description": "明确量化供应商延迟导致的具体缺货SKU和财务影响。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "报告中需指出由于供应商X延迟到第Y天，导致SKU-Z在第M天发生缺货，并计算由此产生的额外停机成本或紧急运费。",
+      "numeric_tolerance": 0,
+      "weight_reason": "将运营异常转化为财务语言是供应链经理的核心能力。",
+      "criterion": [
+        "准确指出受延迟影响的SKU及延迟天数",
+        "量化了因延迟导致的额外成本（紧急运费或停机损失）",
+        "逻辑链条完整：延迟 -> 库存不足 -> 缺货/紧急运输 -> 财务损失"
+      ],
+      "anchors": {
+        "0": "未提及供应商延迟影响或逻辑断裂",
+        "1": "准确量化延迟影响，逻辑链条完整"
+      },
+      "acceptable_alternatives": "如果候选人通过对比'假设按期到货'与'实际延迟'两种场景的总成本差异来量化，同样有效。",
+      "failure_examples": "仅笼统提及'供应商延迟导致成本增加'，未具体指出哪个SKU、哪一天受影响，也未给出具体金额。"
+    },
+    {
+      "id": "R10",
+      "description": "横向调拨路径选择的成本最优性。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "replenishment_schedule.xlsx"
+      ],
+      "evidence": "当需要调拨时，检查是否选择了单位成本最低的路径（如A到C，直接调拨60 vs A->B->C 30+45=75，应选择直接）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察成本敏感度。",
+      "criterion": [
+        "识别所有可能的调拨路径",
+        "选择单位成本最低且满足容量约束的路径"
+      ],
+      "anchors": {
+        "0": "选择了高成本路径",
+        "1": "选择了最优成本路径"
+      },
+      "acceptable_alternatives": "如果低成本路径容量不足，选择次优路径并说明原因，视为正确。",
+      "failure_examples": "在容量充足的情况下，从RDC_A调往RDC_C时，选择A->B->C（成本75），而不是直接的A->C（成本60）。"
+    },
+    {
+      "id": "R11",
+      "description": "产能与需求匹配度分析，清晰展示时序冲突。",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "报告中是否有图表或清晰的文字描述，展示每日CDC到货量、RDC需求量与运输班次容量之间的时序错配。",
+      "numeric_tolerance": 0,
+      "weight_reason": "帮助管理层直观理解瓶颈所在。",
+      "criterion": [
+        "识别出产能瓶颈的具体日期和路线",
+        "对比了需求峰值与产能限制",
+        "清晰解释了为何某些SKU必须等待或紧急发运"
+      ],
+      "levels": {
+        "0": "完全没有时序冲突分析，只给最终结果。",
+        "0.25": "提到了容量限制，但未与具体日期的需求或到货进行对比。",
+        "0.5": "有对比分析，但不够清晰，未明确指出瓶颈发生的具体日期。",
+        "0.75": "清晰展示了时序冲突，但缺乏对业务影响的深入解读。",
+        "1": "通过图表或结构化文字完美展示时序冲突，并准确指出瓶颈对具体SKU交付的连锁影响。"
+      },
+      "acceptable_alternatives": "使用表格对比每日'可用库存+到货' vs '总需求' vs '班次总容量'，只要逻辑清晰即可。",
+      "failure_examples": "仅说'因为容量不够所以缺货'，未展示是哪一天的哪条路线容量不够。"
+    },
+    {
+      "id": "R12",
+      "description": "对当前安全库存策略的反思与优化建议。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "报告中是否指出当前各RDC的安全库存设置（如SKU-108每个RDC 20个）在供应商延迟背景下过高或过低，并提出调整建议。",
+      "numeric_tolerance": 0,
+      "weight_reason": "体现持续改进的供应链思维。",
+      "criterion": [
+        "识别出现有安全库存设置的问题",
+        "提出合理的调整方向（如集中CDC或动态调整）",
+        "建议具有可操作性"
+      ],
+      "anchors": {
+        "0": "未提及安全库存优化或建议脱离实际",
+        "1": "提出合理且具操作性的安全库存优化建议"
+      },
+      "acceptable_alternatives": "建议引入VMI或调整订货点，只要逻辑自洽即可。",
+      "failure_examples": "简单建议'增加所有备件的安全库存'，未考虑CDC库存压力和运输容量限制。"
+    },
+    {
+      "id": "R13",
+      "description": "替代方案的经济性对比（停机成本 vs 紧急运费）。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "在决定是否使用紧急专车时，是否对比了'紧急专车成本'与'等待常规班次导致的停机成本'。",
+      "numeric_tolerance": 0,
+      "weight_reason": "核心权衡逻辑，决定资源分配的最终合理性。",
+      "criterion": [
+        "明确获取了downtime_cost_per_unit_per_day数据",
+        "计算了等待期间的预期停机损失",
+        "与紧急专车成本（3500/次）进行对比",
+        "基于对比结果做出是否发紧急专车的决策"
+      ],
+      "levels": {
+        "0": "未进行经济性对比，盲目使用紧急专车或盲目等待。",
+        "0.25": "进行了对比，但计算公式错误（如未乘以天数或未考虑多台设备）。",
+        "0.5": "对比逻辑正确，但未考虑专线容量限制（如单次只能发20件）导致的多次专车成本。",
+        "0.75": "准确计算并对比，但在临界点（成本接近时）的决策缺乏明确的阈值说明。",
+        "1": "精准计算停机损失与紧急运费，考虑容量限制，并设定了清晰的决策阈值（如停机损失>运费*1.2时触发紧急）。"
+      },
+      "acceptable_alternatives": "如果候选人引入'客户满意度损失'等定性指标辅助决策，只要核心财务对比正确即可。",
+      "failure_examples": "对于单价120元的SKU-108，停机成本100元/天，等待2天损失200元，却花费3500元发紧急专车，未做经济性对比。"
+    },
+    {
+      "id": "R14",
+      "description": "数据引用准确性，报告与排程表数据一致。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "cost_service_tradeoff_report.md",
+        "replenishment_schedule.xlsx"
+      ],
+      "evidence": "交叉核对报告中引用的SKU名称、总发运量、总成本等关键数据是否与排程表计算结果一致。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保交付物内部逻辑一致性。",
+      "criterion": [
+        "SKU名称/编号一致",
+        "汇总数量一致",
+        "汇总金额一致"
+      ],
+      "anchors": {
+        "0": "存在明显的数据不一致",
+        "1": "数据完全一致"
+      },
+      "acceptable_alternatives": "无",
+      "failure_examples": "报告中称常规运输总成本为50000元，但排程表汇总结果为65000元。"
+    },
+    {
+      "id": "R15",
+      "description": "排程表可执行性，包含所有必要操作字段。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "replenishment_schedule.xlsx"
+      ],
+      "evidence": "检查排程表是否包含：日期、SKU、数量、起点、终点、班次/路线类型。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保输出物能直接指导仓库操作。",
+      "criterion": [
+        "包含日期",
+        "包含SKU和数量",
+        "包含起点和终点",
+        "包含班次或路线标识"
+      ],
+      "anchors": {
+        "0": "缺失关键操作字段",
+        "1": "包含所有必要字段，结构清晰"
+      },
+      "acceptable_alternatives": "字段名称可不同（如'Route'代替'起点-终点'），只要语义明确即可。",
+      "failure_examples": "排程表仅列出'Day 1: SKU-101 5 units'，未说明发往哪个RDC，仓库无法执行。"
+    },
+    {
+      "id": "R16",
+      "description": "【负分项】排程中是否出现违反班次物理容量限制的情况。",
+      "type": "Binary",
+      "weight": -3,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "replenishment_schedule.xlsx"
+      ],
+      "evidence": "复核每日每条路线发运总量是否 <= daily_capacity_units。",
+      "numeric_tolerance": 0,
+      "weight_reason": "物理容量是绝对硬约束，违反则计划作废，必须严惩。",
+      "criterion": [
+        "未发生任何路线任何一天的超限"
+      ],
+      "anchors": {
+        "0": "未发生超限（不得负分）",
+        "1": "发生超限（得负分）"
+      },
+      "acceptable_alternatives": "无",
+      "failure_examples": "CDC_to_RDC_C 在第5天分配了32个单位，超过上限30。"
+    },
+    {
+      "id": "R17",
+      "description": "【负分项】CDC库存推演中是否出现提前使用未到货供应商库存的情况。",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "replenishment_schedule.xlsx"
+      ],
+      "evidence": "检查CDC可用库存流水账，是否在expected_arrival_day之前扣减了该供应商的货。",
+      "numeric_tolerance": 0,
+      "weight_reason": "严重违反业务事实，导致虚假的可用性，必须重罚。",
+      "criterion": [
+        "严格遵守供应商到货时间"
+      ],
+      "anchors": {
+        "0": "严格遵守，未提前使用（不得负分）",
+        "1": "出现提前使用未到货库存（得负分）"
+      },
+      "acceptable_alternatives": "无",
+      "failure_examples": "供应商SKU-101预计第4天到货10件，但在第2天的排程中就将这10件分配发运。"
+    },
+    {
+      "id": "R18",
+      "description": "横向调拨是否受限于特定路线的每日容量。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "replenishment_schedule.xlsx"
+      ],
+      "evidence": "核对横向调拨（如RDC_A_to_RDC_B）的每日发运量是否 <= 10。",
+      "numeric_tolerance": 0,
+      "weight_reason": "横向调拨同样受物理限制，易被忽视。",
+      "criterion": [
+        "横向调拨量 <= 对应路线的daily_capacity_units"
+      ],
+      "anchors": {
+        "0": "超限或逻辑错误",
+        "1": "严格遵守容量限制"
+      },
+      "acceptable_alternatives": "无",
+      "failure_examples": "在一天内从RDC_A向RDC_B调拨了15个单位的SKU-102，超过了RDC_A_to_RDC_B的10单位限制。"
+    },
+    {
+      "id": "R19",
+      "description": "对需求为0或负数的异常记录是否进行了合理处理。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "replenishment_schedule.xlsx",
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "检查净需求计算中，若(当前库存 - 预测需求)为负，是否合理处理（如视为无需补货或产生调出需求）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察数据敏感度和异常处理能力。",
+      "criterion": [
+        "识别出库存大于需求的SKU",
+        "未对这类SKU进行无意义的补货",
+        "逻辑处理合理"
+      ],
+      "anchors": {
+        "0": "对库存充足的SKU仍安排了从CDC补货",
+        "1": "正确处理，未产生冗余补货"
+      },
+      "acceptable_alternatives": "在报告中备注'X仓Y备件库存充足，无需补货'。",
+      "failure_examples": "RDC_A的SKU-108当前库存50，14天需求80，安全库存20，净需求50。候选人未减去当前库存50，直接补货80。"
+    },
+    {
+      "id": "R20",
+      "description": "最终决策逻辑一致性，排程表与权衡报告结论是否基于一致的数据推导。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [],
+      "deliverables": [
+        "replenishment_schedule.xlsx",
+        "cost_service_tradeoff_report.md"
+      ],
+      "evidence": "报告中提出的优化建议（如'建议增加供应商A的份额'或'建议提升RDC-B的安全库存'）是否在排程表的数据中得到了印证。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保分析结论有数据支撑，而非凭空捏造。",
+      "criterion": [
+        "报告中的痛点分析与排程表中的缺货/成本数据对应",
+        "优化建议直接针对排程表暴露的问题",
+        "整体逻辑自洽"
+      ],
+      "anchors": {
+        "0": "报告结论与排程表数据脱节或矛盾",
+        "1": "结论与数据高度一致，逻辑严密"
+      },
+      "acceptable_alternatives": "无",
+      "failure_examples": "排程表显示RDC-A的SKU-101严重缺货，但报告中的优化建议却是'降低RDC-A的SKU-102库存'，文不对题。"
+    }
+  ],
+  "checks_to_execute": [
+    "运行Python脚本解析replenishment_schedule.xlsx，验证每日每条路线的发运总量是否严格小于等于JSON中定义的daily_capacity_units。",
+    "运行Python脚本模拟CDC库存流水账，检查是否存在expected_arrival_day之前的库存扣减（即负库存或提前使用）。",
+    "核对cost_service_tradeoff_report.md中的总成本计算：常规运费 + 调拨运费 + 紧急专车费用，是否与排程表推导结果一致。",
+    "验证横向调拨路径的单位成本是否 <= 替代路径成本，检查是否存在明显的成本次优选择。"
+  ],
+  "quality_risks": [
+    "候选人可能忽略横向调拨的每日容量限制（R18），导致排程在实际中不可执行。",
+    "停机成本与紧急专车的权衡（R13）可能存在主观判断，评分时需关注其计算逻辑而非绝对阈值。",
+    "CSV和JSON数据量较小，候选人可能通过硬编码而非通用逻辑解决，需在评分中关注其方法论的普适性。"
+  ],
+  "reference_solution": {
+    "key_facts_and_derivation": [
+      "1. 净需求计算：以SKU-101为例，RDC_A净需求 = 5(预测) - 2(当前) + 2(安全) = 5。RDC_B = 4 - 1 + 2 = 5。RDC_C = 6 - 0 + 2 = 8。总净需求 = 18。",
+      "2. CDC可用库存推演：SKU-101初始15。第1-3天可用15。第4天到货10，可用变为25（假设前3天未发运）。",
+      "3. 瓶颈识别：CDC_to_RDC_C容量仅30/天。若第5天需向RDC_C发运SKU-103(45需求)和SKU-108(90需求)，总需求远超30，必须拆分至多天或触发横向调拨/紧急专车。",
+      "4. 优先级：SKU-105(回转马达)单价25000，停机12000/天。在CDC库存或班次受限时，必须优先满足SKU-105，其次SKU-101(12000, 5000/天)，最后SKU-108(120, 100/天)。",
+      "5. 横向调拨：若RDC_A的SKU-102有富余，可调往RDC_B。需检查RDC_A_to_RDC_B容量(10/天)和成本(30/单位)。",
+      "6. 紧急专车触发：当停机损失(如SKU-105等待2天 = 24000) > 专车成本(3500)时，必须发专车。注意单次最多20单位。"
+    ],
+    "alternative_solutions": [
+      "候选人可选择在CDC建立临时Buffer，将部分低价值SKU延后至第10天发运，以腾出早期班次容量给高价值SKU，只要总满足率逻辑自洽即可。",
+      "对于横向调拨，候选人可选择多级调拨（A->B->C），只要总成本低于直接调拨（A->C）或受限于直接调拨容量，且逻辑合理即可。"
+    ],
+    "limitations": [
+      "本题未考虑运输途中的在途库存对RDC可用性的影响（为简化计算，假设transit_days后瞬间可用）。",
+      "停机成本假设为线性，未考虑停机超过一定天数后的指数级惩罚或客户流失成本。"
+    ]
+  }
+}

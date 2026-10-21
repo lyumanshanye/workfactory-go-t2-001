@@ -1,0 +1,553 @@
+[
+  {
+    "id": "R01",
+    "description": "准确核验项目建筑面积与绿地的变更事实，澄清老李的‘缩水一半’与‘绿地全没’说法。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "report_draft.md",
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查是否指出建筑面积从3000平米调整为2500平米（非1500），绿地率从40%降至30%（或绝对面积从1200平降至750平），明确否定‘绿地全没’。",
+    "numeric_tolerance": "面积数值必须精确，绿地率允许使用30%或计算出的62.5%保留率。",
+    "weight_reason": "这是核心冲突点，直接决定报道的客观性。",
+    "criterion": [
+      "指出建筑面积调整为2500平米",
+      "指出绿地率从40%降至30%或计算绝对面积变化",
+      "明确否定‘绿地全没’和‘1500平米’的说法"
+    ],
+    "anchors": {},
+    "levels": {
+      "0": "完全未提及或完全采信老李的错误数据",
+      "0.25": "提及面积变更但数据错误（如写成1500）",
+      "0.5": "数据正确但未分析绿地率下降的实质影响，仅罗列数字",
+      "0.75": "数据正确，且指出官方‘保留60%绿地’话术与绿地率下降的矛盾",
+      "1": "数据完全准确，清晰解释绝对面积与比例的变化，并客观评估对居民的实际影响"
+    },
+    "acceptable_alternatives": "使用绝对面积（1200平->750平）或百分比（40%->30%）均可，只要逻辑正确。",
+    "failure_examples": "报道中写‘正如老李所说，面积缩水到1500平米’，或未指出官方草案中2500平米与老李记忆的偏差。"
+  },
+  {
+    "id": "R02",
+    "description": "准确拆解项目资金结构，澄清资金来源与中标单位。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "report_draft.md",
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查是否明确资金来源为区级300万+市级200万，合计500万。是否指出中标单位是宏图建设，且老李混淆了宏图与宏宇。",
+    "numeric_tolerance": "金额必须精确匹配CSV。",
+    "weight_reason": "资金流向是居民最关心的核心问题之一。",
+    "criterion": [
+      "准确列出区级300万和市级200万",
+      "明确中标单位为宏图建设",
+      "指出老李将宏宇建设的违规记录张冠李戴"
+    ],
+    "anchors": {
+      "0": "资金拆解错误或未纠正企业违规的张冠李戴",
+      "1": "资金拆解完全正确，且明确指出宏图建设无环保处罚记录，违规的是宏宇建设"
+    },
+    "levels": {},
+    "acceptable_alternatives": "无，资金数据必须严格一致。",
+    "failure_examples": "报道中暗示宏图建设有违规记录，或遗漏市级200万补贴。"
+  },
+  {
+    "id": "R03",
+    "description": "准确核验施工时间与卫生站功能/选址。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "report_draft.md",
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查是否纠正施工时间为6:00-22:00。是否明确卫生站不设传染病房，且距离1号楼为15米（非不到10米）。",
+    "numeric_tolerance": "时间6:00-22:00，距离15米必须精确。",
+    "weight_reason": "消除不必要的恐慌是事实核验的重要职责。",
+    "criterion": [
+      "纠正施工时间为6:00-22:00",
+      "明确卫生站不设传染病房",
+      "明确距离为15米"
+    ],
+    "anchors": {
+      "0": "未纠正施工时间或未澄清卫生站功能/距离",
+      "1": "准确纠正施工时间，并明确澄清无传染病房及15米的安全距离"
+    },
+    "levels": {},
+    "acceptable_alternatives": "可引用《星海市环境噪声污染防治办法》作为施工时间的依据。",
+    "failure_examples": "在报道中写‘施工将从早上5点开始’，或保留了‘传染病房’的疑虑未作澄清。"
+  },
+  {
+    "id": "R04",
+    "description": "事实核验表的格式与完整性。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查CSV是否包含指定的5个列名，Verdict是否使用了规定的4个枚举值，且至少覆盖了老李的4个核心说法。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "确保交付物符合业务规范，具备下游可用性。",
+    "criterion": [
+      "包含正确的5个列名",
+      "Verdict使用规定枚举值",
+      "覆盖至少4个核心争议点"
+    ],
+    "anchors": {
+      "0": "列名错误、枚举值错误或覆盖不足",
+      "1": "列名完全正确，枚举值合规，且覆盖面积、资金/企业、施工时间、卫生站4个核心点"
+    },
+    "levels": {},
+    "acceptable_alternatives": "列名大小写或顺序可微调，但必须语义一致。",
+    "failure_examples": "CSV缺少Notes列，或在Verdict中使用了‘真实/虚假’等非规定词汇。"
+  },
+  {
+    "id": "R05",
+    "description": "报道的信源平衡与客观性。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "report_draft.md"
+    ],
+    "evidence": "检查报道是否同时呈现居民担忧、官方回应和客观数据。是否避免了预设立场或煽动性语言。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "深度报道的核心专业要求。",
+    "criterion": [
+      "呈现居民诉求",
+      "呈现官方回应",
+      "引入客观数据进行第三方校准",
+      "无预设立场或煽动性语言"
+    ],
+    "anchors": {},
+    "levels": {
+      "0": "仅采信一方信源，或充满主观臆断和煽动性语言",
+      "0.25": "呈现了双方观点，但未引入客观数据进行校准",
+      "0.5": "引入客观数据，但语言仍带有明显偏向（如过度同情老李或完全背书官方）",
+      "0.75": "三方信源平衡，语言客观，但未深入分析官方声明的局限性",
+      "1": "三方信源完美交叉验证，语言冷静客观，且能指出官方话术的模糊性与居民恐慌的根源"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "报道标题使用‘黑心企业接手，居民家园将被毁’等煽动性词汇。"
+  },
+  {
+    "id": "R06",
+    "description": "准确定性‘规划调整’，区分合法调整与违规缩水。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-03"
+    ],
+    "deliverables": [
+      "report_draft.md",
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查是否明确指出2500平米是区规划局在2023-09-15作出的合法规划调整，而非企业或部门擅自违规缩减。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "避免将行政程序误解为暗箱操作。",
+    "criterion": [
+      "指出面积变更是基于区规划局的规划调整",
+      "明确这是合法程序而非违规缩水"
+    ],
+    "anchors": {
+      "0": "未提及规划调整，或将其描述为违规/擅自缩减",
+      "1": "准确引用区规划局2023年9月的规划调整记录，明确其合法性"
+    },
+    "levels": {},
+    "acceptable_alternatives": "可补充说明规划调整的具体原因（如材料允许），但核心是确认其合法性。",
+    "failure_examples": "报道中写‘开发商私自将面积砍到2500平米’。"
+  },
+  {
+    "id": "R07",
+    "description": "洞察并指出项目存在的资金缺口。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "report_draft.md"
+    ],
+    "evidence": "检查是否计算出总投资1200万，目前到位500万，中标价850万，存在至少350万的资金缺口或后续拨付待落实。",
+    "numeric_tolerance": "计算差额需准确（1200-500=700未到位，或850-500=350缺口）。",
+    "weight_reason": "体现记者的深度调查和财务分析能力。",
+    "criterion": [
+      "列出总投资、已到位资金和中标价",
+      "指出存在资金缺口或后续资金未落实"
+    ],
+    "anchors": {
+      "0": "未提及资金缺口，仅罗列资金数据",
+      "1": "准确计算并指出资金缺口，将其作为潜在风险或待核实事项提出"
+    },
+    "levels": {},
+    "acceptable_alternatives": "表述为‘剩余700万资金拨付计划尚不明确’亦可。",
+    "failure_examples": "认为500万资金足以覆盖850万中标价，或完全忽略总投资1200万的数据。"
+  },
+  {
+    "id": "R08",
+    "description": "准确引用居民听证会结果。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "report_draft.md"
+    ],
+    "evidence": "检查是否提及街道办于5月1日举行了听证会，收集45条意见，且核心规划未作改变。",
+    "numeric_tolerance": "45条意见必须准确。",
+    "weight_reason": "反映程序正义和居民参与情况。",
+    "criterion": [
+      "提及5月1日听证会",
+      "提及收集45条意见",
+      "说明核心规划未改变"
+    ],
+    "anchors": {
+      "0": "未提及听证会或数据错误",
+      "1": "准确引用听证会时间、意见数量及未改变核心规划的事实"
+    },
+    "levels": {},
+    "acceptable_alternatives": "无。",
+    "failure_examples": "称听证会改变了规划，或遗漏意见数量。"
+  },
+  {
+    "id": "R09",
+    "description": "新闻标题与导语的客观规范性。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "report_draft.md"
+    ],
+    "evidence": "检查标题是否客观概括事件，导语是否包含5W1H且不预设立场。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "新闻写作的基本专业要求。",
+    "criterion": [
+      "标题客观，无煽动性或未经证实的定性",
+      "导语包含核心事实，不预设立场"
+    ],
+    "anchors": {
+      "0": "标题或导语存在煽动性、预设立场或缺失核心要素",
+      "1": "标题客观中立，导语准确概括争议核心与事实核查结果"
+    },
+    "levels": {},
+    "acceptable_alternatives": "标题可采用主副标题形式。",
+    "failure_examples": "标题使用‘锦绣小区居民怒斥骗局’等主观色彩浓厚的词汇。"
+  },
+  {
+    "id": "R10",
+    "description": "准确说明官方声明的性质（初步公示草案）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "report_draft.md",
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查是否指出区住建局的声明是‘初步公示草案’，而非最终定稿或已执行完毕的事实。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "避免将规划意图等同于既定事实。",
+    "criterion": [
+      "明确提及官方声明为初步公示草案",
+      "说明其非最终定稿性质"
+    ],
+    "anchors": {
+      "0": "将官方声明直接作为最终事实陈述",
+      "1": "准确指出其为初步公示草案，提示后续仍有调整可能"
+    },
+    "levels": {},
+    "acceptable_alternatives": "无。",
+    "failure_examples": "称‘区住建局已确认...’而不加‘草案’限定。"
+  },
+  {
+    "id": "R11",
+    "description": "报道与核验表之间的数据交叉一致性。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "report_draft.md",
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查两份交付物中引用的数字（面积、金额、距离、时间）是否完全一致，且均与原始材料吻合。",
+    "numeric_tolerance": "所有数值必须100%一致。",
+    "weight_reason": "确保内部逻辑严密，无自相矛盾。",
+    "criterion": [
+      "报道与核验表中的关键数值一致",
+      "数值与原始输入材料一致"
+    ],
+    "anchors": {
+      "0": "存在数据不一致或与原始材料冲突",
+      "1": "所有关键数值在两份交付物及原始材料间完全一致"
+    },
+    "levels": {},
+    "acceptable_alternatives": "无。",
+    "failure_examples": "报道中写距离15米，核验表中写距离10米。"
+  },
+  {
+    "id": "R12",
+    "description": "专业术语的准确性使用。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "report_draft.md"
+    ],
+    "evidence": "检查是否准确使用‘绿地率’（而非绿化率）、‘慢病管理’等术语。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "体现记者的专业素养。",
+    "criterion": [
+      "准确使用‘绿地率’",
+      "准确使用‘慢病管理’等卫健委规范术语"
+    ],
+    "anchors": {
+      "0": "使用非标准术语（如绿化率、传染病区等）",
+      "1": "术语使用完全符合规划和卫健部门规范"
+    },
+    "levels": {},
+    "acceptable_alternatives": "无。",
+    "failure_examples": "使用‘小区绿化面积’代替‘绿地率’进行比例计算。"
+  },
+  {
+    "id": "R13",
+    "description": "对受访者错误的客观处理。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "report_draft.md"
+    ],
+    "evidence": "检查对老李的事实错误（如企业名字、施工时间）是否进行了温和、客观的纠正，而非嘲讽或无视。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "新闻伦理要求尊重受访者。",
+    "criterion": [
+      "指出老李的错误",
+      "态度客观温和，不带主观贬损"
+    ],
+    "anchors": {
+      "0": "嘲讽受访者或无视其明显错误",
+      "1": "通过引入客观数据自然纠正错误，态度中立客观"
+    },
+    "levels": {},
+    "acceptable_alternatives": "可在行文中直接引用正确数据，无需刻意点名老李的错误。",
+    "failure_examples": "写‘老李连公司名字都记错，其说法可信度存疑’。"
+  },
+  {
+    "id": "R14",
+    "description": "报道的逻辑结构与深度。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "report_draft.md"
+    ],
+    "evidence": "检查文章结构是否具备新闻特稿的逻辑（引语/冲突引入 -> 事实核查 -> 深度分析/资金缺口 -> 多方回应）。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "评估文章的可读性与专业深度。",
+    "criterion": [
+      "具备清晰的新闻特稿结构",
+      "从冲突引入到事实核查过渡自然",
+      "包含深度分析（如资金缺口、绿地率实质影响）"
+    ],
+    "anchors": {},
+    "levels": {
+      "0": "结构混乱，缺乏逻辑，像流水账",
+      "0.25": "有基本结构，但缺乏深度分析，仅罗列事实",
+      "0.5": "结构清晰，事实核查到位，但缺乏对深层矛盾（如资金、规划话术）的挖掘",
+      "0.75": "结构严谨，有深度分析，但过渡稍显生硬",
+      "1": "结构完美，逻辑严密，深度分析透彻，过渡自然，具备优秀新闻特稿质感"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "文章只是将核验表的内容用文字重新复述一遍，没有新闻叙事结构。"
+  },
+  {
+    "id": "R15",
+    "description": "明确标注‘待核实’事项。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "report_draft.md",
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查是否将剩余资金拨付计划、听证会45条意见的具体内容等标记为‘待核实’。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "体现严谨性，不越界推断。",
+    "criterion": [
+      "识别出材料中未明确的信息",
+      "在核验表或报道中明确标注为待核实"
+    ],
+    "anchors": {
+      "0": "未标注待核实事项，或将其作为确定事实陈述",
+      "1": "准确识别资金缺口后续、意见具体内容等待核实项，并明确标注"
+    },
+    "levels": {},
+    "acceptable_alternatives": "无。",
+    "failure_examples": "断言剩余700万资金将由市级财政全额兜底。"
+  },
+  {
+    "id": "R16",
+    "description": "避免阴谋论推断。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "report_draft.md"
+    ],
+    "evidence": "检查是否没有将老李的猜测（如资金被暗箱操作、故意砍面积）作为事实或合理怀疑进行深度渲染。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "防止媒体审判和误导公众。",
+    "criterion": [
+      "不将受访者的无证据猜测作为事实",
+      "不渲染暗箱操作等阴谋论"
+    ],
+    "anchors": {
+      "0": "将猜测作为事实陈述或进行阴谋论渲染",
+      "1": "严格区分事实与猜测，对无证据的说法进行客观证伪或标记为未经证实"
+    },
+    "levels": {},
+    "acceptable_alternatives": "可引用老李的猜测作为‘居民担忧的体现’，但必须紧跟事实核查予以澄清。",
+    "failure_examples": "写‘种种迹象表明，面积缩水背后可能存在利益输送’。"
+  },
+  {
+    "id": "R17",
+    "description": "准确理解并解释官方‘保留60%原有绿地’的话术。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "report_draft.md"
+    ],
+    "evidence": "检查是否计算出原有绿地面积（1200平），现规划绿地面积（750平），并指出官方‘保留60%’（实际约62.5%）是在玩文字游戏，掩盖了绿地率从40%降至30%的实质缩水。",
+    "numeric_tolerance": "1200平，750平，62.5%需计算正确。",
+    "weight_reason": "体现记者对官方话术的解构能力。",
+    "criterion": [
+      "计算原绿地绝对面积",
+      "计算现规划绿地绝对面积",
+      "指出官方话术的模糊性与绿地率实质下降"
+    ],
+    "anchors": {},
+    "levels": {
+      "0": "完全采信官方‘保留60%’的说法，未察觉绿地率下降",
+      "0.25": "指出绿地率下降，但未进行绝对面积计算和对比",
+      "0.5": "计算了绝对面积，但未点破官方话术的意图",
+      "0.75": "准确计算并对比，指出话术问题，但表述不够清晰",
+      "1": "精准计算（1200平->750平），清晰揭示官方用‘保留率’掩盖‘绿地率下降’的逻辑，并评估对居民的实际影响"
+    },
+    "acceptable_alternatives": "直接引用30%绿地率与老李感知的冲突亦可，但计算绝对面积是最佳实践。",
+    "failure_examples": "认为官方‘保留60%原有绿地’意味着绿地面积没有减少。"
+  },
+  {
+    "id": "R18",
+    "description": "准确引用环保局的处罚记录。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查核验表中是否准确记录2024-03-10环保局通报：宏图建设无违规，宏宇建设因夜间施工被罚5万。",
+    "numeric_tolerance": "罚款金额5万必须准确。",
+    "weight_reason": "细节决定事实核验的严谨度。",
+    "criterion": [
+      "明确宏图建设无违规",
+      "明确宏宇建设被罚5万"
+    ],
+    "anchors": {
+      "0": "处罚记录错误或张冠李戴",
+      "1": "准确记录两家企业的不同情况，金额精确"
+    },
+    "levels": {},
+    "acceptable_alternatives": "无。",
+    "failure_examples": "写‘宏图建设因夜间施工被环保局处罚’。"
+  },
+  {
+    "id": "R19",
+    "description": "字数与格式规范。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "report_draft.md",
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查报道初稿字数是否在1500-2000字之间，核验表是否为有效CSV格式。",
+    "numeric_tolerance": "字数允许±10%浮动。",
+    "weight_reason": "基本的业务交付要求。",
+    "criterion": [
+      "报道字数在1350-2200字之间",
+      "核验表为有效CSV格式"
+    ],
+    "anchors": {
+      "0": "字数严重不符或CSV格式损坏",
+      "1": "字数符合要求，CSV格式正确可解析"
+    },
+    "levels": {},
+    "acceptable_alternatives": "无。",
+    "failure_examples": "报道只有500字，或CSV缺少表头。"
+  },
+  {
+    "id": "R20",
+    "description": "负分项：编造事实、政策或官方未发布的数字。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "report_draft.md",
+      "fact_check_matrix.csv"
+    ],
+    "evidence": "检查是否编造了材料中不存在的政策（如市级全额兜底）、数字（如总投资改为1500万）或处罚记录。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "新闻工作的红线，编造事实是严重违规。",
+    "criterion": [
+      "未编造任何外部事实、政策或数字"
+    ],
+    "anchors": {
+      "0": "未发生编造，不扣分",
+      "1": "发生编造（如捏造资金拨付计划、环保处罚细节等），扣7分"
+    },
+    "levels": {},
+    "acceptable_alternatives": "无。",
+    "failure_examples": "在报道中写‘据知情人士透露，剩余700万资金将于下月由市级财政拨付’（材料中无此信息）。"
+  }
+]

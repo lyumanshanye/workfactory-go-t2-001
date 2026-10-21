@@ -1,0 +1,691 @@
+{
+  "title": "设备维护合同草案审阅与红线修改建议",
+  "request": "你是星汉制造（StarForge Manufacturing，位于北京）的内部法务。业务部门收到了设备供应商铁锋重工（IronForge Heavy Industries，位于深圳）发来的《高炉控制系统维护服务合同（草案）》。业务部门反馈，该系统是核心生产线命脉，停机损失极大。同时，业务部门提交了《内部谈判授权与底线矩阵》。\n\n你的任务是审阅该合同草案，对比内部底线，识别法律与商业风险，并出具条款风险表和红线修改建议。业务部门需要拿着你的成果直接去与铁锋重工进行下一轮谈判。请确保修改建议既符合内部底线，又具备法律专业性，且不会在未经额外授权的情况下放弃公司的核心权利。\n\n成果要求：\n1. 条款风险表（clause_risk_register.csv）：列出草案中所有偏离底线或存在重大法律风险的条款，包括条款序号、名称、原内容摘要、风险等级（高/中/低）、风险说明、建议修改方向。\n2. 红线修改建议（redline_markups.md）：针对需要修改的核心条款，直接提供修改后的合同条款文本，并附带简短的修改理由（批注）。\n\n输出文件请保存至 /app/output/ 目录。当前业务日期为2024年5月15日。",
+  "as_of": "2024-05-15T09:00:00+08:00",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "本次任务无外部来源",
+      "limitations": "所有业务记录、合同草案和内部底线均为虚构原创，不依赖外部真实法规或已公开的特定商业案例。"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "maintenance_contract_draft.md",
+      "purpose": "供应商提供的设备维护合同草案原文，包含9个核心条款，用于风险识别和红线修改。",
+      "content_plan": "提供完整的Markdown格式合同草案，包含维护范围、响应时间、费用、违约责任、知识产权、保密、责任限制、争议解决、期限与续约等条款。",
+      "content": "# 高炉控制系统维护服务合同（草案）\n\n**甲方（客户）：** 星汉制造（StarForge Manufacturing）\n**乙方（供应商）：** 铁锋重工（IronForge Heavy Industries）\n\n## 1. 维护范围\n乙方负责甲方3台高炉控制系统的日常巡检、定期保养及故障维修。\n\n## 2. 响应与到达时间\n乙方在接到甲方故障通知后，应在48小时内进行远程响应；若需现场处理，乙方技术人员应在72小时内到达甲方现场。\n\n## 3. 费用及支付\n年度固定维护费用为人民币500万元。费用按季度支付，甲方应在每季度首月5日前向乙方全额支付当季费用125万元。\n\n## 4. 违约责任\n任何一方违反本合同约定，需向守约方支付合同总额20%的违约金。若乙方延迟响应或到达现场，每延迟一天，甲方有权扣减当季维护费用的1%。\n\n## 5. 知识产权\n乙方在提供维护服务过程中，基于甲方系统数据产生的所有改进、优化方案、算法模型及相关知识产权，均归乙方所有。甲方享有在本公司内部的免费使用权。\n\n## 6. 保密条款\n双方应对在合作中获知的对方商业秘密严格保密。保密期限为合同终止后5年。\n\n## 7. 责任限制\n除故意或重大过失外，乙方在任何情况下的累计赔偿总额不超过本年度乙方已实际收取的维护费用（即人民币125万元）。\n\n## 8. 争议解决\n凡因本合同引起的或与本合同有关的任何争议，均应提交深圳国际仲裁院，按照申请仲裁时该会现行有效的仲裁规则进行仲裁。\n\n## 9. 期限与续约\n本合同有效期为1年。期满前30天内，若甲方未以书面形式提出终止，则本合同自动续约1年，续约条件与原合同相同。"
+    },
+    {
+      "filename": "client_negotiation_mandate.json",
+      "purpose": "星汉制造内部法务与业务部门制定的谈判授权与底线矩阵，用于评估草案偏离度并确定修改方向。",
+      "content_plan": "提供JSON格式的内部授权文件，明确各项核心条款的商业底线、法律底线及谈判策略。",
+      "content": "{\n  \"client\": \"星汉制造\",\n  \"vendor\": \"铁锋重工\",\n  \"project\": \"高炉控制系统维护\",\n  \"mandate\": {\n    \"response_time\": {\n      \"baseline\": \"核心系统故障必须在2小时内远程响应，12小时内到达现场。\",\n      \"walk_away_point\": \"响应时间超过24小时或到达时间超过24小时绝不接受。\"\n    },\n    \"fee_and_payment\": {\n      \"baseline\": \"年度预算上限400万元。必须增加按季度考核的扣减机制，不接受无条件全额预付。\",\n      \"walk_away_point\": \"超过450万且无任何考核机制绝不接受。\"\n    },\n    \"penalty\": {\n      \"baseline\": \"违约金上限不超过合同总额的10%。乙方延迟到达的扣款上限应设定为当季费用的10%。\",\n      \"walk_away_point\": \"违约金比例超过15%绝不接受。\"\n    },\n    \"intellectual_property\": {\n      \"baseline\": \"基于甲方工艺数据和系统运行数据产生的优化方案及知识产权，必须归甲方所有，或至少由双方共有。\",\n      \"walk_away_point\": \"绝不同意核心数据产生的知识产权单方面归乙方所有。\"\n    },\n    \"confidentiality\": {\n      \"baseline\": \"保密期限3年即可。\",\n      \"walk_away_point\": \"超过5年需特批。\"\n    },\n    \"liability_cap\": {\n      \"baseline\": \"乙方累计赔偿总额不得低于合同总额的100%（即400万以上），或不低于甲方实际直接损失的150%。\",\n      \"walk_away_point\": \"责任上限低于合同总额50%绝不接受。\"\n    },\n    \"dispute_resolution\": {\n      \"baseline\": \"北京仲裁委员会仲裁，或北京市有管辖权的人民法院诉讼。\",\n      \"walk_away_point\": \"不接受深圳管辖。\"\n    },\n    \"renewal\": {\n      \"baseline\": \"必须提前60天书面通知，否则不自动续约。\",\n      \"walk_away_point\": \"不接受自动续约条款。\"\n    }\n  },\n  \"negotiation_strategy\": \"优先利用知识产权归属和付款条件作为筹码，换取响应时间的提升和费用的降低。\"\n}"
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "clause_risk_register.csv",
+      "format": "CSV",
+      "purpose": "条款风险登记表，系统梳理草案中所有偏离底线或存在重大风险的条款，供谈判团队快速掌握风险全貌。"
+    },
+    {
+      "filename": "redline_markups.md",
+      "format": "Markdown",
+      "purpose": "红线修改建议，提供修改后的核心条款文本及修改理由，供谈判团队直接用于与供应商交涉。"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "text": "风险表必须覆盖草案中所有9个条款，并准确评定风险等级（高/中/低）。",
+      "visibility": "explicit",
+      "basis": "业务部门要求全面了解合同风险。"
+    },
+    {
+      "id": "REQ-02",
+      "text": "红线修改必须严格遵守内部谈判底线（mandate），不得越权接受底线中明确为'walk_away_point'的条款。",
+      "visibility": "explicit",
+      "basis": "内部授权矩阵的强制约束。"
+    },
+    {
+      "id": "REQ-03",
+      "text": "修改理由必须结合法律风险和商业影响进行说明，体现专业律师的分析深度。",
+      "visibility": "professional_practice",
+      "basis": "法律实务中向业务部门解释合同修改理由的标准要求。"
+    },
+    {
+      "id": "REQ-04",
+      "text": "输出文件必须严格命名为 clause_risk_register.csv 和 redline_markups.md。",
+      "visibility": "explicit",
+      "basis": "内部文件管理和流转规范。"
+    }
+  ],
+  "authoring_plan": "本题要求扮演企业内部法务，审阅供应商提供的设备维护合同草案。难点在于草案中埋设了多个对供应商极度有利的条款（如48/72小时响应、IP全归供应商、125万责任上限、自动续约等），且部分条款（如500万费用）直接违反了内部底线（400万上限）。Solver需要准确提取草案事实，对比mandate中的baseline和walk_away_point，在风险表中精准定级，并在红线修改中给出既符合底线又具有可操作性的修改文本。预期判断包括：将响应时间、IP归属、责任限制、管辖权、自动续约定为高风险；将保密期限定为中/低风险。等价解在于红线修改的具体措辞可以不同，但核心商业条件（如IP共有或归客户、责任上限比例、管辖地）必须满足底线。不确定性在于solver是否会将费用直接修改为400万还是提出带考核机制的500万方案，只要不突破450万底线均可接受。",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "响应时间底线偏离分析与风险评级",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv中针对第2条（响应与到达时间）的风险说明和评级。",
+      "numeric_tolerance": "",
+      "weight_reason": "响应时间是核心业务诉求，草案的48/72小时与底线的2/12小时存在巨大偏差，直接影响生产线安全，属于最高权重风险。",
+      "criterion": [
+        "识别出草案规定的48小时响应和72小时到达与底线（2小时响应/12小时到达）严重不符",
+        "明确指出该偏差对核心生产线带来的停机风险和巨大商业损失",
+        "将该条款的风险等级评定为'高'"
+      ],
+      "levels": {
+        "0": "未识别响应时间偏差，或评级错误（如评为低/中），或未提及业务影响。",
+        "0.25": "识别了偏差，但未与内部底线具体数值对比，或未说明对生产线的实际业务影响。",
+        "0.5": "识别了偏差并对比了底线数值，但风险评级不准确，或业务影响分析不够深入。",
+        "0.75": "准确识别偏差、对比底线、评为高风险，业务影响分析合理，但表述略有瑕疵。",
+        "1": "完美识别偏差，精确对比底线数值，明确评定为高风险，并深刻阐述了停机对核心生产线的致命影响。"
+      },
+      "acceptable_alternatives": [
+        "如果solver将风险评级为'高'，并指出偏差超过底线的2倍以上，即使未逐字引用'2小时/12小时'，也可得高分。"
+      ],
+      "failure_examples": [
+        "仅指出'响应时间较长'，未提及内部底线要求，也未评估对生产线的影响，评为'中'风险。"
+      ]
+    },
+    {
+      "id": "R02",
+      "description": "知识产权归属风险识别",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv中针对第5条（知识产权）的风险说明。",
+      "numeric_tolerance": "",
+      "weight_reason": "基于核心系统数据产生的IP归属是重大法律与战略风险，底线明确要求必须归客户或共有，属于绝对红线。",
+      "criterion": [
+        "识别出草案规定IP全归乙方（供应商）的条款",
+        "指出这违反了内部底线（必须归甲方或双方共有）",
+        "明确该条款为'高'风险，并说明可能导致甲方核心工艺数据泄露或丧失技术迭代主导权"
+      ],
+      "anchors": {
+        "0": "未识别IP归属风险，或接受IP全归乙方，或风险评级低于'高'。",
+        "1": "准确识别IP全归乙方的风险，指出违反底线，评为'高'风险，并说明对甲方技术主导权或数据安全的威胁。"
+      },
+      "acceptable_alternatives": [
+        "如果solver指出IP归乙方可能导致乙方利用甲方数据训练模型后向竞争对手出售优化方案，也视为合理的业务影响分析。"
+      ],
+      "failure_examples": [
+        "仅指出'知识产权条款需要修改'，未说明原草案是归乙方，也未说明底线要求，未评估具体风险。"
+      ]
+    },
+    {
+      "id": "R03",
+      "description": "责任限制条款风险识别",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv中针对第7条（责任限制）的风险说明。",
+      "numeric_tolerance": "",
+      "weight_reason": "责任上限仅为125万（当季费用）对高炉控制系统这种高价值资产而言极度不合理，属于重大法律风险。",
+      "criterion": [
+        "识别出草案将赔偿上限限制为当季已收费用（125万元）",
+        "指出该上限远低于内部底线（合同总额100%或实际损失150%）",
+        "明确该条款为'高'风险，并说明在发生重大设备损坏或停产时，甲方将无法获得足额赔偿"
+      ],
+      "anchors": {
+        "0": "未识别责任上限过低的问题，或接受125万上限，或风险评级低于'高'。",
+        "1": "准确识别125万上限的极度不合理性，对比底线要求，评为'高'风险，并说明重大事故下的赔偿不足风险。"
+      },
+      "acceptable_alternatives": [
+        "如果solver计算出125万仅占全年费用的25%，远低于底线要求的100%，以此论证风险，也视为正确。"
+      ],
+      "failure_examples": [
+        "仅指出'责任限制条款对乙方有利'，未提及125万的具体数值，也未与底线对比。"
+      ]
+    },
+    {
+      "id": "R04",
+      "description": "争议解决管辖权风险识别",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv中针对第8条（争议解决）的风险说明。",
+      "numeric_tolerance": "",
+      "weight_reason": "深圳仲裁对北京客户不利，且属于walk_away_point，必须识别。",
+      "criterion": [
+        "识别出草案规定在深圳国际仲裁院仲裁",
+        "指出这违反了内部底线（北京管辖），且增加甲方的差旅和维权成本",
+        "明确该条款风险等级"
+      ],
+      "anchors": {
+        "0": "未识别管辖权问题，或接受深圳管辖。",
+        "1": "准确识别深圳仲裁与底线（北京）的冲突，指出异地维权成本，并进行风险定级。"
+      },
+      "acceptable_alternatives": [
+        "如果solver指出深圳仲裁可能存在的潜在地方保护主义倾向，也视为合理的风险说明。"
+      ],
+      "failure_examples": [
+        "仅指出'建议修改为北京仲裁'，但未说明原草案是深圳，也未分析异地诉讼的成本劣势。"
+      ]
+    },
+    {
+      "id": "R05",
+      "description": "自动续约陷阱识别",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv中针对第9条（期限与续约）的风险说明。",
+      "numeric_tolerance": "",
+      "weight_reason": "自动续约且未书面终止则续约，剥夺了甲方的重新谈判权，属于walk_away_point。",
+      "criterion": [
+        "识别出草案规定提前30天未书面终止则自动续约",
+        "指出这违反了底线（必须提前60天或不接受自动续约）",
+        "说明该条款可能导致甲方在不满意服务时被迫续约的风险"
+      ],
+      "anchors": {
+        "0": "未识别自动续约陷阱，或接受30天自动续约。",
+        "1": "准确识别自动续约及30天期限的陷阱，对比底线，说明剥夺重新谈判权的风险。"
+      },
+      "acceptable_alternatives": [
+        "如果solver指出30天期限过短，业务部门容易遗漏导致被动续约，视为合理分析。"
+      ],
+      "failure_examples": [
+        "仅将条款摘要抄写，未指出自动续约的法律后果和与底线的冲突。"
+      ]
+    },
+    {
+      "id": "R06",
+      "description": "费用及支付条件风险识别",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv中针对第3条（费用及支付）的风险说明。",
+      "numeric_tolerance": "",
+      "weight_reason": "500万超预算且无考核机制，直接违反财务底线。",
+      "criterion": [
+        "识别出500万年度费用超出400万预算上限",
+        "识别出全额预付且无考核扣减机制违反底线",
+        "明确该条款风险等级"
+      ],
+      "anchors": {
+        "0": "未识别费用超标或无考核机制的问题。",
+        "1": "准确指出500万超400万预算，且指出无条件预付缺乏考核机制，进行风险定级。"
+      },
+      "acceptable_alternatives": [
+        "如果solver建议将费用降至400万，或保留500万但增加严格的SLA考核扣款机制，在红线修改中体现即可，此处仅需识别风险。"
+      ],
+      "failure_examples": [
+        "仅指出'费用需要协商'，未提及500万与400万底线的具体差额，也未指出缺乏考核机制。"
+      ]
+    },
+    {
+      "id": "R07",
+      "description": "违约金比例风险识别",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv中针对第4条（违约责任）的风险说明。",
+      "numeric_tolerance": "",
+      "weight_reason": "20%违约金过高，且延迟扣款每天1%缺乏上限，违反底线。",
+      "criterion": [
+        "识别出20%违约金超出10%底线",
+        "识别出延迟到达每天扣1%缺乏上限（可能导致扣光当季费用）",
+        "明确该条款风险等级"
+      ],
+      "anchors": {
+        "0": "未识别20%违约金超标或每天1%扣款无上限的问题。",
+        "1": "准确指出20%超标，并指出每天1%扣款无上限可能导致当季费用被扣减至零的风险。"
+      },
+      "acceptable_alternatives": [
+        "如果solver指出每天1%扣款缺乏上限，建议设置10%的上限，视为合理分析。"
+      ],
+      "failure_examples": [
+        "仅指出'违约金比例需要调整'，未说明20%和1%的具体数值及无上限的致命缺陷。"
+      ]
+    },
+    {
+      "id": "R08",
+      "description": "保密期限偏离识别",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv中针对第6条（保密条款）的风险说明。",
+      "numeric_tolerance": "",
+      "weight_reason": "5年保密期与底线3年有偏差，但风险相对较低。",
+      "criterion": [
+        "识别出草案规定5年保密期",
+        "指出这与底线（3年）不符",
+        "合理评定风险等级（中或低）"
+      ],
+      "anchors": {
+        "0": "未识别保密期限偏离，或错误评为高风险。",
+        "1": "准确识别5年与3年的偏差，评为中或低风险。"
+      },
+      "acceptable_alternatives": [
+        "如果solver认为5年可接受但建议争取3年，也可得分。"
+      ],
+      "failure_examples": [
+        "未提及保密期限的具体年限对比。"
+      ]
+    },
+    {
+      "id": "R09",
+      "description": "红线修改-响应时间与费用",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "redline_markups.md"
+      ],
+      "evidence": "检查redline_markups.md中对第2条和第3条的修改文本。",
+      "numeric_tolerance": "",
+      "weight_reason": "核心业务条款，必须严格落在底线区间内。",
+      "criterion": [
+        "将响应时间修改为2小时内远程响应，12小时内到达现场（或更优）",
+        "将费用修改为400万以内，或保留较高费用但增加明确的SLA考核扣减机制（确保不突破450万walk_away点）",
+        "修改后的文本具有法律合同的可执行性"
+      ],
+      "anchors": {
+        "0": "修改后的响应时间超过24小时，或费用修改后超过450万且无考核机制。",
+        "1": "响应时间修改为2/12小时或更优，费用修改在400万内或带有严格考核机制且不超450万，文本专业。"
+      },
+      "acceptable_alternatives": [
+        "费用修改为450万，但增加了'若乙方未能达到SLA标准，甲方有权扣除相应费用'的条款，视为可接受。"
+      ],
+      "failure_examples": [
+        "将响应时间修改为'24小时内响应'，或费用修改为'500万，年底根据表现给予奖励'（未扣减机制）。"
+      ]
+    },
+    {
+      "id": "R10",
+      "description": "红线修改-知识产权",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "redline_markups.md"
+      ],
+      "evidence": "检查redline_markups.md中对第5条的修改文本。",
+      "numeric_tolerance": "",
+      "weight_reason": "核心战略条款，底线要求必须归客户或共有。",
+      "criterion": [
+        "将知识产权归属修改为归甲方（客户）所有",
+        "或修改为双方共有，且明确甲方有权免费使用及向第三方授权",
+        "明确排除乙方将基于甲方数据的优化方案用于其他商业目的"
+      ],
+      "anchors": {
+        "0": "修改后仍规定IP全归乙方，或仅规定甲方有内部使用权。",
+        "1": "修改为归甲方所有，或双方共有且保障甲方权益，明确限制乙方商业使用。"
+      },
+      "acceptable_alternatives": [
+        "如果solver规定底层通用算法归乙方，但基于甲方特定工艺数据产生的优化方案归甲方，视为专业且合理的替代解。"
+      ],
+      "failure_examples": [
+        "修改为'IP归乙方，但乙方承诺不向甲方的直接竞争对手出售'（未满足底线，且难以举证）。"
+      ]
+    },
+    {
+      "id": "R11",
+      "description": "红线修改-责任限制",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "redline_markups.md"
+      ],
+      "evidence": "检查redline_markups.md中对第7条的修改文本。",
+      "numeric_tolerance": "",
+      "weight_reason": "必须打破125万的极不合理限制，保护甲方重大资产。",
+      "criterion": [
+        "将责任上限修改为不低于合同总额的100%（如400万或500万）",
+        "或修改为不低于甲方实际直接损失的150%",
+        "明确排除故意或重大过失情况下的责任限制"
+      ],
+      "anchors": {
+        "0": "修改后的责任上限低于合同总额的50%（如仍保留125万或200万）。",
+        "1": "修改为合同总额100%或实际损失150%，并排除故意/重大过失的限制。"
+      },
+      "acceptable_alternatives": [
+        "如果solver设定责任上限为年度维护费用的300%，也视为满足底线要求。"
+      ],
+      "failure_examples": [
+        "修改为'乙方累计赔偿不超过当季费用的3倍（375万）'，仍低于底线要求的合同总额100%。"
+      ]
+    },
+    {
+      "id": "R12",
+      "description": "红线修改-争议解决与续约",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "redline_markups.md"
+      ],
+      "evidence": "检查redline_markups.md中对第8条和第9条的修改文本。",
+      "numeric_tolerance": "",
+      "weight_reason": "管辖权和续约权是标准法律红线，必须修改。",
+      "criterion": [
+        "将争议解决修改为北京仲裁委员会或北京市有管辖权的人民法院",
+        "将续约条款修改为提前60天书面通知，或删除自动续约条款（改为需双方另行签署续约协议）"
+      ],
+      "anchors": {
+        "0": "管辖权仍为深圳，或仍保留30天自动续约条款。",
+        "1": "管辖权改为北京，续约条款改为提前60天通知或需另行签署协议。"
+      },
+      "acceptable_alternatives": [
+        "如果solver将管辖权改为上海（中立地），且说明理由，可视为可接受的替代解。"
+      ],
+      "failure_examples": [
+        "将管辖权改为'被告所在地法院'（因乙方在深圳，实质上仍是深圳管辖）。"
+      ]
+    },
+    {
+      "id": "R13",
+      "description": "擅自放弃核心底线权利（负分项）",
+      "type": "Binary",
+      "weight": -10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "redline_markups.md",
+        "clause_risk_register.csv"
+      ],
+      "evidence": "全局检查redline_markups.md和clause_risk_register.csv。",
+      "numeric_tolerance": "",
+      "weight_reason": "律师越权接受walk_away_point是严重失职，必须重罚。",
+      "criterion": [
+        "未在红线修改中建议接受IP全归乙方",
+        "未建议接受125万责任上限",
+        "未建议接受深圳管辖",
+        "未建议接受500万费用且无考核机制"
+      ],
+      "anchors": {
+        "0": "未发生违规（正确识别所有风险并建议拒绝/修改底线条款）。",
+        "1": "发生违规（在任何修改建议中，建议客户接受上述任一walk_away_point条款）。"
+      },
+      "acceptable_alternatives": [
+        "无。底线条款不可退让。"
+      ],
+      "failure_examples": [
+        "在红线修改中写道：'考虑到乙方报价较低，建议接受IP全归乙方所有'（严重违规）。"
+      ]
+    },
+    {
+      "id": "R14",
+      "description": "风险表结构与完整性",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv的表头和行数。",
+      "numeric_tolerance": "",
+      "weight_reason": "确保交付物格式规范，便于业务部门阅读。",
+      "criterion": [
+        "包含条款序号、条款名称、原内容摘要、风险等级、风险说明、建议修改方向等必要列",
+        "覆盖草案中至少8个核心条款",
+        "CSV格式正确，无乱码或错位"
+      ],
+      "levels": {
+        "0": "格式错误（非CSV），或遗漏超过3个核心条款，或缺少关键列。",
+        "0.25": "格式基本正确，但遗漏2个核心条款，或缺少1个关键列。",
+        "0.5": "覆盖所有条款，但部分列名不规范，或风险等级列缺失。",
+        "0.75": "覆盖所有条款，列名规范，但部分摘要过长或过短，影响阅读。",
+        "1": "完美覆盖所有条款，列名规范，摘要精炼，风险等级和说明清晰。"
+      },
+      "acceptable_alternatives": [
+        "如果solver使用Markdown表格代替CSV，但包含了所有要求的列，可酌情给分，但最好严格遵循CSV要求。"
+      ],
+      "failure_examples": [
+        "仅列出条款序号和风险等级，缺少'风险说明'和'建议修改方向'列。"
+      ]
+    },
+    {
+      "id": "R15",
+      "description": "商业谈判策略建议",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "redline_markups.md"
+      ],
+      "evidence": "检查redline_markups.md中的修改理由/批注。",
+      "numeric_tolerance": "",
+      "weight_reason": "律师不仅应修改条款，还应提供谈判策略，体现专业附加值。",
+      "criterion": [
+        "在修改理由中体现谈判策略（如利用IP归属或付款条件作为筹码换取响应时间提升）",
+        "批注语言专业，能够指导业务部门如何与供应商沟通"
+      ],
+      "anchors": {
+        "0": "修改理由仅为'不符合内部规定，建议修改'，无策略指导。",
+        "1": "修改理由中明确提出谈判筹码或替代方案，如'若乙方坚持500万费用，我方可接受IP共有，但必须增加SLA考核'。"
+      },
+      "acceptable_alternatives": [
+        "如果solver在风险表末尾单独增加'谈判策略建议'段落，也视为满足要求。"
+      ],
+      "failure_examples": [
+        "批注写道：'根据底线，必须修改此条款'，未提供任何谈判话术或筹码建议。"
+      ]
+    },
+    {
+      "id": "R16",
+      "description": "风险评级准确性",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv中各条款的风险等级评定。",
+      "numeric_tolerance": "",
+      "weight_reason": "风险等级应准确反映条款对业务的实际影响和底线偏离度。",
+      "criterion": [
+        "响应时间、IP归属、责任限制、管辖权、自动续约被评定为'高'风险",
+        "费用、违约金被评定为'高'或'中'风险",
+        "保密期限被评定为'中'或'低'风险"
+      ],
+      "levels": {
+        "0": "评级完全混乱，如将保密期限评为高风险，或将责任限制评为低风险。",
+        "0.25": "仅正确评定1-2个条款的等级，核心高风险条款评级错误。",
+        "0.5": "正确评定了一半以上的条款等级，但核心高风险条款中有1-2个评级错误。",
+        "0.75": "正确评定所有条款等级，但中/低风险的划分理由不够充分。",
+        "1": "完美匹配预期风险等级，高/中/低划分准确，符合业务实际影响。"
+      },
+      "acceptable_alternatives": [
+        "如果solver将费用评为'高'风险（因超预算），完全合理。"
+      ],
+      "failure_examples": [
+        "将'保密期限5年'评定为'高'风险，而将'责任上限125万'评定为'低'风险。"
+      ]
+    },
+    {
+      "id": "R17",
+      "description": "法律语言专业性",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "redline_markups.md"
+      ],
+      "evidence": "检查redline_markups.md中修改后的条款文本。",
+      "numeric_tolerance": "",
+      "weight_reason": "修改后的文本必须具备法律合同的严谨性和可执行性。",
+      "criterion": [
+        "使用准确的法律术语（如'不可抗力'、'管辖权'、'知识产权归属'）",
+        "条款结构完整，包含条件、主体、权利义务、违约责任",
+        "无歧义表述，避免口语化"
+      ],
+      "levels": {
+        "0": "使用大量口语化表述，条款结构不完整，存在严重法律歧义。",
+        "0.25": "部分使用法律术语，但条款结构松散，存在一定歧义。",
+        "0.5": "基本使用法律术语，条款结构完整，但个别表述不够严谨。",
+        "0.75": "法律术语准确，条款结构完整，仅有极轻微的排版或措辞瑕疵。",
+        "1": "法律术语精准，条款结构严密，无歧义，可直接作为合同定稿使用。"
+      },
+      "acceptable_alternatives": [
+        "如果solver在修改文本后附加了'定义'条款来明确特定概念，视为加分项。"
+      ],
+      "failure_examples": [
+        "修改为'乙方必须快点来修，不然扣钱'（严重口语化，无法律效力）。"
+      ]
+    },
+    {
+      "id": "R18",
+      "description": "交付物命名规范",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv",
+        "redline_markups.md"
+      ],
+      "evidence": "检查输出文件的文件名。",
+      "numeric_tolerance": "",
+      "weight_reason": "确保文件流转和系统自动处理的规范性。",
+      "criterion": [
+        "风险表文件严格命名为 clause_risk_register.csv",
+        "红线修改文件严格命名为 redline_markups.md"
+      ],
+      "anchors": {
+        "0": "任一文件名不正确（如缺少扩展名、拼写错误、包含多余字符）。",
+        "1": "两个文件名完全正确。"
+      },
+      "acceptable_alternatives": [
+        "无。文件名必须严格匹配。"
+      ],
+      "failure_examples": [
+        "命名为 clause_risk_register.xlsx 或 redline_markups.txt。"
+      ]
+    },
+    {
+      "id": "R19",
+      "description": "遗漏关键业务记录核对（负分项）",
+      "type": "Binary",
+      "weight": -3,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "clause_risk_register.csv"
+      ],
+      "evidence": "检查clause_risk_register.csv中是否包含对第9条（自动续约）的风险识别。",
+      "numeric_tolerance": "",
+      "weight_reason": "自动续约是草案中隐藏的典型陷阱，必须识别。",
+      "criterion": [
+        "在风险表中明确列出第9条（期限与续约）",
+        "指出自动续约条款的风险"
+      ],
+      "anchors": {
+        "0": "未发生违规（正确识别了自动续约条款的风险）。",
+        "1": "发生违规（完全遗漏了第9条自动续约条款的风险识别）。"
+      },
+      "acceptable_alternatives": [
+        "无。必须识别该陷阱。"
+      ],
+      "failure_examples": [
+        "风险表中仅列出前8条，未提及第9条的自动续约问题。"
+      ]
+    },
+    {
+      "id": "R20",
+      "description": "违约金修改的合理性",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "redline_markups.md"
+      ],
+      "evidence": "检查redline_markups.md中对第4条的修改文本。",
+      "numeric_tolerance": "",
+      "weight_reason": "违约金修改必须符合底线，且具备可操作性。",
+      "criterion": [
+        "将违约金上限修改为不超过合同总额的10%",
+        "将延迟到达的扣款修改为有上限（如不超过当季费用的10%）",
+        "确保修改后的条款对双方公平或至少不违反底线"
+      ],
+      "anchors": {
+        "0": "修改后的违约金仍为20%，或延迟扣款仍无上限。",
+        "1": "违约金修改为10%以内，延迟扣款设置了合理上限（如10%）。"
+      },
+      "acceptable_alternatives": [
+        "如果solver将违约金修改为'实际损失的30%'，且不超过合同总额10%，视为可接受。"
+      ],
+      "failure_examples": [
+        "修改为'违约金为合同总额的10%，但延迟到达每天扣减当季费用的1%直至扣完'（仍无上限）。"
+      ]
+    }
+  ],
+  "checks_to_execute": [
+    "验证 clause_risk_register.csv 是否为合法的CSV格式，且包含至少8行数据（不含表头）。",
+    "验证 redline_markups.md 是否包含对第2、3、4、5、7、8、9条的明确修改文本。",
+    "检查 redline_markups.md 中是否包含'知识产权'、'责任限制'等关键词，确保核心条款未被遗漏。",
+    "验证输出文件是否严格保存在 /app/output/ 目录下，且文件名完全匹配。"
+  ],
+  "quality_risks": [
+    "Solver可能过度修改合同，引入原草案和底线中均未提及的新条款（如增加不可抗力详细定义），导致偏离审阅任务本身。",
+    "Solver可能在费用条款上提出过于复杂的阶梯报价方案，导致超出底线或难以执行。",
+    "Solver可能混淆'响应时间'和'到达时间'，导致红线修改中的数值不符合底线要求。"
+  ],
+  "reference_solution": "关键数值与事实推导：草案费用500万，底线400万（walk_away 450万）；草案响应48/72，底线2/12（walk_away 24/24）；草案IP归乙方，底线归甲方或共有（walk_away 归乙方）；草案责任上限125万，底线400万+（walk_away <200万）；草案管辖深圳，底线北京（walk_away 深圳）；草案自动续约30天，底线60天或不续约（walk_away 自动续约）。推导链条：对比草案与mandate，识别出5个高风险（响应、IP、责任、管辖、续约），2个中高风险（费用、违约金），1个中低风险（保密）。红线修改必须严格落在baseline区间内，绝不可触碰walk_away_point。替代解：费用可改为400万，或500万+严格SLA考核；IP可改为归甲方，或底层归乙方但应用层归甲方。限制：所有修改必须使用专业法律语言，不得改变原合同的基本商业目的。"
+}

@@ -1,0 +1,574 @@
+[
+  {
+    "id": "R01",
+    "description": "正确识别直径超图纸下限的零件并判定为需返工或报废。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "anomaly_analysis_and_retest_plan.csv"
+    ],
+    "evidence": "CSV中A42-P06, A42-P07, A42-P08, A42-P16的Disposition列标记为Rework或Scrap。",
+    "numeric_tolerance": 0,
+    "weight_reason": "识别严重尺寸超差是防止不合格品流出的底线，权重最高。",
+    "criterion": [
+      "检查CSV中PartID为P06, P07, P08, P16的记录",
+      "确认其Measured_Diameter_mm分别为49.974, 49.972, 49.976, 49.971，均小于图纸下限49.980",
+      "确认其Disposition被标记为Rework或Scrap"
+    ],
+    "anchors": {
+      "0": "未能识别出这4个超差零件，或将其判定为合格/仅复测",
+      "1": "准确识别出这4个零件，并正确判定为Rework或Scrap"
+    },
+    "acceptable_alternatives": [
+      "Disposition写为Reject或NG等同义词，但需明确不是Pass"
+    ],
+    "failure_examples": [
+      "将P06(49.974)判定为合格，理由是接近名义尺寸",
+      "遗漏P16(49.971)的超差判定"
+    ]
+  },
+  {
+    "id": "R02",
+    "description": "正确识别同轴度超图纸极限的零件并判定为不合格。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "anomaly_analysis_and_retest_plan.csv"
+    ],
+    "evidence": "CSV中A42-P11, A42-P12的Disposition列标记为Rework或Scrap，且未标记为需复测。",
+    "numeric_tolerance": 0,
+    "weight_reason": "同轴度严重超差属于重大形位公差失效，直接决定零件报废。",
+    "criterion": [
+      "检查CSV中PartID为P11, P12的记录",
+      "确认其Coaxiality_mm分别为0.032, 0.035，大于图纸极限0.030",
+      "确认其Disposition被标记为Rework或Scrap，且RetestPriority不是高优先级"
+    ],
+    "anchors": {
+      "0": "将P11/P12判定为合格，或仅标记为需复测而未判定为不合格",
+      "1": "准确识别并判定为Rework/Scrap，明确不走常规复测流程"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "认为P11(0.032)只是稍微超差，标记为Retest等待复测确认"
+    ]
+  },
+  {
+    "id": "R03",
+    "description": "准确应用内部规则，将同轴度超内部管控但未超图纸的零件标记为高优先级复测。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02",
+      "REQ-05"
+    ],
+    "deliverables": [
+      "anomaly_analysis_and_retest_plan.csv"
+    ],
+    "evidence": "CSV中A42-P09, A42-P10的RetestPriority标记为高（如High/1），Disposition为Retest。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察对内部预警规则的执行能力，区分测量误差与真实超差。",
+    "criterion": [
+      "检查CSV中PartID为P09, P10的记录",
+      "确认其Coaxiality_mm为0.022, 0.024，处于0.020-0.030之间",
+      "确认Disposition为Retest，且RetestPriority为High或1"
+    ],
+    "anchors": {
+      "0": "未将P09/P10标记为复测，或优先级排序错误",
+      "1": "准确标记为Retest并赋予高优先级"
+    },
+    "acceptable_alternatives": [
+      "优先级标记为'Priority 1'或'Urgent'等同义表达"
+    ],
+    "failure_examples": [
+      "将P09(0.022)直接判定为合格，忽略了内部管控公差0.020的要求"
+    ]
+  },
+  {
+    "id": "R04",
+    "description": "在交接报告中准确指出直径尺寸呈现逐渐减小的趋势，并推断为刀具磨损。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告中提及P13-P16直径递减（49.984->49.971），并明确提到'刀具磨损'或'tool wear'。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数据趋势分析是工艺调整的前提，考察对连续数据的敏感度。",
+    "criterion": [
+      "报告中列出或描述了P13至P16的直径数据递减趋势",
+      "明确将原因归结为刀具磨损(tool wear)或类似机理"
+    ],
+    "anchors": {
+      "0": "未提及尺寸递减趋势，或未推断出刀具磨损",
+      "1": "准确描述趋势并正确推断为刀具磨损"
+    },
+    "acceptable_alternatives": [
+      "提到'刀尖磨损'、'切削刃钝化'等同义词"
+    ],
+    "failure_examples": [
+      "仅说'尺寸偏小'，未识别出P13-P16的连续递减规律"
+    ]
+  },
+  {
+    "id": "R05",
+    "description": "交接报告中刀具补偿建议的合理性与具体性。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告中关于直径补偿的建议内容。",
+    "numeric_tolerance": 0,
+    "weight_reason": "工艺建议的直接可用性，决定工程师能否快速解决问题。",
+    "criterion": [
+      "针对直径偏小，提出向正方向调整直径补偿（或X轴/Z轴磨损补偿正向调整）",
+      "提及检查刀片磨损或调整进给量等辅助措施"
+    ],
+    "levels": {
+      "1": "准确指出向正方向调整直径补偿，并建议检查刀片磨损/调整切削参数",
+      "0.75": "指出向正方向调整补偿，但未提及辅助检查措施",
+      "0.5": "指出尺寸偏小建议换刀，但未明确提及具体的补偿调整方向",
+      "0.25": "仅泛泛提到'尺寸有变化，需调整机床'，无具体零件指向和补偿方向",
+      "0": "未提及刀具磨损或补偿建议，或建议方向完全错误（如建议负向补偿）"
+    },
+    "acceptable_alternatives": [
+      "建议使用磨轮修整或调整刀补号"
+    ],
+    "failure_examples": [
+      "建议向负方向调整补偿（会使尺寸更小）",
+      "仅建议'重新对刀'，未提及具体的补偿方向"
+    ]
+  },
+  {
+    "id": "R06",
+    "description": "识别出键槽位置度系统性超差，并建议调整铣刀。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03",
+      "REQ-04"
+    ],
+    "deliverables": [
+      "engineer_handover_report.md",
+      "anomaly_analysis_and_retest_plan.csv"
+    ],
+    "evidence": "报告中提及P17-P20键槽位置度超图纸(>=0.050)，CSV中Disposition正确，报告建议调整铣刀/分度头。",
+    "numeric_tolerance": 0,
+    "weight_reason": "识别系统性偏移并给出针对性工艺建议。",
+    "criterion": [
+      "指出P17-P20的键槽位置度均≥0.050，超图纸极限",
+      "在报告中建议调整键槽铣刀补偿或检查分度头/夹具"
+    ],
+    "anchors": {
+      "0": "未识别出P17-P20的系统性超差，或未提出调整铣刀的建议",
+      "1": "准确识别系统性超差，并提出调整铣刀/夹具的具体建议"
+    },
+    "acceptable_alternatives": [
+      "建议检查分度盘或调整B轴/C轴零点"
+    ],
+    "failure_examples": [
+      "将P17-P20视为随机误差，仅建议复测"
+    ]
+  },
+  {
+    "id": "R07",
+    "description": "CSV文件包含所有20个PartID，无遗漏无多余，列名完全匹配。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "anomaly_analysis_and_retest_plan.csv"
+    ],
+    "evidence": "CSV文件的行数和表头。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基本的文件完整性与格式合规性。",
+    "criterion": [
+      "CSV包含20条数据记录（不含表头）",
+      "表头严格为：PartID, AnomalyType, Disposition, RetestPriority, Remarks"
+    ],
+    "anchors": {
+      "0": "记录数不是20，或表头列名不匹配",
+      "1": "记录数为20，表头完全匹配"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "CSV只有18条记录，遗漏了P19和P20",
+      "将列名写为'Priority'而非'RetestPriority'"
+    ]
+  },
+  {
+    "id": "R08",
+    "description": "负分项：将同轴度严重超差(>0.030)的零件判定为合格或仅复测。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "anomaly_analysis_and_retest_plan.csv"
+    ],
+    "evidence": "CSV中A42-P11, A42-P12的Disposition列。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严重形位公差超差放行是致命的质量事故，必须严厉惩罚。",
+    "criterion": [
+      "检查CSV中PartID为P11, P12的记录",
+      "若Disposition包含Pass, OK, Retest等允许流转的状态，则触发此项"
+    ],
+    "anchors": {
+      "0": "P11/P12未被错误放行（即标记为Rework/Scrap）",
+      "1": "P11或P12被错误标记为Pass/Retest等允许流转状态"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "认为P11(0.032)可以通过复测确认，将其标记为Retest"
+    ]
+  },
+  {
+    "id": "R09",
+    "description": "异常分组逻辑的严密性，区分尺寸超差、形位公差超差、系统偏移。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "anomaly_analysis_and_retest_plan.csv"
+    ],
+    "evidence": "CSV中AnomalyType和Disposition列的整体逻辑分布。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察分类逻辑的清晰度和对多种异常模式的综合处理能力。",
+    "criterion": [
+      "AnomalyType准确区分尺寸偏差(Diameter)、形位公差(Cylindricity/Coaxiality)、位置度(Position)",
+      "Disposition逻辑严密：尺寸超图纸->Scrap/Rework；同轴度边缘->Retest；系统偏移->调整刀具(在报告体现)"
+    ],
+    "levels": {
+      "1": "完美区分各类异常，AnomalyType描述准确，Disposition逻辑严密无矛盾",
+      "0.75": "区分了大部分异常，但在个别边界零件（如刚好等于管控公差）的分类上不够清晰",
+      "0.5": "能找出超差零件，但未区分'图纸超差'和'内部管控超差'的处理逻辑",
+      "0.25": "仅列出超差零件，AnomalyType描述混乱或无分类逻辑",
+      "0": "分组完全错误或未提供分组"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "将圆柱度超差和同轴度超差混为一谈，统一标记为'形位超差'，未体现具体特征"
+    ]
+  },
+  {
+    "id": "R10",
+    "description": "交接报告包含正确的批次号和线体编号。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告正文中提及Batch A42和ASSY-L04。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保报告上下文准确，防止工艺参数应用到错误批次。",
+    "criterion": [
+      "报告中明确提及'Batch A42'或'A42'",
+      "报告中明确提及'ASSY-L04'"
+    ],
+    "anchors": {
+      "0": "缺失批次号或线体编号，或编号错误",
+      "1": "同时准确包含Batch A42和ASSY-L04"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "将批次号写为'Batch A41'或遗漏线体编号"
+    ]
+  },
+  {
+    "id": "R11",
+    "description": "交接报告结构完整，包含背景、数据趋势、根因、建议四个核心部分。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告的Markdown标题或段落结构。",
+    "numeric_tolerance": 0,
+    "weight_reason": "专业报告的基本结构要求，确保信息传递完整。",
+    "criterion": [
+      "包含背景/概述部分",
+      "包含数据趋势分析部分",
+      "包含根因推断部分",
+      "包含行动建议/工艺调整部分"
+    ],
+    "anchors": {
+      "0": "缺失上述四个核心部分中的两个或以上",
+      "1": "结构完整，包含所有四个核心部分"
+    },
+    "acceptable_alternatives": [
+      "标题名称可略有不同，如'问题描述'代'背景'"
+    ],
+    "failure_examples": [
+      "全篇只有数据罗列，没有独立的根因分析和建议段落"
+    ]
+  },
+  {
+    "id": "R12",
+    "description": "报告中正确区分'图纸公差'与'内部管控公差'的应用场景。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告正文中对公差阈值的引用和解释。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察对质量控制体系（最终判定vs过程控制）的理解深度。",
+    "criterion": [
+      "明确指出图纸公差用于最终零件合格判定",
+      "明确指出内部管控公差用于过程预警和触发复测/工艺干预"
+    ],
+    "anchors": {
+      "0": "混淆两者，或仅引用其中一个公差标准",
+      "1": "清晰阐述两者的不同作用和应用场景"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "认为内部管控公差0.020就是最终判定同轴度合格的标准"
+    ]
+  },
+  {
+    "id": "R13",
+    "description": "复测优先级排序合理，符合内部规则定义的顺序。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "anomaly_analysis_and_retest_plan.csv"
+    ],
+    "evidence": "CSV中RetestPriority列的数值或文本排序。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保检测资源优先分配给最可能出问题的零件。",
+    "criterion": [
+      "同轴度边缘/超差(P09, P10)优先级最高",
+      "圆柱度超内部管控(P13-P16等)优先级次之",
+      "尺寸接近下限但合格优先级再次之"
+    ],
+    "anchors": {
+      "0": "优先级排序混乱，或将正常零件优先级排在超差零件之前",
+      "1": "优先级排序严格符合内部规则定义的顺序"
+    },
+    "acceptable_alternatives": [
+      "使用数字1,2,3或文本High,Medium,Low，只要逻辑顺序一致即可"
+    ],
+    "failure_examples": [
+      "将尺寸合格但圆柱度正常的P01标记为高优先级复测"
+    ]
+  },
+  {
+    "id": "R14",
+    "description": "报告中提到的内部管控公差数值与输入材料完全一致。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告正文中引用的具体公差数值。",
+    "numeric_tolerance": 0.001,
+    "weight_reason": "确保工艺工程师参考的数据准确无误。",
+    "criterion": [
+      "引用直径内部管控公差 -0.008 / -0.017",
+      "引用圆柱度内部管控 0.008",
+      "引用同轴度内部管控 0.020"
+    ],
+    "anchors": {
+      "0": "引用的内部管控公差数值与输入材料不符",
+      "1": "引用的数值完全一致"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "将同轴度内部管控公差误写为0.025"
+    ]
+  },
+  {
+    "id": "R15",
+    "description": "针对P13-P16尺寸递减，提出具体的补偿方向（正向调整）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告中关于直径补偿的具体描述。",
+    "numeric_tolerance": 0,
+    "weight_reason": "补偿方向错误会导致整批零件报废，必须准确。",
+    "criterion": [
+      "明确指出需要向'正方向'或'增大'方向调整直径补偿",
+      "提及具体的补偿号或轴向（如X轴磨损补偿）"
+    ],
+    "anchors": {
+      "0": "未提及补偿方向，或建议向负方向调整",
+      "1": "明确建议向正方向调整直径补偿"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "建议'减小直径补偿'（会导致零件更小）"
+    ]
+  },
+  {
+    "id": "R16",
+    "description": "识别出P11和P12同轴度突变，提示可能存在装夹变形或测量基准面磕碰。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告中对P11/P12异常原因的分析。",
+    "numeric_tolerance": 0,
+    "weight_reason": "区分系统性问题与偶发性异常，避免错误调整机床参数。",
+    "criterion": [
+      "指出P11(0.032)和P12(0.035)同轴度数据突变",
+      "推断原因可能为装夹变形、基准面磕碰或测量干扰"
+    ],
+    "anchors": {
+      "0": "将P11/P12的突变与P13-P16的刀具磨损混为一谈",
+      "1": "准确识别突变，并合理推断为装夹/测量问题"
+    },
+    "acceptable_alternatives": [
+      "提到'夹具定位销磨损'或'零件搬运磕碰'"
+    ],
+    "failure_examples": [
+      "认为P11/P12也是刀具磨损导致的，建议调整机床"
+    ]
+  },
+  {
+    "id": "R17",
+    "description": "交接报告语言专业，无口语化表达，适合工程技术交接。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告整体行文风格。",
+    "numeric_tolerance": 0,
+    "weight_reason": "专业沟通的基本要求。",
+    "criterion": [
+      "使用专业工程术语（如形位公差、刀具磨损、补偿）",
+      "无'大概'、'可能吧'、'我觉得'等口语化或不确定的模糊表达"
+    ],
+    "anchors": {
+      "0": "语言口语化严重，或缺乏专业术语",
+      "1": "语言专业、客观、简明"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "使用'轴好像有点弯'、'刀可能钝了'等非专业表达"
+    ]
+  },
+  {
+    "id": "R18",
+    "description": "交接报告结论中明确要求工艺工程师在下一班次前确认并修改CNC程序。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告结尾的行动要求或Next Steps。",
+    "numeric_tolerance": 0,
+    "weight_reason": "明确责任交接和时间节点。",
+    "criterion": [
+      "明确提出需要修改CNC程序或机床参数",
+      "提及在下一班次或规定时间内完成确认/修改"
+    ],
+    "anchors": {
+      "0": "未提及修改CNC程序，或未明确时间节点",
+      "1": "明确要求修改CNC程序，并提及下一班次或具体时间"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "仅建议'有空时看一下机床'，未明确修改CNC程序的要求"
+    ]
+  },
+  {
+    "id": "R19",
+    "description": "正确计算所有零件的直径偏差（实测-名义），并在报告中体现偏差范围。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告中对直径偏差的描述或计算。",
+    "numeric_tolerance": 0.002,
+    "weight_reason": "数据处理的准确性。",
+    "criterion": [
+      "计算偏差为 实测直径 - 50.000",
+      "报告中提到的偏差范围（如-0.012至-0.029）与数据计算结果一致"
+    ],
+    "anchors": {
+      "0": "偏差计算错误，或报告中提到的范围与实际数据不符",
+      "1": "偏差计算正确，报告中描述的范围准确"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "报告称直径最大偏差为-0.050，但实际最大偏差为-0.029(P16)"
+    ]
+  },
+  {
+    "id": "R20",
+    "description": "针对P17-P20键槽位置度超差，提出调整键槽铣刀或分度头的具体建议。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "engineer_handover_report.md"
+    ],
+    "evidence": "报告中关于键槽位置度调整的建议。",
+    "numeric_tolerance": 0,
+    "weight_reason": "解决系统性位置度偏移的具体工艺措施。",
+    "criterion": [
+      "明确指出需要调整键槽铣刀的刀具补偿",
+      "或建议检查/调整分度头/分度盘/夹具定位"
+    ],
+    "anchors": {
+      "0": "未提出针对键槽位置度的具体调整建议",
+      "1": "提出调整键槽铣刀或分度头的具体建议"
+    },
+    "acceptable_alternatives": [
+      "建议调整B轴/C轴零点或检查夹具定位销"
+    ],
+    "failure_examples": [
+      "仅建议'重新测量键槽'，未提出机床或刀具调整建议"
+    ]
+  }
+]

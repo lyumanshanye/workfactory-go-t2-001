@@ -1,0 +1,790 @@
+{
+  "title": "NovaCare Health Systems 软件许可证整合与预算控制方案",
+  "request": "你是 NovaCare Health Systems 的信息系统经理。CFO 要求你审查现有软件许可证的使用情况，并制定下一财年的许可证整合与续订方案。由于宏观经济压力，下一财年的软件许可总预算上限被严格限制在 $180,000。\n\n你需要完成以下工作：\n1. 根据《内部许可证优化政策》（见附件），分析各软件的使用率，计算建议的目标席位数。\n2. 评估当前总成本，如果超出 $180,000 预算上限，必须在方案中提出至少两项合理的成本削减或供应商谈判策略，并计算调整后的预期成本。\n3. 确保所有“高（High）”业务依赖度的软件在整合后不会出现服务中断，目标席位数不得低于当前活跃用户数。\n4. 编制三个交付物并保存至 /app/output 目录：\n   - `License_Optimization_Plan.docx`：包含执行摘要、各软件利用率分析、目标席位计算过程、预算差异分析及调整策略。\n   - `Budget_Scenario_Analysis.xlsx`：包含当前成本、初步优化成本、调整后成本的详细计算表，以及两个不同的预算达标场景。\n   - `Implementation_Handover.md`：面向供应商和内部 IT 帮助台的交接文档，包含席位变更矩阵、用户清理计划、沟通模板及验收标准。\n\n输出目录：/app/output",
+  "as_of": "2023-11-15T09:00:00Z",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "No external sources provided",
+      "limitations": "Task is entirely based on internally generated fictional data and policies. Solver must rely solely on provided inputs and standard business practices."
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "software_license_inventory.csv",
+      "purpose": "提供当前软件许可证的采购详情、到期日及单价基准。",
+      "content_plan": "包含8款软件的基础台账信息。",
+      "content": "Software,Vendor,License_Type,Total_Seats,Expiration_Date,Unit_Price_USD,Price_Basis\nMedChart EHR,HealthSoft,Named User,250,2024-03-15,150,per user/yr\nPACS Viewer,ImagePro,Concurrent,50,2024-04-10,800,per user/yr\nShiftPro Scheduling,ShiftCorp,Named User,300,2024-05-20,45,per user/yr\nOffice 365 E3,Microsoft,Named User,400,2024-02-28,288,per user/yr\nSecureComm Telehealth,TeleSecure,Concurrent,80,2024-06-01,1200,per user/yr\nFinLedger ERP,FinanceSys,Named User,150,2024-07-15,300,per user/yr\nDocuSign Enterprise,DocuSign,Site,1,2024-08-20,5000,per site/yr\nBioTrack Lab,LabTech,Named User,100,2024-01-30,200,per user/yr"
+    },
+    {
+      "filename": "user_activity_audit.csv",
+      "purpose": "提供各部门过去90天的软件实际使用活跃度及业务依赖度评级。",
+      "content_plan": "包含16条跨部门的软件使用审计记录。",
+      "content": "Department,Software_Name,90d_Unique_Active_Users,90d_Peak_Concurrent,Business_Dependency\nCardiology,MedChart EHR,45,12,High\nCardiology,ShiftPro Scheduling,40,10,High\nRadiology,PACS Viewer,15,8,High\nNursing,MedChart EHR,110,45,High\nNursing,ShiftPro Scheduling,80,35,High\nNursing,SecureComm Telehealth,50,40,High\nAdmin,Office 365 E3,180,50,Medium\nAdmin,FinLedger ERP,20,5,High\nFront Desk,ShiftPro Scheduling,40,15,Medium\nFront Desk,SecureComm Telehealth,20,10,Medium\nIT Support,Office 365 E3,50,15,High\nIT Support,SecureComm Telehealth,10,5,Low\nLab,BioTrack Lab,25,10,High\nLab,MedChart EHR,25,8,Medium\nManagement,Office 365 E3,30,10,Low\nManagement,FinLedger ERP,10,3,Medium"
+    },
+    {
+      "filename": "internal_policy.txt",
+      "purpose": "定义内部许可证优化的硬性计算规则与预算约束。",
+      "content_plan": "包含5条核心优化规则。",
+      "content": "NovaCare Health Systems - Internal License Optimization Policy (FY2024)\n1. Named User Rule: Target seats = (90-day unique active users) rounded up to the nearest multiple of 10. Must not be less than 90-day unique active users.\n2. Concurrent Rule: Target seats = (90-day peak concurrent users) + 20% redundancy, rounded up to the nearest multiple of 10.\n3. Site License Rule: Maintain current configuration unless explicitly requested to cancel.\n4. Continuity Rule: For software with 'High' business dependency, target seats must be >= current 90-day unique active users.\n5. Budget Cap: Total FY2024 software license budget must not exceed $180,000.\n6. Rounding: All seat calculations must round up to the nearest multiple of 10."
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "License_Optimization_Plan.docx",
+      "format": "docx",
+      "purpose": "Executive report detailing utilization analysis, target seat calculations, and budget adjustment strategies."
+    },
+    {
+      "filename": "Budget_Scenario_Analysis.xlsx",
+      "format": "xlsx",
+      "purpose": "Financial modeling workbook comparing current costs, initial optimization costs, and two budget-compliant scenarios."
+    },
+    {
+      "filename": "Implementation_Handover.md",
+      "format": "md",
+      "purpose": "Operational guide for IT helpdesk and vendor management, including seat change matrices and user cleanup plans."
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "text": "All three deliverables must be generated and saved to /app/output with correct file extensions.",
+      "visibility": "explicit",
+      "basis": "Deliverables definition"
+    },
+    {
+      "id": "REQ-02",
+      "text": "Target seat calculations must strictly follow the Named User, Concurrent, and Site License rules defined in internal_policy.txt.",
+      "visibility": "explicit",
+      "basis": "internal_policy.txt"
+    },
+    {
+      "id": "REQ-03",
+      "text": "The proposed budget adjustment strategies must result in a total FY2024 software cost of $180,000 or less.",
+      "visibility": "explicit",
+      "basis": "internal_policy.txt & CFO directive"
+    },
+    {
+      "id": "REQ-04",
+      "text": "Software with 'High' business dependency must not experience service continuity violations during license reduction.",
+      "visibility": "professional_practice",
+      "basis": "internal_policy.txt & IT governance standards"
+    },
+    {
+      "id": "REQ-05",
+      "text": "Handover document must include actionable tasks with clear ownership and acceptance criteria.",
+      "visibility": "professional_practice",
+      "basis": "Project management best practices"
+    }
+  ],
+  "authoring_plan": "The task simulates a real-world IT financial operations (FinOps) scenario where initial mathematical optimization of software seats leads to a budget overrun ($221,080 vs $180,000 cap). The solver must first accurately aggregate unique active users (for Named User) and peak concurrent users (for Concurrent) across departments. Then, apply the rounding and redundancy rules. The core challenge is bridging the $41,080 gap. The solver must propose logical business adjustments (e.g., vendor negotiations, tier downgrades for non-core users, canceling unused modules) without violating the continuity rule for High-dependency software. The reference solution provides the exact mathematical baseline, but acceptable alternatives for budget reduction are encouraged as long as they are justified in the text.",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "All three required deliverables are present and correctly formatted.",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx",
+        "Implementation_Handover.md"
+      ],
+      "evidence": "Check /app/output for file existence and extensions.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Core output completeness.",
+      "criterion": [
+        "File 1 is .docx",
+        "File 2 is .xlsx",
+        "File 3 is .md",
+        "All contain substantive content"
+      ],
+      "anchors": {
+        "0": "One or more deliverables missing or wrong format",
+        "1": "All three deliverables present and correctly formatted"
+      },
+      "acceptable_alternatives": [
+        "Acceptable if .docx is generated as .md with clear docx structure indicators, but native formats are preferred"
+      ],
+      "failure_examples": [
+        "Only provided two files",
+        "Saved xlsx as csv"
+      ]
+    },
+    {
+      "id": "R02",
+      "description": "Correctly aggregates 90-day unique active users and peak concurrent users across all departments for each software.",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Review calculation tables in deliverables to verify summation of user_activity_audit.csv data.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Foundation for all seat calculations.",
+      "criterion": [
+        "Sum unique active users per Named User software",
+        "Sum peak concurrent users per Concurrent software",
+        "Correctly identify all 8 software items"
+      ],
+      "levels": {
+        "0": "Failed to calculate or aggregate users for >50% of software",
+        "0.25": "Calculated for most but missed >2 software or used wrong aggregation logic",
+        "0.5": "Correctly calculated all but missed the distinction between Named and Concurrent metrics",
+        "0.75": "Correctly calculated all metrics but made minor rounding errors in summation",
+        "1": "Perfectly aggregated unique active and peak concurrent users for all 8 software across departments"
+      },
+      "acceptable_alternatives": [
+        "May present data in a pivot table format or explicit text list"
+      ],
+      "failure_examples": [
+        "Summed unique users instead of peak concurrent for PACS Viewer",
+        "Missed Lab department's usage of MedChart EHR"
+      ]
+    },
+    {
+      "id": "R03",
+      "description": "Correctly applies internal policy rules to calculate initial target seats for all software.",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Compare calculated target seats against reference math (e.g., MedChart=180, PACS=10, ShiftPro=160, O365=260, SecureComm=70, FinLedger=30, DocuSign=1, BioTrack=30).",
+      "numeric_tolerance": 0,
+      "weight_reason": "Directly tests adherence to provided business rules.",
+      "criterion": [
+        "Apply Named User rounding to nearest 10",
+        "Apply Concurrent +20% redundancy and round to nearest 10",
+        "Maintain Site license as 1",
+        "Ensure target >= active users for High dependency"
+      ],
+      "levels": {
+        "0": "Failed to apply correct formula for >3 software items",
+        "0.25": "Applied correct formula for most but missed rounding rules or +20% redundancy",
+        "0.5": "Applied formulas correctly but failed to round to nearest multiple of 10 consistently",
+        "0.75": "Calculated seats correctly for 7 items but made one calculation error (e.g., SecureComm 55*1.2=66->70)",
+        "1": "Perfectly calculated target seats for all 8 software strictly following all policy rules"
+      },
+      "acceptable_alternatives": [
+        "May show intermediate steps for rounding"
+      ],
+      "failure_examples": [
+        "Calculated SecureComm target as 60 instead of 70",
+        "Rounded BioTrack to 20 instead of 30"
+      ]
+    },
+    {
+      "id": "R04",
+      "description": "Identifies the budget overrun and proposes at least two logical, justified cost-reduction strategies to meet the $180,000 cap.",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Review Executive Summary and Scenario Analysis for budget gap identification and proposed strategies.",
+      "numeric_tolerance": 41080,
+      "weight_reason": "Tests business acumen and problem-solving under constraints.",
+      "criterion": [
+        "Initial cost calculated correctly (~$221,080)",
+        "Identifies gap of ~$41,080",
+        "Proposes >=2 distinct strategies",
+        "Strategies are logically justified"
+      ],
+      "anchors": {
+        "0": "Failed to identify budget gap or proposed no/invalid strategies",
+        "1": "Correctly identified gap and proposed >=2 logical, non-fabricated strategies"
+      },
+      "acceptable_alternatives": [
+        "Strategies can include vendor negotiation, tier downgrades, module cancellation, or shifting to pay-as-you-go"
+      ],
+      "failure_examples": [
+        "Proposed fake 50% vendor discount without justification",
+        "Only proposed one strategy"
+      ]
+    },
+    {
+      "id": "R05",
+      "description": "Ensures no continuity violations for High-dependency software during optimization.",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx"
+      ],
+      "evidence": "Cross-check target seats in plan against 90-day unique active users for High-dependency items.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Critical risk management requirement.",
+      "criterion": [
+        "MedChart EHR target >= 180",
+        "PACS Viewer target covers peak",
+        "ShiftPro target >= 160",
+        "SecureComm target covers peak",
+        "FinLedger target >= 30",
+        "BioTrack target >= 25"
+      ],
+      "anchors": {
+        "0": "Target seats set below active/peak users for High-dependency software without justification",
+        "1": "All High-dependency software targets safely cover active/peak usage"
+      },
+      "acceptable_alternatives": [
+        "If reducing seats below active users, must provide a documented migration/alternative plan"
+      ],
+      "failure_examples": [
+        "Reduced ShiftPro to 120 seats while 160 users are active"
+      ]
+    },
+    {
+      "id": "R06",
+      "description": "Vendor Handover document quality: Includes seat change matrix, negotiation points, and SLA requirements.",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Implementation_Handover.md"
+      ],
+      "evidence": "Review Implementation_Handover.md for vendor-specific sections.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Ensures operational handover is complete for external parties.",
+      "criterion": [
+        "Seat change matrix present",
+        "Negotiation points for budget strategies included",
+        "SLA requirements defined"
+      ],
+      "levels": {
+        "0": "No vendor handover content provided",
+        "0.25": "Only listed seat changes without negotiation or SLA details",
+        "0.5": "Included matrix and negotiation points but lacked SLA specifics",
+        "0.75": "Comprehensive matrix and negotiation points, SLA section is generic",
+        "1": "Detailed matrix, specific negotiation leverage points based on data, and clear SLA expectations"
+      },
+      "acceptable_alternatives": [
+        "Negotiation points can reference the budget gap analysis"
+      ],
+      "failure_examples": [
+        "Only copied the seat change matrix without any negotiation context"
+      ]
+    },
+    {
+      "id": "R07",
+      "description": "IT Helpdesk Operational Readiness: Includes user cleanup plan, communication templates, and acceptance criteria.",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Implementation_Handover.md"
+      ],
+      "evidence": "Review Implementation_Handover.md for IT helpdesk operational steps.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Ensures internal IT can execute the changes smoothly.",
+      "criterion": [
+        "User cleanup/reclaim plan defined",
+        "Communication templates for affected users included",
+        "Acceptance criteria for task completion stated"
+      ],
+      "levels": {
+        "0": "No IT helpdesk operational content provided",
+        "0.25": "Only listed high-level cleanup steps without templates or criteria",
+        "0.5": "Included cleanup plan and templates but lacked acceptance criteria",
+        "0.75": "Comprehensive plan and templates, criteria are vague",
+        "1": "Actionable cleanup plan, professional communication templates, and measurable acceptance criteria"
+      },
+      "acceptable_alternatives": [
+        "Templates can be outlines rather than full verbatim emails"
+      ],
+      "failure_examples": [
+        "Did not include any communication templates for end-users"
+      ]
+    },
+    {
+      "id": "R08",
+      "description": "Correctly calculates current total cost vs. initial optimized cost.",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Check financial calculations in the Excel file.",
+      "numeric_tolerance": 100,
+      "weight_reason": "Baseline financial accuracy.",
+      "criterion": [
+        "Current cost matches sum of Total_Seats * Unit_Price",
+        "Initial optimized cost matches sum of Target_Seats * Unit_Price"
+      ],
+      "anchors": {
+        "0": "Financial calculations are significantly off (>5% error)",
+        "1": "Calculations are accurate within tolerance"
+      },
+      "acceptable_alternatives": [
+        "May include minor rounding differences in display"
+      ],
+      "failure_examples": [
+        "Calculated current cost using active users instead of total seats"
+      ]
+    },
+    {
+      "id": "R09",
+      "description": "MedChart EHR specific optimization accuracy.",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Check target seat count for MedChart EHR.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Specific verification of Named User rule.",
+      "criterion": [
+        "Target seats = 180",
+        "Cost = $27,000"
+      ],
+      "anchors": {
+        "0": "Target seats or cost incorrect",
+        "1": "Target seats = 180 and cost = $27,000"
+      },
+      "acceptable_alternatives": [
+        "None, math is exact"
+      ],
+      "failure_examples": [
+        "Set target to 250 (current seats) without justification"
+      ]
+    },
+    {
+      "id": "R10",
+      "description": "PACS Viewer specific optimization accuracy.",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Check target seat count for PACS Viewer.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Specific verification of Concurrent rule.",
+      "criterion": [
+        "Target seats = 10",
+        "Cost = $8,000"
+      ],
+      "anchors": {
+        "0": "Target seats or cost incorrect",
+        "1": "Target seats = 10 and cost = $8,000"
+      },
+      "acceptable_alternatives": [
+        "None"
+      ],
+      "failure_examples": [
+        "Calculated target as 8 (peak) without adding 20% redundancy"
+      ]
+    },
+    {
+      "id": "R11",
+      "description": "ShiftPro Scheduling specific optimization accuracy.",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Check target seat count for ShiftPro.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Specific verification of Named User rule.",
+      "criterion": [
+        "Target seats = 160",
+        "Cost = $7,200"
+      ],
+      "anchors": {
+        "0": "Target seats or cost incorrect",
+        "1": "Target seats = 160 and cost = $7,200"
+      },
+      "acceptable_alternatives": [
+        "None"
+      ],
+      "failure_examples": [
+        "Rounded 160 to 200 unnecessarily"
+      ]
+    },
+    {
+      "id": "R12",
+      "description": "Office 365 E3 specific optimization accuracy.",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Check target seat count for Office 365.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Specific verification of high-volume Named User.",
+      "criterion": [
+        "Target seats = 260",
+        "Cost = $74,880"
+      ],
+      "anchors": {
+        "0": "Target seats or cost incorrect",
+        "1": "Target seats = 260 and cost = $74,880"
+      },
+      "acceptable_alternatives": [
+        "None"
+      ],
+      "failure_examples": [
+        "Failed to aggregate across Admin, IT, and Management departments"
+      ]
+    },
+    {
+      "id": "R13",
+      "description": "SecureComm Telehealth specific optimization accuracy.",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Check target seat count for SecureComm.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Critical high-cost item, tests Concurrent +20% and rounding.",
+      "criterion": [
+        "Peak = 55",
+        "55 * 1.2 = 66 -> rounded to 70",
+        "Target seats = 70",
+        "Cost = $84,000"
+      ],
+      "anchors": {
+        "0": "Target seats or cost incorrect",
+        "1": "Target seats = 70 and cost = $84,000"
+      },
+      "acceptable_alternatives": [
+        "None"
+      ],
+      "failure_examples": [
+        "Rounded 66 to 60 instead of 70"
+      ]
+    },
+    {
+      "id": "R14",
+      "description": "FinLedger ERP specific optimization accuracy.",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Check target seat count for FinLedger.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Specific verification of low-utilization Named User.",
+      "criterion": [
+        "Target seats = 30",
+        "Cost = $9,000"
+      ],
+      "anchors": {
+        "0": "Target seats or cost incorrect",
+        "1": "Target seats = 30 and cost = $9,000"
+      },
+      "acceptable_alternatives": [
+        "None"
+      ],
+      "failure_examples": [
+        "Kept current seats (150) without analysis"
+      ]
+    },
+    {
+      "id": "R15",
+      "description": "BioTrack Lab specific optimization accuracy.",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Check target seat count for BioTrack.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Specific verification of rounding up rule.",
+      "criterion": [
+        "Active = 25",
+        "Target seats = 30",
+        "Cost = $6,000"
+      ],
+      "anchors": {
+        "0": "Target seats or cost incorrect",
+        "1": "Target seats = 30 and cost = $6,000"
+      },
+      "acceptable_alternatives": [
+        "None"
+      ],
+      "failure_examples": [
+        "Rounded down to 20"
+      ]
+    },
+    {
+      "id": "R16",
+      "description": "Negative: Fabricated vendor discounts, prices, or user data not present in the inputs.",
+      "type": "Binary",
+      "weight": -10,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx",
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Review proposed strategies and financial tables for unverified numbers.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Severe penalty for hallucinating data to force budget compliance.",
+      "criterion": [
+        "No fake discounts",
+        "No invented user counts",
+        "No fabricated base prices"
+      ],
+      "anchors": {
+        "0": "No fabrication detected",
+        "1": "Fabricated data (e.g., fake discounts, invented prices) found in deliverables"
+      },
+      "acceptable_alternatives": [
+        "Estimates based on standard industry practices (e.g., 5-10% volume discount expectation) are acceptable if labeled as assumptions"
+      ],
+      "failure_examples": [
+        "Assumed Microsoft grants a 40% discount to make the math work without justification"
+      ]
+    },
+    {
+      "id": "R17",
+      "description": "Negative: Recommended target seats lower than current 90-day unique active users for High dependency software without a valid migration plan.",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx"
+      ],
+      "evidence": "Cross-check final target seats against active users for High dependency items.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Severe penalty for causing service disruption.",
+      "criterion": [
+        "No unjustified seat reduction below active users for High dependency"
+      ],
+      "anchors": {
+        "0": "Continuity maintained or properly justified with migration plan",
+        "1": "Unjustified seat reduction below active users for High dependency software"
+      },
+      "acceptable_alternatives": [
+        "Reduction is acceptable if accompanied by a detailed, actionable migration plan to alternative tools"
+      ],
+      "failure_examples": [
+        "Cut MedChart EHR to 150 seats while 180 users are active, with no explanation"
+      ]
+    },
+    {
+      "id": "R18",
+      "description": "Scenario Analysis Depth: Provides at least two distinct, mathematically sound budget-compliant scenarios.",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Budget_Scenario_Analysis.xlsx"
+      ],
+      "evidence": "Review the Excel file for multiple scenario tabs or clearly separated sections.",
+      "numeric_tolerance": 100,
+      "weight_reason": "Tests strategic flexibility and financial modeling skills.",
+      "criterion": [
+        "Scenario 1 is distinct and <= $180,000",
+        "Scenario 2 is distinct and <= $180,000",
+        "Both scenarios include detailed cost breakdowns"
+      ],
+      "levels": {
+        "0": "Only provided the initial optimized cost (>$180k) or no scenarios",
+        "0.25": "Provided one scenario or scenarios are just minor tweaks of the same strategy",
+        "0.5": "Provided two scenarios but one fails to meet the $180,000 cap or lacks detail",
+        "0.75": "Provided two valid, distinct scenarios meeting the budget cap, but rationale is weak",
+        "1": "Provided two highly distinct, well-reasoned scenarios (e.g., aggressive negotiation vs. feature downgrade) both meeting the budget cap with full breakdowns"
+      },
+      "acceptable_alternatives": [
+        "Scenarios can be presented in separate sheets or clearly delimited sections"
+      ],
+      "failure_examples": [
+        "Scenario 1 and Scenario 2 are essentially the same with only $100 difference"
+      ]
+    },
+    {
+      "id": "R19",
+      "description": "Handover Actionability & Governance: Tasks in the handover document are assignable, have timelines, and clear acceptance criteria.",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Implementation_Handover.md"
+      ],
+      "evidence": "Review the task list in the handover document.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Ensures the plan is executable, not just theoretical.",
+      "criterion": [
+        "Tasks have assigned roles (e.g., IT Admin, Vendor Manager)",
+        "Tasks have timelines/deadlines",
+        "Tasks have clear acceptance criteria"
+      ],
+      "anchors": {
+        "0": "Tasks are vague, lack ownership, or missing timelines",
+        "1": "Tasks are specific, assigned, time-bound, and have acceptance criteria"
+      },
+      "acceptable_alternatives": [
+        "Timelines can be relative (e.g., 'Week 1', 'T-30 days')"
+      ],
+      "failure_examples": [
+        "Listed 'Clean up users' as a task with no owner or deadline"
+      ]
+    },
+    {
+      "id": "R20",
+      "description": "Anomaly & Unused License Detection: Identifies DocuSign as a Site license with no active user data, or flags BioTrack's extremely low utilization for potential cancellation.",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "License_Optimization_Plan.docx"
+      ],
+      "evidence": "Check for commentary on DocuSign or BioTrack in the optimization plan.",
+      "numeric_tolerance": 0,
+      "weight_reason": "Tests analytical depth beyond basic math.",
+      "criterion": [
+        "Flags DocuSign Site license anomaly",
+        "Flags BioTrack low utilization (25 active out of 100)"
+      ],
+      "anchors": {
+        "0": "Failed to identify any anomalies",
+        "1": "Identified at least one key anomaly (DocuSign or BioTrack) and addressed it in the strategy"
+      },
+      "acceptable_alternatives": [
+        "Can suggest cancelling BioTrack entirely as part of the budget strategy"
+      ],
+      "failure_examples": [
+        "Applied standard Named User math to DocuSign despite it being a Site license"
+      ]
+    }
+  ],
+  "checks_to_execute": [
+    "Verify file existence and extensions in /app/output",
+    "Parse CSV inputs to verify seat calculations against rubric math",
+    "Validate that target seats for High dependency software >= 90-day unique active users",
+    "Check that total proposed budget in scenarios <= $180,000"
+  ],
+  "quality_risks": [
+    "Solver might invent fictional vendor discounts to meet budget without justifying them in the plan",
+    "Solver might misinterpret Concurrent vs Named User rules leading to incorrect seat calculations",
+    "Solver might ignore the rounding rule to the nearest multiple of 10",
+    "Solver might fail to aggregate department-level data correctly before applying rules"
+  ],
+  "reference_solution": {
+    "data_aggregation": {
+      "MedChart EHR": {
+        "type": "Named User",
+        "unique_active": 180,
+        "peak_concurrent": 65
+      },
+      "PACS Viewer": {
+        "type": "Concurrent",
+        "unique_active": 15,
+        "peak_concurrent": 8
+      },
+      "ShiftPro Scheduling": {
+        "type": "Named User",
+        "unique_active": 160,
+        "peak_concurrent": 60
+      },
+      "Office 365 E3": {
+        "type": "Named User",
+        "unique_active": 260,
+        "peak_concurrent": 75
+      },
+      "SecureComm Telehealth": {
+        "type": "Concurrent",
+        "unique_active": 80,
+        "peak_concurrent": 55
+      },
+      "FinLedger ERP": {
+        "type": "Named User",
+        "unique_active": 30,
+        "peak_concurrent": 8
+      },
+      "DocuSign Enterprise": {
+        "type": "Site",
+        "unique_active": "N/A",
+        "peak_concurrent": "N/A"
+      },
+      "BioTrack Lab": {
+        "type": "Named User",
+        "unique_active": 25,
+        "peak_concurrent": 10
+      }
+    },
+    "initial_optimization_calculation": {
+      "MedChart EHR": "180 -> 180 seats * $150 = $27,000",
+      "PACS Viewer": "8 * 1.2 = 9.6 -> 10 seats * $800 = $8,000",
+      "ShiftPro Scheduling": "160 -> 160 seats * $45 = $7,200",
+      "Office 365 E3": "260 -> 260 seats * $288 = $74,880",
+      "SecureComm Telehealth": "55 * 1.2 = 66 -> 70 seats * $1200 = $84,000",
+      "FinLedger ERP": "30 -> 30 seats * $300 = $9,000",
+      "DocuSign Enterprise": "1 site * $5000 = $5,000",
+      "BioTrack Lab": "25 -> 30 seats * $200 = $6,000",
+      "Total_Initial_Optimized_Cost": 221080
+    },
+    "budget_gap_analysis": "Total Initial Optimized Cost ($221,080) exceeds Budget Cap ($180,000) by $41,080.",
+    "acceptable_adjustment_strategies": [
+      "Negotiate volume/multi-year discounts with TeleSecure for SecureComm (e.g., 20% discount saves $16,800).",
+      "Downgrade Office 365 E3 to a lower tier (e.g., E1) for non-core departments like Management and Front Desk (saves ~$7,500).",
+      "Cancel BioTrack Lab entirely and migrate to a cheaper alternative or manual processes (saves $6,000).",
+      "Shift SecureComm to a pay-per-session model if vendor supports it, based on actual peak usage rather than flat concurrent seats."
+    ],
+    "constraints_validation": "All High-dependency software (MedChart, PACS, ShiftPro, SecureComm, FinLedger, BioTrack) must maintain target seats >= their respective 90-day unique active users or peak concurrent users to ensure continuity."
+  }
+}

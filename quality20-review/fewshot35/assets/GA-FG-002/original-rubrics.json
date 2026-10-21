@@ -1,0 +1,176 @@
+[
+  {
+    "id": "R01",
+    "weight": 10.0,
+    "description": "截至时点选V2为唯一有效版本。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R02",
+    "weight": 7.0,
+    "description": "G1循环采用批准覆盖值60游戏日。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R03",
+    "weight": 7.0,
+    "description": "V3的13:00授权批准晚于12:00截至时点，不能执行V3。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R04",
+    "weight": 7.0,
+    "description": "G1计费距离为300格，不是420格行驶距离。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R05",
+    "weight": 7.0,
+    "description": "G1货物时间t为18周期，不将其当45周期。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R06",
+    "weight": 7.0,
+    "description": "车站等待不加入货物老化。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R07",
+    "weight": 7.0,
+    "description": "P1循环保持48日，不重复加车站等待6日。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R08",
+    "weight": 7.0,
+    "description": "Goods基础收益参数为6144。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R09",
+    "weight": 7.0,
+    "description": "Goods第一衰减界限为5周期。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R10",
+    "weight": 7.0,
+    "description": "Goods第二段持续期为28周期，第二界限为33周期。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R11",
+    "weight": 7.0,
+    "description": "基准P1时间因子为243。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R12",
+    "weight": 7.0,
+    "description": "每辆年循环按floor(360/cycle)计算，不按连续运能确认。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R13",
+    "weight": 7.0,
+    "description": "P1三车基准年度交付量限为2050，不给每辆重复需求。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R14",
+    "weight": 7.0,
+    "description": "M1三车基准收入按11满批加17单位末批逐批取整。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R15",
+    "weight": 7.0,
+    "description": "采购额按实际车辆数计入首年净现金。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R16",
+    "weight": 7.0,
+    "description": "完整年度运行费按实际车数扣除。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R17",
+    "weight": 7.0,
+    "description": "压力需求按80%向下取整，M1为541单位。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R18",
+    "weight": 7.0,
+    "description": "压力老化增加4周期。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R19",
+    "weight": 7.0,
+    "description": "压力循环增加10日后重新向下取整年循环。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R20",
+    "weight": 10.0,
+    "description": "全部有效组合的采购额不超过100000。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R21",
+    "weight": 10.0,
+    "description": "全部有效组合的车辆数不超过4。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R22",
+    "weight": 10.0,
+    "description": "不同时选择同互斥组的不同运输选项。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R23",
+    "weight": 10.0,
+    "description": "可行组合的压力首年净现金至少50000。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R24",
+    "weight": 10.0,
+    "description": "全局最优车辆向量与给定顺序下的完整枚举一致。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R25",
+    "weight": 7.0,
+    "description": "前三次优方案按指定完整破同分顺序正确列出。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R26",
+    "weight": 10.0,
+    "description": "参考代码从实际输入重算而非粘贴最优结果。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R27",
+    "weight": 7.0,
+    "description": "plan.json记录三个实际JSON输入的SHA256。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R28",
+    "weight": 7.0,
+    "description": "工作簿收益与汇总保留可编辑公式并与JSON结果一致。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  },
+  {
+    "id": "R29",
+    "weight": 10.0,
+    "description": "若声称已实际验证OpenTTD当前引擎或存档则扣分。\nDeliverables to inspect: `output/model.py`, `output/plan.json`, `output/planning.xlsx`, `output/handoff.docx`.",
+    "type": "binary"
+  }
+]

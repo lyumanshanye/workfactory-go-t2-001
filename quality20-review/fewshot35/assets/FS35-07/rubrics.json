@@ -1,0 +1,593 @@
+[
+  {
+    "id": "Rubric_01",
+    "description": "是否正确将案件XHC-2024-103（涉商业秘密）转为不公开听证，并在排期表中体现。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "R2"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv",
+      "clerk_audit_report.md"
+    ],
+    "evidence": "排期表中XHC-2024-103的听证性质列标记为“不公开”；审查报告中明确提及该案涉商业秘密，依据规则2转为不公开。",
+    "numeric_tolerance": null,
+    "weight_reason": "涉及法定不公开审理事由的识别，属于核心程序合规要求。",
+    "criterion": [
+      "识别XHC-2024-103的特殊要求‘涉核心配方商业秘密’",
+      "在排期表中将该案听证性质明确标记为‘不公开’",
+      "在审查报告中记录转换依据及通知动作"
+    ],
+    "anchors": {
+      "0": "未识别商业秘密，或仍排为公开听证，或审查报告未提及。",
+      "1": "准确识别并转为不公开，排期表与报告均正确体现。"
+    },
+    "acceptable_alternatives": [
+      "不公开听证可以安排在任意合法时间段，不强制要求特定法庭。"
+    ],
+    "failure_examples": [
+      "将XHC-2024-103排为公开听证，完全忽略特殊要求列的提示。"
+    ]
+  },
+  {
+    "id": "Rubric_02",
+    "description": "是否正确错开律师王建国代理的三起案件（101, 102, 106）的听证时间。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "R3"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "排期表中XHC-2024-101、102、106的日期与时间列互不重叠。",
+    "numeric_tolerance": null,
+    "weight_reason": "代理人冲突是常见排期错误，直接影响庭审能否正常进行。",
+    "criterion": [
+      "提取王建国代理的案件号：101, 102, 106",
+      "检查这三场听证在排期表中的具体日期和时间",
+      "确认三者的时间段完全错开，无并发"
+    ],
+    "anchors": {
+      "0": "存在任意两场王建国代理的案件在同一时间段排期。",
+      "1": "三起案件的时间段完全错开，无冲突。"
+    },
+    "acceptable_alternatives": [
+      "具体日期可灵活分配，只要满足不冲突及案件102避开周三上午的约束。"
+    ],
+    "failure_examples": [
+      "将101和106排在同一天的上午，导致王建国无法同时出庭。"
+    ]
+  },
+  {
+    "id": "Rubric_03",
+    "description": "是否为案件XHC-2024-102避开周三上午（原告律师冲突）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "排期表中XHC-2024-102的日期不为2024-05-15，或时间不为上午。",
+    "numeric_tolerance": null,
+    "weight_reason": "需响应当事人提出的合理时间冲突避让要求。",
+    "criterion": [
+      "识别102的特殊要求‘原告律师周三上午有庭审冲突’",
+      "检查102的排期时间",
+      "确认未排在周三（5月15日）上午"
+    ],
+    "anchors": {
+      "0": "将102排在周三上午。",
+      "1": "102排在周三以外的时间，或周三下午。"
+    },
+    "acceptable_alternatives": [
+      "可排在周二、周四或周五的任意合法时段。"
+    ],
+    "failure_examples": [
+      "机械排期，将102排在周三上午，未考虑特殊要求。"
+    ]
+  },
+  {
+    "id": "Rubric_04",
+    "description": "法官每日排期数量是否严格控制在3场以内。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "统计排期表中张明、李华每天的案件数，验证是否<=3。",
+    "numeric_tolerance": null,
+    "weight_reason": "保障法官工作负荷与庭审质量。",
+    "criterion": [
+      "按法官和日期分组统计排期表记录数",
+      "验证每位法官每天的排期数是否<=3"
+    ],
+    "levels": {
+      "0": "存在法官单日排期>=4场。",
+      "0.25": "存在法官单日排期=3场，但其他法官严重不均或存在隐性冲突。",
+      "0.5": "所有法官单日排期<=3场，但计算或分配逻辑有明显瑕疵。",
+      "0.75": "严格满足<=3场，且分配合理。",
+      "1": "严格满足<=3场，分配均衡，且完全避开法官unavailable时间。"
+    },
+    "acceptable_alternatives": [
+      "法官之间的案件分配比例不要求绝对平均，只要不超限即可。"
+    ],
+    "failure_examples": [
+      "将张明在周二排了4场听证，违反内部规则1。"
+    ]
+  },
+  {
+    "id": "Rubric_05",
+    "description": "是否正确为材料缺失的案件（102, 105）生成《补充材料通知书》。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R4"
+    ],
+    "deliverables": [
+      "notice_dispatch_record.csv",
+      "material_receipt_log.csv"
+    ],
+    "evidence": "通知记录中包含针对102（缺证据清单）和105（缺答辩状）的补充材料通知。",
+    "numeric_tolerance": null,
+    "weight_reason": "材料齐备是开庭的前提，程序上必须通知补正。",
+    "criterion": [
+      "在材料登记中识别102缺证据清单、105缺答辩状",
+      "在通知记录中为这两案生成《补充材料通知书》",
+      "通知对象为对应案件的原告/被告"
+    ],
+    "anchors": {
+      "0": "未识别缺失，或未发送补材通知。",
+      "1": "准确识别缺失项并发送对应的补材通知。"
+    },
+    "acceptable_alternatives": [
+      "通知书名称可微调，如《材料补正通知书》，但必须明确指向缺失材料。"
+    ],
+    "failure_examples": [
+      "仅记录了材料缺失，但未生成发送通知。"
+    ]
+  },
+  {
+    "id": "Rubric_06",
+    "description": "对案件XHC-2024-104被告延期申请的处理是否合规。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R5"
+    ],
+    "deliverables": [
+      "clerk_audit_report.md"
+    ],
+    "evidence": "审查报告中记录了104的延期申请，并明确建议提交主审法官决定。",
+    "numeric_tolerance": null,
+    "weight_reason": "书记员无权直接批准或拒绝延期，需体现程序流转。",
+    "criterion": [
+      "在审查报告中提及XHC-2024-104的延期申请",
+      "处理建议为‘提交主审法官/合议庭决定’",
+      "未直接批准或拒绝"
+    ],
+    "anchors": {
+      "0": "未记录，或书记员直接批准/拒绝。",
+      "1": "准确记录并建议提交法官决定。"
+    },
+    "acceptable_alternatives": [
+      "可备注‘暂按原计划排期，待法官决定后调整’。"
+    ],
+    "failure_examples": [
+      "在报告中直接写明‘同意被告延期申请，取消本次排期’。"
+    ]
+  },
+  {
+    "id": "Rubric_07",
+    "description": "材料登记日志是否完整覆盖8个案件。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "material_receipt_log.csv"
+    ],
+    "evidence": "日志中包含8个案件的记录，无遗漏。",
+    "numeric_tolerance": null,
+    "weight_reason": "基础工作完整性要求。",
+    "criterion": [
+      "检查material_receipt_log.csv的行数",
+      "确认8个case_id均存在"
+    ],
+    "anchors": {
+      "0": "遗漏任意案件。",
+      "1": "完整覆盖8个案件。"
+    },
+    "acceptable_alternatives": [
+      "列名可微调，但必须包含案件号和材料状态。"
+    ],
+    "failure_examples": [
+      "仅登记了部分案件，遗漏了105和108。"
+    ]
+  },
+  {
+    "id": "Rubric_08",
+    "description": "通知发送记录是否完整覆盖所有应发通知（出庭、补材、不公开转换）。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "R2",
+      "R4"
+    ],
+    "deliverables": [
+      "notice_dispatch_record.csv"
+    ],
+    "evidence": "通知记录包含出庭通知（8份）、补材通知（2份）、不公开转换通知（1份）。",
+    "numeric_tolerance": null,
+    "weight_reason": "通知是程序流转的闭环，遗漏会导致程序瑕疵。",
+    "criterion": [
+      "统计出庭通知书数量（应为8）",
+      "统计补充材料通知书数量（应为2，针对102, 105）",
+      "统计不公开听证转换通知书数量（应为1，针对103）"
+    ],
+    "levels": {
+      "0": "缺失核心通知（如未发不公开转换通知或补材通知）。",
+      "0.25": "仅发送了部分出庭通知，数量严重不足。",
+      "0.5": "出庭通知完整，但缺失补材或转换通知。",
+      "0.75": "出庭和补材通知完整，缺失转换通知或对象错误。",
+      "1": "出庭(8)、补材(2)、转换(1)通知均完整且对象正确。"
+    },
+    "acceptable_alternatives": [
+      "出庭通知可合并为‘批量发送’，但需注明覆盖8案。"
+    ],
+    "failure_examples": [
+      "忘记为XHC-2024-103发送不公开听证转换通知。"
+    ]
+  },
+  {
+    "id": "Rubric_09",
+    "description": "排期时间是否合法，避开12:00-14:00午休时间。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "排期表中所有时间均在09:00-11:30或14:00-16:30。",
+    "numeric_tolerance": null,
+    "weight_reason": "基础规则遵守。",
+    "criterion": [
+      "检查所有排期时间",
+      "确认无12:00-14:00的排期"
+    ],
+    "anchors": {
+      "0": "存在午休时间排期。",
+      "1": "所有时间合法。"
+    },
+    "acceptable_alternatives": [
+      "时间可精确到分钟，如09:30-12:00，但核心时段不能违规。"
+    ],
+    "failure_examples": [
+      "将某案件排在12:30-14:00。"
+    ]
+  },
+  {
+    "id": "Rubric_10",
+    "description": "正常案件（101, 106, 107, 108）是否正确分配法庭与法官。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "正常案件均分配了法官和法庭，无空白或冲突。",
+    "numeric_tolerance": null,
+    "weight_reason": "基础排期功能。",
+    "criterion": [
+      "检查101, 106, 107, 108的法官和法庭列",
+      "确认无空值，且法官在available状态。"
+    ],
+    "anchors": {
+      "0": "存在空值或分配给不可用法官。",
+      "1": "分配正确且无空值。"
+    },
+    "acceptable_alternatives": [
+      "法官和法庭的组合可互换，只要不违反其他约束。"
+    ],
+    "failure_examples": [
+      "将101分配给周二上午不可用的张明法官。"
+    ]
+  },
+  {
+    "id": "Rubric_11",
+    "description": "审查报告是否清晰、结构化地汇总所有异常及处理建议。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "R5"
+    ],
+    "deliverables": [
+      "clerk_audit_report.md"
+    ],
+    "evidence": "报告包含商业秘密、代理人冲突、材料缺失、延期申请四个异常板块。",
+    "numeric_tolerance": null,
+    "weight_reason": "审查报告是书记员核心交付物，体现专业判断。",
+    "criterion": [
+      "报告结构清晰，分点列出异常",
+      "涵盖103商业秘密、101/102/106冲突、102/105缺材料、104延期",
+      "每个异常均有明确的处理建议或依据"
+    ],
+    "levels": {
+      "0": "无审查报告，或完全未提及异常。",
+      "0.25": "提及1-2项异常，但无处理建议或逻辑混乱。",
+      "0.5": "涵盖主要异常，但结构松散或缺乏依据。",
+      "0.75": "涵盖所有异常，建议合理，但格式或表述欠佳。",
+      "1": "结构清晰，全面覆盖4类异常，建议准确且引用内部规则。"
+    },
+    "acceptable_alternatives": [
+      "可使用表格或列表形式，不强制特定Markdown标题。"
+    ],
+    "failure_examples": [
+      "将所有异常混在一段话中，未区分问题类型。"
+    ]
+  },
+  {
+    "id": "Rubric_12",
+    "description": "【负分】是否将案件XHC-2024-103错误排为公开听证。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "R2"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "排期表中103的听证性质为‘公开’。",
+    "numeric_tolerance": null,
+    "weight_reason": "严重程序违规，侵犯商业秘密，必须惩罚。",
+    "criterion": [
+      "检查103的听证性质",
+      "若为公开则触发负分"
+    ],
+    "anchors": {
+      "0": "未排为公开（合格）。",
+      "1": "排为公开（触发负分）。"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "忽略‘涉核心配方商业秘密’提示，直接按默认公开排期。"
+    ]
+  },
+  {
+    "id": "Rubric_13",
+    "description": "【负分】是否导致律师王建国在同一时间参加两场听证。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "R3"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "排期表中101, 102, 106存在时间重叠。",
+    "numeric_tolerance": null,
+    "weight_reason": "导致庭审无法进行，属于重大排期失误。",
+    "criterion": [
+      "检查101, 102, 106的时间",
+      "若存在重叠则触发负分"
+    ],
+    "anchors": {
+      "0": "无重叠（合格）。",
+      "1": "存在重叠（触发负分）。"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "将101和106排在同一天的同一上午。"
+    ]
+  },
+  {
+    "id": "Rubric_14",
+    "description": "【负分】法官单日排期是否超过3场。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "某法官单日排期>=4。",
+    "numeric_tolerance": null,
+    "weight_reason": "违反内部硬性负荷规则。",
+    "criterion": [
+      "统计每日每法官排期数",
+      "若>=4触发负分"
+    ],
+    "anchors": {
+      "0": "均<=3（合格）。",
+      "1": "存在>=4（触发负分）。"
+    },
+    "acceptable_alternatives": [],
+    "failure_examples": [
+      "为赶进度，将张明周二排了4场。"
+    ]
+  },
+  {
+    "id": "Rubric_15",
+    "description": "所有交付物是否使用了指定的文件名。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "all"
+    ],
+    "evidence": "文件名与request中要求完全一致。",
+    "numeric_tolerance": null,
+    "weight_reason": "基础规范要求。",
+    "criterion": [
+      "检查4个文件名是否严格匹配"
+    ],
+    "anchors": {
+      "0": "存在文件名错误。",
+      "1": "全部正确。"
+    },
+    "acceptable_alternatives": [
+      "扩展名大小写不敏感。"
+    ],
+    "failure_examples": [
+      "将报告命名为audit_report.txt而非.md。"
+    ]
+  },
+  {
+    "id": "Rubric_16",
+    "description": "送达方式是否符合内部惯例（如默认电子送达）。",
+    "type": "Gradient",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "notice_dispatch_record.csv"
+    ],
+    "evidence": "通知记录中包含送达方式列，且合理。",
+    "numeric_tolerance": null,
+    "weight_reason": "体现实务细节。",
+    "criterion": [
+      "包含送达方式字段",
+      "方式合理（如电子送达、邮寄、直接送达）"
+    ],
+    "levels": {
+      "0": "无送达方式或方式明显不合理。",
+      "0.25": "有送达方式，但全部为不合理方式。",
+      "0.5": "有送达方式，部分合理。",
+      "0.75": "全部合理，但未体现差异化。",
+      "1": "全部合理，且根据案件情况有合理区分（如不公开通知可能需书面）。"
+    },
+    "acceptable_alternatives": [
+      "可统一使用‘电子送达’。"
+    ],
+    "failure_examples": [
+      "送达方式列为‘口头通知’。"
+    ]
+  },
+  {
+    "id": "Rubric_17",
+    "description": "调整案件102时间时，是否最小化变动（未改变不必要的法官/法庭）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R3"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "102的调整仅涉及时间，未无故更换法官。",
+    "numeric_tolerance": null,
+    "weight_reason": "排期优化原则。",
+    "criterion": [
+      "检查102的法官分配",
+      "若因冲突调整时间，法官应保持不变（除非不可用）"
+    ],
+    "anchors": {
+      "0": "无故更换法官。",
+      "1": "仅调整时间，法官合理。"
+    },
+    "acceptable_alternatives": [
+      "若原法官不可用，更换法官是合理的。"
+    ],
+    "failure_examples": [
+      "仅因时间冲突，就将102从张明换给李华，而张明明明有空。"
+    ]
+  },
+  {
+    "id": "Rubric_18",
+    "description": "材料登记日志是否准确记录了各案的材料清单及缺失项。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "R4"
+    ],
+    "deliverables": [
+      "material_receipt_log.csv"
+    ],
+    "evidence": "日志中材料列与输入一致，缺失项准确标记。",
+    "numeric_tolerance": null,
+    "weight_reason": "材料核对是基础工作。",
+    "criterion": [
+      "核对102缺证据清单",
+      "核对105缺答辩状",
+      "其他案件标记为齐全"
+    ],
+    "levels": {
+      "0": "未记录材料情况。",
+      "0.25": "记录了材料，但缺失项识别错误。",
+      "0.5": "识别了1个缺失项，遗漏另1个。",
+      "0.75": "识别了缺失项，但格式或表述不规范。",
+      "1": "准确识别所有缺失项，且记录规范清晰。"
+    },
+    "acceptable_alternatives": [
+      "可用‘缺失：证据清单’或‘证据清单：无’表述。"
+    ],
+    "failure_examples": [
+      "将102标记为材料齐全，未识别缺证据清单。"
+    ]
+  },
+  {
+    "id": "Rubric_19",
+    "description": "对案件108（周四下午二庭维修）的排期是否避开维修时间。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "108未排在周四下午的第二法庭。",
+    "numeric_tolerance": null,
+    "weight_reason": "设备可用性约束。",
+    "criterion": [
+      "检查108的排期",
+      "若排在周四下午，法庭必须为第一法庭；或改期"
+    ],
+    "anchors": {
+      "0": "排在周四下午第二法庭。",
+      "1": "避开该时段法庭，或改期。"
+    },
+    "acceptable_alternatives": [
+      "排在周四下午第一法庭，或改到周三下午第二法庭。"
+    ],
+    "failure_examples": [
+      "将108排在周四下午第二法庭，导致庭审时空调损坏。"
+    ]
+  },
+  {
+    "id": "Rubric_20",
+    "description": "排期表CSV的列结构是否符合要求。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "hearing_schedule_2024W20.csv"
+    ],
+    "evidence": "包含案件号、日期、时间、法庭、法官、听证性质、状态、备注等列。",
+    "numeric_tolerance": null,
+    "weight_reason": "数据规范性。",
+    "criterion": [
+      "检查CSV表头",
+      "包含核心字段"
+    ],
+    "anchors": {
+      "0": "缺少核心字段（如日期、法庭）。",
+      "1": "包含所有核心字段。"
+    },
+    "acceptable_alternatives": [
+      "列名可微调，如‘日期’与‘date’等价。"
+    ],
+    "failure_examples": [
+      "排期表只有案件号和法官，无具体时间和法庭。"
+    ]
+  }
+]

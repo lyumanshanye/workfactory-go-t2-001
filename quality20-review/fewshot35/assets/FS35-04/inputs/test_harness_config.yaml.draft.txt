@@ -1,0 +1,12 @@
+environment:
+  hardware:
+    gpu: "NVIDIA A100 80GB"
+    system_ram_gb: 32
+    cpu_cores: 64
+evaluation:
+  ndcg_at_10: "Normalized Discounted Cumulative Gain at rank 10"
+  recall_at_100: "Recall rate at rank 100"
+  latency_ms: "End-to-end query latency in milliseconds"
+notes:
+  - "OOM errors are tracked per minute during the 10-minute stress test window."
+  - "Peak RAM is the maximum resident set size observed during the test.

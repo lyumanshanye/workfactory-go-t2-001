@@ -1,0 +1,563 @@
+{
+  "title": "医疗秘书：匿名改期请求匹配与日程冲突验证",
+  "request": "你好，我是Sunrise Family Clinic的诊所经理。由于本周电子病历系统升级，部分患者通过临时网页表单提交了匿名改期请求，导致请求数据与系统预约记录脱节。附件中包含了当前的预约队列、匿名改期请求列表以及医生最新的排班可用性。\n\n你的任务是作为医疗秘书，将这些匿名请求与系统记录进行匹配，并严格根据诊所的排程规则（特别是15分钟前后缓冲规则和医生当班时间）验证改期的可行性。请注意，不要进行任何临床优先级的判断，也不要擅自跨医生调整预约。\n\n请完成以下工作并将成果保存至 /app/output 目录：\n\n1. \"Reschedule_Match_and_Validation_Log.xlsx\"：记录所有请求的匹配与验证过程。必须包含列：Request_ID, Patient_Last_Name, Original_Time, Requested_New_Time, Matched_APT_ID, Validation_Status (Approved / Rejected / Pending Manual Review), Rejection_Reason (如适用), 以及 Validation_Notes（说明时间占用和缓冲计算）。\n2. \"Staff_Notification_and_Handover_Memo.docx\"：一份面向医生的交接备忘录。列出所有已成功改期的预约（需注明新时间及提前15分钟的准备时间），以及所有被拒绝或需人工核实的请求（需注明原因，以便前台联系患者重新安排）。\n\n请务必确保时间计算的精确性，任何缓冲时间的计算错误都会导致后续患者就诊延误。",
+  "as_of": "2024-05-09T14:00:00-05:00",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "无外部来源引用",
+      "limitations": "本题为完全原创虚构场景，所有机构名称、人员、排班数据、业务规则均为虚构，不依赖任何外部真实法规或官方数据源。"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "appointment_queue.csv",
+      "purpose": "提供当前系统的预约队列基础数据，用于与匿名改期请求进行匹配。",
+      "content_plan": "包含预约ID、患者全名、主治医生、预约类型、时长、原定时间。至少8条记录，包含同姓同时间冲突的极端案例。",
+      "content": "APT_ID,Patient_Name,Doctor,Appointment_Type,Duration_Min,Original_Start_Time\nAPT-001,John Smith,Dr. Evans,Annual Physical,60,2024-05-10 09:00\nAPT-002,Mary Smith,Dr. Evans,Follow-up,30,2024-05-10 09:00\nAPT-003,Robert Jones,Dr. Lee,Flu Shot,15,2024-05-10 10:00\nAPT-004,Linda Chen,Dr. Evans,Consultation,45,2024-05-10 10:30\nAPT-005,David Brown,Dr. Lee,Follow-up,30,2024-05-10 11:00\nAPT-006,Sarah Davis,Dr. Patel,Physical Therapy,45,2024-05-10 13:00\nAPT-007,Michael Wilson,Dr. Evans,Annual Physical,60,2024-05-10 14:00\nAPT-008,Emily White,Dr. Lee,Consultation,45,2024-05-10 15:00"
+    },
+    {
+      "filename": "reschedule_requests.md",
+      "purpose": "提供患者通过匿名表单提交的改期请求，包含部分姓氏匹配歧义和各类时间冲突场景。",
+      "content_plan": "包含请求ID、患者姓氏、原预约时间、期望改期时间。7条记录，涵盖成功、缓冲冲突、超班冲突、同姓歧义等情况。",
+      "content": "# Anonymous Reschedule Requests\n\n- **REQ-101**: Smith | Original: 2024-05-10 09:00 | Requested: 2024-05-10 11:00\n- **REQ-102**: Jones | Original: 2024-05-10 10:00 | Requested: 2024-05-10 13:00\n- **REQ-103**: Chen | Original: 2024-05-10 10:30 | Requested: 2024-05-10 14:00\n- **REQ-104**: Brown | Original: 2024-05-10 11:00 | Requested: 2024-05-11 10:00\n- **REQ-105**: Davis | Original: 2024-05-10 13:00 | Requested: 2024-05-10 15:00\n- **REQ-106**: Wilson | Original: 2024-05-10 14:00 | Requested: 2024-05-10 16:00\n- **REQ-107**: White | Original: 2024-05-10 15:00 | Requested: 2024-05-10 16:30"
+    },
+    {
+      "filename": "staff_availability.json",
+      "purpose": "提供医生在特定日期的排班时间，用于验证改期时间（含缓冲）是否在医生当班时间内。",
+      "content_plan": "JSON格式，包含医生姓名及每日的上班时间、下班时间。覆盖2024-05-10和2024-05-11。",
+      "content": "{\n  \"doctors\": [\n    {\n      \"name\": \"Dr. Evans\",\n      \"schedule\": {\n        \"2024-05-10\": {\"start\": \"08:00\", \"end\": \"17:00\"},\n        \"2024-05-11\": {\"start\": null, \"end\": null}\n      }\n    },\n    {\n      \"name\": \"Dr. Lee\",\n      \"schedule\": {\n        \"2024-05-10\": {\"start\": \"08:00\", \"end\": \"16:00\"},\n        \"2024-05-11\": {\"start\": \"09:00\", \"end\": \"15:00\"}\n      }\n    },\n    {\n      \"name\": \"Dr. Patel\",\n      \"schedule\": {\n        \"2024-05-10\": {\"start\": \"08:00\", \"end\": \"14:00\"},\n        \"2024-05-11\": {\"start\": null, \"end\": null}\n      }\n    }\n  ]\n}"
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "Reschedule_Match_and_Validation_Log.xlsx",
+      "format": "Excel Workbook",
+      "purpose": "记录所有匿名请求的匹配结果、规则验证状态及详细的时间计算注释，作为前台后续操作的唯一数据依据。"
+    },
+    {
+      "filename": "Staff_Notification_and_Handover_Memo.docx",
+      "format": "Word Document",
+      "purpose": "向医生和前台主管清晰交接改期结果，包含已确认的新日程（含缓冲准备时间）及需人工介入的异常清单。"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "text": "准确将匿名请求中的姓氏和时间与系统预约队列进行匹配。",
+      "visibility": "explicit",
+      "basis": "业务匹配基础"
+    },
+    {
+      "id": "REQ-02",
+      "text": "严格执行15分钟前后缓冲规则：每次改期的总占用时长 = 预约时长 + 30分钟。",
+      "visibility": "explicit",
+      "basis": "诊所内部排程规则"
+    },
+    {
+      "id": "REQ-03",
+      "text": "验证改期后的总占用时间段必须完全包含在对应医生的当班时间内。",
+      "visibility": "explicit",
+      "basis": "诊所内部排程规则"
+    },
+    {
+      "id": "REQ-04",
+      "text": "识别并标记同姓氏、同原预约时间的歧义请求为“Pending Manual Review”。",
+      "visibility": "explicit",
+      "basis": "数据质量控制"
+    },
+    {
+      "id": "REQ-05",
+      "text": "生成结构化的通知清单，清晰分类Approved, Rejected, Pending。",
+      "visibility": "explicit",
+      "basis": "交付物格式要求"
+    },
+    {
+      "id": "REQ-06",
+      "text": "备忘录需准确传达改期细节，包括提前15分钟的准备提示。",
+      "visibility": "explicit",
+      "basis": "交付物内容要求"
+    },
+    {
+      "id": "REQ-07",
+      "text": "保持专业、中立的语气，不引入任何临床优先级判断或主观建议。",
+      "visibility": "professional_practice",
+      "basis": "医疗秘书职业规范"
+    },
+    {
+      "id": "REQ-08",
+      "text": "禁止擅自更改患者主治医生进行跨医生改期。",
+      "visibility": "explicit",
+      "basis": "诊所权限控制"
+    }
+  ],
+  "authoring_plan": "本题考察医疗秘书在信息不完整（匿名）和规则严格（缓冲、排班）条件下的数据匹配与冲突解决能力。\n\n核心推导逻辑：\n1. 缓冲规则应用：总占用时间 = [Start_Time - 15min, Start_Time + Duration_Min + 15min]。\n2. 匹配逻辑：通过姓氏和原时间匹配APT_ID。若匹配到多个（如REQ-101匹配APT-001和APT-002），则标记Pending。\n3. 冲突验证：\n   - REQ-102 (Jones, 15min, 13:00): 占用 12:45-13:30。Dr. Lee 05-10 至 16:00。无冲突，Approved。\n   - REQ-103 (Chen, 45min, 14:00): 占用 13:45-14:45。Dr. Evans 14:00有APT-007 (Wilson, 60min, 13:45-15:15)。缓冲时间13:45重叠，Rejected。\n   - REQ-104 (Brown, 30min, 05-11 10:00): 占用 09:45-10:45。Dr. Lee 05-11 09:00-15:00。在班，Approved。\n   - REQ-105 (Davis, 45min, 15:00): 占用 14:45-16:00。Dr. Patel 05-10 至 14:00。超班，Rejected。\n   - REQ-106 (Wilson, 60min, 16:00): 占用 15:45-17:15。Dr. Evans 05-10 至 17:00。超班，Rejected。\n   - REQ-107 (White, 45min, 16:30): 占用 16:15-17:30。Dr. Lee 05-10 至 16:00。超班，Rejected。\n\n预期判断：Solver需精确计算分钟级时间，识别出Chen的冲突是由于缓冲时间重叠（而非预约本身时间重叠），以及Davis/Wilson/White的冲突是由于缓冲时间延伸超出了医生下班时间。\n\n不确定性/等价解：备忘录的格式可以有多种，但必须包含所有关键信息（新时间、缓冲提示、拒绝原因）。不强制要求特定的Excel样式，但列名和数据完整性必须达标。",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "正确识别REQ-101 (Smith) 的同姓/同时间歧义并标记为Pending Manual Review。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01",
+        "REQ-04"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "Excel中REQ-101行的Validation_Status是否为Pending Manual Review，且Validation_Notes或Rejection_Reason中是否提及匹配到多个Smith（APT-001和APT-002）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "匿名数据匹配的核心难点，直接关系到患者身份安全，权重最高。",
+      "criterion": [
+        "准确识别出05-10 09:00存在两个Smith预约（APT-001和APT-002）。",
+        "将REQ-101的状态明确标记为Pending Manual Review或等价需人工介入状态。",
+        "在备注中说明原因（同姓同时间无法唯一确定）。"
+      ],
+      "levels": {
+        "1.0": "准确识别两个Smith，标记为Pending，并明确列出APT-001和APT-002。",
+        "0.75": "识别出同姓冲突并标记为Pending，但未列出具体的APT编号。",
+        "0.5": "识别出同姓冲突，但错误地只保留了其中一个或标记为Rejected。",
+        "0.25": "尝试匹配但逻辑混乱，未明确标记为Pending。",
+        "0": "完全忽略同姓冲突，直接批准或拒绝，或完全未处理REQ-101。"
+      },
+      "acceptable_alternatives": "状态列可使用'Needs Verification'等等价表述，只要明确表达了需要人工干预的含义。",
+      "failure_examples": "直接将REQ-101批准为APT-001，忽略了APT-002也是Smith且在09:00的事实。"
+    },
+    {
+      "id": "R02",
+      "description": "正确验证REQ-102 (Jones) 的改期申请，确认其缓冲时间无冲突且在医生排班内。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02",
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "Excel中REQ-102行的Validation_Status是否为Approved，Validation_Notes中是否正确计算出占用时间为12:45-13:30。",
+      "numeric_tolerance": 0,
+      "weight_reason": "验证成功路径，确保Solver不仅会找错误，也能正确处理合法请求。",
+      "criterion": [
+        "状态标记为Approved。",
+        "正确计算总占用时间为12:45至13:30（13:00开始，15分钟时长，前后各15分钟）。",
+        "确认Dr. Lee在05-10 13:30前在班（排班至16:00）。"
+      ],
+      "levels": {
+        "1": "状态Approved，且时间计算完全正确（12:45-13:30）。",
+        "0": "状态非Approved，或时间计算错误（如未加缓冲，算成13:00-13:15）。"
+      },
+      "acceptable_alternatives": "时间表述可以是'12:45 - 13:30'或'12:45 to 13:30'。",
+      "failure_examples": "将状态标为Approved，但备注中写占用时间为13:00-13:15，忽略了缓冲规则。"
+    },
+    {
+      "id": "R03",
+      "description": "正确识别REQ-103 (Chen) 的缓冲时间冲突并拒绝。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "Excel中REQ-103行的Validation_Status是否为Rejected，Rejection_Reason是否指出与Wilson的缓冲时间重叠。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察对缓冲规则导致的时间延伸冲突的理解，这是实际排班中最常见的错误。",
+      "criterion": [
+        "状态标记为Rejected。",
+        "明确指出是因为缓冲时间冲突（Buffer Conflict）。",
+        "正确计算Chen占用时间（13:45-14:45）与Wilson占用时间（13:45-15:15）在13:45发生重叠。"
+      ],
+      "levels": {
+        "1": "状态Rejected，且准确指出缓冲时间重叠（13:45）。",
+        "0": "状态非Rejected，或拒绝理由错误（如说是诊室冲突或医生不同）。"
+      },
+      "acceptable_alternatives": "理由可表述为'Overlaps with APT-007 buffer time'或'13:45 start buffer conflict'。",
+      "failure_examples": "拒绝理由是'Patient already has an appointment at 14:00'，未意识到是因为15分钟缓冲导致的13:45提前冲突。"
+    },
+    {
+      "id": "R04",
+      "description": "正确验证REQ-104 (Brown) 跨天改期的可行性。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02",
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "Excel中REQ-104行的Validation_Status是否为Approved，时间计算是否基于05-11的排班。",
+      "numeric_tolerance": 0,
+      "weight_reason": "跨天请求容易出错，需验证Solver是否正确切换了日期并查询了对应的排班。",
+      "criterion": [
+        "状态标记为Approved。",
+        "正确计算05-11的占用时间为09:45-10:45。",
+        "确认Dr. Lee在05-11 09:00-15:00在班。"
+      ],
+      "levels": {
+        "1": "状态Approved，日期切换正确，时间计算无误。",
+        "0": "状态非Approved，或错误使用了05-10的排班，或时间计算错误。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "因为05-11是第二天，Solver未查询Dr. Lee的05-11排班，直接拒绝了该请求。"
+    },
+    {
+      "id": "R05",
+      "description": "正确识别REQ-105 (Davis) 超出Dr. Patel当班时间并拒绝。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "Excel中REQ-105行的Validation_Status是否为Rejected，理由是否指出超出当班时间。",
+      "numeric_tolerance": 0,
+      "weight_reason": "验证对医生排班边界的精确把控。",
+      "criterion": [
+        "状态标记为Rejected。",
+        "计算出占用时间14:45-16:00。",
+        "指出14:45超出了Dr. Patel 14:00的下班时间。"
+      ],
+      "levels": {
+        "1": "状态Rejected，准确指出缓冲后时间超出医生下班时间。",
+        "0": "状态非Rejected，或理由错误。"
+      },
+      "acceptable_alternatives": "理由可表述为'End time 16:00 exceeds Dr. Patel shift end 14:00'。",
+      "failure_examples": "认为15:00在14:00之后，所以拒绝，但未提及缓冲时间导致结束时间延后至16:00。"
+    },
+    {
+      "id": "R06",
+      "description": "正确识别REQ-106 (Wilson) 超出Dr. Evans当班时间并拒绝。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "Excel中REQ-106行的Validation_Status及理由。",
+      "numeric_tolerance": 0,
+      "weight_reason": "同R05，验证不同医生和不同时间点的排班边界。",
+      "criterion": [
+        "状态标记为Rejected。",
+        "计算出占用时间15:45-17:15。",
+        "指出17:15超出了Dr. Evans 17:00的下班时间。"
+      ],
+      "levels": {
+        "1": "状态Rejected，准确指出缓冲后时间超出医生下班时间。",
+        "0": "状态非Rejected，或理由错误。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "认为16:00开始，17:00结束，刚好在17:00下班，忽略了15分钟缓冲导致结束时间变成17:15。"
+    },
+    {
+      "id": "R07",
+      "description": "正确识别REQ-107 (White) 超出Dr. Lee当班时间并拒绝。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "Excel中REQ-107行的Validation_Status及理由。",
+      "numeric_tolerance": 0,
+      "weight_reason": "同R05/R06，完成所有拒绝路径的验证。",
+      "criterion": [
+        "状态标记为Rejected。",
+        "计算出占用时间16:15-17:30。",
+        "指出17:30超出了Dr. Lee 16:00的下班时间。"
+      ],
+      "levels": {
+        "1": "状态Rejected，准确指出缓冲后时间超出医生下班时间。",
+        "0": "状态非Rejected，或理由错误。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "未计算缓冲时间，认为16:30+45min=17:15，仍然错误，但计算逻辑完全偏离。"
+    },
+    {
+      "id": "R08",
+      "description": "在通知清单/备忘录中，为所有被拒绝的请求提供准确且符合规则的拒绝理由。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-05",
+        "REQ-06"
+      ],
+      "deliverables": [
+        "Staff_Notification_and_Handover_Memo.docx"
+      ],
+      "evidence": "Docx中需人工介入/被拒清单部分，是否清晰列出了Chen, Davis, Wilson, White的拒绝原因，且原因分类正确（缓冲冲突 vs 超班）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "备忘录的核心价值在于让前台/医生快速理解失败原因以便重新沟通，理由的准确性至关重要。",
+      "criterion": [
+        "Chen的理由明确归类为缓冲时间冲突（或与其他预约重叠）。",
+        "Davis, Wilson, White的理由明确归类为超出医生排班时间。",
+        "未混用或错误归类这些理由。"
+      ],
+      "levels": {
+        "1.0": "所有4个拒绝请求的理由均准确分类，且表述清晰专业。",
+        "0.75": "理由分类正确，但表述模糊（如仅写'Conflict'或'Not available'）。",
+        "0.5": "部分请求理由正确，部分错误（如将超班也写成缓冲冲突）。",
+        "0.25": "大部分理由错误，或遗漏了大部分拒绝请求的说明。",
+        "0": "未提供拒绝理由，或理由完全不符合诊所规则。"
+      },
+      "acceptable_alternatives": "理由可使用'Schedule conflict due to buffer time'或'Outside provider's working hours'等标准业务用语。",
+      "failure_examples": "将Davis的拒绝原因写为'Patient requested time not preferred'，这属于主观判断，违反了客观规则。"
+    },
+    {
+      "id": "R09",
+      "description": "备忘录中准确传达已批准改期的细节，包含新时间及提前15分钟的准备提示。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-06"
+      ],
+      "deliverables": [
+        "Staff_Notification_and_Handover_Memo.docx"
+      ],
+      "evidence": "Docx中成功改期清单，是否包含Jones和Brown的新时间，以及明确的15分钟准备提示（如12:45准备，09:45准备）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保医疗团队能准确执行新日程，缓冲提示是防止延误的关键。",
+      "criterion": [
+        "列出Jones的新时间13:00，并提示12:45开始准备。",
+        "列出Brown的新时间05-11 10:00，并提示09:45开始准备。",
+        "表述清晰，无歧义。"
+      ],
+      "levels": {
+        "1": "准确列出两个批准请求的新时间及缓冲准备时间。",
+        "0": "遗漏了其中一个，或时间计算错误，或未提及缓冲准备时间。"
+      },
+      "acceptable_alternatives": "准备时间可表述为'Please prepare room at 12:45'或'Buffer starts at 12:45'。",
+      "failure_examples": "仅列出新时间13:00，未提及12:45的准备时间，导致医生可能按13:00开始准备，造成后续延误。"
+    },
+    {
+      "id": "R10",
+      "description": "通知清单中包含需人工核实的Smith请求，并指明需联系患者确认身份。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Staff_Notification_and_Handover_Memo.docx"
+      ],
+      "evidence": "Docx中是否包含Smith (REQ-101) 的待办事项，说明需要核实身份。",
+      "numeric_tolerance": 0,
+      "weight_reason": "闭环处理所有异常状态。",
+      "criterion": [
+        "明确提及Smith的改期请求（REQ-101）。",
+        "指示需要联系患者确认是John Smith还是Mary Smith。"
+      ],
+      "levels": {
+        "1": "准确指出Smith请求需核实身份。",
+        "0": "遗漏该请求，或未说明需要核实身份。"
+      },
+      "acceptable_alternatives": "可表述为'Please call patient to confirm if this is for John or Mary Smith'。",
+      "failure_examples": "将Smith的请求直接列入已批准清单，未进行任何人工核实提示。"
+    },
+    {
+      "id": "R11",
+      "description": "Excel日志包含所有必要的列，且数据分类（Approved/Rejected/Pending）准确无误。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "Excel文件结构检查，列名是否齐全，状态分类是否与上述逻辑推导一致。",
+      "numeric_tolerance": 0,
+      "weight_reason": "基础交付物格式要求。",
+      "criterion": [
+        "包含Request_ID, Validation_Status, Rejection_Reason等关键列。",
+        "状态分类统计正确（2个Approved，4个Rejected，1个Pending）。"
+      ],
+      "levels": {
+        "1": "结构完整，分类统计完全正确。",
+        "0": "缺少关键列，或状态分类统计错误。"
+      },
+      "acceptable_alternatives": "列名可使用同义词，如'Status'代替'Validation_Status'。",
+      "failure_examples": "将Pending的请求计入了Approved或Rejected，导致统计数量错误。"
+    },
+    {
+      "id": "R12",
+      "description": "Docx备忘录包含标准的商务格式，包括抬头、日期、收件人和签名区。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-06"
+      ],
+      "deliverables": [
+        "Staff_Notification_and_Handover_Memo.docx"
+      ],
+      "evidence": "Docx文件视觉和结构检查。",
+      "numeric_tolerance": 0,
+      "weight_reason": "专业文档的基本规范。",
+      "criterion": [
+        "包含To（医生/前台）、From（医疗秘书）、Date、Subject。",
+        "包含合理的段落结构和签名占位符。"
+      ],
+      "levels": {
+        "1": "格式规范，包含所有标准商务备忘录元素。",
+        "0": "格式混乱，缺少关键商务元素（如日期或收件人）。"
+      },
+      "acceptable_alternatives": "可使用'Memo'字样开头，或采用标准信件格式。",
+      "failure_examples": "直接输出一段无格式的纯文本，未体现备忘录的文档属性。"
+    },
+    {
+      "id": "R13",
+      "description": "全程保持专业、中立的语气，未引入任何临床优先级判断。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-07"
+      ],
+      "deliverables": [
+        "Staff_Notification_and_Handover_Memo.docx"
+      ],
+      "evidence": "Docx文本内容审查，检查是否有'because it's urgent'或'patient needs this more'等主观临床判断。",
+      "numeric_tolerance": 0,
+      "weight_reason": "医疗秘书的职业边界，不得越权进行临床判断。",
+      "criterion": [
+        "所有拒绝理由均基于客观规则（时间、排班、缓冲）。",
+        "未出现任何关于病情严重程度、患者紧急程度的主观评价。"
+      ],
+      "levels": {
+        "1": "语气完全专业客观，无任何临床判断。",
+        "0": "出现至少一处临床优先级判断或主观建议。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "在拒绝Chen的请求时写道'Although her consultation is important, the schedule does not allow'。"
+    },
+    {
+      "id": "R14",
+      "description": "所有批准请求的总占用时间计算（含缓冲）在数值上完全正确。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "Excel中REQ-102和REQ-104的Validation_Notes中的时间区间。",
+      "numeric_tolerance": 0,
+      "weight_reason": "核心计算能力，分钟级错误会导致实际排班崩溃。",
+      "criterion": [
+        "REQ-102计算结果为12:45-13:30。",
+        "REQ-104计算结果为09:45-10:45。"
+      ],
+      "levels": {
+        "1": "两个批准请求的时间计算均精确无误。",
+        "0": "任意一个批准请求的时间计算出现分钟级错误。"
+      },
+      "acceptable_alternatives": "时间格式可以是24小时制或12小时制，但数值必须正确。",
+      "failure_examples": "REQ-104计算为09:30-10:30，忽略了跨天缓冲规则的对称性。"
+    },
+    {
+      "id": "R15",
+      "description": "完整处理了所有7个匿名请求，无遗漏。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "Excel行数检查，是否包含REQ-101至REQ-107所有7行。",
+      "numeric_tolerance": 0,
+      "weight_reason": "数据完整性基础要求。",
+      "criterion": [
+        "Excel日志中包含7个请求的记录。",
+        "备忘录中涵盖了所有需关注的请求状态。"
+      ],
+      "levels": {
+        "1": "7个请求全部处理。",
+        "0": "遗漏了任意一个请求。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "只处理了前6个请求，遗漏了REQ-107。"
+    },
+    {
+      "id": "R16",
+      "description": "未发生擅自跨医生改期的违规行为。",
+      "type": "Binary",
+      "weight": -10,
+      "requirement_refs": [
+        "REQ-08"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx",
+        "Staff_Notification_and_Handover_Memo.docx"
+      ],
+      "evidence": "检查所有状态为Approved的请求，其Matched_APT_ID对应的医生是否与原预约医生一致。",
+      "numeric_tolerance": 0,
+      "weight_reason": "严重违规项，秘书无权更改主治医生，负分惩罚。",
+      "criterion": [
+        "所有Approved请求的医生均未发生改变。",
+        "未在任何建议中提出将患者转给其他医生。"
+      ],
+      "levels": {
+        "1": "未发生跨医生改期（表示1）。",
+        "0": "发生了跨医生改期（表示0）。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "在REQ-103 (Chen) 被Dr. Evans拒绝后，擅自将其批准并改期给Dr. Lee。"
+    },
+    {
+      "id": "R17",
+      "description": "未发生忽略缓冲规则导致排班冲突的严重计算错误。",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "Reschedule_Match_and_Validation_Log.xlsx"
+      ],
+      "evidence": "检查所有状态为Approved的请求，其计算出的结束时间是否确实与同一医生的其他预约存在重叠（若存在则为错误）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "缓冲规则是本题的核心业务逻辑，忽略此规则会导致实际运营事故，负分惩罚。",
+      "criterion": [
+        "所有Approved请求的总占用时间（含缓冲）均未与同医生的其他预约重叠。",
+        "未将存在缓冲冲突的请求标记为Approved。"
+      ],
+      "levels": {
+        "1": "未忽略缓冲规则（表示1）。",
+        "0": "忽略了缓冲规则，导致错误批准了冲突请求（表示0）。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "将REQ-103 (Chen) 标记为Approved，认为14:00开始没问题，未计算13:45的缓冲会与Wilson重叠。"
+    }
+  ],
+  "checks_to_execute": [
+    "检查Excel文件是否成功生成且包含7行数据（对应7个请求）。",
+    "验证REQ-101的状态是否为'Pending Manual Review'或等价表述。",
+    "验证REQ-102和REQ-104的状态是否为'Approved'。",
+    "验证REQ-103, 105, 106, 107的状态是否为'Rejected'。",
+    "检查Excel中批准请求的时间计算区间是否包含+30分钟的缓冲。",
+    "检查Docx文件是否包含标准备忘录格式（To, From, Date, Subject）。",
+    "检查Docx中是否明确列出了Jones和Brown的新时间及15分钟准备提示。"
+  ],
+  "quality_risks": [
+    "Solver可能忽略15分钟缓冲规则，仅使用预约本身的时长进行冲突检测，导致错误批准REQ-103。",
+    "Solver在处理跨天请求（REQ-104）时，可能错误地使用05-10的排班数据，导致误判。",
+    "Solver可能在遇到同姓冲突（REQ-101）时，主观选择其中一个患者进行匹配，违反了数据完整性原则。",
+    "Solver可能在拒绝理由中加入主观的临床判断（如'患者病情不紧急'），违反了医疗秘书的职业边界。"
+  ],
+  "reference_solution": {
+    "key_facts_and_deductions": "1. 缓冲规则：总占用 = [Start - 15m, Start + Duration + 15m]。\n2. REQ-101 (Smith, 09:00 -> 11:00): 匹配到APT-001 (John) 和 APT-002 (Mary)。结论：Pending Manual Review。\n3. REQ-102 (Jones, 15m, 13:00): 占用 12:45-13:30。Dr. Lee 05-10 至 16:00。无冲突。结论：Approved。\n4. REQ-103 (Chen, 45m, 14:00): 占用 13:45-14:45。Dr. Evans 14:00有APT-007 (Wilson, 60m, 13:45-15:15)。13:45重叠。结论：Rejected (Buffer Conflict)。\n5. REQ-104 (Brown, 30m, 05-11 10:00): 占用 09:45-10:45。Dr. Lee 05-11 09:00-15:00。在班。结论：Approved。\n6. REQ-105 (Davis, 45m, 15:00): 占用 14:45-16:00。Dr. Patel 05-10 至 14:00。超班。结论：Rejected (Outside working hours)。\n7. REQ-106 (Wilson, 60m, 16:00): 占用 15:45-17:15。Dr. Evans 05-10 至 17:00。超班。结论：Rejected (Outside working hours)。\n8. REQ-107 (White, 45m, 16:30): 占用 16:15-17:30。Dr. Lee 05-10 至 16:00。超班。结论：Rejected (Outside working hours)。",
+    "alternative_solutions": "备忘录的格式可以是列表或表格，只要清晰区分了Approved, Rejected, Pending三类即可。拒绝理由的措辞可以有多种，只要核心原因（缓冲冲突 vs 超班）准确即可。",
+    "limitations": "本题未提供诊室可用性数据，因此冲突验证仅基于医生时间和缓冲规则。实际业务中可能还需考虑特定检查所需的特殊诊室，但本题设定为简化场景。"
+  }
+}

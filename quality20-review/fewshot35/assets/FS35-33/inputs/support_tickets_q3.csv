@@ -1,0 +1,9 @@
+TicketID,DeviceModel,IssueDescription,ResolutionNotes,Status
+TKT-101,PDA-X1,升级后设备无法连接服务器，一直报 401 Unauthorized。,检查发现客户端仍在使用旧版 PIN 码配置。指导用户生成并配置 mTLS 证书至指定路径后恢复。,Resolved
+TKT-102,PDA-X2,昨晚断网期间扫码了 50 条，今早同步后中心数据库只收到 30 条，疑似丢数据。,v2 采用增量合并机制。经核查，该设备未配置 NTP，时间比服务器慢 2 小时，导致部分记录被判定为旧数据覆盖。配置 NTP 后正常。,Resolved
+TKT-103,PDA-X1,车间断网恢复后，标记为紧急的订单扫码没有优先上传，还是按顺序排队。,排查发现业务系统调用接口时未传递 priority=HIGH 字段，且部分设备仍运行 v1.5 客户端，不支持优先级解析。更新客户端并修改业务代码后解决。,Resolved
+TKT-104,PDA-X3,证书路径配置正确，但连接时仍报 TLS handshake error。,检查设备系统时间，发现比服务器慢 10 分钟，超出了 v2 的 5 分钟容差。强制同步 NTP 后握手成功。,Resolved
+TKT-105,PDA-X2,自动化脚本调用旧接口 /api/v1/sync 时直接返回 404 Not Found。,v2.0 已物理移除 v1 接口。指导开发人员将脚本端点更改为 /api/v2/devices/{device_id}/sync 并调整 payload 结构。,Resolved
+TKT-106,PDA-X1,批量同步时提示 'payload size too large'，每次只传了 800 条。,v2.0 为优化内存，单次请求 payload 限制从 1000 条下调至 500 条。修改业务端分片逻辑，每 500 条分批提交后成功。,Resolved
+TKT-107,PDA-X3,升级后设备运行几小时就频繁自动重启。,检查发现磁盘空间 100%。原因是运维人员在配置文件中将日志级别设为 DEBUG，且旧脚本清理的是 /var/log/，未清理新路径 /var/log/edgsync/。调整日志级别并更新清理脚本。,Resolved
+TKT-108,PDA-X2,离线模式下工作半天后，系统提示 'queue overflow' 拒绝写入。,v2.0 默认 max_queue_size 从 10000 降至 5000。指导用户在 edgsync.conf 中手动增加 max_queue_size=15000 参数并重启服务。,Resolved

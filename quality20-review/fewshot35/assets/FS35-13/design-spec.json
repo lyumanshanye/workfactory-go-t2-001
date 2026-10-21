@@ -1,0 +1,630 @@
+{
+  "title": "星汉智创科技园二期入驻审查与现场核查安排",
+  "request": "你好，我是星汉智创科技园招商运营部的负责人。二期‘创新实验室与配套商业区’即将开放入驻，目前收到了8家企业/商户的Q3批次入驻申请。由于涉及实验室危化品、餐饮油烟、医疗美容等高风险业态，园区物业与安环部门要求严格执行《星汉园区二期入驻准入与运营管理细则V2.0》。\n\n请你作为许可审查与检查员，审查附件中的申请档案，对照内部准入规则，完成以下工作：\n1. 梳理每家申请企业的材料缺口，给出初步审查结论（直接通过、条件通过/缺件整改、拒绝）。\n2. 针对触发‘现场核查’条件的企业，制定详细的现场核查安排表，明确核查重点和需携带的检查工具。\n3. 撰写一份审查简报，汇总本批次情况，并对处于边缘状态或需跨部门协调的企业提出处理建议。\n\n请将成果输出至 /app/output 目录。最终成果包括：审查明细表（admission_review_workbook.json）、现场核查安排表（site_inspection_schedule.md）和审查简报（review_summary_brief.md）。注意，本任务仅涉及园区内部准入审查，请勿与政府行政许可流程混淆。",
+  "as_of": "2024-10-15T09:00:00+08:00",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "N/A",
+      "limitations": "本次任务无外部真实来源。所有业务规则、机构名称、申请档案均为原创虚构，用于测试在明确内部规则下的材料审查与现场核查安排能力。"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "park_admission_rules_v2.md",
+      "purpose": "提供星汉智创科技园二期入驻的内部准入规则，作为审查的唯一依据。",
+      "content_plan": "Markdown格式，包含通用要求、创新实验室特殊要求、配套商业特殊要求、现场核查触发条件。",
+      "content": "# 星汉园区二期入驻准入与运营管理细则V2.0\n\n## 第一章 通用准入要求\n1. **注册资本**：所有入驻企业实缴资本或认缴注册资本不得低于100万元人民币。其中，涉及仓储物流、大型餐饮的，注册资本不得低于200万元。\n2. **基础材料**：营业执照复印件、法人身份证复印件、园区入驻申请表。\n\n## 第二章 创新实验室（Lab区）特殊要求\n1. **环评与消防**：所有Lab区企业必须提交《环境影响评价报告》或环保备案登记表，以及《消防安全检查合格证》或消防初审意见。\n2. **生物与化学安全**：涉及生物研发、化学试剂使用的企业，必须额外提交《生物安全实验室备案凭证》或《危化品存储与废弃物处理协议》。\n\n## 第三章 配套商业（Commercial区）特殊要求\n1. **餐饮业**：必须提交《排烟及隔油池设计方案》（需物业工程部初审），以及所有接触食品员工的健康证明。\n2. **娱乐/医美/教培**：必须提交《消防验收合格证》（正式批复，非初审），以及对应的特种行业许可证（如《医疗机构执业许可证》《娱乐经营许可证》）。\n3. **健身/体育**：涉及游泳池的，需提交水质检测报告及救生员资质证明。\n\n## 第四章 现场核查触发条件\n符合以下任一条件，必须在材料初审后安排现场核查：\n1. 涉及餐饮油烟排放、实验室危化品/生物安全、医疗美容的。\n2. 涉及室内游泳池、大型特种设备（如大型锅炉、承重超标的仓储货架）的。\n3. 材料中存在“需现场复核实际面积/人数”标记的。\n\n## 第五章 审查结论分类\n- **直接通过**：材料齐全且符合所有规则，无需现场核查。\n- **条件通过/缺件整改**：基础资质达标，但缺少部分非核心材料，或需现场核查后视情况批准。\n- **拒绝**：注册资本不达标，或缺少不可豁免的核心安全/资质证照（如正式消防验收、特种行业许可）。"
+    },
+    {
+      "filename": "applicant_profiles_q3_2024.csv",
+      "purpose": "提供8家企业的申请档案数据，包含基本信息和已提交材料清单。",
+      "content_plan": "CSV格式，包含ApplicantID, CompanyName, AppliedZone, Industry, RegisteredCapital(万), SubmittedDocs, SpecialNotes。共8条记录。",
+      "content": "ApplicantID,CompanyName,AppliedZone,Industry,RegisteredCapital(万),SubmittedDocs,SpecialNotes\nAPP-001,绿源生物科技有限公司,Lab,生物研发,500,\"营业执照,法人身份证,环评报告,消防初审意见\",涉及细胞培养，需核实生物安全等级。\nAPP-002,寻味轻餐饮管理公司,Commercial,轻餐饮,150,\"营业执照,法人身份证,员工健康证(3份)\",计划设3个档口，需核实员工总数与排烟设计。\nAPP-003,智算未来软件有限公司,Office,软件开发,1000,\"营业执照,法人身份证,入驻申请表\",纯办公，无特殊设备。\nAPP-004,星跃电竞娱乐有限公司,Commercial,网咖/电竞,200,\"营业执照,法人身份证\",已装修完毕，急于开业。\nAPP-005,极客硬件研发工作室,Lab,电子研发,300,\"营业执照,法人身份证,消防初审意见\",涉及电路板焊接与清洗，有少量危废。\nAPP-006,悦动健身服务有限公司,Commercial,健身,500,\"营业执照,法人身份证,消防备案,水质检测报告(泳池)\",含室内恒温泳池，救生员证书待补。\nAPP-007,云图同城物流有限公司,Office,仓储配送,50,\"营业执照,法人身份证\",申请将部分办公区改为快递分拣与临时仓储。\nAPP-008,臻美医疗美容门诊部,Commercial,医疗美容,800,\"营业执照,法人身份证,医疗机构执业许可证\",涉及微创注射与医疗废弃物产生。"
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "admission_review_workbook.json",
+      "format": "JSON",
+      "purpose": "记录每家企业的材料缺口、初步审查结论及依据。"
+    },
+    {
+      "filename": "site_inspection_schedule.md",
+      "format": "Markdown",
+      "purpose": "针对触发核查条件的企业，制定详细的现场核查计划、重点和工具清单。"
+    },
+    {
+      "filename": "review_summary_brief.md",
+      "format": "Markdown",
+      "purpose": "汇总本批次审查情况，提供边缘案例处理建议及跨部门协调事项。"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "text": "准确应用通用注册资本要求，识别不达标企业并拒绝。",
+      "visibility": "explicit",
+      "basis": "park_admission_rules_v2.md 第一章"
+    },
+    {
+      "id": "REQ-02",
+      "text": "准确应用创新实验室特殊要求，识别环评、消防及生物/化学安全材料缺口。",
+      "visibility": "explicit",
+      "basis": "park_admission_rules_v2.md 第二章"
+    },
+    {
+      "id": "REQ-03",
+      "text": "准确应用配套商业特殊要求，识别餐饮、娱乐、医美等业态的核心证照缺口。",
+      "visibility": "explicit",
+      "basis": "park_admission_rules_v2.md 第三章"
+    },
+    {
+      "id": "REQ-04",
+      "text": "准确触发并规划现场核查，针对高风险业态制定针对性检查重点。",
+      "visibility": "explicit",
+      "basis": "park_admission_rules_v2.md 第四章"
+    },
+    {
+      "id": "REQ-05",
+      "text": "严格区分园区内部准入材料与政府法定行政许可，不混淆两者效力。",
+      "visibility": "professional_practice",
+      "basis": "行业惯例与园区管理边界"
+    }
+  ],
+  "authoring_plan": "本题设计为虚构商业园区的内部准入审查。核心难度在于：1. 规则应用：需从Markdown规则中提取具体数值（如注册资本200万/100万）和证照名称，与CSV中的SubmittedDocs进行精确匹配。2. 逻辑判断：区分‘缺件整改’（如缺排烟图纸）与‘直接拒绝’（如缺正式消防验收/特种行业许可）。3. 现场核查设计：需根据业态特点（如生物安全、医疗废弃物、泳池水质）推导合理的核查要点，而非泛泛而谈。预期判断包括：APP-004和APP-007应被直接拒绝；APP-003直接通过；其余企业需条件通过并安排现场核查。不确定性在于模型是否会过度宽容（如将缺正式消防验收视为可整改），需通过负分项严格约束。",
+  "rubrics": [
+    {
+      "id": "RUB-01",
+      "description": "准确拒绝APP-004（星跃电竞），并指出缺少不可豁免的核心证照。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "审查明细表中APP-004的结论为‘拒绝’，原因明确指出缺少《消防验收合格证》和《娱乐经营许可证》。",
+      "numeric_tolerance": 0,
+      "weight_reason": "核心安全与合规底线，错误批准将导致重大园区违规风险。",
+      "criterion": [
+        "结论必须为拒绝",
+        "必须指出缺少《消防验收合格证》",
+        "必须指出缺少《娱乐经营许可证》"
+      ],
+      "anchors": {
+        "0": "未拒绝，或拒绝理由完全错误，或遗漏核心证照",
+        "1": "结论为拒绝，且准确指出缺少正式消防验收和娱乐经营许可证"
+      },
+      "acceptable_alternatives": "可表述为‘缺少消防正式批复及特种行业许可’，意思一致即可。",
+      "failure_examples": "将APP-004判定为‘条件通过’，认为其可以在开业后补齐消防验收。"
+    },
+    {
+      "id": "RUB-02",
+      "description": "准确拒绝APP-007（云图物流），识别注册资本不达标及用途违规。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "审查明细表中APP-007的结论为‘拒绝’，原因指出注册资本50万低于仓储/物流类200万的要求，或指出办公区改仓储违规。",
+      "numeric_tolerance": 0,
+      "weight_reason": "注册资本是硬性门槛，且办公区改仓储涉及消防分区变更，属根本性不符。",
+      "criterion": [
+        "结论必须为拒绝",
+        "必须指出注册资本50万不满足仓储物流类200万的要求"
+      ],
+      "anchors": {
+        "0": "未拒绝，或未识别出注册资本不足的问题",
+        "1": "结论为拒绝，且准确指出注册资本50万低于200万门槛"
+      },
+      "acceptable_alternatives": "同时指出办公区改仓储需重新规划消防分区作为补充拒绝理由。",
+      "failure_examples": "仅指出其缺材料，未识别出注册资本不达标，给出‘条件通过’。"
+    },
+    {
+      "id": "RUB-03",
+      "description": "综合评估创新实验室（APP-001, APP-005）的材料缺口与现场核查要点的准确性。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02",
+        "REQ-04"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json",
+        "site_inspection_schedule.md"
+      ],
+      "evidence": "明细表中对APP-001和APP-005的缺口识别完整；核查表中针对生物安全和危废的核查要点具体、专业。",
+      "numeric_tolerance": 0,
+      "weight_reason": "实验室业态风险高，材料审查与现场核查需高度结合，体现专业深度。",
+      "criterion": [
+        "准确识别APP-001缺生物安全备案",
+        "准确识别APP-005缺环评及危废协议",
+        "核查计划包含生物安全等级核实和危废存储检查"
+      ],
+      "levels": {
+        "0": "完全未识别实验室特殊要求，或核查要点与实验室无关",
+        "0.25": "仅识别了基础消防/环评缺口，遗漏生物/化学安全核心要求",
+        "0.5": "识别了所有材料缺口，但现场核查要点泛泛而谈（如仅写‘检查安全’）",
+        "0.75": "识别缺口准确，核查要点较具体，但缺乏专业工具或标准引用",
+        "1": "缺口识别精准，核查计划详细列出生物安全柜检查、危废暂存间台账核对等专业要点"
+      },
+      "acceptable_alternatives": "核查要点可使用同义专业表述，如‘核查医疗/生物废弃物转移联单’。",
+      "failure_examples": "认为APP-001已提交环评报告即可通过，未察觉其涉及细胞培养需生物安全备案。"
+    },
+    {
+      "id": "RUB-04",
+      "description": "综合评估配套商业（APP-002, APP-006, APP-008）条件性通过与整改要求的准确性。",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "明细表中对这三家企业的结论为‘条件通过/缺件整改’，且整改要求具体对应其业态规则。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察对商业业态细分规则的掌握及整改建议的可操作性。",
+      "criterion": [
+        "APP-002需补排烟图纸及核实健康证人数",
+        "APP-006需补救生员证",
+        "APP-008需补消防验收及医废协议"
+      ],
+      "levels": {
+        "0": "结论分类错误（如将缺正式消防验收的APP-008判为条件通过）",
+        "0.25": "结论分类基本正确，但整改要求遗漏超过一半的核心缺件",
+        "0.5": "结论分类正确，整改要求覆盖了主要缺件，但缺乏针对性",
+        "0.75": "结论与整改要求准确，但表述不够清晰或未说明整改期限/标准",
+        "1": "结论精准，整改要求具体到文件名称、核对逻辑（如健康证数量需与排班人数匹配）"
+      },
+      "acceptable_alternatives": "APP-008若因缺正式消防验收被判为拒绝，只要理由充分且符合规则，可接受。",
+      "failure_examples": "将APP-008（医美）判定为条件通过，认为其可以‘先开业后补消防验收’。"
+    },
+    {
+      "id": "RUB-05",
+      "description": "准确识别APP-001（绿源生物）缺少《生物安全实验室备案凭证》。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "APP-001的缺口分析中明确提到生物安全备案/凭证。",
+      "numeric_tolerance": 0,
+      "weight_reason": "生物安全是实验室准入的隐性但关键的合规点。",
+      "criterion": [
+        "明确指出缺少生物安全相关备案或凭证"
+      ],
+      "anchors": {
+        "0": "未识别出此缺口",
+        "1": "准确识别出缺少生物安全备案/凭证"
+      },
+      "acceptable_alternatives": "表述为‘缺生物安全等级证明’或‘缺P2实验室备案’。",
+      "failure_examples": "认为APP-001已提交环评和消防初审，材料已齐全。"
+    },
+    {
+      "id": "RUB-06",
+      "description": "准确识别APP-002（寻味餐饮）缺少《排烟及隔油池设计方案》。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "APP-002的缺口分析中明确提到排烟及隔油池设计图。",
+      "numeric_tolerance": 0,
+      "weight_reason": "餐饮油烟是园区物业管理的重点痛点。",
+      "criterion": [
+        "明确指出缺少排烟及隔油池设计方案/图纸"
+      ],
+      "anchors": {
+        "0": "未识别出此缺口",
+        "1": "准确识别出缺少排烟及隔油池设计方案"
+      },
+      "acceptable_alternatives": "表述为‘缺餐饮环保工程图纸’。",
+      "failure_examples": "仅指出其健康证数量可能不足，遗漏了排烟图纸这一核心工程材料。"
+    },
+    {
+      "id": "RUB-07",
+      "description": "准确识别APP-005（极客硬件）缺少环评及危废处理协议。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "APP-005的缺口分析中同时提到环评（或环保备案）和危废/清洗废液处理协议。",
+      "numeric_tolerance": 0,
+      "weight_reason": "电子研发涉及清洗工序，危废处理是环保底线。",
+      "criterion": [
+        "指出缺少环评/环保备案",
+        "指出缺少危废处理协议"
+      ],
+      "anchors": {
+        "0": "未识别出环保或危废缺口",
+        "1": "同时准确识别出缺环评和危废协议"
+      },
+      "acceptable_alternatives": "表述为‘缺环境影响评价及危险废物处置合同’。",
+      "failure_examples": "认为APP-005已有消防初审即可，未察觉其涉及危废需额外环保手续。"
+    },
+    {
+      "id": "RUB-08",
+      "description": "准确识别APP-008（臻美医美）缺少《消防验收合格证》和医疗废弃物处理协议。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "APP-008的缺口分析中明确提到正式消防验收和医废协议。",
+      "numeric_tolerance": 0,
+      "weight_reason": "医美属于高危商业，消防和医废是双红线。",
+      "criterion": [
+        "指出缺少正式消防验收合格证",
+        "指出缺少医疗废弃物处理协议"
+      ],
+      "anchors": {
+        "0": "遗漏任一核心缺口",
+        "1": "同时准确指出缺正式消防验收和医废协议"
+      },
+      "acceptable_alternatives": "表述为‘缺消防正式批复及医废转移联单’。",
+      "failure_examples": "仅指出缺少医废协议，忽略了其作为人员密集场所必须提供的正式消防验收。"
+    },
+    {
+      "id": "RUB-09",
+      "description": "准确触发APP-006（悦动健身）的现场核查，并指出需补充救生员资质。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03",
+        "REQ-04"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json",
+        "site_inspection_schedule.md"
+      ],
+      "evidence": "APP-006被标记为需现场核查，且缺口/核查要点中包含救生员资质和泳池水质。",
+      "numeric_tolerance": 0,
+      "weight_reason": "涉水高风险业态，必须现场核查硬件与人员配备。",
+      "criterion": [
+        "结论包含需现场核查",
+        "指出缺救生员资质/证书",
+        "核查重点包含泳池水质与救生员在岗情况"
+      ],
+      "anchors": {
+        "0": "未触发核查，或未识别出救生员资质缺口",
+        "1": "准确触发核查，并完整指出缺救生员证及水质核查要求"
+      },
+      "acceptable_alternatives": "表述为‘需核实国家职业资格证书（游泳救生员）’。",
+      "failure_examples": "认为APP-006已提交水质检测报告即可通过，未察觉救生员证书缺失且需现场核查。"
+    },
+    {
+      "id": "RUB-10",
+      "description": "准确判定APP-003（智算未来）为直接通过。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "APP-003的结论为‘直接通过’，且无多余的不合理缺件要求。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察模型是否能识别完全合规的简单案例，避免过度审查。",
+      "criterion": [
+        "结论为直接通过",
+        "未编造不存在的材料缺口"
+      ],
+      "anchors": {
+        "0": "结论非直接通过，或画蛇添足要求提供额外材料",
+        "1": "准确判定为直接通过，无冗余要求"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "要求纯办公的APP-003提供环评报告或消防验收合格证。"
+    },
+    {
+      "id": "RUB-11",
+      "description": "交付物文件命名与格式完全符合要求。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "admission_review_workbook.json",
+        "site_inspection_schedule.md",
+        "review_summary_brief.md"
+      ],
+      "evidence": "输出目录中存在三个文件，且扩展名正确（.json, .md, .md）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "基础工程规范。",
+      "criterion": [
+        "文件名完全一致",
+        "格式正确",
+        "JSON文件可解析"
+      ],
+      "anchors": {
+        "0": "文件名错误或格式错误（如JSON写成TXT）",
+        "1": "完全符合命名与格式要求"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "将审查明细表输出为Excel格式（.xlsx）而非要求的JSON。"
+    },
+    {
+      "id": "RUB-12",
+      "description": "审查简报中的汇总数据（通过、整改、拒绝数量）准确无误。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "review_summary_brief.md"
+      ],
+      "evidence": "简报中统计的拒绝数为2（APP-004, APP-007），条件通过/核查数为5，直接通过数为1。",
+      "numeric_tolerance": 0,
+      "weight_reason": "管理层简报的数据准确性。",
+      "criterion": [
+        "拒绝数量=2",
+        "直接通过数量=1",
+        "条件通过/核查数量=5"
+      ],
+      "anchors": {
+        "0": "统计数据错误",
+        "1": "统计数据完全准确"
+      },
+      "acceptable_alternatives": "若APP-008因缺消防被判拒绝，则拒绝=3，条件通过=4，只要逻辑自洽且符合规则即可。",
+      "failure_examples": "汇总数据与明细表结论自相矛盾。"
+    },
+    {
+      "id": "RUB-13",
+      "description": "现场核查时间安排具有合理性，考虑了企业准备时间和核查逻辑。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "site_inspection_schedule.md"
+      ],
+      "evidence": "核查计划中包含了建议的核查时间节点（如‘收到整改材料后3个工作日内’或具体日期），且顺序合理。",
+      "numeric_tolerance": 0,
+      "weight_reason": "体现实际业务中的计划性。",
+      "criterion": [
+        "包含明确的核查时间建议或触发条件",
+        "时间安排符合业务逻辑"
+      ],
+      "anchors": {
+        "0": "未提供时间安排，或时间安排荒谬（如要求今天立刻核查未交材料的企业）",
+        "1": "时间安排合理，逻辑清晰"
+      },
+      "acceptable_alternatives": "可设定为‘材料补齐后预约核查’或‘本周四集中核查’。",
+      "failure_examples": "要求所有企业在同一天同一时间接受核查，未考虑业态差异和准备时间。"
+    },
+    {
+      "id": "RUB-14",
+      "description": "整改建议具有可操作性，明确了需提交的具体文件名称。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02",
+        "REQ-03"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "整改建议中使用了规则中的标准文件名称（如《医疗机构执业许可证》而非‘医疗资质’）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "减少沟通成本，避免企业提交错误材料。",
+      "criterion": [
+        "使用规范的文件名称",
+        "整改要求具体明确"
+      ],
+      "anchors": {
+        "0": "整改要求模糊（如‘请补齐相关资质’）",
+        "1": "明确列出需补齐的具体文件名称"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "整改建议写为‘请提供环保证明和消防证明’，未区分初审、备案和正式验收。"
+    },
+    {
+      "id": "RUB-15",
+      "description": "准确识别APP-002（寻味餐饮）健康证数量与员工总数的潜在匹配问题。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json",
+        "site_inspection_schedule.md"
+      ],
+      "evidence": "指出APP-002提交了3份健康证，但需在现场核查时确认3个档口的实际员工总数是否覆盖。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察对材料细节的敏感度和现场核查的验证目的。",
+      "criterion": [
+        "注意到已提交3份健康证",
+        "提出需现场核实员工总数与持证人数是否匹配"
+      ],
+      "anchors": {
+        "0": "未关注健康证数量细节，或未提出核实要求",
+        "1": "准确指出需核实3份健康证是否覆盖所有接触食品员工"
+      },
+      "acceptable_alternatives": "表述为‘需现场抽查排班表与原件核对’。",
+      "failure_examples": "直接认为3份健康证已满足要求，未考虑餐饮人员流动性及多档口需求。"
+    },
+    {
+      "id": "RUB-16",
+      "description": "准确识别APP-006（悦动健身）注册资本达标且无其他硬伤。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "APP-005的注册资本分析中，未将其列为不达标（500万>100万）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "排除干扰项，确保基础门槛判断准确。",
+      "criterion": [
+        "未对APP-006的注册资本提出异议"
+      ],
+      "anchors": {
+        "0": "错误认为APP-006注册资本不达标",
+        "1": "正确识别其注册资本符合要求"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "将APP-006误判为拒绝，理由是注册资本不足。"
+    },
+    {
+      "id": "RUB-17",
+      "description": "负分项：是否将园区内部准入材料与政府法定行政许可混淆。",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json",
+        "review_summary_brief.md"
+      ],
+      "evidence": "全文是否出现要求企业提供‘发改委立项批复’、‘环保局正式红头文件’等超出园区权限的材料，或声称园区可代办政府审批。",
+      "numeric_tolerance": 0,
+      "weight_reason": "严重越权，可能导致园区面临法律风险或误导企业。",
+      "criterion": [
+        "未混淆园区规则与政府法定程序",
+        "未编造园区无权出具的政府公文"
+      ],
+      "anchors": {
+        "0": "存在混淆或越权表述",
+        "1": "严格限定在园区内部准入范畴"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "在整改建议中要求APP-005提供‘市环保局出具的排污许可证原件’（规则仅要求环评报告或备案）。"
+    },
+    {
+      "id": "RUB-18",
+      "description": "负分项：是否错误批准了缺少正式消防验收的高风险商业（APP-004或APP-008）。",
+      "type": "Binary",
+      "weight": -10,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "APP-004或APP-008的结论是否为‘通过’或‘条件通过’（允许先开业后补消防）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "消防验收是人员密集场所的绝对底线，妥协将导致重大安全隐患。",
+      "criterion": [
+        "APP-004结论不能是通过/条件通过",
+        "APP-008结论不能是通过/条件通过（若判定拒绝则不扣分）"
+      ],
+      "anchors": {
+        "0": "对APP-004或APP-008给出了通过/条件通过的结论",
+        "1": "对这两家企业给出了拒绝结论，或至少未允许其无消防验收开业"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "认为APP-008已有《医疗机构执业许可证》，可‘容缺受理’，允许其先开业后补消防验收。"
+    },
+    {
+      "id": "RUB-19",
+      "description": "负分项：是否遗漏危化品/生物安全底线，错误批准APP-001或APP-005。",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "admission_review_workbook.json"
+      ],
+      "evidence": "APP-001或APP-005的结论是否为‘直接通过’，且未提及生物安全或危废问题。",
+      "numeric_tolerance": 0,
+      "weight_reason": "实验室安全底线，遗漏将导致园区面临环保处罚或安全事故。",
+      "criterion": [
+        "APP-001未获直接通过（需有生物安全核查）",
+        "APP-005未获直接通过（需有危废核查）"
+      ],
+      "anchors": {
+        "0": "直接批准了APP-001或APP-005，且完全未提及生物/危废安全",
+        "1": "对这两家企业均设置了条件通过/核查，或指出了相关缺口"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "认为APP-005仅涉及少量危废，无需提供危废处理协议即可直接入驻。"
+    },
+    {
+      "id": "RUB-20",
+      "description": "整体审查逻辑的严密性、优先级排序及跨部门协调建议的合理性。",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-04",
+        "REQ-05"
+      ],
+      "deliverables": [
+        "review_summary_brief.md"
+      ],
+      "evidence": "简报中是否对边缘案例（如APP-007办公改仓储）提出了合理的跨部门协调建议（如联系工程部评估消防分区），且逻辑严密。",
+      "numeric_tolerance": 0,
+      "weight_reason": "体现高级审查员的综合判断与协调能力。",
+      "criterion": [
+        "识别出需跨部门协调的案例",
+        "建议具体且符合园区管理架构",
+        "整体审查逻辑无自相矛盾"
+      ],
+      "levels": {
+        "0": "未提供任何跨部门协调建议，或建议完全脱离园区实际",
+        "0.25": "提出了建议，但过于笼统（如‘建议加强管理’），无具体指向",
+        "0.5": "识别了需协调的案例，建议方向正确，但缺乏具体执行步骤",
+        "0.75": "建议具体，明确了协调部门（如工程部、安环部），但优先级或逻辑略有瑕疵",
+        "1": "准确识别边缘案例，提出具体、可落地的跨部门协调方案，且整体审查逻辑严密无矛盾"
+      },
+      "acceptable_alternatives": "协调建议可针对APP-007（工程部评估仓储消防），或APP-002（物业工程部审核排烟图纸）。",
+      "failure_examples": "建议园区招商部直接代替企业向政府环保局申请环评批复。"
+    }
+  ],
+  "reference_solution": {
+    "summary": "基于虚构规则，8家企业的审查结论应为：直接通过1家（APP-003），拒绝2家（APP-004, APP-007），条件通过/需现场核查5家（APP-001, APP-002, APP-005, APP-006, APP-008）。",
+    "key_findings": [
+      "APP-004（电竞）缺正式消防验收和娱乐经营许可证，属硬性缺失，必须拒绝。",
+      "APP-007（物流）注册资本50万，低于仓储类200万门槛，且办公改仓储需重新评估消防，必须拒绝。",
+      "APP-001（生物）有环评和消防初审，但缺生物安全备案；APP-005（硬件）缺环评和危废协议。两者均需条件通过并安排安环部现场核查。",
+      "APP-002（餐饮）缺排烟图纸，需物业工程部初审；健康证3份需现场核实人数。",
+      "APP-008（医美）有医疗许可，但缺正式消防验收和医废协议。注：若严格按规则，缺正式消防验收应拒绝；若视为可整改，则需条件通过并严禁开业。参考解倾向于拒绝或极严格条件通过。",
+      "APP-006（健身）有消防备案和水质报告，但缺救生员证，需现场核查泳池硬件与人员。"
+    ],
+    "site_inspection_focus": [
+      "APP-001: 生物安全柜运行记录、高压灭菌器使用台账、P2实验室备案原件。",
+      "APP-005: 危废暂存间防渗漏措施、废液收集桶标识、危废处置合同。",
+      "APP-002: 排烟管道走向、隔油池容量、员工排班表与健康证原件比对。",
+      "APP-006: 泳池水质循环系统、救生员在岗情况、急救设备。",
+      "APP-008: 医疗废弃物暂存点、锐器盒使用、消防控制室值班记录。"
+    ],
+    "alternatives_and_limits": "APP-008的消防验收问题存在解释空间。规则要求‘必须提交’，未明确是否可容缺。若模型将其判为拒绝，符合严格安全底线；若判为条件通过但明确禁止开业直到验收通过，也可接受。但绝不允许‘先开业后补证’。"
+  },
+  "checks_to_execute": [
+    "解析applicant_profiles_q3_2024.csv，验证8条记录的字段完整性。",
+    "提取park_admission_rules_v2.md中的数值约束（100万，200万），验证模型是否应用。",
+    "检查admission_review_workbook.json是否为合法JSON，且包含8个企业的审查结论。",
+    "验证site_inspection_schedule.md是否覆盖了所有触发核查条件的企业（至少5家）。",
+    "正则检查输出文件中是否包含‘发改委’、‘住建局正式批复’等越权词汇。"
+  ],
+  "quality_risks": [
+    "模型可能混淆‘消防初审/备案’与‘消防验收合格证’，对APP-004或APP-008错误放行。",
+    "模型可能忽视注册资本的行业差异要求，对APP-007仅按通用100万标准审查。",
+    "模型可能编造政府审批流程，在整改建议中要求企业办理园区无权干预的行政许可。",
+    "现场核查计划可能流于形式，缺乏针对特定业态（如生物安全、医废）的专业检查要点。"
+  ]
+}

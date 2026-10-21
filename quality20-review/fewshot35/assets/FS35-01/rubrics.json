@@ -1,0 +1,568 @@
+[
+  {
+    "id": "Rub1",
+    "description": "准确计算干预组与对照组的失访率。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查Excel中的失访统计表。干预组应为1/6 (16.67%)，对照组应为2/6 (33.33%)。",
+    "numeric_tolerance": "允许百分比保留两位小数，或分数表达。",
+    "weight_reason": "失访率是评估研究质量的核心指标，计算错误将导致后续偏倚分析完全失效。",
+    "criterion": [
+      "明确列出干预组失访人数（1人）和总人数（6人），计算失访率约为16.67%。",
+      "明确列出对照组失访人数（2人）和总人数（6人），计算失访率约为33.33%。"
+    ],
+    "acceptable_alternatives": "若solver按ITT人群（12人）计算总失访率（3/12=25%）并同时给出分组率，亦可接受。",
+    "failure_examples": "将失访人数与完成随访人数混淆，导致失访率计算大于100%或严重偏离。",
+    "anchors": {
+      "0": "未计算失访率，或计算逻辑/数值完全错误。",
+      "1": "准确计算并报告了两组的失访率及对应的人数/分母。"
+    }
+  },
+  {
+    "id": "Rub2",
+    "description": "识别失访患者与未失访患者在基线HbA1c上的显著差异。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "R3"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查Excel中的特征对比表。失访者基线HbA1c（P03:9.1, P07:9.5, P10:8.8，均值9.13）应显著高于未失访者（均值8.26）。",
+    "numeric_tolerance": "均值计算允许±0.1的舍入误差。",
+    "weight_reason": "这是推断缺失机制（MAR/MNAR）的关键事实依据。",
+    "criterion": [
+      "提取失访患者的基线HbA1c数据并计算均值或列出明细。",
+      "提取未失访患者的基线HbA1c数据并计算均值或列出明细。",
+      "明确指出失访患者的基线HbA1c高于未失访患者。"
+    ],
+    "acceptable_alternatives": "未计算精确均值，但通过列出具体数值对比得出正确结论。",
+    "failure_examples": "认为失访患者与未失访患者基线特征无差异，或未检查基线HbA1c数据。",
+    "anchors": {
+      "0": "未进行基线特征对比，或得出错误结论（如认为无差异或失访者更低）。",
+      "1": "正确提取数据并明确指出失访者基线HbA1c更高。"
+    }
+  },
+  {
+    "id": "Rub3",
+    "description": "合理计算患者用药依从性（PDC）并对比两组均值。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "R2"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查Excel中的PDC计算表。干预组均值约0.84，对照组约0.64。需检查分母逻辑说明。",
+    "numeric_tolerance": "PDC均值允许±0.05的误差，取决于分母定义（观察期vs计划期）。",
+    "weight_reason": "依从性是干预实施质量的关键指标，计算逻辑的合理性反映专业严谨性。",
+    "criterion": [
+      "为每位患者计算PDC（如总覆盖天数/总天数，或pdc_score均值）。",
+      "明确说明PDC计算的分母逻辑（如：按实际观察月数，或按计划的6个月）。",
+      "计算并报告干预组和对照组的平均PDC，指出干预组依从性更高。"
+    ],
+    "acceptable_alternatives": "若采用二分类adherent的汇总率代替pdc_score，只要逻辑一致且说明清晰，亦可接受。",
+    "failure_examples": "计算PDC时未说明分母逻辑，或对失访患者直接缺失处理导致均值计算错误。",
+    "levels": {
+      "0": "未计算PDC，或计算逻辑完全错误（如将未观察月份直接忽略不计分母且无说明）。",
+      "0.25": "计算了PDC但未说明分母逻辑，或分母逻辑存在明显缺陷（如对所有患者统一用12个月作分母）。",
+      "0.5": "明确了分母逻辑（如按观察期），但计算结果存在明显算术错误，或未进行组间对比。",
+      "0.75": "计算正确且逻辑清晰，但未能指出干预组与对照组在依从性上的实质性差异。",
+      "1": "计算准确，分母逻辑合理且有明确说明，正确对比两组均值并得出干预组依从性更高的结论。"
+    }
+  },
+  {
+    "id": "Rub4",
+    "description": "分析失访与早期依从性的关联。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R3"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查Excel中的相关性分析。失访患者（P03, P07, P10）的早期PDC（0.76, 0.25, 0.44）明显低于未失访患者。",
+    "numeric_tolerance": "无严格数值容差，侧重趋势判断。",
+    "weight_reason": "依从性差导致失访是MNAR机制的重要线索。",
+    "criterion": [
+      "提取失访患者的早期（前几个月）PDC数据。",
+      "对比失访与未失访患者的依从性表现。",
+      "得出失访患者早期依从性较差的结论。"
+    ],
+    "acceptable_alternatives": "使用adherent二分类变量的比例进行对比，得出相同结论。",
+    "failure_examples": "认为失访患者的依从性与未失访者无差异，或未检查依从性数据。",
+    "anchors": {
+      "0": "未分析失访与依从性的关系，或得出错误结论。",
+      "1": "正确提取数据并明确指出失访患者早期依从性较差。"
+    }
+  },
+  {
+    "id": "Rub5",
+    "description": "深入论证失访数据的缺失机制（MCAR/MAR/MNAR）。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "R4"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查Markdown报告中的机制讨论章节。需结合基线HbA1c和依从性数据论证MAR/MNAR。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "缺失机制的准确判断是选择正确统计处理策略的前提，是本题核心难点。",
+    "criterion": [
+      "明确讨论MCAR、MAR、MNAR的概念。",
+      "结合失访者基线HbA1c较高的事实，论证失访概率与已观测基线特征相关（支持MAR）。",
+      "结合失访者依从性差的事实，探讨失访可能由未观测到的病情恶化或副作用引起（提示MNAR风险）。",
+      "指出当前数据无法完全区分MAR和MNAR的局限性。"
+    ],
+    "acceptable_alternatives": "若solver主要论证MAR，但提及了MNAR的可能性及数据局限性，可给高分。",
+    "failure_examples": "直接假设所有缺失为MCAR，或完全忽略MNAR的可能性，未结合具体数据特征进行论证。",
+    "levels": {
+      "0": "未讨论缺失机制，或认为所有缺失均为MCAR，未结合数据特征。",
+      "0.25": "提到了MAR/MNAR，但未结合本数据的具体特征（基线HbA1c、依从性）进行论证。",
+      "0.5": "结合了数据特征，但机制判断错误（如将基线HbA1c导致的失访误判为MCAR），或逻辑混乱。",
+      "0.75": "正确识别为MAR并论证了基线HbA1c的影响，但未探讨潜在的MNAR风险（如依从性差导致的失访）。",
+      "1": "全面论证了MAR的合理性，同时深入探讨了MNAR风险（结合依从性数据），并清晰指出当前数据的局限性。"
+    }
+  },
+  {
+    "id": "Rub6",
+    "description": "提出基于MAR假设的统计处理策略。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R5"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查报告中的策略建议章节。需提及多重插补（MI）或逆概率加权（IPW）。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "MAR是临床试验中最常用的缺失数据假设，需掌握相应的标准处理方法。",
+    "criterion": [
+      "提出多重插补（Multiple Imputation）或逆概率加权（IPW）作为处理MAR的策略。",
+      "说明所选方法的基本原理及其在MAR假设下的合理性。"
+    ],
+    "acceptable_alternatives": "提及似然方法（Likelihood-based methods）或混合效应模型（MMRM）处理纵向数据缺失，并说明其MAR假设。",
+    "failure_examples": "推荐LOCF（末次观测值结转）作为MAR的主要处理方法，或未说明方法的假设前提。",
+    "anchors": {
+      "0": "未提出合理策略，或推荐LOCF/均值插补作为主要MAR处理方法。",
+      "1": "正确提出MI/IPW/MMRM等方法，并清晰说明其MAR假设及适用性。"
+    }
+  },
+  {
+    "id": "Rub7",
+    "description": "设计针对MNAR假设的敏感性分析方案。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "R5"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查报告中的敏感性分析章节。需提及Tipping point analysis或Pattern mixture model。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "ICH E9(R1)强调必须评估MNAR对结果稳健性的影响，体现高级生物统计能力。",
+    "criterion": [
+      "提出临界点分析（Tipping point analysis）或模式混合模型（Pattern mixture model）。",
+      "说明如何调整失访患者的结局假设（如假设失访者HbA1c恶化）来评估结果稳健性。",
+      "明确该敏感性分析旨在评估MNAR对主分析结论的影响。"
+    ],
+    "acceptable_alternatives": "提出基于delta调整法的敏感性分析，并说明delta的选取逻辑。",
+    "failure_examples": "未设计敏感性分析，或设计的敏感性分析仅针对MCAR/MAR（如比较不同插补方法），未触及MNAR。",
+    "levels": {
+      "0": "未提出任何敏感性分析，或仅提出LOCF作为敏感性分析。",
+      "0.25": "提出了敏感性分析，但仅针对MAR假设（如比较MI和IPW），未涉及MNAR。",
+      "0.5": "提及了MNAR敏感性分析，但方法描述模糊（如仅说'做敏感性分析'），未说明具体调整逻辑。",
+      "0.75": "正确提出Tipping point或模式混合模型，但调整逻辑或实施细节不够清晰。",
+      "1": "提出严谨的MNAR敏感性分析方案（如Tipping point），清晰说明如何调整失访者结局假设以评估结论稳健性。"
+    }
+  },
+  {
+    "id": "Rub8",
+    "description": "指出末次观测值结转（LOCF）的局限性。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R5"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查报告中对LOCF的评价。需指出其不推荐的原因。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "LOCF是常见的错误做法，识别其局限性是专业素养的体现。",
+    "criterion": [
+      "明确提及LOCF。",
+      "指出LOCF会引入偏倚（如低估疾病进展或高估疗效），不推荐用于本研究的缺失数据处理。"
+    ],
+    "acceptable_alternatives": "指出LOCF假设病情完全停止变化，这在慢性病随访中通常不成立。",
+    "failure_examples": "推荐LOCF作为主要处理方法，或未提及LOCF的局限性。",
+    "anchors": {
+      "0": "推荐LOCF，或未认识其局限性。",
+      "1": "正确指出LOCF的局限性并明确表示不推荐。"
+    }
+  },
+  {
+    "id": "Rub9",
+    "description": "包含患者状态流转记录或数据流图。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查Excel中是否有类似CONSORT流程图或患者状态汇总表。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "清晰展示数据过滤和失访过程是临床试验报告的标准规范。",
+    "criterion": [
+      "包含一个表格或流程图，展示初始入组人数、分组情况、完成随访人数及失访人数。",
+      "数据流中的各节点人数与patient_data.csv一致（总计12人，干预组6人，对照组6人，失访3人）。"
+    ],
+    "acceptable_alternatives": "使用文本形式的流程图或详细的汇总统计表。",
+    "failure_examples": "未提供数据流或患者状态汇总，导致失访率的计算过程不可追溯。",
+    "anchors": {
+      "0": "未提供患者状态流转记录。",
+      "1": "提供了清晰的患者状态流转记录，数据准确。"
+    }
+  },
+  {
+    "id": "Rub10",
+    "description": "评估依从性与最后已知HbA1c的关联。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R2"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查Excel中的相关性分析。高PDC应关联低HbA1c。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "验证依从性数据与临床结局的预期生物学合理性。",
+    "criterion": [
+      "将患者的PDC与其last_hba1c进行关联分析（如散点图、相关系数或分组对比）。",
+      "得出依从性越高，最后已知HbA1c越低的结论。"
+    ],
+    "acceptable_alternatives": "使用Spearman秩相关或简单的均值对比。",
+    "failure_examples": "未进行关联分析，或得出依从性与HbA1c无关或正相关的错误结论。",
+    "anchors": {
+      "0": "未分析依从性与HbA1c的关联，或结论错误。",
+      "1": "正确进行关联分析并得出预期结论。"
+    }
+  },
+  {
+    "id": "Rub11",
+    "description": "讨论依从性数据缺失的潜在机制。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R4"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查报告中对依从性缺失的讨论。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "除了失访，依从性记录本身也存在截断，需讨论其机制。",
+    "criterion": [
+      "讨论失访患者依从性记录截断的原因。",
+      "指出如果患者因自行停药（依从性差）而失访，则依从性缺失可能属于MNAR。"
+    ],
+    "acceptable_alternatives": "区分了'未记录'与'未服药'的区别，并讨论其对偏倚的影响。",
+    "failure_examples": "仅讨论失访机制，完全忽略依从性记录截断的机制探讨。",
+    "anchors": {
+      "0": "未讨论依从性缺失机制。",
+      "1": "合理讨论了依从性记录截断的机制及潜在偏倚。"
+    }
+  },
+  {
+    "id": "Rub12",
+    "description": "使用规范的生物统计和临床试验术语。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R6"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查报告全文的术语使用。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "专业沟通的准确性。",
+    "criterion": [
+      "正确使用MCAR, MAR, MNAR, ITT, PP, PDC等术语。",
+      "避免口语化表达，符合监管指南的语境。"
+    ],
+    "acceptable_alternatives": "使用中文术语但附带准确的英文缩写。",
+    "failure_examples": "混淆ITT和PP概念，或滥用统计术语。",
+    "anchors": {
+      "0": "术语使用混乱，存在明显概念错误。",
+      "1": "术语使用规范、准确。"
+    }
+  },
+  {
+    "id": "Rub13",
+    "description": "识别数据中的潜在异常或逻辑问题。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查Excel中的数据审查记录。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "数据清理是生物统计师的基本职责。",
+    "criterion": [
+      "指出P04在month 3,4依从性低但后续恢复，或P07仅2个月记录即失访等数据特征。",
+      "或指出PDC计算中分母选择可能带来的逻辑问题。"
+    ],
+    "acceptable_alternatives": "指出任何合理的业务逻辑疑点。",
+    "failure_examples": "完全未进行数据审查，默认所有数据完美无缺。",
+    "anchors": {
+      "0": "未识别任何数据异常或逻辑问题。",
+      "1": "识别并合理讨论了至少一个数据异常或逻辑问题。"
+    }
+  },
+  {
+    "id": "Rub14",
+    "description": "报告结构完整，包含所有要求的章节。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R6"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查Markdown的标题结构。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "交付物的格式规范性。",
+    "criterion": [
+      "包含机制讨论章节。",
+      "包含策略建议与敏感性分析章节。"
+    ],
+    "acceptable_alternatives": "章节名称不同，但内容覆盖全面。",
+    "failure_examples": "缺失关键章节，导致报告不完整。",
+    "anchors": {
+      "0": "缺失关键章节。",
+      "1": "结构完整，包含所有必要章节。"
+    }
+  },
+  {
+    "id": "Rub15",
+    "description": "准确计算失访患者的基线HbA1c均值。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R3"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查Excel中的计算结果。失访者均值应为(9.1+9.5+8.8)/3 = 9.13。",
+    "numeric_tolerance": "±0.05。",
+    "weight_reason": "基础计算准确性。",
+    "criterion": [
+      "正确提取P03, P07, P10的HbA1c。",
+      "计算均值约为9.13。"
+    ],
+    "acceptable_alternatives": "直接列出数值，未计算精确均值，但数值正确。",
+    "failure_examples": "提取了错误的患者数据，或计算错误。",
+    "anchors": {
+      "0": "数值提取或计算错误。",
+      "1": "数值正确。"
+    }
+  },
+  {
+    "id": "Rub16",
+    "description": "准确计算未失访患者的基线HbA1c均值。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R3"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查Excel中的计算结果。未失访者均值应为74.3/9 = 8.26。",
+    "numeric_tolerance": "±0.05。",
+    "weight_reason": "基础计算准确性。",
+    "criterion": [
+      "正确提取9名未失访患者的HbA1c。",
+      "计算均值约为8.26。"
+    ],
+    "acceptable_alternatives": "直接列出数值，未计算精确均值。",
+    "failure_examples": "数值提取或计算错误。",
+    "anchors": {
+      "0": "数值提取或计算错误。",
+      "1": "数值正确。"
+    }
+  },
+  {
+    "id": "Rub17",
+    "description": "在报告中明确区分主分析与敏感性分析的目的。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R5"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查报告中的分析框架描述。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "理解ICH E9(R1)中estimand与敏感性分析的关系。",
+    "criterion": [
+      "指出主分析基于特定的缺失机制假设（如MAR）。",
+      "指出敏感性分析旨在评估主分析结论对假设改变的稳健性。"
+    ],
+    "acceptable_alternatives": "使用'基准分析'和'稳健性检查'等类似表述。",
+    "failure_examples": "将敏感性分析等同于主分析，或未说明其目的。",
+    "anchors": {
+      "0": "未区分两者目的，或概念混淆。",
+      "1": "清晰区分并正确描述两者目的。"
+    }
+  },
+  {
+    "id": "Rub18",
+    "description": "讨论年龄对失访或依从性的潜在影响。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R3"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查报告中对协变量的讨论。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "探索性分析应尽可能全面。",
+    "criterion": [
+      "提及失访患者或依从性差的患者在年龄分布上的特征（如P07年轻，P09年老但依从性高）。",
+      "或讨论年龄作为失访预测因子的可能性。"
+    ],
+    "acceptable_alternatives": "指出当前数据量不足以评估年龄的独立影响。",
+    "failure_examples": "完全忽略基线年龄数据。",
+    "anchors": {
+      "0": "完全忽略年龄数据。",
+      "1": "合理讨论了年龄特征或数据局限性。"
+    }
+  },
+  {
+    "id": "Rub19",
+    "description": "负分项：编造未提供的临床疗效结论或夸大代表性。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "R6"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查报告结论部分。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "严禁在数据审计阶段越界下临床结论，防止误导性报告。",
+    "criterion": [
+      "报告中出现'干预组心血管事件减少X%'或'干预显著优于对照'等未经验证的疗效结论。",
+      "或夸大本虚构小样本（12人）数据的总体代表性。"
+    ],
+    "acceptable_alternatives": "无，此为禁止行为。",
+    "failure_examples": "在报告中推断干预组疗效更好，或声称结果可推广至所有2型糖尿病患者。",
+    "anchors": {
+      "0": "未发生编造结论或夸大代表性的行为（即正常完成）。",
+      "1": "发生了编造结论或夸大代表性的行为（即触发负分）。"
+    }
+  },
+  {
+    "id": "Rub20",
+    "description": "负分项：PDC计算中对失访患者处理不当导致系统性低估。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "R2"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查PDC计算逻辑。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "错误的分母处理会导致严重的依从性低估偏倚。",
+    "criterion": [
+      "对失访患者（如P03, P07），错误地将未观察到的月份计为0（PDC=0）并纳入分母计算整体PDC。",
+      "且未在报告中对此进行任何说明或敏感性分析。"
+    ],
+    "acceptable_alternatives": "若采用计划期PDC（分母为6），但明确说明了对失访者的处理逻辑并进行了敏感性分析，则不触发此负分。",
+    "failure_examples": "直接将P07的PDC记为0（因第3-6月无数据），导致对照组PDC被严重低估且无解释。",
+    "anchors": {
+      "0": "未发生此类系统性低估，或进行了合理说明/敏感性分析。",
+      "1": "发生了未加说明的系统性低估行为（触发负分）。"
+    }
+  },
+  {
+    "id": "Rub21",
+    "description": "负分项：混淆ITT和PP人群导致分母使用错误。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "Followup_and_Adherence_Analysis.xlsx"
+    ],
+    "evidence": "检查失访率计算的分母。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "ITT原则是临床试验的核心，混淆人群会导致偏倚评估失效。",
+    "criterion": [
+      "在计算'失访率'时，错误地将对照组中依从性差但未失访的患者排除在分母外（即按PP计算失访率）。",
+      "或未明确说明计算的是ITT人群还是PP人群的失访率。"
+    ],
+    "acceptable_alternatives": "分别报告ITT和PP的失访率。",
+    "failure_examples": "计算失访率时，分母仅包含'完成随访的患者'，导致失访率计算为0或逻辑矛盾。",
+    "anchors": {
+      "0": "未发生人群混淆，分母使用正确。",
+      "1": "发生了人群混淆，导致分母使用错误（触发负分）。"
+    }
+  },
+  {
+    "id": "Rub22",
+    "description": "负分项：完全忽略ICH E9(R1)或相关监管指南原则。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "R4",
+      "R5"
+    ],
+    "deliverables": [
+      "Bias_and_Missingness_Report.md"
+    ],
+    "evidence": "检查报告中的理论依据。",
+    "numeric_tolerance": "无。",
+    "weight_reason": "临床试验统计分析必须遵循监管指南。",
+    "criterion": [
+      "报告中完全未提及estimand框架、缺失数据机制或ICH E9(R1)等相关原则。",
+      "或使用了与监管指南严重冲突的处理方法（如常规使用LOCF而不加批评）。"
+    ],
+    "acceptable_alternatives": "未直接引用ICH E9(R1)名称，但内容完全符合其核心精神（如明确讨论MAR/MNAR及敏感性分析）。",
+    "failure_examples": "认为只要插补了数据即可，无需讨论缺失机制或敏感性分析。",
+    "anchors": {
+      "0": "内容符合监管原则，或虽未引用指南名称但逻辑一致。",
+      "1": "完全忽略监管原则，或采用严重冲突的方法（触发负分）。"
+    }
+  }
+]

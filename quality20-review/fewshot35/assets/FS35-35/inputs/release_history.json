@@ -1,0 +1,6 @@
+[
+  {"version":"v2.1.0","release_date":"2024-01-10","modules":["core","auth","blog"],"db_script":"db_v2.1.0.sql","rollback_note":"Restore db_v2.0.0.sql, delete /uploads/blog/v2.1"},
+  {"version":"v2.2.0","release_date":"2024-02-15","modules":["core","gallery"],"db_script":"db_v2.2.0.sql","rollback_note":"Restore db_v2.1.0.sql, drop table gallery_items"},
+  {"version":"v2.3.0","release_date":"2024-03-20","modules":["core","auth","docs"],"db_script":"db_v2.3.0.sql","rollback_note":"Restore db_v2.2.0.sql, remove /docs/secure"},
+  {"version":"v2.4.0","release_date":"2024-04-25","modules":["core","api","docs"],"db_script":"db_v2.4.0.sql","rollback_note":"Restore db_v2.3.0.sql, revoke api_service_account"}
+]

@@ -1,0 +1,516 @@
+[
+  {
+    "id": "R01",
+    "description": "正确计算NR-4A非计划停机造成的累计产油量损失",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ01"
+    ],
+    "deliverables": [
+      "production_impact_assessment.csv"
+    ],
+    "evidence": "查看CSV中NR-4A的Unplanned_Shutdown损失计算。基准产量应取10-03的430 bopd左右，2天损失应在800-900 bbl之间。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "非计划停机是核心生产异常，准确量化其损失是评估维护优先级的基础。",
+    "criterion": [
+      "正确识别NR-4A在10-04和10-05处于非计划停机状态。",
+      "使用合理的基准产量（如停机前一日或前几日均值）计算损失。",
+      "累计损失数值在合理容差范围内（约860 bbl）。"
+    ],
+    "anchors": {
+      "0": "未计算NR-4A损失，或计算结果严重偏离（如使用0或全周期平均值）。",
+      "1": "准确计算了NR-4A的停机损失，基准产量选择合理，数值在容差内。"
+    },
+    "acceptable_alternatives": "允许使用10-01至10-03的平均产量（440 bopd）作为基准，损失约880 bbl。",
+    "failure_examples": "使用NR-4A全周期平均产量（约281 bopd）计算停机损失，导致结果严重偏低。"
+  },
+  {
+    "id": "R02",
+    "description": "正确计算NR-4C计划停机造成的累计产油量损失",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ01"
+    ],
+    "deliverables": [
+      "production_impact_assessment.csv"
+    ],
+    "evidence": "查看CSV中NR-4C的Planned_Shutdown损失计算。基准产量约380 bopd，3天损失约1140 bbl。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "计划停机是排程优化的重点，需准确量化以评估维护成本。",
+    "criterion": [
+      "正确识别NR-4C在10-05至10-07处于计划停机状态。",
+      "使用合理的基准产量（约380 bopd）计算损失。",
+      "累计损失数值在合理容差范围内（约1140 bbl）。"
+    ],
+    "anchors": {
+      "0": "未计算或计算错误（如漏算天数）。",
+      "1": "准确计算了NR-4C的停机损失，数值在容差内。"
+    },
+    "acceptable_alternatives": "允许使用10-01至10-04的平均产量（380 bopd）计算。",
+    "failure_examples": "将NR-4C的停机时间误算为2天，导致损失少算约380 bbl。"
+  },
+  {
+    "id": "R03",
+    "description": "准确识别NR-4D含水率导致区块总含水率突破50%限制的具体日期",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ03"
+    ],
+    "deliverables": [
+      "production_impact_assessment.csv"
+    ],
+    "evidence": "查看CSV或报告中对每日区块总含水率的计算。10-03总含水率约49.5%（未超限），10-04总含水率约55.1%（超限）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "集输限制是硬性约束，准确识别超限日期是触发干预措施的前提。",
+    "criterion": [
+      "正确计算每日区块总液量和总产水量。",
+      "正确计算每日区块总含水率（总水/总液）。",
+      "明确指出10月4日是首次突破50%限制的日期。"
+    ],
+    "anchors": {
+      "0": "未计算每日含水率，或未能识别出10-04为超限日。",
+      "1": "准确计算了每日含水率，并正确定位10-04为首次超限日。"
+    },
+    "acceptable_alternatives": "如果solver计算出10-04含水率为55%，10-03为49%，只要逻辑正确即可。",
+    "failure_examples": "仅计算NR-4D单井含水率，未计算区块总含水率，导致结论错误。"
+  },
+  {
+    "id": "R04",
+    "description": "评估执行推荐维护窗口对区块总产量的影响，计算维护期间预计损失",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ02"
+    ],
+    "deliverables": [
+      "production_impact_assessment.csv"
+    ],
+    "evidence": "查看CSV中维护窗口的预计损失计算。需将小时数转换为天数，并乘以相应井的基准产量。",
+    "numeric_tolerance": 0.2,
+    "weight_reason": "维护排程需权衡产量损失，准确评估影响是决策依据。",
+    "criterion": [
+      "正确将维护停机小时数转换为天数（如16h=0.67d或1d，8h=0.33d或0.5d，24h=1d）。",
+      "使用各井当前或近期基准产量计算维护损失。",
+      "总维护损失计算逻辑合理，数值在容差内。"
+    ],
+    "anchors": {
+      "0": "未计算维护损失，或小时数转换严重错误（如将16h算作2天）。",
+      "1": "合理转换了时间，并正确计算了各井维护损失及总和。"
+    },
+    "acceptable_alternatives": "允许将16h保守估计为1天停机，只要说明合理即可。",
+    "failure_examples": "直接将小时数等同于天数（如16h算16天），导致损失计算荒谬。"
+  },
+  {
+    "id": "R05",
+    "description": "评估维护期间总含水率的变化，判断是否仍会超限",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ03"
+    ],
+    "deliverables": [
+      "data_gap_report.md"
+    ],
+    "evidence": "查看报告中对维护期间含水率的预测。若NR-4D停机，含水率会下降；若其他井停机，含水率可能上升。",
+    "numeric_tolerance": 0,
+    "weight_reason": "维护排程必须确保不违反集输限制，需动态评估含水率影响。",
+    "criterion": [
+      "模拟了维护期间各井的产量变化。",
+      "重新计算了维护期间的区块总含水率。",
+      "得出了维护期间是否仍会超限的合理结论。"
+    ],
+    "anchors": {
+      "0": "未评估维护对含水率的影响，或结论与实际趋势相反。",
+      "1": "正确模拟了维护场景，并准确判断了含水率是否超限。"
+    },
+    "acceptable_alternatives": "允许使用近似估算，只要定性结论正确（如NR-4D停机可降低含水率）。",
+    "failure_examples": "假设所有井同时停机，导致含水率计算失去意义。"
+  },
+  {
+    "id": "R06",
+    "description": "提出NR-4A产能恢复情况不明的数据缺口",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ04"
+    ],
+    "deliverables": [
+      "data_gap_report.md"
+    ],
+    "evidence": "查看报告中对NR-4A的分析。需指出10-06和10-07产量（300, 350）未恢复至停机前水平（430+）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "识别井况异常是生产工程师的核心职责，避免盲目排程。",
+    "criterion": [
+      "指出NR-4A在恢复期产量未达到停机前基准。",
+      "明确将此列为数据缺口或风险点。"
+    ],
+    "anchors": {
+      "0": "未提及NR-4A的恢复异常。",
+      "1": "准确识别了NR-4A恢复不足的问题。"
+    },
+    "acceptable_alternatives": "允许使用图表或趋势分析来佐证，不强制特定措辞。",
+    "failure_examples": "认为NR-4A已完全恢复，忽略了300和350与430的差距。"
+  },
+  {
+    "id": "R07",
+    "description": "提出NR-4D水堵前需要产液剖面测井（PLT）的数据缺口及建议",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ04"
+    ],
+    "deliverables": [
+      "data_gap_report.md"
+    ],
+    "evidence": "查看报告中对NR-4D的建议。必须提到PLT（Production Logging Tool）或类似的诊断测井，以确认出水层位。",
+    "numeric_tolerance": 0,
+    "weight_reason": "盲目进行水堵作业是重大工程失误，PLT是标准前置程序。",
+    "criterion": [
+      "指出NR-4D含水率上升原因不明。",
+      "明确建议在执行水堵前进行PLT或产液剖面测井。"
+    ],
+    "anchors": {
+      "0": "未提及PLT或类似诊断测井，直接建议水堵。",
+      "1": "准确识别了前置数据缺口，并提出了PLT测井建议。"
+    },
+    "acceptable_alternatives": "允许使用'production log', 'spinner survey'等同义专业术语。",
+    "failure_examples": "建议直接进行化学堵水，未考虑出水机理和层位。"
+  },
+  {
+    "id": "R08",
+    "description": "维护窗口排程是否考虑了前置条件",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ04"
+    ],
+    "deliverables": [
+      "data_gap_report.md"
+    ],
+    "evidence": "查看排程建议。NR-4A的维护必须在井况稳定后，NR-4D的维护必须在PLT完成后。",
+    "numeric_tolerance": 0,
+    "weight_reason": "排程必须尊重工程逻辑，否则计划无法执行。",
+    "criterion": [
+      "NR-4A的排程避开了当前的恢复波动期。",
+      "NR-4D的排程明确在PLT完成之后。"
+    ],
+    "anchors": {
+      "0": "忽略了前置条件，直接安排立即执行。",
+      "1": "排程合理反映了前置条件的约束。"
+    },
+    "acceptable_alternatives": "允许提出具体的时间节点建议（如建议10月10日后执行NR-4A维护）。",
+    "failure_examples": "建议明天立即执行NR-4D的水堵作业。"
+  },
+  {
+    "id": "R09",
+    "description": "计算维护期间其他井（如NR-4B）的产量是否能部分弥补损失",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ02"
+    ],
+    "deliverables": [
+      "production_impact_assessment.csv"
+    ],
+    "evidence": "查看是否考虑了NR-4B作为稳定基准井，在维护期间继续产油。",
+    "numeric_tolerance": 0,
+    "weight_reason": "区块视角的产量评估需考虑未停机井的贡献。",
+    "criterion": [
+      "识别了NR-4B在维护期间保持正常生产。",
+      "在总产量影响评估中包含了NR-4B的持续贡献。"
+    ],
+    "anchors": {
+      "0": "假设所有井同时停机，或未考虑NR-4B的贡献。",
+      "1": "正确计算了维护期间NR-4B的产量贡献。"
+    },
+    "acceptable_alternatives": "允许使用NR-4B的平均产量（500 bopd）进行估算。",
+    "failure_examples": "认为维护期间区块总产量为0。"
+  },
+  {
+    "id": "R10",
+    "description": "报告结构完整性，包含执行摘要和详细分析",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ05"
+    ],
+    "deliverables": [
+      "data_gap_report.md"
+    ],
+    "evidence": "查看MD文件的目录结构。",
+    "numeric_tolerance": 0,
+    "weight_reason": "专业报告需具备良好的可读性和结构。",
+    "criterion": [
+      "包含执行摘要（Executive Summary）。",
+      "包含详细的产量损失、含水率分析和数据缺口章节。"
+    ],
+    "anchors": {
+      "0": "结构混乱，缺少关键章节。",
+      "1": "结构完整，逻辑清晰。"
+    },
+    "acceptable_alternatives": "允许使用不同的标题名称，只要功能等价。",
+    "failure_examples": "只有一段长文本，无分段和标题。"
+  },
+  {
+    "id": "R11",
+    "description": "数据单位一致性检查，确保bopd/bwpd与bpd计算正确",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ01"
+    ],
+    "deliverables": [
+      "production_impact_assessment.csv"
+    ],
+    "evidence": "查看CSV中的列名和数值。总液量应为Oil+Water。",
+    "numeric_tolerance": 0,
+    "weight_reason": "单位错误会导致后续所有计算失效。",
+    "criterion": [
+      "明确区分Oil (bopd), Water (bwpd), Liquid (bpd)。",
+      "总液量计算公式正确（Oil + Water）。"
+    ],
+    "anchors": {
+      "0": "混淆了油、水、液量，或单位错误。",
+      "1": "单位使用正确，计算逻辑无误。"
+    },
+    "acceptable_alternatives": "允许使用m3/d等单位，只要内部一致。",
+    "failure_examples": "将bopd和bwpd直接相加但未标记为总液量，或重复计算。"
+  },
+  {
+    "id": "R12",
+    "description": "如果在评估中宣称了真实储量评估或安全批准",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "REQ05"
+    ],
+    "deliverables": [
+      "data_gap_report.md"
+    ],
+    "evidence": "扫描报告全文，查找'proved reserves', 'safety approval', 'compliance certified'等越权表述。",
+    "numeric_tolerance": 0,
+    "weight_reason": "越权结论可能导致严重的合规与法律风险，属于一票否决项。",
+    "criterion": [
+      "报告中未出现储量评估或安全批准的结论性声明。",
+      "明确声明了分析的局限性。"
+    ],
+    "anchors": {
+      "0": "存在越权声明或结论。",
+      "1": "严格遵守了业务边界，无越权声明。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "在结论中写道'本分析确认了区块的剩余可采储量'或'满足安全合规要求'。"
+  },
+  {
+    "id": "R13",
+    "description": "如果无视含水率超限事实直接排程",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ03"
+    ],
+    "deliverables": [
+      "data_gap_report.md"
+    ],
+    "evidence": "查看排程建议是否忽略了10-04开始的含水率超限问题，或未将NR-4D的干预列为高优先级。",
+    "numeric_tolerance": 0,
+    "weight_reason": "无视集输限制会导致设施瘫痪或环保处罚，属于严重工程失误。",
+    "criterion": [
+      "识别了含水率超限的严重性。",
+      "在排程中优先考虑了解决含水率超限的措施（如NR-4D干预）。"
+    ],
+    "anchors": {
+      "0": "无视超限事实，或排程优先级完全错误。",
+      "1": "准确识别并优先处理了超限风险。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为含水率55%仍在可接受范围内，建议推迟NR-4D的维护。"
+  },
+  {
+    "id": "R14",
+    "description": "产量损失计算的准确度与容差处理",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ01",
+      "REQ02"
+    ],
+    "deliverables": [
+      "production_impact_assessment.csv"
+    ],
+    "evidence": "综合评估NR-4A和NR-4C的停机损失计算，以及维护损失的折算。",
+    "numeric_tolerance": 0.15,
+    "weight_reason": "量化分析的精度直接影响决策质量。",
+    "criterion": [
+      "各井停机损失计算准确。",
+      "维护时间折算合理。",
+      "总损失汇总无误。"
+    ],
+    "levels": {
+      "0": "未计算或完全错误。",
+      "0.25": "计算了但公式错误或单位混淆。",
+      "0.5": "计算了某一口井但漏掉另一口，或时间折算错误。",
+      "0.75": "计算了所有井，但忽略了停机前后的产量变化或使用了错误的基准产量。",
+      "1": "准确计算了所有井的停机损失和维护损失，合理处理了部分天数或恢复期产量。"
+    },
+    "acceptable_alternatives": "允许使用不同的基准产量选择方法（如前一日、前3日均值），只要逻辑自洽。",
+    "failure_examples": "使用全周期平均产量计算停机损失，导致结果失真。"
+  },
+  {
+    "id": "R15",
+    "description": "数据缺口分析的深度与工程合理性",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ04"
+    ],
+    "deliverables": [
+      "data_gap_report.md"
+    ],
+    "evidence": "评估对NR-4A恢复情况和NR-4D出水机理的分析深度。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数据缺口分析体现了工程师的专业判断和闭环思维。",
+    "criterion": [
+      "准确识别了关键数据缺口。",
+      "提出了具有工程逻辑的闭环建议。",
+      "考虑了时间窗口和前置依赖。"
+    ],
+    "levels": {
+      "0": "未识别数据缺口或仅重复题面信息。",
+      "0.25": "识别了缺口但未提出任何后续行动建议。",
+      "0.5": "识别了缺口并提出了常规建议，但未考虑工程前置条件或实际可行性。",
+      "0.75": "识别了关键缺口（如PLT），建议合理，但未考虑时间成本或与其他维护的冲突。",
+      "1": "准确识别关键数据缺口（NR-4A恢复曲线、NR-4D的PLT），提出了具有工程逻辑的闭环建议，并考虑了时间窗口和前置依赖。"
+    },
+    "acceptable_alternatives": "允许提出其他合理的诊断手段（如示踪剂测试），只要逻辑成立。",
+    "failure_examples": "仅指出'NR-4D含水率高'，未分析原因或提出测井建议。"
+  },
+  {
+    "id": "R16",
+    "description": "正确汇总各井的累计产油量",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ01"
+    ],
+    "deliverables": [
+      "production_impact_assessment.csv"
+    ],
+    "evidence": "查看CSV中各井7天内的总产油量汇总。",
+    "numeric_tolerance": 0.05,
+    "weight_reason": "基础数据汇总是后续分析的基石。",
+    "criterion": [
+      "正确累加了各井每日的Oil_bopd。",
+      "汇总数值准确无误。"
+    ],
+    "anchors": {
+      "0": "未汇总或汇总错误。",
+      "1": "汇总准确。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "漏加了停机日的0产量，或重复计算。"
+  },
+  {
+    "id": "R17",
+    "description": "正确汇总各井的累计产水量",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ03"
+    ],
+    "deliverables": [
+      "production_impact_assessment.csv"
+    ],
+    "evidence": "查看CSV中各井7天内的总产水量汇总。",
+    "numeric_tolerance": 0.05,
+    "weight_reason": "产水量汇总用于计算含水率和评估水处理负荷。",
+    "criterion": [
+      "正确累加了各井每日的Water_bwpd。",
+      "汇总数值准确无误。"
+    ],
+    "anchors": {
+      "0": "未汇总或汇总错误。",
+      "1": "汇总准确。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将产水量与产油量混淆。"
+  },
+  {
+    "id": "R18",
+    "description": "识别NR-4B产量稳定并作为基准井的特征",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ02"
+    ],
+    "deliverables": [
+      "data_gap_report.md"
+    ],
+    "evidence": "查看报告中是否提及NR-4B的运行状态稳定，可作为区块基准。",
+    "numeric_tolerance": 0,
+    "weight_reason": "识别稳定井有助于隔离其他井的异常影响。",
+    "criterion": [
+      "指出NR-4B在7天内产量波动小。",
+      "将其作为评估其他井或区块的参考基准。"
+    ],
+    "anchors": {
+      "0": "未提及NR-4B的稳定性。",
+      "1": "准确识别了NR-4B的基准作用。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为NR-4B也存在异常波动。"
+  },
+  {
+    "id": "R19",
+    "description": "维护窗口总时长计算准确，转换为天数合理",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ02"
+    ],
+    "deliverables": [
+      "production_impact_assessment.csv"
+    ],
+    "evidence": "查看维护总时长的计算（16+8+24=48小时=2天）。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "总时长反映了整体资源占用和产能影响。",
+    "criterion": [
+      "正确累加了各井的停机小时数。",
+      "合理转换为天数或井·天（well-days）。"
+    ],
+    "anchors": {
+      "0": "计算错误或单位未转换。",
+      "1": "计算准确，转换合理。"
+    },
+    "acceptable_alternatives": "允许保留小时数，只要说明清晰。",
+    "failure_examples": "将48小时算作3天。"
+  },
+  {
+    "id": "R20",
+    "description": "建议的维护顺序是否合理（考虑生产影响最小化和前置条件）",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ04"
+    ],
+    "deliverables": [
+      "data_gap_report.md"
+    ],
+    "evidence": "查看排程建议的顺序。应先进行NR-4D的PLT，再安排水堵；NR-4A应在稳定后；NR-4C可随时插空。",
+    "numeric_tolerance": 0,
+    "weight_reason": "合理的排程能最大化减少产量损失并满足工程约束。",
+    "criterion": [
+      "排程顺序考虑了前置条件（PLT先于水堵）。",
+      "考虑了产量影响最小化（如先处理高含水井）。"
+    ],
+    "anchors": {
+      "0": "顺序混乱，违反前置条件或导致产量损失最大化。",
+      "1": "顺序合理，兼顾了工程约束和生产影响。"
+    },
+    "acceptable_alternatives": "允许NR-4C和NR-4A的顺序互换，只要不违反各自的前置条件。",
+    "failure_examples": "建议先进行NR-4D的水堵，再安排PLT测井。"
+  }
+]

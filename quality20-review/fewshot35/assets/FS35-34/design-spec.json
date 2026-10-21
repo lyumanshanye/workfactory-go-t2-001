@@ -1,0 +1,633 @@
+{
+  "title": "Aura Coffee 门店服务效能提升与带教体系重构",
+  "request": "Hi，我是Aura Coffee华东区的培训运营负责人。最近我们上海04店（AURA-SH-04）在大众点评和内部客诉系统里的数据很难看，尤其是上个月。新咖啡师上手慢，高峰期出杯效率低，奶泡和萃取的客诉特别多。店长Amy和值班经理们反馈，现有的带教全靠‘老带新’随缘教，缺乏标准，而且排班时导师和学员的时间经常对不上，导致培训进度严重滞后。\n\n我需要你基于附件里的《员工能力与可用时间矩阵》和《门店运营与客诉观察记录》，为我们店重构带教体系。请完成以下三项核心交付：\n\n1. 制定一份实操训练计划（Barista_Practical_Training_Plan.md）。必须针对客诉高发区（如奶泡打发、萃取、订单准确率）设计具体的强化模块，区分不同技能等级员工的学习重点，并包含设备维护的情景训练。\n2. 设计一套课后行为评估方案（Post_Training_Behavior_Evaluation.docx）。不要那种脱产考试，我要的是能嵌入日常运营的行为观察指标，特别是针对客诉痛点的量化标准和评估闭环。\n3. 输出一份带教排班与冲突解决表（Mentorship_Schedule_and_Conflict_Resolution.xlsx）。必须严格遵守门店的高峰期禁训规则、导师产能上限（每周<=6小时，每班<=2人）以及导师的休息日。对于员工偏好导师但时间冲突的情况，必须在表格中单列‘冲突解决说明’。\n\n所有文件请存放在 /app/output 目录下。这周末的区经理复盘会上我要直接拿你的方案去汇报，请务必确保排班逻辑严密、训练内容直击痛点。",
+  "as_of": "2024-05-10T09:00:00+08:00",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "本次任务无外部真实来源，所有业务数据、门店规则、员工记录均为原创虚构，旨在考察_solver_在给定约束下的资源调度与培训设计能力。",
+      "limitations": "不适用外部真实法规或行业基准，一切以inputs中提供的虚构材料为准。"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "staff_capability_matrix.csv",
+      "purpose": "提供门店员工的基础技能等级、每周可用于培训的时间、业务弱点以及偏好的带教导师，用于匹配训练需求与排班资源。",
+      "content_plan": "包含12名员工（8名一线咖啡师/值班主管，4名导师）的ID、姓名、角色、技能等级(1-5)、每周可用培训小时数、弱点领域、偏好导师ID。",
+      "content": "EmpID,Name,Role,SkillLevel,AvailTrainHrs_Wk,WeaknessArea,MentorPrefID\nE01,Lin Yao,Barista,2,6,Milk_Texturing,M02\nE02,Chen Wei,Barista,1,8,Espresso_Extraction,M01\nE03,Wang Mei,Barista,3,4,Customer_Communication,M03\nE04,Zhao Peng,ShiftSup,4,2,Team_Coaching,M04\nE05,Liu Na,Barista,2,6,Milk_Texturing,M01\nE06,Sun Jie,Barista,1,8,Order_Accuracy,M02\nE07,Zhou Tao,Barista,3,4,Equipment_Maintenance,M04\nE08,Wu Fang,Barista,2,6,Espresso_Extraction,M03\nM01,Kevin Zhang,HeadBarista,5,10,NA,NA\nM02,Sarah Li,SeniorBarista,4,8,NA,NA\nM03,David Wu,ShiftSup,4,6,NA,NA\nM04,Amy Chen,StoreMgr,5,4,NA,NA"
+    },
+    {
+      "filename": "store_ops_and_feedback.json",
+      "purpose": "提供门店的客诉痛点数据、高峰期时段、导师的具体排班与休息日，以及公司强制的培训排班规则，用于约束排班逻辑和确定训练优先级。",
+      "content_plan": "包含客诉分类及次数、高峰期时段、4名导师的上班班次与休息日、4条强制性培训排班规则（如高峰期禁训、导师产能上限等）。",
+      "content": "{\n  \"store_id\": \"AURA-SH-04\",\n  \"month\": \"2024-04\",\n  \"complaint_categories\": {\n    \"Milk_Texturing\": {\"count\": 12, \"desc\": \"奶泡粗糙，拉花失败，温度过高或过低\"},\n    \"Espresso_Extraction\": {\"count\": 8, \"desc\": \"萃取不足或过度，风味苦涩/偏酸，流速不稳\"},\n    \"Customer_Communication\": {\"count\": 5, \"desc\": \"推荐不自然，处理抱怨生硬，缺乏眼神交流\"},\n    \"Order_Accuracy\": {\"count\": 15, \"desc\": \"高峰期做错杯，漏加配料，杯贴写错\"},\n    \"Equipment_Maintenance\": {\"count\": 3, \"desc\": \"咖啡机蒸汽棒堵塞，磨豆机校准错误，吧台卫生不达标\"}\n  },\n  \"peak_hours\": [\"08:00-09:30\", \"12:30-13:30\", \"17:30-19:00\"],\n  \"mentor_availability\": {\n    \"M01\": {\"shift_hours\": [\"07:00-15:00\"], \"off_days\": [\"Tuesday\", \"Wednesday\"]},\n    \"M02\": {\"shift_hours\": [\"12:00-20:00\"], \"off_days\": [\"Monday\", \"Tuesday\"]},\n    \"M03\": {\"shift_hours\": [\"14:00-22:00\"], \"off_days\": [\"Wednesday\", \"Thursday\"]},\n    \"M04\": {\"shift_hours\": [\"09:00-18:00\"], \"off_days\": [\"Saturday\", \"Sunday\"]}\n  },\n  \"training_rules\": {\n    \"max_trainees_per_mentor_per_shift\": 2,\n    \"mentor_max_weekly_training_hours\": 6,\n    \"training_cannot_overlap_peak_hours\": true,\n    \"mentor_off_days_must_be_respected\": true\n  }\n}"
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "Barista_Practical_Training_Plan.md",
+      "format": "Markdown",
+      "purpose": "详细规划针对客诉痛点的实操训练模块，区分技能等级，包含设备维护与情景模拟，作为门店带教的SOP指导。"
+    },
+    {
+      "filename": "Post_Training_Behavior_Evaluation.docx",
+      "format": "Word Document (文本描述)",
+      "purpose": "设计嵌入日常运营的课后行为评估方案，包含量化观察指标、评估人、周期及反馈闭环，替代脱产考试。"
+    },
+    {
+      "filename": "Mentorship_Schedule_and_Conflict_Resolution.xlsx",
+      "format": "Excel Spreadsheet",
+      "purpose": "输出符合所有时间、产能与规则约束的周带教排班表，并专门记录导师偏好与时间冲突的解决策略。"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "text": "训练计划必须将客诉次数最高的领域（Order_Accuracy 15次, Milk_Texturing 12次）列为最高优先级实操模块。",
+      "visibility": "explicit",
+      "basis": "request中明确要求针对客诉高发区设计强化模块，且输入数据明确了客诉数量。"
+    },
+    {
+      "id": "REQ-02",
+      "text": "排班表必须严格遵守‘training_cannot_overlap_peak_hours’规则，所有带教活动必须避开08:00-09:30, 12:30-13:30, 17:30-19:00。",
+      "visibility": "explicit",
+      "basis": "输入JSON中的training_rules明确规定。"
+    },
+    {
+      "id": "REQ-03",
+      "text": "每位导师每周的带教总时长不得超过6小时，且单个班次内带教学员数不得超过2人。",
+      "visibility": "explicit",
+      "basis": "输入JSON中的training_rules明确规定。"
+    },
+    {
+      "id": "REQ-04",
+      "text": "排班必须绝对尊重导师的休息日（off_days），不得在休息日安排任何带教任务。",
+      "visibility": "explicit",
+      "basis": "输入JSON中的training_rules明确规定，且涉及劳动合规底线。"
+    },
+    {
+      "id": "REQ-05",
+      "text": "评估方案必须包含可量化的行为锚点（Behavioral Anchors），不能仅使用‘态度好’、‘操作规范’等模糊描述。",
+      "visibility": "professional_practice",
+      "basis": "培训专业惯例要求行为评估必须具备可观察、可测量的客观标准。"
+    },
+    {
+      "id": "REQ-06",
+      "text": "针对Shift Supervisor (E04) 等管理岗的弱点，必须设计区别于基础咖啡师技能的‘现场管理/团队调度’专属训练模块。",
+      "visibility": "explicit",
+      "basis": "request要求区分不同技能/角色，输入数据明确了E04的WeaknessArea为Team_Coaching。"
+    },
+    {
+      "id": "REQ-07",
+      "text": "当员工偏好导师与该导师可用时间冲突，或同一导师被多名同弱点员工偏好导致超负荷时，必须在排班表中提供明确的‘冲突解决说明’。",
+      "visibility": "explicit",
+      "basis": "request要求对偏好导师但时间冲突的情况单列说明。"
+    }
+  ],
+  "authoring_plan": "本题设计核心在于‘约束求解’与‘痛点映射’。首先，客诉数据(Order 15, Milk 12, Extraction 8)直接决定训练计划的优先级与内容设计，要求solver将数据转化为具体的SOP强化动作（如Order需防错机制，Milk需温度控制）。其次，排班是一个典型的多约束调度问题：时间窗口（避开3个高峰期）、导师容量（周<=6h，班<=2人）、硬约束（导师休息日不可用）。solver需要计算导师的实际可用非高峰时段，并分配学员。例如，M01周二三休息，其可用时段为周一、四、五的07:00-15:00，避开08:00-09:30后，实际可用带教窗口为09:30-12:30。E02偏好M01，需在此窗口安排。同时，M02周一二休息，可用时段为周三至周日12:00-20:00，避开12:30-13:30和17:30-19:00，可用窗口碎片化，需精细排班。评估方案要求脱离传统笔试，转向嵌入式观察，需结合门店实际运营节奏设计。",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "训练计划是否将‘订单准确率(Order_Accuracy)’和‘奶泡打发(Milk_Texturing)’作为最高优先级，并设计了针对性的防错与温控实操模块？",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "Barista_Practical_Training_Plan.md"
+      ],
+      "evidence": "查看训练计划文档，是否将Order_Accuracy和Milk_Texturing列为前两大模块。Order模块是否包含‘盲测/无标签配料杯’等防错设计；Milk模块是否包含‘温度计实测55-65℃’等温控标准。",
+      "numeric_tolerance": 0,
+      "weight_reason": "直接回应客诉最高频痛点（15次和12次），是训练计划的核心价值所在。",
+      "criterion": [
+        "明确将Order_Accuracy和Milk_Texturing列为训练优先级前两位。",
+        "Order_Accuracy模块包含针对‘漏加配料/做错杯’的防错机制训练（如盲测、核对清单）。",
+        "Milk_Texturing模块包含针对‘温度过高/奶泡粗糙’的客观测量与实操训练（如使用温度计）。"
+      ],
+      "anchors": {
+        "0": "未将这两项列为最高优先级，或仅提及名词但无针对性实操设计（如只写‘练习拉花’）。",
+        "1": "明确列为最高优先级，且Order和Milk模块均包含具体的、直击客诉痛点的实操防错/温控设计。"
+      },
+      "acceptable_alternatives": "防错设计可以是‘大声复述订单’、‘杯贴与实物物理比对’等，只要逻辑上能有效降低漏加/做错率即可。",
+      "failure_examples": "将Espresso_Extraction（8次客诉）排在Order（15次）之前；或者Milk_Texturing模块只写了‘学习拉花技巧’，未提及温度控制和奶泡绵密度标准。"
+    },
+    {
+      "id": "R02",
+      "description": "针对‘订单准确率’痛点，是否设计了非高峰时段的‘模拟高峰出杯’压力测试训练，而非单纯背诵配方？",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "Barista_Practical_Training_Plan.md"
+      ],
+      "evidence": "查看训练计划中Order_Accuracy模块，是否包含在模拟高峰期（如连续接单、增加干扰项）的压力测试环节。",
+      "numeric_tolerance": 0,
+      "weight_reason": "客诉多发于高峰期，单纯的静态记忆无法解决高压下的出错问题，压力测试是专业惯例中的有效手段。",
+      "criterion": [
+        "训练计划中必须包含‘模拟高峰出杯’或‘压力测试’环节。",
+        "该环节设计需体现高峰期特征（如连续订单、限时、干扰环境）。",
+        "明确指出该训练安排在非高峰时段进行，以保证安全与复盘空间。"
+      ],
+      "anchors": {
+        "0": "仅安排背诵配方、静态制作，或完全未提及压力测试。",
+        "1": "设计了明确的模拟高峰压力测试环节，并说明了模拟特征（如连单、限时），且安排在非高峰期。"
+      },
+      "acceptable_alternatives": "压力测试可以通过‘引入噪音’、‘增加同时处理订单数’、‘店长突击派单’等形式实现。",
+      "failure_examples": "只写了‘熟记所有饮品配方’，没有模拟连续出杯的压力环境。"
+    },
+    {
+      "id": "R03",
+      "description": "评估方案中‘客诉行为观察’的指标设计质量与量化程度。",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Post_Training_Behavior_Evaluation.docx"
+      ],
+      "evidence": "查看评估方案文档中的观察指标/评估表部分，检查指标是否具体、可量化，是否避免了模糊形容词。",
+      "numeric_tolerance": 0,
+      "weight_reason": "行为评估的有效性取决于指标的颗粒度，这是区分专业方案与业余方案的关键。",
+      "criterion": [
+        "指标必须针对具体的客诉行为（如漏加配料、态度生硬）。",
+        "指标必须是可量化或具有明确行为锚点的，而非主观感受。",
+        "指标应能直接对应到输入材料中的客诉分类。"
+      ],
+      "levels": {
+        "0": "无具体观察指标，或仅使用‘服务态度好’、‘操作规范’、‘提高准确率’等完全模糊的形容词。",
+        "0.25": "列出了观察点，但描述仍偏向主观（如‘能注意到顾客需求’），缺乏可衡量的行为动作。",
+        "0.5": "包含了特定场景指标，有部分量化尝试（如‘出错次数’），但未覆盖主要客诉痛点，或锚点不够清晰。",
+        "0.75": "包含可量化的行为锚点（如‘主动询问口味偏好次数’、‘杯贴与实物100%物理核对’），覆盖了主要痛点。",
+        "1": "包含高度量化的行为锚点，与客诉痛点直接一一对应，且设计了配套的观察记录表/打卡机制，具备强实操性。"
+      },
+      "acceptable_alternatives": "量化方式可以是计数（如核对次数）、时间（如响应时间）、或二元行为记录（是否执行了某标准动作）。",
+      "failure_examples": "评估指标写为‘提升顾客满意度’、‘减少客诉’、‘认真制作每一杯咖啡’。"
+    },
+    {
+      "id": "R04",
+      "description": "排班表是否严格遵守‘培训不能与高峰时段(08:00-09:30, 12:30-13:30, 17:30-19:00)重叠’的硬性规则？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "Mentorship_Schedule_and_Conflict_Resolution.xlsx"
+      ],
+      "evidence": "核对排班表中所有带教任务的‘开始时间’和‘结束时间’，确认是否完全避开了三个高峰时段。",
+      "numeric_tolerance": 0,
+      "weight_reason": "高峰期禁训是门店运营的底线要求，违反此规则会导致门店运营瘫痪。",
+      "criterion": [
+        "排班表中所有带教任务的时段必须完全避开08:00-09:30。",
+        "必须完全避开12:30-13:30。",
+        "必须完全避开17:30-19:00。",
+        "带教时间窗口必须落在导师的shift_hours内，且与peak_hours无交集。"
+      ],
+      "anchors": {
+        "0": "存在任何一项带教任务的时间与上述三个高峰时段之一重叠（哪怕只有5分钟）。",
+        "1": "所有带教任务的时间安排均完美避开三个高峰时段，时间窗口合法。"
+      },
+      "acceptable_alternatives": "带教可以安排在09:30-12:30, 13:30-17:30, 19:00-22:00等非高峰时段，只要符合导师班次。",
+      "failure_examples": "将M02的带教安排在12:00-13:00，与12:30-13:30的高峰期重叠。"
+    },
+    {
+      "id": "R05",
+      "description": "排班表是否确保每位导师（M01-M04）的周带教总时长严格不超过6小时？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Mentorship_Schedule_and_Conflict_Resolution.xlsx"
+      ],
+      "evidence": "计算排班表中每位导师（M01至M04）所有带教任务的时长总和，确认是否<=6小时。",
+      "numeric_tolerance": 0,
+      "weight_reason": "导师产能上限是防止导师过度疲劳、保证带教质量的核心约束。",
+      "criterion": [
+        "M01周带教总时长 <= 6小时。",
+        "M02周带教总时长 <= 6小时。",
+        "M03周带教总时长 <= 6小时。",
+        "M04周带教总时长 <= 6小时。"
+      ],
+      "anchors": {
+        "0": "任何一位导师的周带教总时长超过6小时（如6.5小时或7小时）。",
+        "1": "所有四位导师的周带教总时长均严格控制在6小时及以内。"
+      },
+      "acceptable_alternatives": "导师可以带教少于6小时，只要不超过即可。未带教的导师时长为0也合规。",
+      "failure_examples": "为了让M01带完E02和E05，安排了总计7小时的带教时间。"
+    },
+    {
+      "id": "R06",
+      "description": "是否出现安排导师在其休息日（off_days）进行带教的严重违规？",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "Mentorship_Schedule_and_Conflict_Resolution.xlsx"
+      ],
+      "evidence": "交叉核对排班表中带教任务的‘日期’与输入JSON中导师的‘off_days’。",
+      "numeric_tolerance": 0,
+      "weight_reason": "违反休息日安排涉及劳动合规与员工体验底线，属于一票否决的严重错误。",
+      "criterion": [
+        "M01的带教任务未出现在Tuesday或Wednesday。",
+        "M02的带教任务未出现在Monday或Tuesday。",
+        "M03的带教任务未出现在Wednesday或Thursday。",
+        "M04的带教任务未出现在Saturday或Sunday。"
+      ],
+      "anchors": {
+        "0": "发生至少一次安排导师在休息日带教的情况。",
+        "1": "未发生任何安排导师在休息日带教的情况。"
+      },
+      "acceptable_alternatives": "无替代方案，休息日必须绝对禁排。",
+      "failure_examples": "因M01周一到周五排班困难，将其带教任务安排在周三（其休息日）。"
+    },
+    {
+      "id": "R07",
+      "description": "冲突解决记录中，针对Chen Wei (E02) 偏好M01，但M01周二/周三休息的情况，是否提出了合理的替代或时间调整方案？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-07"
+      ],
+      "deliverables": [
+        "Mentorship_Schedule_and_Conflict_Resolution.xlsx"
+      ],
+      "evidence": "查看排班表中的‘冲突解决说明’列或单独备注，是否针对E02与M01的时间/偏好冲突给出了明确解释和解决方案。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察solver处理现实世界中‘意愿与资源不匹配’时的调度与沟通能力。",
+      "criterion": [
+        "明确识别出E02(Chen Wei)偏好M01，但M01在周二、周三休息的冲突。",
+        "提出了合理的解决方案（如：将E02的带教安排在M01周一/四/五的非高峰可用时段；或在M01不可用时，由M02/M03进行交叉带教并说明原因）。",
+        "解决方案不违反其他硬性约束（如避开高峰、不超产能）。"
+      ],
+      "anchors": {
+        "0": "未提及此冲突，或强行在M01休息日安排，或未给出任何解决说明直接忽略偏好。",
+        "1": "清晰记录了冲突原因，并给出了符合所有约束的合理调度或交叉带教方案。"
+      },
+      "acceptable_alternatives": "方案可以是调整E02的可用时间，或分配给M02（但需解决M02的偏好问题），只要逻辑自洽且合规。",
+      "failure_examples": "在冲突解决栏写‘已要求E02放弃偏好’，但未提供实际的带教安排；或直接安排在周三。"
+    },
+    {
+      "id": "R08",
+      "description": "训练计划中是否明确区分了SkillLevel 1（如Chen Wei, Sun Jie）和SkillLevel 2（如Lin Yao, Liu Na）的实操侧重点？",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-06"
+      ],
+      "deliverables": [
+        "Barista_Practical_Training_Plan.md"
+      ],
+      "evidence": "查看训练计划，是否对Level 1和Level 2员工设定了不同的学习路径或考核标准。",
+      "numeric_tolerance": 0,
+      "weight_reason": "分层培训是提升培训效率的专业惯例，避免‘一锅炖’。",
+      "criterion": [
+        "明确指出Level 1（新手）侧重于基础SOP、设备认知与安全规范。",
+        "明确指出Level 2（初级）侧重于效率提升、客诉处理与复杂饮品制作。",
+        "两者在实操模块的课时分配或考核标准上有所区分。"
+      ],
+      "anchors": {
+        "0": "对所有员工采用完全相同的训练内容和进度要求，未体现层级差异。",
+        "1": "清晰区分了Level 1和Level 2的训练侧重点，并匹配了相应的实操内容。"
+      },
+      "acceptable_alternatives": "可以通过‘必修/选修’模块、‘基础/进阶’阶段来体现差异。",
+      "failure_examples": "让SkillLevel 1的员工直接参与高压出杯测试，或未区分基础萃取与进阶拉花的训练顺序。"
+    },
+    {
+      "id": "R09",
+      "description": "课后行为评估方案的‘落地可行性’与运营节奏契合度。",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Post_Training_Behavior_Evaluation.docx"
+      ],
+      "evidence": "评估方案中关于评估执行时间、执行人、反馈机制的设计是否契合门店实际运营，是否具备可操作性。",
+      "numeric_tolerance": 0,
+      "weight_reason": "评估方案若脱离实际运营节奏，将沦为形式主义，无法产生真实业务价值。",
+      "criterion": [
+        "评估执行时间避开高峰期，利用非高峰碎片时间或低峰期。",
+        "明确了具体的评估执行人（如值班经理、指定导师）。",
+        "设计了评估结果的反馈闭环（如训后复盘、1v1沟通）。"
+      ],
+      "levels": {
+        "0": "仅提出‘加强考核’或‘月底统一考试’，未说明如何执行。",
+        "0.25": "提出了考核，但未说明由谁、在何时执行，或安排在高峰期执行。",
+        "0.5": "指定了执行人（如店长），但未结合门店实际运营节奏，缺乏反馈闭环设计。",
+        "0.75": "指定了执行人，并结合了非高峰时段的碎片时间进行微评估，有初步的反馈机制。",
+        "1": "设计了完整的评估机制（如‘每日非高峰抽查+每周神秘顾客’），明确了评估周期、执行人，且包含针对评估结果的‘1v1辅导反馈’闭环。"
+      },
+      "acceptable_alternatives": "评估形式可以是系统数据抓取（如POS漏单率）、现场观察、顾客评价综合。",
+      "failure_examples": "要求员工每天下班后花1小时填写评估表，或安排店长在早高峰进行行为观察。"
+    },
+    {
+      "id": "R10",
+      "description": "针对Shift Supervisor (E04, Zhao Peng) 的‘Team_Coaching’弱点，是否设计了区别于基础咖啡师技能的‘现场管理与人员调度’实操演练？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-06"
+      ],
+      "deliverables": [
+        "Barista_Practical_Training_Plan.md"
+      ],
+      "evidence": "查看训练计划中是否有专门针对E04或管理岗的训练模块，内容是否涉及排班、现场调度、突发处理等。",
+      "numeric_tolerance": 0,
+      "weight_reason": "管理层培训必须与一线技能剥离，聚焦于杠杆效应。",
+      "criterion": [
+        "包含专门针对Shift Supervisor/管理岗的训练模块。",
+        "内容涉及‘现场管理’、‘人员调度’、‘高峰期站位指挥’或‘团队辅导’。",
+        "未将其与基础咖啡技能（如打奶泡、萃取）混为一谈。"
+      ],
+      "anchors": {
+        "0": "未提及管理层培训，或让E04重新参加基础咖啡师技能复训。",
+        "1": "设计了专属的管理岗实操模块，聚焦于现场调度、团队辅导或高峰期指挥。"
+      },
+      "acceptable_alternatives": "可以通过‘沙盘推演’、‘影子跟岗’、‘模拟突发客诉处理’等形式实现。",
+      "failure_examples": "让E04和E01一起参加‘奶泡打发’训练，未体现管理层特有的Team_Coaching需求。"
+    },
+    {
+      "id": "R11",
+      "description": "交付物文件名是否完全符合要求？",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "Barista_Practical_Training_Plan.md",
+        "Post_Training_Behavior_Evaluation.docx",
+        "Mentorship_Schedule_and_Conflict_Resolution.xlsx"
+      ],
+      "evidence": "检查输出文件列表中的文件名是否精确匹配。",
+      "numeric_tolerance": 0,
+      "weight_reason": "基础交付规范，确保下游系统或流程能正确识别文件。",
+      "criterion": [
+        "包含 'Barista_Practical_Training_Plan.md'。",
+        "包含 'Post_Training_Behavior_Evaluation.docx'。",
+        "包含 'Mentorship_Schedule_and_Conflict_Resolution.xlsx'。"
+      ],
+      "anchors": {
+        "0": "任何一个文件名拼写错误、格式错误或缺失。",
+        "1": "三个文件名完全精确匹配。"
+      },
+      "acceptable_alternatives": "无，文件名必须严格一致。",
+      "failure_examples": "将.xlsx写成了.csv，或将Evaluation拼错为Evalution。"
+    },
+    {
+      "id": "R12",
+      "description": "针对Equipment_Maintenance（3次客诉），是否将‘咖啡机蒸汽棒堵塞，磨豆机校准错误’纳入了每日开铺/打烊的实操检查清单训练中？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "Barista_Practical_Training_Plan.md"
+      ],
+      "evidence": "查看训练计划中Equipment_Maintenance模块，是否包含蒸汽棒清理和磨豆机校准的实操步骤，并关联到开铺/打烊流程。",
+      "numeric_tolerance": 0,
+      "weight_reason": "设备维护是预防性客诉的关键，必须固化为日常SOP。",
+      "criterion": [
+        "明确提及‘蒸汽棒堵塞’的清理/疏通实操训练。",
+        "明确提及‘磨豆机校准错误’的校准实操训练。",
+        "将这两项训练与‘每日开铺/打烊’的检查清单或流程相绑定。"
+      ],
+      "anchors": {
+        "0": "未提及设备维护训练，或仅泛泛而谈‘注意设备保养’。",
+        "1": "详细设计了蒸汽棒和磨豆机的实操训练，并明确将其嵌入开铺/打烊的SOP检查清单中。"
+      },
+      "acceptable_alternatives": "可以通过‘设备护照打卡’、‘开铺Checklist演练’等形式实现。",
+      "failure_examples": "只写了‘学习咖啡机结构’，未涉及具体的疏通和校准动作。"
+    },
+    {
+      "id": "R13",
+      "description": "排班表中，每个Shift的带教学员数是否严格 <= 2人？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Mentorship_Schedule_and_Conflict_Resolution.xlsx"
+      ],
+      "evidence": "检查排班表中同一导师、同一班次（Shift）下安排的学员数量。",
+      "numeric_tolerance": 0,
+      "weight_reason": "保证带教质量的上限约束，超过2人会导致导师无法兼顾。",
+      "criterion": [
+        "排班表中任何一行/任何Shift的学员数量 <= 2。",
+        "不存在同一导师在同一时段带教3人或以上的情况。"
+      ],
+      "anchors": {
+        "0": "存在至少一个Shift安排给同一导师的学员数 >= 3。",
+        "1": "所有Shift的学员数均 <= 2。"
+      },
+      "acceptable_alternatives": "可以安排1人或2人，0人（休息/无带教）也合规。",
+      "failure_examples": "为了赶进度，将E01, E05, E08三人同时安排给M02在周三下午带教。"
+    },
+    {
+      "id": "R14",
+      "description": "评估方案中是否包含了对‘Milk_Texturing’温度控制的客观测量标准？",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Post_Training_Behavior_Evaluation.docx"
+      ],
+      "evidence": "查看评估方案中关于奶泡打发的评估指标，是否包含具体的温度数值范围。",
+      "numeric_tolerance": 5,
+      "weight_reason": "温度是奶泡质量的核心客观指标，不可仅凭手感。",
+      "criterion": [
+        "评估指标中必须包含温度测量。",
+        "温度范围设定合理（如55℃-65℃，或类似行业通用标准）。",
+        "明确要求使用温度计等工具进行客观验证。"
+      ],
+      "anchors": {
+        "0": "未提及温度标准，或仅写‘温度适宜’、‘不烫手’等主观描述。",
+        "1": "明确规定了合理的温度数值范围，并要求使用温度计测量。"
+      },
+      "acceptable_alternatives": "温度范围在50-65℃之间均可接受。",
+      "failure_examples": "评估标准写为‘牛奶不能太烫’，未给出具体数值和测量工具。"
+    },
+    {
+      "id": "R15",
+      "description": "冲突解决记录是否明确指出了Lin Yao (E01) 和 Liu Na (E05) 同时偏好M02，且两人WeaknessArea相同，是否进行了分组差异化训练或错开时间安排？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-07"
+      ],
+      "deliverables": [
+        "Mentorship_Schedule_and_Conflict_Resolution.xlsx"
+      ],
+      "evidence": "查看排班表的冲突解决说明，是否针对E01和E05同偏好M02且同弱点的情况给出了处理方案。",
+      "numeric_tolerance": 0,
+      "weight_reason": "处理同质化需求冲突，避免资源挤兑，考验精细化调度能力。",
+      "criterion": [
+        "识别出E01和E05均偏好M02，且WeaknessArea均为Milk_Texturing。",
+        "提出了避免M02单班次超负荷或同质化训练的方案（如：错开两人的训练时段，或分为基础组/进阶组，或分配M01/M03进行交叉带教）。",
+        "方案逻辑合理，符合M02的可用时间约束。"
+      ],
+      "anchors": {
+        "0": "未提及此冲突，或将两人强行塞入M02的同一个Shift，或未做差异化处理。",
+        "1": "清晰记录了同质化偏好冲突，并给出了错开时间、交叉带教或差异化分组的有效方案。"
+      },
+      "acceptable_alternatives": "可以将两人分配给M01（需解决M01偏好问题），或分上下半场由M02带教。",
+      "failure_examples": "在冲突栏写‘两人一起跟M02学’，导致单班次人数或内容无差异。"
+    },
+    {
+      "id": "R16",
+      "description": "训练计划是否包含‘顾客沟通(Customer_Communication)’的情景模拟（Role-play），特别是针对‘处理抱怨生硬’这一客诉痛点？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "Barista_Practical_Training_Plan.md"
+      ],
+      "evidence": "查看Customer_Communication模块，是否设计了Role-play，且场景包含处理抱怨/客诉。",
+      "numeric_tolerance": 0,
+      "weight_reason": "软技能无法通过背诵提升，必须通过情景模拟进行行为塑造。",
+      "criterion": [
+        "包含‘顾客沟通’或‘Customer_Communication’专属模块。",
+        "明确采用‘情景模拟’或‘Role-play’形式。",
+        "模拟场景必须包含‘处理抱怨’、‘应对不满顾客’等高压沟通情境。"
+      ],
+      "anchors": {
+        "0": "未包含沟通模块，或仅要求‘背诵服务话术’，无情景模拟。",
+        "1": "设计了专门的情景模拟模块，且场景直接针对‘处理抱怨生硬’的痛点。"
+      },
+      "acceptable_alternatives": "可以通过‘录像回放分析’、‘红蓝对抗’等形式实现。",
+      "failure_examples": "沟通模块只写了‘学习微笑服务’、‘熟记欢迎语’。"
+    },
+    {
+      "id": "R17",
+      "description": "排班表是否以周视图（或清晰的日视图）呈现，包含日期、时段、导师、学员、训练主题等必要元素？",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "Mentorship_Schedule_and_Conflict_Resolution.xlsx"
+      ],
+      "evidence": "检查排班表的结构和列名，是否具备完整的排班要素。",
+      "numeric_tolerance": 0,
+      "weight_reason": "排班表的基础可用性要求。",
+      "criterion": [
+        "包含日期/星期列。",
+        "包含具体时段（开始-结束时间）列。",
+        "包含导师、学员、训练主题/内容列。"
+      ],
+      "anchors": {
+        "0": "结构混乱，缺失关键列（如只有导师和学员，没有时间和主题），无法作为实际排班表使用。",
+        "1": "结构清晰，包含日期、时段、导师、学员、训练主题等所有必要元素。"
+      },
+      "acceptable_alternatives": "可以是横向的周日历视图，也可以是纵向的列表视图。",
+      "failure_examples": "只写了一个总时长‘M01本周带教6小时’，没有具体的日期和时段分布。"
+    },
+    {
+      "id": "R18",
+      "description": "针对Order_Accuracy的训练，是否引入了‘盲测’或‘无标签配料杯’等防错机制训练，以解决‘漏加配料’问题？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "Barista_Practical_Training_Plan.md"
+      ],
+      "evidence": "查看Order_Accuracy模块的具体训练方法，是否包含物理防错或感官强化的训练手段。",
+      "numeric_tolerance": 0,
+      "weight_reason": "针对‘漏加配料’这一高频客诉，必须通过改变操作环境来强化肌肉记忆和核对习惯。",
+      "criterion": [
+        "训练方法中包含‘盲测’、‘无标签’、‘遮盖杯贴’等剥夺视觉提示的手段。",
+        "或包含‘大声复述’、‘物理指认’等强制核对动作。",
+        "明确说明该训练旨在解决‘漏加配料/做错杯’问题。"
+      ],
+      "anchors": {
+        "0": "仅要求‘仔细看杯贴’、‘多做几遍’，无具体的防错机制设计。",
+        "1": "设计了具体的防错机制训练（如盲测、无标签），直接针对漏加配料痛点。"
+      },
+      "acceptable_alternatives": "可以是‘配料杯分区定位训练’，强制养成固定位置取料的习惯。",
+      "failure_examples": "训练方法写为‘熟记所有饮品的配料清单’。"
+    },
+    {
+      "id": "R19",
+      "description": "评估方案中，是否将‘Espresso_Extraction’的评估与每日早晨的‘Dial-in（校准）’流程结合，而非单独脱产考试？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Post_Training_Behavior_Evaluation.docx"
+      ],
+      "evidence": "查看Espresso_Extraction的评估方式，是否嵌入到日常运营的关键节点（如开铺校准）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "萃取校准是每日必做且对风味影响最大的环节，将其作为评估点最自然且有效。",
+      "criterion": [
+        "明确指出萃取评估与‘每日开铺Dial-in/校准’或‘换豆校准’结合。",
+        "说明由导师或值班经理在真实校准过程中进行观察和打分。",
+        "避免安排单独的、脱离实际运营环境的‘萃取理论考试’或‘周末专项考试’。"
+      ],
+      "anchors": {
+        "0": "安排单独脱产考试，或未提及与日常校准流程结合。",
+        "1": "明确将评估嵌入每日早晨的Dial-in/校准流程，利用真实运营节点进行考核。"
+      },
+      "acceptable_alternatives": "也可以结合‘每日首杯试饮’环节进行评估。",
+      "failure_examples": "要求员工每周五下午参加1小时的‘萃取参数笔试’。"
+    },
+    {
+      "id": "R20",
+      "description": "冲突解决记录中，是否考虑了E04 (ShiftSup) 和 M04 (StoreMgr) 的可用时间极少（分别为2h和4h），并合理安排了管理层培训，避免影响运营？",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-06",
+        "REQ-07"
+      ],
+      "deliverables": [
+        "Mentorship_Schedule_and_Conflict_Resolution.xlsx"
+      ],
+      "evidence": "查看排班表中E04和M04的安排，以及冲突解决说明，是否体现了对管理层时间稀缺性的特殊处理。",
+      "numeric_tolerance": 0,
+      "weight_reason": "管理层时间宝贵，培训必须高度浓缩且不能占用核心管理时间。",
+      "criterion": [
+        "识别出E04每周仅有2小时可用，M04仅有4小时可用。",
+        "安排的培训时长严格 <= 其可用时间（E04<=2h, M04<=4h）。",
+        "培训时间安排避开了门店核心运营时段，或采用了‘微培训’、‘影子跟岗’等不脱离岗位的形式。"
+      ],
+      "anchors": {
+        "0": "未考虑管理层时间限制，安排了超过其可用时长的培训，或安排在店长最忙的时段。",
+        "1": "精准识别了管理层的时间约束，安排了符合时长的培训，并采用了适合管理层的高效培训形式（如微培训、跟岗）。"
+      },
+      "acceptable_alternatives": "可以将管理培训拆解为多个15分钟的‘微辅导’，嵌入日常巡店中。",
+      "failure_examples": "给Amy Chen (M04) 安排了每周3小时的脱产管理课，超出了其4小时的总可用时间（还需留出自身工作时间）。"
+    }
+  ],
+  "checks_to_execute": [
+    "编写Python脚本解析Mentorship_Schedule_and_Conflict_Resolution.xlsx，自动校验所有带教任务的时长总和（按导师分组）是否<=6小时。",
+    "校验排班表中的时段是否与peak_hours (08:00-09:30, 12:30-13:30, 17:30-19:00) 存在交集。",
+    "校验排班表中的日期是否与对应导师的off_days冲突。",
+    "校验每个Shift的学员计数是否<=2。",
+    "使用NLP工具检查Barista_Practical_Training_Plan.md中是否包含‘防错’、‘温控’、‘情景模拟’等关键词及其上下文语义。"
+  ],
+  "quality_risks": [
+    "Solver可能忽略‘高峰期禁训’规则，为了凑齐培训时长而将课程排在12:30-13:30，导致严重违规。",
+    "Solver可能将‘冲突解决’简单处理为‘放弃员工偏好’，而未提供实质性的替代带教方案，导致排班逻辑断裂。",
+    "评估方案可能流于形式，使用大量形容词而非可量化的行为锚点，无法实际指导门店运营。",
+    "Solver可能混淆管理层培训与一线技能培训，让ShiftSup参加基础拉花训练，未能解决其Team_Coaching的弱点。"
+  ],
+  "reference_solution": "【私有参考草稿，待核验】\n1. 训练计划优先级：Order_Accuracy (15次) > Milk_Texturing (12次) > Espresso_Extraction (8次)。\n2. 核心模块设计：\n   - Order：引入‘无标签配料杯盲测’，强制大声复述订单。\n   - Milk：引入温度计，标准55-65℃，蒸汽棒‘一擦一喷’SOP。\n   - Extraction：嵌入每日开铺Dial-in流程，不单独考试。\n3. 排班逻辑推导（以M01为例）：\n   - M01班次07:00-15:00，休息周二/三。可用日：周一、四、五。\n   - 避开高峰08:00-09:30。实际可用窗口：09:30-12:30 (3小时/天)，加上07:00-08:00 (1小时/天，但早高峰前可能需备料，假设09:30-12:30为最佳带教窗口)。\n   - M01周产能<=6h。可安排：周一09:30-11:30 (2h)，周四09:30-11:30 (2h)，周五09:30-11:30 (2h)。\n   - E02偏好M01，安排在此窗口。E05也偏好M01，但M01产能已满，需在冲突解决中说明：将E05调剂给M02（需解决M02偏好冲突）或安排在M01周五剩余时间。\n4. 评估方案：\n   - 采用‘每日非高峰抽查（值班经理）+ 每周神秘顾客’双轨制。\n   - 指标量化：如‘杯贴与实物物理核对执行率100%’、‘奶泡温度合格率>90%’。\n   - 闭环：每周五下午14:00-15:00（非高峰）进行1v1数据反馈与辅导。\n5. 替代解：若M01/M02产能不足以覆盖所有学员，可将部分同弱点学员（如Milk_Texturing的E01和E05）分给M03，但需说明M03的班次（14:00-22:00）适合进行晚班高峰前的模拟压力测试。",
+  "supplied_source": "本题所有业务数据（客诉、员工能力、排班规则）均为原创虚构，旨在测试_solver_在给定约束下的资源调度与培训设计能力，不依赖任何外部真实来源。"
+}

@@ -1,0 +1,522 @@
+[
+  {
+    "id": "RB01",
+    "description": "准确计算各类型工单的平均排队时间与平均处理时间，并正确识别瓶颈环节。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "SSC_Q3_Diagnostic_Analysis.csv"
+    ],
+    "evidence": "检查CSV中Expense/Access/Contract三类的排队与处理时间数值。Expense排队应约2.0h，处理1.0h；Access排队约0.2h，处理0.5h；Contract排队约0.16h，处理约2.7h。",
+    "numeric_tolerance": "允许±0.15小时的计算误差（因时间戳解析或四舍五入导致）。",
+    "weight_reason": "核心数据分析能力，直接决定后续诊断的准确性。",
+    "criterion": [
+      "正确计算Expense的平均排队时间（约2.03小时）和平均处理时间（1.0小时）。",
+      "正确计算Access的平均排队时间（约0.23小时）和平均处理时间（0.5小时）。",
+      "正确计算Contract的平均排队时间（约0.16小时）和平均处理时间（约2.68小时）。",
+      "准确识别瓶颈：Expense的瓶颈在排队环节，Contract的瓶颈在实际处理环节。"
+    ],
+    "acceptable_alternatives": "若将排队定义为从创建到首次响应（若有响应时间字段，但本题无），或采用分钟作为单位且换算正确，均可接受。",
+    "failure_examples": "将AssignedAt到FirstCompletedAt的时间错误计算为排队时间；或忽略跨天时间戳（如2024-07-01到2024-07-02）导致处理时间计算为负数或严重偏小。",
+    "levels": {
+      "0": "未计算或计算逻辑完全错误，无法区分排队与处理时间。",
+      "0.25": "仅计算了部分类型，或混淆了排队与处理时间的定义。",
+      "0.5": "计算了所有类型，但数值存在明显错误（如未处理跨天时间戳，误差>0.5小时）。",
+      "0.75": "计算准确，但未能明确指出各类型的瓶颈环节（排队还是处理）。",
+      "1": "计算准确（容差内），且准确识别出Expense瓶颈在排队、Contract瓶颈在处理，并关联业务影响。"
+    }
+  },
+  {
+    "id": "RB02",
+    "description": "准确计算各类型工单的返工率及主要返工原因分布。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R2"
+    ],
+    "deliverables": [
+      "SSC_Q3_Diagnostic_Analysis.csv"
+    ],
+    "evidence": "检查CSV中各类型的返工率数值及原因明细。Expense返工率50%（Receipt_Missing 2, Category_Error 2），Contract返工率83.3%（Missing_Signature 3, Wrong_Clause 2），Access为0。",
+    "numeric_tolerance": "返工率允许±1%的百分比误差，原因数量必须完全精确。",
+    "weight_reason": "返工是流程优化的核心痛点，数据准确性至关重要。",
+    "criterion": [
+      "正确计算Expense返工率（50%）并列出Receipt_Missing(2)和Category_Error(2)。",
+      "正确计算Contract返工率（83.3%或5/6）并列出Missing_Signature(3)和Wrong_Clause(2)。",
+      "正确计算Access返工率（0%）。"
+    ],
+    "acceptable_alternatives": "返工率可表示为小数（0.5, 0.83）或百分比（50%, 83.3%），只要数值等价即可。",
+    "failure_examples": "将FinalCompletedAt为空的记录错误计入返工；或统计原因时遗漏某一项（如只写了缺签字，漏了条款错误）。",
+    "anchors": {
+      "0": "返工率计算错误，或返工原因分布完全缺失/错误。",
+      "1": "返工率计算正确（容差内），且原因分布完全准确。"
+    }
+  },
+  {
+    "id": "RB03",
+    "description": "流程优化建议的数据支撑度与可行性，是否针对排队和返工的根本原因。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "R4"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中的优化建议部分。建议必须直接对应数据揭示的根因（如针对Expense排队建议削峰或前置校验；针对Contract返工建议模板强制化）。",
+    "numeric_tolerance": "无",
+    "weight_reason": "考察分析师将数据洞察转化为可落地业务策略的能力。",
+    "criterion": [
+      "针对Expense排队问题，提出前端校验、必填项强管控或智能路由等实质性建议。",
+      "针对Contract返工问题，提出标准模板库、非标准条款预审等从源头减少错误的建议。",
+      "建议具备业务可行性，不脱离SSC的实际权限与资源限制。"
+    ],
+    "acceptable_alternatives": "若建议引入RPA自动审核、或建立业务部门SLA反向考核机制，只要逻辑自洽且能解决根因，均可接受。",
+    "failure_examples": "建议“增加报销组人手”来解决排队问题（数据表明处理时间仅1h，增加人手无法解决前端提交质量或峰值积压）；或建议“加强合同组培训”（数据表明是前端缺签字/条款错，非后端审核能力问题）。",
+    "levels": {
+      "0": "无建议，或建议完全脱离数据（如凭空建议更换系统）。",
+      "0.25": "建议仅停留在口号（如“提高效率”、“加强沟通”），无具体落地措施。",
+      "0.5": "建议有一定针对性，但未解决核心痛点（如只解决处理慢，不解决排队或返工）。",
+      "0.75": "建议精准针对核心痛点，但缺乏落地细节或实施路径。",
+      "1": "建议精准针对数据揭示的根因，具备高可行性、具体落地步骤及预期业务价值。"
+    }
+  },
+  {
+    "id": "RB04",
+    "description": "准确评估各组的SLA达标情况（以首次完成时间为准）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R3"
+    ],
+    "deliverables": [
+      "SSC_Q3_Diagnostic_Analysis.csv"
+    ],
+    "evidence": "检查CSV中SLA达标率。若按FirstCompletedAt - CreatedAt计算，三组均应接近100%（所有工单首次完成时间均未超SLA）。",
+    "numeric_tolerance": "若按端到端（含返工）计算得出未达标，只要逻辑自洽且在文档中明确说明计算口径，可接受。",
+    "weight_reason": "SLA是服务承诺，准确评估是诊断的基础。",
+    "criterion": [
+      "明确SLA计算口径（首次完成时间 vs 最终完成时间）。",
+      "若按首次完成时间计算，正确得出三组SLA达标率均为100%（或接近100%）。",
+      "指出Contract虽然首次SLA达标，但因返工导致实际交付周期拉长，存在隐性体验风险。"
+    ],
+    "acceptable_alternatives": "允许模型采用FinalCompletedAt计算SLA，得出Contract大面积违规的结论，但必须在报告中明确说明此口径，并解释这与前端返工的关联。",
+    "failure_examples": "未对比JSON中的SLA_Target_Hours，直接主观判断SLA是否达标；或计算时间差时出错导致达标率计算错误。",
+    "anchors": {
+      "0": "未评估SLA，或评估逻辑/计算完全错误，且未说明计算口径。",
+      "1": "准确评估SLA达标情况，明确计算口径，并合理指出隐性体验风险或端到端视角的洞察。"
+    }
+  },
+  {
+    "id": "RB05",
+    "description": "试点方案中实验组与对照组的设计合理性。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R5"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中的试点设计部分。必须明确指定实验组和对照组（如按部门、按工单类型或按处理人划分），并说明分组逻辑。",
+    "numeric_tolerance": "无",
+    "weight_reason": "科学的试点设计是验证优化效果的前提。",
+    "criterion": [
+      "明确指定实验组和对照组（如Sales为实验组，其他部门为对照组）。",
+      "分组逻辑合理，确保两组在基线特征上具有可比性。",
+      "明确试点周期（如2-4周）。"
+    ],
+    "acceptable_alternatives": "按工单类型分组（如Expense作为实验流程，Access保持原流程），或按处理人分组（如H01/H02处理实验组），只要逻辑自洽即可。",
+    "failure_examples": "未设置对照组，仅描述“在全公司推行新流程”；或分组逻辑存在严重偏差（如将问题最多的部门作为对照组）。",
+    "anchors": {
+      "0": "未设计实验组/对照组，或分组逻辑存在严重缺陷。",
+      "1": "明确划分实验组与对照组，分组逻辑合理，周期设定在2-4周之间。"
+    }
+  },
+  {
+    "id": "RB06",
+    "description": "试点方案核心量化指标定义（必须包含可量化指标）。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "R6"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中的验收指标部分。必须包含具体的数值目标（如“返工率下降30%”、“排队时间缩短至1.5h以内”）。",
+    "numeric_tolerance": "目标数值需基于基线数据合理推导，无严格固定值，但必须是具体数字。",
+    "weight_reason": "总监明确要求“用量化指标说话”，缺乏量化指标的试点方案无效。",
+    "criterion": [
+      "定义至少两个核心量化指标（如返工率、排队时间、处理时间、SLA达标率）。",
+      "为每个指标设定具体的验收目标数值或下降比例（如“Contract返工率从83%降至40%以下”）。",
+      "指标与优化建议直接挂钩（如针对前置校验的指标应为返工率）。"
+    ],
+    "acceptable_alternatives": "允许使用绝对值（如“排队时间<1小时”）或相对值（如“下降30%”），只要数值合理即可。",
+    "failure_examples": "仅使用定性描述（如“显著提升效率”、“降低返工”）；或设定的目标数值完全脱离基线（如要求返工率从83%降至0%）。",
+    "anchors": {
+      "0": "缺乏量化指标，或指标完全不可衡量/脱离实际。",
+      "1": "定义至少两个核心量化指标，设定合理的具体数值目标，且与优化建议强关联。"
+    }
+  },
+  {
+    "id": "RB07",
+    "description": "准确提取总工单量及各类型分布。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "SSC_Q3_Diagnostic_Analysis.csv"
+    ],
+    "evidence": "检查CSV中各类型的工单数量。总计20单，Expense 8单，Access 6单，Contract 6单。",
+    "numeric_tolerance": "必须完全精确。",
+    "weight_reason": "基础数据统计，是后续所有计算的分母。",
+    "criterion": [
+      "正确统计总工单量（20单）。",
+      "正确统计Expense（8单）、Access（6单）、Contract（6单）的分布。"
+    ],
+    "acceptable_alternatives": "无",
+    "failure_examples": "统计错误（如将TKT020漏算，或把Contract算成5单）。",
+    "anchors": {
+      "0": "工单量统计错误，或各类型分布完全错误。",
+      "1": "总工单量及各类型分布完全准确。"
+    }
+  },
+  {
+    "id": "RB08",
+    "description": "识别出耗时最长的具体环节（排队 vs 处理）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R1"
+    ],
+    "deliverables": [
+      "SSC_Q3_Diagnostic_Analysis.csv",
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查诊断报告或方案中是否明确指出Expense耗时主要在排队，Contract耗时主要在实际处理。",
+    "numeric_tolerance": "无",
+    "weight_reason": "精准定位瓶颈是提出有效建议的前提。",
+    "criterion": [
+      "明确指出Expense的耗时瓶颈在排队环节（排队2.0h > 处理1.0h）。",
+      "明确指出Contract的耗时瓶颈在实际处理环节（处理2.7h >> 排队0.16h）。"
+    ],
+    "acceptable_alternatives": "若通过图表或文字清晰表达了这一对比关系，即使未直接使用“瓶颈”一词，也可接受。",
+    "failure_examples": "认为Contract耗时在排队，或认为Expense耗时在处理。",
+    "anchors": {
+      "0": "未识别瓶颈，或识别完全错误。",
+      "1": "准确识别Expense瓶颈在排队、Contract瓶颈在处理。"
+    }
+  },
+  {
+    "id": "RB09",
+    "description": "交付物1（CSV）结构完整，包含所有要求的列。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R8"
+    ],
+    "deliverables": [
+      "SSC_Q3_Diagnostic_Analysis.csv"
+    ],
+    "evidence": "检查CSV文件是否包含Type, Ticket_Count, Avg_Queue_Time, Avg_Process_Time, Rework_Rate, Top_Rework_Reasons, SLA_Compliance等核心列。",
+    "numeric_tolerance": "无",
+    "weight_reason": "格式规范是交付物的基本要求。",
+    "criterion": [
+      "文件为有效CSV格式。",
+      "包含工单类型、工单量、排队时间、处理时间、返工率、原因、SLA达标情况等核心字段。"
+    ],
+    "acceptable_alternatives": "列名可略有不同（如Avg_Queue_Hours代替Avg_Queue_Time），只要语义明确即可。",
+    "failure_examples": "缺失关键列（如未包含返工率或SLA达标情况），或CSV格式损坏无法解析。",
+    "anchors": {
+      "0": "格式错误或严重缺失核心列。",
+      "1": "格式正确，包含所有要求的核心列。"
+    }
+  },
+  {
+    "id": "RB10",
+    "description": "交付物2（MD）结构完整，包含优化建议和试点方案。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R8"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文件是否包含流程优化建议和试点验收方案两个主要部分，且使用Markdown格式。",
+    "numeric_tolerance": "无",
+    "weight_reason": "格式规范与结构完整性。",
+    "criterion": [
+      "文件为有效Markdown格式。",
+      "包含流程优化建议部分。",
+      "包含试点验收方案部分。"
+    ],
+    "acceptable_alternatives": "无",
+    "failure_examples": "仅包含优化建议，无试点方案；或格式非Markdown。",
+    "anchors": {
+      "0": "缺失主要部分或格式错误。",
+      "1": "结构完整，包含所有要求的主要部分，格式正确。"
+    }
+  },
+  {
+    "id": "RB11",
+    "description": "合同组资源与工作量匹配度分析（证伪人力不足假设）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R7"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中是否利用排队时间（0.16h）证明合同组未出现积压，从而证伪总监“人手不足”的假设。",
+    "numeric_tolerance": "无",
+    "weight_reason": "考察分析师敢于用数据纠正管理层直觉假设的能力。",
+    "criterion": [
+      "明确指出合同组平均排队时间极短（约0.16h），说明后端人力并未出现积压。",
+      "得出结论：合同组的痛点在于处理质量（返工）而非人力数量，不建议盲目增加HC。"
+    ],
+    "acceptable_alternatives": "若指出合同组处理时间长是因为前端提交质量差导致反复沟通，逻辑自洽即可。",
+    "failure_examples": "附和总监观点，认为合同组人手不足并建议增加HC；或仅定性描述“合同组很忙”，未用排队数据证伪。",
+    "anchors": {
+      "0": "未验证假设，或错误地证实了“人手不足”的假设。",
+      "1": "利用排队时间数据准确证伪“人手不足”假设，指出根因在前端质量。"
+    }
+  },
+  {
+    "id": "RB12",
+    "description": "报销组排队时间长的原因分析。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R4"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中是否分析Expense排队长的原因（如峰值积压、前端提交不规范导致审核耗时等）。",
+    "numeric_tolerance": "无",
+    "weight_reason": "深入分析根因，为优化建议提供依据。",
+    "criterion": [
+      "指出Expense排队时间长（平均2.03h）的可能原因（如提交量大、审核规则复杂、峰值积压）。",
+      "分析合理，与数据特征（处理时间仅1h）相符。"
+    ],
+    "acceptable_alternatives": "若分析为“人员排班未覆盖峰值”或“工单路由分配不均”，只要逻辑合理即可。",
+    "failure_examples": "认为Expense排队是因为处理速度慢（数据表明处理仅1h）；或分析毫无逻辑。",
+    "anchors": {
+      "0": "未分析原因，或原因分析与数据矛盾（如认为处理慢导致排队）。",
+      "1": "合理分析排队原因，且与处理时间短的数据特征相符。"
+    }
+  },
+  {
+    "id": "RB13",
+    "description": "试点方案周期设定合理性。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R5"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中试点周期是否在2-4周之间。",
+    "numeric_tolerance": "允许14-30天。",
+    "weight_reason": "试点周期过短无法观察效果，过长影响业务推广。",
+    "criterion": [
+      "明确设定试点周期。",
+      "周期在2至4周（14-28天）之间。"
+    ],
+    "acceptable_alternatives": "无",
+    "failure_examples": "设定周期为1天或3个月。",
+    "anchors": {
+      "0": "未设定周期，或周期严重不合理（<7天或>60天）。",
+      "1": "周期设定在2-4周之间。"
+    }
+  },
+  {
+    "id": "RB14",
+    "description": "建议是否包含跨组资源动态调配或前置自动化机制。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R4"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中是否提出跨组支援（如Access组闲置时支援Expense）或自动化前置校验（如RPA检查发票）。",
+    "numeric_tolerance": "无",
+    "weight_reason": "考察流程优化的创新性与系统性思维。",
+    "criterion": [
+      "提出跨组动态调配建议（如利用Access组低排队时间支援Expense峰值）。",
+      "或提出前置自动化校验建议（如系统自动校验发票必填项）。"
+    ],
+    "acceptable_alternatives": "若提出建立统一工单池，按技能路由分配，也可接受。",
+    "failure_examples": "仅建议各組各自为战，无跨组或自动化视角。",
+    "anchors": {
+      "0": "未提出任何跨组或自动化前置机制。",
+      "1": "提出合理的跨组动态调配或前置自动化校验机制。"
+    }
+  },
+  {
+    "id": "RB15",
+    "description": "诊断结果与优化建议之间的逻辑一致性。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "R4"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中诊断结论（如Contract返工率高）是否直接推导出对应的优化建议（如推行标准模板），且试点指标是否针对该建议。",
+    "numeric_tolerance": "无",
+    "weight_reason": "考察分析师的逻辑闭环能力。",
+    "criterion": [
+      "诊断出的痛点（排队/返工）与提出的优化建议一一对应。",
+      "试点验收指标直接衡量优化建议的预期效果。",
+      "整体逻辑链条完整，无自相矛盾之处。"
+    ],
+    "acceptable_alternatives": "无",
+    "failure_examples": "诊断出Contract返工率高，但建议是“增加合同组人手”或“加快审批速度”（未解决返工根因）；或试点指标与优化建议无关。",
+    "levels": {
+      "0": "诊断与建议完全脱节，逻辑混乱。",
+      "0.25": "部分建议与诊断相关，但核心痛点未被建议覆盖。",
+      "0.5": "建议覆盖了痛点，但试点指标未能有效衡量建议效果。",
+      "0.75": "逻辑链条基本完整，但存在个别不自洽或指标不够精准。",
+      "1": "诊断、建议、试点指标形成完美闭环，逻辑严密，无自相矛盾。"
+    }
+  },
+  {
+    "id": "RB16",
+    "description": "准确计算整体或各组的SLA违规数量/比例。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R3"
+    ],
+    "deliverables": [
+      "SSC_Q3_Diagnostic_Analysis.csv"
+    ],
+    "evidence": "检查CSV中SLA达标率或违规数。若按首次完成时间，违规数应为0；若按最终完成时间，Contract违规数应为5。",
+    "numeric_tolerance": "必须与所选口径的计算结果完全一致。",
+    "weight_reason": "SLA是核心运营指标，计算必须准确。",
+    "criterion": [
+      "明确计算口径。",
+      "计算结果与口径严格一致（如首次完成口径下违规为0，最终完成口径下Contract违规为5）。"
+    ],
+    "acceptable_alternatives": "无",
+    "failure_examples": "计算结果与所选口径矛盾（如声称按首次完成计算，却得出Contract违规5单）。",
+    "anchors": {
+      "0": "计算结果与所选口径矛盾，或未说明口径导致无法复核。",
+      "1": "明确口径，且计算结果与口径严格一致。"
+    }
+  },
+  {
+    "id": "RB17",
+    "description": "盲目采纳备忘录中未经数据验证的假设（如认为合同组人手不足并建议增加HC）。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "R7"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中是否直接建议为合同组增加HC，且未用排队数据反驳总监假设。",
+    "numeric_tolerance": "无",
+    "weight_reason": "负分项，惩罚缺乏数据独立思考、盲从管理层直觉的行为。",
+    "criterion": [
+      "直接建议为合同组增加HC。",
+      "未利用排队时间（0.16h）数据反驳“人手不足”假设。"
+    ],
+    "acceptable_alternatives": "若建议增加HC，但明确指出这是为了应对未来业务量增长而非当前积压，且用数据说明了当前人力充足，可豁免。",
+    "failure_examples": "在诊断报告中写道“数据表明合同组确实存在人力瓶颈，建议增加1名HC”，完全无视排队时间极短的事实。",
+    "anchors": {
+      "0": "发生盲从假设并建议增加HC的实质错误。",
+      "1": "未发生此错误（即未建议增加HC，或用数据证伪了该假设）。"
+    }
+  },
+  {
+    "id": "RB18",
+    "description": "试点方案缺乏量化指标或逻辑不可执行（只写“提升效率”、“加强培训”）。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "R6"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中的试点验收指标部分，是否全篇无具体数字，仅使用定性词汇。",
+    "numeric_tolerance": "无",
+    "weight_reason": "负分项，惩罚完全无视总监“量化指标”要求的行为。",
+    "criterion": [
+      "试点验收指标部分全篇无具体数字。",
+      "仅使用“提升效率”、“降低返工”、“加强沟通”等定性描述。"
+    ],
+    "acceptable_alternatives": "无",
+    "failure_examples": "试点方案中写道“验收标准：报销处理效率显著提升，合同返工率大幅下降”，无任何具体数值或比例。",
+    "anchors": {
+      "0": "发生缺乏量化指标或逻辑不可执行的实质错误。",
+      "1": "未发生此错误（即包含了合理的量化指标）。"
+    }
+  },
+  {
+    "id": "RB19",
+    "description": "数据计算容差（允许合理四舍五入）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "R1",
+      "R2"
+    ],
+    "deliverables": [
+      "SSC_Q3_Diagnostic_Analysis.csv"
+    ],
+    "evidence": "检查CSV中时间计算是否允许合理的四舍五入误差。",
+    "numeric_tolerance": "时间计算允许±0.15小时误差。",
+    "weight_reason": "鼓励合理的数据处理习惯，避免因微小精度问题全盘否定。",
+    "criterion": [
+      "时间计算结果在合理容差内（±0.15小时）。",
+      "四舍五入逻辑一致（如统一保留两位小数）。"
+    ],
+    "acceptable_alternatives": "无",
+    "failure_examples": "因未处理跨天时间戳导致误差远超0.5小时。",
+    "anchors": {
+      "0": "计算误差超出合理容差，或四舍五入逻辑混乱。",
+      "1": "计算在合理容差内，且精度处理一致。"
+    }
+  },
+  {
+    "id": "RB20",
+    "description": "综合建议是否兼顾短期试点与长期流程改进。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "R4"
+    ],
+    "deliverables": [
+      "Process_Optimization_Pilot_Plan.md"
+    ],
+    "evidence": "检查MD文档中是否既有短期试点计划，又提及长期流程固化或系统改造。",
+    "numeric_tolerance": "无",
+    "weight_reason": "考察分析师的全局观与长期价值。",
+    "criterion": [
+      "包含短期试点计划（2-4周）。",
+      "提及长期流程固化、系统改造或全面推广计划。"
+    ],
+    "acceptable_alternatives": "若试点方案本身设计为分阶段推广（如Phase 1试点，Phase 2推广），也可接受。",
+    "failure_examples": "仅关注短期试点，未提及试点成功后的推广或长期机制；或仅谈长期规划，无短期试点。",
+    "anchors": {
+      "0": "缺失短期试点或长期改进视角。",
+      "1": "兼顾短期试点与长期流程改进/推广规划。"
+    }
+  }
+]

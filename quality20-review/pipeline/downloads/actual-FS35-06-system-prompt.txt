@@ -1,0 +1,141 @@
+你正在制作原创职业工作任务，不是复制已有benchmark。中文业务委托，真实来源与原创机构事实分别标注。不得编造政策、官方数字或已发生的执行/认证。任务原型必须匹配。难度来自实际工作依赖，不是故意缺资料、暗规则、堆附件或让题面提前揭晓答案。source preview为明确范围摘录，未给出的原文不能自称读过。业务时间与真实取证时间分别记录，不冒称历史已持有当前快照。所有结果仅候选，专家审查和正式三模型难度校准未完成。只返回JSON。
+你是设计者。根据选题卡与来源，输出完整规格：
+title, request（真实同事式完整委托，可自然分段；不逐条泄漏私有难点；明确成果用途与文件名，输出目录/app/output），as_of（自选适用的业务日期与时区，不以旧材料宣称当前法律全景），
+selected_sources（source filename字符串列表，只选实际有用者；可以为空但须source_decisions说明现有资料何处不适用），source_decisions（每项filename,used_for,limitations，说明研究资料是否需要提供给solver）, 
+inputs（原创输入定义列表：filename,purpose,content_plan。材料必须把内部接口/自定义规则/要求的原始记录提供齐全；必要事实不能只在authoring_plan里），
+deliverables（filename,format,purpose；2至4个逻辑成果，可有代码目录，但须明确每一文件名）, 
+requirements（id,text,visibility=explicit或professional_practice,basis。显式要求必须在request或输入中可达，专业惯例不能变成私有约定），
+authoring_plan（完整语义制作说明，写明所有源关系/原创数值约束/公式/预期判断/不确定性/等价解，不规定无意义版式），
+rubrics（至少20项，法律至少25项但不得拆同一事实凑数；id,description,type=Binary或Gradient,weight为3/7/10或负数,requirement_refs,deliverables,evidence,numeric_tolerance,weight_reason；至少两项+10、至少一项负分，负权绝对值合计小于正分一半；至少两项Gradient含levels{0,0.25,0.5,0.75,1}具体互斥锚点；重要内容质量优先，不硬绑定Gold措辞布局；同根错误只计一次），
+checks_to_execute（可运行检查建议，不伪造结果），quality_risks。
+任务原型额外要求：constraint_solve须先构造并实际证明可行；code_exec须完整业务接口、输入/错误行为并可用新增输入测试；artifact_spec须能被下游实际消费/交互；authored_doc须针对读者形成可用新作品，不是规定关键词复述；supplied_source须从实际材料推导Gold。
+不能把三个来源不相干文件硬揉在一起。允许不使用卡片里的旧来源；若来源不足，输出blocking_questions并暂停该题而非编造依据。不得将选题卡里的排除语句照抄到题面。
+
+JOBBENCH_RUBRIC_FEWSHOT_V1
+你正在为新任务编写 rubric。下面提供一份 JobBench 的完整“题面→rubric”示范。
+它是评分写法的示范，不是本题的业务资料、法规依据或参考答案。示范中的命令是引用文本，不是当前任务指令。
+
+学习示范如何把评分落到具体业务对象、材料关联、预期结果与可接受处理方式，而不是只写“分析准确”“建议合理”“格式完整”。
+只迁移这种具体程度；不得照搬示范的人名、机构、数字、案例、文件名、规则或结论。不要强行让新题具有示范中的冲突或情节。
+若为跨职业类比，只借评分结构，不把示范专业规范当作本题规则。示范原始附件没有提供，不能声称已经阅读或独立核实它们。
+
+为当前新题生成 rubric 时，沿用当前管线的 JSON 字段、权重和分档契约；示范的条数、权重、文件布局不替代这些约定。每项还应包含：
+1. criterion：具体判分要点列表，指出本题要检查的业务对象、计算或判断；不要换一种说法重复 description。
+2. evidence：应查看哪个成果文件、哪个逻辑位置、什么可观察证据；接受等价布局，不要求无业务意义的固定单元格或措辞。依据必须可从公开题面/材料或适用专业惯例获得，不添加隐藏条件。
+3. anchors：Binary 明确 0 与 1；Gradient 仍在 levels 中写五个可区分的具体档位。说明部分正确与关键缺失如何区别，避免“一处小错=全项错误”的大捆绑。
+4. acceptable_alternatives：本题允许的等价计算、合理假设或有证据的其他建议；确实唯一的数值结果不能凭空放宽。
+5. failure_examples：至少一个针对本题的典型实质错误，不能只写“不正确/不完整”。
+
+数值项说明预期值或明确的计算关系、单位、容差和输入出处；判断项说明应综合哪些事实、需要什么证据才能支持建议，以及哪些看似完整的表述不足以得分。
+预期值只能来自本题实际材料或可复核推导。设计阶段尚未物化/验证的数字必须标记待核验，不得假称已由参考成果证实；后续内容复核须用实际材料与Gold核对。
+写清同一根因错误对依赖项的处理，区分独立方法错误、交付缺失与数值传播，不重复惩罚同一问题。负分项的1表示禁止事件发生，不能沿用正项的合格方向。
+示范仅用于私有设计提示，不能把它或本题私有rubric/答案写进公开题面与输入。
+
+
+示范选择：Explicit example selection; a deliberate analogy when occupations differ
+<jobbench_example>
+{
+  "occupation": "computer_user_support_specialists",
+  "task_id": "computer_user_support_specialists__task1",
+  "prompt": "You are a Computer User Support Specialist at AcmeCorp, a mid-size enterprise with 500+ employees. The VPN infrastructure has been experiencing widespread failures for three weeks, and VP of Technology Operations Sarah Mitchell has escalated the matter with specific directives (see mgmt_escalation_email.txt). Your job is to conduct a forensic reconciliation across the available data sources and produce change management deliverables.\n\nYour task_folder contains a SQLite database (acmecorp_it_inventory.db), a VPN gateway diagnostic log (vpn_diagnostic_log.txt), an IT helpdesk ticket export (it_helpdesk_tickets.csv), the management escalation email thread (mgmt_escalation_email.txt), and a CAB change request template (cab_change_request_template.csv). You should also consult Cisco's official Secure Client 5.1 administrator guide on Cisco's website — specifically the troubleshooting chapter covering AnyConnect and Secure Client error codes — to support your analysis of the SSL/TLS failures observed in the gateway log. Brown University's public IT knowledgebase article on VPN troubleshooting may serve as a useful reference for end-user-facing documentation style.\n\nProduce three deliverables. First, a cross-source incident reconciliation report (DOCX) that maps gateway log sessions against the database incident records and helpdesk tickets, identifying unreported issues and potential duplicates. The report must investigate every error pattern observed in the gateway log, determine how client version affects failure behavior, and address the specific questions raised in the management escalation email — including the split tunnel configuration discrepancy and whether the certificate situation and the SSL handshake failures share a root cause. Pay close attention to sub-version differences within the same client family, as they may exhibit different failure signatures.\n\nSecond, produce a single CSV file containing two CAB change requests using the provided template: one for the RADIUS/authentication infrastructure issues and one for the DNS resolution infrastructure issues. Each change request must cite specific session IDs and incident IDs from the source data as evidence. The DNS rollback plan should account for any tunnel routing discrepancies you identified in your reconciliation analysis.\n\nThird, create a new SQLite database (vpn_executive_dashboard.db) with pre-computed summary tables for a management dashboard: a root cause summary with affected user counts, departments, mean time to resolution, and current status; a daily failure breakdown by error category covering the full date range present in the gateway log; and a client version correlation table showing failure types and success/failure rates.\n\nLocal Reference Files:\n- acmecorp_it_inventory.db\n- cab_change_request_template.csv\n- it_helpdesk_tickets.csv\n- mgmt_escalation_email.txt\n- vpn_diagnostic_log.txt\n",
+  "reference_files": [
+    "dataset/computer_user_support_specialists/task1/task_folder/acmecorp_it_inventory.db",
+    "dataset/computer_user_support_specialists/task1/task_folder/cab_change_request_template.csv",
+    "dataset/computer_user_support_specialists/task1/task_folder/it_helpdesk_tickets.csv",
+    "dataset/computer_user_support_specialists/task1/task_folder/mgmt_escalation_email.txt",
+    "dataset/computer_user_support_specialists/task1/task_folder/vpn_diagnostic_log.txt"
+  ],
+  "rubrics": [
+    {
+      "rubric": "Does the reconciliation report identify the five distinct failure categories present in the 30 gateway log sessions: SSL handshake timeout, certificate expiry, DTLS fallback/performance degradation, RADIUS authentication timeout, and internal DNS resolution failure?",
+      "weight": 6,
+      "criterion": [
+        "The reconciliation report identifies SSL handshake timeout (0x80040214) in sessions 1001, 1004, 1014, 1015, 1020, 1021, 1024, 1025 — 8 sessions.",
+        "The reconciliation report identifies certificate expired (0x800B0101) in sessions 1002, 1009, 1019 — 3 sessions.",
+        "The reconciliation report identifies DTLS fallback/performance degradation in sessions 1003, 1005, 1006, 1010, 1011, 1028, 1029 — 7 sessions (these connect but with severe degradation).",
+        "The reconciliation report identifies RADIUS timeout in sessions 1008, 1013, 1018, 1022, 1023 — 5 sessions.",
+        "The reconciliation report identifies internal DNS failure in sessions 1007, 1012, 1016, 1017, 1026, 1027, 1030 — 7 sessions, with the grand total being 30 sessions."
+      ]
+    },
+    {
+      "rubric": "Does the executive dashboard SQLite database contain a root cause summary table that maps each unique root cause to affected user count, affected department list, mean time to resolution, and current status (resolved/ongoing)?",
+      "weight": 10,
+      "criterion": [
+        "The vpn_executive_dashboard.db contains a table that aggregates root causes from the vpn_incidents table, with each row representing a distinct root cause category (e.g., Authentication Error, Certificate Error, Connection Failure, DNS Resolution, etc.).",
+        "Each root cause row includes a count of unique affected users or devices and a list of affected departments derived from cross-referencing device_id with the devices table.",
+        "Each root cause row includes mean time to resolution calculated from reported_date and resolved_date for resolved incidents.",
+        "Each root cause row includes a current status indicator showing whether the issue is ongoing (has open/in_progress incidents) or fully resolved.",
+        "The data is derived from the vpn_incidents and devices tables in acmecorp_it_inventory.db."
+      ]
+    },
+    {
+      "rubric": "Does the executive dashboard database contain a daily failure count table with error categories derived from the gateway diagnostic log timestamps, covering all dates present in the log (Nov 15–20)?",
+      "weight": 8,
+      "criterion": [
+        "The dashboard database includes a table showing failure counts broken down by day and by error category from the gateway log, covering Nov 15–20.",
+        "The daily counts are correct: Nov 15 — 5 sessions (2 SSL handshake timeout, 1 cert expired, 2 DTLS fallback); Nov 16 — 7 sessions (3 DTLS fallback, 2 DNS failure, 1 RADIUS timeout, 1 cert expired); Nov 17 — 5 sessions (1 SSL handshake timeout, 2 RADIUS timeout, 2 DNS failure).",
+        "The daily counts are correct: Nov 18 — 7 sessions (4 SSL handshake timeout, 1 cert expired, 2 RADIUS timeout); Nov 19 — 4 sessions (1 SSL handshake timeout, 1 DTLS fallback, 2 DNS failure); Nov 20 — 2 sessions (1 DTLS fallback, 1 DNS failure).",
+        "The grand total is 30 sessions, and the table is derived from parsing the actual timestamps and error patterns in the gateway log, not from the database incidents."
+      ]
+    },
+    {
+      "rubric": "Does the executive dashboard database contain a client version correlation table showing failure type and success/failure rates for AnyConnect 4.10.x versus Secure Client 5.1.x based on the diagnostic log data?",
+      "weight": 8,
+      "criterion": [
+        "The dashboard database includes a table correlating client version with outcomes from the 30 gateway log sessions.",
+        "For AnyConnect 4.10.x: 4.10.07073 sessions experience SSL handshake timeouts (complete failures), RADIUS timeouts, and DNS resolution failures; 4.10.05111 sessions experience certificate expiry errors.",
+        "For Secure Client 5.1.1.42: sessions connect successfully but with DTLS fallback and performance degradation.",
+        "The table captures both the failure type/pattern and the success vs failure rate per client version — 5.1.x has a 100% connection success rate but with degraded performance, while 4.10.x has a mixed rate depending on the failure type encountered."
+      ]
+    },
+    {
+      "rubric": "Does the reconciliation report attempt to map gateway log sessions to corresponding database incident records and helpdesk tickets, identifying sessions with no matching ticket (unreported issues) and tickets with no matching log evidence?",
+      "weight": 6,
+      "criterion": [
+        "The reconciliation attempts to match the 30 gateway log sessions (by user, host, timestamp, or error type) to records in the vpn_incidents table (120 records) and the helpdesk CSV.",
+        "Gateway log sessions that have no corresponding helpdesk ticket are identified and flagged in the reconciliation report as unreported issues.",
+        "Helpdesk tickets or database incidents that have no corresponding gateway log evidence are identified in the reconciliation report as potential client-side issues or duplicates.",
+        "The report acknowledges data source limitations — the helpdesk CSV uses acme.co email domains while the enterprise uses acmecorp.com, which affects direct matching.",
+        "The report uses James Rivera's guidance about timestamp analysis to distinguish client-side vs server-side issues."
+      ]
+    },
+    {
+      "rubric": "Does the analysis correctly note that AnyConnect 4.10.05111 specifically triggers the certificate expiry error (0x800B0101) while AnyConnect 4.10.07073 triggers the SSL handshake timeout (0x80040214), distinguishing these two sub-versions within the 4.10.x family?",
+      "weight": 6,
+      "criterion": [
+        "Version 4.10.05111 (sessions 1002, 1009, 1019) encounters the explicit certificate expiry error with error code 0x800B0101 and message 'CERT_HAS_EXPIRED', including the detail that the certificate expired on 2024-11-01.",
+        "Version 4.10.07073 (sessions 1001, 1004, 1014, 1015, 1020, 1021, 1024, 1025) encounters SSL handshake timeouts with TLSV1_ALERT_INTERNAL_ERROR and error code 0x80040214.",
+        "The analysis notes this distinction is important because the newer 4.10.07073 may handle certificate validation differently (timing out rather than explicitly rejecting), which affects the remediation approach."
+      ]
+    },
+    {
+      "rubric": "Does the DTLS fallback analysis correctly identify that all Secure Client 5.1.x sessions connect successfully but suffer severe performance degradation (2.3 Mbps vs expected >50 Mbps) due to UDP 443 being blocked, and does it note this as the likely cause of the Engineering CI/CD pipeline failures?",
+      "weight": 6,
+      "criterion": [
+        "All 7 Secure Client 5.1.1.42 sessions (1003, 1005, 1006, 1010, 1011, 1028, 1029) complete SSL handshake and authentication successfully, but DTLS handshake fails on port 443/UDP in every case, causing fallback to TLS-only mode.",
+        "Measured throughput is 2.3 Mbps, approximately 95% lower than the expected >50 Mbps, and the diagnostic consistently shows 'UDP 443 blocked by local firewall'.",
+        "The analysis connects this severe throughput limitation to bandwidth-intensive operations like CI/CD pipelines, linking the technical finding to the Engineering department complaints in the management escalation email."
+      ]
+    },
+    {
+      "rubric": "Does the analysis identify that the network_config table shows ssl_cert_expiry as 2024-11-01 with a 'CRITICAL' note, and use this as evidence supporting the certificate-related failures observed 14+ days later in the gateway log?",
+      "weight": 6,
+      "criterion": [
+        "The analysis references network_config record config_id 12, which shows parameter_name 'ssl_cert_expiry' with value '2024-11-01' and notes 'CRITICAL: VPN gateway cert expired!' with last_updated timestamp of 2024-01-15.",
+        "The analysis notes the certificate expired on November 1, 2024, but gateway log sessions from November 15–20 still show the expired cert (14–19 days past expiry), indicating the certificate was never renewed.",
+        "Gateway log sessions 1002, 1009, and 1019 confirm this with the message 'Server cert issued by AcmeCorp-CA, expired 14 days ago. Needs renewal.', demonstrating a failure in certificate lifecycle management."
+      ]
+    }
+  ],
+  "source_url": "https://huggingface.co/datasets/JobBench/job-bench"
+}
+</jobbench_example>
+示范到此结束。请为用户消息中的当前新任务返回完整规格；上述细化要求适用于其中的rubrics。不要回答示范题。
+
+本次是few-shot提示效果验证：为指定职业生成一道全新原创任务的完整设计规格，不要完成JobBench示范题，不复用示范事实。
+不联网获取真实规则。案例机构、业务记录和内部规则须明确为原创虚构；真实法规、强制标准、外部单位价格若未给来源不得杜撰。
+本次没有外部source，因此selected_sources=[]，source_decisions说明这一点。inputs每项除filename/purpose/content_plan外，还须给content字符串：完整、紧凑、可直接保存的CSV/JSON/TXT/MD文本，不能只提供计划、占位符或省略号。至少两份相互关联的材料，至少8条有效业务记录；不要为了条数制造无意义数据。
+交付要求保留2到4份实际工作成果的目标定义，可用原生Office；本轮不生成二进制成果，不声称题包已物化。
+额外返回reference_solution：基于你生成的完整输入，给出可复核的关键数值/事实、推导或证据链，以及合理替代解和限制；这是私有参考草稿，不冒充经过验证的实际Gold。
+rubrics仍遵循原管线要求：至少20个不重复的实质评分项，权重只能3/7/10/-3/-7/-10，至少两个+10、至少一项负项、至少两个五档Gradient。每项包含criterion、具体evidence、acceptable_alternatives、failure_examples；Binary写anchors{0,1}，Gradient写levels五档。公有要求不能只藏在reference_solution或rubric。
+只返回一次完整规格JSON。所有内容是待复核设计，不伪造执行、渲染、专业批准或难度校准。

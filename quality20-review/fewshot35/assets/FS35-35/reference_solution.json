@@ -1,0 +1,12 @@
+{
+  "key_facts": [
+    "v2.4.0的备份文件 backup_v2.4.0.tar.gz 缺失（大小为0，状态missing），必须在迁移前重新生成备份，否则无法回滚文件系统。",
+    "v2.2.0的数据库脚本 db_v2.2.0.sql MD5不匹配（预期d4...m3，实际d4...m4），需重新校验或从生产环境重新导出。",
+    "迁移时不能将 /docs/secure/ 同步到OSS，必须保留在旧系统MySQL中，通过旧系统API动态获取。",
+    "CDN缓存策略：HTML为 max-age=0, must-revalidate，静态资源为 max-age=31536000, immutable。",
+    "WAF拦截规则：UA包含 BadBot 或 Scraper 返回403。"
+  ],
+  "evidence_chain": "通过比对 release_history.json 的回滚依赖，确认回滚v2.4.0需要 db_v2.3.0.sql；通过比对 backup_inventory.csv 的MD5和size，确认v2.2.0和v2.4.0存在完整性问题；通过解析 migration_requirements.md，确认路径映射和缓存策略的具体参数。",
+  "acceptable_alternatives": "修复建议可以是从生产环境直接导出、使用云盘快照或暂停迁移直至修复；验收脚本可以使用curl、Python requests或专门的HTTP测试工具，只要逻辑断言正确即可。",
+  "limitations": "本参考草稿基于提供的虚构材料推导，未经过真实环境验证。实际执行中需考虑网络延迟、OSS并发限制等额外因素。"
+}

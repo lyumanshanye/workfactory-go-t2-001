@@ -1,0 +1,7 @@
+{
+  "scoring_logic_trace": "Base = 50. For C01 (Cons, 1-2y, High Liq, Pref: FI/CP, Excl: Comm/Lev) vs P1 (Cons, 1y, FI/CP): Term(+20), Risk(+30), Pref(+20), Liq(0). Total = 120. vs P4 (Agg, 5y, Tech/HY/Comm): Term(-30), Risk(-50), Pref(0), Liq(-15), Excl(-30). Total = -75. For C03 (Agg, 5-10y, Low Liq, Pref: Tech/HY/Comm, Excl: CP) vs P4 (Agg, 5y, Tech/HY/Comm): Term(+20), Risk(+30), Pref(+30), Liq(0). Total = 130. vs P7 (Agg, 7y, Tech/Lev): Term(+20), Risk(+30), Pref(+10), Liq(0), Excl(0). Total = 90. P4 is top match for C03.",
+  "key_facts": "C01 top match: P1 or P8 (P1 score 120, P8 score 50+20+30+20-15=105. P1 wins). C02 top match: P3 (50+20+30+10+0 = 110). C03 top match: P4 (130). C04 top match: P3 (50+20+30+10-15 = 95).",
+  "hard_exclusions": "C01 vs P6 (Comm), C01 vs P7 (Lev), C02 vs P7 (Lev), C03 vs P1 (CP - wait, C03 excludes CP, P1 has CP tag. Yes, C03 vs P1 is hard exclusion), C04 vs P6 (Comm).",
+  "acceptable_alternatives": "If solver uses a slightly different scoring formula but explicitly states it and applies it consistently, it may be partially accepted, but strict adherence to the provided content_plan formula is required for full marks.",
+  "limitations": "This reference solution is a private design draft. Exact numerical values in the solver's output must be verified against their parsed data, as CSV formatting could lead to minor parsing variations if not handled perfectly."
+}

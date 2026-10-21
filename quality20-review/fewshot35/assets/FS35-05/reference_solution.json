@@ -1,0 +1,63 @@
+{
+  "data_aggregation": {
+    "MedChart EHR": {
+      "type": "Named User",
+      "unique_active": 180,
+      "peak_concurrent": 65
+    },
+    "PACS Viewer": {
+      "type": "Concurrent",
+      "unique_active": 15,
+      "peak_concurrent": 8
+    },
+    "ShiftPro Scheduling": {
+      "type": "Named User",
+      "unique_active": 160,
+      "peak_concurrent": 60
+    },
+    "Office 365 E3": {
+      "type": "Named User",
+      "unique_active": 260,
+      "peak_concurrent": 75
+    },
+    "SecureComm Telehealth": {
+      "type": "Concurrent",
+      "unique_active": 80,
+      "peak_concurrent": 55
+    },
+    "FinLedger ERP": {
+      "type": "Named User",
+      "unique_active": 30,
+      "peak_concurrent": 8
+    },
+    "DocuSign Enterprise": {
+      "type": "Site",
+      "unique_active": "N/A",
+      "peak_concurrent": "N/A"
+    },
+    "BioTrack Lab": {
+      "type": "Named User",
+      "unique_active": 25,
+      "peak_concurrent": 10
+    }
+  },
+  "initial_optimization_calculation": {
+    "MedChart EHR": "180 -> 180 seats * $150 = $27,000",
+    "PACS Viewer": "8 * 1.2 = 9.6 -> 10 seats * $800 = $8,000",
+    "ShiftPro Scheduling": "160 -> 160 seats * $45 = $7,200",
+    "Office 365 E3": "260 -> 260 seats * $288 = $74,880",
+    "SecureComm Telehealth": "55 * 1.2 = 66 -> 70 seats * $1200 = $84,000",
+    "FinLedger ERP": "30 -> 30 seats * $300 = $9,000",
+    "DocuSign Enterprise": "1 site * $5000 = $5,000",
+    "BioTrack Lab": "25 -> 30 seats * $200 = $6,000",
+    "Total_Initial_Optimized_Cost": 221080
+  },
+  "budget_gap_analysis": "Total Initial Optimized Cost ($221,080) exceeds Budget Cap ($180,000) by $41,080.",
+  "acceptable_adjustment_strategies": [
+    "Negotiate volume/multi-year discounts with TeleSecure for SecureComm (e.g., 20% discount saves $16,800).",
+    "Downgrade Office 365 E3 to a lower tier (e.g., E1) for non-core departments like Management and Front Desk (saves ~$7,500).",
+    "Cancel BioTrack Lab entirely and migrate to a cheaper alternative or manual processes (saves $6,000).",
+    "Shift SecureComm to a pay-per-session model if vendor supports it, based on actual peak usage rather than flat concurrent seats."
+  ],
+  "constraints_validation": "All High-dependency software (MedChart, PACS, ShiftPro, SecureComm, FinLedger, BioTrack) must maintain target seats >= their respective 90-day unique active users or peak concurrent users to ensure continuity."
+}

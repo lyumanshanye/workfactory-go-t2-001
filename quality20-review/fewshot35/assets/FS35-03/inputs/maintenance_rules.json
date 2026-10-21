@@ -1,0 +1,25 @@
+{
+  "unit_prices": {
+    "crack": 250,
+    "spalling": 180,
+    "siltation": 60
+  },
+  "zone_windows": {
+    "Zone-A": {"routine_coeff": 1.0, "emergency_coeff": 1.0, "routine_window": "daytime", "emergency_window": "daytime"},
+    "Zone-B": {"routine_coeff": 1.0, "emergency_coeff": 1.15, "routine_window": "daytime", "emergency_window": "nighttime"},
+    "Zone-C": {"routine_coeff": 1.1, "emergency_coeff": 1.1, "routine_window": "weekend", "emergency_window": "weekend"}
+  },
+  "repair_strategies": {
+    "Strategy_1_Full_Emergency": {
+      "description": "全量立即修复（应急模式）",
+      "included_severity": ["minor", "moderate", "severe"],
+      "window_mode": "emergency"
+    },
+    "Strategy_2_Phased_Routine": {
+      "description": "分期优先修复（常规模式）",
+      "included_severity": ["moderate", "severe"],
+      "window_mode": "routine"
+    }
+  },
+  "management_fee_rate": 0.08
+}

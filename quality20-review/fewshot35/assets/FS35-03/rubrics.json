@@ -1,0 +1,516 @@
+[
+  {
+    "id": "R01",
+    "description": "方案一（全量应急）实际直接成本计算完全正确。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "查看 repair_cost_estimate.csv 中方案一汇总行，实际直接成本应为 100410。",
+    "numeric_tolerance": 0.01,
+    "weight_reason": "核心数值结果，直接决定方案比选的准确性。",
+    "criterion": [
+      "Zone-A直接成本19100",
+      "Zone-B直接成本40940",
+      "Zone-C直接成本40370",
+      "总计100410"
+    ],
+    "anchors": {
+      "0": "总计不等于100410，或某区域计算错误。",
+      "1": "各区域及总计均精确等于预期值。"
+    },
+    "acceptable_alternatives": "允许因中间步骤四舍五入导致总计有0.1以内的尾差，但各区域明细必须逻辑自洽。",
+    "failure_examples": "将Zone-B的应急系数错用为1.0，导致Zone-B成本算作35600，总计错误。"
+  },
+  {
+    "id": "R02",
+    "description": "方案二（分期常规）实际直接成本计算完全正确。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02",
+      "REQ-04"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "查看 repair_cost_estimate.csv 中方案二汇总行，实际直接成本应为 82350。",
+    "numeric_tolerance": 0.01,
+    "weight_reason": "核心数值结果，验证过滤逻辑与常规系数应用。",
+    "criterion": [
+      "正确排除SEC-03和SEC-07",
+      "Zone-A直接成本19100",
+      "Zone-B直接成本30800",
+      "Zone-C直接成本32450",
+      "总计82350"
+    ],
+    "anchors": {
+      "0": "总计不等于82350，或未排除minor段。",
+      "1": "各区域及总计均精确等于预期值，且未包含minor段。"
+    },
+    "acceptable_alternatives": "允许中间步骤四舍五入导致总计有0.1以内的尾差。",
+    "failure_examples": "未排除minor段，导致总计仍为91400左右；或Zone-B误用了1.15的应急系数。"
+  },
+  {
+    "id": "R03",
+    "description": "方案一总成本（含8%管理费）计算正确。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv",
+      "strategy_comparison_report.md"
+    ],
+    "evidence": "查看成本表或报告，方案一总成本应为 108442.8。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "验证管理费计算基数和费率应用。",
+    "criterion": [
+      "基数为100410",
+      "费率为8%",
+      "结果为108442.8"
+    ],
+    "anchors": {
+      "0": "结果错误，或管理费计算基数错误。",
+      "1": "结果精确等于108442.8。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将8%管理费错误地分摊到单价中计算，或基数使用了未乘系数的91400。"
+  },
+  {
+    "id": "R04",
+    "description": "方案二总成本（含8%管理费）计算正确。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv",
+      "strategy_comparison_report.md"
+    ],
+    "evidence": "查看成本表或报告，方案二总成本应为 88938。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "验证管理费计算基数和费率应用。",
+    "criterion": [
+      "基数为82350",
+      "费率为8%",
+      "结果为88938"
+    ],
+    "anchors": {
+      "0": "结果错误，或管理费计算基数错误。",
+      "1": "结果精确等于88938。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "基数使用了全量直接成本100410，导致管理费多算。"
+  },
+  {
+    "id": "R05",
+    "description": "Zone-B 施工窗口附加费在不同方案中的逻辑应用完全正确。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "检查 Zone-B 各区段在方案一和方案二中的系数取值。方案一应为1.15，方案二应为1.0。",
+    "numeric_tolerance": 0,
+    "weight_reason": "区分方案核心差异的关键规则，极易混淆。",
+    "criterion": [
+      "方案一Zone-B所有段应用1.15",
+      "方案二Zone-B所有段应用1.0",
+      "未出现系数混用"
+    ],
+    "levels": {
+      "0": "完全未应用附加费，或方案一和方案二均使用相同系数。",
+      "0.25": "仅部分区段应用了正确的系数，或方案一应用了1.15但方案二漏算。",
+      "0.5": "方案一和方案二均应用了系数，但数值错误（如均使用1.1）。",
+      "0.75": "方案一正确应用1.15，方案二正确应用1.0，但遗漏了Zone-B的个别区段（如漏算SEC-10）。",
+      "1": "Zone-B所有区段在两个方案中均精确应用了正确的系数（1.15和1.0），无遗漏。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为Zone-B夜间施工是常规操作，在方案一和方案二中均使用1.0系数。"
+  },
+  {
+    "id": "R06",
+    "description": "Zone-C 周末施工系数在所有方案中应用正确。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "检查 Zone-C 各区段在方案一和方案二中的系数取值，均应为 1.1。",
+    "numeric_tolerance": 0,
+    "weight_reason": "验证对特殊区域常规系数的持续应用。",
+    "criterion": [
+      "方案一Zone-C所有段应用1.1",
+      "方案二Zone-C适用段应用1.1",
+      "未出现漏乘"
+    ],
+    "levels": {
+      "0": "未应用1.1系数，直接按基础单价计算。",
+      "0.25": "仅在方案一或方案二之一中应用了1.1。",
+      "0.5": "应用了系数，但数值错误（如使用了1.15或1.0）。",
+      "0.75": "两个方案均应用了1.1，但遗漏了Zone-C的个别区段。",
+      "1": "Zone-C所有适用区段在两个方案中均精确应用了1.1系数，无遗漏。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为方案二是常规模式，Zone-C就不需要周末加班费，错误地使用了1.0系数。"
+  },
+  {
+    "id": "R07",
+    "description": "破损类型单价映射完全正确。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "抽查明细行，crack=250, spalling=180, siltation=60。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础数据准确性。",
+    "criterion": [
+      "crack映射250",
+      "spalling映射180",
+      "siltation映射60"
+    ],
+    "anchors": {
+      "0": "任一单价映射错误。",
+      "1": "所有单价映射均正确。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将siltation（清淤）错误地按混凝土修复单价250计算。"
+  },
+  {
+    "id": "R08",
+    "description": "方案二正确排除了 minor 级别段。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "检查方案二明细或汇总，SEC-03和SEC-07的成本应为0或不在列表中。",
+    "numeric_tolerance": 0,
+    "weight_reason": "验证方案筛选逻辑。",
+    "criterion": [
+      "SEC-03未计入方案二",
+      "SEC-07未计入方案二"
+    ],
+    "anchors": {
+      "0": "minor段被计入方案二成本。",
+      "1": "minor段被正确排除。"
+    },
+    "acceptable_alternatives": "在列表中保留但成本记为0，或直接不列出均可。",
+    "failure_examples": "将全量数据直接用于方案二计算，未做severity过滤。"
+  },
+  {
+    "id": "R09",
+    "description": "管理费 8% 计算基数和结果正确。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "检查管理费列或汇总说明，基数必须是实际直接成本，而非基础成本。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "财务合规性。",
+    "criterion": [
+      "方案一管理费基数100410",
+      "方案二管理费基数82350",
+      "管理费不在单价中体现"
+    ],
+    "anchors": {
+      "0": "基数错误或管理费计入了单价。",
+      "1": "基数和结果均正确。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将8%直接加到单价上（如crack变成270），导致基数错误。"
+  },
+  {
+    "id": "R10",
+    "description": "总工程量（长度）计算无误。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "方案一总长度535m，方案二总长度415m。",
+    "numeric_tolerance": 0,
+    "weight_reason": "工程量基础。",
+    "criterion": [
+      "方案一总长535",
+      "方案二总长415"
+    ],
+    "anchors": {
+      "0": "长度计算错误。",
+      "1": "长度计算正确。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "加法错误，或方案二未减去minor段的长度（80+40=120）。"
+  },
+  {
+    "id": "R11",
+    "description": "交付物 repair_cost_estimate.csv 包含所有必需列。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "文件包含 section_id, zone, length, damage_type, base_cost, strategy1_coeff, strategy1_actual, strategy2_coeff, strategy2_actual 等核心列。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数据结构完整性。",
+    "criterion": [
+      "包含区段信息",
+      "包含两方案系数",
+      "包含两方案实际成本"
+    ],
+    "anchors": {
+      "0": "缺失关键列导致无法复核计算。",
+      "1": "列结构完整。"
+    },
+    "acceptable_alternatives": "列名可微调，但语义必须明确。",
+    "failure_examples": "只输出了最终汇总结果，缺少区段级明细。"
+  },
+  {
+    "id": "R12",
+    "description": "方案比选报告包含成本对比与明确推荐。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "strategy_comparison_report.md"
+    ],
+    "evidence": "报告中列出了两方案的总成本差异，并给出了推荐方案。",
+    "numeric_tolerance": 0,
+    "weight_reason": "业务目标达成。",
+    "criterion": [
+      "列出成本差异",
+      "给出推荐建议"
+    ],
+    "anchors": {
+      "0": "缺少对比或推荐。",
+      "1": "包含对比和推荐。"
+    },
+    "acceptable_alternatives": "推荐方案一或方案二均可，只要理由自洽。",
+    "failure_examples": "仅罗列数据，未进行对比分析。"
+  },
+  {
+    "id": "R13",
+    "description": "现场交接单包含具体的区段编号、长度和修复类型。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "site_handover_checklist.md"
+    ],
+    "evidence": "交接单中明确列出了需施工的SEC-XX编号，以及对应的长度和破损类型。",
+    "numeric_tolerance": 0,
+    "weight_reason": "指导现场施工的核心信息。",
+    "criterion": [
+      "包含区段编号",
+      "包含长度",
+      "包含修复类型"
+    ],
+    "anchors": {
+      "0": "缺少关键施工参数。",
+      "1": "参数完整准确。"
+    },
+    "acceptable_alternatives": "可按推荐方案列出，或列出全量并标注优先级。",
+    "failure_examples": "交接单仅写了‘Zone-B区域修复’，未细化到具体段和长度。"
+  },
+  {
+    "id": "R14",
+    "description": "现场交接单包含施工安全/围挡提示。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "site_handover_checklist.md"
+    ],
+    "evidence": "交接单中包含夜间施工照明、周末交通疏导或沟槽开挖围挡等安全提示。",
+    "numeric_tolerance": 0,
+    "weight_reason": "专业惯例与现场安全。",
+    "criterion": [
+      "包含安全围挡提示",
+      "包含夜间/周末特殊提示"
+    ],
+    "anchors": {
+      "0": "无任何安全或现场管理提示。",
+      "1": "包含合理的安全/现场管理提示。"
+    },
+    "acceptable_alternatives": "提示内容可结合具体方案（如方案一的夜间施工提示）。",
+    "failure_examples": "完全从技术角度交接，忽略了园区施工的安全管理要求。"
+  },
+  {
+    "id": "R15",
+    "description": "【负分】是否错误地将 minor 段计入方案二成本。",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "检查方案二的成本汇总，若包含SEC-03或SEC-07的成本则触发。",
+    "numeric_tolerance": 0,
+    "weight_reason": "惩罚违反明确筛选逻辑的严重错误。",
+    "criterion": [
+      "方案二未包含minor段成本"
+    ],
+    "anchors": {
+      "0": "方案二未包含minor段成本（正常）。",
+      "1": "方案二错误包含了minor段成本（触发扣分）。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "直接对全量数据应用方案二系数，未做severity过滤。"
+  },
+  {
+    "id": "R16",
+    "description": "【负分】是否将管理费错误地加到了单价上。",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "检查单价或明细行，若crack单价显示为270等包含管理费的数值则触发。",
+    "numeric_tolerance": 0,
+    "weight_reason": "惩罚财务计算逻辑错误。",
+    "criterion": [
+      "管理费未混入单价"
+    ],
+    "anchors": {
+      "0": "管理费未混入单价（正常）。",
+      "1": "管理费错误混入单价（触发扣分）。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "为了计算方便，直接将8%加到基础单价上，导致后续系数乘法基数错误。"
+  },
+  {
+    "id": "R17",
+    "description": "方案比选逻辑的合理性（考虑成本节约与风险）。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "strategy_comparison_report.md"
+    ],
+    "evidence": "评估报告中的分析深度，是否仅列数字，还是考虑了工期、夜间施工风险、资金占用等因素。",
+    "numeric_tolerance": 0,
+    "weight_reason": "评估综合分析能力。",
+    "criterion": [
+      "对比成本差异",
+      "分析施工窗口影响（如夜间降效/安全）",
+      "给出明确推荐"
+    ],
+    "levels": {
+      "0": "无方案比选分析。",
+      "0.25": "仅罗列两方案成本数字，无文字分析。",
+      "0.5": "有分析但结论错误（如推荐成本更高的方案且无合理理由）。",
+      "0.75": "正确对比成本并给出推荐，但未考虑施工窗口带来的隐性风险（如Zone-B夜间施工的安全/扰民风险）。",
+      "1": "全面分析成本差异，并深入探讨Zone-B夜间施工、Zone-C周末施工的现场管理风险，给出平衡成本与风险的综合推荐。"
+    },
+    "acceptable_alternatives": "推荐方案一（若强调工期和全面整改）或方案二（若强调成本控制）均可，关键在于论证逻辑。",
+    "failure_examples": "仅因为方案二便宜就推荐方案二，完全忽略了方案二无法修复minor段可能导致淤积加剧的风险。"
+  },
+  {
+    "id": "R18",
+    "description": "文件名和输出路径完全符合要求。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "repair_cost_estimate.csv",
+      "strategy_comparison_report.md",
+      "site_handover_checklist.md"
+    ],
+    "evidence": "所有文件均位于 /app/output/ 目录下，且文件名精确匹配。",
+    "numeric_tolerance": 0,
+    "weight_reason": "工程交付规范性。",
+    "criterion": [
+      "路径为/app/output/",
+      "文件名完全匹配"
+    ],
+    "anchors": {
+      "0": "路径或文件名错误。",
+      "1": "路径和文件名均正确。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将文件输出到了当前目录，或文件名拼写错误（如 .xlsx 代替 .csv）。"
+  },
+  {
+    "id": "R19",
+    "description": "计算过程保留了清晰的中间步骤。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "repair_cost_estimate.csv"
+    ],
+    "evidence": "成本表中包含基础成本、系数、实际成本等中间列，而非直接输出最终结果。",
+    "numeric_tolerance": 0,
+    "weight_reason": "便于复核与审计。",
+    "criterion": [
+      "包含基础成本列",
+      "包含系数列",
+      "包含实际成本列"
+    ],
+    "anchors": {
+      "0": "缺少中间计算步骤，直接给出结果。",
+      "1": "中间步骤清晰完整。"
+    },
+    "acceptable_alternatives": "可以在CSV中分列，也可以在附注中说明计算过程。",
+    "failure_examples": "只有一列‘最终成本’，无法追溯其计算逻辑。"
+  },
+  {
+    "id": "R20",
+    "description": "交接单中体现了正确的业务日期。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "site_handover_checklist.md"
+    ],
+    "evidence": "交接单日期应在 as_of (2024-05-15) 之后或当天。",
+    "numeric_tolerance": 0,
+    "weight_reason": "时间逻辑一致性。",
+    "criterion": [
+      "交接单日期 >= 2024-05-15"
+    ],
+    "anchors": {
+      "0": "日期早于测量完成日期。",
+      "1": "日期逻辑合理。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "交接单日期写成了 2024-05-01，早于现场测量日期。"
+  }
+]

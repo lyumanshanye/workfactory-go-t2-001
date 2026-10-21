@@ -1,0 +1,650 @@
+{
+  "title": "星跃智家租赁客服工单处理与争议解决",
+  "request": "你是星跃智家租赁有限公司（StarLeap Smart Home Leasing Co., Ltd.）的高级客服代表。临近月底结账，主管将8个复杂的客户工单（涉及预约改期、争议费用、设备升级和期满买断）交给你处理。这些工单情况各异，部分涉及特殊合同条款或系统自动计费的误判。\n\n你的任务是：\n1. 仔细核对《星跃智家内部客服政策手册》，独立调查每个工单的真实情况。\n2. 制作【客户争议与工单处理矩阵】，详细记录每个案例的争议焦点、政策依据、计算过程及系统操作指引。\n3. 撰写【客户回复话术草稿】，针对每个案例提供专业、准确、有同理心的回复，明确告知客户处理结果和后续步骤。\n\n请将处理矩阵保存为 `dispute_resolution_matrix.csv`，回复话术保存为 `customer_response_drafts.md`，统一输出至 `/app/output` 目录。注意：所有费用计算必须严格遵循公司政策，不得凭主观同情随意减免。",
+  "as_of": "2024-10-20T09:00:00+08:00",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "本题为纯虚构业务场景，无外部真实来源。所有业务规则、客户数据、产品定价及政策条款均为原创设计，用于考察复杂业务逻辑推演与客服争议解决能力。",
+      "limitations": "不适用外部真实法规或价格， solver 必须完全依赖提供的虚构内部政策与工单记录进行推导。"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "service_orders_and_contracts.csv",
+      "purpose": "提供8个待处理客户工单的核心业务数据，包括订单信息、租赁参数、当前状态及客户诉求。",
+      "content_plan": "包含order_id, customer_name, appliance_type, monthly_rent, contract_duration_months, start_date, end_date, appliance_original_price, special_terms, current_status, customer_request, notes 字段，涵盖买断、升级、改期、超期争议等多种场景。",
+      "content": "order_id,customer_name,appliance_type,monthly_rent,contract_duration_months,start_date,end_date,appliance_original_price,special_terms,current_status,customer_request,notes\nO20231001,张三,洗烘套装,300,12,2023-10-01,2024-09-30,4500,无,租赁到期,申请提前买断该设备,已支付10个月租金\nO20231115,李四,智能冰箱,200,24,2023-11-15,2025-11-14,5000,无,履约中,申请升级至旗舰款冰箱,旗舰款月租350元，剩余租期10个月\nO20240105,王五,新风系统,150,12,2024-01-05,2025-01-04,3000,无,履约中,要求改期上门深度清洁,原预约10月20日14:00，要求改至10月22日。于10月19日10:00来电\nO20240210,赵六,洗烘套装,300,12,2024-02-10,2025-02-09,4500,无,超期未退,争议超期占用费,合同已于8月9日到期，超期40天。系统生成超期占用费600元，客户拒付\nO20240312,孙七,扫地机器人,120,12,2024-03-12,2025-03-11,2500,无,租赁到期,争议深度清洁费,租期1年已到期。账单含深度清洁费150元。客户表示每月多交了20元无忧清洁包\nO20240418,周八,智能电视,180,12,2024-04-18,2025-04-17,3600,无,履约中,要求改期上门安装,原预约10月21日09:00，要求改至10月23日。于10月18日15:00来电\nO20240520,吴九,中央空调(商用),8000,24,2022-05-20,2024-05-19,150000,商用合同：买断价固定按设备原价70%计算，不适用已付租金抵扣规则,租赁到期,申请买断,已支付24个月租金共计19.2万元（注：原记录10万为笔误，实际按月租8000*24=19.2万，但此处以special_terms为准计算买断价）\nO20240625,郑十,洗烘套装,300,12,2024-06-25,2025-06-24,4500,无,超期未退,争议超期占用费,合同10月25日到期（注：此处指2024年10月，即已超期15天）。系统生成超期费225元。客户表示设备在到期前5天（即第10天）故障报修，至今未修好，拒绝支付超期费"
+    },
+    {
+      "filename": "internal_policies_manual.md",
+      "purpose": "提供星跃智家内部客服政策手册，作为处理所有争议、计算费用和系统操作的唯一权威依据。",
+      "content_plan": "包含预约与改期规则、费用争议与豁免规则、升级与换机规则、租期结束与买断规则四个核心章节，明确各项计算公式与边界条件。",
+      "content": "# 星跃智家内部客服政策手册 (V2024.10)\n\n## 1. 预约与改期规则\n- **免费改期**：客户在原预约时间前 48 小时（含）以上提出改期，免收改期费。\n- **收费改期**：在原预约时间前 24 至 48 小时内提出，收取 50 元/次改期费。\n- **违约改期**：在原预约时间前 24 小时内提出，收取 100 元/次改期费，且取消本次预约，需重新排队。\n\n## 2. 费用争议与豁免规则\n- **深度清洁费**：租赁期满1年且未购买“无忧清洁包”（月付附加费）的客户，收取机器原价 5% 的深度清洁费。若已购买“无忧清洁包”，则全额豁免此费用。\n- **超期占用费**：合同到期后未办理续租或退租的，按日收取超期占用费。日租金 = 月租金 / 30。超期占用费 = 日租金 × 1.5 × 超期天数。\n- **故障期豁免**：若设备在超期期间发生非人为故障且客户已报修，自报修日起至维修完成/设备更换日止，该期间不计算超期占用费。\n\n## 3. 升级与换机规则\n- **升级差价**：升级至更高档次机型需补交差价。差价 = (新机月租金 - 旧机月租金) × 剩余租期月数 + 一次性物流与调试服务费（固定 200 元）。\n- **合同变更**：升级成功后，剩余租期的月租金自动更新为新机月租金。\n\n## 4. 租期结束与买断规则\n- **常规买断**：买断价 = 机器原价 - (已付租金总额 × 80%)。买断价最低不得低于机器原价的 30%。若计算结果低于 30%，则按原价 30% 收取。\n- **特殊合同**：若合同备注中包含特殊买断条款（如商用合同固定比例），则优先适用特殊条款，不再执行常规抵扣规则。\n\n## 5. 客服沟通准则\n- 严禁向客户承诺手册规定之外的任何费用减免或赔偿。\n- 回复话术必须包含：客户称呼、订单号、核心结论（费用明细或处理结果）、下一步操作指引。"
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "dispute_resolution_matrix.csv",
+      "format": "CSV",
+      "purpose": "结构化记录8个工单的处理逻辑、计算过程和系统操作指引，供主管审核和财务对账。"
+    },
+    {
+      "filename": "customer_response_drafts.md",
+      "format": "Markdown",
+      "purpose": "面向客户的回复话术草稿，用于实际发送或录入CRM系统，需兼顾专业性与客户体验。"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ1",
+      "text": "处理矩阵必须包含所有8个工单，每个工单需明确列出：争议焦点/需求、政策依据（引用手册章节）、计算过程或判定逻辑、系统操作指引。",
+      "visibility": "explicit",
+      "basis": "request"
+    },
+    {
+      "id": "REQ2",
+      "text": "所有费用计算（买断价、升级差价、改期费、超期费）必须严格遵循《内部客服政策手册》中的公式，不得凭空捏造。",
+      "visibility": "explicit",
+      "basis": "request"
+    },
+    {
+      "id": "REQ3",
+      "text": "回复话术必须针对每个案例独立撰写，语气专业、有同理心，且必须包含订单号、核心结论和下一步操作。",
+      "visibility": "explicit",
+      "basis": "request & manual"
+    },
+    {
+      "id": "REQ4",
+      "text": "专业惯例：对于系统自动计费但客户存在合理争议（如故障期超期、已购服务包重复收费）的情况，必须依据政策进行修正，而非盲目执行系统账单。",
+      "visibility": "professional_practice",
+      "basis": "customer service best practices"
+    }
+  ],
+  "authoring_plan": "本题设计为典型的客服争议解决与复杂计费场景。难度在于：1) 跨文件信息核对（如孙七的无忧清洁包在CSV的notes中隐含，需结合MD政策判定豁免）；2) 复杂条件计算（如吴九的商用合同特殊条款覆盖了常规抵扣规则，郑十的超期费需扣除故障天数）；3) 边界条件处理（如张三的买断价计算后需验证是否低于30%最低限价）。所有数值均基于虚构政策推导，无真实外部依赖。预期solver需先理清每个案例的适用规则，再进行数学计算，最后转化为得体的客户话术。",
+  "rubrics": [
+    {
+      "id": "R1",
+      "description": "张三(O20231001)常规买断价计算准确性",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵中张三订单的计算过程与最终买断价。",
+      "numeric_tolerance": 0,
+      "weight_reason": "核心计费逻辑，涉及多步计算与最低限价校验，权重最高。",
+      "criterion": [
+        "验证原价4500",
+        "验证已付租金10个月*300=3000",
+        "验证抵扣额3000*80%=2400",
+        "验证买断价4500-2400=2100",
+        "验证2100 > 4500*30%(1350)，未触发最低限价"
+      ],
+      "anchors": null,
+      "levels": {
+        "0": "完全未计算或结果严重错误（如>3000或<1000）",
+        "0.25": "计算了抵扣，但比例错误（如按100%抵扣）或未考虑最低限价",
+        "0.5": "抵扣比例正确（80%），但算错了已付月数（如算成12个月）或原价错误，结果偏差在500元以内",
+        "0.75": "计算过程和结果完全正确（2100元），但未在矩阵中说明计算依据",
+        "1": "结果正确（2100元），且在矩阵中清晰列出计算式，并备注符合最低限价要求"
+      },
+      "acceptable_alternatives": "若solver在矩阵中分步列出计算式，即使最终数字因四舍五入有1元误差，可视为0.75档。",
+      "failure_examples": "直接使用4500-3000=1500（未乘80%），或计算出2100但未说明过程。"
+    },
+    {
+      "id": "R2",
+      "description": "李四(O20231115)升级差价计算准确性",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵中李四订单的升级差价计算结果。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察对升级规则中‘剩余租期’和‘固定服务费’的理解。",
+      "criterion": [
+        "验证差价公式：(350-200)*10 + 200",
+        "得出正确结果1700元"
+      ],
+      "anchors": {
+        "0": "计算结果错误，如未加200元服务费（得1500），或乘错月数（如乘24得3800）",
+        "1": "正确计算出1700元，并清晰列出计算依据"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "计算出1500元，遗漏了200元的物流与调试服务费。"
+    },
+    {
+      "id": "R3",
+      "description": "王五(O20240105)改期费判定准确性",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv",
+        "customer_response_drafts.md"
+      ],
+      "evidence": "矩阵中的判定逻辑及回复话术中的费用告知。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察对时间窗口（24-48小时）的精确计算。",
+      "criterion": [
+        "计算提前时间：10月19日10:00至10月20日14:00为28小时",
+        "判定属于24-48小时区间，收取50元"
+      ],
+      "anchors": {
+        "0": "判定为免费或100元",
+        "1": "正确判定为50元，并说明提前了28小时"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "误认为提前1天即为48小时以上，判定为免费。"
+    },
+    {
+      "id": "R4",
+      "description": "赵六(O20240210)超期占用费核算与解释",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv",
+        "customer_response_drafts.md"
+      ],
+      "evidence": "矩阵中的计算过程及回复话术中的拆解说明。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察系统自动计费逻辑的复核及向客户解释复杂计费的能力。",
+      "criterion": [
+        "计算日租金：300/30=10元",
+        "计算超期单价：10*1.5=15元/天",
+        "计算总费用：15*40=600元",
+        "话术中需向客户清晰拆解此计算过程"
+      ],
+      "anchors": null,
+      "levels": {
+        "0": "计算结果错误，或未在话术中解释计算过程",
+        "0.25": "计算出600元，但话术中未拆解日租金和1.5倍系数",
+        "0.5": "计算出600元，话术中拆解了日租金，但遗漏了1.5倍系数的说明",
+        "0.75": "计算出600元，话术中清晰拆解了所有步骤，但语气生硬",
+        "1": "计算出600元，话术清晰拆解计算过程，且语气专业、有同理心，引导客户尽快办理退租"
+      },
+      "acceptable_alternatives": "无",
+      "failure_examples": "直接回复“系统生成600元是正确的”，未提供任何计算依据。"
+    },
+    {
+      "id": "R5",
+      "description": "孙七(O20240312)深度清洁费豁免判定",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ2",
+        "REQ4"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv",
+        "customer_response_drafts.md"
+      ],
+      "evidence": "矩阵中的豁免判定及系统操作指引，回复话术中的致歉与退费说明。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察跨信息源（notes中的无忧包与政策中的豁免规则）核对及纠正系统错误的能力。",
+      "criterion": [
+        "识别客户已购买‘无忧清洁包’",
+        "判定150元深度清洁费应全额豁免",
+        "系统操作指引中明确需红冲/作废该笔账单",
+        "话术中致歉并告知退费"
+      ],
+      "anchors": {
+        "0": "未识别无忧包，或仍要求客户支付150元",
+        "1": "正确识别并全额豁免，系统操作和话术均准确到位"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "认为无忧包只包日常清洁，不包深度清洁，仍收取150元。"
+    },
+    {
+      "id": "R6",
+      "description": "周八(O20240418)改期免费判定",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵中的改期费判定结果。",
+      "numeric_tolerance": 0,
+      "weight_reason": "基础规则应用，考察>48小时的边界。",
+      "criterion": [
+        "计算提前时间：10月18日15:00至10月21日09:00为66小时",
+        "判定属于>48小时区间，免收改期费"
+      ],
+      "anchors": {
+        "0": "判定收费（50或100元）",
+        "1": "正确判定为免费，并说明提前了66小时"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "按自然日计算，误认为18日到21日不足48小时。"
+    },
+    {
+      "id": "R7",
+      "description": "吴九(O20240520)特殊合同买断价计算",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵中吴九订单的买断价计算及特殊条款引用。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察对特殊合同条款优先于常规规则的理解，防止被‘已付10万’干扰。",
+      "criterion": [
+        "识别商用合同特殊条款：买断价固定按原价70%计算，不适用已付租金抵扣",
+        "计算买断价：150000 * 70% = 105000元",
+        "明确已付租金19.2万不用于抵扣买断价"
+      ],
+      "anchors": {
+        "0": "使用常规规则计算（如150000-192000*80%），或错误抵扣了已付租金",
+        "1": "正确应用特殊条款，得出105000元，并明确说明不适用常规抵扣"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "计算出150000 - 192000*80% = -3600，或错误地将10万（notes笔误）作为已付租金进行抵扣。"
+    },
+    {
+      "id": "R8",
+      "description": "郑十(O20240625)故障期超期费扣除",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ2",
+        "REQ4"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv",
+        "customer_response_drafts.md"
+      ],
+      "evidence": "矩阵中的费用修正计算及系统操作指引。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察对‘故障期豁免’规则的应用，需从总超期天数中精准扣除故障天数。",
+      "criterion": [
+        "总超期15天，故障报修占10天（含报修日）",
+        "有效计费天数 = 15 - 10 = 5天",
+        "计算应付超期费：5天 * 15元/天 = 75元",
+        "系统操作需修正账单金额"
+      ],
+      "anchors": {
+        "0": "未扣除故障天数，仍收取225元，或计算逻辑完全错误",
+        "1": "正确扣除10天，计算出75元，并明确系统需修正账单"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "认为机器坏了就应该全免，直接判定超期费为0元。"
+    },
+    {
+      "id": "R9",
+      "description": "郑十维修工单升级与跟进",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ4"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵中郑十工单的系统操作指引部分。",
+      "numeric_tolerance": 0,
+      "weight_reason": "专业惯例：解决费用争议的同时必须解决根本的服务缺失问题。",
+      "criterion": [
+        "在系统操作指引中明确要求触发/升级‘紧急维修’工单",
+        "指派高级工程师或安排设备更换"
+      ],
+      "anchors": {
+        "0": "仅处理费用，未提及维修工单升级",
+        "1": "明确指示升级维修工单，并跟进维修进度"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "只修改了超期费账单，没有安排人员去修机器。"
+    },
+    {
+      "id": "R10",
+      "description": "越权承诺与违规减免（负分项）",
+      "type": "Binary",
+      "weight": -10,
+      "requirement_refs": [
+        "manual"
+      ],
+      "deliverables": [
+        "customer_response_drafts.md"
+      ],
+      "evidence": "所有回复话术草稿。",
+      "numeric_tolerance": 0,
+      "weight_reason": "严重违反公司财务底线和客服准则，属于重大业务事故。",
+      "criterion": [
+        "检查回复中是否包含政策外的费用减免",
+        "检查是否向客户承诺了未经授权的赔偿或赠品"
+      ],
+      "anchors": {
+        "0": "未发生越权承诺",
+        "1": "发生越权承诺（如无故免除张三买断费、免除赵六全部超期费等）"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "在回复赵六时，为安抚客户情绪，主动提出‘帮您申请免除一半超期费’。"
+    },
+    {
+      "id": "R11",
+      "description": "处理矩阵完整性",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ1"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵文件包含的行数。",
+      "numeric_tolerance": 0,
+      "weight_reason": "基础交付完整性要求。",
+      "criterion": [
+        "矩阵必须包含O20231001至O20240625共8个订单的处理记录"
+      ],
+      "anchors": {
+        "0": "遗漏任何一个订单",
+        "1": "完整包含8个订单"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "漏掉了吴九的商用合同订单。"
+    },
+    {
+      "id": "R12",
+      "description": "处理矩阵逻辑结构",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ1"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵的列结构。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保矩阵具备实际业务审核价值。",
+      "criterion": [
+        "必须包含：争议焦点/需求、政策依据、计算过程/判定逻辑、系统操作指引四个核心维度"
+      ],
+      "anchors": {
+        "0": "缺少核心维度，或内容混乱无法阅读",
+        "1": "结构清晰，四个维度均完整且对应准确"
+      },
+      "levels": null,
+      "acceptable_alternatives": "列名可略有不同，但语义必须覆盖这四个维度。",
+      "failure_examples": "只有‘处理结果’一列，没有计算过程和政策依据。"
+    },
+    {
+      "id": "R13",
+      "description": "回复话术格式规范性",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ3",
+        "manual"
+      ],
+      "deliverables": [
+        "customer_response_drafts.md"
+      ],
+      "evidence": "话术草稿的段落结构。",
+      "numeric_tolerance": 0,
+      "weight_reason": "基础沟通规范。",
+      "criterion": [
+        "每个回复必须包含：客户称呼、订单号、核心结论、下一步操作"
+      ],
+      "anchors": {
+        "0": "缺少上述任一要素",
+        "1": "四要素齐全"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "直接说‘您的买断价是2100，请付款’，无称呼和订单号。"
+    },
+    {
+      "id": "R14",
+      "description": "回复话术语气与共情",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ3"
+      ],
+      "deliverables": [
+        "customer_response_drafts.md"
+      ],
+      "evidence": "话术草稿的措辞。",
+      "numeric_tolerance": 0,
+      "weight_reason": "客户服务体验要求。",
+      "criterion": [
+        "语气专业、客观",
+        "在客户遭遇不便（如孙七被误扣费、郑十机器故障）时，有适当的共情与致歉表达"
+      ],
+      "anchors": {
+        "0": "语气生硬、推诿，或在客户受损时缺乏基本致歉",
+        "1": "语气专业且具备良好的共情能力"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "对孙七说‘系统扣费是正常的，是你自己没看清合同’。"
+    },
+    {
+      "id": "R15",
+      "description": "政策引用准确性",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "customer_response_drafts.md",
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "文本中对政策条款的提及。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保处理结果有据可依，增强说服力。",
+      "criterion": [
+        "在矩阵或话术中，准确引用了《内部客服政策手册》的具体规则名称或核心逻辑（如‘根据超期占用费计算规则’、‘依据升级差价政策’）"
+      ],
+      "anchors": {
+        "0": "全篇无政策引用，或引用了不存在的条款",
+        "1": "准确引用了适用的政策规则名称或核心逻辑"
+      },
+      "levels": null,
+      "acceptable_alternatives": "不要求精确到章节号，但核心规则名称必须准确。",
+      "failure_examples": "捏造了‘消费者权益保护法第X条’来解释内部租赁规则。"
+    },
+    {
+      "id": "R16",
+      "description": "李四升级后合同状态更新",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵中李四订单的系统操作指引。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察业务闭环，升级不仅是收差价，还需更新后续合同参数。",
+      "criterion": [
+        "系统操作指引中明确：升级成功后，剩余10个月的月租金需更新为350元"
+      ],
+      "anchors": {
+        "0": "未提及月租金更新，或更新金额错误",
+        "1": "明确指示更新月租金为350元"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "只计算了差价，未提示修改系统里的月租参数。"
+    },
+    {
+      "id": "R17",
+      "description": "王五改期系统备注规范",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵中王五订单的系统操作指引。",
+      "numeric_tolerance": 0,
+      "weight_reason": "工单管理的细节要求。",
+      "criterion": [
+        "系统操作指引中要求：在工单中备注改期原因，并记录收取的50元改期费"
+      ],
+      "anchors": {
+        "0": "未提及系统备注或费用记录",
+        "1": "明确要求备注原因并记录50元费用"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "只写了‘同意改期’，未提费用记录。"
+    },
+    {
+      "id": "R18",
+      "description": "孙七账单修正操作明确性",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ4"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵中孙七订单的系统操作指引。",
+      "numeric_tolerance": 0,
+      "weight_reason": "财务修正操作必须明确具体。",
+      "criterion": [
+        "系统操作指引中明确写出：在系统中作废/红冲150元深度清洁费账单"
+      ],
+      "anchors": {
+        "0": "仅写‘退还费用’，未指明系统操作动作",
+        "1": "明确使用‘作废’、‘红冲’或‘冲销’等财务系统术语"
+      },
+      "levels": null,
+      "acceptable_alternatives": "‘撤销账单’也可接受。",
+      "failure_examples": "写‘通知财务线下退款’，不符合系统操作规范。"
+    },
+    {
+      "id": "R19",
+      "description": "周八改期后工程师调度",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵中周八订单的系统操作指引。",
+      "numeric_tolerance": 0,
+      "weight_reason": "改期不仅是时间变更，需确保后端资源匹配。",
+      "criterion": [
+        "系统操作指引中要求：重新预约/调度工程师于10月23日上门"
+      ],
+      "anchors": {
+        "0": "仅更改客户侧时间，未提及工程师调度",
+        "1": "明确要求重新调度工程师"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "只回复客户改期成功，未安排安装师傅。"
+    },
+    {
+      "id": "R20",
+      "description": "张三买断最低限价校验说明",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "dispute_resolution_matrix.csv"
+      ],
+      "evidence": "矩阵中张三订单的计算过程部分。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察对边界条件（最低限价）的敏感度和校验习惯。",
+      "criterion": [
+        "在计算过程中，明确提及或验证了买断价2100元大于最低限价1350元（4500*30%）"
+      ],
+      "anchors": {
+        "0": "未提及最低限价校验",
+        "1": "明确写出校验过程及结论"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "直接给出2100，未说明为何不触发最低限价。"
+    },
+    {
+      "id": "R21",
+      "description": "吴九特殊合同买断逻辑解释",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "customer_response_drafts.md"
+      ],
+      "evidence": "吴九的回复话术草稿。",
+      "numeric_tolerance": 0,
+      "weight_reason": "特殊条款往往容易引起客户误解，话术需清晰解释为何不抵扣已付租金。",
+      "criterion": [
+        "话术中明确向客户解释：因属于商用特殊合同，买断价按原价70%固定计算，不适用常规租金抵扣规则"
+      ],
+      "anchors": {
+        "0": "未解释特殊条款，或解释含糊导致客户可能误解",
+        "1": "清晰、准确地解释了特殊条款的适用逻辑"
+      },
+      "levels": null,
+      "acceptable_alternatives": "无",
+      "failure_examples": "直接报价105000，客户若问‘我交了19万租金为什么不能抵扣’，话术中无应对解释。"
+    }
+  ],
+  "checks_to_execute": [
+    "验证 `dispute_resolution_matrix.csv` 是否包含8行有效数据（不含表头），且列数不少于4列。",
+    "验证 `customer_response_drafts.md` 中是否包含8个独立的回复段落，每个段落是否包含订单号（正则匹配 O\\d{8}）。",
+    "运行脚本提取矩阵中张三的买断价，校验是否等于2100；李四的升级差价是否等于1700；吴九的买断价是否等于105000。",
+    "检查回复话术中是否包含违规词汇（如‘免费’、‘赔偿’、‘破例’），若存在且非政策允许，则触发R10负分项。"
+  ],
+  "quality_risks": [
+    "Solver可能忽略吴九的‘special_terms’列，直接使用常规买断公式导致计算错误。",
+    "Solver在处理郑十的超期费时，可能直接免除全部费用，而未仔细计算故障期外的有效超期天数。",
+    "回复话术可能过于机械，缺乏对孙七、郑十等遭遇系统误判或设备故障客户的共情，导致R14失分。",
+    "CSV格式解析时，若内容中包含换行符或逗号未正确转义，可能导致矩阵结构损坏。"
+  ],
+  "reference_solution": {
+    "O20231001_张三": "买断价计算：原价4500 - (已付10个月*300*80%) = 4500 - 2400 = 2100元。校验：2100 > 4500*30%(1350)，按2100元收取。",
+    "O20231115_李四": "升级差价：(350-200)*10 + 200 = 1700元。操作：收取1700元，系统更新剩余10个月月租为350元。",
+    "O20240105_王五": "改期时间差：19日10:00至20日14:00为28小时。判定：24-48小时区间，收取50元改期费。操作：备注改期原因，记录50元费用，重新调度工程师。",
+    "O20240210_赵六": "超期费核算：日租金300/30=10元，超期单价10*1.5=15元/天。40天*15=600元。系统计费正确，需向客户清晰拆解计算过程，引导退租。",
+    "O20240312_孙七": "争议处理：客户已购‘无忧清洁包’，依据政策全额豁免深度清洁费。操作：系统红冲150元账单，话术致歉并告知退费。",
+    "O20240418_周八": "改期时间差：18日15:00至21日09:00为66小时。判定：>48小时，免费改期。操作：重新调度工程师。",
+    "O20240520_吴九": "买断价计算：适用特殊条款，买断价 = 150000 * 70% = 105000元。不适用已付租金抵扣。话术需明确解释此特殊条款逻辑。",
+    "O20240625_郑十": "超期费修正：总超期15天，故障期10天。有效计费天数 = 15 - 10 = 5天。应付超期费 = 5 * 15 = 75元。操作：系统修正账单为75元，触发紧急维修工单。"
+  }
+}

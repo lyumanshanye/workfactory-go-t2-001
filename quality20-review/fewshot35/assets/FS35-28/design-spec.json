@@ -1,0 +1,662 @@
+{
+  "title": "星渊市科创委Q4前沿技术孵化项目跨部门评审会会务与材料统筹",
+  "request": "你好，我是星渊市科技创新委员会的会务统筹负责人。下周五（2024年11月15日）我们将召开“2024年度第四季度前沿技术孵化项目跨部门联合评审会”。由于本次评审涉及多个不同保密级别的项目，且时间紧凑，我需要你协助完成核心的会务统筹工作。\n\n首先，请根据《Q4项目提交状态与基本信息表》筛选出符合上会条件的项目，并编制详细的会议议程（Q4_Review_Agenda.md）。议程需明确每个项目的时间分配，并严格遵守我们的《评审会保密与日程规则》。特别注意，部分项目存在提交状态异常，不能排入正式议程；机密级项目必须安排在指定的闭门环节。\n\n其次，请根据项目的保密级别，制作《材料分发与保密登记册》（Material_Distribution_Log.csv）。你需要明确每种保密级别对应的分发渠道和物理材料管理要求，尤其是机密级材料的编号与回收机制。\n\n最后，请整理《会后行动交接表》（Post_Meeting_Action_Items.csv）。评委们已经在系统中留下了一些初步批注和需要行政跟进的事项，请将这些内容转化为具体的待办任务，明确跟进动作、责任人和时间节点。\n\n请将这三份文件输出到 /app/output 目录下。这些材料将直接用于会议当天的现场执行和会后的跨部门督办，请务必确保时间计算准确、保密规则执行到位、行动事项无遗漏。",
+  "as_of": "2024-11-08T10:00:00+08:00",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "无外部来源",
+      "limitations": "本次任务完全基于原创虚构的机构规则与业务数据，不依赖任何外部真实来源或政策文件。所有机构名称、项目信息、保密规则均为虚构设计。"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "Q4_Project_Submission_Status.json",
+      "purpose": "提供所有申报项目的详细信息，包括提交状态、保密级别和预期时长，用于筛选有效项目和编排议程。",
+      "content_plan": "包含10个项目的JSON数组，字段有project_id, project_name, lead_name, department, submission_status, confidentiality_level, expected_duration_mins。其中2个项目状态异常（草稿、逾期），8个项目状态为已提交。",
+      "content": "[\n  {\"project_id\": \"P001\", \"project_name\": \"量子加密路由网关\", \"lead_name\": \"赵明\", \"department\": \"信息安全部\", \"submission_status\": \"已提交\", \"confidentiality_level\": \"机密\", \"expected_duration_mins\": 15},\n  {\"project_id\": \"P002\", \"project_name\": \"智能政务助手大模型\", \"lead_name\": \"钱莉\", \"department\": \"人工智能部\", \"submission_status\": \"已提交\", \"confidentiality_level\": \"内部\", \"expected_duration_mins\": 10},\n  {\"project_id\": \"P003\", \"project_name\": \"无人机自动巡检系统\", \"lead_name\": \"孙强\", \"department\": \"物联网部\", \"submission_status\": \"草稿\", \"confidentiality_level\": \"内部\", \"expected_duration_mins\": 10},\n  {\"project_id\": \"P004\", \"project_name\": \"新型生物降解材料\", \"lead_name\": \"李娜\", \"department\": \"新材料部\", \"submission_status\": \"已提交\", \"confidentiality_level\": \"公开\", \"expected_duration_mins\": 10},\n  {\"project_id\": \"P005\", \"project_name\": \"非侵入式脑机接口原型\", \"lead_name\": \"周涛\", \"department\": \"生物医疗部\", \"submission_status\": \"已提交\", \"confidentiality_level\": \"机密\", \"expected_duration_mins\": 20},\n  {\"project_id\": \"P006\", \"project_name\": \"社区智慧养老平台\", \"lead_name\": \"吴芳\", \"department\": \"社会服务部\", \"submission_status\": \"已提交\", \"confidentiality_level\": \"内部\", \"expected_duration_mins\": 10},\n  {\"project_id\": \"P007\", \"project_name\": \"高能量密度固态电池\", \"lead_name\": \"郑凯\", \"department\": \"新能源部\", \"submission_status\": \"逾期\", \"confidentiality_level\": \"机密\", \"expected_duration_mins\": 15},\n  {\"project_id\": \"P008\", \"project_name\": \"城市级数字孪生底座\", \"lead_name\": \"王磊\", \"department\": \"城市规划部\", \"submission_status\": \"已提交\", \"confidentiality_level\": \"内部\", \"expected_duration_mins\": 15},\n  {\"project_id\": \"P009\", \"project_name\": \"精准农业物联网监测\", \"lead_name\": \"冯雪\", \"department\": \"农业科技部\", \"submission_status\": \"已提交\", \"confidentiality_level\": \"公开\", \"expected_duration_mins\": 10},\n  {\"project_id\": \"P010\", \"project_name\": \"深海探测机器人\", \"lead_name\": \"陈宇\", \"department\": \"海洋工程部\", \"submission_status\": \"已提交\", \"confidentiality_level\": \"机密\", \"expected_duration_mins\": 15}\n]"
+    },
+    {
+      "filename": "Review_Meeting_Rules_and_Schedule.md",
+      "purpose": "提供会议的基本信息、议程编排规则、保密材料分发规则以及闭门环节的特殊要求。",
+      "content_plan": "Markdown文档，包含会议时间地点、议程时间分配规则、保密级别对应的材料分发渠道、闭门环节的具体时间段和人员管理要求。",
+      "content": "# 2024年Q4前沿技术孵化项目跨部门评审会规则与日程草案\n\n## 会议基本信息\n- **会议名称**: 2024年度第四季度前沿技术孵化项目跨部门联合评审会\n- **会议时间**: 2024年11月15日 09:00 - 12:00 (总时长180分钟)\n- **会议地点**: 星渊市科创委总部 3楼 第一多功能会议室\n\n## 议程编排规则\n1. 仅允许“已提交”状态的项目进入正式汇报议程，“草稿”或“逾期”项目不得排入。\n2. 每个项目的时间块包含“汇报+提问”，总时长严格等于项目预期时长，不得随意压缩或延长。\n3. 必须包含开场致辞、中场休息、闭门环节切换准备及全体总结环节，确保总时长不超过180分钟。\n\n## 保密与材料分发规则\n- **公开级**: 会议材料（摘要版）通过全员电子邮件发送。\n- **内部级**: 会议材料（详细版）上传至内部OA系统，通过系统消息通知评委下载。\n- **机密级**: 会议材料（核心数据版）必须打印纸质版，实行“一项目一编号”（编号格式：CONF-[项目ID]），仅限授权评委在闭门环节现场签收，会后由行政助理统一回收销毁。\n\n## 闭门环节管理\n- **时间段**: 10:30 - 11:30\n- **管理要求**: 闭门环节开始前5分钟，行政助理需提示非授权评委离场；闭门环节期间，仅允许持有“机密级项目授权名单”的评委参会并需完成纸质签到。"
+    },
+    {
+      "filename": "Reviewer_Comments_and_Actions.csv",
+      "purpose": "提供评委对部分项目的初步批注及需要行政助理跟进的具体行动事项。",
+      "content_plan": "CSV格式，包含project_id, reviewer_name, comment_summary, required_admin_action, deadline_or_specifics。共4条记录。",
+      "content": "project_id,reviewer_name,comment_summary,required_admin_action,deadline_or_specifics\nP002,刘院士,模型安全性需进一步验证,要求申报负责人补充第三方安全审计报告,下周一前\nP005,张主任,原型机需进行实地环境测试,为项目组预约生物医疗部地下实验室场地,2024年11月20日\nP008,王委员,数据接口标准需与市级平台对齐,联系规划局接口规范负责人安排技术对接会,本周四下午\nP001,李院士,量子密钥分发距离需确认,联系信息安全部确认实验室最新测试数据并反馈,会后立即"
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "Q4_Review_Agenda.md",
+      "format": "Markdown",
+      "purpose": "详细记录会议当天的完整时间轴、项目汇报顺序、闭门环节安排及时间分配，供会务组和评委现场使用。"
+    },
+    {
+      "filename": "Material_Distribution_Log.csv",
+      "format": "CSV",
+      "purpose": "记录所有有效项目的材料保密级别、分发渠道/方式、特殊管理要求（如编号、回收），供行政组执行材料准备和分发。"
+    },
+    {
+      "filename": "Post_Meeting_Action_Items.csv",
+      "format": "CSV",
+      "purpose": "将评委批注转化为结构化的待办任务，包含项目ID、跟进动作、责任指向和具体时间节点，供会后督办使用。"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "text": "议程必须且仅包含所有“已提交”状态的项目，排除“草稿”和“逾期”项目。",
+      "visibility": "explicit",
+      "basis": "Review_Meeting_Rules_and_Schedule.md 中的议程编排规则1。"
+    },
+    {
+      "id": "REQ-02",
+      "text": "机密级项目（P001, P005, P010）必须被安排在10:30至11:30的闭门环节时间段内。",
+      "visibility": "explicit",
+      "basis": "Review_Meeting_Rules_and_Schedule.md 中的闭门环节管理要求。"
+    },
+    {
+      "id": "REQ-03",
+      "text": "材料分发必须严格对应保密级别：公开级-全员邮件；内部级-OA系统下载；机密级-纸质编号及会后回收。",
+      "visibility": "explicit",
+      "basis": "Review_Meeting_Rules_and_Schedule.md 中的保密与材料分发规则。"
+    },
+    {
+      "id": "REQ-04",
+      "text": "机密级材料必须具有唯一编号（格式：CONF-[项目ID]），并明确标记会后回收。",
+      "visibility": "explicit",
+      "basis": "Review_Meeting_Rules_and_Schedule.md 中的保密与材料分发规则。"
+    },
+    {
+      "id": "REQ-05",
+      "text": "会后行动交接表必须准确提取评委批注中的所有行政跟进事项，并明确具体时间节点。",
+      "visibility": "explicit",
+      "basis": "Reviewer_Comments_and_Actions.csv 数据及业务惯例。"
+    },
+    {
+      "id": "REQ-06",
+      "text": "议程中每个项目的时间块需明确标注总时长，且各项目时长之和加上会议其他环节不超过180分钟。",
+      "visibility": "professional_practice",
+      "basis": "会议统筹的专业惯例与规则文档的总时长限制。"
+    }
+  ],
+  "authoring_plan": "本题要求行政助理根据三份虚构材料完成会议议程、材料分发登记和会后行动表的统筹。核心难点在于多规则约束下的时间编排与保密分级处理。1. 议程编排：需从10个项目中筛选8个有效项目（排除P003草稿、P007逾期）。8个项目总时长为10+10+10+10+15+15+15+20=105分钟。需将3个机密项目（P001, P005, P010，总时长50分钟）嵌入10:30-11:30（60分钟）的闭门环节。剩余5个非机密项目（55分钟）需安排在9:00-10:30（90分钟）及11:30-12:00（30分钟）之间。需合理分配开场、休息和总结时间（共75分钟）。存在多种等价排法，只要逻辑自洽、时间不重叠且符合闭门区间即可。2. 材料分发：需将8个项目按公开、内部、机密正确映射到邮件、OA、纸质编号。机密材料编号需严格遵循CONF-P001等格式。3. 行动交接：需将4条评委批注转化为具体行动，注意区分“联系负责人”、“预约场地”、“安排会议”等不同动作性质，并准确提取时间节点（如“下周一”、“11月20日”、“本周四”、“会后立即”）。预期判断：助理需具备一定的业务敏感度，将模糊的批注转化为可执行的行政指令。不确定性：对于“下周一”等相对时间，需基于as_of日期（11月8日周五）推导为11月11日；“本周四”推导为11月14日。等价解：议程的具体时间轴顺序（非闭门项目之间）、材料清单的列顺序、行动表的字段命名可有一定自由度。",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "议程正确筛选并排入了所有8个有效项目，且排除了2个无效项目。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "Q4_Review_Agenda.md"
+      ],
+      "evidence": "检查议程文档中是否包含P001, P002, P004, P005, P006, P008, P009, P010这8个项目，且不包含P003和P007。",
+      "numeric_tolerance": 0,
+      "weight_reason": "核心业务逻辑，排错项目会导致严重的会务事故。",
+      "criterion": [
+        "议程中明确列出了P001, P002, P004, P005, P006, P008, P009, P010共8个项目。",
+        "议程中未包含P003（草稿）和P007（逾期）。"
+      ],
+      "anchors": {
+        "0": "排入了无效项目或遗漏了有效项目。",
+        "1": "准确排入8个有效项目，且未包含无效项目。"
+      },
+      "acceptable_alternatives": "项目名称可使用全称或简称，只要ID对应正确即可。",
+      "failure_examples": "将P003（无人机自动巡检系统）排入了议程，或遗漏了P009。"
+    },
+    {
+      "id": "R02",
+      "description": "议程中3个机密级项目被正确安排在10:30至11:30的闭门环节时间段内。",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "Q4_Review_Agenda.md"
+      ],
+      "evidence": "检查P001, P005, P010的时间块是否完全落在10:30-11:30区间内。",
+      "numeric_tolerance": 0,
+      "weight_reason": "保密规则的红线要求，违反会导致泄密风险。",
+      "criterion": [
+        "P001, P005, P010的汇报时间块均开始于10:30或之后，且结束于11:30或之前。",
+        "非机密项目未被安排在10:30-11:30的闭门核心时段（除非作为闭门环节的开场/总结且符合规则）。"
+      ],
+      "anchors": {
+        "0": "存在机密项目未在10:30-11:30之间，或存在非机密项目占用了该闭门时段。",
+        "1": "3个机密项目严格在10:30-11:30之间，非机密项目未违规占用。"
+      },
+      "acceptable_alternatives": "闭门环节内部的3个机密项目顺序可互换；闭门环节前后的非机密项目时间可灵活调整。",
+      "failure_examples": "将P001安排在09:30开始，或者在10:45安排了公开项目P004。"
+    },
+    {
+      "id": "R03",
+      "description": "材料分发清单的保密级别与分发渠道映射完全正确。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Material_Distribution_Log.csv"
+      ],
+      "evidence": "检查CSV中每个项目的分发方式：公开级(邮件)、内部级(OA系统)、机密级(纸质)。",
+      "numeric_tolerance": 0,
+      "weight_reason": "材料分发是行政核心职责，映射错误直接影响工作效率和保密安全。",
+      "criterion": [
+        "公开级(P004, P009)对应全员邮件。",
+        "内部级(P002, P006, P008)对应内部OA系统下载。",
+        "机密级(P001, P005, P010)对应纸质打印。"
+      ],
+      "levels": {
+        "0": "未提供材料分发清单，或所有项目的分发渠道均完全错误。",
+        "0.25": "提供了清单，但大部分项目的分发渠道错误，仅个别正确。",
+        "0.5": "内部级和公开级映射正确，但机密级映射错误（如发了邮件），或反之。",
+        "0.75": "所有项目的分发渠道基本正确，但个别项目的渠道描述不够规范（如内部级写成了'内部群发'而非'OA系统'）。",
+        "1": "所有8个有效项目的分发渠道严格且准确地映射为邮件、OA系统、纸质。"
+      },
+      "acceptable_alternatives": "分发渠道的表述可以有同义词（如'全员邮件'与'电子邮件群发'），但核心介质必须一致。",
+      "failure_examples": "将内部级项目P002的分发方式写成了'全员邮件'。"
+    },
+    {
+      "id": "R04",
+      "description": "机密级材料具有唯一编号且明确标记会后回收。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "Material_Distribution_Log.csv"
+      ],
+      "evidence": "检查机密项目(P001, P005, P010)的编号格式是否为CONF-[项目ID]，且是否有回收标记。",
+      "numeric_tolerance": 0,
+      "weight_reason": "机密材料管理的闭环要求，确保物理安全。",
+      "criterion": [
+        "P001, P005, P010的材料编号分别为CONF-P001, CONF-P005, CONF-P010（或等价格式如CONF-001对应P001）。",
+        "清单中明确包含'会后回收'或'统一回收销毁'等字样。"
+      ],
+      "anchors": {
+        "0": "编号格式错误，或未提及会后回收。",
+        "1": "编号格式严格符合要求，且明确标记了会后回收。"
+      },
+      "acceptable_alternatives": "编号可以带有前缀或后缀（如CONF-P001-V1），只要包含核心标识CONF和P00X即可。",
+      "failure_examples": "将机密材料编号写成了'M001'，或者完全没有提到材料需要回收。"
+    },
+    {
+      "id": "R05",
+      "description": "会后行动交接表准确提取了所有跟进事项，且责任人/时间节点明确。",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Post_Meeting_Action_Items.csv"
+      ],
+      "evidence": "检查CSV是否包含4条行动项，且每条都有具体的动作描述和明确的时间节点（如具体日期或'会后立即'）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "行动项的完整性与可执行性决定了会后督办的效果。",
+      "criterion": [
+        "包含P002补充报告、P005预约场地、P008安排对接会、P001确认数据共4项。",
+        "每项都有具体的时间节点（如11月11日/下周一、11月20日、11月14日/本周四、会后立即）。"
+      ],
+      "levels": {
+        "0": "未提供行动交接表，或遗漏了大部分行动项。",
+        "0.25": "列出了行动项，但完全没有时间节点或责任人指向。",
+        "0.5": "包含了所有4项，但时间节点模糊（如仅写'尽快'）或部分项缺失时间。",
+        "0.75": "包含了所有4项且时间节点基本准确，但相对时间（如'下周一'）未转化为具体日期，或描述略有瑕疵。",
+        "1": "准确包含4项，动作描述清晰，且相对时间均正确转化为具体日期（或保留原意但指向明确），具备完全的可执行性。"
+      },
+      "acceptable_alternatives": "对于'下周一'，可以写'下周一(11月11日)'或直接写'11月11日'。",
+      "failure_examples": "遗漏了P008的技术对接会事项，或者将所有事项的时间都写成了'待定'。"
+    },
+    {
+      "id": "R06",
+      "description": "议程总时间分配合理，项目总时长计算正确且未超总会议时长。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-06"
+      ],
+      "deliverables": [
+        "Q4_Review_Agenda.md"
+      ],
+      "evidence": "核算议程中8个项目的时长总和是否为105分钟，且包含其他环节后总结束时间不晚于12:00。",
+      "numeric_tolerance": 0,
+      "weight_reason": "时间管理是行政秘书的基本功，超时会导致后续环节崩溃。",
+      "criterion": [
+        "议程中8个项目的时长设置与输入数据一致（10,10,10,10,15,15,15,20），总和105分钟。",
+        "议程的最后一个环节结束时间 <= 12:00。"
+      ],
+      "anchors": {
+        "0": "项目时长总和错误，或议程结束时间超过12:00。",
+        "1": "项目时长总和准确为105分钟，且议程在12:00或之前结束。"
+      },
+      "acceptable_alternatives": "允许在11:50或12:00结束，只要不超时。",
+      "failure_examples": "将P005的时长写成了15分钟，或者议程排到了12:15结束。"
+    },
+    {
+      "id": "R07",
+      "description": "议程包含了开场、休息/切换准备及总结环节，且时间分配合理。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "Q4_Review_Agenda.md"
+      ],
+      "evidence": "检查议程中是否包含非项目汇报的通用环节。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保会议流程的完整性，符合专业会议惯例。",
+      "criterion": [
+        "议程中包含开场致辞/签到环节。",
+        "议程中包含中场休息或闭门环节切换准备时间。",
+        "议程包含全体总结/闭幕环节。"
+      ],
+      "anchors": {
+        "0": "缺少上述通用环节中的两个或以上。",
+        "1": "包含开场、休息/切换、总结等通用环节，且时间分配在合理范围内（如开场10-15分钟）。"
+      },
+      "acceptable_alternatives": "环节名称可微调，如'领导致辞'等同于'开场致辞'。",
+      "failure_examples": "议程从09:00到12:00全是项目汇报，没有任何休息或开场总结时间。"
+    },
+    {
+      "id": "R08",
+      "description": "负面项：是否将“草稿”或“逾期”项目排入了正式议程？",
+      "type": "Binary",
+      "weight": -10,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "Q4_Review_Agenda.md"
+      ],
+      "evidence": "检查议程中是否出现了P003或P007。",
+      "numeric_tolerance": 0,
+      "weight_reason": "严重违规事件，必须严厉扣分以一票否决。",
+      "criterion": [
+        "议程中绝对不包含P003和P007。"
+      ],
+      "anchors": {
+        "0": "排入了P003或P007（禁止事件发生）。",
+        "1": "未排入P003和P007（禁止事件未发生）。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "在议程中为P003（无人机自动巡检系统）安排了10分钟的汇报时间。"
+    },
+    {
+      "id": "R09",
+      "description": "负面项：是否将“机密”项目的详细材料通过“全员邮件”或“内部系统”直接公开分发？",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Material_Distribution_Log.csv"
+      ],
+      "evidence": "检查机密级项目(P001, P005, P010)的分发渠道是否被错误设置为邮件或OA系统。",
+      "numeric_tolerance": 0,
+      "weight_reason": "严重的保密违规，可能导致核心机密泄露。",
+      "criterion": [
+        "机密级项目的分发渠道必须且仅为纸质打印/现场分发，不得包含邮件或系统下载。"
+      ],
+      "anchors": {
+        "0": "机密材料被配置为邮件或OA系统分发（禁止事件发生）。",
+        "1": "机密材料配置为纸质分发（禁止事件未发生）。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "在材料清单中将P001的分发方式写为'全员电子邮件'。"
+    },
+    {
+      "id": "R10",
+      "description": "议程中每个项目的时间块明确标注了总时长，且与申报时长一致。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-06"
+      ],
+      "deliverables": [
+        "Q4_Review_Agenda.md"
+      ],
+      "evidence": "检查每个项目条目是否显示了时长（如'15分钟'），且数值与输入一致。",
+      "numeric_tolerance": 0,
+      "weight_reason": "时间标识清晰有助于评委和会务控制节奏。",
+      "criterion": [
+        "每个项目条目均标注了时长。",
+        "标注的时长数值与输入数据中的expected_duration_mins一致。"
+      ],
+      "anchors": {
+        "0": "未标注时长，或数值与输入不符。",
+        "1": "所有项目均准确标注了时长。"
+      },
+      "acceptable_alternatives": "时长可写为'15 mins'、'15分钟'等。",
+      "failure_examples": "P005的输入时长是20分钟，但在议程中标注为15分钟。"
+    },
+    {
+      "id": "R11",
+      "description": "行动交接表中，将“要求补充材料”类的事项明确指向了申报负责人。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Post_Meeting_Action_Items.csv"
+      ],
+      "evidence": "检查P002的行动项是否包含联系负责人或要求负责人提交的内容。",
+      "numeric_tolerance": 0,
+      "weight_reason": "明确责任主体是行政跟进的关键。",
+      "criterion": [
+        "针对P002补充安全审计报告的事项，明确指出需联系申报负责人（钱莉）或由其提交。"
+      ],
+      "anchors": {
+        "0": "未明确责任主体，或错误指向了其他部门。",
+        "1": "明确指出由申报负责人补充或需联系负责人。"
+      },
+      "acceptable_alternatives": "可写'联系钱莉'或'要求P002负责人'。",
+      "failure_examples": "将补充报告的任务指派给了信息安全部，而不是人工智能部的钱莉。"
+    },
+    {
+      "id": "R12",
+      "description": "行动交接表中，将“预约场地”类的事项明确标注了具体的日期要求。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Post_Meeting_Action_Items.csv"
+      ],
+      "evidence": "检查P005的行动项是否包含11月20日的时间节点。",
+      "numeric_tolerance": 0,
+      "weight_reason": "场地预约具有强时间约束，日期错误会导致测试无法进行。",
+      "criterion": [
+        "针对P005预约实验室场地的事项，明确包含了2024年11月20日（或11月20日）的时间要求。"
+      ],
+      "anchors": {
+        "0": "未标注日期，或日期错误。",
+        "1": "准确标注了11月20日。"
+      },
+      "acceptable_alternatives": "可写'11月20日'或'2024-11-20'。",
+      "failure_examples": "将P005的场地预约时间写成了'11月25日'或'下周'。"
+    },
+    {
+      "id": "R13",
+      "description": "议程文档包含了会议的基本信息（名称、时间、地点）。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "Q4_Review_Agenda.md"
+      ],
+      "evidence": "检查文档头部或基本信息区是否包含会议名称、2024年11月15日 09:00-12:00、第一多功能会议室。",
+      "numeric_tolerance": 0,
+      "weight_reason": "文档规范性要求。",
+      "criterion": [
+        "包含会议名称。",
+        "包含会议时间。",
+        "包含会议地点。"
+      ],
+      "anchors": {
+        "0": "缺少上述基本信息中的两项或以上。",
+        "1": "完整包含会议名称、时间、地点。"
+      },
+      "acceptable_alternatives": "地点可简写为'3楼第一会议室'。",
+      "failure_examples": "议程直接以09:00的项目列表开始，完全没有会议名称和地点信息。"
+    },
+    {
+      "id": "R14",
+      "description": "材料分发清单包含了所有8个有效项目，无遗漏。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Material_Distribution_Log.csv"
+      ],
+      "evidence": "统计CSV中的有效行数或项目ID，确认是否覆盖8个有效项目。",
+      "numeric_tolerance": 0,
+      "weight_reason": "材料准备的基础，遗漏会导致现场材料缺失。",
+      "criterion": [
+        "清单中包含P001, P002, P004, P005, P006, P008, P009, P010共8个项目。"
+      ],
+      "anchors": {
+        "0": "遗漏了1个或以上有效项目。",
+        "1": "完整包含8个有效项目。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "清单中只有7个项目，遗漏了P009。"
+    },
+    {
+      "id": "R15",
+      "description": "闭门环节的评委提示是否准确，包含离场提示与授权签到要求。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "Q4_Review_Agenda.md"
+      ],
+      "evidence": "检查议程中10:25-10:30左右的闭门环节切换说明，是否提示非授权人员离场，以及授权人员签到。",
+      "numeric_tolerance": 0,
+      "weight_reason": "闭门环节的人员管控是保密管理的核心执行点。",
+      "criterion": [
+        "明确提示非授权评委/人员需离场。",
+        "明确要求授权评委进行纸质签到。"
+      ],
+      "levels": {
+        "0": "完全没有提及闭门环节的人员管控和提示。",
+        "0.25": "仅提及了'保密级别'或'闭门开始'，但没有任何具体的人员动作提示。",
+        "0.5": "提示了非授权人员离场，但未提及授权人员的签到要求。",
+        "0.75": "提示了离场和签到，但存在事实瑕疵（如时间提示错误，或对象描述不清）。",
+        "1": "准确提示非授权评委离场，并明确要求授权评委完成纸质签到，时间与规则完全吻合。"
+      },
+      "acceptable_alternatives": "可写为'清场'、'非授权人员退席'等同于'离场'。",
+      "failure_examples": "议程中只写了'10:30 闭门会议开始'，没有写任何关于人员进出和签字的指示。"
+    },
+    {
+      "id": "R16",
+      "description": "行动交接表包含了项目ID以便溯源。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "Post_Meeting_Action_Items.csv"
+      ],
+      "evidence": "检查CSV是否有project_id列或类似字段，且值正确。",
+      "numeric_tolerance": 0,
+      "weight_reason": "便于跨部门沟通和后续归档检索。",
+      "criterion": [
+        "表格中包含项目ID字段。",
+        "ID值与输入材料对应。"
+      ],
+      "anchors": {
+        "0": "未包含项目ID，或ID无法对应。",
+        "1": "包含项目ID且对应正确。"
+      },
+      "acceptable_alternatives": "字段名可为'项目ID'、'Project_ID'等。",
+      "failure_examples": "行动表中只有项目名称，没有项目编号，导致无法快速定位项目。"
+    },
+    {
+      "id": "R17",
+      "description": "材料分发清单中，明确指出了“内部”级别项目的具体分发渠道（OA系统）。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "Material_Distribution_Log.csv"
+      ],
+      "evidence": "检查内部级项目(P002, P006, P008)的分发方式是否明确为内部OA系统或内部系统下载。",
+      "numeric_tolerance": 0,
+      "weight_reason": "区分公开邮件和内部系统是信息安全管理的要求。",
+      "criterion": [
+        "内部级项目的分发渠道明确包含'OA系统'、'内部系统'或'内部平台'等字眼。"
+      ],
+      "anchors": {
+        "0": "内部级项目未指明系统渠道，或写成了'内部群发'等模糊表述。",
+        "1": "明确指出了通过内部OA系统或等效系统分发。"
+      },
+      "acceptable_alternatives": "可写为'上传至内部OA系统供下载'。",
+      "failure_examples": "将内部级项目的分发方式写成了'通过内部微信群发送'。"
+    },
+    {
+      "id": "R18",
+      "description": "议程中的时间格式统一，逻辑合理且无时间重叠。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "Q4_Review_Agenda.md"
+      ],
+      "evidence": "检查时间轴的连贯性，前一个环节的结束时间是否等于或早于后一个环节的开始时间。",
+      "numeric_tolerance": 0,
+      "weight_reason": "时间重叠会导致现场执行混乱。",
+      "criterion": [
+        "时间格式统一（如均为HH:MM）。",
+        "时间轴无重叠，逻辑连贯。"
+      ],
+      "anchors": {
+        "0": "存在时间重叠或格式混乱。",
+        "1": "时间格式统一，无重叠，逻辑连贯。"
+      },
+      "acceptable_alternatives": "允许使用24小时制或带AM/PM，只要全文统一。",
+      "failure_examples": "09:30-09:40 项目A，09:35-09:45 项目B（时间重叠）。"
+    },
+    {
+      "id": "R19",
+      "description": "整体文档的专业性、逻辑性与可读性。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [],
+      "deliverables": [
+        "Q4_Review_Agenda.md",
+        "Material_Distribution_Log.csv",
+        "Post_Meeting_Action_Items.csv"
+      ],
+      "evidence": "综合评估三份交付物的排版、语言规范性、结构清晰度。",
+      "numeric_tolerance": 0,
+      "weight_reason": "行政产出物的专业形象直接影响委员会的运转效率和对外形象。",
+      "criterion": [
+        "文档结构清晰，层次分明。",
+        "语言专业、简练，无口语化表达。",
+        "表格格式规范，易于阅读和打印。"
+      ],
+      "levels": {
+        "0": "文档结构混乱，语言极度不专业，完全无法直接用于正式场合。",
+        "0.25": "文档勉强能看懂，但排版粗糙，存在多处格式错误或口语化表达。",
+        "0.5": "文档结构基本合理，语言尚可，但缺乏专业行政文档的严谨性和美观度。",
+        "0.75": "文档结构清晰，语言专业，仅有轻微的排版瑕疵或个别表述不够完美。",
+        "1": "文档结构严密，逻辑清晰，语言极其专业规范，排版美观，可直接作为正式会务文件下发。"
+      },
+      "acceptable_alternatives": "Markdown和CSV的排版风格可有所不同，但均需符合各自格式的最佳实践。",
+      "failure_examples": "议程使用纯文本无换行，或者行动表CSV缺少表头导致无法解析。"
+    },
+    {
+      "id": "R20",
+      "description": "交付物的文件名严格符合要求。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "Q4_Review_Agenda.md",
+        "Material_Distribution_Log.csv",
+        "Post_Meeting_Action_Items.csv"
+      ],
+      "evidence": "检查输出文件的实际命名。",
+      "numeric_tolerance": 0,
+      "weight_reason": "文件命名规范是档案管理的基础。",
+      "criterion": [
+        "三个文件分别命名为Q4_Review_Agenda.md, Material_Distribution_Log.csv, Post_Meeting_Action_Items.csv。"
+      ],
+      "anchors": {
+        "0": "存在文件名不符或扩展名错误。",
+        "1": "三个文件名完全符合要求。"
+      },
+      "acceptable_alternatives": "无。",
+      "failure_examples": "将议程文件命名为'agenda.md'或'Q4_Review_Agenda.txt'。"
+    }
+  ],
+  "checks_to_execute": [
+    "验证Q4_Review_Agenda.md中是否包含P003或P007（预期不包含）。",
+    "计算Q4_Review_Agenda.md中8个有效项目的expected_duration_mins总和，验证是否等于105。",
+    "检查Material_Distribution_Log.csv中机密级项目的分发渠道字段，验证不包含'邮件'或'OA'。",
+    "验证Post_Meeting_Action_Items.csv中P002和P005的时间节点是否分别指向11月11日（或下周一）和11月20日。"
+  ],
+  "quality_risks": [
+    "Solver可能未能正确推导'下周一'和'本周四'的具体日期（基于as_of为2024-11-08周五）。",
+    "Solver在编排议程时，可能将闭门环节的时间段计算错误，导致机密项目总时长（50分钟）超出10:30-11:30的60分钟窗口（实际上50<60，是可行的，但需注意前后衔接）。",
+    "Solver可能将内部级项目的分发渠道误写为'内部邮件'，与公开级的'全员邮件'混淆。"
+  ],
+  "reference_solution": {
+    "valid_projects": [
+      "P001",
+      "P002",
+      "P004",
+      "P005",
+      "P006",
+      "P008",
+      "P009",
+      "P010"
+    ],
+    "invalid_projects": [
+      "P003",
+      "P007"
+    ],
+    "total_duration_mins": 105,
+    "agenda_logic": "09:00-09:15 开场; 09:15-10:25 安排5个非机密项目(P002,P004,P006,P008,P009，总55分钟)及休息; 10:25-10:30 闭门清场; 10:30-11:20 安排3个机密项目(P001,P005,P010，总50分钟); 11:20-12:00 闭门总结及全体闭幕。",
+    "material_distribution": {
+      "public": {
+        "P004": "全员邮件",
+        "P009": "全员邮件"
+      },
+      "internal": {
+        "P002": "内部OA系统",
+        "P006": "内部OA系统",
+        "P008": "内部OA系统"
+      },
+      "confidential": {
+        "P001": "纸质(CONF-P001,会后回收)",
+        "P005": "纸质(CONF-P005,会后回收)",
+        "P010": "纸质(CONF-P010,会后回收)"
+      }
+    },
+    "action_items": [
+      {
+        "project_id": "P002",
+        "action": "联系钱莉补充第三方安全审计报告",
+        "deadline": "2024-11-11"
+      },
+      {
+        "project_id": "P005",
+        "action": "预约生物医疗部地下实验室场地",
+        "deadline": "2024-11-20"
+      },
+      {
+        "project_id": "P008",
+        "action": "联系规划局接口规范负责人安排技术对接会",
+        "deadline": "2024-11-14"
+      },
+      {
+        "project_id": "P001",
+        "action": "联系信息安全部确认实验室最新测试数据",
+        "deadline": "会后立即"
+      }
+    ],
+    "alternative_solutions": "议程中非机密项目的内部顺序可互换，只要不占用10:30-11:30即可；闭门环节内3个机密项目的顺序也可互换。相对时间的推导只要逻辑正确（如基于11月8日周五推导下周一为11日）即可接受。"
+  }
+}

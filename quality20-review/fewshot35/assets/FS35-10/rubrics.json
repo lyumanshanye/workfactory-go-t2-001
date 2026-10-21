@@ -1,0 +1,613 @@
+[
+  {
+    "id": "R1",
+    "description": "Correct identification and full payment of all Critical commitments in November.",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-1"
+    ],
+    "deliverables": [
+      "nov_payment_schedule.csv"
+    ],
+    "evidence": "Check if C-101 ($45k), C-102 ($28k), C-104 ($35k), and C-106 ($22k) are marked as paid in full in November with zero deferred amounts.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Core operational constraint; failing this disrupts fleet operations.",
+    "criterion": [
+      "All 4 Critical commitments are present in the schedule.",
+      "Each Critical commitment shows 100% of its amount paid in Nov.",
+      "No Critical commitment has any deferred amount."
+    ],
+    "anchors": {
+      "0": "One or more Critical commitments are partially or fully deferred.",
+      "1": "All 4 Critical commitments are fully paid in November."
+    },
+    "acceptable_alternatives": [
+      "Solvers may use different column names (e.g., 'Nov_Paid_Amount' vs 'Paid_in_Nov') as long as the meaning is clear."
+    ],
+    "failure_examples": [
+      "Deferring C-104 (HVAC) to December to save cash.",
+      "Paying only $20k of the $22k for C-106 (SwiftLube)."
+    ]
+  },
+  {
+    "id": "R2",
+    "description": "Adherence to the November effective cash limit (Minimum of Max Distributable and HQ Cap).",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-2",
+      "REQ-3"
+    ],
+    "deliverables": [
+      "nov_payment_schedule.csv",
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "Sum of all amounts paid in November must not exceed $155,000. (Calculation: 60k + 350k - 210k = 200k available; 200k - 45k min balance = 155k max distributable. HQ Cap is 180k, so 155k is the binding constraint).",
+    "numeric_tolerance": 0,
+    "weight_reason": "Fundamental liquidity constraint violation.",
+    "criterion": [
+      "Total November payments calculated correctly.",
+      "Total does not exceed $155,000.",
+      "Minimum balance of $45,000 is mathematically preserved."
+    ],
+    "anchors": {
+      "0": "Total November payments exceed $155,000 or drop the ending balance below $45,000.",
+      "1": "Total November payments are exactly $155,000 or less, maintaining the $45k floor."
+    },
+    "acceptable_alternatives": [
+      "If the solver uses the JSON's Dec opening of 52k to reverse-calculate Nov ending as 45k, it is acceptable as long as the 155k limit is respected."
+    ],
+    "failure_examples": [
+      "Paying $180,000 in November because they only looked at the HQ Cap and ignored the minimum balance requirement.",
+      "Paying $160,000, leaving only $40k in the account, violating the $45k minimum."
+    ]
+  },
+  {
+    "id": "R3",
+    "description": "Optimal selection of Routine commitments to defer, minimizing total penalty costs.",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-5"
+    ],
+    "deliverables": [
+      "nov_payment_schedule.csv"
+    ],
+    "evidence": "With $25k remaining after Critical payments, the solver must pay the highest penalty items first. Correct set: C-105 ($15k, 2.0%) and C-103 ($10k, 1.5%). Total $25k. Deferred: C-107, C-108, C-109.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Tests financial optimization and analytical reasoning.",
+    "criterion": [
+      "Identifies $25k available for Routine payments.",
+      "Selects C-105 ($15k) and C-103 ($10k) to pay in Nov.",
+      "Defers C-107, C-108, C-109.",
+      "Calculates correct penalties for deferred items."
+    ],
+    "levels": {
+      "0": "Fails to pay C-105 in Nov, resulting in higher penalties.",
+      "0.25": "Pays C-105 but selects suboptimal second item (e.g., C-108 instead of C-103).",
+      "0.5": "Selects correct items but miscalculates the remaining limit or penalty.",
+      "0.75": "Correctly selects items and calculates penalties, but includes unnecessary narrative explaining the obvious.",
+      "1": "Flawless selection of C-105 and C-103, exact penalty calculation, and clear tabular presentation."
+    },
+    "acceptable_alternatives": [
+      "If the solver chooses C-109 ($24k, 1.5%) and $1k of another (violating the no partial payment rule), it's a failure. If they pay C-103 and C-109, they exceed $25k."
+    ],
+    "failure_examples": [
+      "Paying C-108 ($8k, 0.5%) and C-107 ($17k partial) instead of prioritizing the 2.0% penalty.",
+      "Deferring C-105 (2.0%) to save cash, which violates the optimization directive."
+    ]
+  },
+  {
+    "id": "R4",
+    "description": "Accurate calculation of deferred principal and penalty amounts for December.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-5"
+    ],
+    "deliverables": [
+      "nov_payment_schedule.csv"
+    ],
+    "evidence": "Deferred principal must be $73,000 (C-107: 41k, C-108: 8k, C-109: 24k). Penalties: C-107=$410, C-108=$40, C-109=$360. Total penalty=$810. Total Dec obligation=$73,810.",
+    "numeric_tolerance": 1,
+    "weight_reason": "Precision in financial forecasting is mandatory.",
+    "criterion": [
+      "Deferred principal sums to $73,000.",
+      "Individual penalties are calculated correctly.",
+      "Total penalty is $810."
+    ],
+    "anchors": {
+      "0": "Penalty calculations are wrong or deferred principal is incorrect.",
+      "1": "All principal and penalty calculations are mathematically exact."
+    },
+    "acceptable_alternatives": [
+      "Rounding to nearest dollar is acceptable."
+    ],
+    "failure_examples": [
+      "Applying a flat 1.5% to all deferred items instead of vendor-specific rates.",
+      "Calculating penalty on the total $98k Routine amount instead of just the deferred $73k."
+    ]
+  },
+  {
+    "id": "R5",
+    "description": "Correct projection of December distributable cash limit.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-2",
+      "REQ-3"
+    ],
+    "deliverables": [
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "Dec Available = 52k (opening) + 320k (in) - 280k (hard) = 92k. Max Distributable = 92k - 45k (min) = 47k. HQ Cap is 160k. Effective Dec Limit = $47,000.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Identifies the exact boundary of the liquidity crisis.",
+    "criterion": [
+      "Uses correct Dec opening balance from JSON.",
+      "Subtracts hard outflows and minimum balance correctly.",
+      "Identifies $47,000 as the effective payment limit for December."
+    ],
+    "anchors": {
+      "0": "Miscalculates Dec available cash or ignores the minimum balance constraint.",
+      "1": "Correctly derives the $47,000 effective limit for December."
+    },
+    "acceptable_alternatives": [
+      "If the solver uses 45k as Dec opening (derived from Nov cash flow), Dec available is 92k, limit is 47k. The math holds either way if explicitly shown."
+    ],
+    "failure_examples": [
+      "Using the Nov HQ Cap (180k) for December.",
+      "Forgetting to subtract the 45k minimum balance, concluding Dec has $92k available."
+    ]
+  },
+  {
+    "id": "R6",
+    "description": "Identification of the December funding shortfall and liquidity warning.",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-2",
+      "REQ-3"
+    ],
+    "deliverables": [
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "Dec Obligation ($73,810) > Dec Effective Limit ($47,000). Shortfall = $26,810. The memo must clearly state this gap and trigger a formal warning.",
+    "numeric_tolerance": 500,
+    "weight_reason": "The core analytical output of the task; failing to spot the deficit renders the report useless.",
+    "criterion": [
+      "Compares Dec obligation to Dec limit.",
+      "Calculates the shortfall accurately.",
+      "Explicitly frames it as a liquidity warning."
+    ],
+    "levels": {
+      "0": "Fails to identify any shortfall or claims December is fully funded.",
+      "0.25": "Identifies a shortfall but uses completely wrong numbers (e.g., compares total Nov commitments to Dec cap).",
+      "0.5": "Identifies the shortfall but miscalculates the amount by > $500.",
+      "0.75": "Correctly identifies the $26,810 shortfall but buries it in text without clear emphasis.",
+      "1": "Prominently highlights the $26,810 shortfall with a clear breakdown of obligation vs. limit."
+    },
+    "acceptable_alternatives": [
+      "Solvers may express the shortfall as a negative cash balance projection (e.g., 'Ending Dec cash will be -$26,810 before minimum balance')."
+    ],
+    "failure_examples": [
+      "Concluding that since Dec HQ Cap is $160k, and obligation is $73k, there is no issue.",
+      "Ignoring the minimum balance requirement and concluding Dec has enough cash."
+    ]
+  },
+  {
+    "id": "R7",
+    "description": "Provision of actionable mitigation strategies for the December shortfall.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "The memo must contain at least two realistic, professional recommendations (e.g., request temporary HQ cap increase, accelerate AR collections from internal billing, negotiate extended terms with Dec vendors, liquidate idle parts inventory).",
+    "numeric_tolerance": 0,
+    "weight_reason": "Tests practical financial management and problem-solving skills.",
+    "criterion": [
+      "Provides at least two distinct recommendations.",
+      "Recommendations are realistic and actionable in a corporate setting.",
+      "Recommendations directly address cash flow or payment timing."
+    ],
+    "anchors": {
+      "0": "Provides fewer than two recommendations, or provides generic/meaningless advice (e.g., 'manage cash better').",
+      "1": "Provides two or more specific, actionable, and realistic mitigation strategies."
+    },
+    "acceptable_alternatives": [
+      "Suggesting a temporary intercompany loan from HQ is valid.",
+      "Suggesting delaying non-critical internal parts purchases is valid."
+    ],
+    "failure_examples": [
+      "Suggesting 'increase sales' as a short-term cash fix.",
+      "Recommending defaulting on Critical payments (violates core constraints)."
+    ]
+  },
+  {
+    "id": "R8",
+    "description": "Negative Constraint: Deferral of any Critical commitment.",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-1"
+    ],
+    "deliverables": [
+      "nov_payment_schedule.csv"
+    ],
+    "evidence": "Check if ANY amount of C-101, C-102, C-104, or C-106 is marked as deferred or not paid in full in Nov.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Critical operational failure; deferring critical maintenance halts the business.",
+    "criterion": [
+      "Zero Critical commitments deferred.",
+      "All Critical commitments fully paid."
+    ],
+    "anchors": {
+      "0": "No Critical commitments deferred (No penalty).",
+      "1": "At least one Critical commitment is partially or fully deferred (Penalty applied)."
+    },
+    "acceptable_alternatives": [
+      "None. This is a hard constraint."
+    ],
+    "failure_examples": [
+      "Deferring C-102 (Hydraulics) to save cash for November.",
+      "Paying C-106 (Oils) partially in Nov and partially in Dec."
+    ]
+  },
+  {
+    "id": "R9",
+    "description": "Adherence to the no partial payment rule for commitments.",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [
+      "REQ-4"
+    ],
+    "deliverables": [
+      "nov_payment_schedule.csv"
+    ],
+    "evidence": "Check if any commitment has both a 'Paid in Nov' amount and a 'Deferred' amount that sum to the total, where neither is the full amount or zero.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Violates standard AP processing logic for fixed invoices.",
+    "criterion": [
+      "Every commitment is either 100% paid or 100% deferred.",
+      "No split payments exist."
+    ],
+    "anchors": {
+      "0": "All commitments are fully paid or fully deferred (No penalty).",
+      "1": "At least one commitment is split into partial payment and partial deferral (Penalty applied)."
+    },
+    "acceptable_alternatives": [
+      "None."
+    ],
+    "failure_examples": [
+      "Paying $10,000 of C-107 ($41,000) in Nov and deferring the remaining $31,000."
+    ]
+  },
+  {
+    "id": "R10",
+    "description": "CSV formatting and structural integrity of the payment schedule.",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "nov_payment_schedule.csv"
+    ],
+    "evidence": "File must be valid CSV, contain all 9 commitments, and have clear columns for ID, Vendor, Total Amount, Nov Paid, Deferred Principal, Penalty, and Dec Total Obligation.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Ensures deliverable is machine-readable and professionally formatted.",
+    "criterion": [
+      "Valid CSV format.",
+      "Contains all 9 rows.",
+      "Columns are logically named and populated."
+    ],
+    "anchors": {
+      "0": "File is malformed, missing rows, or lacks clear column structure.",
+      "1": "Clean, valid CSV with all data correctly mapped."
+    },
+    "acceptable_alternatives": [
+      "Column names can vary as long as intent is clear."
+    ],
+    "failure_examples": [
+      "Submitting a markdown table instead of a CSV file.",
+      "Omitting C-108 or C-109 from the schedule."
+    ]
+  },
+  {
+    "id": "R11",
+    "description": "Markdown structure and professional tone of the liquidity report.",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "Document must use Markdown headers, be addressed to the Senior Finance Director, and maintain a professional, objective tone.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Communication standards for executive reporting.",
+    "criterion": [
+      "Uses Markdown formatting (headers, lists).",
+      "Addresses the correct stakeholder.",
+      "Tone is professional."
+    ],
+    "anchors": {
+      "0": "Poorly formatted, missing headers, or unprofessional tone.",
+      "1": "Well-structured Markdown memo with appropriate executive tone."
+    },
+    "acceptable_alternatives": [
+      "Email format within the markdown is acceptable if it includes clear headers."
+    ],
+    "failure_examples": [
+      "Writing a single unformatted block of text.",
+      "Using informal slang or overly emotional language about the shortfall."
+    ]
+  },
+  {
+    "id": "R12",
+    "description": "Accurate extraction and use of hard outflows from the JSON forecast.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "liquidity_warning_report.md",
+      "nov_payment_schedule.csv"
+    ],
+    "evidence": "Nov hard outflows ($210k) and Dec hard outflows ($280k) must be correctly subtracted from inflows to determine available cash. Solvers must not double-count or omit these figures.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Fundamental cash flow accounting accuracy.",
+    "criterion": [
+      "Nov available cash calculation uses $210k correctly.",
+      "Dec available cash calculation uses $280k correctly."
+    ],
+    "anchors": {
+      "0": "Fails to subtract hard outflows, or uses incorrect values from the JSON.",
+      "1": "Correctly integrates hard outflows into both months' cash calculations."
+    },
+    "acceptable_alternatives": [
+      "Solvers may list hard outflows as a single line item or break them down if they invent a plausible breakdown, as long as the total matches the JSON."
+    ],
+    "failure_examples": [
+      "Forgetting to subtract the $280k Dec hard outflows, leading to a massive overestimation of Dec cash.",
+      "Adding hard outflows instead of subtracting them."
+    ]
+  },
+  {
+    "id": "R13",
+    "description": "Correct interpretation of the HQ payment cap constraint.",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-2"
+    ],
+    "deliverables": [
+      "nov_payment_schedule.csv",
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "The solver must understand that the HQ Cap is an UPPER BOUND, not a target. If available cash is less than the Cap, the available cash is the binding constraint. If available cash is more than the Cap, the Cap is the binding constraint.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Tests understanding of corporate liquidity controls vs. actual cash availability.",
+    "criterion": [
+      "Recognizes Cap as a maximum limit.",
+      "Correctly identifies the binding constraint for Nov (155k, not 180k).",
+      "Correctly identifies the binding constraint for Dec (47k, not 160k)."
+    ],
+    "levels": {
+      "0": "Assumes the Hub MUST pay up to the Cap regardless of actual cash, or completely ignores the Cap.",
+      "0.25": "Understands the Cap is a limit, but fails to compare it against actual available cash.",
+      "0.5": "Correctly applies the Cap for Nov, but fails to apply it for Dec.",
+      "0.75": "Applies the Cap correctly but fails to realize the actual cash is the tighter constraint in both months.",
+      "1": "Explicitly calculates both actual available cash and the Cap, and correctly uses the lower of the two for both months."
+    },
+    "acceptable_alternatives": [
+      "Stating 'Effective Limit = Min(Available Cash, HQ Cap)' is sufficient."
+    ],
+    "failure_examples": [
+      "Paying $180k in Nov because the Cap is $180k, resulting in a negative cash balance.",
+      "Assuming Dec has $160k available to pay vendors because the Cap is $160k."
+    ]
+  },
+  {
+    "id": "R14",
+    "description": "Mathematical consistency between Nov payments and Dec opening balance.",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "If the solver calculates Nov ending cash, it must logically flow into Dec opening cash. If they use the JSON's 52k, they should explicitly state they are using the provided forecast figure.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Ensures temporal continuity in financial modeling.",
+    "criterion": [
+      "Dec opening balance is either derived correctly from Nov or explicitly cited from JSON.",
+      "No mathematical breaks between the two months."
+    ],
+    "anchors": {
+      "0": "Dec opening balance is a random number or mathematically impossible.",
+      "1": "Dec opening balance is logically consistent with Nov ending cash or the JSON."
+    },
+    "acceptable_alternatives": [
+      "Using 45k (derived) or 52k (JSON) are both acceptable if justified."
+    ],
+    "failure_examples": [
+      "Stating Nov ending cash is $10k, but using $52k for Dec without explanation."
+    ]
+  },
+  {
+    "id": "R15",
+    "description": "Negative Constraint: Hallucination of external policies or vendor terms.",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [],
+    "deliverables": [
+      "nov_payment_schedule.csv",
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "Check if the solver invents new penalty rates, changes vendor amounts, or creates new HQ policies not present in the prompt or inputs.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Reliance on hallucinated data invalidates the financial model.",
+    "criterion": [
+      "All vendor amounts match input CSV.",
+      "All penalty rates match input CSV.",
+      "No invented HQ policies."
+    ],
+    "anchors": {
+      "0": "All data strictly from inputs (No penalty).",
+      "1": "Invents or alters key financial parameters (Penalty applied)."
+    },
+    "acceptable_alternatives": [
+      "None."
+    ],
+    "failure_examples": [
+      "Assuming C-107 has a 5% penalty because it's a 'large project'.",
+      "Changing C-101 amount to $40,000 to fit a budget."
+    ]
+  },
+  {
+    "id": "R16",
+    "description": "Clear presentation of the December funding gap breakdown.",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-2",
+      "REQ-3"
+    ],
+    "deliverables": [
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "The report must clearly show: Dec Obligation ($73,810) - Dec Effective Limit ($47,000) = Shortfall ($26,810). The arithmetic must be transparent.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Executive reports require clear, auditable math for decision-making.",
+    "criterion": [
+      "Shows Dec Obligation.",
+      "Shows Dec Limit.",
+      "Shows the resulting Shortfall.",
+      "Math is correct."
+    ],
+    "anchors": {
+      "0": "Missing components of the gap calculation or math is wrong.",
+      "1": "Clear, step-by-step presentation of the gap calculation with correct math."
+    },
+    "acceptable_alternatives": [
+      "Using a small table or bulleted list for the breakdown is acceptable."
+    ],
+    "failure_examples": [
+      "Just stating 'We are short on cash in December' without showing the numbers."
+    ]
+  },
+  {
+    "id": "R17",
+    "description": "Verification of total commitment coverage.",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "nov_payment_schedule.csv"
+    ],
+    "evidence": "Sum of (Nov Paid) + (Deferred Principal) for each row must exactly equal the original 'amount' from the input CSV.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Basic accounting equation check.",
+    "criterion": [
+      "Every row balances: Paid + Deferred = Total.",
+      "No orphaned amounts."
+    ],
+    "anchors": {
+      "0": "One or more rows do not balance.",
+      "1": "All rows balance perfectly."
+    },
+    "acceptable_alternatives": [
+      "None."
+    ],
+    "failure_examples": [
+      "Marking C-103 as $10k paid and $5k deferred, ignoring the remaining $5k."
+    ]
+  },
+  {
+    "id": "R18",
+    "description": "Inclusion of a summary cash flow timeline in the memo.",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "The memo should include a brief timeline or summary table showing Nov Inflows/Outflows/End Balance and Dec Inflows/Outflows/End Balance (pre-shortfall).",
+    "numeric_tolerance": 0,
+    "weight_reason": "Provides context for the warning.",
+    "criterion": [
+      "Includes Nov cash summary.",
+      "Includes Dec cash summary.",
+      "Values match calculations."
+    ],
+    "anchors": {
+      "0": "No cash flow summary or timeline provided.",
+      "1": "Clear summary of Nov and Dec cash flows included."
+    },
+    "acceptable_alternatives": [
+      "A narrative summary or a small markdown table are both acceptable."
+    ],
+    "failure_examples": [
+      "Jumping straight to the shortfall without explaining how the cash position evolved."
+    ]
+  },
+  {
+    "id": "R19",
+    "description": "Correct handling of the 0% penalty rate for Critical items.",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "nov_payment_schedule.csv"
+    ],
+    "evidence": "Critical items have a 0.00 penalty rate. Even if they were somehow deferred (which they shouldn't be), the penalty column should show 0 or N/A. Since they are paid, the deferred amount is 0, so penalty is 0.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Attention to detail in data mapping.",
+    "criterion": [
+      "Critical items show 0 deferred.",
+      "Critical items show 0 penalty.",
+      "No erroneous penalties applied to Critical items."
+    ],
+    "anchors": {
+      "0": "Applies a penalty to Critical items or shows non-zero deferred amounts.",
+      "1": "Correctly maps 0% penalty and 0 deferred for Critical items."
+    },
+    "acceptable_alternatives": [
+      "Leaving the penalty cell blank or 0 are both acceptable."
+    ],
+    "failure_examples": [
+      "Applying a 1.5% penalty to C-101 because it was deferred."
+    ]
+  },
+  {
+    "id": "R20",
+    "description": "Negative Constraint: Failure to maintain minimum operating balance.",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-3"
+    ],
+    "deliverables": [
+      "nov_payment_schedule.csv",
+      "liquidity_warning_report.md"
+    ],
+    "evidence": "If the solver's payment schedule results in an ending cash balance below $45,000 in either Nov or Dec, this flag triggers.",
+    "numeric_tolerance": 0,
+    "weight_reason": "Breaching minimum cash reserves is a critical compliance and operational failure.",
+    "criterion": [
+      "Nov ending balance >= $45,000.",
+      "Dec ending balance (after mandatory payments) >= $45,000."
+    ],
+    "anchors": {
+      "0": "Ending balances remain at or above $45,000 (No penalty).",
+      "1": "The proposed schedule or projection results in a balance below $45,000 (Penalty applied)."
+    },
+    "acceptable_alternatives": [
+      "None. The floor is absolute."
+    ],
+    "failure_examples": [
+      "Paying $160k in Nov, leaving $40k in the account.",
+      "Paying the full $73,810 deferred obligation in Dec, dropping the balance to $18,190."
+    ]
+  }
+]

@@ -1,0 +1,532 @@
+[
+  {
+    "id": "R01",
+    "description": "资质与合规性审查：是否正确识别Vendor A因账期不合规被淘汰，以及Vendor B在PCR参数上的资质缺失。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "bid_comparison_matrix.xlsx",
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "矩阵或备忘录中明确标注Vendor A 'Non-compliant' 或 'Eliminated' 因为Net 30 < Net 45；明确指出Vendor B需分包PCR温度参数。",
+    "numeric_tolerance": 0,
+    "weight_reason": "合规性是采购决策的一票否决项，必须准确识别。",
+    "criterion": [
+      "明确淘汰Vendor A因账期Net 30不满足最低Net 45要求",
+      "明确指出Vendor B在PCR-01参数上资质缺失，需分包"
+    ],
+    "anchors": {
+      "0": "未识别账期违规或未识别资质缺失",
+      "1": "同时准确识别账期违规和资质缺失"
+    },
+    "acceptable_alternatives": "可以使用不同措辞，如'Financial non-compliance'或'Account terms rejection'。",
+    "failure_examples": "忽略了Net 30与Net 45的冲突，继续将Vendor A纳入最终价格对比。"
+  },
+  {
+    "id": "R02",
+    "description": "账期合规性过滤应用：在比较矩阵中是否正确执行了账期过滤逻辑。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "bid_comparison_matrix.xlsx"
+    ],
+    "evidence": "bid_comparison_matrix.xlsx中的合规性审查列。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保财务合规政策被严格执行。",
+    "criterion": [
+      "矩阵中包含明确的合规性审查列",
+      "Vendor A被标记为不合规",
+      "Vendor B和C被标记为合规"
+    ],
+    "levels": {
+      "0": "未设置合规性审查列，或完全未过滤Vendor A",
+      "0.25": "设置了列，但仅过滤了Vendor A，未提及Vendor B和C的合规状态",
+      "0.5": "过滤了Vendor A，但对Vendor B的账期或合规性判断存在模糊或错误",
+      "0.75": "正确标记了A不合规、B和C合规，但未说明Net 45的政策依据",
+      "1": "正确标记三家状态，并清晰引用Net 45政策依据"
+    },
+    "acceptable_alternatives": "合规状态可用'Pass/Fail'、'Compliant/Non-compliant'或红绿灯图标表示。",
+    "failure_examples": "将Vendor A标记为合规，仅因其报价较低而忽略账期政策。"
+  },
+  {
+    "id": "R03",
+    "description": "停机违约扣款计算：是否准确计算了Vendor B和C因承诺周期超限导致的违约金，并得出调整后总价。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "bid_comparison_matrix.xlsx"
+    ],
+    "evidence": "bid_comparison_matrix.xlsx中的扣款计算列及调整后总价。",
+    "numeric_tolerance": 50,
+    "weight_reason": "核心业务逻辑，直接影响最终成本评估。",
+    "criterion": [
+      "正确计算每台仪器的超额天数（promised_days - max_downtime）",
+      "按Budget_Cap权重合理分摊总报价得出单台仪器基准价",
+      "应用10%/天的扣款规则",
+      "得出正确的调整后总价"
+    ],
+    "levels": {
+      "0": "未计算停机违约扣款，或计算逻辑完全错误（如直接扣总价的10%）",
+      "0.25": "识别了需要扣款，但未按单台仪器拆分计算，或天数计算错误",
+      "0.5": "正确计算了单台超额天数和扣款比例，但基准价分摊逻辑错误（如简单平均）",
+      "0.75": "计算逻辑完全正确，但最终调整后总价存在算术错误",
+      "1": "计算逻辑、分摊逻辑及最终总价完全正确"
+    },
+    "acceptable_alternatives": "单台基准价分摊可采用 Budget_Cap / Sum(Budget_Cap) * Total_Quote，只要逻辑一致且合理即可。",
+    "failure_examples": "直接用 Vendor B 总报价 21000 减去 (5.5 - 平均停机天数) * 10%，未按单台设备分别计算。"
+  },
+  {
+    "id": "R04",
+    "description": "预算上限检查：是否验证了最终授标金额不超过40,000 RMB。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "备忘录中明确提及预算上限检查及结果。",
+    "numeric_tolerance": 0,
+    "weight_reason": "财务红线，必须确认。",
+    "criterion": [
+      "明确提及40,000 RMB的预算上限",
+      "确认推荐方案的金额（或调整后金额）未超预算"
+    ],
+    "anchors": {
+      "0": "未提及预算上限检查",
+      "1": "明确提及并确认合规"
+    },
+    "acceptable_alternatives": "可表述为'Fits within the 40k RMB cap'。",
+    "failure_examples": "推荐了调整前超过4万的方案且未做说明。"
+  },
+  {
+    "id": "R05",
+    "description": "综合成本效益分析（TCO）：是否将备用机价值（1500 RMB）纳入综合评估。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "bid_comparison_matrix.xlsx"
+    ],
+    "evidence": "矩阵中的综合评分或TCO计算列。",
+    "numeric_tolerance": 0,
+    "weight_reason": "体现采购的专业深度，超越单纯的低价中标。",
+    "criterion": [
+      "识别Vendor B和C提供备用机",
+      "将1500 RMB价值转化为成本抵扣或等效加分",
+      "在最终对比中体现该价值"
+    ],
+    "levels": {
+      "0": "完全忽略备用机条款",
+      "0.25": "提及备用机，但未进行量化或价值转换",
+      "0.5": "量化了1500 RMB，但未与基础报价或扣款后报价进行综合对比",
+      "0.75": "在报价中抵扣了1500 RMB，但未说明依据",
+      "1": "清晰展示1500 RMB备用机价值，并合理纳入TCO或综合评分体系"
+    },
+    "acceptable_alternatives": "可将1500 RMB作为'Qualitative Value'或'Risk Mitigation Value'单独列出。",
+    "failure_examples": "认为备用机是'免费赠送'而不计入任何成本或价值评估。"
+  },
+  {
+    "id": "R06",
+    "description": "备忘录结构完整性：是否包含要求的四个核心部分。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "award_recommendation_memo.md的目录或段落标题。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保汇报材料结构清晰，满足管理层阅读需求。",
+    "criterion": [
+      "包含资质与合规审查结论",
+      "包含财务成本与停机风险对比",
+      "包含明确授标建议",
+      "包含交接与风险缓解措施"
+    ],
+    "anchors": {
+      "0": "缺失2个及以上核心部分",
+      "1": "包含所有4个核心部分"
+    },
+    "acceptable_alternatives": "标题措辞可不同，但内容必须覆盖。",
+    "failure_examples": "只写了推荐理由，缺少风险缓解措施。"
+  },
+  {
+    "id": "R07",
+    "description": "排期表逻辑约束：排期天数是否严格满足各仪器的最大停机天数。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "downtime_schedule.csv"
+    ],
+    "evidence": "downtime_schedule.csv中的'预计校准天数'列。",
+    "numeric_tolerance": 0,
+    "weight_reason": "直接关系研发项目的连续性，是核心业务约束。",
+    "criterion": [
+      "所有8台仪器的预计校准天数 <= 该仪器的Max_Downtime_Days",
+      "排期天数基于所选供应商的实际能力或合理承诺"
+    ],
+    "levels": {
+      "0": "存在3台及以上仪器排期天数超标",
+      "0.25": "存在1-2台仪器排期天数超标",
+      "0.5": "所有仪器未超标，但排期天数明显不符合供应商实际能力（如选Vendor B却排期1天）",
+      "0.75": "未超标且基本符合供应商能力，但个别边界情况（如PCR 1.5天与Vendor C 1.5天）处理生硬",
+      "1": "完全符合停机约束，且排期合理反映供应商服务周期"
+    },
+    "acceptable_alternatives": "若采用组合授标，不同仪器的排期天数可对应不同供应商的承诺周期。",
+    "failure_examples": "选择Vendor B（5.5天），却为HPLC（限制3天）排期3天，未考虑实际违约风险。"
+  },
+  {
+    "id": "R08",
+    "description": "负分项：是否直接将Vendor A推荐给研发总监而未说明需获取账期豁免。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "备忘录的最终建议部分。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严重违反财务合规政策，属于重大业务失误。",
+    "criterion": [
+      "最终建议授予Vendor A",
+      "未提及需要CFO特批豁免Net 45账期要求"
+    ],
+    "anchors": {
+      "1": "直接推荐Vendor A且未提豁免",
+      "0": "未推荐Vendor A，或推荐但明确说明需申请豁免"
+    },
+    "acceptable_alternatives": "无，此为禁止事件。",
+    "failure_examples": "认为Vendor A资质全且价格适中，直接推荐，忽略了Net 30的财务违规。"
+  },
+  {
+    "id": "R09",
+    "description": "交付物文件名与格式正确性。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "bid_comparison_matrix.xlsx",
+      "award_recommendation_memo.md",
+      "downtime_schedule.csv"
+    ],
+    "evidence": "输出目录中的文件名。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础工作要求。",
+    "criterion": [
+      "三个文件名完全匹配",
+      "扩展名正确"
+    ],
+    "anchors": {
+      "0": "文件名或扩展名错误",
+      "1": "完全正确"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "输出为 bid_comparison_matrix.csv。"
+  },
+  {
+    "id": "R10",
+    "description": "识别Vendor B周期违约的具体影响：是否指出Vendor B的5.5天周期会导致哪些具体仪器违约。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "bid_comparison_matrix.xlsx",
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "分析文本或矩阵备注中列出的违约仪器清单。",
+    "numeric_tolerance": 0,
+    "weight_reason": "体现对业务细节的掌握程度。",
+    "criterion": [
+      "指出HPLC, GC-MS, BAL, UV, IC, PCR, TOC, VISCO中大部分或全部受Vendor B周期影响",
+      "明确说明5.5天远超多数仪器的限制"
+    ],
+    "anchors": {
+      "0": "未具体指出受影响的仪器",
+      "1": "准确指出受影响的仪器或说明5.5天导致广泛违约"
+    },
+    "acceptable_alternatives": "可列表展示，也可文字概括。",
+    "failure_examples": "仅说'Vendor B会导致部分仪器超时'，未说明具体是哪些。"
+  },
+  {
+    "id": "R11",
+    "description": "授标策略的合理性与替代解：是否提出单一授标或合理的组合授标策略。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "备忘录中的授标建议部分。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察解决复杂问题的能力，组合授标是高级实践。",
+    "criterion": [
+      "给出明确的单一授标建议（如选C）",
+      "或给出逻辑严密的组合授标建议（如A类给C，B类给B）",
+      "策略能平衡成本与风险"
+    ],
+    "levels": {
+      "0": "未给出明确建议，或建议自相矛盾",
+      "0.25": "给出单一建议，但理由不充分或忽略了关键风险",
+      "0.5": "给出单一建议（如选C），理由基本合理（如合规、周期短）",
+      "0.75": "给出组合授标建议，但分配逻辑存在瑕疵（如把高价值仪器分给资质弱的）",
+      "1": "给出单一或组合授标建议，逻辑严密，完美平衡合规、成本与停机风险"
+    },
+    "acceptable_alternatives": "推荐Vendor C（单一）或 Vendor B+C（组合）均视为合理，关键看论证。",
+    "failure_examples": "推荐Vendor B单一授标，且未提出任何风险缓解措施来应对超时。"
+  },
+  {
+    "id": "R12",
+    "description": "备忘录语气与专业性：是否采用适合向研发总监汇报的专业商务语气。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "备忘录整体行文风格。",
+    "numeric_tolerance": 0,
+    "weight_reason": "职场沟通基本功。",
+    "criterion": [
+      "语气客观、专业",
+      "结构清晰，便于管理层快速抓取重点"
+    ],
+    "anchors": {
+      "0": "语气随意、口语化或结构混乱",
+      "1": "专业商务语气，结构清晰"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "使用大量表情符号或口语化表达（如'Vendor A太坑了'）。"
+  },
+  {
+    "id": "R13",
+    "description": "排期表冲突检查：是否确保同一台仪器不会在同一天被重复安排或排期重叠导致逻辑冲突。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "downtime_schedule.csv"
+    ],
+    "evidence": "downtime_schedule.csv中的日期和天数列。",
+    "numeric_tolerance": 0,
+    "weight_reason": "排期表必须具备可执行性。",
+    "criterion": [
+      "每台仪器的计划交接日期+预计天数不会与自身其他任务冲突",
+      "日期格式正确"
+    ],
+    "anchors": {
+      "0": "存在明显的日期重叠或逻辑冲突",
+      "1": "排期逻辑自洽，无冲突"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "同一台仪器在同一天安排了两次校准。"
+  },
+  {
+    "id": "R14",
+    "description": "数据源引用准确性：在计算和论证中是否正确引用了输入文件中的数据（如预算、天数）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "bid_comparison_matrix.xlsx",
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "计算过程和文本引用。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保分析基于事实而非臆造。",
+    "criterion": [
+      "引用的Budget_Cap、Max_Downtime_Days与输入文件一致",
+      "引用的供应商报价与输入文件一致"
+    ],
+    "anchors": {
+      "0": "引用了错误的原始数据",
+      "1": "所有引用数据准确无误"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将HPLC的预算写成50000而非5000。"
+  },
+  {
+    "id": "R15",
+    "description": "风险缓解措施的具体性：针对中标供应商的潜在风险（如Vendor C价格高、Vendor B周期长），是否提出具体缓解措施。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "备忘录的风险缓解部分。",
+    "numeric_tolerance": 0,
+    "weight_reason": "体现采购的事前管理能力。",
+    "criterion": [
+      "若选B，提出分包质量控制或超时罚款条款",
+      "若选C，提出价格谈判或长期协议折扣",
+      "措施具有可操作性"
+    ],
+    "anchors": {
+      "0": "未提出具体缓解措施，或措施空洞（如'加强沟通'）",
+      "1": "提出至少两项具体、可操作的缓解措施"
+    },
+    "acceptable_alternatives": "措施可包括合同条款、备选方案、阶段性验收等。",
+    "failure_examples": "仅写'我们会监督Vendor B的进度'。"
+  },
+  {
+    "id": "R16",
+    "description": "分包管理要求的理解：是否指出Vendor B的分包需遵循政策第4条（总周期含分包，主供应商担责）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "bid_comparison_matrix.xlsx",
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "对Vendor B资质缺失的处理说明。",
+    "numeric_tolerance": 0,
+    "weight_reason": "合规细节。",
+    "criterion": [
+      "指出Vendor B的分包时间已计入其5.5天周期中",
+      "或明确指出主供应商需对分包质量负责"
+    ],
+    "anchors": {
+      "0": "完全忽略分包责任或周期计算",
+      "1": "正确理解并应用分包管理规则"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为Vendor B自身只需3天，分包的2天可以不计入考核。"
+  },
+  {
+    "id": "R17",
+    "description": "负分项：是否直接采用供应商原始报价进行对比，未进行停机违约扣款调整。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "bid_comparison_matrix.xlsx"
+    ],
+    "evidence": "矩阵中的最终对比价格。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严重业务逻辑错误，导致决策依据失效。",
+    "criterion": [
+      "最终对比价格等于或极度接近供应商原始总报价",
+      "未体现任何因超时导致的扣款"
+    ],
+    "anchors": {
+      "1": "未做扣款调整，直接用原价对比",
+      "0": "进行了合理的扣款调整"
+    },
+    "acceptable_alternatives": "无，此为禁止事件。",
+    "failure_examples": "在最终推荐中，仍使用Vendor B的21000作为基础成本，忽略其超时带来的隐性成本。"
+  },
+  {
+    "id": "R18",
+    "description": "总体推荐结论的清晰度：是否在备忘录开头或结尾用一句话明确给出最终建议。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "备忘录的执行摘要或结论段。",
+    "numeric_tolerance": 0,
+    "weight_reason": "管理层阅读习惯。",
+    "criterion": [
+      "有明确的'推荐授予Vendor X'的结论句"
+    ],
+    "anchors": {
+      "0": "结论模糊，需通读全文才能猜测",
+      "1": "有清晰明确的结论句"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "写'Vendor C看起来不错，但Vendor B也有优势，请领导定夺'。"
+  },
+  {
+    "id": "R19",
+    "description": "日期与时区格式规范：排期表中的日期格式是否统一且符合业务习惯。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "downtime_schedule.csv"
+    ],
+    "evidence": "downtime_schedule.csv中的日期列。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数据规范性。",
+    "criterion": [
+      "日期格式统一（如YYYY-MM-DD）",
+      "起始日期不早于2024-05-27"
+    ],
+    "anchors": {
+      "0": "格式混乱或起始日期错误",
+      "1": "格式统一且起始日期正确"
+    },
+    "acceptable_alternatives": "可使用YYYY/MM/DD，但需统一。",
+    "failure_examples": "部分写'5月27日'，部分写'2024-05-28'。"
+  },
+  {
+    "id": "R20",
+    "description": "矩阵数据可视化与易读性：比较矩阵是否使用了条件格式、清晰的表头或合理的排序以辅助决策。",
+    "type": "Gradient",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "bid_comparison_matrix.xlsx"
+    ],
+    "evidence": "bid_comparison_matrix.xlsx的排版和格式。",
+    "numeric_tolerance": 0,
+    "weight_reason": "提升交付物的专业度和用户体验。",
+    "criterion": [
+      "表头清晰",
+      "数据对齐",
+      "有适当的视觉辅助（如加粗、颜色区分合规/违规）"
+    ],
+    "levels": {
+      "0": "纯文本堆砌，无表格结构或表头缺失",
+      "0.25": "有表格结构，但无表头或数据错位",
+      "0.5": "表头清晰，数据对齐，但无视觉区分",
+      "0.75": "使用了颜色或加粗区分关键信息（如违规项、最终推荐项）",
+      "1": "排版专业，视觉辅助恰到好处，极大提升阅读效率"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将数据直接以逗号分隔的纯文本形式放在Excel单元格内。"
+  },
+  {
+    "id": "R21",
+    "description": "对落选供应商的反馈要点：是否简要说明了为何未选择其他供应商，以便后续沟通。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "award_recommendation_memo.md"
+    ],
+    "evidence": "备忘录的反馈或落选说明部分。",
+    "numeric_tolerance": 0,
+    "weight_reason": "供应商关系管理的专业实践。",
+    "criterion": [
+      "对落选供应商（如A和B，或A和C）给出了基于政策的客观落选原因"
+    ],
+    "anchors": {
+      "0": "未提及落选原因",
+      "1": "给出了客观、基于政策的落选原因"
+    },
+    "acceptable_alternatives": "原因可包括'账期不符'、'停机风险过高'等。",
+    "failure_examples": "仅写'Vendor A未中标'，不说明原因。"
+  }
+]

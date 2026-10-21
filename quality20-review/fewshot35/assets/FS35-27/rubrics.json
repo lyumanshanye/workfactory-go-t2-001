@@ -1,0 +1,523 @@
+[
+  {
+    "id": "R01",
+    "description": "技术合规矩阵正确评估主推产品(DualFlow HTS)的集成移液能力（接触式+声波），标记为PASS。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Technical_Compliance_Matrix.csv"
+    ],
+    "evidence": "查看Technical_Compliance_Matrix.csv中Liquid Handling/移液技术行，DualFlow HTS列应标为PASS，并引用Internal CSV中的Acoustic_Support=Yes, Contact_Support=Yes。",
+    "numeric_tolerance": "",
+    "weight_reason": "核心需求匹配度，直接决定方案可行性。",
+    "criterion": [
+      "矩阵必须包含移液技术要求的评估行",
+      "DualFlow HTS必须标记为PASS",
+      "必须引用内部数据证明其同时支持声接触式"
+    ],
+    "anchors": {
+      "0": "未评估或DualFlow标记为FAIL/PARTIAL",
+      "1": "正确标记为PASS并有证据支持"
+    },
+    "acceptable_alternatives": "允许使用不同的列名或行名，只要逻辑对应即可。",
+    "failure_examples": "将DualFlow标记为FAIL，或遗漏了接触式移液的支持说明。"
+  },
+  {
+    "id": "R02",
+    "description": "技术合规矩阵正确评估384孔板支持情况，DualFlow和EchoMatrix为PASS，AutoFlex为FAIL。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Technical_Compliance_Matrix.csv"
+    ],
+    "evidence": "查看Throughput & Format行，AutoFlex列应为FAIL（Internal CSV中384_Plate_Support=No）。",
+    "numeric_tolerance": "",
+    "weight_reason": "通量要求是HTS的核心，错误评估会导致方案无效。",
+    "criterion": [
+      "包含通量与板型要求评估",
+      "AutoFlex必须标记为FAIL",
+      "DualFlow/EchoMatrix标记为PASS"
+    ],
+    "anchors": {
+      "0": "AutoFlex未标记为FAIL或遗漏评估",
+      "1": "所有产品评估正确"
+    },
+    "acceptable_alternatives": "可合并96和384孔要求为一行或分两行。",
+    "failure_examples": "将AutoFlex标记为PASS，因其支持384孔板。"
+  },
+  {
+    "id": "R03",
+    "description": "技术合规矩阵正确评估精度要求（CV ≤ 5%），指出DualFlow和EchoMatrix标称<3%，满足要求。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Technical_Compliance_Matrix.csv"
+    ],
+    "evidence": "Precision行，DualFlow/EchoMatrix应标记PASS，备注中提及<3%或满足≤5%。",
+    "numeric_tolerance": "",
+    "weight_reason": "精度是液体处理的关键指标。",
+    "criterion": [
+      "包含精度要求评估",
+      "DualFlow/EchoMatrix标记为PASS",
+      "备注或证据中体现CV < 3% 或 ≤ 5%"
+    ],
+    "anchors": {
+      "0": "未评估或标记错误",
+      "1": "评估正确且逻辑自洽"
+    },
+    "acceptable_alternatives": "若未提供具体CV数值，但基于产品定位判定为PASS也可接受，但最好有数值支撑。",
+    "failure_examples": "因RFQ未提供具体产品CV数据而将该行标记为PARTIAL或FAIL。"
+  },
+  {
+    "id": "R04",
+    "description": "技术合规矩阵正确评估洁净室兼容性，DualFlow为直接PASS，EchoMatrix为条件PASS（需Adapter），AutoFlex为FAIL。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-04"
+    ],
+    "deliverables": [
+      "Technical_Compliance_Matrix.csv"
+    ],
+    "evidence": "Cleanroom Compatibility行，DualFlow为PASS（ISO 7 Certified），EchoMatrix为PARTIAL/PASS（Needs Adapter），AutoFlex为FAIL（No）。",
+    "numeric_tolerance": "",
+    "weight_reason": "洁净室合规是安装的物理前提，错误评估会导致现场拒收。",
+    "criterion": [
+      "包含洁净室要求评估",
+      "DualFlow标记为PASS",
+      "EchoMatrix体现需要Adapter或条件通过",
+      "AutoFlex标记为FAIL"
+    ],
+    "anchors": {
+      "0": "未区分产品认证状态或AutoFlex未标FAIL",
+      "1": "准确反映Internal CSV中的认证状态"
+    },
+    "acceptable_alternatives": "EchoMatrix可标为PARTIAL并说明需额外采购或验证Adapter。",
+    "failure_examples": "将EchoMatrix直接标记为PASS而未提及Needs Adapter限制。"
+  },
+  {
+    "id": "R05",
+    "description": "技术合规矩阵正确评估软件接口（REST API），DualFlow和EchoMatrix为PASS，AutoFlex为FAIL。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Technical_Compliance_Matrix.csv"
+    ],
+    "evidence": "Software Integration行，AutoFlex列应为FAIL。",
+    "numeric_tolerance": "",
+    "weight_reason": "LIMS集成是客户明确的IT要求。",
+    "criterion": [
+      "包含软件接口评估",
+      "AutoFlex标记为FAIL",
+      "DualFlow/EchoMatrix标记为PASS"
+    ],
+    "anchors": {
+      "0": "AutoFlex未标FAIL",
+      "1": "评估完全正确"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为所有产品均支持标准LIMS接口而将AutoFlex标为PASS。"
+  },
+  {
+    "id": "R06",
+    "description": "演示大纲明确指出客户痛点（人工搬运导致的污染和瓶颈），并说明主推方案如何解决。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "Proposal_Presentation_Outline.md"
+    ],
+    "evidence": "查看Presentation Outline，是否提及manual transfer / cross-contamination / throughput bottleneck，并说明DualFlow的Integrated特性消除了搬运。",
+    "numeric_tolerance": "",
+    "weight_reason": "解决客户核心痛点是赢单的关键。",
+    "criterion": [
+      "提及人工搬运痛点",
+      "提及交叉污染或通量瓶颈",
+      "说明一体化/集成方案如何解决此问题"
+    ],
+    "anchors": {
+      "0": "未提及痛点或解决方案与痛点脱节",
+      "1": "痛点与解决方案逻辑闭环"
+    },
+    "acceptable_alternatives": "可使用不同的措辞描述痛点，如'plate handling risks'。",
+    "failure_examples": "只强调设备速度快，未提及解决人工搬运问题。"
+  },
+  {
+    "id": "R07",
+    "description": "演示大纲对比竞品(Competitor Y/SonicDispense Pro)，指出其缺乏接触式模块导致仍需人工干预的弱点。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "Proposal_Presentation_Outline.md"
+    ],
+    "evidence": "Competitor Analysis部分，指出SonicDispense Pro仅为acoustic module，仍需手动处理buffers。",
+    "numeric_tolerance": "",
+    "weight_reason": "针对竞品弱点进行防御性销售。",
+    "criterion": [
+      "提及竞品SonicDispense Pro",
+      "指出其仅支持声波/缺乏接触式",
+      "说明其无法解决客户搬运痛点"
+    ],
+    "anchors": {
+      "0": "未提及竞品或分析错误",
+      "1": "准确击中竞品弱点"
+    },
+    "acceptable_alternatives": "无需提及具体价格，重点在技术短板。",
+    "failure_examples": "仅对比价格，未分析技术架构差异。"
+  },
+  {
+    "id": "R08",
+    "description": "演示大纲包含Q3安装与OQ/PQ的时间线规划，且逻辑上考虑了14周交期。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "Proposal_Presentation_Outline.md"
+    ],
+    "evidence": "Timeline部分，PO在6月，考虑到14周（约3.5个月）交期，安装/OQ/PQ安排在Q3（8-9月）。",
+    "numeric_tolerance": "",
+    "weight_reason": "项目可行性验证。",
+    "criterion": [
+      "包含时间线",
+      "考虑了Lead Time",
+      "最终完成时间在Q3 2024内"
+    ],
+    "anchors": {
+      "0": "无时间线或时间线不合理",
+      "1": "时间线合理且符合约束"
+    },
+    "acceptable_alternatives": "若建议加急或分批发货也可接受，只要最终满足Q3。",
+    "failure_examples": "时间线显示Q4才完成安装。"
+  },
+  {
+    "id": "R09",
+    "description": "报价单主推DualFlow HTS，且选型逻辑在备忘录或大纲中有清晰支撑。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "Pricing_and_Margin_Workbook.csv",
+      "Internal_Win_Strategy_Memo.md"
+    ],
+    "evidence": "报价单包含DualFlow HTS，备忘录中说明选择一体化方案的理由。",
+    "numeric_tolerance": "",
+    "weight_reason": "确保推荐方案符合业务目标。",
+    "criterion": [
+      "报价单包含DualFlow",
+      "备忘录说明选型理由（如解决痛点、CapEx阈值）"
+    ],
+    "anchors": {
+      "0": "未主推DualFlow或无理由",
+      "1": "逻辑清晰"
+    },
+    "acceptable_alternatives": "若主推EchoMatrix+AutoFlex组合，需有极强的成本/场地理由，但通常不推荐。",
+    "failure_examples": "报价单中遗漏了主推硬件。"
+  },
+  {
+    "id": "R10",
+    "description": "报价单计算折扣，使总价落入$300,000以内，且折扣率符合内部授权（≤15%）。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02",
+      "REQ-05"
+    ],
+    "deliverables": [
+      "Pricing_and_Margin_Workbook.csv"
+    ],
+    "evidence": "列表总价（含安装和License）>300K，应用8%或15%折扣后，Final Price ≤ 300,000。折扣率≤15%。",
+    "numeric_tolerance": "0.01",
+    "weight_reason": "核心商务约束，直接决定审批流程。",
+    "criterion": [
+      "计算列表总价",
+      "应用合理折扣（8%或15%）",
+      "最终价格≤300,000",
+      "折扣率未超标"
+    ],
+    "anchors": {
+      "0": "总价超300K或折扣率计算错误",
+      "1": "计算完全正确且符合阈值"
+    },
+    "acceptable_alternatives": "可调整产品组合（如去掉某些非必要服务）来降价，但需合理。",
+    "failure_examples": "应用了20%的折扣，或最终价格仍为$305,000。"
+  },
+  {
+    "id": "R11",
+    "description": "报价单准确计算内部毛利率，确保≥35%。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "Pricing_and_Margin_Workbook.csv"
+    ],
+    "evidence": "毛利率 = (Final Price - Total Internal Cost) / Final Price。Total Cost包含硬件、安装、软件成本。结果≥35%。",
+    "numeric_tolerance": "0.005",
+    "weight_reason": "公司盈利底线。",
+    "criterion": [
+      "正确汇总内部成本",
+      "正确计算毛利率",
+      "毛利率≥35%"
+    ],
+    "anchors": {
+      "0": "毛利率计算错误或<35%",
+      "1": "计算正确且达标"
+    },
+    "acceptable_alternatives": "若成本计算包含税费等需明确说明，但基于给定数据应使用Internal_Cost_USD。",
+    "failure_examples": "未将Install_Svc_HTS的成本($6000)计入总成本，导致毛利率虚高。"
+  },
+  {
+    "id": "R12",
+    "description": "报价单包含安装服务和API License的独立列或合理打包，不遗漏必要组件。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Pricing_and_Margin_Workbook.csv"
+    ],
+    "evidence": "报价明细中包含Install_Svc_HTS和LIMS_API_License。",
+    "numeric_tolerance": "",
+    "weight_reason": "确保方案完整性，避免后期变更单。",
+    "criterion": [
+      "包含安装服务报价",
+      "包含API License报价"
+    ],
+    "anchors": {
+      "0": "遗漏必要组件",
+      "1": "组件齐全"
+    },
+    "acceptable_alternatives": "可将License打包进硬件，但需在备注中说明。",
+    "failure_examples": "只报了硬件价格，未包含客户要求的API License。"
+  },
+  {
+    "id": "R13",
+    "description": "备忘录分析竞品Y的弱点，指出其功能单一导致客户仍需人工干预，验证了客户VP的担忧。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "Internal_Win_Strategy_Memo.md"
+    ],
+    "evidence": "Competitor Analysis部分，提及SonicDispense Pro，指出其缺乏contact module，需manual handling。",
+    "numeric_tolerance": "",
+    "weight_reason": "知己知彼，制定针对性话术。",
+    "criterion": [
+      "提及竞品型号",
+      "指出技术短板",
+      "关联客户担忧"
+    ],
+    "anchors": {
+      "0": "未分析或分析偏离",
+      "1": "分析准确且切中要害"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "仅分析竞品价格，未提及技术架构缺陷。"
+  },
+  {
+    "id": "R14",
+    "description": "备忘录指出报价策略需匹配$300K CapEx快速通道，并说明折扣申请的必要性。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Internal_Win_Strategy_Memo.md"
+    ],
+    "evidence": "Budget/Approval部分，明确提及$300K阈值，说明为何申请8%或15%折扣。",
+    "numeric_tolerance": "",
+    "weight_reason": "商务策略与客户内部流程对齐。",
+    "criterion": [
+      "提及$300K CapEx阈值",
+      "说明折扣申请理由"
+    ],
+    "anchors": {
+      "0": "未提及阈值或折扣理由不充分",
+      "1": "逻辑严密"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为客户预算充足，未考虑CapEx通道限制。"
+  },
+  {
+    "id": "R15",
+    "description": "备忘录识别洁净室安装风险（高度限制、FFU气流），并提出应对方案（如DualFlow自带认证，或现场测绘）。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "Internal_Win_Strategy_Memo.md"
+    ],
+    "evidence": "Risk Management部分，提及2.2米高度限制、FFU downflow，说明DualFlow的ISO 7 Certified优势或EchoMatrix的测绘需求。",
+    "numeric_tolerance": "",
+    "weight_reason": "现场安装风险是项目交付的重大隐患。",
+    "criterion": [
+      "提及2.2米高度限制",
+      "提及FFU气流干扰",
+      "提出应对或确认方案"
+    ],
+    "anchors": {
+      "0": "未识别风险或无应对",
+      "1": "风险识别准确且有应对"
+    },
+    "acceptable_alternatives": "若推荐EchoMatrix，必须强调需现场验证高度和Adapter。",
+    "failure_examples": "忽略洁净室限制，假设设备可直接进入。"
+  },
+  {
+    "id": "R16",
+    "description": "备忘录对齐决策人偏好，区分Dr. Thorne（预算/通道）和Sarah Jenkins（洁净室限制）的关注点。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "Internal_Win_Strategy_Memo.md"
+    ],
+    "evidence": "Stakeholder Alignment部分，分别提及两人的关注点及应对策略。",
+    "numeric_tolerance": "",
+    "weight_reason": "多决策人销售策略。",
+    "criterion": [
+      "提及Dr. Thorne及CapEx关注",
+      "提及Sarah Jenkins及洁净室关注"
+    ],
+    "anchors": {
+      "0": "遗漏关键决策人",
+      "1": "全面覆盖"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "只关注了预算，忽略了Lab Director的现场限制。"
+  },
+  {
+    "id": "R17",
+    "description": "若提供备选方案（如EchoMatrix+AutoFlex），是否合理评估了通量损失、集成痛点未解决与成本节约的权衡。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [],
+    "deliverables": [
+      "Internal_Win_Strategy_Memo.md",
+      "Proposal_Presentation_Outline.md"
+    ],
+    "evidence": "备选方案部分，是否指出该组合虽降低成本，但仍需人工搬运（未解决痛点），且需验证洁净室适配。",
+    "numeric_tolerance": "",
+    "weight_reason": "评估备选方案的商业与技术可行性。",
+    "criterion": [
+      "提出备选方案",
+      "分析成本优势",
+      "指出痛点未解决/集成度低",
+      "指出洁净室验证风险"
+    ],
+    "levels": {
+      "0": "未提供备选方案或完全忽略其缺点",
+      "0.25": "提及备选方案但仅分析成本，未分析技术/痛点缺陷",
+      "0.5": "指出痛点未解决，但未提及洁净室验证风险",
+      "0.75": "全面分析了成本与缺陷，但未给出明确建议或权衡结论",
+      "1": "全面分析成本、痛点缺陷、洁净室风险，并给出清晰的适用场景建议"
+    },
+    "acceptable_alternatives": "若明确建议不采用备选方案，只需充分说明理由即可。",
+    "failure_examples": "认为备选方案完美解决所有问题，忽略了其缺乏集成性的事实。"
+  },
+  {
+    "id": "R18",
+    "description": "整体方案逻辑一致性：技术矩阵、报价、演示和备忘录之间是否相互支撑，无自相矛盾。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [],
+    "deliverables": [
+      "Technical_Compliance_Matrix.csv",
+      "Proposal_Presentation_Outline.md",
+      "Pricing_and_Margin_Workbook.csv",
+      "Internal_Win_Strategy_Memo.md"
+    ],
+    "evidence": "交叉检查各交付物。例如，报价中的产品是否与矩阵中的主推产品一致；备忘录中的折扣策略是否与报价单中的计算一致。",
+    "numeric_tolerance": "",
+    "weight_reason": "确保交付物作为一个整体方案的专业性。",
+    "criterion": [
+      "产品选型一致",
+      "价格与折扣一致",
+      "时间线一致",
+      "风险应对一致"
+    ],
+    "levels": {
+      "0": "存在严重矛盾（如报价产品与矩阵不符）",
+      "0.25": "存在轻微矛盾（如备忘录未提及报价中的关键折扣）",
+      "0.5": "基本一致，但缺乏交叉引用或逻辑衔接生硬",
+      "0.75": "高度一致，逻辑清晰，但个别细节可优化",
+      "1": "完美一致，各部分相互印证，形成严密的赢单逻辑链"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "矩阵主推DualFlow，但报价单中只报了EchoMatrix。"
+  },
+  {
+    "id": "R19",
+    "description": "交付物完整性与格式：是否按要求的四个文件名输出，且格式正确（CSV/MD）。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "Technical_Compliance_Matrix.csv",
+      "Proposal_Presentation_Outline.md",
+      "Pricing_and_Margin_Workbook.csv",
+      "Internal_Win_Strategy_Memo.md"
+    ],
+    "evidence": "检查输出目录中是否存在这四个文件，且扩展名和基础结构正确。",
+    "numeric_tolerance": "",
+    "weight_reason": "基本交付规范。",
+    "criterion": [
+      "存在四个指定文件",
+      "CSV格式可解析",
+      "MD格式正确"
+    ],
+    "anchors": {
+      "0": "缺失文件或格式严重错误",
+      "1": "全部符合要求"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将CSV文件保存为TXT，或缺失Memo文件。"
+  },
+  {
+    "id": "R20",
+    "description": "负分项：是否编造了内部产品库中不存在的产品型号、虚假的行业认证标准或虚构的竞品数据。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [],
+    "deliverables": [
+      "Technical_Compliance_Matrix.csv",
+      "Proposal_Presentation_Outline.md",
+      "Pricing_and_Margin_Workbook.csv",
+      "Internal_Win_Strategy_Memo.md"
+    ],
+    "evidence": "检查所有交付物中是否出现了Input文件中未定义的产品型号（如P-004），或虚构了ISO标准（如ISO 9001认证用于洁净室），或捏造了竞品价格。",
+    "numeric_tolerance": "",
+    "weight_reason": "严禁编造事实，确保基于给定数据的严谨性。",
+    "criterion": [
+      "未编造产品型号",
+      "未虚构认证标准",
+      "未捏造竞品数据"
+    ],
+    "anchors": {
+      "0": "存在编造事实",
+      "1": "严格基于输入材料"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "在报价单中添加了内部CSV中不存在的'Cleanroom_Adapter_Pro'并标价$5000。"
+  }
+]

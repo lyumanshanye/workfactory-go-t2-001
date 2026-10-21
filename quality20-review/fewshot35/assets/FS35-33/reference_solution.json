@@ -1,0 +1,25 @@
+{
+  "key_facts_and_values": {
+    "mTLS_paths": "device cert: /etc/edgsync/certs/device.pem, CA cert: /etc/edgsync/certs/ca.pem",
+    "ntp_tolerance": "5 minutes",
+    "api_v1_status": "Deprecated & Removed",
+    "api_v2_endpoint": "POST /api/v2/devices/{device_id}/sync",
+    "payload_limit_v2": "500 records (down from 1000)",
+    "queue_limit_v2": "5000 (down from 10000), config key: max_queue_size",
+    "log_path_v2": "/var/log/edgsync/"
+  },
+  "evidence_chain": [
+    "TKT-101/104 -> mTLS 401/TLS error -> Release Notes Authentication -> 需配置证书路径，且 NTP 偏差 > 5 分钟会失败。",
+    "TKT-102 -> 数据丢失假象 -> Release Notes Synchronization -> v2 增量合并基于时间戳，设备时间不准会导致旧数据覆盖新数据。",
+    "TKT-103 -> 优先级未生效 -> Release Notes Offline Queue -> 需在 payload 显式传 priority=HIGH，且客户端必须为 v2。",
+    "TKT-105 -> 404 Not Found -> Release Notes API Changes -> v1 接口已物理移除，必须改用 v2 端点。",
+    "TKT-106 -> payload too large -> Release Notes API Changes -> v2 限制 500 条。",
+    "TKT-107 -> 频繁重启/磁盘满 -> Release Notes Logging -> 日志路径变更为 /var/log/edgsync/，DEBUG 级别会打满磁盘。",
+    "TKT-108 -> queue overflow -> Release Notes Offline Queue -> 默认上限降至 5000，需改 edgsync.conf。"
+  ],
+  "alternative_solutions_and_limits": [
+    "对于 TKT-107 的磁盘满问题，除了调整日志级别，建议配置 logrotate 也是合理的专业实践，即使材料未直接提及。",
+    "对于 TKT-103 的优先级问题，如果业务系统无法修改 payload，降级回 v1 客户端（如果 v1 仍支持）也是一种替代解，但文档应优先推荐升级客户端。",
+    "材料未提供具体的 NTP 配置命令（如 timedatectl 或 ntpd），文档中提供通用建议或常见 Linux 命令均可接受，不应因缺少具体 OS 命令而扣分。"
+  ]
+}

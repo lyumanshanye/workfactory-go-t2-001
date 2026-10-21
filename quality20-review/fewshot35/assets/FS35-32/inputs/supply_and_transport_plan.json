@@ -1,0 +1,31 @@
+{
+  "supplier_arrivals": [
+    {"sku": "SKU-101", "expected_arrival_day": 4, "qty": 10},
+    {"sku": "SKU-102", "expected_arrival_day": 3, "qty": 15},
+    {"sku": "SKU-103", "expected_arrival_day": 1, "qty": 50},
+    {"sku": "SKU-104", "expected_arrival_day": 5, "qty": 40},
+    {"sku": "SKU-105", "expected_arrival_day": 6, "qty": 5},
+    {"sku": "SKU-106", "expected_arrival_day": 2, "qty": 20},
+    {"sku": "SKU-107", "expected_arrival_day": 1, "qty": 30},
+    {"sku": "SKU-108", "expected_arrival_day": 2, "qty": 150}
+  ],
+  "transport_routes": {
+    "CDC_to_RDC_A": {"daily_capacity_units": 40, "cost_per_unit": 50, "transit_days": 1},
+    "CDC_to_RDC_B": {"daily_capacity_units": 35, "cost_per_unit": 65, "transit_days": 1},
+    "CDC_to_RDC_C": {"daily_capacity_units": 30, "cost_per_unit": 80, "transit_days": 2}
+  },
+  "horizontal_transfers": {
+    "RDC_A_to_RDC_B": {"daily_capacity_units": 10, "cost_per_unit": 30, "transit_days": 1},
+    "RDC_B_to_RDC_C": {"daily_capacity_units": 10, "cost_per_unit": 45, "transit_days": 1},
+    "RDC_A_to_RDC_C": {"daily_capacity_units": 8, "cost_per_unit": 60, "transit_days": 2}
+  },
+  "emergency_transport": {
+    "flat_cost_per_dispatch": 3500,
+    "max_weight_units": 20,
+    "transit_days": 1
+  },
+  "downtime_cost_per_unit_per_day": {
+    "SKU-101": 5000, "SKU-102": 2000, "SKU-103": 500, "SKU-104": 200,
+    "SKU-105": 12000, "SKU-106": 800, "SKU-107": 300, "SKU-108": 100
+  }
+}

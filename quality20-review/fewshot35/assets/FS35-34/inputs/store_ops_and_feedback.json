@@ -1,0 +1,24 @@
+{
+  "store_id": "AURA-SH-04",
+  "month": "2024-04",
+  "complaint_categories": {
+    "Milk_Texturing": {"count": 12, "desc": "奶泡粗糙，拉花失败，温度过高或过低"},
+    "Espresso_Extraction": {"count": 8, "desc": "萃取不足或过度，风味苦涩/偏酸，流速不稳"},
+    "Customer_Communication": {"count": 5, "desc": "推荐不自然，处理抱怨生硬，缺乏眼神交流"},
+    "Order_Accuracy": {"count": 15, "desc": "高峰期做错杯，漏加配料，杯贴写错"},
+    "Equipment_Maintenance": {"count": 3, "desc": "咖啡机蒸汽棒堵塞，磨豆机校准错误，吧台卫生不达标"}
+  },
+  "peak_hours": ["08:00-09:30", "12:30-13:30", "17:30-19:00"],
+  "mentor_availability": {
+    "M01": {"shift_hours": ["07:00-15:00"], "off_days": ["Tuesday", "Wednesday"]},
+    "M02": {"shift_hours": ["12:00-20:00"], "off_days": ["Monday", "Tuesday"]},
+    "M03": {"shift_hours": ["14:00-22:00"], "off_days": ["Wednesday", "Thursday"]},
+    "M04": {"shift_hours": ["09:00-18:00"], "off_days": ["Saturday", "Sunday"]}
+  },
+  "training_rules": {
+    "max_trainees_per_mentor_per_shift": 2,
+    "mentor_max_weekly_training_hours": 6,
+    "training_cannot_overlap_peak_hours": true,
+    "mentor_off_days_must_be_respected": true
+  }
+}

@@ -1,0 +1,522 @@
+{
+  "title": "X-Search检索系统候选算法A/B测试与压测日志分析",
+  "request": "你好，星汉前沿计算实验室（Xinghan Frontier Computing Lab）的X-Search项目组目前正处于核心检索引擎的原型选型阶段。我们近期针对两个候选算法原型——稠密稀疏混合检索算法（Dense-Sparse-Hybrid, 简称DSH）和轻量级双塔检索算法（Lightweight-Bi-Encoder, 简称LBE）——进行了为期一周的A/B测试与系统压测。\n\n试验日志和系统监控数据已经导出（见输入材料）。你的任务是深入分析这些试验记录，检验这两种算法在查询质量（NDCG@10, Recall@100）、响应延迟以及系统资源消耗（CPU、GPU、内存）上的具体取舍关系。特别需要关注长尾查询（长文本）对算法质量的衰减影响，以及高并发下DSH算法出现的OOM（内存溢出）问题。\n\n请基于分析结果，交付以下成果：\n1. 算法取舍与瓶颈分析报告（algorithm_tradeoff_report.md）：需包含不同查询长度下的质量/延迟对比、高并发下的资源瓶颈剖析，以及三维（质量-延迟-资源）帕累托评估。\n2. 下一轮试验建议方案（next_phase_proposal.md）：针对当前暴露的缺陷，提出具体的优化路径（如知识蒸馏、动态路由、批处理调优等），并说明预期收益与工程可行性。\n3. 可复现分析脚本（reproducibility_script.py）：提供一段Python代码，能够直接读取日志文件并复现报告中的关键指标计算与瓶颈识别逻辑。\n\n所有成果请保存至 /app/output 目录。我们需要这些数据来指导下一阶段的架构冻结决策。",
+  "as_of": "2024-05-15T10:00:00+08:00",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "无外部真实来源",
+      "limitations": "本题完全基于原创虚构机构（星汉前沿计算实验室）的内部试验日志。不依赖任何外部真实政策、官方数字或已有基准数据集。所有数据与规则均为原创设计，仅供本任务评估使用。"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "trial_logs.jsonl",
+      "purpose": "记录单次查询的算法表现，包含查询长度、算法类型、延迟、内存占用及检索质量指标。",
+      "content_plan": "包含20条JSON Lines记录，涵盖DSH和LBE两种算法在不同query_length下的表现。DSH在长查询时延迟显著增加，LBE在长查询时NDCG@10显著下降。",
+      "content": "{\"query_id\":\"Q001\",\"algorithm\":\"DSH\",\"query_length\":4,\"latency_ms\":42,\"ram_mb\":120,\"gpu_mem_mb\":800,\"ndcg_at_10\":0.83,\"recall_at_100\":0.91}\n{\"query_id\":\"Q002\",\"algorithm\":\"DSH\",\"query_length\":8,\"latency_ms\":85,\"ram_mb\":150,\"gpu_mem_mb\":950,\"ndcg_at_10\":0.81,\"recall_at_100\":0.89}\n{\"query_id\":\"Q003\",\"algorithm\":\"DSH\",\"query_length\":12,\"latency_ms\":195,\"ram_mb\":280,\"gpu_mem_mb\":1400,\"ndcg_at_10\":0.75,\"recall_at_100\":0.86}\n{\"query_id\":\"Q004\",\"algorithm\":\"DSH\",\"query_length\":18,\"latency_ms\":340,\"ram_mb\":450,\"gpu_mem_mb\":2100,\"ndcg_at_10\":0.69,\"recall_at_100\":0.82}\n{\"query_id\":\"Q005\",\"algorithm\":\"DSH\",\"query_length\":6,\"latency_ms\":65,\"ram_mb\":130,\"gpu_mem_mb\":850,\"ndcg_at_10\":0.82,\"recall_at_100\":0.90}\n{\"query_id\":\"Q006\",\"algorithm\":\"LBE\",\"query_length\":4,\"latency_ms\":18,\"ram_mb\":40,\"gpu_mem_mb\":300,\"ndcg_at_10\":0.68,\"recall_at_100\":0.75}\n{\"query_id\":\"Q007\",\"algorithm\":\"LBE\",\"query_length\":9,\"latency_ms\":21,\"ram_mb\":42,\"gpu_mem_mb\":310,\"ndcg_at_10\":0.64,\"recall_at_100\":0.72}\n{\"query_id\":\"Q008\",\"algorithm\":\"LBE\",\"query_length\":14,\"latency_ms\":24,\"ram_mb\":45,\"gpu_mem_mb\":320,\"ndcg_at_10\":0.53,\"recall_at_100\":0.65}\n{\"query_id\":\"Q009\",\"algorithm\":\"LBE\",\"query_length\":20,\"latency_ms\":28,\"ram_mb\":48,\"gpu_mem_mb\":330,\"ndcg_at_10\":0.42,\"recall_at_100\":0.58}\n{\"query_id\":\"Q010\",\"algorithm\":\"LBE\",\"query_length\":5,\"latency_ms\":19,\"ram_mb\":40,\"gpu_mem_mb\":300,\"ndcg_at_10\":0.67,\"recall_at_100\":0.74}\n{\"query_id\":\"Q011\",\"algorithm\":\"DSH\",\"query_length\":15,\"latency_ms\":260,\"ram_mb\":380,\"gpu_mem_mb\":1800,\"ndcg_at_10\":0.72,\"recall_at_100\":0.84}\n{\"query_id\":\"Q012\",\"algorithm\":\"DSH\",\"query_length\":3,\"latency_ms\":38,\"ram_mb\":110,\"gpu_mem_mb\":750,\"ndcg_at_10\":0.84,\"recall_at_100\":0.92}\n{\"query_id\":\"Q013\",\"algorithm\":\"LBE\",\"query_length\":7,\"latency_ms\":20,\"ram_mb\":41,\"gpu_mem_mb\":305,\"ndcg_at_10\":0.66,\"recall_at_100\":0.73}\n{\"query_id\":\"Q014\",\"algorithm\":\"LBE\",\"query_length\":16,\"latency_ms\":26,\"ram_mb\":46,\"gpu_mem_mb\":325,\"ndcg_at_10\":0.48,\"recall_at_100\":0.61}\n{\"query_id\":\"Q015\",\"algorithm\":\"DSH\",\"query_length\":10,\"latency_ms\":120,\"ram_mb\":210,\"gpu_mem_mb\":1100,\"ndcg_at_10\":0.78,\"recall_at_100\":0.88}\n{\"query_id\":\"Q016\",\"algorithm\":\"DSH\",\"query_length\":22,\"latency_ms\":410,\"ram_mb\":520,\"gpu_mem_mb\":2400,\"ndcg_at_10\":0.65,\"recall_at_100\":0.79}\n{\"query_id\":\"Q017\",\"algorithm\":\"LBE\",\"query_length\":11,\"latency_ms\":22,\"ram_mb\":43,\"gpu_mem_mb\":315,\"ndcg_at_10\":0.58,\"recall_at_100\":0.68}\n{\"query_id\":\"Q018\",\"algorithm\":\"LBE\",\"query_length\":25,\"latency_ms\":30,\"ram_mb\":50,\"gpu_mem_mb\":340,\"ndcg_at_10\":0.39,\"recall_at_100\":0.55}\n{\"query_id\":\"Q019\",\"algorithm\":\"DSH\",\"query_length\":7,\"latency_ms\":75,\"ram_mb\":140,\"gpu_mem_mb\":900,\"ndcg_at_10\":0.81,\"recall_at_100\":0.89}\n{\"query_id\":\"Q020\",\"algorithm\":\"LBE\",\"query_length\":13,\"latency_ms\":23,\"ram_mb\":44,\"gpu_mem_mb\":318,\"ndcg_at_10\":0.55,\"recall_at_100\":0.66}"
+    },
+    {
+      "filename": "system_metrics.csv",
+      "purpose": "记录系统级压测监控数据，包含不同QPS下的资源占用及错误情况。",
+      "content_plan": "包含8条CSV记录。DSH在QPS达到150时出现OOM，且内存峰值达到32GB；LBE在极高QPS下GPU利用率仍未完全饱和，且无OOM。",
+      "content": "timestamp,algorithm,qps,avg_cpu_pct,avg_gpu_pct,peak_ram_gb,oom_errors\n2024-05-10T08:00:00,DSH,50,62,78,12.4,0\n2024-05-10T09:00:00,DSH,100,86,94,24.1,0\n2024-05-10T10:00:00,DSH,150,99,100,31.8,5\n2024-05-10T11:00:00,LBE,100,35,45,8.2,0\n2024-05-10T12:00:00,LBE,200,68,82,8.5,0\n2024-05-10T13:00:00,LBE,400,92,96,8.8,0\n2024-05-10T14:00:00,LBE,600,98,99,9.0,0\n2024-05-10T15:00:00,DSH,120,95,98,28.5,1"
+    },
+    {
+      "filename": "test_harness_config.yaml",
+      "purpose": "说明测试环境的硬件配置与评估指标定义。",
+      "content_plan": "定义硬件上限（如系统内存32GB）及指标说明。",
+      "content": "environment:\n  hardware:\n    gpu: \"NVIDIA A100 80GB\"\n    system_ram_gb: 32\n    cpu_cores: 64\nevaluation:\n  ndcg_at_10: \"Normalized Discounted Cumulative Gain at rank 10\"\n  recall_at_100: \"Recall rate at rank 100\"\n  latency_ms: \"End-to-end query latency in milliseconds\"\nnotes:\n  - \"OOM errors are tracked per minute during the 10-minute stress test window.\"\n  - \"Peak RAM is the maximum resident set size observed during the test."
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "algorithm_tradeoff_report.md",
+      "format": "Markdown",
+      "purpose": "详细对比DSH与LBE在质量、延迟、资源上的取舍，剖析长尾查询衰退与高并发OOM瓶颈。"
+    },
+    {
+      "filename": "next_phase_proposal.md",
+      "format": "Markdown",
+      "purpose": "提出下一轮试验的具体优化建议（如知识蒸馏、动态路由等），并论证可行性。"
+    },
+    {
+      "filename": "reproducibility_script.py",
+      "format": "Python",
+      "purpose": "提供可执行的Python脚本，用于从日志中复现关键指标计算与瓶颈识别逻辑。"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ1",
+      "text": "报告必须清晰区分并对比DSH和LBE在不同查询长度区间（短、中、长）的质量（NDCG@10）与延迟（latency_ms）表现。",
+      "visibility": "explicit",
+      "basis": "委托要求检验两个候选算法的质量、延迟取舍。"
+    },
+    {
+      "id": "REQ2",
+      "text": "必须识别并分析DSH算法在高并发（如QPS>=120）时出现的OOM问题，并将其与系统资源监控数据（system_metrics.csv）关联。",
+      "visibility": "explicit",
+      "basis": "委托要求分析资源取舍与OOM问题。"
+    },
+    {
+      "id": "REQ3",
+      "text": "必须指出LBE算法在处理长尾查询（query_length >= 14）时NDCG@10的显著衰退现象，并解释其双塔架构的局限性。",
+      "visibility": "professional_practice",
+      "basis": "计算机检索系统研究中双塔模型对长文本匹配的已知局限性。"
+    },
+    {
+      "id": "REQ4",
+      "text": "下一轮试验建议必须包含至少一种解决当前痛点的具体技术路径（如知识蒸馏、动态路由、批处理调优），并说明预期收益。",
+      "visibility": "explicit",
+      "basis": "委托要求交下一轮试验建议。"
+    },
+    {
+      "id": "REQ5",
+      "text": "复现脚本必须能够直接读取提供的JSONL和CSV文件，不依赖硬编码的绝对路径或外部未提供的库。",
+      "visibility": "explicit",
+      "basis": "委托要求可复现分析。"
+    }
+  ],
+  "authoring_plan": "本题设计基于真实检索系统研发中的典型困境：高精度模型（DSH，类似ColBERT或复杂交叉编码器）计算开销大、内存占用高、长查询延迟退化；低延迟模型（LBE，双塔）速度快但长尾查询质量差。输入数据经过精心构造：DSH的延迟随query_length呈非线性增长，且在QPS 150时触及32GB系统内存上限导致OOM；LBE的延迟极其稳定，但NDCG在query_length>10后断崖式下跌，且在高QPS下GPU利用率未饱和（暗示批处理batch size设置过小）。预期 solver 能够进行多维度的交叉分析，不仅停留在表面数据，还能深入到系统瓶颈（内存墙与计算墙的权衡）。下一轮建议应指向如知识蒸馏（用DSH的软标签训练LBE以提升长尾质量）、动态路由（短查询走LBE，长查询走DSH并优化DSH的批处理）、或硬件层面的资源隔离。所有数值均可从输入材料中精确推导。",
+  "rubrics": [
+    {
+      "id": "R1",
+      "description": "准确计算并对比DSH和LBE在不同查询长度区间（如1-5, 6-10, 11-15, 16+）的平均NDCG@10和平均延迟。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ1"
+      ],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "查看 algorithm_tradeoff_report.md 中是否包含按 query_length 分组的 NDCG@10 和 latency_ms 统计表格或明确描述。",
+      "numeric_tolerance": "计算结果允许有10%以内的四舍五入误差。",
+      "weight_reason": "核心分析任务，直接检验对基础数据的解析和聚合能力。",
+      "levels": {
+        "0": "未进行分组计算，或数据完全错误。",
+        "0.25": "仅计算了整体平均值，未按查询长度分组。",
+        "0.5": "进行了分组，但仅计算了其中一个指标（如只有延迟或只有NDCG）。",
+        "0.75": "分组计算了两个指标，但区间划分不合理或存在明显计算错误（如>20%误差）。",
+        "1": "合理划分查询长度区间，准确计算并对比了两种算法在两个指标上的表现。"
+      },
+      "acceptable_alternatives": "区间划分可以是2-3个或4个，只要逻辑合理即可。",
+      "failure_examples": "只计算了所有query的平均延迟，没有区分短查询和长查询，掩盖了DSH的延迟退化问题。"
+    },
+    {
+      "id": "R2",
+      "description": "准确识别DSH算法的OOM瓶颈，将其与system_metrics.csv中的峰值内存（peak_ram_gb）和系统配置上限（32GB）关联。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "查看报告中是否提及 DSH 在 QPS 120/150 时 peak_ram_gb 接近或超过 32GB 上限，从而导致 OOM。",
+      "numeric_tolerance": "无",
+      "weight_reason": "考察对系统资源监控数据与错误日志的关联分析能力。",
+      "anchors": {
+        "0": "未提及OOM，或将其归咎于GPU显存（实际是系统内存RAM超限），或未关联32GB上限。",
+        "1": "明确指出DSH在QPS 120/150时系统内存（RAM）峰值达到28.5GB/31.8GB，逼近或超过test_harness_config.yaml中定义的32GB上限，导致OOM。"
+      },
+      "acceptable_alternatives": "可以提及GPU显存也较高，但核心原因必须落在系统RAM超限。",
+      "failure_examples": "认为OOM是因为NVIDIA A100的80GB显存不足，忽略了系统内存（peak_ram_gb）的限制。"
+    },
+    {
+      "id": "R3",
+      "description": "识别LBE算法在长尾查询（query_length >= 14）时NDCG@10的显著衰退，并从双塔架构原理角度解释。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ3"
+      ],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "查看报告是否指出 LBE 在 query_length >= 14 时 NDCG@10 降至 0.55 以下，并提及双塔模型（Bi-Encoder）缺乏细粒度交互或截断问题。",
+      "numeric_tolerance": "无",
+      "weight_reason": "考察对算法架构缺陷的深入理解。",
+      "anchors": {
+        "0": "未指出LBE的长尾衰退，或解释为数据噪声、硬件问题等非架构原因。",
+        "1": "准确指出LBE在长查询时NDCG大幅下降（如从0.68降至0.42），并正确归因于双塔模型独立编码导致的语义交互不足或长文本截断。"
+      },
+      "acceptable_alternatives": "使用“独立编码缺乏交叉注意力”、“长文本被截断”等专业表述均可。",
+      "failure_examples": "认为LBE的NDCG下降是因为其计算速度太快导致精度牺牲，未触及双塔架构的本质。"
+    },
+    {
+      "id": "R4",
+      "description": "提出基于查询特征（如query_length）的动态路由策略作为下一轮建议，并论证其对质量和延迟的平衡作用。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ4"
+      ],
+      "deliverables": [
+        "next_phase_proposal.md"
+      ],
+      "evidence": "查看 next_phase_proposal.md 是否提出动态路由，并具体说明如何根据 query_length 将请求分发到 LBE 或 DSH。",
+      "numeric_tolerance": "无",
+      "weight_reason": "核心解决方案设计能力，考察能否结合实际痛点提出工程落地方案。",
+      "levels": {
+        "0": "未提出动态路由，或提出的方案完全不可行。",
+        "0.25": "仅泛泛提及“结合两者优点”或“使用路由”，无具体触发条件。",
+        "0.5": "提出了动态路由，但仅依赖单一维度（如仅看长度），缺乏对并发或资源的考量。",
+        "0.75": "提出基于query_length的动态路由，设定了合理阈值（如>10走DSH），但未讨论路由本身的开销或DSH的并发瓶颈。",
+        "1": "提出基于query_length的动态路由，设定合理阈值，并综合考虑了DSH的批处理优化、路由延迟开销及系统资源隔离。"
+      },
+      "acceptable_alternatives": "可以结合缓存机制（短查询缓存）来进一步优化路由策略。",
+      "failure_examples": "建议“对所有请求先过一遍LBE，如果不行再过DSH”，这会导致延迟翻倍，不符合工程实际。"
+    },
+    {
+      "id": "R5",
+      "description": "复现脚本包含健壮的异常处理，能正确处理文件不存在、数据缺失或格式错误，且不依赖硬编码路径。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ5"
+      ],
+      "deliverables": [
+        "reproducibility_script.py"
+      ],
+      "evidence": "审查 reproducibility_script.py 的代码结构，是否使用了相对路径或参数传入，是否包含 try-except 块或 pandas 的安全读取选项。",
+      "numeric_tolerance": "无",
+      "weight_reason": "考察代码的工程素养和可复现性保障。",
+      "levels": {
+        "0": "代码无法运行，或存在严重的语法错误、硬编码绝对路径。",
+        "0.25": "能运行但无任何异常处理，遇到脏数据或文件缺失直接崩溃。",
+        "0.5": "包含基本的 try-except，但路径仍部分硬编码，或异常处理过于宽泛（如 bare except）。",
+        "0.75": "使用相对路径或命令行参数传入路径，包含合理的异常捕获和日志打印。",
+        "1": "架构清晰，使用参数化路径，包含细粒度的异常处理（如区分 FileNotFoundError 和 ValueError），且有数据校验逻辑。"
+      },
+      "acceptable_alternatives": "使用 argparse 或 os.environ 获取路径均可。",
+      "failure_examples": "代码中直接写死 open('/app/output/trial_logs.jsonl')，且没有 try-except，导致在其他环境完全无法运行。"
+    },
+    {
+      "id": "R6",
+      "description": "负分项：捏造日志中不存在的指标（如编造F1@50、P99延迟具体毫秒数或Recall@10），或虚构未提供的硬件参数。",
+      "type": "Binary",
+      "weight": -10,
+      "requirement_refs": [],
+      "deliverables": [
+        "algorithm_tradeoff_report.md",
+        "next_phase_proposal.md"
+      ],
+      "evidence": "全局检查报告内容，是否存在输入材料中未定义且无法推导的指标或数值。",
+      "numeric_tolerance": "无",
+      "weight_reason": "严禁学术/工程不端行为，必须基于给定事实。",
+      "anchors": {
+        "0": "未捏造任何指标或参数，分析严格基于给定材料。",
+        "1": "捏造了如P99延迟、F1分数、GPU温度等未提供的指标，或虚构了CPU型号等未提供的硬件参数。"
+      },
+      "acceptable_alternatives": "可以通过合理假设进行定性分析，但不能编造具体数值。",
+      "failure_examples": "在报告中写道“DSH的P99延迟达到了450ms”，但日志中仅提供平均延迟或未提供分位数。"
+    },
+    {
+      "id": "R7",
+      "description": "分析QPS对DSH延迟的非线性影响，指出高并发下延迟的急剧恶化。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ1"
+      ],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "查看报告是否结合 system_metrics.csv 分析 DSH 在 QPS 从 50 升至 150 时，系统负载（CPU/GPU 100%）与内存压力如何导致延迟非线性增长。",
+      "numeric_tolerance": "无",
+      "weight_reason": "考察对系统级压测数据的深度解读。",
+      "anchors": {
+        "0": "仅分析单次查询延迟，未结合QPS和系统负载分析并发下的延迟退化。",
+        "1": "明确指出DSH在高QPS（如120/150）下，由于CPU/GPU满载及内存逼近上限，导致并发延迟呈非线性恶化（甚至触发OOM）。"
+      },
+      "acceptable_alternatives": "可以提及上下文切换或内存交换（swap）作为延迟恶化的潜在原因。",
+      "failure_examples": "认为DSH在QPS 150时的延迟与QPS 50时呈线性关系，忽略了资源争抢导致的非线性放大。"
+    },
+    {
+      "id": "R8",
+      "description": "识别LBE在极高QPS（如400/600）下GPU利用率未完全饱和（<100%或接近）的现象，指出批处理不足。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "查看报告是否指出 LBE 在 QPS 400/600 时 avg_gpu_pct 为 96%/99%，且结合其极低内存占用，推测其未充分利用GPU的并行计算能力（Batch size过小）。",
+      "numeric_tolerance": "无",
+      "weight_reason": "考察对硬件利用率与算法工程实现的关联分析。",
+      "anchors": {
+        "0": "认为LBE的GPU利用率已经完美，或未关注到其资源利用效率问题。",
+        "1": "指出LBE在高QPS下内存占用极低（<9GB）且GPU利用率未达绝对饱和，推测其未采用大Batch动态批处理，存在优化空间。"
+      },
+      "acceptable_alternatives": "提及“请求排队”或“单条请求GPU调度开销”导致利用率未饱和。",
+      "failure_examples": "认为LBE的GPU利用率96%说明其已经榨干了硬件性能，忽略了内存带宽和计算单元的实际匹配情况。"
+    },
+    {
+      "id": "R9",
+      "description": "报告结构完整，包含清晰的章节（如概述、质量分析、延迟与资源瓶颈、三维权衡评估）。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "检查 algorithm_tradeoff_report.md 是否使用了Markdown标题进行合理分节。",
+      "numeric_tolerance": "无",
+      "weight_reason": "基本的文档规范要求。",
+      "anchors": {
+        "0": "无章节结构，或结构混乱、缺失核心部分。",
+        "1": "结构清晰，包含概述、多维度分析、瓶颈剖析及综合评估等合理章节。"
+      },
+      "acceptable_alternatives": "章节名称可自定义，只要逻辑连贯即可。",
+      "failure_examples": "通篇只有一段话，没有使用任何Markdown标题或列表。"
+    },
+    {
+      "id": "R10",
+      "description": "交付物文件名严格匹配要求（algorithm_tradeoff_report.md, next_phase_proposal.md, reproducibility_script.py）。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "algorithm_tradeoff_report.md",
+        "next_phase_proposal.md",
+        "reproducibility_script.py"
+      ],
+      "evidence": "检查输出的文件名是否完全一致。",
+      "numeric_tolerance": "无",
+      "weight_reason": "工程规范与契约精神。",
+      "anchors": {
+        "0": "文件名存在拼写错误、扩展名错误或缺失文件。",
+        "1": "三个文件名完全正确。"
+      },
+      "acceptable_alternatives": "无，必须严格匹配。",
+      "failure_examples": "将脚本命名为 script.py 或 report.txt。"
+    },
+    {
+      "id": "R11",
+      "description": "准确计算DSH内存使用率峰值，并对比系统配置上限。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "查看报告是否明确计算出 DSH 峰值内存 31.8GB 占 32GB 上限的 99.375%。",
+      "numeric_tolerance": "允许1%以内的计算误差。",
+      "weight_reason": "定量分析能力。",
+      "anchors": {
+        "0": "未计算占比，或计算结果严重错误。",
+        "1": "明确计算并指出 DSH 峰值内存（31.8GB）已达到系统上限（32GB）的 99% 以上。"
+      },
+      "acceptable_alternatives": "可以表述为“几乎耗尽”或“达到99.4%”。",
+      "failure_examples": "计算错误，如认为31.8GB只占了32GB的80%。"
+    },
+    {
+      "id": "R12",
+      "description": "复现脚本包含必要的依赖说明或环境配置注释。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ5"
+      ],
+      "deliverables": [
+        "reproducibility_script.py"
+      ],
+      "evidence": "检查脚本头部是否有 import 说明，或注释中提及 pandas 等必要库。",
+      "numeric_tolerance": "无",
+      "weight_reason": "代码可读性与可运行性基础。",
+      "anchors": {
+        "0": "使用了第三方库但无任何导入声明或环境说明。",
+        "1": "包含正确的 import 语句，或在注释中明确说明依赖（如 pandas, json）。"
+      },
+      "acceptable_alternatives": "提供 requirements.txt 或在脚本内说明。",
+      "failure_examples": "使用了 pd.read_csv() 但文件中没有 import pandas as pd。"
+    },
+    {
+      "id": "R13",
+      "description": "对比分析两种算法对query_length的敏感度差异（DSH对延迟敏感，LBE对质量敏感）。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ1"
+      ],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "查看报告是否有明确的对比结论，指出 DSH 的延迟随长度急剧增加，而 LBE 的延迟稳定但 NDCG 随长度急剧下降。",
+      "numeric_tolerance": "无",
+      "weight_reason": "综合对比能力。",
+      "anchors": {
+        "0": "孤立分析两种算法，未进行敏感度差异的对比总结。",
+        "1": "明确总结出 DSH 是“延迟敏感型”（长查询延迟退化），LBE 是“质量敏感型”（长查询精度退化）。"
+      },
+      "acceptable_alternatives": "使用“计算复杂度”、“上下文理解能力”等专业术语解释。",
+      "failure_examples": "仅列出数据表格，没有提炼出两者的核心敏感度差异。"
+    },
+    {
+      "id": "R14",
+      "description": "对“质量-延迟-资源”三维帕累托前沿进行综合评估，明确两种算法的适用场景。",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ1",
+        "REQ2"
+      ],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "查看报告是否有一个专门的章节或段落，综合权衡三个维度，给出类似“DSH适合高精度/低并发/短查询，LBE适合高并发/低延迟容忍/短查询”的结论。",
+      "numeric_tolerance": "无",
+      "weight_reason": "高阶业务决策能力。",
+      "levels": {
+        "0": "无综合评估，或结论与数据矛盾。",
+        "0.25": "仅简单总结“DSH精度高但慢，LBE快但精度低”，缺乏场景化建议。",
+        "0.5": "进行了三维评估，但未明确界定各自的适用边界（如并发阈值、查询长度阈值）。",
+        "0.75": "明确界定了适用场景（如DSH适合离线/长查询，LBE适合在线/短查询），但缺乏对资源成本的考量。",
+        "1": "构建了三维帕累托评估，明确给出了基于查询特征和并发负载的场景划分，并量化了资源成本（如内存/计算）。"
+      },
+      "acceptable_alternatives": "可以使用雷达图描述或文字详细阐述。",
+      "failure_examples": "结论是“LBE在所有方面都优于DSH”，违背了DSH在长查询和高精度上的优势事实。"
+    },
+    {
+      "id": "R15",
+      "description": "负分项：在建议中提出违反物理或系统常识的方案（如“将内存无限增加”、“使用不存在的硬件”或“完全消除延迟”）。",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [],
+      "deliverables": [
+        "next_phase_proposal.md"
+      ],
+      "evidence": "全局检查 next_phase_proposal.md，是否存在反常识的工程建议。",
+      "numeric_tolerance": "无",
+      "weight_reason": "防止AI产生幻觉，确保建议具备工程可行性。",
+      "anchors": {
+        "0": "建议合理，符合计算机系统常识与物理限制。",
+        "1": "提出了如“将系统内存提升至10TB以解决OOM”、“使用0延迟网络”或“消除所有上下文切换”等违反常识的建议。"
+      },
+      "acceptable_alternatives": "提出硬件升级建议（如加内存）是合理的，但不能是“无限增加”。",
+      "failure_examples": "建议“通过优化代码将DSH的长查询延迟从340ms降低到0ms”。"
+    },
+    {
+      "id": "R16",
+      "description": "报告语言流畅，专业术语（如NDCG, OOM, QPS, 双塔模型, 帕累托）使用准确。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [],
+      "deliverables": [
+        "algorithm_tradeoff_report.md",
+        "next_phase_proposal.md"
+      ],
+      "evidence": "通读报告，检查术语是否准确，语句是否通顺，无明显语病或机翻痕迹。",
+      "numeric_tolerance": "无",
+      "weight_reason": "专业文档的基本素质。",
+      "anchors": {
+        "0": "术语使用错误（如将NDCG解释为网络延迟），或语句严重不通顺。",
+        "1": "专业术语使用准确，行文流畅，符合计算机科学研究人员的表达习惯。"
+      },
+      "acceptable_alternatives": "中英文术语混用（如“双塔模型 (Bi-Encoder)”）是允许的。",
+      "failure_examples": "将“召回率 (Recall)”写成“回复率 (Reply)”。"
+    },
+    {
+      "id": "R17",
+      "description": "提出知识蒸馏（Knowledge Distillation）作为解决LBE长尾质量问题的具体建议。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ4"
+      ],
+      "deliverables": [
+        "next_phase_proposal.md"
+      ],
+      "evidence": "查看 next_phase_proposal.md 是否明确提出使用 DSH 作为教师模型，LBE 作为学生模型进行知识蒸馏。",
+      "numeric_tolerance": "无",
+      "weight_reason": "考察对前沿检索算法优化技术的掌握。",
+      "anchors": {
+        "0": "未提及知识蒸馏，或将其概念混淆（如与数据增强混淆）。",
+        "1": "明确提出使用 DSH 的高精度软标签（或排名分布）来指导 LBE 的训练，以提升其在长尾查询上的 NDCG。"
+      },
+      "acceptable_alternatives": "提及“教师-学生模型”、“软目标 (Soft targets)”、“排名保留 (Rank-preserving)”等相关概念。",
+      "failure_examples": "建议“用DSH的数据重新训练LBE”，这属于数据增强或监督微调，不是知识蒸馏。"
+    },
+    {
+      "id": "R18",
+      "description": "复现脚本包含必要的日志或打印输出，以验证关键指标的计算结果。",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ5"
+      ],
+      "deliverables": [
+        "reproducibility_script.py"
+      ],
+      "evidence": "检查代码中是否有 print() 或 logging.info() 输出计算出的 NDCG、延迟或内存峰值。",
+      "numeric_tolerance": "无",
+      "weight_reason": "代码的可验证性。",
+      "anchors": {
+        "0": "代码静默运行，无任何结果输出，无法验证计算是否正确。",
+        "1": "包含清晰的 print 或 logging 输出，展示关键指标的计算结果。"
+      },
+      "acceptable_alternatives": "将结果写入临时CSV文件并在控制台提示路径也可接受。",
+      "failure_examples": "代码中定义了变量但没有打印或保存，运行后无任何反馈。"
+    },
+    {
+      "id": "R19",
+      "description": "负分项：将DSH和LBE的指标张冠李戴（如将LBE的NDCG下降归结为DSH的问题）。",
+      "type": "Binary",
+      "weight": -3,
+      "requirement_refs": [],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "交叉核对报告中的描述与输入数据，检查算法与指标的对应关系是否错误。",
+      "numeric_tolerance": "无",
+      "weight_reason": "基本的数据准确性底线。",
+      "anchors": {
+        "0": "指标与算法的对应关系完全正确，无张冠李戴现象。",
+        "1": "存在明显的张冠李戴，如声称 DSH 的长尾 NDCG 下降，或 LBE 在高 QPS 下 OOM。"
+      },
+      "acceptable_alternatives": "无，必须准确对应。",
+      "failure_examples": "在报告中写道“DSH算法在处理长查询时，NDCG@10从0.68降至0.42”，实际上这是LBE的数据。"
+    },
+    {
+      "id": "R20",
+      "description": "分析OOM发生时的具体上下文，指出QPS 120时已出现1次OOM，QPS 150时出现5次，说明瓶颈的渐进性。",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ2"
+      ],
+      "deliverables": [
+        "algorithm_tradeoff_report.md"
+      ],
+      "evidence": "查看报告是否细化分析了 system_metrics.csv 中 oom_errors 列，指出 QPS 120 和 150 的具体错误次数，而非笼统地说“高并发时OOM”。",
+      "numeric_tolerance": "无",
+      "weight_reason": "数据洞察力，考察对细节的捕捉。",
+      "anchors": {
+        "0": "仅笼统提及高并发时发生OOM，未区分具体QPS下的错误频次。",
+        "1": "明确指出在 QPS 120 时已出现 1 次 OOM，QPS 150 时激增至 5 次，表明内存压力在 QPS 100-120 之间已达到临界点。"
+      },
+      "acceptable_alternatives": "可以计算每分钟的OOM率，只要逻辑正确。",
+      "failure_examples": "只说“DSH在QPS 150时崩溃”，忽略了QPS 120时已经出现的早期OOM警告信号。"
+    }
+  ],
+  "checks_to_execute": [
+    "运行 reproducibility_script.py，检查是否能无报错地读取 trial_logs.jsonl 和 system_metrics.csv，并输出预期的聚合指标。",
+    "检查 algorithm_tradeoff_report.md 和 next_phase_proposal.md 是否存在于 /app/output 目录，且文件名完全匹配。",
+    "使用 grep 搜索报告中的负分项触发词（如“P99”、“F1@50”、“无限内存”），验证是否违反禁止规则。",
+    "人工核对报告中引用的具体数值（如 31.8GB, 0.42, 99.375%）是否与输入材料严格一致。"
+  ],
+  "quality_risks": [
+    "Solver 可能使用外部知识（如真实的 BERT 或 ColBERT 论文数据）来替代输入材料中的虚构数据，导致计算结果与题面不符。",
+    "复现脚本可能依赖未提供的第三方库（如 rank_metrics），导致无法直接运行。需在提示或环境中明确仅使用标准库或 pandas/numpy。",
+    "Solver 可能忽略 system_metrics.csv 中的 oom_errors 细节，仅关注峰值内存，导致 R20 项失分。"
+  ],
+  "reference_solution": "### 关键数值与推导：\n1. **质量与延迟取舍**：\n   - **DSH**：短查询（1-5字）NDCG@10 约 0.83-0.84，延迟 38-45ms；长查询（16+字）NDCG@10 降至 0.65-0.69，延迟飙升至 340-410ms。延迟随长度呈显著非线性增长。\n   - **LBE**：短查询 NDCG@10 约 0.67-0.68，延迟稳定在 18-19ms；长查询（16+字）NDCG@10 暴跌至 0.39-0.48，但延迟仅微增至 26-30ms。双塔模型长尾质量衰退严重。\n2. **资源与OOM瓶颈**：\n   - DSH 在 QPS 50/100 时 RAM 分别为 12.4GB/24.1GB；QPS 120 时 RAM 达 28.5GB（1次OOM）；QPS 150 时 RAM 达 31.8GB（5次OOM），超过系统配置上限 32GB 的 99.375%。\n   - LBE 在 QPS 600 时 RAM 仅 9.0GB，无 OOM，但 avg_gpu_pct 为 99%，结合极低内存，暗示未充分利用大 Batch 动态批处理。\n3. **合理替代解与建议**：\n   - **动态路由**：设定 query_length 阈值（如 >10 走 DSH，<=10 走 LBE）。需解决 DSH 的并发瓶颈（如引入请求队列或批处理）。\n   - **知识蒸馏**：用 DSH 的软标签训练 LBE，提升其长尾 NDCG，使其在保持低延迟的同时提高长查询质量。\n   - **批处理优化**：针对 LBE 内存占用低的特点，增大 Batch Size 以提升 GPU 吞吐量。\n\n### 限制与不确定性：\n- 输入数据仅为抽样日志，未提供完整的查询分布（Query Distribution），因此动态路由的阈值设定只能基于经验法则，无法通过全局最优计算得出。\n- OOM 的具体根因（是模型参数加载、索引缓存还是并发请求栈溢出）在日志中未明确，报告应指出这一不确定性。"
+}

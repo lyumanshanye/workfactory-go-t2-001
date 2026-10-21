@@ -1,0 +1,521 @@
+[
+  {
+    "id": "R01",
+    "description": "化工厂火灾(INJ-02)正确分配了至少1个HazMat单位和1个ALS单位。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-02的分配单位列，是否包含E1或R1（HazMat）以及M1或M2（ALS）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "核心演练规则1，危化品火灾的致命性要求必须满足最低能力配置。",
+    "criterion": [
+      "识别INJ-02为化工厂火灾，触发Rule_1",
+      "分配具备HazMat能力的单位(E1或R1)",
+      "分配具备ALS能力的单位(M1或M2)"
+    ],
+    "anchors": {
+      "0": "未分配HazMat或未分配ALS，或两者皆无",
+      "1": "同时分配了至少1个HazMat单位和1个ALS单位"
+    },
+    "acceptable_alternatives": "分配E1+M1, E1+M2, R1+M1, R1+M2均可接受。",
+    "failure_examples": "仅分配了E1（具备HazMat）但未分配任何ALS单位，违反了Rule_1的双重要求。"
+  },
+  {
+    "id": "R02",
+    "description": "化工厂火灾(INJ-02)的HazMat单位响应时间计算正确且不超过5分钟（基于travel_time_matrix）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-03"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-02的响应时间列。若分配E1(消防总站)，时间应为4分钟；若分配R1(港口)，时间应为8分钟。",
+    "numeric_tolerance": 1,
+    "weight_reason": "时间敏感性是调度的关键，验证solver是否真正使用了距离矩阵。",
+    "criterion": [
+      "正确查阅travel_time_matrix",
+      "若派E1，响应时间<=5分钟(实际4)",
+      "若派R1，响应时间>5分钟(实际8)"
+    ],
+    "anchors": {
+      "0": "响应时间计算错误，或派R1导致超时且未做说明",
+      "1": "派E1且时间正确，或派R1但合理说明超时原因/调整"
+    },
+    "acceptable_alternatives": "如果派R1导致8分钟响应，但在备注中说明E1更优或存在资源竞争，可视为合理处理。",
+    "failure_examples": "分配R1到化工厂，计算响应时间为8分钟，且未作任何优化或说明，直接接受超时。"
+  },
+  {
+    "id": "R03",
+    "description": "游艇俱乐部水域救援(INJ-05)正确分配了具备Water_Rescue能力的单位。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-05的分配单位，必须为E1（唯一具备Water_Rescue能力的单位）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "Rule_2的硬性要求，水域救援必须匹配特定能力。",
+    "criterion": [
+      "识别INJ-05为水域救援",
+      "分配具备Water_Rescue能力的单位(E1)"
+    ],
+    "anchors": {
+      "0": "分配了不具备Water_Rescue能力的单位",
+      "1": "正确分配E1"
+    },
+    "acceptable_alternatives": "无，E1是唯一具备该能力的单位。",
+    "failure_examples": "分配R1或M1进行水域救援，忽视了Water_Rescue的专项能力要求。"
+  },
+  {
+    "id": "R04",
+    "description": "购物中心活跃射手(INJ-06)正确分配了至少2个Police单位，且第一响应时间不超过3分钟。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-06分配了P1和P2。P2在购物中心(0分钟)，P1在09:25可用，从街头到购物中心需6分钟。第一响应为0分钟，满足<=3分钟要求。",
+    "numeric_tolerance": 0,
+    "weight_reason": "Rule_3的核心要求，活跃射手对警力数量和首达时间有极高要求。",
+    "criterion": [
+      "分配至少2个Police单位(P1和P2)",
+      "第一响应时间计算正确(P2为0分钟)",
+      "满足<=3分钟的Rule_3要求"
+    ],
+    "anchors": {
+      "0": "分配不足2个警察，或第一响应时间计算错误导致>3分钟",
+      "1": "分配P1和P2，且正确计算P2的首达时间为0分钟"
+    },
+    "acceptable_alternatives": "如果有其他虚构警察单位也可，但基于给定数据只有P1和P2。",
+    "failure_examples": "只分配了P2，或者错误计算P1的响应时间导致认为第一响应超过了3分钟。"
+  },
+  {
+    "id": "R05",
+    "description": "跨海大桥连环车祸(INJ-08)正确分配了至少1个Extrication单位和至少2个ALS单位。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-08的分配。需包含E1或R1(Extrication)以及M1和M2(2个ALS)。",
+    "numeric_tolerance": 0,
+    "weight_reason": "Rule_4针对重大伤亡事故的破拆与高级生命支持双重需求。",
+    "criterion": [
+      "分配具备Extrication的单位(E1或R1)",
+      "分配至少2个具备ALS的单位(M1和M2)"
+    ],
+    "anchors": {
+      "0": "未满足Extrication要求，或ALS单位少于2个",
+      "1": "同时满足Extrication和2个ALS的要求"
+    },
+    "acceptable_alternatives": "E1+M1+M2 或 R1+M1+M2。",
+    "failure_examples": "分配了E1和M1，但忽略了Rule_4中明确要求'至少2个ALS单位'的规定。"
+  },
+  {
+    "id": "R06",
+    "description": "所有P1级别事件在调度决策中明确备注'已通知指挥中心'或分配了指挥车。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-02, INJ-04, INJ-06, INJ-08（均为P1）的备注列，是否包含'已通知指挥中心'。",
+    "numeric_tolerance": 0,
+    "weight_reason": "Rule_5的行政与指挥链报备要求。",
+    "criterion": [
+      "识别所有P1事件",
+      "在备注或分配中包含指挥中心报备信息"
+    ],
+    "anchors": {
+      "0": "遗漏P1事件的报备，或备注缺失",
+      "1": "所有4个P1事件均正确备注'已通知指挥中心'"
+    },
+    "acceptable_alternatives": "措辞可为'已报备指挥中心'或'指挥中心已通知'。",
+    "failure_examples": "只对部分P1事件（如只写了INJ-02和INJ-06）进行了报备，遗漏了INJ-04和INJ-08。"
+  },
+  {
+    "id": "R07",
+    "description": "未将处于Enroute状态的P1分配给09:25之前的任何事件，或正确处理了状态冲突。",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查09:00-09:20的事件（INJ-01至INJ-05），分配单位中是否错误地包含了P1且未计算延迟/未标记冲突。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严重调度失误，将不可用单位分配给紧急事件且不处理冲突，违背基本调度逻辑。",
+    "criterion": [
+      "检查P1的available_time(09:25)",
+      "09:25前的P2/P3/P1事件不应直接分配P1",
+      "若分配必须明确计算延迟并标记冲突"
+    ],
+    "anchors": {
+      "0": "将P1分配给09:25前的事件且当作正常可用处理",
+      "1": "未分配P1给早期事件，或明确记录了P1在09:25前不可用/延迟到达"
+    },
+    "acceptable_alternatives": "如果分配了P1给09:15的事件，但在备注中明确写明'P1预计09:25到达，存在10分钟延迟，已标记冲突'，可免于扣分。",
+    "failure_examples": "将P1分配给09:12的中央公园医疗事件(INJ-03)，且未提及P1在09:25前无法到达的事实。"
+  },
+  {
+    "id": "R08",
+    "description": "正确识别P1在09:25返回后，将其分配给09:25或之后的事件（如INJ-06活跃射手）。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查09:25之后的事件（INJ-06, INJ-07, INJ-08），P1是否被合理分配。",
+    "numeric_tolerance": 0,
+    "weight_reason": "验证solver是否具备动态资源状态追踪能力，而非静态死锁。",
+    "criterion": [
+      "识别P1在09:25变为Available",
+      "将P1分配给09:25及之后的事件"
+    ],
+    "anchors": {
+      "0": "P1在09:25后仍未被分配，或错误地认为其一直不可用",
+      "1": "在09:25或之后的事件中合理使用了P1"
+    },
+    "acceptable_alternatives": "分配给INJ-06(活跃射手)或INJ-07/INJ-08均可。",
+    "failure_examples": "认为P1一直处于Enroute状态，导致09:25的活跃射手事件只分配了P2一个警察。"
+  },
+  {
+    "id": "R09",
+    "description": "中央公园心脏骤停(INJ-03)正确分配了ALS单位。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-03的分配，必须为M1或M2。M2距离更近(中央公园到中央公园南门1分钟)。",
+    "numeric_tolerance": 0,
+    "weight_reason": "心脏骤停对ALS的绝对需求，考察基本医疗调度逻辑。",
+    "criterion": [
+      "识别心脏骤停需ALS",
+      "分配M1或M2"
+    ],
+    "anchors": {
+      "0": "分配了非ALS单位",
+      "1": "正确分配M1或M2"
+    },
+    "acceptable_alternatives": "M1或M2均可，M2更优。",
+    "failure_examples": "分配了U1或P1去处理心脏骤停。"
+  },
+  {
+    "id": "R10",
+    "description": "港口集装箱码头泄漏(INJ-04)正确分配了HazMat单位。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-04分配了E1或R1。R1距离更近(2分钟)。",
+    "numeric_tolerance": 0,
+    "weight_reason": "Rule_1的延伸，危化品泄漏必须匹配HazMat能力。",
+    "criterion": [
+      "识别HAZMAT_SPILL需HazMat",
+      "分配E1或R1"
+    ],
+    "anchors": {
+      "0": "未分配HazMat单位",
+      "1": "正确分配E1或R1"
+    },
+    "acceptable_alternatives": "E1或R1均可。",
+    "failure_examples": "分配了M1去处理不明液体泄漏。"
+  },
+  {
+    "id": "R11",
+    "description": "老城区电梯困人(INJ-07)正确分配了具备救援/工程能力的单位。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-07分配了U1（具备Power_Rescue）或E1/R1。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础资源匹配，电梯困人需专业破拆/工程能力。",
+    "criterion": [
+      "分配具备相关救援能力的单位"
+    ],
+    "anchors": {
+      "0": "分配了无救援能力的单位(如P1/P2)",
+      "1": "分配了U1或消防/救援单位"
+    },
+    "acceptable_alternatives": "U1, E1, R1均可。",
+    "failure_examples": "分配P2去处理电梯困人。"
+  },
+  {
+    "id": "R12",
+    "description": "滨海大道交通事故(INJ-01)分配了可用的警察单位。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-01分配了P2（P1在09:25前不可用）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础状态检查，09:00时只有P2可用。",
+    "criterion": [
+      "分配P2"
+    ],
+    "anchors": {
+      "0": "分配了P1且未处理冲突",
+      "1": "正确分配P2"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "在09:00分配P1，且未说明P1的Enroute状态。"
+  },
+  {
+    "id": "R13",
+    "description": "所有8条注入记录均在调度决策中得到了处理，无遗漏。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查dispatch_decisions.csv是否包含INJ-01至INJ-08共8行数据。",
+    "numeric_tolerance": 0,
+    "weight_reason": "任务完整性基本要求。",
+    "criterion": [
+      "包含8条记录"
+    ],
+    "anchors": {
+      "0": "遗漏了任何一条记录",
+      "1": "完整处理了8条记录"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "漏掉了INJ-07（P3优先级）的处理。"
+  },
+  {
+    "id": "R14",
+    "description": "输出文件命名和格式完全符合要求。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv",
+      "exercise_timeline_review.md"
+    ],
+    "evidence": "检查文件扩展名和名称是否严格匹配。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础交付规范。",
+    "criterion": [
+      "文件名为dispatch_decisions.csv和exercise_timeline_review.md"
+    ],
+    "anchors": {
+      "0": "文件名或格式错误",
+      "1": "完全正确"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "将复盘报告命名为review.txt而非.md。"
+  },
+  {
+    "id": "R15",
+    "description": "调度决策理由的专业性、规则映射准确性及逻辑严密性。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-04"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "审查'reason'列的内容，评估其是否准确引用演练规则、是否考虑了单位状态和能力。",
+    "numeric_tolerance": 0,
+    "weight_reason": "调度理由的质量直接反映调度员的专业水平和对规则的理解深度。",
+    "criterion": [
+      "理由准确引用Rule_1至Rule_5",
+      "考虑了单位能力匹配",
+      "考虑了单位状态(Enroute/Available)",
+      "表述专业清晰"
+    ],
+    "levels": {
+      "0": "无理由，或理由完全违背演练规则（如用P1处理危化品）",
+      "0.25": "有理由但明显错误或遗漏关键规则约束（如只提了灭火未提HazMat）",
+      "0.5": "理由部分正确，涵盖了主要分配逻辑，但未考虑单位状态或次要规则",
+      "0.75": "理由正确，涵盖主要规则和能力匹配，但表述不够专业或缺乏对时间窗口的考量",
+      "1": "理由完全符合规则，逻辑严密，专业术语准确，且综合考虑了单位状态、时间约束与资源竞争"
+    },
+    "acceptable_alternatives": "理由表述可多样化，只要核心逻辑和规则引用正确即可。",
+    "failure_examples": "理由写为'派E1去化工厂因为它在那里'，未提及任何规则、能力或时间考量。"
+  },
+  {
+    "id": "R16",
+    "description": "时间线复盘的逻辑严密性、资源冲突分析及专业改进建议。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03",
+      "REQ-04"
+    ],
+    "deliverables": [
+      "exercise_timeline_review.md"
+    ],
+    "evidence": "审查复盘报告的时间线计算是否准确，是否识别了HazMat单位竞争等瓶颈，以及建议的可行性。",
+    "numeric_tolerance": 0,
+    "weight_reason": "复盘是演练的核心价值，考察高级调度员的系统性思维和优化能力。",
+    "criterion": [
+      "时间线计算准确(基于travel_time_matrix)",
+      "识别了资源瓶颈(如09:05和09:15的HazMat竞争)",
+      "提出了合理、可操作的改进建议"
+    ],
+    "levels": {
+      "0": "未提交复盘，或时间线完全错乱，无分析",
+      "0.25": "仅列出事件时间，无响应时间计算，无资源或规则分析",
+      "0.5": "时间计算基本正确，但缺乏对资源竞争（如HazMat冲突）的识别，建议空泛",
+      "0.75": "时间线准确，能指出明显的资源冲突，但改进建议缺乏深度或可操作性",
+      "1": "时间线精确，深度分析资源竞争（如R1与E1的调度优化），提出如'增加HazMat储备'或'优化响应梯队'等高级专业建议"
+    },
+    "acceptable_alternatives": "建议可以针对人员培训、装备配置或规则修改，只要逻辑自洽。",
+    "failure_examples": "复盘报告只是把dispatch_decisions.csv的内容用自然语言重写了一遍，没有任何时间计算或冲突分析。"
+  },
+  {
+    "id": "R17",
+    "description": "识别并记录了09:05化工厂火灾与09:15港口泄漏之间的HazMat资源竞争或时间冲突。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv",
+      "exercise_timeline_review.md"
+    ],
+    "evidence": "检查是否在决策备注或复盘报告中提及R1或E1在两个事件中的分配冲突/延迟。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察solver是否具备全局资源视角，而非孤立处理每个事件。",
+    "criterion": [
+      "识别出HazMat资源有限",
+      "分析了09:05和09:15事件的资源重叠",
+      "记录了冲突或采取了优化调度"
+    ],
+    "anchors": {
+      "0": "孤立处理事件，未意识到HazMat资源竞争",
+      "1": "明确识别了资源竞争，并在调度或复盘中进行了合理分析/处理"
+    },
+    "acceptable_alternatives": "可以是将E1派往化工厂，R1派往港口；或指出若R1派往化工厂会导致港口泄漏延迟。",
+    "failure_examples": "将R1同时分配给09:05的化工厂和09:15的港口，且未说明这是重复分配或分身乏术。"
+  },
+  {
+    "id": "R18",
+    "description": "响应时间计算整体准确，基于travel_time_matrix且无重大算术错误。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "抽查至少3个事件的响应时间计算，核对单位初始位置到事件地点的矩阵时间。",
+    "numeric_tolerance": 1,
+    "weight_reason": "时间计算是调度的基础数据，错误会导致后续所有决策失效。",
+    "criterion": [
+      "正确查阅矩阵",
+      "加法计算正确(考虑available_time)",
+      "无重大偏差"
+    ],
+    "anchors": {
+      "0": "多处时间计算错误，或未使用提供的矩阵",
+      "1": "时间计算整体准确，允许1分钟内的舍入误差"
+    },
+    "acceptable_alternatives": "若考虑了单位在途时间或任务释放时间，只要逻辑正确即可。",
+    "failure_examples": "计算P1从街头到购物中心的时间，矩阵显示6分钟，solver计算为2分钟。"
+  },
+  {
+    "id": "R19",
+    "description": "未将唯一具备Water_Rescue能力的E1分配给非水域事件，导致INJ-05无单位可用。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv"
+    ],
+    "evidence": "检查INJ-05是否成功分配了E1。如果E1被分配给其他非水域事件且未释放，导致INJ-05无单位，则扣分。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严重资源锁死错误，导致关键专项能力失效。",
+    "criterion": [
+      "确保E1在INJ-05(09:20)时可用",
+      "未将E1锁死在前期无法释放的任务中"
+    ],
+    "anchors": {
+      "0": "E1被错误分配导致INJ-05无Water_Rescue单位可用",
+      "1": "E1成功分配给INJ-05，或前期任务已释放E1"
+    },
+    "acceptable_alternatives": "如果E1在09:05的化工厂火灾后于09:20前释放，可用于INJ-05，需有合理时间线支持。",
+    "failure_examples": "将E1分配给09:00的滨海大道车祸，且认为E1一直被占用，导致09:20的水域救援无单位可派。"
+  },
+  {
+    "id": "R20",
+    "description": "正确理解并应用了演练背景，未引入现实中的真实法规或外部预案。",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "dispatch_decisions.csv",
+      "exercise_timeline_review.md"
+    ],
+    "evidence": "审查文本内容，是否出现了'根据《XX市消防条例》'或'按照国家标准GB...'等现实法规引用。",
+    "numeric_tolerance": 0,
+    "weight_reason": "任务明确要求仅使用虚构演练规则，引入现实法规属于审题不清。",
+    "criterion": [
+      "未引用任何现实法规",
+      "严格限定在虚构规则内"
+    ],
+    "anchors": {
+      "0": "引入了现实法规或外部预案作为依据",
+      "1": "完全基于虚构演练规则进行决策和复盘"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "在复盘报告中写道'根据现实中的危化品处理标准，应增加防化服储备'，混淆了虚构与现实。"
+  }
+]

@@ -1,0 +1,594 @@
+[
+  {
+    "id": "R01",
+    "description": "迁移计划是否包含完整的数据备份步骤",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "migration_and_rollback_plan.md"
+    ],
+    "evidence": "查看迁移计划的前置步骤，是否明确提及对旧系统MySQL数据库和文件系统进行备份/快照。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数据备份是迁移的最基本安全保障，权重中等。",
+    "criterion": [
+      "检查迁移计划中是否包含数据库备份步骤",
+      "检查迁移计划中是否包含文件系统/目录备份步骤"
+    ],
+    "anchors": {
+      "0": "未提及数据备份或仅提及部分",
+      "1": "明确包含数据库和文件系统的完整备份步骤"
+    },
+    "acceptable_alternatives": [
+      "备份方式可以是mysqldump、物理快照或云盘快照，不限具体工具"
+    ],
+    "failure_examples": [
+      "计划中直接开始同步文件，完全未提及迁移前的备份操作。"
+    ]
+  },
+  {
+    "id": "R02",
+    "description": "迁移计划是否包含静态资源导出与OSS同步步骤",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "migration_and_rollback_plan.md"
+    ],
+    "evidence": "查看迁移计划中是否提及将旧版 /uploads/ 同步至 OSS /assets/uploads/。",
+    "numeric_tolerance": 0,
+    "weight_reason": "路径映射是本次迁移的核心任务之一。",
+    "criterion": [
+      "检查是否提及导出旧版 /uploads/ 目录",
+      "检查是否提及同步至 OSS /assets/uploads/ 路径"
+    ],
+    "anchors": {
+      "0": "未提及资源同步或路径错误",
+      "1": "准确提及 /uploads/ 到 /assets/uploads/ 的同步"
+    },
+    "acceptable_alternatives": [
+      "可使用ossutil、rsync或云厂商自带同步工具"
+    ],
+    "failure_examples": [
+      "计划中要求将 /uploads/ 直接覆盖到 OSS 根目录，未进行路径映射。"
+    ]
+  },
+  {
+    "id": "R03",
+    "description": "迁移计划是否包含DNS切换与明确的回滚触发条件",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "migration_and_rollback_plan.md"
+    ],
+    "evidence": "查看迁移计划的后半部分，是否包含DNS解析切换步骤，以及定义了何种指标/错误率触发回滚。",
+    "numeric_tolerance": 0,
+    "weight_reason": "DNS切换与回滚触发条件是迁移计划的核心决策点，权重高。",
+    "criterion": [
+      "检查是否包含DNS切换或流量灰度步骤",
+      "检查是否明确定义了触发回滚的具体条件（如错误率阈值、核心功能不可用等）"
+    ],
+    "anchors": {
+      "0": "缺失DNS切换或未定义回滚触发条件",
+      "1": "包含DNS切换步骤且明确定义了回滚触发条件"
+    },
+    "acceptable_alternatives": [
+      "触发条件可以是具体的HTTP 5xx比例、核心接口超时率或人工验收失败"
+    ],
+    "failure_examples": [
+      "计划中提及了回滚步骤，但未说明在什么情况下应该执行回滚。"
+    ]
+  },
+  {
+    "id": "R04",
+    "description": "回滚计划是否正确引用v2.3.0的DB脚本和路径清理",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "migration_and_rollback_plan.md"
+    ],
+    "evidence": "查看回滚计划中针对v2.4.0的回滚操作，是否正确引用了 db_v2.3.0.sql 并提及清理 /docs/secure。",
+    "numeric_tolerance": 0,
+    "weight_reason": "验证solver对历史发布记录回滚依赖链的理解。",
+    "criterion": [
+      "检查回滚v2.4.0时是否指定使用 db_v2.3.0.sql",
+      "检查是否提及移除或清理 /docs/secure 目录"
+    ],
+    "anchors": {
+      "0": "引用了错误的脚本或遗漏路径清理",
+      "1": "准确引用 db_v2.3.0.sql 并提及清理 /docs/secure"
+    },
+    "acceptable_alternatives": [
+      "清理操作可表述为删除目录或移除权限"
+    ],
+    "failure_examples": [
+      "回滚计划中要求使用 db_v2.4.0.sql 进行回滚，逻辑错误。"
+    ]
+  },
+  {
+    "id": "R05",
+    "description": "配置核对是否准确识别 db_v2.2.0.sql 的MD5不匹配",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "config_checklist.csv"
+    ],
+    "evidence": "查看核对清单中是否指出 db_v2.2.0.sql 的 actual_md5 与 expected_md5 不一致，并分析其影响。",
+    "numeric_tolerance": 0,
+    "weight_reason": "识别关键数据完整性风险是核对工作的核心价值，权重高。",
+    "criterion": [
+      "检查是否指出 db_v2.2.0.sql 的MD5不匹配",
+      "检查是否分析了该不匹配可能导致回滚失败或数据不一致的影响"
+    ],
+    "levels": {
+      "0": "完全未提及或指鹿为马",
+      "0.25": "提及了v2.2.0但未指出MD5不匹配",
+      "0.5": "指出了MD5不匹配但未给出具体文件名或差异",
+      "0.75": "准确指出了db_v2.2.0.sql的MD5不匹配，但未分析影响",
+      "1": "准确指出db_v2.2.0.sql的MD5不匹配，并说明可能导致回滚失败或数据不一致"
+    },
+    "acceptable_alternatives": [
+      "分析影响时可提及数据丢失、结构损坏或回滚脚本执行失败"
+    ],
+    "failure_examples": [
+      "清单中标记所有文件均为ok，完全忽略了MD5不匹配的记录。"
+    ]
+  },
+  {
+    "id": "R06",
+    "description": "配置核对是否准确识别 backup_v2.4.0.tar.gz 缺失且大小为0",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "config_checklist.csv"
+    ],
+    "evidence": "查看核对清单中是否指出 backup_v2.4.0.tar.gz 状态为missing且size_mb为0，并说明其导致无法回滚文件系统。",
+    "numeric_tolerance": 0,
+    "weight_reason": "识别致命缺失文件是防止迁移灾难的关键，权重高。",
+    "criterion": [
+      "检查是否指出 backup_v2.4.0.tar.gz 缺失或大小为0",
+      "检查是否说明该缺失会导致无法回滚v2.4.0的文件系统状态"
+    ],
+    "levels": {
+      "0": "完全未提及缺失",
+      "0.25": "提及了v2.4.0备份有问题但未明确是缺失",
+      "0.5": "指出了缺失但未关联到backup_v2.4.0.tar.gz",
+      "0.75": "准确指出backup_v2.4.0.tar.gz缺失且大小为0",
+      "1": "准确指出backup_v2.4.0.tar.gz缺失且大小为0，并说明会导致无法回滚v2.4.0的文件系统状态"
+    },
+    "acceptable_alternatives": [
+      "说明影响时可提及必须重新生成备份或从生产环境直接打包"
+    ],
+    "failure_examples": [
+      "清单中未标记缺失文件，或建议直接使用现有的空文件进行回滚。"
+    ]
+  },
+  {
+    "id": "R07",
+    "description": "配置核对是否针对异常文件提出合理的修复或替代建议",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "config_checklist.csv"
+    ],
+    "evidence": "查看核对清单中是否为MD5不匹配和文件缺失提供了具体的处理建议（如重新导出、重新备份）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "识别问题后提供解决方案是完整闭环的必要部分。",
+    "criterion": [
+      "检查是否为 db_v2.2.0.sql 提供了重新校验或导出的建议",
+      "检查是否为 backup_v2.4.0.tar.gz 提供了重新备份或同步的建议"
+    ],
+    "anchors": {
+      "0": "未提供任何修复建议或建议不可行",
+      "1": "为两个异常文件均提供了合理的修复或替代建议"
+    },
+    "acceptable_alternatives": [
+      "建议可以是从生产环境直接导出、使用其他备份源或暂停迁移直至修复"
+    ],
+    "failure_examples": [
+      "建议忽略MD5不匹配继续迁移，或建议删除缺失记录以通过核对。"
+    ]
+  },
+  {
+    "id": "R08",
+    "description": "验收脚本说明是否包含CDN HTML缓存策略验证",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "acceptance_script_spec.md"
+    ],
+    "evidence": "查看验收脚本逻辑中是否包含请求HTML文件并断言 Cache-Control 为 max-age=0, must-revalidate。",
+    "numeric_tolerance": 0,
+    "weight_reason": "HTML缓存策略是SSG架构的核心要求。",
+    "criterion": [
+      "检查是否提及请求HTML类型文件",
+      "检查是否断言 Cache-Control 包含 max-age=0 或 must-revalidate"
+    ],
+    "anchors": {
+      "0": "未验证HTML缓存或断言值错误",
+      "1": "准确验证HTML文件的缓存头为 max-age=0, must-revalidate"
+    },
+    "acceptable_alternatives": [
+      "可通过curl -I或HTTP客户端获取响应头进行断言"
+    ],
+    "failure_examples": [
+      "验收脚本中要求验证HTML文件的 max-age=31536000，与需求相反。"
+    ]
+  },
+  {
+    "id": "R09",
+    "description": "验收脚本说明是否包含CDN静态资源长缓存验证",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "acceptance_script_spec.md"
+    ],
+    "evidence": "查看验收脚本逻辑中是否包含请求js/css/images并断言 Cache-Control 为 max-age=31536000, immutable。",
+    "numeric_tolerance": 0,
+    "weight_reason": "静态资源长缓存是CDN性能优化的关键。",
+    "criterion": [
+      "检查是否提及请求静态资源（js/css/images）",
+      "检查是否断言 Cache-Control 包含 max-age=31536000 和 immutable"
+    ],
+    "anchors": {
+      "0": "未验证静态资源缓存或断言值错误",
+      "1": "准确验证静态资源的缓存头为 max-age=31536000, immutable"
+    },
+    "acceptable_alternatives": [
+      "可分别验证js、css或图片，或统称为静态资源"
+    ],
+    "failure_examples": [
+      "验收脚本中仅验证了HTML缓存，完全遗漏了静态资源的长缓存验证。"
+    ]
+  },
+  {
+    "id": "R10",
+    "description": "验收脚本说明是否包含WAF拦截BadBot UA的验证",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "acceptance_script_spec.md"
+    ],
+    "evidence": "查看验收脚本逻辑中是否包含构造User-Agent为BadBot或Scraper的请求，并断言返回403。",
+    "numeric_tolerance": 0,
+    "weight_reason": "WAF拦截规则是安全防护的验收重点。",
+    "criterion": [
+      "检查是否提及构造包含 BadBot 或 Scraper 的 User-Agent",
+      "检查是否断言响应状态码为 403"
+    ],
+    "anchors": {
+      "0": "未验证WAF拦截或状态码错误",
+      "1": "准确验证携带特定UA的请求被拦截并返回403"
+    },
+    "acceptable_alternatives": [
+      "可分别测试BadBot和Scraper，或测试其中一个"
+    ],
+    "failure_examples": [
+      "验收脚本中测试BadBot UA，但断言期望返回200或404。"
+    ]
+  },
+  {
+    "id": "R11",
+    "description": "验收脚本说明是否包含OSS /assets/uploads/ 路径访问验证",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "acceptance_script_spec.md"
+    ],
+    "evidence": "查看验收脚本逻辑中是否包含请求 /assets/uploads/ 下的文件，并断言可正常访问（200）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "路径映射正确性直接影响业务功能。",
+    "criterion": [
+      "检查是否提及请求 /assets/uploads/ 路径下的资源",
+      "检查是否断言响应状态码为 200 或可正常下载"
+    ],
+    "anchors": {
+      "0": "未验证OSS路径映射或路径错误",
+      "1": "准确验证 /assets/uploads/ 路径下的资源可正常访问"
+    },
+    "acceptable_alternatives": [
+      "可通过CDN域名或OSS直连域名进行验证"
+    ],
+    "failure_examples": [
+      "验收脚本中要求验证 /uploads/ 路径，未体现新架构的路径映射。"
+    ]
+  },
+  {
+    "id": "R12",
+    "description": "验收脚本说明是否明确指出 /docs/secure/ 不迁移的验证方式",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "acceptance_script_spec.md"
+    ],
+    "evidence": "查看验收脚本逻辑中是否包含验证 /docs/secure/ 不通过OSS/CDN静态访问，而是通过旧系统API获取。",
+    "numeric_tolerance": 0,
+    "weight_reason": "理解不迁移的边界条件，避免错误测试。",
+    "criterion": [
+      "检查是否提及 /docs/secure/ 的验证方式",
+      "检查是否明确该目录应通过旧系统API动态获取，而非OSS静态访问"
+    ],
+    "anchors": {
+      "0": "未提及 /docs/secure/ 或错误地要求OSS静态访问",
+      "1": "明确 /docs/secure/ 应通过旧系统API验证，不进行OSS静态访问测试"
+    },
+    "acceptable_alternatives": [
+      "可表述为验证旧API接口返回的文档链接有效性"
+    ],
+    "failure_examples": [
+      "验收脚本中要求测试 https://cdn.../assets/docs/secure/ 是否返回200。"
+    ]
+  },
+  {
+    "id": "R13",
+    "description": "迁移计划中是否正确处理了旧版API的动态获取逻辑",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "migration_and_rollback_plan.md"
+    ],
+    "evidence": "查看迁移计划中是否提及保留旧系统API服务，或配置反向代理以支持 /docs/secure/ 的动态获取。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保迁移后业务功能不中断的关键设计。",
+    "criterion": [
+      "检查是否提及保留或配置旧系统API",
+      "检查是否说明如何通过API支持 /docs/secure/ 的访问"
+    ],
+    "anchors": {
+      "0": "未提及API保留或动态获取逻辑",
+      "1": "明确提及保留旧系统API或配置代理以支持动态获取"
+    },
+    "acceptable_alternatives": [
+      "可提及在Nginx层配置路由转发，将特定路径指向旧系统"
+    ],
+    "failure_examples": [
+      "计划中要求将旧系统完全下线，未考虑 /docs/secure/ 的API依赖。"
+    ]
+  },
+  {
+    "id": "R14",
+    "description": "是否捏造了不存在的输入文件或版本记录",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "migration_and_rollback_plan.md",
+      "config_checklist.csv",
+      "acceptance_script_spec.md"
+    ],
+    "evidence": "全局搜索所有交付物中出现的版本号或文件名，比对输入材料。",
+    "numeric_tolerance": 0,
+    "weight_reason": "捏造输入材料是严重的幻觉错误，必须负分惩罚。",
+    "criterion": [
+      "检查是否出现了未在输入材料中定义的版本号（如v2.5.0）",
+      "检查是否出现了未在输入材料中定义的文件名"
+    ],
+    "anchors": {
+      "0": "未捏造任何不存在的文件或版本",
+      "1": "捏造了至少一个不存在的文件或版本"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "在回滚计划中提及了回滚到v2.5.0，但该版本在输入材料中不存在。"
+    ]
+  },
+  {
+    "id": "R15",
+    "description": "是否在验收脚本中要求测试未迁移的 /docs/secure/ 目录的静态文件",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "acceptance_script_spec.md"
+    ],
+    "evidence": "查看验收脚本说明中的测试用例列表，检查是否将 /docs/secure/ 作为静态资源进行访问测试。",
+    "numeric_tolerance": 0,
+    "weight_reason": "违背需求中明确的不迁移规则，属于实质错误，必须负分惩罚。",
+    "criterion": [
+      "检查是否将 /docs/secure/ 下的文件作为OSS或CDN静态资源进行访问测试"
+    ],
+    "anchors": {
+      "0": "未错误要求测试未迁移的静态文件",
+      "1": "错误要求测试了未迁移的 /docs/secure/ 静态文件"
+    },
+    "acceptable_alternatives": [
+      "如果脚本测试的是通过旧系统API动态获取，则视为正确（不触发负分）"
+    ],
+    "failure_examples": [
+      "在OSS路径映射验证中，要求测试 /assets/docs/secure/xxx.pdf 是否返回200。"
+    ]
+  },
+  {
+    "id": "R16",
+    "description": "回滚计划是否错误地包含了清理新系统OSS数据的步骤导致无法回滚",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "migration_and_rollback_plan.md"
+    ],
+    "evidence": "查看回滚计划中是否在回退到旧系统前，要求删除或清空 starorbit-portal-prod 存储桶中的数据。",
+    "numeric_tolerance": 0,
+    "weight_reason": "清理新系统数据会破坏回滚现场，属于逻辑错误，给予负分。",
+    "criterion": [
+      "检查回滚计划中是否要求删除或清空新系统的OSS存储桶数据"
+    ],
+    "anchors": {
+      "0": "未包含清理OSS数据的错误步骤",
+      "1": "包含了清理OSS数据的错误步骤"
+    },
+    "acceptable_alternatives": [
+      "如果回滚计划中包含保留新系统OSS数据以备排查，则视为正确"
+    ],
+    "failure_examples": [
+      "在回滚步骤第一步要求执行清空存储桶的命令。"
+    ]
+  },
+  {
+    "id": "R17",
+    "description": "验收脚本是否考虑了并发、超时或状态码异常等处理逻辑",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "acceptance_script_spec.md"
+    ],
+    "evidence": "查看验收脚本说明中是否包含对网络超时、重试机制或非预期状态码的处理逻辑。",
+    "numeric_tolerance": 0,
+    "weight_reason": "自动化脚本的健壮性设计，体现专业深度。",
+    "criterion": [
+      "检查是否提及超时处理或重试机制",
+      "检查是否包含对非预期状态码的异常捕获或告警逻辑"
+    ],
+    "levels": {
+      "0": "无任何异常处理",
+      "0.25": "仅提及需要处理异常，无具体逻辑",
+      "0.5": "提及了超时，但未结合具体验收项",
+      "0.75": "针对CDN或OSS验证提出了超时重试或状态码非200的处理",
+      "1": "针对CDN/OSS/WAF验证均提出了合理的异常处理（如重试、降级、告警）"
+    },
+    "acceptable_alternatives": [
+      "可提及使用指数退避重试、设置合理的timeout参数或失败时发送告警通知"
+    ],
+    "failure_examples": [
+      "脚本说明中仅列出了成功断言，完全未考虑网络波动或CDN缓存未刷新的情况。"
+    ]
+  },
+  {
+    "id": "R18",
+    "description": "配置核对清单格式是否规范且包含所有输入记录",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "config_checklist.csv"
+    ],
+    "evidence": "查看核对清单CSV文件，检查是否包含所有8条记录，且列结构清晰（如包含预期值、实际值、状态、建议）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "交付物的规范性和完整性是专业素养的体现。",
+    "criterion": [
+      "检查是否包含输入材料中的所有8条备份记录",
+      "检查CSV格式是否规范，包含必要的对比列和建议列"
+    ],
+    "levels": {
+      "0": "未提供核对清单或遗漏超过一半记录",
+      "0.25": "仅提供部分清单，遗漏了MD5检查或状态列",
+      "0.5": "包含了所有记录，但格式不规范或缺少预期/实际对比",
+      "0.75": "格式规范，包含所有8条记录，对比清晰",
+      "1": "格式规范，包含所有8条记录，对比清晰，且对异常项有醒目标注或汇总建议"
+    },
+    "acceptable_alternatives": [
+      "列名可自定义，但必须能清晰表达对比关系和最终结论"
+    ],
+    "failure_examples": [
+      "CSV文件仅列出了文件名和状态，未提供expected_md5和actual_md5的对比。"
+    ]
+  },
+  {
+    "id": "R19",
+    "description": "迁移计划的时间窗口选择是否合理",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "migration_and_rollback_plan.md"
+    ],
+    "evidence": "查看迁移计划中是否提及选择业务低峰期（如凌晨或周末）进行DNS切换和核心迁移操作。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基本的运维常识，权重较低。",
+    "criterion": [
+      "检查是否提及选择业务低峰期进行迁移"
+    ],
+    "anchors": {
+      "0": "未提及时间窗口或选择在工作日高峰期",
+      "1": "明确提及选择业务低峰期进行迁移"
+    },
+    "acceptable_alternatives": [
+      "可提及凌晨2点-5点，或周末非工作时间"
+    ],
+    "failure_examples": [
+      "计划中安排在周一上午10点进行核心DNS切换。"
+    ]
+  },
+  {
+    "id": "R20",
+    "description": "交付物中的专业术语使用是否准确",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-05"
+    ],
+    "deliverables": [
+      "migration_and_rollback_plan.md",
+      "config_checklist.csv",
+      "acceptance_script_spec.md"
+    ],
+    "evidence": "全局检查交付物，确认SSG、OSS、CDN、WAF、MD5、Cache-Control等术语使用正确，无常识性混淆。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基本的专业表达要求。",
+    "criterion": [
+      "检查术语使用是否准确，无常识性混淆"
+    ],
+    "anchors": {
+      "0": "存在明显的术语混淆或错误使用",
+      "1": "专业术语使用准确，符合Web运维惯例"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "将CDN的缓存策略与WAF的拦截规则混为一谈，或混淆了OSS与MySQL的职责。"
+    ]
+  }
+]

@@ -1,0 +1,659 @@
+[
+  {
+    "id": "R1",
+    "description": "交付物完整性与格式规范",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx",
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查/app/output目录下是否存在这两个文件，且扩展名正确。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础交付要求，未满足则任务失败。",
+    "criterion": [
+      "存在Coding_Traceability_Matrix.xlsx",
+      "存在Research_Briefing.md",
+      "文件位于/app/output目录"
+    ],
+    "anchors": {
+      "0": "缺少任一文件或路径错误",
+      "1": "两个文件均存在且路径正确"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "只输出了md文件，没有输出xlsx文件。",
+      "文件保存在了根目录而不是/app/output。"
+    ]
+  },
+  {
+    "id": "R2",
+    "description": "编码追溯表的基础覆盖率",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ2",
+      "REQ3"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx"
+    ],
+    "evidence": "检查Excel表中是否包含ID_01至ID_08所有受访者的有效编码行。",
+    "numeric_tolerance": 0,
+    "weight_reason": "核心工作量体现，遗漏受访者意味着分析不完整。",
+    "criterion": [
+      "覆盖全部8个受访者ID",
+      "每个ID至少有一行有效编码",
+      "无遗漏或错位的ID"
+    ],
+    "levels": {
+      "1": "完整覆盖8个ID，无遗漏，且每个ID至少一个有效编码",
+      "0.75": "覆盖7个ID，或覆盖8个ID但个别ID编码明显缺失/错误",
+      "0.5": "覆盖5-6个ID",
+      "0.25": "覆盖3-4个ID",
+      "0": "覆盖少于3个ID或完全未做"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "遗漏了ID_06和ID_07的编码。"
+    ]
+  },
+  {
+    "id": "R3",
+    "description": "T1物理环境障碍识别准确性",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ2"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx"
+    ],
+    "evidence": "检查ID_01是否被正确编码为S1.1和S1.2，ID_06是否被正确编码为S1.1。",
+    "numeric_tolerance": 0,
+    "weight_reason": "验证对基础物理环境主题的识别能力。",
+    "criterion": [
+      "ID_01包含S1.1(楼梯/无障碍)和S1.2(照明/扶手)",
+      "ID_06包含S1.1",
+      "未将物理环境误判为其他主题"
+    ],
+    "anchors": {
+      "0": "遗漏关键物理环境编码或分类错误",
+      "1": "准确识别所有物理环境相关子主题"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "将ID_01的楼道灯暗归类为T2数字排斥。"
+    ]
+  },
+  {
+    "id": "R4",
+    "description": "T2数字技术排斥识别准确性",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ2"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx"
+    ],
+    "evidence": "检查ID_02, ID_05, ID_08的T2相关编码（S2.1界面复杂, S2.3安全担忧）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数字融入是试点核心，需准确识别技术障碍的具体维度。",
+    "criterion": [
+      "ID_02识别出S2.1和S2.3",
+      "ID_08识别出S2.1",
+      "ID_05识别出S2.1",
+      "准确区分界面复杂与安全担忧"
+    ],
+    "anchors": {
+      "0": "遗漏关键数字排斥编码或混淆子主题",
+      "1": "准确识别所有数字排斥相关子主题"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "将ID_02的怕扣钱归类为S2.1界面复杂，而非S2.3安全担忧。"
+    ]
+  },
+  {
+    "id": "R5",
+    "description": "T3社会支持网络识别准确性",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ2"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx"
+    ],
+    "evidence": "检查ID_03(S3.2), ID_04(S3.1), ID_06(S3.1)的社会支持编码。",
+    "numeric_tolerance": 0,
+    "weight_reason": "验证对非正式与正式支持网络的区分能力。",
+    "criterion": [
+      "ID_03识别出S3.2(社区工作人员)",
+      "ID_04识别出S3.1(邻里互助)",
+      "ID_06识别出S3.1(邻里互助)"
+    ],
+    "anchors": {
+      "0": "遗漏社会支持编码或混淆正式/非正式网络",
+      "1": "准确识别所有社会支持相关子主题"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "将ID_03的居委会小李归类为S3.1邻里互助。"
+    ]
+  },
+  {
+    "id": "R6",
+    "description": "多重主题交叉处理与拆分逻辑",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ6"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx"
+    ],
+    "evidence": "检查ID_04, ID_05, ID_06等包含多重主题的段落，是否进行了合理拆分或主次标注，且备注清晰。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察处理复杂文本的专业定性分析能力。",
+    "criterion": [
+      "识别ID_04包含T2(S2.1)和T3(S3.1)",
+      "识别ID_05包含T2(S2.1)和T3(S3.2)",
+      "识别ID_06包含T1(S1.1)和T3(S3.1)",
+      "备注中明确说明拆分逻辑"
+    ],
+    "levels": {
+      "1": "准确识别所有多重主题段落（至少3处），并合理拆分且备注清晰",
+      "0.75": "识别了2处，或识别了3处但主次标注/备注不够清晰",
+      "0.5": "识别了1处，或强行合并导致语义丢失",
+      "0.25": "尝试处理但逻辑混乱，或仅识别了极明显的部分",
+      "0": "完全未处理多重编码，全部归为单一主题或遗漏"
+    },
+    "acceptable_alternatives": [
+      "如果未拆分但在同一行标注了多个代码且置信度合理，也可接受。"
+    ],
+    "failure_examples": [
+      "将ID_04的文本仅编码为T2，完全忽略了王姐的帮助（T3）。"
+    ]
+  },
+  {
+    "id": "R7",
+    "description": "反例（主动排斥）的特殊标注",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ2",
+      "REQ6"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx"
+    ],
+    "evidence": "检查ID_07的编码是否归入S2.3，并在备注中明确标注‘反例-主动排斥’或类似说明。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察对编码手册中反例处理规则的遵循及敏锐度。",
+    "criterion": [
+      "ID_07归入S2.3",
+      "备注中明确提及主动排斥/反例",
+      "未将其误判为S2.1能力不足"
+    ],
+    "levels": {
+      "1": "准确归入S2.3，且备注明确标注反例/主动排斥特征",
+      "0.75": "归入S2.3，但备注仅简单提及不学/不用，未点明反例性质",
+      "0.5": "归入S2.3，但无备注说明，或归入S2.1但备注说明了主动排斥",
+      "0.25": "归入错误主题，但尝试在备注中解释",
+      "0": "完全按普通S2.1处理，无任何特殊标注"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "将ID_07编码为S2.1，认为其是因为学不会才不用。"
+    ]
+  },
+  {
+    "id": "R8",
+    "description": "研究简报核心发现总结质量",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ4",
+      "REQ5"
+    ],
+    "deliverables": [
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查简报的‘核心发现’部分是否准确提炼了三大主题，且没有编造量化百分比。",
+    "numeric_tolerance": 0,
+    "weight_reason": "简报的核心价值在于从定性数据中提炼洞察，而非简单罗列。",
+    "criterion": [
+      "涵盖物理环境、数字排斥、社会支持三大主题",
+      "使用定性描述（如‘普遍存在’、‘部分老人’）",
+      "未编造具体百分比或官方数据"
+    ],
+    "levels": {
+      "1": "准确提炼三大主题，定性描述准确，无编造数据，洞察深刻",
+      "0.75": "涵盖三大主题，无编造数据，但描述较为平淡，缺乏深度",
+      "0.5": "遗漏某一主题，或出现了轻微的编造数据/过度推断",
+      "0.25": "仅简单罗列访谈原话，未进行主题提炼",
+      "0": "严重偏离材料，大量编造数据或完全未总结核心发现"
+    },
+    "acceptable_alternatives": [
+      "允许使用‘多数’、‘少数’等模糊量词，只要不编造精确百分比。"
+    ],
+    "failure_examples": [
+      "在简报中写明‘85%的老人面临数字排斥’，材料中并无此数据。"
+    ]
+  },
+  {
+    "id": "R9",
+    "description": "交叉洞察分析深度",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查简报是否结合了Sample_Register（如独居状态与数字排斥/社会支持的关系，健康限制与物理障碍的关系）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "交叉分析是研究助理的核心能力，体现数据与背景的关联。",
+    "criterion": [
+      "分析了独居状态与社会支持网络（如S3.2 vs S3.1）的关系",
+      "分析了健康限制（如视力/认知）与数字排斥（T2）的关系",
+      "逻辑连贯，有具体ID或案例支撑"
+    ],
+    "levels": {
+      "1": "深入分析了至少两个维度的交叉关系（如独居+健康限制），且有具体案例支撑",
+      "0.75": "分析了交叉关系，但维度较少（如仅分析了独居状态），或缺乏具体案例",
+      "0.5": "仅泛泛而谈背景特征，未与编码主题建立实质性联系",
+      "0.25": "尝试联系但逻辑错误或张冠李戴",
+      "0": "完全未进行交叉分析，各部分割裂"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "在简报中称‘所有有健康限制的老人都不会使用智能手机’，过于绝对且未区分视力与认知障碍。"
+    ]
+  },
+  {
+    "id": "R10",
+    "description": "资料局限性声明",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ4",
+      "REQ5"
+    ],
+    "deliverables": [
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查简报的‘资料局限性’部分是否明确指出了样本量小（n=8）、自评偏差或特定人群覆盖等局限。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严谨的研究必须承认资料局限，防止过度推论。",
+    "criterion": [
+      "明确指出样本量极小（n=8）的局限性",
+      "指出样本特征可能存在的偏差（如均为高龄/特定社区）",
+      "未将结论过度推广至全体老年人"
+    ],
+    "anchors": {
+      "0": "未提及局限性，或将结论过度推广",
+      "1": "明确、客观地声明了样本量和特征局限性"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "在简报中称‘本研究结果可代表全市老年人的数字融入现状’。"
+    ]
+  },
+  {
+    "id": "R11",
+    "description": "反例与不确定性说明",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查简报是否专门讨论了编码中遇到的反例（如ID_07）或模糊文本，并说明其对政策的启示。",
+    "numeric_tolerance": 0,
+    "weight_reason": "反例往往蕴含独特的政策价值，考察对异常数据的敏感度。",
+    "criterion": [
+      "专门讨论了主动排斥等反例",
+      "说明了反例对政策干预的启示（如不能仅靠降低门槛，需解决信任问题）"
+    ],
+    "anchors": {
+      "0": "未讨论反例或仅一笔带过",
+      "1": "专门讨论反例，并得出合理的政策/干预启示"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "在简报中完全忽略了ID_07的主动排斥现象。"
+    ]
+  },
+  {
+    "id": "R12",
+    "description": "致命错误：伪造数据或政策",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ5"
+    ],
+    "deliverables": [
+      "Research_Briefing.md",
+      "Coding_Traceability_Matrix.xlsx"
+    ],
+    "evidence": "全局检查是否编造了未在材料中出现的官方数字、政策名称或受访者原话。",
+    "numeric_tolerance": 0,
+    "weight_reason": "研究底线，伪造数据导致成果完全不可用。",
+    "criterion": [
+      "无编造官方数字",
+      "无编造政策名称",
+      "无编造受访者原话"
+    ],
+    "anchors": {
+      "0": "存在编造行为",
+      "1": "无任何编造行为（1表示未发生禁止事件）"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "在简报中引用了‘根据市民政局2023年发布的《适老化改造指导意见》...’，材料中无此文件。"
+    ]
+  },
+  {
+    "id": "R13",
+    "description": "格式与规范严重错误",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [
+      "REQ1",
+      "REQ3"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx",
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查文件扩展名、必需列/章节是否严重缺失。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基本的交付规范。",
+    "criterion": [
+      "扩展名正确",
+      "必需列/章节未严重缺失"
+    ],
+    "anchors": {
+      "0": "存在严重格式/规范错误",
+      "1": "无严重格式/规范错误（1表示未发生禁止事件）"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "将Excel文件保存为.csv格式，且未包含表头。"
+    ]
+  },
+  {
+    "id": "R14",
+    "description": "简报语言风格专业性",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查简报语言是否客观、专业，适合学术/政策汇报，无口语化或情绪化表达。",
+    "numeric_tolerance": 0,
+    "weight_reason": "研究简报需具备专业沟通属性。",
+    "criterion": [
+      "语言客观专业",
+      "无过度口语化表达",
+      "适合决策层阅读"
+    ],
+    "anchors": {
+      "0": "语言风格不符合专业简报要求",
+      "1": "语言客观专业，符合简报风格"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "在简报中使用‘大爷大妈们根本搞不懂’等非专业、情绪化表述。"
+    ]
+  },
+  {
+    "id": "R15",
+    "description": "定性引用准确性",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ5"
+    ],
+    "deliverables": [
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查简报中引用的受访者原话是否与Interview_Transcripts.txt完全一致，无断章取义。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保定性证据的真实性。",
+    "criterion": [
+      "引用内容与原文一致",
+      "未断章取义改变原意"
+    ],
+    "anchors": {
+      "0": "引用内容有误或断章取义",
+      "1": "引用准确且忠于原意"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "将ID_08的‘弄了十分钟没挂上’篡改为‘完全不会用挂号机’。"
+    ]
+  },
+  {
+    "id": "R16",
+    "description": "编码手册遵循度（无自创代码）",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ2"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx"
+    ],
+    "evidence": "检查Excel表中是否出现了T1/T2/T3及S1/S2/S3之外的自创主题代码。",
+    "numeric_tolerance": 0,
+    "weight_reason": "遵循统一编码框架是保证研究信度的基础。",
+    "criterion": [
+      "仅使用手册定义的代码",
+      "未自创如T4、S1.3等代码"
+    ],
+    "anchors": {
+      "0": "存在自创代码",
+      "1": "严格遵循手册，无自创代码"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "自创了T4: 心理障碍 代码来编码ID_07。"
+    ]
+  },
+  {
+    "id": "R17",
+    "description": "置信度评估合理性",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ6"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx"
+    ],
+    "evidence": "检查置信度列，对于模糊文本（如ID_04, ID_05）是否给出了0.5-0.9的合理区间，而非一律1.0。",
+    "numeric_tolerance": 0.1,
+    "weight_reason": "考察对定性数据不确定性的专业判断。",
+    "criterion": [
+      "清晰表述置信度为1.0",
+      "模糊/推测表述置信度<1.0",
+      "未出现0或负数等无效值"
+    ],
+    "levels": {
+      "1": "置信度评估合理，模糊表述准确赋予<1.0的值，清晰表述为1.0",
+      "0.75": "大部分合理，但个别模糊表述给了1.0，或个别清晰表述给了过低分数",
+      "0.5": "区分度一般，大部分给了0.8-1.0，缺乏针对性",
+      "0.25": "几乎全部给1.0或随机给分",
+      "0": "置信度列缺失或完全不合理"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "将ID_05中‘脑子最近有点慢’的模糊表述置信度标为1.0。"
+    ]
+  },
+  {
+    "id": "R18",
+    "description": "样本特征提取准确性",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查简报中引用的样本背景信息（如年龄、独居状态、健康限制）是否与Sample_Register.csv完全一致。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保交叉分析的事实基础准确。",
+    "criterion": [
+      "年龄引用正确",
+      "独居状态引用正确",
+      "健康限制引用正确"
+    ],
+    "anchors": {
+      "0": "样本特征提取有误",
+      "1": "样本特征提取完全准确"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "在简报中称ID_03为非独居，而CSV中明确为独居。"
+    ]
+  },
+  {
+    "id": "R19",
+    "description": "逻辑连贯性与证据支撑",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ4"
+    ],
+    "deliverables": [
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查简报的结论和建议是否有编码数据或访谈原话支撑，逻辑自洽。",
+    "numeric_tolerance": 0,
+    "weight_reason": "研究结论必须基于证据。",
+    "criterion": [
+      "结论有证据支撑",
+      "建议与发现的问题逻辑对应"
+    ],
+    "anchors": {
+      "0": "结论无证据支撑或逻辑断裂",
+      "1": "结论有充分证据支撑，逻辑连贯"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "在建议中提出‘加强社区绿化’，但编码数据中完全未提及物理环境中的绿化问题。"
+    ]
+  },
+  {
+    "id": "R20",
+    "description": "复杂语境理解（认知与技术的交互）",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ2",
+      "REQ6"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx"
+    ],
+    "evidence": "检查对ID_05（认知轻微衰退导致的技术困难）的理解，是否能区分单纯的S2.1和认知匹配问题，并在备注中体现。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察对深层语境和特殊人群需求的理解能力。",
+    "criterion": [
+      "ID_05归入S2.1",
+      "备注中提及认知衰退/反应慢对操作的影响",
+      "未将其简单归结为界面设计问题"
+    ],
+    "levels": {
+      "1": "准确归入S2.1，且备注明确指出认知衰退导致的匹配问题",
+      "0.75": "归入S2.1，备注提及了脑子慢/反应慢，但未深入分析",
+      "0.5": "归入S2.1，但仅从界面复杂度分析，忽略了认知因素",
+      "0.25": "归入错误主题，或备注完全偏离",
+      "0": "未对ID_05进行有效编码"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "将ID_05的问题完全归咎于人脸识别算法不好，忽略了受访者自述的认知衰退。"
+    ]
+  },
+  {
+    "id": "R21",
+    "description": "输出目录与路径正确性",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ1"
+    ],
+    "deliverables": [
+      "Coding_Traceability_Matrix.xlsx",
+      "Research_Briefing.md"
+    ],
+    "evidence": "检查文件是否明确保存在 /app/output 目录下。",
+    "numeric_tolerance": 0,
+    "weight_reason": "系统自动化处理的路径要求。",
+    "criterion": [
+      "路径为/app/output"
+    ],
+    "anchors": {
+      "0": "路径错误",
+      "1": "路径正确"
+    },
+    "acceptable_alternatives": [
+      "无"
+    ],
+    "failure_examples": [
+      "文件保存在 /app/ 根目录下。"
+    ]
+  }
+]

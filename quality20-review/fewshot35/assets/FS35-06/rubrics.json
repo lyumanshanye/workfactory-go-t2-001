@@ -1,0 +1,538 @@
+[
+  {
+    "id": "R01",
+    "description": "准确识别所有因VLAN/IP网段错配导致无法入会或认证失败的工单，并指向正确的网络环境。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx",
+      "escalation_package.md"
+    ],
+    "evidence": "检查升级包和决策表中对T-1003(DEV-03, 192.168.100.22, 访客网)、T-1008(DEV-06, 10.20.10.8, 办公网)的分析。",
+    "numeric_tolerance": 0,
+    "weight_reason": "核心网络排查能力，直接决定升级方向。",
+    "criterion": [
+      "识别T-1003(DEV-03)处于访客网(VLAN 30)，无SIP路由导致超时。",
+      "识别T-1008(DEV-06)处于办公网(VLAN 10)，防火墙拦截SIP端口导致认证失败。",
+      "明确指出这些设备未配置在音视频专网(VLAN 20)。"
+    ],
+    "anchors": {
+      "0": "未能识别出这两个工单的网络错配问题，或将其归咎于硬件故障。",
+      "1": "准确识别T-1003和T-1008的IP所属网段及对应的网络限制（访客网无路由/办公网防火墙拦截），并正确建议迁移至VLAN 20。"
+    },
+    "acceptable_alternatives": "网段名称可用VLAN ID或网段IP表示，如192.168.100.0/24或访客网，只要逻辑对应即可。",
+    "failure_examples": "将T-1008的认证失败归结为设备SIP账号密码错误，未检查IP 10.20.10.8属于办公网VLAN 10。"
+  },
+  {
+    "id": "R02",
+    "description": "准确识别所有因固件已知缺陷导致的工单，并关联到具体的技术备注。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "escalation_package.md"
+    ],
+    "evidence": "检查升级包中‘厂商/三线固件缺陷’部分对T-1001/T-1005(DEV-01)和T-1006(DEV-05)的分析。",
+    "numeric_tolerance": 0,
+    "weight_reason": "区分软件缺陷与硬件/网络故障的关键能力。",
+    "criterion": [
+      "识别T-1001和T-1005(DEV-01, 固件2.0.5)属于‘固件<2.1.0的音频回声/静音Bug’。",
+      "识别T-1006(DEV-05, 固件2.1.5)属于‘2.1.x外部SIP Trunk注册超时Bug’。",
+      "明确建议等待厂商补丁或升级固件，而非调整网络。"
+    ],
+    "anchors": {
+      "0": "未识别出固件缺陷，或遗漏了T-1006的SIP注册Bug。",
+      "1": "准确将T-1001/T-1005映射到音频Bug，T-1006映射到SIP注册Bug，并引用了技术备注中的版本号条件。"
+    },
+    "acceptable_alternatives": "可以建议临时降级/升级固件作为缓解措施，只要最终指向厂商补丁。",
+    "failure_examples": "将T-1006的外部SIP失败归结为网络防火墙问题，忽略了DEV-05的IP(10.20.20.15)在专网且2.1.x存在已知Bug的事实。"
+  },
+  {
+    "id": "R03",
+    "description": "准确识别测试网段无QoS导致的画面卡顿问题。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx",
+      "escalation_package.md"
+    ],
+    "evidence": "检查对T-1002和T-1007(DEV-02, IP 10.20.30.5)的分析。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察对非标准网段（测试网）特性的理解。",
+    "criterion": [
+      "识别DEV-02的IP 10.20.30.5属于测试网段。",
+      "指出测试网段未配置QoS策略导致带宽无保障，从而引发卡顿。",
+      "建议将设备迁移至VLAN 20。"
+    ],
+    "anchors": {
+      "0": "未识别出测试网段，或将其误认为专网/办公网。",
+      "1": "准确指出IP属于测试网段，且因无QoS导致卡顿，提出迁移建议。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "认为画面卡顿是因为设备硬件老化或CPU性能不足，未排查IP地址。"
+  },
+  {
+    "id": "R04",
+    "description": "准确识别访客网DHCP租期策略导致的周期性断会问题。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx",
+      "escalation_package.md"
+    ],
+    "evidence": "检查对T-1004(DEV-04, IP 192.168.100.15)的分析。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察将时间规律（下午3点）与网络策略（8小时租期）关联的推理能力。",
+    "criterion": [
+      "识别DEV-04的IP 192.168.100.15属于访客网(VLAN 30)。",
+      "将‘每天下午3点断会’与访客网‘DHCP租期8小时’的策略关联。",
+      "建议将设备迁移至VLAN 20以解决租期问题。"
+    ],
+    "anchors": {
+      "0": "未将断会时间与DHCP租期关联，或建议更换设备电源/硬件。",
+      "1": "准确关联访客网DHCP 8小时租期与下午3点断会的现象，并给出迁移建议。"
+    },
+    "acceptable_alternatives": "可建议修改访客网DHCP租期，但最佳实践是迁移至专网。",
+    "failure_examples": "将定时断会归结为会议室定时断电或设备休眠策略。"
+  },
+  {
+    "id": "R05",
+    "description": "正确合并同一设备的重复报修工单，避免重复分析。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx",
+      "escalation_package.md"
+    ],
+    "evidence": "检查工单处理逻辑中是否将T-1001与T-1005、T-1002与T-1007视为同一设备的连续问题。",
+    "numeric_tolerance": 0,
+    "weight_reason": "提升工单处理效率的基本素养。",
+    "criterion": [
+      "在分析或升级包中，将T-1001和T-1005合并为DEV-01的同一音频问题。",
+      "将T-1002和T-1007合并为DEV-02的同一卡顿问题。",
+      "未对同一根因重复提交升级请求。"
+    ],
+    "anchors": {
+      "0": "将T-1001、T-1005或T-1002、T-1007作为独立的新故障分别处理。",
+      "1": "明确识别并合并这两组重复报修，指出是同一根因的持续或复发。"
+    },
+    "acceptable_alternatives": "在升级包中备注‘关联工单’，或在决策表中说明‘若重启无效则确认为已知Bug’。",
+    "failure_examples": "在升级包中为T-1001和T-1005分别创建了两次固件升级请求。"
+  },
+  {
+    "id": "R06",
+    "description": "决策表包含‘网络层排查’分支，指导检查IP/VLAN。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx"
+    ],
+    "evidence": "检查Excel表格中是否有专门针对网络配置/IP地址的检查步骤。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础排查流程完整性。",
+    "criterion": [
+      "决策表中存在网络排查分支或步骤。",
+      "步骤中包含检查设备IP地址、确认所属VLAN或网段的操作。"
+    ],
+    "anchors": {
+      "0": "决策表完全未涉及网络或IP检查。",
+      "1": "包含明确的网络排查步骤，如‘登录设备后台检查IP地址及子网掩码’。"
+    },
+    "acceptable_alternatives": "可表述为‘检查网络配置’或‘核对IP是否在10.20.20.0/24’。",
+    "failure_examples": "决策表只有‘检查网线是否插紧’和‘重启设备’。"
+  },
+  {
+    "id": "R07",
+    "description": "决策表包含‘设备配置/固件排查’分支，指导检查版本号。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx"
+    ],
+    "evidence": "检查Excel表格中是否有针对固件版本或系统配置的检查步骤。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础排查流程完整性。",
+    "criterion": [
+      "决策表中存在固件/配置排查分支。",
+      "步骤中包含检查设备固件版本号或特定功能开关的操作。"
+    ],
+    "anchors": {
+      "0": "决策表未涉及固件版本检查。",
+      "1": "包含明确的固件排查步骤，如‘在系统信息页面核对当前固件版本’。"
+    },
+    "acceptable_alternatives": "可表述为‘检查系统版本’或‘核对固件是否为最新’。",
+    "failure_examples": "决策表仅要求‘恢复出厂设置’而不检查版本。"
+  },
+  {
+    "id": "R08",
+    "description": "升级包中包含向网络团队申请VLAN迁移的明确请求。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "escalation_package.md"
+    ],
+    "evidence": "检查Markdown文件中是否有针对网络团队的行动建议。",
+    "numeric_tolerance": 0,
+    "weight_reason": "明确跨团队协作的交付要求。",
+    "criterion": [
+      "升级包中明确列出需要网络团队介入的工单（如T-1003, T-1004, T-1008, T-1002）。",
+      "明确提出‘修改VLAN’或‘迁移至VLAN 20/音视频专网’的请求。"
+    ],
+    "anchors": {
+      "0": "未向网络团队提出VLAN迁移请求，或请求模糊。",
+      "1": "明确列出受影响工单，并清晰请求网络团队将对应端口或设备IP迁移至VLAN 20。"
+    },
+    "acceptable_alternatives": "可表述为‘调整交换机端口VLAN’或‘重新分配IP网段’。",
+    "failure_examples": "仅建议网络团队‘优化网络质量’，未提出具体的VLAN迁移操作。"
+  },
+  {
+    "id": "R09",
+    "description": "升级包中包含向厂商/三线反馈固件缺陷的明确请求。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "escalation_package.md"
+    ],
+    "evidence": "检查Markdown文件中是否有针对厂商/三线的行动建议。",
+    "numeric_tolerance": 0,
+    "weight_reason": "明确跨团队协作的交付要求。",
+    "criterion": [
+      "升级包中明确列出需要厂商介入的工单（T-1001, T-1005, T-1006）。",
+      "明确提出‘申请固件补丁’或‘升级固件至2.1.0以上/等待2.2.x修复’的请求。"
+    ],
+    "anchors": {
+      "0": "未向厂商提出固件缺陷反馈。",
+      "1": "明确列出受影响工单及对应Bug，并清晰请求厂商提供补丁或指导固件升级。"
+    },
+    "acceptable_alternatives": "可建议内部尝试刷入测试固件（若权限允许），但核心是识别出需厂商介入。",
+    "failure_examples": "建议一线工程师通过修改注册表或隐藏文件来修复固件Bug。"
+  },
+  {
+    "id": "R10",
+    "description": "决策表的排查步骤逻辑合理，遵循从物理/网络到应用/配置的递进原则。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx"
+    ],
+    "evidence": "审查Excel中排查步骤的顺序和逻辑连贯性。",
+    "numeric_tolerance": 0,
+    "weight_reason": "体现专业支持人员的排查方法论。",
+    "criterion": [
+      "步骤是否先检查物理连接/电源。",
+      "步骤是否接着检查网络/IP/VLAN。",
+      "步骤是否最后检查固件版本/应用配置。",
+      "整体逻辑是否形成有效的决策树或流程图。"
+    ],
+    "levels": {
+      "0": "排查步骤混乱，直接要求重启或恢复出厂，无逻辑顺序。",
+      "0.25": "仅包含1-2个步骤，如只查网络不查固件，缺乏层次。",
+      "0.5": "包含网络、硬件、固件排查，但顺序颠倒（如先查固件再查网线）。",
+      "0.75": "逻辑顺序正确（物理->网络->配置），但步骤描述过于简略，缺乏具体操作指引。",
+      "1": "逻辑严密，从物理层到网络层再到应用层，且每一步都有具体的检查点（如检查IP是否在10.20.20.x）。"
+    },
+    "acceptable_alternatives": "可以使用OSI七层模型或TCP/IP四层模型作为排查框架。",
+    "failure_examples": "第一步就要求用户登录后台查看系统日志，完全忽略物理和网络连通性。"
+  },
+  {
+    "id": "R11",
+    "description": "升级包中提供的证据链完整性，包含IP、MAC、版本号、现象时间等客观数据。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "escalation_package.md"
+    ],
+    "evidence": "审查Markdown文件中每个升级工单下附带的证据详情。",
+    "numeric_tolerance": 0,
+    "weight_reason": "证据的完整性决定了二线/厂商能否直接接手处理。",
+    "criterion": [
+      "是否包含设备IP地址。",
+      "是否包含MAC地址。",
+      "是否包含固件版本号。",
+      "是否包含故障发生的时间戳或规律（如每天下午3点）。",
+      "证据是否直接来源于输入材料，无编造。"
+    ],
+    "levels": {
+      "0": "未提供任何客观数据，仅有用户主观描述（如‘用户说声音有问题’）。",
+      "0.25": "仅提供了IP地址或MAC地址中的一项，缺乏版本和时间信息。",
+      "0.5": "提供了IP和版本号，但缺少MAC地址或时间规律等关键辅助证据。",
+      "0.75": "包含了IP、MAC、版本号，但未将时间规律（如T-1004的下午3点）与网络策略关联说明。",
+      "1": "完整包含IP、MAC、固件版本、报修时间/规律，且证据与根因分析紧密对应。"
+    },
+    "acceptable_alternatives": "证据可以以表格或列表形式呈现，只要信息完整即可。",
+    "failure_examples": "升级包中只写了‘Room D设备掉线，请厂商检查’，未提供DEV-04的IP和固件版本。"
+  },
+  {
+    "id": "R12",
+    "description": "负分项：在成果中伪造工单状态为‘已解决’或编造用户确认信息。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx",
+      "escalation_package.md"
+    ],
+    "evidence": "全局搜索交付物中是否出现‘已修复’、‘用户确认正常’、‘Closed’等状态。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严重违反业务真实性原则，伪造状态会导致真实故障被遗漏。",
+    "criterion": [
+      "检查是否有任何工单被标记为已解决。",
+      "检查是否编造了用户反馈（如‘用户表示重启后恢复正常’）。"
+    ],
+    "anchors": {
+      "0": "严格遵守输入数据，所有工单状态保持Open，未编造任何修复确认。",
+      "1": "在成果中虚构了工单已解决的状态或用户确认信息。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "在升级包备注中写道‘T-1001已在现场通过重启解决，用户确认声音恢复’。"
+  },
+  {
+    "id": "R13",
+    "description": "负分项：编造未在网络拓扑笔记中提供的网段、端口号或设备特性。",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx",
+      "escalation_package.md"
+    ],
+    "evidence": "核对交付物中提到的网络参数和技术细节是否均来源于输入材料。",
+    "numeric_tolerance": 0,
+    "weight_reason": "禁止过度推断和编造未知参数，避免误导后续操作。",
+    "criterion": [
+      "检查是否虚构了新的VLAN ID（如VLAN 40）。",
+      "检查是否虚构了未提供的SIP端口号（如UDP 5062）。",
+      "检查是否虚构了设备型号的新特性。"
+    ],
+    "anchors": {
+      "0": "严格使用输入材料中的参数，未编造任何外部信息。",
+      "1": "编造了未提供的网段、端口或设备特性。"
+    },
+    "acceptable_alternatives": "可引用行业通用标准（如TCP 443为HTTPS），但核心业务参数必须来自输入。",
+    "failure_examples": "在升级包中写道‘请网络团队开放UDP 5062端口以解决SIP问题’，而笔记中未提及5062。"
+  },
+  {
+    "id": "R14",
+    "description": "正确计算并指出受影响的独立会议室总数。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "escalation_package.md"
+    ],
+    "evidence": "检查升级包或决策表总结中提到的受影响会议室数量。",
+    "numeric_tolerance": 0,
+    "weight_reason": "评估故障影响范围的基本能力。",
+    "criterion": [
+      "识别出受影响的会议室为Room A, B, C, D, E, F。",
+      "明确指出受影响会议室总数为6个。"
+    ],
+    "anchors": {
+      "0": "计算错误，如将重复工单算作多个会议室，或漏算。",
+      "1": "准确去重并统计出6个独立会议室受影响。"
+    },
+    "acceptable_alternatives": "可列出具体会议室名单，只要总数和去重逻辑正确。",
+    "failure_examples": "报告称‘共有8个会议室受影响’，未合并重复报修的房间。"
+  },
+  {
+    "id": "R15",
+    "description": "正确区分HoloMeet X1和X2型号的硬件/固件差异，不混淆问题。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx",
+      "escalation_package.md"
+    ],
+    "evidence": "检查分析中是否正确将音频/SIP Bug归因于X1，将网络环境问题归因于具体IP而非型号。",
+    "numeric_tolerance": 0,
+    "weight_reason": "资产差异化管理的基础。",
+    "criterion": [
+      "明确指出音频回声/静音Bug和外部SIP Bug仅存在于HoloMeet X1。",
+      "未将X2的卡顿或断会问题归结为型号固有的固件Bug。"
+    ],
+    "anchors": {
+      "0": "混淆了X1和X2的已知Bug，或认为X2也存在音频/固件缺陷。",
+      "1": "准确区分X1的固件缺陷和X2的网络环境问题，分析逻辑清晰。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "在升级包中向厂商反馈‘HoloMeet全系设备存在音频静音Bug’。"
+  },
+  {
+    "id": "R16",
+    "description": "决策表输出格式符合Excel标准结构，包含清晰的列和行。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx"
+    ],
+    "evidence": "检查Excel文件的结构，是否有表头，数据是否分行列排布。",
+    "numeric_tolerance": 0,
+    "weight_reason": "交付物格式规范，确保可用性。",
+    "criterion": [
+      "文件可被识别为表格结构（或CSV/Markdown表格模拟）。",
+      "包含明确的列名（如故障现象、排查步骤等）。",
+      "数据行与列对应整齐。"
+    ],
+    "anchors": {
+      "0": "输出为纯文本段落，无表格结构，或列缺失。",
+      "1": "具有标准的表格结构，表头清晰，行列对应正确。"
+    },
+    "acceptable_alternatives": "如果无法生成真实XLSX，使用Markdown表格或CSV格式且结构正确亦可接受。",
+    "failure_examples": "将所有排查步骤写在一个单元格内，或使用无表头的纯列表。"
+  },
+  {
+    "id": "R17",
+    "description": "升级包输出格式符合Markdown标准结构，包含清晰的标题、列表。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "escalation_package.md"
+    ],
+    "evidence": "检查MD文件的排版，是否有H1/H2标题，是否有无序/有序列表。",
+    "numeric_tolerance": 0,
+    "weight_reason": "交付物格式规范，确保可读性。",
+    "criterion": [
+      "包含主标题和分类子标题。",
+      "使用列表或表格组织工单和证据信息。",
+      "代码块或加粗用于突出关键参数（如IP、MAC）。"
+    ],
+    "anchors": {
+      "0": "无Markdown格式，或格式混乱无法阅读。",
+      "1": "结构清晰，标题层级合理，列表和强调使用得当。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "所有内容堆砌在一个段落中，无任何换行或标记。"
+  },
+  {
+    "id": "R18",
+    "description": "正确引用设备资产清单中的MAC地址或安装日期作为辅助证据。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "escalation_package.md"
+    ],
+    "evidence": "检查升级包中是否包含了MAC地址信息。",
+    "numeric_tolerance": 0,
+    "weight_reason": "体现对资产清单数据的充分利用。",
+    "criterion": [
+      "在升级包的设备信息中列出了对应的MAC地址。",
+      "MAC地址与输入JSON中的记录完全一致。"
+    ],
+    "anchors": {
+      "0": "未引用任何MAC地址信息。",
+      "1": "准确引用了所有升级工单对应设备的MAC地址。"
+    },
+    "acceptable_alternatives": "可仅引用部分关键设备的MAC，但最好全覆盖。",
+    "failure_examples": "编造了不存在的MAC地址，或张冠李戴。"
+  },
+  {
+    "id": "R19",
+    "description": "整体业务逻辑的自洽性：决策表的最终指向是否能有效分流到升级包的对应团队。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx",
+      "escalation_package.md"
+    ],
+    "evidence": "对比决策表的结论分支与升级包的分类，检查逻辑闭环。",
+    "numeric_tolerance": 0,
+    "weight_reason": "考察两份交付物之间的协同性和整体解决方案的完整性。",
+    "criterion": [
+      "决策表中判定为‘网络配置错误’的分支，其后续动作是否指向升级包中的‘网络团队’。",
+      "决策表中判定为‘已知固件缺陷’的分支，其后续动作是否指向升级包中的‘厂商/三线’。",
+      "两份文档的术语和分类标准是否统一。"
+    ],
+    "levels": {
+      "0": "决策表与升级包逻辑脱节，或分类标准冲突（如决策表说是网络问题，升级包却提交给厂商）。",
+      "0.25": "部分逻辑对应，但存在明显遗漏或分类不一致。",
+      "0.5": "逻辑基本对应，但决策表的排查步骤未能有效收敛到升级包的分类上。",
+      "0.75": "逻辑自洽，分类统一，但缺乏对中间状态（如需进一步测试）的处理说明。",
+      "1": "决策表的排查分支与升级包的团队分类完美映射，术语统一，形成完整的SOP闭环。"
+    },
+    "acceptable_alternatives": "决策表可以作为升级包的前置说明，只要逻辑链条清晰。",
+    "failure_examples": "决策表中将‘无法入会’统一归结为硬件故障，但升级包中却要求网络团队修改VLAN。"
+  },
+  {
+    "id": "R20",
+    "description": "准确识别所有8条工单，未遗漏任何报修记录。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "troubleshooting_decision_matrix.xlsx",
+      "escalation_package.md"
+    ],
+    "evidence": "清点交付物中涉及的TicketID数量。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基础的数据处理完整性。",
+    "criterion": [
+      "T-1001至T-1008均被提及或覆盖。",
+      "未遗漏任何一条工单。"
+    ],
+    "anchors": {
+      "0": "遗漏了1条或多条工单（如未处理T-1006或T-1008）。",
+      "1": "完整覆盖所有8条工单（合并重复报修后体现在根因分析中）。"
+    },
+    "acceptable_alternatives": "无",
+    "failure_examples": "在升级包中只列出了6个工单，忽略了T-1005和T-1007。"
+  }
+]

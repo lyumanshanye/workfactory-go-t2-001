@@ -1,0 +1,8 @@
+{
+  "data_merge_key_facts": "合并后共12条记录。B-1001 sampling_ratio = 50/2000 = 0.025, defect_rate = 8/50 = 0.16。",
+  "descriptive_stats": "Alpha 班组总抽样 195，总缺陷 40，加权缺陷率 20.5%。Beta 班组总抽样 110，总缺陷 19，加权缺陷率 17.3%。Gamma 班组总抽样 210，总缺陷 22，加权缺陷率 10.5%。berries 类别加权缺陷率最高（约 14.6%），root_vegs 最低。",
+  "glm_expected_findings": "使用 binomial GLM，因变量为 cbind(defects, passes)，自变量为 team, product_category, sampling_ratio。预期 product_category 显著（berries 风险高），team 效应在控制货物类别后可能减弱，因为 Alpha 抽了较多 root_vegs（本身缺陷可能受运输时长影响，如 B-1004, B-1007, B-1010 transit_hours 较长）。sampling_ratio 系数可能不显著或为负（抽样多可能发现更多微小缺陷，或单纯是设计变量）。",
+  "confidence_intervals": "B-1011 (sample=20, defects=5) 的 95% CI (Clopper-Pearson) 约为 [0.069, 0.476]，宽度极大，不具备决策价值。B-1012 (sample=60, defects=6) 的 95% CI 约为 [0.032, 0.185]，相对较窄。",
+  "alternative_approaches": "可使用 Beta regression (gamlss 或 betareg 包) 处理比例数据，结果应与 GLM 趋势一致。对于小样本 CI，Wilson score 区间比 Clopper-Pearson 更窄，但两者在业务结论上（标记小样本不可靠）应一致。",
+  "limitations": "本数据集样本量较小（仅12个批次），GLM 模型的统计功效（power）可能不足以检测出班组间的微小差异。结论应强调“当前数据未发现显著班组效应”，而非“证明班组效应不存在”。"
+}

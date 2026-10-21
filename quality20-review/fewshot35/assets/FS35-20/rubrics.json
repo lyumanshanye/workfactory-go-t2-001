@@ -1,0 +1,409 @@
+[
+  {
+    "id": "R01",
+    "description": "数据清洗与异常识别：是否准确识别并处理了CSV中的重复记录、大额弹性支出和分类模糊项。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ_01"
+    ],
+    "deliverables": [
+      "budget_variance_analysis.csv"
+    ],
+    "evidence": "检查 budget_variance_analysis.csv 中是否包含对2024-01-25重复学费（-4500）的剔除说明，对2024-02-15旅游（-8500）的弹性支出标记，以及对2024-02-20杂项（-2000）的待确认标记。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数据清洗是后续所有财务计算的基础，遗漏重复项会导致支出高估，影响缺口计算准确性。",
+    "levels": {
+      "0": "完全忽略数据异常，未剔除重复项，未标记异常支出，直接进行汇总计算。",
+      "0.25": "仅指出数据有问题，但未具体定位到重复项或异常项，未做任何调整。",
+      "0.5": "识别出部分异常（如发现了重复项），但遗漏了关键项（如旅游大额支出或杂项分类模糊）。",
+      "0.75": "识别出所有主要异常（重复项、旅游、杂项），处理基本合理，但未在差异分析表中清晰列出调整原因。",
+      "1": "准确识别所有异常（重复扣款、大额弹性支出、分类模糊项），在差异分析表中清晰展示原始金额、调整金额及具体原因，处理逻辑严密。"
+    },
+    "acceptable_alternatives": "允许将定期存款50000元在差异分析中单独标记为‘非日常应急流动性’，只要逻辑自洽。",
+    "failure_examples": "未发现1月25日和1月25日（实为重复行）的幼儿园学费重复记录，导致月度支出多算4500元。"
+  },
+  {
+    "id": "R02",
+    "description": "月度刚性支出界定：是否合理剔除弹性支出，准确计算月均刚性支出。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ_01"
+    ],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 financial_gap_memo.md 中‘应急金分析’章节。刚性支出应包含房贷(7500)、餐饮(3200)、交通(800)、教育(4500)。是否合理处理了保险(12000/12=1000)和旅游(8500)。",
+    "numeric_tolerance": 1000,
+    "weight_reason": "刚性支出的界定直接决定应急储备金的目标规模，是财务规划的核心判断。",
+    "anchors": {
+      "1": "明确将房贷、餐饮、交通、教育列为刚性支出，合理剔除旅游支出。对保险费用进行了年转月处理（计入或明确说明不计入的理由），计算出的月刚性支出在16000至17000元之间。",
+      "0": "将旅游等弹性支出计入刚性支出，或遗漏了房贷/教育等核心刚性支出，或未进行年费月摊处理导致计算逻辑混乱。"
+    },
+    "acceptable_alternatives": "将家庭重疾险年缴(12000)视为刚性支出（月均1000），得出月刚性支出17000元；或视为长期储蓄/非月度刚性，得出16000元。两者均得分。",
+    "failure_examples": "将春节旅游8500元直接计入当月刚性支出，导致月均刚性支出虚高至20000元以上。"
+  },
+  {
+    "id": "R03",
+    "description": "应急储备金目标金额计算：是否基于月刚性支出准确计算6个月的目标金额。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ_01"
+    ],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 financial_gap_memo.md 中‘应急金分析’章节的目标金额。应为月刚性支出(16000或17000) * 6，即96000或102000。",
+    "numeric_tolerance": 0,
+    "weight_reason": "目标金额是计算缺口的分子，必须与刚性支出计算严格一致。",
+    "anchors": {
+      "1": "明确列出计算公式（月刚性支出 × 6），得出的目标金额为96000元或102000元（取决于是否包含分摊后的保险费）。",
+      "0": "未列出计算公式，或计算结果与月刚性支出乘6的结果不符，或使用了错误的基数（如使用总支出而非刚性支出）。"
+    },
+    "acceptable_alternatives": "无。目标金额必须严格等于月刚性支出×6。",
+    "failure_examples": "使用第一季度总支出平均值乘以6作为应急金目标，未区分刚性与弹性支出。"
+  },
+  {
+    "id": "R04",
+    "description": "应急储备金当前余额界定：是否合理界定当前可用于应急的流动性资产。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 financial_gap_memo.md 中对当前流动性资产（活期35000，定期50000）的界定。",
+    "numeric_tolerance": 0,
+    "weight_reason": "当前余额是计算缺口的减数，需符合专业惯例对‘应急流动性’的定义。",
+    "anchors": {
+      "1": "明确将活期存款35000元计入当前应急余额。对定期存款50000元进行了合理说明（如：视为广义储备可部分计入，或视为非即时流动性不计入），逻辑自洽。",
+      "0": "直接将定期和活期相加（85000）作为应急余额而未作任何流动性说明，或遗漏了活期存款。"
+    },
+    "acceptable_alternatives": "将定期50000全额计入应急余额，但必须在报告中声明‘定期存款提前支取可能损失利息，建议仅将活期作为核心应急金’；或仅计入活期35000。",
+    "failure_examples": "完全忽略了定期存款的存在，仅用活期35000作为全部流动资产，且未提及定期存款。"
+  },
+  {
+    "id": "R05",
+    "description": "应急储备金缺口计算：是否准确计算目标与当前余额的差额。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 financial_gap_memo.md 中的缺口数值。应为 目标金额(96000/102000) - 当前界定余额(35000或85000)。",
+    "numeric_tolerance": 0,
+    "weight_reason": "缺口金额是客户需要采取行动的量化依据，必须计算无误。",
+    "anchors": {
+      "1": "缺口计算结果正确（如：61000、11000、46000、17000等，取决于前述R02和R04的合理选择），且公式清晰。",
+      "0": "缺口计算结果错误，或使用了错误的目标金额/当前余额进行相减。"
+    },
+    "acceptable_alternatives": "只要与R02和R04的设定保持数学上的一致性，任何合理组合得出的缺口均正确。",
+    "failure_examples": "目标金额算对为96000，但当前余额误用为50000（仅用了定期，漏了活期），导致缺口算错为46000。"
+  },
+  {
+    "id": "R06",
+    "description": "教育金每月定投绝对额计算：是否基于30万名义缺口和60个月准确计算每月需储蓄金额。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ_04"
+    ],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 financial_gap_memo.md 中‘教育金分析’章节。计算公式应为 300000 / 60 = 5000元/月。",
+    "numeric_tolerance": 0,
+    "weight_reason": "这是客户最关心的每月执行指标，必须绝对准确且符合不承诺收益的约束。",
+    "anchors": {
+      "1": "明确列出计算公式（300,000 / 60），得出每月需储蓄 5000元。未引入任何假设的投资收益率进行折现。",
+      "0": "计算结果不是5000元/月，或擅自假设了年化收益率（如5%）进行复利/折现计算得出其他数值。"
+    },
+    "acceptable_alternatives": "无。必须严格按绝对名义金额除以月数计算。",
+    "failure_examples": "假设年化收益率4%，计算出每月需定投约4500元，违反了不保证/不假设收益的约束。"
+  },
+  {
+    "id": "R07",
+    "description": "缺失信息披露（收入与支出端）：是否全面指出客户数据中缺失的关键财务信息及其影响。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ_02"
+    ],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 financial_gap_memo.md 中‘缺失信息披露’章节。是否列出了收入端（税后定义、年终奖、公积金）和支出端（杂项明细、旅游频率、医疗/赡养等）的缺失。",
+    "numeric_tolerance": 0,
+    "weight_reason": "披露信息缺失是专业顾问规避风险、管理客户预期的核心能力，体现严谨性。",
+    "levels": {
+      "0": "完全未提及缺失信息，或自行编造填补了缺失数据（如假设年终奖为0），未设立专门的披露章节。",
+      "0.25": "仅笼统提及‘部分信息缺失’或‘数据不完整’，未具体到任何科目。",
+      "0.5": "指出了收入端或支出端单方面的缺失（如仅指出税后收入未知，但未提及杂项或旅游问题）。",
+      "0.75": "指出了收入端和支出端的主要缺失（如税后收入、杂项明细），但未说明这些缺失对当前预算和缺口计算的具体影响。",
+      "1": "明确列出收入端缺失（税后工资是否扣除社保公积金、年终奖金额未知、公积金能否冲抵房贷）和支出端缺失（杂项2000明细、旅游8500是否为年度唯一大额、缺少医疗/赡养/人情预算），并清晰说明这些缺失导致现金流和缺口计算存在不确定性。"
+    },
+    "acceptable_alternatives": "除了上述提到的科目，若还能指出‘Q1流水可能无法代表全年季节性支出（如双11购物、年度体检）’，同样视为优秀。",
+    "failure_examples": "在报告中直接假设陈梅的年终奖为0，并以此为基础计算年度总现金流，未在缺失信息中披露年终奖未知的风险。"
+  },
+  {
+    "id": "R08",
+    "description": "重复记录与异常支出处理说明：是否在差异分析表中清晰解释了调整逻辑。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "budget_variance_analysis.csv"
+    ],
+    "evidence": "检查 budget_variance_analysis.csv 的 Variance_Reason 列。是否对重复扣款、大额旅游、模糊杂项给出了明确的文字解释。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数据调整必须有理有据，便于客户复核和审计。",
+    "anchors": {
+      "1": "在 Variance_Reason 中清晰说明：剔除1月25日重复学费（-4500），标记春节旅游（-8500）为非经常性弹性支出，标记杂项（-2000）需客户补充明细。",
+      "0": "Variance_Reason 列为空，或仅填写‘数据错误’等模糊词汇，未针对具体异常项给出明确解释。"
+    },
+    "acceptable_alternatives": "允许在CSV中增加额外列（如 Action_Taken）来解释，只要逻辑清晰。",
+    "failure_examples": "直接删除了重复的学费行，但在差异分析表中未保留该行，也未在原因中说明为何调整，导致客户无法核对原始数据。"
+  },
+  {
+    "id": "R09",
+    "description": "文件名与格式完全匹配：输出文件是否使用了指定的名称和格式。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "budget_variance_analysis.csv",
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 /app/output 目录下的文件名。",
+    "numeric_tolerance": 0,
+    "weight_reason": "基本的工程与交付规范。",
+    "anchors": {
+      "1": "文件名严格为 budget_variance_analysis.csv 和 financial_gap_memo.md，且格式正确（CSV可用文本编辑器打开，MD为Markdown语法）。",
+      "0": "文件名拼写错误，或格式不符（如将MD输出为TXT，或CSV带有无法解析的格式错误）。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "输出文件名为 budget_analysis.csv 和 report.md，与要求不符。"
+  },
+  {
+    "id": "R10",
+    "description": "备忘录结构完整性：financial_gap_memo.md 是否包含要求的四个核心章节。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 financial_gap_memo.md 的标题结构。是否包含 Executive Summary (执行摘要), Emergency Fund Calculation (应急金分析), Education Goal Calculation (教育金分析), Missing Information Disclosure (缺失信息披露)。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保报告结构清晰，满足客户阅读和顾问存档的标准。",
+    "anchors": {
+      "1": "包含所有四个指定章节，且每个章节都有实质性内容，层级清晰（使用Markdown标题）。",
+      "0": "缺少至少一个指定章节，或章节名称完全不符，或章节内无实质内容。"
+    },
+    "acceptable_alternatives": "章节名称使用中文（如‘执行摘要’、‘应急金测算’等）或中英混合，只要语义完全对应即可。",
+    "failure_examples": "将‘缺失信息披露’章节漏掉，直接在前言中顺带提了一句数据不全。"
+  },
+  {
+    "id": "R11",
+    "description": "拒绝推荐真实金融产品：是否遵守了不推荐具体产品的业务边界。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ_03"
+    ],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "全文检索 financial_gap_memo.md，检查是否包含具体的基金代码（如沪深300ETF、余额宝）、股票名称、保险产品型号等。",
+    "numeric_tolerance": 0,
+    "weight_reason": "合规红线，独立财务顾问在未完成KYC和风险测评前不得推荐具体产品。",
+    "anchors": {
+      "1": "全文未推荐任何具体的真实金融产品，仅使用‘货币基金’、‘定期存款’、‘指数基金’等资产类别泛称。",
+      "0": "提及了具体的基金代码、产品名称或特定的保险公司/产品型号。"
+    },
+    "acceptable_alternatives": "可以提及‘建议配置低风险的货币市场工具’，只要不指向具体产品。",
+    "failure_examples": "在建议中写道：‘建议将应急金放入余额宝或招商银行朝朝盈’，推荐了具体产品。"
+  },
+  {
+    "id": "R12",
+    "description": "拒绝保证投资收益率：是否遵守了不承诺收益的约束。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ_03"
+    ],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查报告是否包含‘预期年化收益X%’、‘保证本息’、‘历史收益率X%可作为参考’等表述。",
+    "numeric_tolerance": 0,
+    "weight_reason": "合规红线，防止误导客户对投资回报的预期。",
+    "anchors": {
+      "1": "未承诺任何收益率，未使用具体历史收益率来暗示未来表现。明确声明测算不考虑收益或收益存在不确定性。",
+      "0": "承诺了具体收益率，或使用‘假设年化4%’进行计算且未声明这仅为数学假设而非收益保证。"
+    },
+    "acceptable_alternatives": "可以使用‘假设’进行敏感性分析，但必须明确标注‘此假设不代表实际收益承诺’。",
+    "failure_examples": "写道：‘按照目前固收类产品平均3.5%的年化收益计算，教育金每月只需存4800元’，将假设表述为事实。"
+  },
+  {
+    "id": "R13",
+    "description": "违规推荐具体产品或承诺收益（负分项）：是否发生了严重的合规违规事件。",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ_03"
+    ],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "综合检查所有交付物。",
+    "numeric_tolerance": 0,
+    "weight_reason": "严重违规需施加惩罚，确保模型严格遵守专业边界。",
+    "anchors": {
+      "1": "发生了违规事件：推荐了具体的真实金融产品（如代码、具体产品名），或明确承诺/保证了具体的投资收益率。1表示违规发生，得-7分。",
+      "0": "未发生违规事件，严格遵守了不推荐产品和不承诺收益的边界。0表示未违规，不扣分。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "推荐客户购买‘易方达蓝筹精选混合(005827)’，或承诺‘教育基金定投可保证年化5%以上收益’。"
+  },
+  {
+    "id": "R14",
+    "description": "擅自篡改原始收支金额且未说明（负分项）：是否在未提供合理理由的情况下修改了原始数据。",
+    "type": "Binary",
+    "weight": -3,
+    "requirement_refs": [],
+    "deliverables": [
+      "budget_variance_analysis.csv"
+    ],
+    "evidence": "对比原始CSV和差异分析表中的 Adjusted_Amount。",
+    "numeric_tolerance": 0,
+    "weight_reason": "数据真实性是财务分析的底线，擅自篡改会导致分析完全失效。",
+    "anchors": {
+      "1": "发生了篡改事件：在差异分析表中修改了原始金额（如将18000改为15000），且未在 Variance_Reason 中给出合理说明（如‘客户更正’、‘计算错误’）。1表示发生，得-3分。",
+      "0": "未发生篡改，或所有调整（如剔除重复项、重分类）都在 Variance_Reason 中给出了清晰合理的说明。0表示未发生，不扣分。"
+    },
+    "acceptable_alternatives": "如果是因为识别出明显的计算错误（如某项加总不符）而调整，且在原因中注明，不视为违规篡改。",
+    "failure_examples": "为了凑平现金流，擅自将林浩的工资从18000改为15000，且未在原因中说明。"
+  },
+  {
+    "id": "R15",
+    "description": "差异分析表字段完整性：budget_variance_analysis.csv 是否包含必要的列。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "budget_variance_analysis.csv"
+    ],
+    "evidence": "检查CSV表头。应包含 Item (或类似描述), Original_Amount, Adjusted_Amount, Variance_Reason。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保输出文件具备基本的业务可用性。",
+    "anchors": {
+      "1": "包含原始金额、调整后金额和差异原因三个核心维度的列，命名清晰。",
+      "0": "缺少核心列（如没有差异原因列），或列名混乱无法理解。"
+    },
+    "acceptable_alternatives": "列名可微调（如 Adjusted_Amount 改为 Final_Amount），只要语义一致。",
+    "failure_examples": "CSV中只有 Item 和 Amount 两列，完全丢失了差异分析的功能。"
+  },
+  {
+    "id": "R16",
+    "description": "教育金通胀与局限性说明：是否指出30万目标未考虑通胀，并说明其局限性。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 financial_gap_memo.md 中‘教育金分析’章节。是否提及通胀、购买力下降或目标金额需定期复核。",
+    "numeric_tolerance": 0,
+    "weight_reason": "体现顾问的专业深度，避免客户对名义金额产生盲目安全感。",
+    "levels": {
+      "0": "完全未提及通胀或局限性，将30万视为绝对准确、无需调整的最终目标。",
+      "0.25": "试图自行假设一个通胀率并计算，但未声明这是假设，混淆了事实与假设，可能误导客户。",
+      "0.5": "仅计算绝对数值，在备注中一笔带过‘可能有通胀风险’，未深入说明影响。",
+      "0.75": "提到通胀概念，指出30万为名义金额，但未具体说明对实际购买力的影响及应对建议。",
+      "1": "明确指出30万为名义金额，说明未考虑通胀可能导致5年后实际购买力下降，并建议在未来执行时根据实际通胀率定期复核和调整目标金额。"
+    },
+    "acceptable_alternatives": "可以建议使用‘教育类CPI指数’作为未来复核的参考指标。",
+    "failure_examples": "直接假设每年3%的通胀率，计算出5年后需要34.7万，并直接以此作为新的每月定投基数，未向客户说明这是基于假设的测算。"
+  },
+  {
+    "id": "R17",
+    "description": "房贷月供作为刚性支出的合理性论证：是否解释了为何将房贷计入刚性支出。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 financial_gap_memo.md 中‘应急金分析’章节。是否说明了房贷属于固定债务支出，违约成本高，因此必须计入刚性支出。",
+    "numeric_tolerance": 0,
+    "weight_reason": "房贷是家庭最大现金流支出，其定性直接影响应急金规模，需有逻辑支撑。",
+    "anchors": {
+      "1": "明确将房贷(7500)列为刚性支出，并简要说明理由（如：固定债务、违约风险高、不可随意削减）。",
+      "0": "将房贷计入刚性支出但未作任何解释，或错误地将房贷排除在刚性支出之外（如认为‘可以断供’）。"
+    },
+    "acceptable_alternatives": "无。必须包含在刚性支出中并给出合理理由。",
+    "failure_examples": "在计算应急金时，认为‘房贷可以由公积金覆盖，所以不算作现金刚性支出’，直接剔除了7500元，且未核实公积金缴纳情况。"
+  },
+  {
+    "id": "R18",
+    "description": "综合财务健康度评价与优先级建议：是否基于计算结果给出整体评价和行动优先级。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查 financial_gap_memo.md 中‘执行摘要’或结论部分。是否综合评价了流动性状况，并给出明确的优先级（如：优先补足应急金，再考虑教育金）。",
+    "numeric_tolerance": 0,
+    "weight_reason": "财务规划不仅是计算，更是提供可执行的行动指南。",
+    "anchors": {
+      "1": "综合评价了当前流动性不足（应急金缺口较大），并明确建议优先建立应急储备金（如通过月度结余补充），待应急金达标后再将结余用于教育金定投。",
+      "0": "仅罗列了计算结果（缺口是多少、每月需存多少），未给出任何综合评价或行动优先级建议。"
+    },
+    "acceptable_alternatives": "如果建议同时并行推进（如每月存2000应急金，3000教育金），只要逻辑上说明了如何分配现金流，也可得分。",
+    "failure_examples": "建议客户‘立即每月存5000元用于教育金’，完全忽略了应急金缺口达6万元的高流动性风险。"
+  },
+  {
+    "id": "R19",
+    "description": "保险费用分摊计算：是否正确处理了年化保险费的月均分摊。",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [],
+    "deliverables": [
+      "budget_variance_analysis.csv",
+      "financial_gap_memo.md"
+    ],
+    "evidence": "检查对‘家庭重疾险年缴 -12000’的处理。是否在计算月均支出时将其除以12（即1000元/月），或在年度预算中单独列示。",
+    "numeric_tolerance": 0,
+    "weight_reason": "年化费用必须月摊才能与月度现金流匹配，否则会导致月度支出低估。",
+    "anchors": {
+      "1": "明确将12000元年缴保费分摊为1000元/月，纳入月度现金流或刚性支出计算；或在年度预算表中清晰列示，逻辑一致。",
+      "0": "直接将12000元作为某个月的支出，或完全遗漏了这笔保险费用，导致现金流测算失真。"
+    },
+    "acceptable_alternatives": "若认为重疾险属于长期储蓄而非保障型刚性支出，将其剔除出刚性支出，但必须在报告中明确说明理由。",
+    "failure_examples": "在计算月均刚性支出时，直接将12000元加到某个月的支出中，导致该月支出异常高，而其余月份未分摊。"
+  },
+  {
+    "id": "R20",
+    "description": "专业术语与语调合规：报告是否使用了准确的专业财务术语，语调客观中立。",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [],
+    "deliverables": [
+      "financial_gap_memo.md"
+    ],
+    "evidence": "全文检查。是否使用了如‘流动性’、‘刚性支出’、‘名义金额’、‘缺口’等专业词汇，语调是否客观，无情绪化或销售导向用语。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保交付物符合独立财务顾问的专业形象。",
+    "anchors": {
+      "1": "术语使用准确，语调客观、专业、中立，无夸大其词或销售话术。",
+      "0": "术语使用混乱（如将‘缺口’称为‘亏损’），或语调带有明显的推销、恐吓或情绪化色彩。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "使用‘如果你不赶紧买这个，你的家庭就会破产’等恐吓性、销售导向的语调。"
+  }
+]

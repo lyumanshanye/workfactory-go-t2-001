@@ -1,0 +1,712 @@
+{
+  "title": "星海市立图书馆特藏文献移交数据清洗与录入",
+  "request": "小林，旧馆区向新馆区移交了一批特藏文献（地方志与古籍），这是移交小组提交的原始移交单（transfer_manifest.csv）和我们馆内现行的数据录入字段词典（field_dictionary.md）。\n\n你的任务是将这份移交单转化为新馆系统可导入的标准登记表。请仔细阅读字段词典中的异常处理规则，重点解决移交单中出现的索书号重号、册数缺值以及册数与备注数量不一致的问题。\n\n处理完成后，请生成两个CSV文件：\n1. 清洗后、格式合规、可直接导入新系统的标准登记表（catalog_registry.csv）。\n2. 记录所有异常发现及处理建议的待核对清单（discrepancy_log.csv），后续我会根据这个清单跟移交小组做最终确认。\n\n请将最终生成的两个文件输出到 /app/output 目录下。如果有词典中未覆盖的极端情况，请在备注中说明，但优先严格按词典执行。",
+  "as_of": "2024-05-15T09:00:00+08:00",
+  "selected_sources": [],
+  "source_decisions": [
+    {
+      "filename": "N/A",
+      "used_for": "无外部真实来源",
+      "limitations": "本题为纯原创虚构业务场景，所有机构、人物、文献数据及内部字段词典均为原创设计，不依赖任何外部真实法规或公开数据集。所有业务规则均以内嵌的 field_dictionary.md 为准。"
+    }
+  ],
+  "inputs": [
+    {
+      "filename": "transfer_manifest.csv",
+      "purpose": "旧馆区提交的原始特藏文献移交清单，包含正常记录与各类数据异常（重号、缺值、数量不一致），是数据清洗和录入的核心输入源。",
+      "content_plan": "包含10条业务记录，覆盖批次A/B/C。记录中包含正常的文献，1个册数缺值（TS-004），1个册数与备注不一致（TS-003），2组索书号重号（TS-001出现2次，TS-008出现2次）。",
+      "content": "批次,索书号,题名,责任者,册数,品相,备注\n批次A,TS-001,星海市志(康熙版),张知县,2,良好,无\n批次A,TS-002,星海水利考,李工,1,破损,缺卷二\n批次A,TS-003,星海植物图鉴,王Botanist,2,良好,共3册\n批次B,TS-004,星海商业录,赵商人,,良好,无\n批次B,TS-005,星海市志(乾隆版),王知县,4,良好,无\n批次B,TS-001,星海旧闻,孙记者,1,良好,无\n批次C,TS-006,星海水文记,周水文,2,破损,需修复\n批次C,TS-007,星海教育史,吴校长,5,良好,共5册\n批次C,TS-008,星海市志(光绪版),郑知县,3,良好,无\n批次C,TS-008,星海交通志,钱交通,2,良好,无"
+    },
+    {
+      "filename": "field_dictionary.md",
+      "purpose": "定义目标登记表和待核对清单的字段结构、数据校验规则以及各类异常的具体处理逻辑，是本次数据清洗工作的唯一业务规则依据。",
+      "content_plan": "Markdown格式文档。分为三部分：输出文件要求、登记表字段定义及异常处理规则（重号追加后缀、缺值填0、数量不一致以备注为准）、待核对清单字段定义。",
+      "content": "# 特藏文献移交数据录入字段词典与规范\n\n## 1. 输出文件要求\n需生成两个CSV文件：`catalog_registry.csv`（清洗后的登记表）和 `discrepancy_log.csv`（待核对清单）。\n\n## 2. 登记表 (catalog_registry.csv) 字段定义与处理规则\n- **批次**: 直接转录原值。\n- **索书号**: 必须全局唯一。若发现重号，按在移交单中出现的先后顺序，依次追加 `-A`, `-B` 等后缀（如第一次出现保持原样或加-A，第二次出现加-B。本规范约定：首次出现维持原号不变，后续重复出现依次追加 `-B`, `-C`... 以保证向后兼容，但若采用 `-A`, `-B` 后缀均视为合规，需保持逻辑一致）。\n- **题名**: 直接转录原值。\n- **责任者**: 直接转录原值，保留原有中英文或拼音，不作翻译或删减。\n- **册数**: 必须为正整数或0。若原数据为空（缺值），且备注中无数量信息，则填入 `0`。若备注中明确数量（如“共X册”）与册数字段不符，以备注中的数字为准进行修正。\n- **品相**: 必须为“良好”或“破损”，不接受其他值。\n- **备注**: 直接转录原值。\n\n## 3. 待核对清单 (discrepancy_log.csv) 字段定义\n- **原索书号**: 发生异常的原始索书号。\n- **异常类型**: 仅限以下三种：'重号'、'缺值'、'数量不一致'。\n- **原始值**: 异常字段在移交单中的原始值（重号填'重复出现'，缺值填'空'，数量不一致填'册数字段值'）。\n- **处理建议**: 根据本词典规则给出的具体处理动作描述（如'索书号变更为TS-001-B'、'册数修正为3'、'册数修正为0'）。"
+    }
+  ],
+  "deliverables": [
+    {
+      "filename": "catalog_registry.csv",
+      "format": "CSV",
+      "purpose": "经过清洗、异常处理和格式校验后，可直接导入新馆系统的标准特藏文献登记表。包含全部10条原始记录。"
+    },
+    {
+      "filename": "discrepancy_log.csv",
+      "format": "CSV",
+      "purpose": "记录移交单中发现的所有数据异常（重号、缺值、数量不一致）及其对应的处理建议，供业务人员后续与移交小组核对。包含4条异常记录。"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01",
+      "text": "必须生成且仅生成 catalog_registry.csv 和 discrepancy_log.csv 两个文件，放置于 /app/output 目录下。",
+      "visibility": "explicit",
+      "basis": "request明确要求"
+    },
+    {
+      "id": "REQ-02",
+      "text": "catalog_registry.csv 必须包含10行数据记录（不含表头），对应移交单中的所有10条文献记录，不得遗漏或凭空增加。",
+      "visibility": "explicit",
+      "basis": "field_dictionary.md 及数据完整性专业惯例"
+    },
+    {
+      "id": "REQ-03",
+      "text": "索书号在登记表中必须唯一，重号必须按规则追加后缀，且在待核对清单中必须被记录为'重号'异常。",
+      "visibility": "explicit",
+      "basis": "field_dictionary.md 明确规则"
+    },
+    {
+      "id": "REQ-04",
+      "text": "册数缺值必须根据备注判断，无备注则填0，有备注则按备注修正；异常必须在清单中记录为'缺值'。",
+      "visibility": "explicit",
+      "basis": "field_dictionary.md 明确规则"
+    },
+    {
+      "id": "REQ-05",
+      "text": "册数与备注不一致时，必须以备注中的数字为准进行修正，并在清单中记录为'数量不一致'。",
+      "visibility": "explicit",
+      "basis": "field_dictionary.md 明确规则"
+    },
+    {
+      "id": "REQ-06",
+      "text": "CSV文件必须使用标准逗号分隔，包含正确的表头，且中文字符无乱码。",
+      "visibility": "professional_practice",
+      "basis": "数据录入与文件交付通用专业惯例"
+    }
+  ],
+  "authoring_plan": "本题考察数据录入员在面对脏数据时的清洗、校验与异常上报能力。数据源包含10条记录，精心设计了4个异常点：TS-003册数不一致（字段2，备注3）、TS-004册数缺值（字段空，备注无）、TS-001重号（康熙版与旧闻）、TS-008重号（光绪版与交通志）。预期判断路径为：首先解析CSV，按行遍历；遇到TS-003时，比对册数与备注，发现冲突，按规则取备注值3，并记入异常清单；遇到TS-004时，发现册数为空，备注无数量，按规则填0，记入异常清单；遇到TS-001和TS-008时，维护一个索书号集合，发现重复，按规则追加-B后缀，记入异常清单。预期不确定性在于后缀追加的具体策略（首次不变第二次加-B，或首次加-A第二次加-B），词典已声明两者皆可但需逻辑一致。等价解包括：登记表和清单的列名只要语义匹配即可，不强制要求与词典中的Markdown加粗字体完全一致（如'册数'与'Volumes'）。",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "登记表完整包含10条原始记录",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "catalog_registry.csv"
+      ],
+      "evidence": "检查 catalog_registry.csv 的数据行数。应为10行（不含表头）。",
+      "numeric_tolerance": 0,
+      "weight_reason": "核心交付物完整性，遗漏数据会导致严重业务后果。",
+      "criterion": [
+        "catalog_registry.csv 包含恰好10行数据记录",
+        "行数不能多也不能少"
+      ],
+      "anchors": {
+        "0": "行数不是10（存在遗漏或多余）",
+        "1": "行数严格为10"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "模型在清洗时丢弃了某条认为'格式不对'的记录，导致只有9行。"
+      ]
+    },
+    {
+      "id": "R02",
+      "description": "正确识别并处理 TS-001 的索书号重号",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "catalog_registry.csv",
+        "discrepancy_log.csv"
+      ],
+      "evidence": "检查登记表中两条原TS-001记录的索书号是否唯一且带后缀；检查清单中是否有TS-001的重号记录。",
+      "numeric_tolerance": 0,
+      "weight_reason": "重号是图书馆管理系统致命错误，必须正确拦截和处理。",
+      "criterion": [
+        "登记表中第一条TS-001保持原样或为TS-001-A，第二条变更为TS-001-B（或类似后缀）",
+        "待核对清单中包含原索书号为TS-001、异常类型为'重号'的记录",
+        "清单中的处理建议明确指出了后缀变更"
+      ],
+      "anchors": {
+        "0": "未处理后缀或清单未记录",
+        "1": "登记表后缀唯一且清单记录完整"
+      },
+      "acceptable_alternatives": [
+        "首次出现加-A，第二次加-B，只要逻辑一致即可"
+      ],
+      "failure_examples": [
+        "登记表保留了两个TS-001，或者清单中只记录了TS-001但没给出后缀变更建议。"
+      ]
+    },
+    {
+      "id": "R03",
+      "description": "正确识别并处理 TS-008 的索书号重号",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "catalog_registry.csv",
+        "discrepancy_log.csv"
+      ],
+      "evidence": "同R02，针对TS-008记录。",
+      "numeric_tolerance": 0,
+      "weight_reason": "验证异常处理逻辑的泛化能力，不仅限于第一个遇到的重号。",
+      "criterion": [
+        "登记表中第一条TS-008保持原样或加-A，第二条变更为TS-008-B",
+        "待核对清单中包含TS-008的重号记录及正确建议"
+      ],
+      "anchors": {
+        "0": "未处理或处理错误",
+        "1": "完全正确"
+      },
+      "acceptable_alternatives": [
+        "同R02"
+      ],
+      "failure_examples": [
+        "将TS-008的第二条记录错误地合并到了第一条中。"
+      ]
+    },
+    {
+      "id": "R04",
+      "description": "正确修正 TS-003 的册数（数量不一致）",
+      "type": "Binary",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-05"
+      ],
+      "deliverables": [
+        "catalog_registry.csv",
+        "discrepancy_log.csv"
+      ],
+      "evidence": "检查登记表中TS-003的册数字段是否为3；检查清单中是否有TS-003的数量不一致记录。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察对多字段冲突时的优先级判断（以备注为准）。",
+      "criterion": [
+        "登记表中TS-003的册数为3",
+        "待核对清单中包含TS-003、异常类型'数量不一致'、原始值'2'、建议'册数修正为3'"
+      ],
+      "anchors": {
+        "0": "册数未修正为3或清单未记录",
+        "1": "登记表修正正确且清单记录完整"
+      },
+      "acceptable_alternatives": [
+        "清单中原始值写为'册数字段为2'等语义等价的描述"
+      ],
+      "failure_examples": [
+        "模型认为册数字段优先，保留了2，或者未将其记入异常清单。"
+      ]
+    },
+    {
+      "id": "R05",
+      "description": "正确处理 TS-004 的册数缺值",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-04"
+      ],
+      "deliverables": [
+        "catalog_registry.csv",
+        "discrepancy_log.csv"
+      ],
+      "evidence": "检查登记表中TS-004的册数是否为0；检查清单中是否有TS-004的缺值记录。",
+      "numeric_tolerance": 0,
+      "weight_reason": "考察对空值（NULL）的规范化处理及默认值填充规则。",
+      "criterion": [
+        "登记表中TS-004的册数为0（非空）",
+        "待核对清单中包含TS-004、异常类型'缺值'、建议'册数修正为0'"
+      ],
+      "anchors": {
+        "0": "册数留空或填错，或清单缺失",
+        "1": "填0且清单记录完整"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "登记表中TS-004册数留空，导致下游系统导入报错。"
+      ]
+    },
+    {
+      "id": "R06",
+      "description": "待核对清单包含且仅包含4条异常记录",
+      "type": "Binary",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-03",
+        "REQ-04",
+        "REQ-05"
+      ],
+      "deliverables": [
+        "discrepancy_log.csv"
+      ],
+      "evidence": "检查 discrepancy_log.csv 的数据行数。",
+      "numeric_tolerance": 0,
+      "weight_reason": "防止模型过度报告（把正常数据当异常）或漏报。",
+      "criterion": [
+        "清单恰好包含4行数据记录",
+        "分别对应TS-001, TS-008, TS-003, TS-004"
+      ],
+      "anchors": {
+        "0": "行数不是4",
+        "1": "行数为4"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "模型将TS-002的'缺卷二'也记入了异常清单，导致总行数变为5。"
+      ]
+    },
+    {
+      "id": "R07",
+      "description": "待核对清单的列名符合词典要求",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-06"
+      ],
+      "deliverables": [
+        "discrepancy_log.csv"
+      ],
+      "evidence": "检查 discrepancy_log.csv 的表头。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保清单格式规范，便于人工阅读。",
+      "criterion": [
+        "表头包含原索书号、异常类型、原始值、处理建议（或语义完全等价的英文/拼音）"
+      ],
+      "anchors": {
+        "0": "表头缺失核心字段",
+        "1": "表头完整且语义正确"
+      },
+      "acceptable_alternatives": [
+        "Original_Call_Number, Anomaly_Type 等英文表头"
+      ],
+      "failure_examples": [
+        "表头只有'索书号'和'问题'两个字段，丢失了原始值和处理建议。"
+      ]
+    },
+    {
+      "id": "R08",
+      "description": "登记表中所有'品相'字段值合规",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "catalog_registry.csv"
+      ],
+      "evidence": "检查 catalog_registry.csv 中'品相'列的所有值。",
+      "numeric_tolerance": 0,
+      "weight_reason": "基础数据校验，确保枚举值未被破坏。",
+      "criterion": [
+        "所有10条记录的品相字段值严格为'良好'或'破损'，无空值或错别字"
+      ],
+      "anchors": {
+        "0": "存在非'良好'/'破损'的值",
+        "1": "全部合规"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "模型将'破损'自动纠正为'损坏'。"
+      ]
+    },
+    {
+      "id": "R09",
+      "description": "责任者字段原样保留（含外文/拼音）",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "catalog_registry.csv"
+      ],
+      "evidence": "检查登记表中TS-003的责任者字段。",
+      "numeric_tolerance": 0,
+      "weight_reason": "防止模型过度清洗，破坏原始责任人信息。",
+      "criterion": [
+        "TS-003的责任者必须为'王Botanist'（或保留原有空格），未被翻译为'王植物学家'或删除英文"
+      ],
+      "anchors": {
+        "0": "被错误翻译或删除英文",
+        "1": "原样保留"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "模型认为'王Botanist'格式不统一，将其修改为'王'。"
+      ]
+    },
+    {
+      "id": "R10",
+      "description": "备注字段完整保留，未被截断",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "catalog_registry.csv"
+      ],
+      "evidence": "抽查登记表中多条记录的备注字段。",
+      "numeric_tolerance": 0,
+      "weight_reason": "备注包含重要业务上下文（如缺卷二、需修复）。",
+      "criterion": [
+        "所有记录的备注字段与移交单完全一致，包括'无'、'缺卷二'、'共3册'等"
+      ],
+      "anchors": {
+        "0": "存在截断或篡改",
+        "1": "完全一致"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "模型在清洗后，将所有备注为'无'的单元格清空为NULL。"
+      ]
+    },
+    {
+      "id": "R11",
+      "description": "CSV文件格式正确，无乱码",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-06"
+      ],
+      "deliverables": [
+        "catalog_registry.csv",
+        "discrepancy_log.csv"
+      ],
+      "evidence": "尝试用标准CSV解析器读取两个文件。",
+      "numeric_tolerance": 0,
+      "weight_reason": "基础交付质量。",
+      "criterion": [
+        "文件为标准UTF-8编码，逗号分隔，无多余换行符破坏行结构"
+      ],
+      "anchors": {
+        "0": "解析失败或乱码",
+        "1": "解析正常且无乱码"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "模型输出时未处理包含逗号的字段，导致CSV列错位。"
+      ]
+    },
+    {
+      "id": "R12",
+      "description": "登记表中批次字段准确转录",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "catalog_registry.csv"
+      ],
+      "evidence": "检查登记表中批次列的分布。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保数据归属关系未丢失。",
+      "criterion": [
+        "批次A有3条，批次B有3条，批次C有4条，且无拼写错误"
+      ],
+      "anchors": {
+        "0": "分布错误或拼写错误",
+        "1": "分布与拼写完全正确"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "将'批次A'误写为'第A批'。"
+      ]
+    },
+    {
+      "id": "R13",
+      "description": "异常处理逻辑的整体一致性",
+      "type": "Gradient",
+      "weight": 10,
+      "requirement_refs": [
+        "REQ-03",
+        "REQ-04",
+        "REQ-05"
+      ],
+      "deliverables": [
+        "catalog_registry.csv",
+        "discrepancy_log.csv"
+      ],
+      "evidence": "综合对比登记表和清单中4个异常点的处理结果。",
+      "numeric_tolerance": 0,
+      "weight_reason": "核心业务逻辑完整性。",
+      "criterion": [
+        "检查TS-001, TS-008(重号), TS-003(数量不一致), TS-004(缺值)的处理是否全部符合词典且两表联动正确"
+      ],
+      "levels": {
+        "1.0": "4个异常点全部在登记表中正确修正，且在清单中准确记录，两表数据完全联动。",
+        "0.75": "3个异常点处理完全正确，1个异常点存在轻微瑕疵（如清单建议描述不够精确，但登记表修正正确）。",
+        "0.5": "2个异常点处理完全正确，另外2个存在明显错误或遗漏。",
+        "0.25": "仅1个异常点处理正确，其余均失败。",
+        "0.0": "0个异常点处理正确，或完全未理解异常处理规则。"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "登记表修正了TS-003，但清单中漏记了TS-003，导致两表逻辑断裂（得0.75或更低）。"
+      ]
+    },
+    {
+      "id": "R14",
+      "description": "常规非异常数据的转录准确度",
+      "type": "Gradient",
+      "weight": 7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "catalog_registry.csv"
+      ],
+      "evidence": "逐字段比对登记表中非异常记录（如TS-002, TS-005, TS-006, TS-007）与移交单。",
+      "numeric_tolerance": 0,
+      "weight_reason": "数据保真度。",
+      "criterion": [
+        "检查非异常记录的批次、索书号、题名、责任者、册数、品相、备注是否与原件100%一致"
+      ],
+      "levels": {
+        "1.0": "所有非异常记录的转录0错误。",
+        "0.75": "存在1个字段的转录错误（如错别字、漏字）。",
+        "0.5": "存在2-3个字段的转录错误。",
+        "0.25": "存在4-5个字段的转录错误。",
+        "0.0": "存在>5个字段的转录错误，或大量正常数据被错误修改。"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "模型在清洗时，将TS-005的'王知县'错误地改成了'张知县'。"
+      ]
+    },
+    {
+      "id": "R15",
+      "description": "登记表中索书号后缀逻辑一致性",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-03"
+      ],
+      "deliverables": [
+        "catalog_registry.csv"
+      ],
+      "evidence": "检查TS-001和TS-008的后缀命名模式。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保数据清洗规则应用的一致性。",
+      "criterion": [
+        "如果TS-001采用'A/B'后缀，TS-008也必须采用'A/B'后缀，不能混用模式"
+      ],
+      "anchors": {
+        "0": "后缀命名模式不一致",
+        "1": "后缀命名模式一致"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "TS-001使用了TS-001和TS-001-B，而TS-008使用了TS-008-A和TS-008-B。"
+      ]
+    },
+    {
+      "id": "R16",
+      "description": "待核对清单中'原始值'字段填写准确",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-03",
+        "REQ-04",
+        "REQ-05"
+      ],
+      "deliverables": [
+        "discrepancy_log.csv"
+      ],
+      "evidence": "检查清单中4条记录的'原始值'列。",
+      "numeric_tolerance": 0,
+      "weight_reason": "异常溯源的基础。",
+      "criterion": [
+        "TS-001/008填'重复出现'或类似描述，TS-003填'2'，TS-004填'空'或NULL"
+      ],
+      "anchors": {
+        "0": "原始值填写错误或为空",
+        "1": "原始值准确反映异常现场"
+      },
+      "acceptable_alternatives": [
+        "TS-004原始值填'None'或'空值'均可"
+      ],
+      "failure_examples": [
+        "TS-003的原始值错误地填成了'3'（修正后的值）。"
+      ]
+    },
+    {
+      "id": "R17",
+      "description": "未擅自修改非异常数据（惩罚项）",
+      "type": "Binary",
+      "weight": -7,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "catalog_registry.csv"
+      ],
+      "evidence": "对比移交单和登记表，检查是否有任何非异常字段被模型'自作主张'修改。",
+      "numeric_tolerance": 0,
+      "weight_reason": "数据录入员的核心底线是忠实于原始数据，过度清洗是严重违规。",
+      "criterion": [
+        "除了词典明确要求的异常处理外，登记表中没有任何其他数据被修改（如修改了正常的册数、改写了题名等）"
+      ],
+      "anchors": {
+        "1": "1（表示发生了擅自修改，触发扣分）",
+        "0": "0（表示未发生擅自修改，不扣分）"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "模型认为TS-007的'共5册'是冗余信息，在备注中将其删除，或把册数5改成了别的值。"
+      ]
+    },
+    {
+      "id": "R18",
+      "description": "未遗漏原始记录（惩罚项）",
+      "type": "Binary",
+      "weight": -3,
+      "requirement_refs": [
+        "REQ-02"
+      ],
+      "deliverables": [
+        "catalog_registry.csv"
+      ],
+      "evidence": "检查登记表行数是否少于10。",
+      "numeric_tolerance": 0,
+      "weight_reason": "数据丢失是数据录入的致命错误。",
+      "criterion": [
+        "登记表中是否有任何一条原始移交单记录被丢弃"
+      ],
+      "anchors": {
+        "1": "1（表示发生了遗漏，触发扣分）",
+        "0": "0（表示未发生遗漏，不扣分）"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "模型认为TS-004册数为空是无效数据，直接将其从登记表中剔除。"
+      ]
+    },
+    {
+      "id": "R19",
+      "description": "待核对清单中'异常类型'枚举值合规",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-03",
+        "REQ-04",
+        "REQ-05"
+      ],
+      "deliverables": [
+        "discrepancy_log.csv"
+      ],
+      "evidence": "检查清单中'异常类型'列的所有值。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保分类标准化，便于下游系统或人员统计。",
+      "criterion": [
+        "所有异常类型必须严格为'重号'、'缺值'、'数量不一致'三者之一，无自创类型"
+      ],
+      "anchors": {
+        "0": "存在自创类型或拼写错误",
+        "1": "全部为规定的三种类型"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "模型将TS-003的异常类型标记为'数据冲突'或'备注不一致'。"
+      ]
+    },
+    {
+      "id": "R20",
+      "description": "输出目录与文件名完全匹配",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-01"
+      ],
+      "deliverables": [
+        "catalog_registry.csv",
+        "discrepancy_log.csv"
+      ],
+      "evidence": "检查文件保存的路径和名称。",
+      "numeric_tolerance": 0,
+      "weight_reason": "工程交付规范。",
+      "criterion": [
+        "文件必须位于 /app/output/ 下，且文件名严格为 catalog_registry.csv 和 discrepancy_log.csv"
+      ],
+      "anchors": {
+        "0": "路径或文件名错误",
+        "1": "路径和文件名完全正确"
+      },
+      "acceptable_alternatives": [
+        "无"
+      ],
+      "failure_examples": [
+        "将文件命名为 registry.csv 或输出到了 /app/ 根目录。"
+      ]
+    },
+    {
+      "id": "R21",
+      "description": "登记表表头字段完整且顺序合理",
+      "type": "Binary",
+      "weight": 3,
+      "requirement_refs": [
+        "REQ-06"
+      ],
+      "deliverables": [
+        "catalog_registry.csv"
+      ],
+      "evidence": "检查 catalog_registry.csv 的表头。",
+      "numeric_tolerance": 0,
+      "weight_reason": "确保下游系统能正确映射列。",
+      "criterion": [
+        "表头包含批次、索书号、题名、责任者、册数、品相、备注（或语义等价英文），无多余列"
+      ],
+      "anchors": {
+        "0": "表头缺失核心字段或有多余字段",
+        "1": "表头完整且无冗余"
+      },
+      "acceptable_alternatives": [
+        "列顺序与移交单不同但字段齐全"
+      ],
+      "failure_examples": [
+        "表头中遗漏了'品相'字段。"
+      ]
+    }
+  ],
+  "checks_to_execute": [
+    "python3 -c \"import pandas as pd; df=pd.read_csv('/app/output/catalog_registry.csv'); assert len(df)==10, 'Registry row count mismatch'; assert df['索书号'].is_unique, 'Call numbers not unique'; print('Registry checks passed')\"",
+    "python3 -c \"import pandas as pd; df=pd.read_csv('/app/output/discrepancy_log.csv'); assert len(df)==4, 'Log row count mismatch'; assert set(df['异常类型'].unique()).issubset({'重号','缺值','数量不一致'}), 'Invalid anomaly types'; print('Log checks passed')\""
+  ],
+  "quality_risks": [
+    "模型可能将TS-002备注中的'缺卷二'误判为册数异常或品相异常，导致过度报告。",
+    "模型在处理重号后缀时，可能生成如'TS-001(1)'、'TS-001_2'等不符合词典'-A/-B'惯例的后缀，虽然词典说语义等价即可，但过于奇特的后缀可能影响下游解析。",
+    "CSV输出时，若备注中包含逗号（本题虽无，但模型可能幻觉加入），未加双引号会导致CSV列错位。",
+    "模型可能将TS-004的空值直接保留为空字符串，而不是按规则填入数字'0'，导致下游系统读取册数时发生类型错误。"
+  ],
+  "reference_solution": {
+    "catalog_registry.csv": "批次,索书号,题名,责任者,册数,品相,备注\n批次A,TS-001,星海市志(康熙版),张知县,2,良好,无\n批次A,TS-002,星海水利考,李工,1,破损,缺卷二\n批次A,TS-003,星海植物图鉴,王Botanist,3,良好,共3册\n批次B,TS-004,星海商业录,赵商人,0,良好,无\n批次B,TS-005,星海市志(乾隆版),王知县,4,良好,无\n批次B,TS-001-B,星海旧闻,孙记者,1,良好,无\n批次C,TS-006,星海水文记,周水文,2,破损,需修复\n批次C,TS-007,星海教育史,吴校长,5,良好,共5册\n批次C,TS-008,星海市志(光绪版),郑知县,3,良好,无\n批次C,TS-008-B,星海交通志,钱交通,2,良好,无",
+    "discrepancy_log.csv": "原索书号,异常类型,原始值,处理建议\nTS-003,数量不一致,2,册数修正为3\nTS-004,缺值,空,册数修正为0\nTS-001,重号,重复出现,索书号变更为TS-001-B\nTS-008,重号,重复出现,索书号变更为TS-008-B",
+    "derivation": "TS-003：备注'共3册'与册数'2'冲突，按规则取3，记入清单。TS-004：册数为空，备注无，按规则填0，记入清单。TS-001：第二次出现，追加'-B'后缀，记入清单。TS-008：第二次出现，追加'-B'后缀，记入清单。其余数据原样转录。",
+    "limitations": "后缀策略采用'首次不变，第二次加-B'。若模型采用'首次加-A，第二次加-B'，只要两表联动且逻辑一致，在R13和R15中应视为等价解。"
+  }
+}

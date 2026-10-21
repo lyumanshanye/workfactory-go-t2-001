@@ -1,0 +1,546 @@
+[
+  {
+    "id": "R01",
+    "description": "排期表是否合理解决了Ep4双主持人档期冲突与录音棚维修的物理约束？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Revised_Production_Schedule.xlsx"
+    ],
+    "evidence": "查看排期表中Ep4的录制安排。Host_A和Host_B无共同档期。若安排在同一天同一时段则得0分。",
+    "numeric_tolerance": 0,
+    "weight_reason": "这是本题最核心的排期冲突，直接决定节目能否按期推进。",
+    "criterion": [
+      "识别出Host_A（二四六上午）与Host_B（一三五下午）无自然交集。",
+      "采用合理的解决方案：方案A（协调其中一人周末/非工作日加班，需支付加班费）；方案B（采用分轨录制，后期对齐，需增加后期成本）。",
+      "避开Studio_B的维修期（Week 5-7），Ep4必须使用Studio_A，或安排在Week 4之前的Studio_B（但法务和准备时间可能不足）。"
+    ],
+    "anchors": {
+      "levels": {
+        "0": "未解决档期冲突，或安排了不存在的共同档期，或使用了维修期的录音棚。",
+        "0.25": "识别了冲突但仅给出模糊建议，未落实到具体日期和棚号。",
+        "0.5": "提出了分轨录制或加班方案，但未计算或关联相应的成本增加，或排期存在轻微逻辑瑕疵（如法务审核未完成即录制）。",
+        "0.75": "完美解决冲突，排期合理，但成本核算或后续依赖衔接不够紧密。",
+        "1": "完美解决冲突，明确采用分轨或加班，排期避开维修期，且将成本变化准确同步到预算备忘录中。"
+      }
+    },
+    "acceptable_alternatives": "允许将Ep4提前至Week 4使用Studio_B（若法务和准备允许），或推迟至Week 8之后使用恢复的Studio_B。",
+    "failure_examples": "将Ep4安排在周四下午，声称两人都在，但实际上Host_B在下午而Host_A在上午。"
+  },
+  {
+    "id": "R02",
+    "description": "排期表是否严格遵循法务审核的5个工作日（周一至周五）周期？",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Revised_Production_Schedule.xlsx"
+    ],
+    "evidence": "检查Ep4和Ep5的法务审核时间段。",
+    "numeric_tolerance": 0,
+    "weight_reason": "法务合规是播客上线的红线，周期计算错误会导致严重的延期风险。",
+    "criterion": [
+      "Ep4和Ep5涉及医疗、金融等敏感话题，必须触发法务审核。",
+      "审核周期必须精确计算为5个自然工作日（排除周末）。",
+      "审核必须在录制前（或至少粗剪前）完成，不得倒置。"
+    ],
+    "anchors": {
+      "0": "未触发审核，或将周末计入5天导致实际天数不足，或审核安排在录制之后。",
+      "1": "准确触发审核，严格排除周末计算5天，且时间节点在录制/粗剪之前。"
+    },
+    "acceptable_alternatives": "允许在录制前提交初稿审核，或粗剪后提交成片审核，只要保证5个工作日的净时间且上线前完成。",
+    "failure_examples": "周五提交审核，下周一即认为完成（仅算1个工作日却当成5天）。"
+  },
+  {
+    "id": "R03",
+    "description": "排期表中的后期制作依赖（粗剪->精剪->音效）是否保持严格的串行逻辑？",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Revised_Production_Schedule.xlsx"
+    ],
+    "evidence": "检查Ep3至Ep6的后期阶段日期。",
+    "numeric_tolerance": 0,
+    "weight_reason": "后期工序的物理依赖，不可并行或倒置。",
+    "criterion": [
+      "粗剪必须在精剪之前。",
+      "精剪必须在音效设计之前。",
+      "各阶段之间不得出现时间重叠。"
+    ],
+    "anchors": {
+      "0": "出现后期工序并行或倒置。",
+      "1": "严格串行，无重叠。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "精剪和音效设计安排在同一天进行。"
+  },
+  {
+    "id": "R04",
+    "description": "预算备忘录是否准确计算了当前的预算执行率与剩余可用资金？",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Budget_Reconciliation_Memo.docx"
+    ],
+    "evidence": "检查备忘录中的财务数据计算。",
+    "numeric_tolerance": 0,
+    "weight_reason": "财务数据的准确性是决策的基础。",
+    "criterion": [
+      "总预算120,000。",
+      "已发生：35,000（棚20k+主持10k+法务5k）。",
+      "已承诺：30,000（Ep1/2后期）。",
+      "原计划Ep3-6：40,000。",
+      "剩余可用资金计算正确（120k - 35k - 30k = 55,000，或120k - 35k - 30k - 40k = 15,000，取决于如何定义剩余，但必须明确区分已发生、已承诺和计划）。"
+    ],
+    "anchors": {
+      "0": "计算错误，或混淆已发生与已承诺。",
+      "1": "各项数值准确，逻辑清晰。"
+    },
+    "acceptable_alternatives": "允许不同的表格呈现方式，只要数值关系正确。",
+    "failure_examples": "将已承诺的3万重复计入已发生，导致剩余预算少算3万。"
+  },
+  {
+    "id": "R05",
+    "description": "预算备忘录是否准确量化了赞助商硬广插入带来的额外成本及总超支金额？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Budget_Reconciliation_Memo.docx"
+    ],
+    "evidence": "检查硬广成本及总预算对比。",
+    "numeric_tolerance": 0,
+    "weight_reason": "变更管理的核心在于准确评估变更的财务影响。",
+    "criterion": [
+      "硬广插入Ep4的额外成本明确为15,000。",
+      "双主持协调的额外成本（加班或分轨）被正确计入。",
+      "总超支金额计算正确（原计划120k，现需120k+15k+协调费，超支至少15k以上）。"
+    ],
+    "anchors": {
+      "levels": {
+        "0": "未提及硬广成本，或计算完全错误。",
+        "0.25": "提及硬广成本15,000，但未考虑双主持协调的额外费用。",
+        "0.5": "计算了硬广和协调费用，但未得出总超支金额，或总超支计算有误。",
+        "0.75": "总超支计算正确，但未说明这些额外费用在内部如何消化。",
+        "1": "准确计算硬广(15k)与协调费(0.2k或0.32k)，得出总超支(15.2k或15.32k)，并清晰展示对总预算120k的冲击。"
+      }
+    },
+    "acceptable_alternatives": "若采用分轨，协调费为2,000；若采用加班，按800/小时，至少4小时为3,200。两者均可接受。",
+    "failure_examples": "认为硬广成本已包含在原计划的40,000中，未计算超支。"
+  },
+  {
+    "id": "R06",
+    "description": "预算备忘录是否提出了平衡且可执行的预算调整方案？",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Budget_Reconciliation_Memo.docx"
+    ],
+    "evidence": "检查预算调整建议。",
+    "numeric_tolerance": 0,
+    "weight_reason": "发现问题后必须提供解决路径。",
+    "criterion": [
+      "提出具体的削减方案（如降低Ep5/6音效标准、减少外包工时）以吸收超支，或明确提出追加预算的申请及理由。",
+      "方案不能影响节目核心质量或导致合规问题。"
+    ],
+    "anchors": {
+      "0": "仅指出超支，无解决方案，或建议削减法务/合规预算。",
+      "1": "提出合理的削减或追加方案，理由充分且不影响核心质量。"
+    },
+    "acceptable_alternatives": "允许向赞助商申请额外广告分成以覆盖成本。",
+    "failure_examples": "建议取消法务审核以节省预算。"
+  },
+  {
+    "id": "R07",
+    "description": "风险登记册是否准确识别法务审核延迟为最高风险，并设定触发条件？",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Risk_Register_and_Mitigation.xlsx"
+    ],
+    "evidence": "检查风险册中的风险排序与描述。",
+    "numeric_tolerance": 0,
+    "weight_reason": "法务延迟是导致后续所有节点崩盘的关键路径风险。",
+    "criterion": [
+      "将法务审核延迟列为高优先级风险。",
+      "明确触发条件（如嘉宾修改稿件导致重新审核）。",
+      "提供应急预案（如预留缓冲时间、准备备选嘉宾或降级话题）。"
+    ],
+    "anchors": {
+      "0": "未识别法务延迟风险，或无应急预案。",
+      "1": "准确识别，触发条件清晰，预案具体可行。"
+    },
+    "acceptable_alternatives": "允许将录音棚维修列为同等高风险。",
+    "failure_examples": "仅列出‘法务可能延迟’，但未说明如何监控或应对。"
+  },
+  {
+    "id": "R08",
+    "description": "风险登记册是否包含针对Studio_B维修的备用方案？",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Risk_Register_and_Mitigation.xlsx"
+    ],
+    "evidence": "检查风险册中的棚维修应对。",
+    "numeric_tolerance": 0,
+    "weight_reason": "物理资源中断必须有B计划。",
+    "criterion": [
+      "识别Studio_B维修（Week 5-7）对原定排期的影响。",
+      "提出备用方案：如全面转移至Studio_A（需解决容量/档期冲突），或租赁外部录音棚，或采用远程居家录音。"
+    ],
+    "anchors": {
+      "0": "未提及维修影响或无备用方案。",
+      "1": "提出具体可行的备用方案，并评估其成本或时间影响。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "建议等待Studio_B维修完成后再录制，导致Ep4/5严重延期。"
+  },
+  {
+    "id": "R09",
+    "description": "排期表是否识别并体现了关键路径（Critical Path）？",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Revised_Production_Schedule.xlsx"
+    ],
+    "evidence": "检查排期表中的关键路径标注或逻辑推导。",
+    "numeric_tolerance": 0,
+    "weight_reason": "项目管理专业惯例，识别关键路径有助于资源倾斜。",
+    "criterion": [
+      "明确指出Ep4或Ep5（涉及双主持协调、法务审核、硬广插入）为关键路径。",
+      "关键路径上的任务无浮动时间（Float=0）。"
+    ],
+    "anchors": {
+      "0": "未识别关键路径，或识别错误。",
+      "1": "准确识别关键路径，并说明其脆弱性。"
+    },
+    "acceptable_alternatives": "允许使用甘特图高亮显示关键路径。",
+    "failure_examples": "将Ep1（已录完）列为关键路径。"
+  },
+  {
+    "id": "R10",
+    "description": "备忘录是否清晰说明了硬广变更对交付时间（Timeline）的具体影响？",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Budget_Reconciliation_Memo.docx"
+    ],
+    "evidence": "检查备忘录中关于时间的描述。",
+    "numeric_tolerance": 0,
+    "weight_reason": "变更管理不仅涉及成本，必然涉及时间。",
+    "criterion": [
+      "明确说明Ep4因硬广插入导致的后期工时增加量。",
+      "说明这是否会导致Ep4或后续节目的交付时间推迟。"
+    ],
+    "anchors": {
+      "0": "仅谈成本，未提及时间影响。",
+      "1": "准确说明工时增加及对交付节点的影响。"
+    },
+    "acceptable_alternatives": "若通过增加人手保持原交付时间，需说明成本代价。",
+    "failure_examples": "声称硬广插入不影响任何交付时间，且未增加额外成本。"
+  },
+  {
+    "id": "R11",
+    "description": "预算计算中是否正确区分了沉没成本与未来可节省成本？",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Budget_Reconciliation_Memo.docx"
+    ],
+    "evidence": "检查预算分析的逻辑。",
+    "numeric_tolerance": 0,
+    "weight_reason": "财务决策的专业基础。",
+    "criterion": [
+      "已发生的35,000视为沉没成本，不可追回。",
+      "未来可调整的成本（如Ep3-6的40,000计划）作为调配空间。"
+    ],
+    "anchors": {
+      "0": "试图削减已发生的35,000。",
+      "1": "正确区分，调配空间基于未来成本。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "建议通过退还Host_B的定金来弥补超支。"
+  },
+  {
+    "id": "R12",
+    "description": "风险册是否考虑了外包商支付节点带来的现金流或交付风险？",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Risk_Register_and_Mitigation.xlsx"
+    ],
+    "evidence": "检查风险册中的供应商管理。",
+    "numeric_tolerance": 0,
+    "weight_reason": "外包依赖是播客制作的常见瓶颈。",
+    "criterion": [
+      "识别Ep1/2后期30,000的支付节点（如预付款/尾款）风险。",
+      "若因超支导致付款延迟，可能引发外包商停工风险。"
+    ],
+    "anchors": {
+      "0": "未考虑外包支付风险。",
+      "1": "识别付款节点风险，并提出保障支付的措施。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为只要总预算够，何时付款不影响外包商进度。"
+  },
+  {
+    "id": "R13",
+    "description": "排期表中Ep3至Ep6的录制与后期时间是否预留了合理的缓冲（Buffer）？",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Revised_Production_Schedule.xlsx"
+    ],
+    "evidence": "检查排期表的时间安排。",
+    "numeric_tolerance": 0,
+    "weight_reason": "专业项目管理惯例，应对不确定性。",
+    "criterion": [
+      "在法务审核、后期制作等易延期环节之间预留了至少1-2天的缓冲时间。",
+      "缓冲时间不占用关键路径上的核心资源。"
+    ],
+    "anchors": {
+      "0": "所有任务紧密衔接，无任何缓冲。",
+      "1": "合理预留缓冲，且不影响最终交付。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "法务审核周五完成，周一早上8点必须上线，中间无任何缓冲。"
+  },
+  {
+    "id": "R14",
+    "description": "备忘录中的预算调整建议是否获得了充分的数据支持，而非主观臆断？",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Budget_Reconciliation_Memo.docx"
+    ],
+    "evidence": "检查备忘录中的论证逻辑。",
+    "numeric_tolerance": 0,
+    "weight_reason": "管理层决策需要数据支撑。",
+    "criterion": [
+      "削减预算或申请追加时，引用了具体的Vendor_Quotes或历史数据。",
+      "避免了‘大概’、‘可能’等模糊表述。"
+    ],
+    "anchors": {
+      "0": "仅凭感觉建议削减或追加。",
+      "1": "引用具体报价或数据，论证严密。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "建议‘适当削减音效预算’，但未说明削减多少及依据。"
+  },
+  {
+    "id": "R15",
+    "description": "【负分项】备忘录是否试图向管理层隐瞒超支事实或推诿责任？",
+    "type": "Binary",
+    "weight": -7,
+    "requirement_refs": [
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Budget_Reconciliation_Memo.docx"
+    ],
+    "evidence": "检查备忘录的语气与结论。",
+    "numeric_tolerance": 0,
+    "weight_reason": "职业道德与诚信红线。",
+    "criterion": [
+      "若备忘录中将超支归咎于赞助商变更，但自身未采取任何成本吸收措施，或试图通过修改已发生费用来掩盖超支。",
+      "触发此负分项即扣除相应分数。"
+    ],
+    "anchors": {
+      "0": "存在隐瞒或推诿行为。",
+      "1": "客观陈述，积极寻找解决方案。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "在备忘录中声称‘超支完全由赞助商硬广导致，我方无任何责任，且无法在内部消化’。"
+  },
+  {
+    "id": "R16",
+    "description": "风险册是否包含嘉宾突发取消的应急预案？",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Risk_Register_and_Mitigation.xlsx"
+    ],
+    "evidence": "检查风险册中的嘉宾管理。",
+    "numeric_tolerance": 0,
+    "weight_reason": "播客制作的常见风险。",
+    "criterion": [
+      "识别嘉宾取消或迟到的风险。",
+      "提供预案：如准备备用话题、主持人solo单口、或延期录制。"
+    ],
+    "anchors": {
+      "0": "未考虑嘉宾风险。",
+      "1": "识别风险并提供至少一种可行预案。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "认为嘉宾已确认就不会取消，无需预案。"
+  },
+  {
+    "id": "R17",
+    "description": "排期表是否考虑了法定节假日或周末加班限制（若适用）？",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Revised_Production_Schedule.xlsx"
+    ],
+    "evidence": "检查排期表中的日期。",
+    "numeric_tolerance": 0,
+    "weight_reason": "合规与成本意识。",
+    "criterion": [
+      "若安排周末录音/剪辑，是否计入了加班费或调休。",
+      "未将法定节假日误算为工作日。"
+    ],
+    "anchors": {
+      "0": "未考虑周末/节假日影响，或导致成本漏算。",
+      "1": "正确处理周末/节假日安排及成本。"
+    },
+    "acceptable_alternatives": "若题目未明确当年节假日，可假设无，但需逻辑自洽。",
+    "failure_examples": "将周六安排为正常工作日且未支付Host_A的加班费。"
+  },
+  {
+    "id": "R18",
+    "description": "风险登记册的格式与字段是否完整且专业？",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Risk_Register_and_Mitigation.xlsx"
+    ],
+    "evidence": "检查风险册的表格结构。",
+    "numeric_tolerance": 0,
+    "weight_reason": "专业交付物的基本要求。",
+    "criterion": [
+      "包含风险ID、风险描述、概率、影响程度、风险等级、应对策略、责任人等标准字段。"
+    ],
+    "anchors": {
+      "0": "字段缺失严重，或格式混乱。",
+      "1": "字段完整，结构清晰。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "仅用一段文字描述风险，无结构化表格。"
+  },
+  {
+    "id": "R19",
+    "description": "整体交付物的跨文件数据一致性（人名、金额、日期）是否完美？",
+    "type": "Binary",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "Revised_Production_Schedule.xlsx",
+      "Budget_Reconciliation_Memo.docx",
+      "Risk_Register_and_Mitigation.xlsx"
+    ],
+    "evidence": "交叉比对三个文件中的关键数据。",
+    "numeric_tolerance": 0,
+    "weight_reason": "制作人必须确保信息在团队中传递的一致性。",
+    "criterion": [
+      "排期表中的日期与备忘录中的影响分析一致。",
+      "备忘录中的超支金额与风险册中的应对成本一致。",
+      "人名、棚号在所有文件中拼写一致。"
+    ],
+    "anchors": {
+      "0": "存在明显的跨文件数据冲突。",
+      "1": "所有数据完美一致。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "备忘录中写超支1.5万，排期表中却按2万做调整。"
+  },
+  {
+    "id": "R20",
+    "description": "排期表是否明确标注了硬广插入的具体位置与时长？",
+    "type": "Binary",
+    "weight": 3,
+    "requirement_refs": [
+      "REQ-01"
+    ],
+    "deliverables": [
+      "Revised_Production_Schedule.xlsx"
+    ],
+    "evidence": "检查Ep4的排期详情。",
+    "numeric_tolerance": 0,
+    "weight_reason": "确保赞助商权益的准确落实。",
+    "criterion": [
+      "在Ep4的后期或最终交付物中，明确标注3分钟硬广的插入点（如片头、片中、片尾）。"
+    ],
+    "anchors": {
+      "0": "未标注硬广位置。",
+      "1": "明确标注位置，且符合播客常规习惯。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "仅写‘插入硬广’，未说明具体在Ep4的哪个时间段。"
+  },
+  {
+    "id": "R21",
+    "description": "【负分项】排期与预算是否将周末算作法务审核的工作日，导致实际审核周期缩短、合规失效？",
+    "type": "Binary",
+    "weight": -10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Revised_Production_Schedule.xlsx"
+    ],
+    "evidence": "检查法务审核的日历计算。",
+    "numeric_tolerance": 0,
+    "weight_reason": "法务合规的绝对红线，周末不计入工作日是基本常识。",
+    "criterion": [
+      "若排期表中将周六、周日计入5天审核周期（如周五提交，下周二即认为完成），则触发此负分项。"
+    ],
+    "anchors": {
+      "0": "错误地将周末计入审核周期。",
+      "1": "严格排除周末。"
+    },
+    "acceptable_alternatives": "无。",
+    "failure_examples": "周四提交法务审核，排期表显示下周一完成（仅跨越1个工作日，却算作5天）。"
+  }
+]
