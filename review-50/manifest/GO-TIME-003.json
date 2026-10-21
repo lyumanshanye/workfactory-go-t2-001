@@ -1,0 +1,1512 @@
+{
+  "id": "GO-TIME-003",
+  "title": "政府采购跨新规公告：制造商与联合体价格复核",
+  "domain": "通用办公",
+  "domain_l2": "T3-建模与决策支持",
+  "domain_l3": "公共采购中小企业适用口径",
+  "category": "weakness-driven",
+  "complexity": "C2",
+  "target_difficulty": "A2",
+  "as_of": "2022-08-01 10:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "46号官方原PDF、19号完整通知与财政部2021问答选段；企业/报价/采购文件/内部消息原创，非官方案例。",
+  "instruction": "# 政府采购跨新规公告：制造商与联合体价格复核\n\n## 业务场景与任务说明\n\n你是采购代理机构价格复核助理。两个非预留货物包在新规执行前后各首次公告；D0误用开标日期和最高比例，负责人又纠正了既有联合协议份额转录。请以冻结材料修订14份报价的价格复核工作簿和条件性建议，不发布中标或付款。\n\n业务判断基准时点：2022-08-01 10:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_财库2020_46号官方办法.pdf`：真实官方11页完整办法；重点第2/4/9/11/12/25条。\n- `/app/input_files/S02_新通知与官方问答摘录.docx`：真实2022通知及2021问答选段、来源与真实时间，不是2022历史网页快照。\n- `/app/input_files/S03_采购复核委托与已发布文件.docx`：原创非预留货物包前提、两已发文件、范围/公式与交付约束。\n- `/app/input_files/S04_报价与制造事实台账.xlsx`：原创14份报价/制造事实/声明与关系，B04转录原值保留。\n- `/app/input_files/S05_D0与有权事实补充.docx`：原创D0、负责人纠正既有协议转录及较晚无权建议。\n\n## 工作要求\n\n- [Q1] 按S01/S02准确列明新旧规则、真实落款/公开/起施与抓取时间，用首次公告而非开标/复核日选择A/B已发文件、具体比例，保留工程适用边界。\n- [Q2] 逐份核对两包7报价的制造商与经销商、声明函、关系排除及联合体/分包小微制造份额，按材料判断优惠，不因不优惠就判无效，不外推未给划型。\n- [Q3] 保留原台账及报价，采用S05有权纠正B04既有协议30.00%并传播到优惠、评审价、价格序和说明，拒无权较晚商务建议。\n- [Q4] 制作可用Excel，列输入定位、原值/采用值、优惠类型/率与理由、按原报价计算的评审价、同包升序和候选原报价；评审价/排名/候选金额用公式且可见缓存。\n- [Q5] 逐一纠正D0-1到D0-5，备忘录给出两包条件性价格序建议与金额、关键不优惠理由、B04变更影响、后续有权复核；跨交付数字一致，不把价格序当正式中标。\n- [Q6] 只交指定Excel与Word，材料来源及条款可定位，区分官方政策与原创案例，不虚构声明补交、财政/专家确认、签约或付款，不真实对外操作。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/price_review.xlsx`：含原值与采用值、事实判断、优惠率、公式评审价与同包排名、候选原报价及版本/D0依据索引的可用Excel。\n- `/app/output/review_memo.docx`：内部待审中文备忘录：两包价格序首位及原报价、关键判断、更正影响、工程边界与后续授权动作。\n\n## 硬约束（单独列明）\n\n- 只交/app/output/price_review.xlsx及/app/output/review_memo.docx；中文，允许等价计算和版式，不匹配Gold措辞。\n- 报价、声明与关系为给定冻结事实；不改原台账、不编额外法定阈值/证明、不允许标后改投标协议。\n- 评审价只用于本题价格序，候选原报价仍原金额；未经有权流程不作真实中标/合同/付款结论。\n",
+  "instruction_url": "assets/tasks/GO-TIME-003/instruction.md",
+  "absolute_path": "tasks/GO-TIME-003",
+  "spec_path": "manifest/GO-TIME-003.json",
+  "spec_url": "manifest/GO-TIME-003.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "区分46号2020-12-18落款/2021-01-01起施和19号2022-05-30落款/2022-06-01页面/2022-07-01起执行；2026抓取不当业务生效。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S01第25条；S02元数据。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R02",
+      "description": "以首次公告而非7月开标或8月复核为切点：A6/30旧幅度、B7/1新幅度；无重新公告事实，不追溯改A。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S02通知第二项、S03公告。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R03",
+      "description": "A按已发8%/2%，B按已发12%/5%，不采用DRAFT或自动20%/6%，小型微型同等。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q2"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S03 A/B-FINAL；S01第9条。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R04",
+      "description": "G01大型经销商货物全部微型制造且用制造商商标，两包均享普通小微扣除；不强加双小条件。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S04 G01；S02问答一1。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R05",
+      "description": "G02小微经销商混有大型制造，两包不优惠；不按经销商规模或仅小微那部分做普通扣除。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "price_review.xlsx"
+      ],
+      "evidence": "S04 G02；S01第4条。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R06",
+      "description": "G03全部中型制造不享小微扣除，两包率0；不把中型等同小型微型。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "price_review.xlsx"
+      ],
+      "evidence": "S04 G03；S02问答一2/四1。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R07",
+      "description": "G04采用30.00%实际小微制造份额且无关系排除，对联合体总报价适用A2%/B5%；不只扣小微部分、不按普通小微率。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q3"
+      ],
+      "deliverables": [
+        "price_review.xlsx"
+      ],
+      "evidence": "S01第9条；S02问答四4/六4；S05 G04-CORR。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R08",
+      "description": "G05约定29.90%低于30%，两包不优惠；不进位或只拿经销份额冒制造份额。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "price_review.xlsx"
+      ],
+      "evidence": "S04 G05；S01第9条。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R09",
+      "description": "G06存在与大型直接控股的排除事实，两包不享扶持；声明齐全不覆盖关系排除。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S04 G06；S01第2条；S02问答一6。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R10",
+      "description": "G07未交声明函，两包不优惠；不虚拟补交、不额外强索其他中小身份材料。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q6"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S01第11条；S04 G07。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R11",
+      "description": "14份报价完整且原报价不改；原始B04份额29和采用30可区分，纠正可追到G04-CORR既有协议，不说允许标后改协议。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3",
+        "Q4"
+      ],
+      "deliverables": [
+        "price_review.xlsx"
+      ],
+      "evidence": "S04原表；S05纠正时间及原协议。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R12",
+      "description": "按原报价×(1−合法率)、人民币元保留2位计算全部14评审价；允许等价公式，金额误差≤0.01元。以正确金额行数分档。",
+      "weight": 10,
+      "type": "Gradient",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "price_review.xlsx"
+      ],
+      "evidence": "A依次2760000/2850000/2820000/2851800/2880000/2730000/3060000；B2640000/2850000/2820000/2764500/2880000/2730000/3060000。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。",
+      "levels": {
+        "0": "正确不足8行。",
+        "0.25": "正确8–10行。",
+        "0.5": "正确11–12行。",
+        "0.75": "正确13行。",
+        "1": "14行全部正确。"
+      }
+    },
+    {
+      "id": "R13",
+      "description": "两包分别按合法评审价升序、无漏项或跨包排名；不优惠报价仍参与。以每包7个报价排名完全正确为单位评价。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q4"
+      ],
+      "deliverables": [
+        "price_review.xlsx"
+      ],
+      "evidence": "A:06,01,03,02,04,05,07；B:01,06,04,03,02,05,07。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。",
+      "levels": {
+        "0": "两包皆未全对，且每包正确名次均少于4个。",
+        "0.25": "两包皆未全对，但至少一包有4–6个正确名次。",
+        "0.5": "恰一包全部正确，另一包少于4个正确名次。",
+        "0.75": "恰一包全部正确，另一包4–6个正确名次。",
+        "1": "两包全部正确。"
+      }
+    },
+    {
+      "id": "R14",
+      "description": "A首位A06、评审价/原报价2730000；B首位B01、评审价2640000且条件性候选原报价3000000；两交付保持一致，不按2640000付款。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4",
+        "Q5"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S03评审价不改变原报价；计算/候选表与备忘录。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R15",
+      "description": "不优惠不判无效投标，不凭价格序宣称正式中标、成交或批准；明确需项目负责人及后续有权流程，保留冻结其他资格通过前提。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q5"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S03身份与范围。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R16",
+      "description": "D0-1至D0-5逐项指出原错误、采用处理和可定位依据；不是只写已全部修正。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S05五项，工作簿纠错栏或备忘录可互相定位。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R17",
+      "description": "B04更正实际传播至5%优惠、评审价2764500/排名3和候选比较说明；不只在正文提30而保留旧计算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3",
+        "Q5"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S05 09:00；B04明细和memo。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R18",
+      "description": "19号货物服务新幅度不套工程；工程仍46号，且区别直接扣报价与特定综合评估分支价格分加分，不编本题未给工程算例。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q6"
+      ],
+      "deliverables": [
+        "review_memo.docx"
+      ],
+      "evidence": "S01第9条；S02通知第二项。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R19",
+      "description": "重要判断能定位S01条号/S02通知或问答/S03最终文件/S05补充；明确政策真实、业务与角色虚构，不冒充官方业务规则。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-采购价格复核",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q5",
+        "Q6"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "实际引用索引，允许等价格式。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R20",
+      "description": "Excel可打开，评审价/排名和候选金额有实际可复算公式且缓存可见无错误，金额单位清晰。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "交付可用性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4",
+        "Q6"
+      ],
+      "deliverables": [
+        "price_review.xlsx"
+      ],
+      "evidence": "实际Office公式与缓存、渲染。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R21",
+      "description": "备忘录面向负责人可读，建议/理由/待审动作可定位，不以大量套话替代判断；允许不同排版页数。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "交付可用性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5",
+        "Q6"
+      ],
+      "deliverables": [
+        "review_memo.docx"
+      ],
+      "evidence": "实际Word内容与渲染。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R22",
+      "description": "只交指定两份真实Office成果，不交加密、压缩或伪扩展名文件，不真实对外操作。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "目录与文件结构。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    },
+    {
+      "id": "R23",
+      "description": "扣分：虚构具体供应商已补交声明、财政/专家已认定或批准、合同已签署/已付款/通知已发等完成凭证。一般计算错误或遗漏待审提示本身不触发此负项。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与授权",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "price_review.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S03/S05明确冻结事实与非执行边界。",
+      "weight_reason": "直接改变适用规则、优惠/价格序和错误付款风险10；必要完整性/追溯7；形式3。一般口径错误不重复触发负分。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://gks.mof.gov.cn/guizhangzhidu/202012/P020201228514483258334.pdf",
+      "locator": "2/4/9/11/12/25条",
+      "fact": "制造/关系/声明/幅度与具体比例制定、2021起施"
+    },
+    {
+      "url": "https://app.www.gov.cn/govdata/gov/202206/01/485609/article.html",
+      "locator": "第二项及末尾",
+      "fact": "2022-07-01起新公告货物服务新幅度，工程仍旧规定"
+    },
+    {
+      "url": "https://m.mof.gov.cn/czxw/202102/t20210220_3659586.htm",
+      "locator": "一1/一2/一6、四1/四4、六4",
+      "fact": "不双小、混中型非小微、实际制造份额、联合/分包部分声明语义"
+    }
+  ],
+  "status": {
+    "task_id": "GO-TIME-003",
+    "domain": "通用办公",
+    "domain_l2": "T3-建模与决策支持",
+    "category": "weakness-driven",
+    "inputs": 5,
+    "gold_files": 2,
+    "rubrics": 23,
+    "complexity": "C2",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:5abc40ff9789ae9db8abd62f56584f8eb017674734137f6cb634e08dff8b34dd",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/GO-TIME-003/20261021T011610Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 23.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_财库2020_46号官方办法.pdf",
+      "absolute_path": "题包内：S01_财库2020_46号官方办法.pdf",
+      "url": "",
+      "bytes": 272829,
+      "sha256": "557ff997052072b56253268c867aad7386ef4d2fb78a4f3a8e61d7d8a69bef08",
+      "description": "真实官方11页完整办法；重点第2/4/9/11/12/25条。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://gks.mof.gov.cn/guizhangzhidu/202012/P020201228514483258334.pdf",
+        "https://app.www.gov.cn/govdata/gov/202206/01/485609/article.html",
+        "https://m.mof.gov.cn/czxw/202102/t20210220_3659586.htm"
+      ]
+    },
+    {
+      "name": "S02_新通知与官方问答摘录.docx",
+      "absolute_path": "题包内：S02_新通知与官方问答摘录.docx",
+      "url": "",
+      "bytes": 42640,
+      "sha256": "7afad578210a8f5c0581664d26a17dab6306a857a6684d386331395c36d8cf67",
+      "description": "真实2022通知及2021问答选段、来源与真实时间，不是2022历史网页快照。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://gks.mof.gov.cn/guizhangzhidu/202012/P020201228514483258334.pdf",
+        "https://app.www.gov.cn/govdata/gov/202206/01/485609/article.html",
+        "https://m.mof.gov.cn/czxw/202102/t20210220_3659586.htm"
+      ]
+    },
+    {
+      "name": "S03_采购复核委托与已发布文件.docx",
+      "absolute_path": "题包内：S03_采购复核委托与已发布文件.docx",
+      "url": "assets/tasks/GO-TIME-003/environment/input_files/S03_%E9%87%87%E8%B4%AD%E5%A4%8D%E6%A0%B8%E5%A7%94%E6%89%98%E4%B8%8E%E5%B7%B2%E5%8F%91%E5%B8%83%E6%96%87%E4%BB%B6.docx",
+      "bytes": 39252,
+      "sha256": "e78bf76dc04bac3de6c6549f6ce1bf7e5e2e2f7eb2336b12e2dec5f2ef820b27",
+      "description": "原创非预留货物包前提、两已发文件、范围/公式与交付约束。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创业务委托：两包价格复核，不替代评标委员会"
+        },
+        {
+          "kind": "heading",
+          "text": "身份与范围"
+        },
+        {
+          "kind": "paragraph",
+          "text": "全部采购包、企业代号、业务数据、内部文件与消息为原创虚构，非真实投标、真实政府采购决定或官方案例。历史基准2022-08-01 10:00，Asia/Shanghai。你是采购代理机构的价格复核助理，只为项目负责人制作内部复核材料。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "A、B是两个独立项目中依法完成预留安排后的非预留部分货物采购包。主管预算单位已完成统筹，预留合法性与项目预算不是本题审查对象。两包各预算320万元，接受联合体/分包但不强制；各7份报价，技术与其他资格审查均已通过。本题只复核价格优惠、评审价排序与候选建议，不能从不享受优惠推为无效投标。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "所有报价人民币含税元，未含需另加费用，无报价修正、同价或其他政策加分。依给定采购文件按扣除后价格从低到高形成价格序建议；这不是完整评标/中标结果，不真实签约或发通知。制造商/行业/划型事实已经合同式给定，不要求用营收人数另划型，不额外索要声明函之外的身份证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "已发布采购文件：A-FINAL与B-FINAL"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "包",
+              "首次公告",
+              "开标",
+              "有效文件",
+              "小微普通扣除",
+              "符合条件联合体/分包扣除"
+            ],
+            [
+              "A",
+              "2022-06-30 09:00",
+              "2022-07-25 09:00",
+              "A-FINAL，6月28日批准并随公告发布",
+              "8%",
+              "2%"
+            ],
+            [
+              "B",
+              "2022-07-01 09:00",
+              "2022-07-26 09:00",
+              "B-FINAL，6月30日批准并随公告发布",
+              "12%",
+              "5%"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "时间、公式和交付边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "两包首次公告后未中止、重新公告或变更采购方式；不是按照开标日期选择新旧幅度。B-DRAFT的8%/2%仅为6月15日未批准底稿，不是最终采购文件。小型与微型同等，不按企业名称、经销商规模或更晚消息给上限。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "评审价=原报价×(1−本次合法适用扣除率)，金额保留2位；未享受优惠率为0而非剔除该报价。价格扣除不改变报价，候选合同金额仍为原报价，任何付款条款或最终成交须另外完成有权流程。工作簿须保留原报价/原始字段/纠正后依据/优惠类型/率/评审价/排名，评审价和排名用可复算公式且具有可见缓存。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "最终只交price_review.xlsx（明细、两包建议/原报价、时间与依据索引、D0纠错）和review_memo.docx（负责人能据此复核的中文备忘录，理由、候选与金额、待有权复核事项）。不交脚本、网页或压缩包。可以采用等价工作表/版式。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "另说明政府采购工程仍按46号相关规定，不把货物服务10%–20%套到工程；不需要演算本题未给的工程投标或签署任何正式文书。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://gks.mof.gov.cn/guizhangzhidu/202012/P020201228514483258334.pdf",
+        "https://app.www.gov.cn/govdata/gov/202206/01/485609/article.html",
+        "https://m.mof.gov.cn/czxw/202102/t20210220_3659586.htm"
+      ]
+    },
+    {
+      "name": "S04_报价与制造事实台账.xlsx",
+      "absolute_path": "题包内：S04_报价与制造事实台账.xlsx",
+      "url": "assets/tasks/GO-TIME-003/environment/input_files/S04_%E6%8A%A5%E4%BB%B7%E4%B8%8E%E5%88%B6%E9%80%A0%E4%BA%8B%E5%AE%9E%E5%8F%B0%E8%B4%A6.xlsx",
+      "bytes": 7900,
+      "sha256": "696b596795ee6103592d620db55cc2f4563200e818402b6a55207a76637a99c3",
+      "description": "原创14份报价/制造事实/声明与关系，B04转录原值保留。",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "报价事实"
+        },
+        {
+          "kind": "notice",
+          "text": "共15行 × 11列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "包",
+              "报价ID",
+              "企业代号",
+              "原报价_元",
+              "参与形式",
+              "经销商或主企业规模",
+              "制造与商标事实",
+              "小微合同份额_百分数",
+              "与大企业关系",
+              "声明函状态",
+              "事实定位"
+            ],
+            [
+              "A",
+              "A01",
+              "青禾",
+              3000000,
+              "独立",
+              "大型",
+              "两个标的均微型制造商生产并使用各自注册商标",
+              0,
+              "无",
+              "齐全",
+              "G01；B04份额需核S05"
+            ],
+            [
+              "A",
+              "A02",
+              "禾桥",
+              2850000,
+              "独立",
+              "微型",
+              "标的1小型制造，标的2大型制造；均用制造商商标",
+              0,
+              "无",
+              "齐全",
+              "G02；B04份额需核S05"
+            ],
+            [
+              "A",
+              "A03",
+              "中岭",
+              2820000,
+              "独立",
+              "中型",
+              "两个标的均中型制造商生产并使用各自商标",
+              0,
+              "无",
+              "齐全",
+              "G03；B04份额需核S05"
+            ],
+            [
+              "A",
+              "A04",
+              "河杉联合体",
+              2910000,
+              "联合体",
+              "大型",
+              "大型方制造其部分，小微方制造其承担部分且使用自身商标",
+              30,
+              "无",
+              "齐全且明确小微承担内容",
+              "G04；B04份额需核S05"
+            ],
+            [
+              "A",
+              "A05",
+              "溪桥分包",
+              2880000,
+              "分包",
+              "大型",
+              "大企业制造主要部分，小微分包方制造其部分且用自身商标",
+              29.9,
+              "无",
+              "齐全且明确分包内容",
+              "G05；B04份额需核S05"
+            ],
+            [
+              "A",
+              "A06",
+              "岭源",
+              2730000,
+              "独立",
+              "小型",
+              "两个标的均本企业生产并使用自身商标",
+              0,
+              "制造商由大型企业直接控股",
+              "齐全",
+              "G06；B04份额需核S05"
+            ],
+            [
+              "A",
+              "A07",
+              "槐川",
+              3060000,
+              "独立",
+              "小型",
+              "两个标的均小型制造商生产并使用各自商标",
+              0,
+              "无",
+              "未提交",
+              "G07；B04份额需核S05"
+            ],
+            [
+              "B",
+              "B01",
+              "青禾",
+              3000000,
+              "独立",
+              "大型",
+              "两个标的均微型制造商生产并使用各自注册商标",
+              0,
+              "无",
+              "齐全",
+              "G01；B04份额需核S05"
+            ],
+            [
+              "B",
+              "B02",
+              "禾桥",
+              2850000,
+              "独立",
+              "微型",
+              "标的1小型制造，标的2大型制造；均用制造商商标",
+              0,
+              "无",
+              "齐全",
+              "G02；B04份额需核S05"
+            ],
+            [
+              "B",
+              "B03",
+              "中岭",
+              2820000,
+              "独立",
+              "中型",
+              "两个标的均中型制造商生产并使用各自商标",
+              0,
+              "无",
+              "齐全",
+              "G03；B04份额需核S05"
+            ],
+            [
+              "B",
+              "B04",
+              "河杉联合体",
+              2910000,
+              "联合体",
+              "大型",
+              "大型方制造其部分，小微方制造其承担部分且使用自身商标",
+              29,
+              "无",
+              "齐全且明确小微承担内容",
+              "G04；B04份额需核S05"
+            ],
+            [
+              "B",
+              "B05",
+              "溪桥分包",
+              2880000,
+              "分包",
+              "大型",
+              "大企业制造主要部分，小微分包方制造其部分且用自身商标",
+              29.9,
+              "无",
+              "齐全且明确分包内容",
+              "G05；B04份额需核S05"
+            ],
+            [
+              "B",
+              "B06",
+              "岭源",
+              2730000,
+              "独立",
+              "小型",
+              "两个标的均本企业生产并使用自身商标",
+              0,
+              "制造商由大型企业直接控股",
+              "齐全",
+              "G06；B04份额需核S05"
+            ],
+            [
+              "B",
+              "B07",
+              "槐川",
+              3060000,
+              "独立",
+              "小型",
+              "两个标的均小型制造商生产并使用各自商标",
+              0,
+              "无",
+              "未提交",
+              "G07；B04份额需核S05"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "表格说明"
+        },
+        {
+          "kind": "notice",
+          "text": "共6行 × 2列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "项目",
+              "说明"
+            ],
+            [
+              "原创事实",
+              "固定7类报价×2包；不是现实企业/投标。所有关系、划型已给，不要求外部调查。"
+            ],
+            [
+              "G04份额定义",
+              "所写合同份额是小微企业实际制造货物的部分；不是经销商拿货比例。"
+            ],
+            [
+              "G05份额定义",
+              "29.9%是签署分包意向协议约定的小微制造部分，占合同总金额比例。"
+            ],
+            [
+              "声明函",
+              "齐全者事实、划型与内容明确；未提交者当前不得优惠，不假造补交或排除报价。"
+            ],
+            [
+              "B04转录",
+              "保留当前原始29，不私改源文件；后续负责人补充见S05。"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://gks.mof.gov.cn/guizhangzhidu/202012/P020201228514483258334.pdf",
+        "https://app.www.gov.cn/govdata/gov/202206/01/485609/article.html",
+        "https://m.mof.gov.cn/czxw/202102/t20210220_3659586.htm"
+      ]
+    },
+    {
+      "name": "S05_D0与有权事实补充.docx",
+      "absolute_path": "题包内：S05_D0与有权事实补充.docx",
+      "url": "assets/tasks/GO-TIME-003/environment/input_files/S05_D0%E4%B8%8E%E6%9C%89%E6%9D%83%E4%BA%8B%E5%AE%9E%E8%A1%A5%E5%85%85.docx",
+      "bytes": 38527,
+      "sha256": "35ac49d4787b98530b087a4ed338ac1bcb2a430ea36a47279fcea7e512984cf1",
+      "description": "原创D0、负责人纠正既有协议转录及较晚无权建议。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创内部记录：事实纠正不等于标后改变协议"
+        },
+        {
+          "kind": "heading",
+          "text": "D0，7月27日08:30，未审复核底稿"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-1 两包均7月开标，统一小微20%、联合体6%。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-2 青禾是大型经销商，不优惠；禾桥是微型经销商全部优惠；中岭是中型，按小微同等待遇。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-3 B04台账29%，不能优惠；溪桥29.9%四舍五入为30%。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-4 岭源直接控股关系无须关注，声明函齐全就优惠；槐川虽未交声明函也先优惠。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-5 扣除后最低价格就是正式成交价，可直接发中标通知。"
+        },
+        {
+          "kind": "heading",
+          "text": "7月27日09:00，项目负责人，有权核实事实"
+        },
+        {
+          "kind": "paragraph",
+          "text": "B04台账存在转录错误：调阅开标前2022-07-25已签署的联合协议原件，第一条明确小微制造部分合同份额为30.00%，其他事实、报价不变。A04原台账30.00%正确。此为既有协议信息更正，并非允许投标截止后调整份额或补签。记录编号G04-CORR。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "采用S03已发布A-FINAL/B-FINAL，保留S04原台账数字，在工作簿另列采用份额与更正依据；对B04的优惠、金额、排名、候选比较和备忘录均同步。已给声明状态是冻结事实，不借此虚写供应商补交、财政认定或专家批准。"
+        },
+        {
+          "kind": "heading",
+          "text": "7月27日09:30，商务联络员，无权修改采购文件"
+        },
+        {
+          "kind": "paragraph",
+          "text": "联络员建议：8月才复核，全给20%吧；B04别改旧表，按29%；直接按扣除价付款。该角色无权修改已发文件、制造商事实或采购决定；建议未获项目负责人批准。"
+        },
+        {
+          "kind": "heading",
+          "text": "需要你完成的纠错"
+        },
+        {
+          "kind": "paragraph",
+          "text": "逐一处置D0-1至D0-5并指向S01/S02/S03/本补充。按给定材料给出两包7名报价的价格序与条件性候选建议；候选金额用原报价，写清仍待项目负责人和后续有权评审流程，不伪称已批准。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://gks.mof.gov.cn/guizhangzhidu/202012/P020201228514483258334.pdf",
+        "https://app.www.gov.cn/govdata/gov/202206/01/485609/article.html",
+        "https://m.mof.gov.cn/czxw/202102/t20210220_3659586.htm"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "price_review.xlsx",
+      "absolute_path": "题包内：price_review.xlsx",
+      "url": "assets/tasks/GO-TIME-003/solution/golden_output/price_review.xlsx",
+      "bytes": 16872,
+      "sha256": "71facd2f3705f0106934ae05d0a1f282c053648aff08921535c47301726e5e26",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "价格计算"
+        },
+        {
+          "kind": "notice",
+          "text": "共15行 × 11列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "包",
+              "报价ID",
+              "原报价_元",
+              "台账份额_%",
+              "采用份额_%",
+              "优惠类型",
+              "扣除率",
+              "评审价_元",
+              "价格序",
+              "候选原报价_元",
+              "依据"
+            ],
+            [
+              "A",
+              "A01",
+              3000000,
+              0,
+              0,
+              "普通小微",
+              0.08,
+              "=ROUND(C2*(1-G2),2)\n缓存：2760000",
+              "=COUNTIFS($A$2:$A$15,A2,$H$2:$H$15,\"<\"&H2)+1\n缓存：2",
+              "=IF(I2=1,C2,\"\")\n缓存：None",
+              "S01第4/9/11条；S02问答一1"
+            ],
+            [
+              "A",
+              "A02",
+              2850000,
+              0,
+              0,
+              "不优惠",
+              0,
+              "=ROUND(C3*(1-G3),2)\n缓存：2850000",
+              "=COUNTIFS($A$2:$A$15,A3,$H$2:$H$15,\"<\"&H3)+1\n缓存：4",
+              "=IF(I3=1,C3,\"\")\n缓存：None",
+              "S01第4条"
+            ],
+            [
+              "A",
+              "A03",
+              2820000,
+              0,
+              0,
+              "不优惠",
+              0,
+              "=ROUND(C4*(1-G4),2)\n缓存：2820000",
+              "=COUNTIFS($A$2:$A$15,A4,$H$2:$H$15,\"<\"&H4)+1\n缓存：3",
+              "=IF(I4=1,C4,\"\")\n缓存：None",
+              "S01第9条；S02问答一2/四1"
+            ],
+            [
+              "A",
+              "A04",
+              2910000,
+              30,
+              30,
+              "联合体",
+              0.02,
+              "=ROUND(C5*(1-G5),2)\n缓存：2851800",
+              "=COUNTIFS($A$2:$A$15,A5,$H$2:$H$15,\"<\"&H5)+1\n缓存：5",
+              "=IF(I5=1,C5,\"\")\n缓存：None",
+              "S01第9条；S02问答四4/六4；S05 G04-CORR"
+            ],
+            [
+              "A",
+              "A05",
+              2880000,
+              29.9,
+              29.9,
+              "不优惠",
+              0,
+              "=ROUND(C6*(1-G6),2)\n缓存：2880000",
+              "=COUNTIFS($A$2:$A$15,A6,$H$2:$H$15,\"<\"&H6)+1\n缓存：6",
+              "=IF(I6=1,C6,\"\")\n缓存：None",
+              "S01第9条"
+            ],
+            [
+              "A",
+              "A06",
+              2730000,
+              0,
+              0,
+              "不优惠",
+              0,
+              "=ROUND(C7*(1-G7),2)\n缓存：2730000",
+              "=COUNTIFS($A$2:$A$15,A7,$H$2:$H$15,\"<\"&H7)+1\n缓存：1",
+              "=IF(I7=1,C7,\"\")\n缓存：2730000",
+              "S01第2/9条；S02问答一6"
+            ],
+            [
+              "A",
+              "A07",
+              3060000,
+              0,
+              0,
+              "不优惠",
+              0,
+              "=ROUND(C8*(1-G8),2)\n缓存：3060000",
+              "=COUNTIFS($A$2:$A$15,A8,$H$2:$H$15,\"<\"&H8)+1\n缓存：7",
+              "=IF(I8=1,C8,\"\")\n缓存：None",
+              "S01第11条；S03冻结资格边界"
+            ],
+            [
+              "B",
+              "B01",
+              3000000,
+              0,
+              0,
+              "普通小微",
+              0.12,
+              "=ROUND(C9*(1-G9),2)\n缓存：2640000",
+              "=COUNTIFS($A$2:$A$15,A9,$H$2:$H$15,\"<\"&H9)+1\n缓存：1",
+              "=IF(I9=1,C9,\"\")\n缓存：3000000",
+              "S01第4/9/11条；S02问答一1"
+            ],
+            [
+              "B",
+              "B02",
+              2850000,
+              0,
+              0,
+              "不优惠",
+              0,
+              "=ROUND(C10*(1-G10),2)\n缓存：2850000",
+              "=COUNTIFS($A$2:$A$15,A10,$H$2:$H$15,\"<\"&H10)+1\n缓存：5",
+              "=IF(I10=1,C10,\"\")\n缓存：None",
+              "S01第4条"
+            ],
+            [
+              "B",
+              "B03",
+              2820000,
+              0,
+              0,
+              "不优惠",
+              0,
+              "=ROUND(C11*(1-G11),2)\n缓存：2820000",
+              "=COUNTIFS($A$2:$A$15,A11,$H$2:$H$15,\"<\"&H11)+1\n缓存：4",
+              "=IF(I11=1,C11,\"\")\n缓存：None",
+              "S01第9条；S02问答一2/四1"
+            ],
+            [
+              "B",
+              "B04",
+              2910000,
+              29,
+              30,
+              "联合体",
+              0.05,
+              "=ROUND(C12*(1-G12),2)\n缓存：2764500",
+              "=COUNTIFS($A$2:$A$15,A12,$H$2:$H$15,\"<\"&H12)+1\n缓存：3",
+              "=IF(I12=1,C12,\"\")\n缓存：None",
+              "S01第9条；S02问答四4/六4；S05 G04-CORR"
+            ],
+            [
+              "B",
+              "B05",
+              2880000,
+              29.9,
+              29.9,
+              "不优惠",
+              0,
+              "=ROUND(C13*(1-G13),2)\n缓存：2880000",
+              "=COUNTIFS($A$2:$A$15,A13,$H$2:$H$15,\"<\"&H13)+1\n缓存：6",
+              "=IF(I13=1,C13,\"\")\n缓存：None",
+              "S01第9条"
+            ],
+            [
+              "B",
+              "B06",
+              2730000,
+              0,
+              0,
+              "不优惠",
+              0,
+              "=ROUND(C14*(1-G14),2)\n缓存：2730000",
+              "=COUNTIFS($A$2:$A$15,A14,$H$2:$H$15,\"<\"&H14)+1\n缓存：2",
+              "=IF(I14=1,C14,\"\")\n缓存：None",
+              "S01第2/9条；S02问答一6"
+            ],
+            [
+              "B",
+              "B07",
+              3060000,
+              0,
+              0,
+              "不优惠",
+              0,
+              "=ROUND(C15*(1-G15),2)\n缓存：3060000",
+              "=COUNTIFS($A$2:$A$15,A15,$H$2:$H$15,\"<\"&H15)+1\n缓存：7",
+              "=IF(I15=1,C15,\"\")\n缓存：None",
+              "S01第11条；S03冻结资格边界"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "事实判断"
+        },
+        {
+          "kind": "notice",
+          "text": "共15行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "报价ID",
+              "经销商/主企业",
+              "制造与声明事实摘要",
+              "关系/份额判断",
+              "本次结论",
+              "依据"
+            ],
+            [
+              "A01",
+              "大型",
+              "每个标的均微型制造；大型经销商不影响此条件",
+              "不要求双小",
+              "普通小微",
+              "S01第4/9/11条；S02问答一1"
+            ],
+            [
+              "A02",
+              "微型",
+              "货物混合小型与大型制造",
+              "非全部中小制造，不优惠",
+              "0%只是无优惠，不剔除报价",
+              "S01第4条"
+            ],
+            [
+              "A03",
+              "中型",
+              "全部中型制造，不是全部小微",
+              "中型不能按小微优惠",
+              "0%只是无优惠，不剔除报价",
+              "S01第9条；S02问答一2/四1"
+            ],
+            [
+              "A04",
+              "大型",
+              "小微承担货物全部由其制造且用其商标；声明函齐全",
+              "30.00%达到门槛且无关系排除",
+              "联合体",
+              "S01第9条；S02问答四4/六4；S05 G04-CORR"
+            ],
+            [
+              "A05",
+              "大型",
+              "29.90%小微制造分包份额",
+              "小于30%，不能四舍五入",
+              "0%只是无优惠，不剔除报价",
+              "S01第9条"
+            ],
+            [
+              "A06",
+              "小型",
+              "自身小型制造、声明齐全，但被大型直接控股",
+              "第2条排除，不凭声明函自动优惠",
+              "0%只是无优惠，不剔除报价",
+              "S01第2/9条；S02问答一6"
+            ],
+            [
+              "A07",
+              "小型",
+              "全部小型制造但未交声明函",
+              "不享优惠；非自动无效投标",
+              "0%只是无优惠，不剔除报价",
+              "S01第11条；S03冻结资格边界"
+            ],
+            [
+              "B01",
+              "大型",
+              "每个标的均微型制造；大型经销商不影响此条件",
+              "不要求双小",
+              "普通小微",
+              "S01第4/9/11条；S02问答一1"
+            ],
+            [
+              "B02",
+              "微型",
+              "货物混合小型与大型制造",
+              "非全部中小制造，不优惠",
+              "0%只是无优惠，不剔除报价",
+              "S01第4条"
+            ],
+            [
+              "B03",
+              "中型",
+              "全部中型制造，不是全部小微",
+              "中型不能按小微优惠",
+              "0%只是无优惠，不剔除报价",
+              "S01第9条；S02问答一2/四1"
+            ],
+            [
+              "B04",
+              "大型",
+              "小微承担货物全部由其制造且用其商标；声明函齐全",
+              "30.00%达到门槛且无关系排除",
+              "联合体",
+              "S01第9条；S02问答四4/六4；S05 G04-CORR"
+            ],
+            [
+              "B05",
+              "大型",
+              "29.90%小微制造分包份额",
+              "小于30%，不能四舍五入",
+              "0%只是无优惠，不剔除报价",
+              "S01第9条"
+            ],
+            [
+              "B06",
+              "小型",
+              "自身小型制造、声明齐全，但被大型直接控股",
+              "第2条排除，不凭声明函自动优惠",
+              "0%只是无优惠，不剔除报价",
+              "S01第2/9条；S02问答一6"
+            ],
+            [
+              "B07",
+              "小型",
+              "全部小型制造但未交声明函",
+              "不享优惠；非自动无效投标",
+              "0%只是无优惠，不剔除报价",
+              "S01第11条；S03冻结资格边界"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "候选建议"
+        },
+        {
+          "kind": "notice",
+          "text": "共3行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "包",
+              "价格序首位",
+              "条件性候选原报价_元",
+              "首位评审价_元",
+              "状态"
+            ],
+            [
+              "A",
+              "A06",
+              "=价格计算!C7\n缓存：2730000",
+              "=价格计算!H7\n缓存：2730000",
+              "待有权评审；非成交/付款通知"
+            ],
+            [
+              "B",
+              "B01",
+              "=价格计算!C9\n缓存：3000000",
+              "=价格计算!H9\n缓存：2640000",
+              "待有权评审；非成交/付款通知"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "版本与纠错"
+        },
+        {
+          "kind": "notice",
+          "text": "共11行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "项目",
+              "原记录/时间",
+              "采用口径",
+              "依据"
+            ],
+            [
+              "真实政策时间",
+              "46号落款2020-12-18、CCGP页2021-01-06；19号落款2022-05-30、页2022-06-01",
+              "46号2021-01-01起施；19号2022-07-01起执行；研究抓取2026并非当时快照",
+              "S01第25条；S02元数据；官方URL"
+            ],
+            [
+              "D0-1：两包7月开标",
+              "A公告6/30，B公告7/1",
+              "按首次公告，不按开标/复核；A8%/2%，B12%/5%，非上限20%/6%",
+              "S02通知第二项；S03已发布文件"
+            ],
+            [
+              "D0-2：只看经销商",
+              "大型青禾/微型禾桥/中型中岭",
+              "青禾全部微型制造可普通优惠；禾桥混大型不优惠；中岭中型非小微",
+              "S01第4/9条；S02问答一1/一2/四1"
+            ],
+            [
+              "D0-3：份额和转录",
+              "B04台账29；G04-CORR既有签署协议30.00%；G05为29.90",
+              "B04原值保留，采用30有补充；A04不变；G05不进位到30",
+              "S01第9条；S05 09:00"
+            ],
+            [
+              "D0-4：声明函万能",
+              "G06大企业直接控股；G07声明未提交",
+              "G06关系排除、G07无声明不优惠；两者不因此自动判无效",
+              "S01第2/11条；S03"
+            ],
+            [
+              "D0-5：评审价付款",
+              "B首位2640000是评审价",
+              "B建议原报价3000000；A首位原报价2730000；都未签约/审批",
+              "S01第9条“用扣除后的价格参加评审”；S03范围"
+            ],
+            [
+              "无权晚消息",
+              "7月27日09:30商务建议统一20%、B04仍29、扣除价付款",
+              "拒绝，不覆盖09:00既有事实纠正和已发文件",
+              "S05角色权限；S03"
+            ],
+            [
+              "工程边界",
+              "19号仅调整货物服务的优惠幅度",
+              "政府采购工程仍依46号：普通3%–5%、组合1%–2%；特定综合评估法是价格分加分而非直接套货物扣除",
+              "S01第9条；S02通知第二项"
+            ],
+            [
+              "离线核源",
+              "S01官方完整PDF、S02官方通知/问答摘录",
+              "所有业务实体与事实为原创虚构，不是真实供应商或官方决定",
+              "原文URL及冻结清单；政策≠业务授权"
+            ],
+            [
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "review_memo.docx",
+      "absolute_path": "题包内：review_memo.docx",
+      "url": "assets/tasks/GO-TIME-003/solution/golden_output/review_memo.docx",
+      "bytes": 39500,
+      "sha256": "a4d806a061acf6a9361db6ded7af38e7e2eb6f16aac17c7cbd6ac6d5e4d77a0a",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "两货物包价格复核备忘录｜2022-08-01 10:00 上海"
+        },
+        {
+          "kind": "heading",
+          "text": "给项目负责人的建议：仅供内部复核"
+        },
+        {
+          "kind": "paragraph",
+          "text": "A价格序首位A06（岭源），评审价与原报价均2,730,000.00元；B价格序首位B01（青禾），评审价2,640,000.00元、条件性候选原报价3,000,000.00元。不能把B评审价当成交/合同付款额。两包都仅给出价格序建议，未作正式评审、中标、签约、支付或通知。所有业务资料为原创虚构案例，不是已获政府或专家确认的采购决定。"
+        },
+        {
+          "kind": "heading",
+          "text": "先选时点与已发文件，不看最后消息"
+        },
+        {
+          "kind": "paragraph",
+          "text": "46号2020-12-18落款、官方转发页2021-01-06、2021-01-01起施；19号2022-05-30落款、页面2022-06-01、2022-07-01起执行。源字节2026实际抓取，非当年存档。S02第二项以起执行日起首次公告/邀请为切点，A6月30日公告仍用A-FINAL 8%/2%；B7月1日公告用B-FINAL 12%/5%。开标在7月、8月复核都不能使A追溯改新。B-DRAFT和商务09:30意见均不替代已发布文件。10%–20%/4%–6%是新范围，不自动20%/6%，小型微型同等。"
+        },
+        {
+          "kind": "heading",
+          "text": "制造、声明及份额，而非仅看经销商"
+        },
+        {
+          "kind": "paragraph",
+          "text": "G01大型青禾的每个标的均由微型企业制造且使用制造商商标：满足声明事实可普通小微优惠，不要求经销商也小微。G02小微禾桥混大型制造不享扶持；G03全中型不享小微扣除。G06自身小型制造但与大型直接控股关系排除；G07未交声明不优惠。未享优惠不等于无效投标，本题其他资格已通过。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "G04联合体的小微制造份额30.00%达到第9条门槛且不存在控股/管理关系，A按2%、B按5%；不是对其小微部分单独扣除而是对该报价扣除。G05 29.90%不达到30%，不四舍五入。B04台账29保留于D列，E列按S05 G04-CORR采用30：既有7月25日签署协议的转录纠正，不是标后修改投标。B04评审价2,764,500.00元、价格序3，已同步明细与候选比较，仍不是首位。"
+        },
+        {
+          "kind": "heading",
+          "text": "D0闭环、来源和后续"
+        },
+        {
+          "kind": "paragraph",
+          "text": "工作簿“版本与纠错”逐项关闭D0-1时点/上限、D0-2只看经销商、D0-3份额误记/进位、D0-4声明万能、D0-5扣除价付款。两包各7份原报价完整保留，按同包评审价升序；价格计算/排名/候选原报价为真实公式且已重算缓存。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "依据：S01第2、4、9、11、12、25条；S02新通知第二项及2021问答一1/一2/一6、四1/四4、六4；S03已发布文件与冻结资格边界；S05负责人补充。S01 URL：https://gks.mof.gov.cn/guizhangzhidu/202012/P020201228514483258334.pdf；S02通知：https://app.www.gov.cn/govdata/gov/202206/01/485609/article.html；问答：https://m.mof.gov.cn/czxw/202102/t20210220_3659586.htm。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "19号没有将政府采购工程改为10%–20%：仍依46号，普通工程3%–5%、符合条件组合1%–2%；其适用招标投标法且综合评估但未用低价优先法计算价格分的分支是原报价价格分上的政策加分，不能一概当直接报价扣除。本题不演算工程、预留方案或其他缺失事项。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "下一步由项目负责人核对原协议/声明函及已发文件、确认事实纠正和价格序，再送有权评审与后续批准流程；不得额外强索声明函以外的中小企业身份证明，不虚构已补函、财政认定、专家批准、合同或付款。正式业务用途须由采购/法律专业人员复核；本作者成果没有外部专家签字。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": [
+    {
+      "name": "price_review.pdf",
+      "url": "assets/audit/render/GO-TIME-003/20261021T010901Z/price_review.pdf"
+    },
+    {
+      "name": "review_memo.pdf",
+      "url": "assets/audit/render/GO-TIME-003/20261021T010901Z/review_memo.pdf"
+    }
+  ]
+}

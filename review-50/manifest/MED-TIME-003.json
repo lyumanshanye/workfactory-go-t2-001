@@ -1,0 +1,1562 @@
+{
+  "id": "MED-TIME-003",
+  "title": "伦理培训并行规则更新：受控事实与多产物依赖工作流",
+  "domain": "医疗",
+  "domain_l2": "Med3-教学与人才培养",
+  "domain_l3": "医学研究伦理培训与依赖交付",
+  "category": "dependency-aware-workflow",
+  "complexity": "C3",
+  "target_difficulty": "A2",
+  "as_of": "2023-03-01 10:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "真实官方公报节选/官方索引转录，业务/案例/消息/内部依赖合同原创，不造医学数据或机构批准。",
+  "instruction": "# 伦理培训并行规则更新：受控事实与多产物依赖工作流\n\n## 业务场景与任务说明\n\n你是医学科研伦理培训设计师兼资料统筹。旧稿把2023当全面废旧，并混淆简易/免审/同意与牵头/本点；R2又确认J新增商业利益，较晚无权便笺催忽略。请依真实冻结依据处理12教学情境，实际执行有前置门禁的工作流，同步底稿、课件和讲师说明并交可复核待审回执；不签伦理批准或真实上传。\n\n业务判断基准时点：2023-03-01 10:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_2016公报节选.pdf`：2016十一号令公报真实印刷1–7页节选，非完整71页原刊。\n- `/app/input_files/S02_2023公报节选.pdf`：2023四部门办法公报印刷24–31页节选，保留版面，非整36页原刊。\n- `/app/input_files/S03_官方解读第七问.docx`：官方解读第七问实际搜索索引转录，直连412披露，非律师口径。\n- `/app/input_files/S04_教学案例R1.json`：原创12情境R1事实，不含真实人员/医疗记录。\n- `/app/input_files/S05_权限与消息.docx`：原创培训负责人/营销/秘书权限及消息时序。\n- `/app/input_files/S06_R2补充.json`：原创有权R2只改J商业利益，非监管修法。\n- `/app/input_files/S07_D0培训稿.docx`：原创错误D0，不能照抄为规则。\n- `/app/input_files/S08_工作流合同.json`：原创十节点生产依赖/核定合同，不是法定审查SOP。\n- `/app/input_files/S09_培训委托.docx`：原创培训目标、格式与范围。\n- `/app/input_files/S10_来源登记.json`：真实来源/节选映射、取证和时点边界。\n\n## 工作要求\n\n- [Q1] 建立并行规则/主体/程序对照，准确引用S01–03，不把2023当全面废止2016。\n- [Q2] 区分法规发布/落款/抓取、内部补充/权限，以R2更新事实，未知法律起点不伪算截止日。\n- [Q3] 完整覆盖12案例的事实、路线/缺证/理由、条款与下一责任接口，不越权批准或开研。\n- [Q4] 正确讲解免审前提、匿名化与去标识化、商业利益、免审与免签同意，不能只查关键词。\n- [Q5] 正确处理简易至少两委员/分歧转会议、本点审查/跟踪、委托等级/能力与参与者同意。\n- [Q6] 工作簿规则/案例/D0更正与可重算统计可用，参考理由与课件/讲师说明同步。\n- [Q7] 制作10页真实可编辑教学PPT和中文讲师说明，给受众/案例追问、结论边界和下一负责人。\n- [Q8] 实现S08真实依赖工作流，前置未完成不提前执行，保留当前版本完成状态与哈希。\n- [Q9] 实际构建/验证，修改输入/节点/产物后拒旧证据，新事实可重建并同步全部Office产物。\n- [Q10] 五指定文件齐备只到内部待审，不修改输入或真实外联，不伪造审批/上传/专家认证。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/training_matrix.xlsx`：规则/12案例/旧稿更正与可复算统计底稿。\n- `/app/output/trainer_brief.pptx`：10页原生可编辑讲师课件。\n- `/app/output/facilitator_notes.docx`：中文讲师说明/复现/责任与范围。\n- `/app/output/workflow.py`：真实分支合并依赖工作流，build/stage/verify。\n- `/app/output/build_receipt.json`：当前节点/输入/产物哈希与内部待审回执。\n\n## 硬约束（单独列明）\n\n- 只交五指定文件，不改10只读输入、无压缩加密或真实外联。\n- 2016/2023并行不按新文自动废旧；S03是索引转录不是原HTML，节选PDF不是整刊原件。\n- 不得凭空编最低风险/匿名化、法定精确截止日、机构批准、已上传或专家签字。\n- S08为原创生产依赖和内部培训核定，不可冒称法定审查流程或秘书审批权。\n- 新补充须使旧状态/回执失效并重建全部Office；真实运行时间不得倒填业务日期。\n",
+  "instruction_url": "assets/tasks/MED-TIME-003/instruction.md",
+  "absolute_path": "tasks/MED-TIME-003",
+  "spec_path": "manifest/MED-TIME-003.json",
+  "spec_url": "manifest/MED-TIME-003.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "明确2016与2023并行：2023指导实践，医疗机构违规可依11号令处理，不宣称新文全面废旧。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S03第七问；S01法律责任。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R02",
+      "description": "2023主体含高校/科研院所等，不把高校或学生研究自动排除；规则对照包含范围。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第2/3条；T2。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R03",
+      "description": "只把2月18日视为通知落款、2月27日为官方解读日期，2016公布/12月1日起施、抓取日分开；未伪算本题不要求的过渡截止日。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S01签发/第50条，S02第54条，S03/10说明。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R04",
+      "description": "J最终按有权R2商业利益true排除本题32条免审路径，三Office一致；晚到无权便笺不能覆盖。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q4",
+        "Q6"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S04 J + S05/06，案例J专属段落/行。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R05",
+      "description": "A风险资料不足只补证/交委员会定程序，不由“无干预”自行确定最小风险/简易/开研。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S04 A；S02第18/19/31条。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R06",
+      "description": "B在给定合法公开/无伤害/无敏感或商业利益前提下可提出免审候选，但不是秘书已批准；不将机构内部核定说成法条授权。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3",
+        "Q4"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第32条、S08内部责任。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R07",
+      "description": "C保留可回识别映射钥匙不当已匿名，补信息可识别性/来源用途核查，不直接免审。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S04 C明确保留钥匙；S02第32条匿名化前提。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R08",
+      "description": "区分免除伦理审查与免除签署知情同意，不能把32条候选直接视作已免知情同意；旧39条不扩成高校普适免签授权。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第32/33条；S01第39条及医疗机构适用范围。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R09",
+      "description": "D给定小改且不影响风险受益可作简易候选；2023口径主任指定至少两委员、意见报会议，不沿旧稿一人签。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第23/31条；D。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R10",
+      "description": "E简易委员意见不一致须转会议审查，不用主任签/多数表决维持简易强过。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第31条第三款；E。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R11",
+      "description": "F保留本参与机构组织审查及跟踪责任，同时允许依法简易确认牵头意见，不写一律免本点/一律不得简易。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第27/31(四)条；F。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R12",
+      "description": "G独立企业可书面委托有能力机构或区域委员会且需跟踪，不凭空要求企业适用医院等级。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第14条；G。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R13",
+      "description": "H医院拟受托等级低于委托方应纠正，改选不低等级有能力医疗委员会或区域委员会，并保留书面委托/跟踪/自身设委责任。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第5/14条；H。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R14",
+      "description": "I不只收监护签字，在参与者可理解范围还须告知并征得同意，不能宣布给定个案可入组。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第34条；I。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R15",
+      "description": "K/L分别既设过渡6个月/新设3个月，已获批研究9个月另列，年度3月31日不混成同一起点。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第13/54条；K/L与规则T9。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R16",
+      "description": "一般受理后30天出审查意见不写30工作日；疫情突发一般72小时不降低质量，实施前上传且随进展更新。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "S02第16/24条。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R17",
+      "description": "12案例均有对应事实/路线、依据、具体下一动作及责任接口，不能用泛泛“依法办理”替代完整底稿。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3",
+        "Q6"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx"
+      ],
+      "evidence": "S04 A–L；实际12行和列，允许等价表结构。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R18",
+      "description": "工作簿D0更正覆盖并行、简易、免审、牵头、本人与监护同意、备案起点等核心错误，并与当前案例一致。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx"
+      ],
+      "evidence": "S07七条旧稿；对应更正表，不依固定措辞。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R19",
+      "description": "队列统计实际公式可复算且有缓存，当前12案例/1免审候选/1简易候选/0允许开研，与明细勾稽。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx"
+      ],
+      "evidence": "当前R2明细及统计。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R20",
+      "description": "10页PPT原生可编辑，六页各两案例且含当前事实、处理与出处；版式清晰无重要裁切，非截图伪装。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "trainer_brief.pptx"
+      ],
+      "evidence": "S09课件结构；Office解析与实际渲染。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R21",
+      "description": "讲师说明给出案例追问/参考理由和未验边界，角色下一动作、复现命令与更新责任可执行。",
+      "weight": 7,
+      "type": "Gradient",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "facilitator_notes.docx"
+      ],
+      "evidence": "四证据槽：追问理由、责任动作、复现命令、未验范围。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。",
+      "levels": {
+        "0": "0槽具体可用。",
+        "0.25": "1槽具体可用。",
+        "0.5": "2槽具体可用。",
+        "0.75": "3槽具体可用。",
+        "1": "4槽均具体可用且与当前案例/代码一致。"
+      }
+    },
+    {
+      "id": "R22",
+      "description": "工作流显式实现S0→S1/S2→S3、S1→S4、S3/S4→三Office→S8→S9，缺前置拒执行，不只是画图或在回执填完成。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q8"
+      ],
+      "deliverables": [
+        "workflow.py",
+        "build_receipt.json"
+      ],
+      "evidence": "S08完整依赖图，实际stage命令与节点文件哈希。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R23",
+      "description": "保留当前输入/脚本/中间/产物哈希和真实执行时间，回执对应实际十节点，不把2023业务日冒充运行日或把SHA当机构签章。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q8",
+        "Q9"
+      ],
+      "deliverables": [
+        "workflow.py",
+        "build_receipt.json"
+      ],
+      "evidence": "S08/S09与实际文件/状态。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R24",
+      "description": "输入/节点/Office被改后verify拒绝旧结果；有权改事实能在新工作目录重建并同步三Office，不只更新回执标签。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q9"
+      ],
+      "deliverables": [
+        "workflow.py",
+        "build_receipt.json",
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "修改S06有权补充并真正重跑，或实际坏节点/交付反测。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R25",
+      "description": "依赖交接清晰度按四证据槽评定：源冻结边界、分支输入、合并及同步点、失败/变更恢复；允许不同正确实现，不要求复制作者函数名。",
+      "weight": 3,
+      "type": "Gradient",
+      "requirement_refs": [
+        "Q8",
+        "Q9"
+      ],
+      "deliverables": [
+        "workflow.py",
+        "facilitator_notes.docx"
+      ],
+      "evidence": "四槽各需具体文件/节点/命令或动作。",
+      "dimension": "内容质量",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。",
+      "levels": {
+        "0": "0槽有具体对应。",
+        "0.25": "1槽有具体对应。",
+        "0.5": "2槽有具体对应。",
+        "0.75": "3槽有具体对应。",
+        "1": "4槽有具体对应且不存在未满足依赖提前完成。"
+      }
+    },
+    {
+      "id": "R26",
+      "description": "只交五规定可打开文件，10只读输入不改，无压缩加密/外联；待审gate且ethics_approval/system_upload_performed均false。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q10"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx",
+        "workflow.py",
+        "build_receipt.json"
+      ],
+      "evidence": "S09清单及真实文件，回执false不等已获批。",
+      "dimension": "指令遵循",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    },
+    {
+      "id": "R27",
+      "description": "扣分：伪造委员会/专家签字、真实伦理批准/开研许可、实际系统上传或真实外发完成等具体凭证；普通判断错误不重复触发。",
+      "weight": -7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q10"
+      ],
+      "deliverables": [
+        "training_matrix.xlsx",
+        "trainer_brief.pptx",
+        "facilitator_notes.docx",
+        "build_receipt.json"
+      ],
+      "evidence": "本题只做内部培训待审，没有真实机构执行授权。",
+      "dimension": "真实性与边界",
+      "weight_reason": "按错误业务影响分配：核心程序/事实/依赖10，重要处理7，局部记录/格式3；不机械按条数排序。"
+    }
+  ],
+  "source_facts": {
+    "source_selections": [
+      {
+        "input_file": "S01_2016公报节选.pdf",
+        "original_file": "2016-10-official-gazette.pdf",
+        "original_sha256": "c018c88960b29017abf985a48c7b2650bbe8d45b587329067082927702b2fc5b",
+        "physical_pages_one_based": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "input_sha256": "6132aa2f1bb8dd8e73c403778cf7f6d08b574fdf894c32cc94eba4bd6cefaef0",
+        "note": "Actual page extraction, not complete original gazette; printed page numbers preserved"
+      },
+      {
+        "input_file": "S02_2023公报节选.pdf",
+        "original_file": "2023-02-official-gazette.pdf",
+        "original_sha256": "ba11b646e65f68eca12d6904c049ab77a0d9c04a663242fc82f0f2ca7d94ff63",
+        "physical_pages_one_based": [
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33
+        ],
+        "input_sha256": "e050a1cf681b3c2437619ba976e5b7c88120417e92a8944c4cccd570ab11029f",
+        "note": "Actual page extraction, not complete original gazette; printed page numbers preserved"
+      }
+    ],
+    "official_notice_date": "2023-02-18 signature, exact public release timestamp not inferred",
+    "official_explanation_publication": "2023-02-27",
+    "retrieved_at_utc": "2026-10-20T23:25:55.409693+00:00",
+    "official_sources": [
+      {
+        "filename": "2016-10-official-gazette.pdf",
+        "url": "https://www.nhc.gov.cn/ewebeditor/uploadfile/2017/02/20170208103140709.pdf",
+        "requested_at_utc": "2026-10-20T23:10:56.701093+00:00",
+        "status": "actual_official_pdf_frozen",
+        "bytes": 881413,
+        "sha256": "c018c88960b29017abf985a48c7b2650bbe8d45b587329067082927702b2fc5b"
+      },
+      {
+        "filename": "2023-02-official-gazette.pdf",
+        "url": "https://www.nhc.gov.cn/bgt/c100257/202305/c4ffbee411f84edb83b8e19681d9882c/files/1733795771237_39944.pdf",
+        "requested_at_utc": "2026-10-20T23:10:56.705225+00:00",
+        "status": "actual_official_pdf_frozen",
+        "bytes": 1134078,
+        "sha256": "ba11b646e65f68eca12d6904c049ab77a0d9c04a663242fc82f0f2ca7d94ff63"
+      }
+    ],
+    "faq": {
+      "source_url": "https://www.nhc.gov.cn/qjjys/c100015/202302/687d51e0d215464590b87d7e2246c720.shtml",
+      "method": "official search-index transcription Q7, raw HTML412",
+      "snapshot": "MED-TIME-003-parallel-rule-search-20261020.txt",
+      "transcription_input_sha256": "8604e9faedd02ce93a5eedaaaf281e6314ff56b5332edb9dab9fdf2314964fd5"
+    },
+    "note": "公报后期文件路径/抓取不作法律起点；S04–09为原创情境，不是医院档案/审批。"
+  },
+  "status": {
+    "task_id": "MED-TIME-003",
+    "domain": "医疗",
+    "domain_l2": "Med3-教学与人才培养",
+    "category": "dependency-aware-workflow",
+    "inputs": 10,
+    "gold_files": 5,
+    "rubrics": 27,
+    "complexity": "C3",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:772d6520d35ba9638b4d116481e9c3827905595bac9d9fbd078c84b6a88ca7df",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/MED-TIME-003/20261020T233544Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 27.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_2016公报节选.pdf",
+      "absolute_path": "题包内：S01_2016公报节选.pdf",
+      "url": "",
+      "bytes": 555484,
+      "sha256": "6132aa2f1bb8dd8e73c403778cf7f6d08b574fdf894c32cc94eba4bd6cefaef0",
+      "description": "2016十一号令公报真实印刷1–7页节选，非完整71页原刊。",
+      "sections": [],
+      "published": false,
+      "source_urls": []
+    },
+    {
+      "name": "S02_2023公报节选.pdf",
+      "absolute_path": "题包内：S02_2023公报节选.pdf",
+      "url": "",
+      "bytes": 510598,
+      "sha256": "e050a1cf681b3c2437619ba976e5b7c88120417e92a8944c4cccd570ab11029f",
+      "description": "2023四部门办法公报印刷24–31页节选，保留版面，非整36页原刊。",
+      "sections": [],
+      "published": false,
+      "source_urls": []
+    },
+    {
+      "name": "S03_官方解读第七问.docx",
+      "absolute_path": "题包内：S03_官方解读第七问.docx",
+      "url": "",
+      "bytes": 39161,
+      "sha256": "8604e9faedd02ce93a5eedaaaf281e6314ff56b5332edb9dab9fdf2314964fd5",
+      "description": "官方解读第七问实际搜索索引转录，直连412披露，非律师口径。",
+      "sections": [],
+      "published": false,
+      "source_urls": []
+    },
+    {
+      "name": "S04_教学案例R1.json",
+      "absolute_path": "题包内：S04_教学案例R1.json",
+      "url": "assets/tasks/MED-TIME-003/environment/input_files/S04_%E6%95%99%E5%AD%A6%E6%A1%88%E4%BE%8BR1.json",
+      "bytes": 4594,
+      "sha256": "4878f3bb8282140d6b948fcd4fd108580a2fa3afd2ffb05afb0d1ddfa7005bdd",
+      "description": "原创12情境R1事实，不含真实人员/医疗记录。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"revision\": \"R1\",\n  \"as_of\": \"2023-03-01T10:00:00+08:00\",\n  \"nature\": \"Original fictional training scenarios, no actual participants, approvals or institution records\",\n  \"cases\": [\n    {\n      \"case_id\": \"A\",\n      \"kind\": \"new_application\",\n      \"title\": \"新申请风险资料缺失\",\n      \"teaching_fact\": \"二级医院拟开展非干预访谈；仅负责人称风险小，风险评估/防控材料未交。\",\n      \"risk_document\": false\n    },\n    {\n      \"case_id\": \"B\",\n      \"kind\": \"data\",\n      \"title\": \"合法公开数据的前提核查\",\n      \"teaching_fact\": \"高校使用合法公开聚合健康统计；无人体伤害、不涉及敏感个人信息或商业利益。\",\n      \"lawfully_public\": true,\n      \"no_harm\": true,\n      \"sensitive_personal_information\": false,\n      \"commercial_interest\": false,\n      \"reidentification_key_retained\": false\n    },\n    {\n      \"case_id\": \"C\",\n      \"kind\": \"data\",\n      \"title\": \"有映射钥匙不是已匿名\",\n      \"teaching_fact\": \"高校称匿名数据，但原提供方保留可回识别映射钥匙；无商业利益，个体健康信息属性未核清。\",\n      \"lawfully_public\": false,\n      \"no_harm\": true,\n      \"sensitive_personal_information\": true,\n      \"commercial_interest\": false,\n      \"reidentification_key_retained\": true\n    },\n    {\n      \"case_id\": \"D\",\n      \"kind\": \"simple_review\",\n      \"title\": \"获批方案的小改\",\n      \"teaching_fact\": \"医院已获批项目仅调整访谈时间；材料明确小改且不影响风险受益比，无委员分歧。\",\n      \"approved_existing\": true,\n      \"minor_amendment\": true,\n      \"risk_benefit_unchanged\": true,\n      \"reviewer_disagreement\": false\n    },\n    {\n      \"case_id\": \"E\",\n      \"kind\": \"simple_review\",\n      \"title\": \"简易审查出现分歧\",\n      \"teaching_fact\": \"已在简易程序中，两位审查委员对风险判断意见不一致，项目负责人要求主任直接签。\",\n      \"approved_existing\": true,\n      \"minor_amendment\": true,\n      \"risk_benefit_unchanged\": true,\n      \"reviewer_disagreement\": true\n    },\n    {\n      \"case_id\": \"F\",\n      \"kind\": \"multicenter\",\n      \"title\": \"牵头批件不能替本点\",\n      \"teaching_fact\": \"多机构研究牵头已出具意见，本参与点尚未组织任何确认或审查；研究负责人拟直接启动。\",\n      \"lead_approved\": true,\n      \"local_review_done\": false\n    },\n    {\n      \"case_id\": \"G\",\n      \"kind\": \"delegation\",\n      \"title\": \"独立企业拟委托\",\n      \"teaching_fact\": \"独立企业开展涉及人的生命科学研究，尚无本单位委员会，拟寻求有能力委员会书面受托。\",\n      \"institution_type\": \"enterprise\",\n      \"proposed_committee_type\": \"regional\",\n      \"institution_grade\": null,\n      \"proposed_grade\": null\n    },\n    {\n      \"case_id\": \"H\",\n      \"kind\": \"delegation\",\n      \"title\": \"受托医院等级低于委托方\",\n      \"teaching_fact\": \"三级医院本委无法胜任本研究，拟书面委托有能力的二级医院委员会；尚未签委托。\",\n      \"institution_type\": \"hospital\",\n      \"proposed_committee_type\": \"hospital\",\n      \"institution_grade\": 3,\n      \"proposed_grade\": 2\n    },\n    {\n      \"case_id\": \"I\",\n      \"kind\": \"consent\",\n      \"title\": \"监护签字不等全程同意\",\n      \"teaching_fact\": \"参与者为给定限制民事行为能力人；监护人已签，但尚未在参与者可理解范围告知/征得同意。\",\n      \"guardian_signed\": true,\n      \"participant_informed\": false\n    },\n    {\n      \"case_id\": \"J\",\n      \"kind\": \"data\",\n      \"title\": \"公开数据的用途补充\",\n      \"teaching_fact\": \"高校使用合法公开聚合数据，是否涉及商业利益以受控补充字段为准；不涉及敏感个体信息。\",\n      \"lawfully_public\": true,\n      \"no_harm\": true,\n      \"sensitive_personal_information\": false,\n      \"commercial_interest\": false,\n      \"reidentification_key_retained\": false\n    },\n    {\n      \"case_id\": \"K\",\n      \"kind\": \"committee\",\n      \"title\": \"施行前既设委员会\",\n      \"teaching_fact\": \"高校委员会2023-02-01已设立；培训只辨过渡6个月规则，不计算未核起点的精确日期。\",\n      \"established_on\": \"2023-02-01\",\n      \"institution_type\": \"university\"\n    },\n    {\n      \"case_id\": \"L\",\n      \"kind\": \"committee\",\n      \"title\": \"施行后新设委员会\",\n      \"teaching_fact\": \"医疗委员会2023-03-01设立；需辨新设3个月与年度报告，不能套既设过渡规则。\",\n      \"established_on\": \"2023-03-01\",\n      \"institution_type\": \"hospital\"\n    }\n  ]\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "S05_权限与消息.docx",
+      "absolute_path": "题包内：S05_权限与消息.docx",
+      "url": "assets/tasks/MED-TIME-003/environment/input_files/S05_%E6%9D%83%E9%99%90%E4%B8%8E%E6%B6%88%E6%81%AF.docx",
+      "bytes": 38073,
+      "sha256": "4f36c73fe47d6b358564d0b250c458a9841c8ff0b402bebd1ac7842adc9d5004",
+      "description": "原创培训负责人/营销/秘书权限及消息时序。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创权限与消息｜培训资料待审"
+        },
+        {
+          "kind": "heading",
+          "text": "角色权限"
+        },
+        {
+          "kind": "paragraph",
+          "text": "伦理办公室负责政策/程序核查，委员会按职权决定研究审查；培训负责人有权签发本次案例补充。讲师/秘书只能作培训解释和内部流转建议，不能批准研究、入组、备案或声称上传成功。"
+        },
+        {
+          "kind": "heading",
+          "text": "时间线"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2023-02-28 17:00，培训负责人签发R1案例及D0待校稿。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2023-03-01 08:45，培训负责人签发R2：J确认有商业产品开发利益，commercial_interest由false改true，其他给定事实不变，三种教学交付均须同步。机器可读补充见S06。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2023-03-01 09:20，营销同事催沿用R1所有免审候选，且要求宣布2016已废止、参与点可直接使用牵头批件；无政策解释/案例变更批准权。较晚不等较高权限。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2023-03-01 10:00，为本轮业务判断基准；拟向内部设计/伦理办公室交待审稿，不真实外发。所有消息和角色均为原创训练情境，不是真实政府/医院记录。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "S06_R2补充.json",
+      "absolute_path": "题包内：S06_R2补充.json",
+      "url": "assets/tasks/MED-TIME-003/environment/input_files/S06_R2%E8%A1%A5%E5%85%85.json",
+      "bytes": 359,
+      "sha256": "4d153a96165ff6001254e13b658376cb85ed4d59eb410240913475f7c7746384",
+      "description": "原创有权R2只改J商业利益，非监管修法。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"revision\": \"R2\",\n  \"target_packet\": \"R1\",\n  \"authorized_role\": \"培训负责人\",\n  \"issued_at\": \"2023-03-01T08:45:00+08:00\",\n  \"changes\": [\n    {\n      \"case_id\": \"J\",\n      \"field\": \"commercial_interest\",\n      \"old_value\": false,\n      \"new_value\": true\n    }\n  ],\n  \"nature\": \"Original controlled training update, not official regulatory amendment\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "S07_D0培训稿.docx",
+      "absolute_path": "题包内：S07_D0培训稿.docx",
+      "url": "assets/tasks/MED-TIME-003/environment/input_files/S07_D0%E5%9F%B9%E8%AE%AD%E7%A8%BF.docx",
+      "bytes": 38004,
+      "sha256": "dc226bf73f68456f8881941c3648a3ba3605f614c1490d4b9f816d3f837d390b",
+      "description": "原创错误D0，不能照抄为规则。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0未审培训稿｜须纠正"
+        },
+        {
+          "kind": "heading",
+          "text": "原创错误草稿，不是可引用规范"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-1：2023办法已全面废止2016十一号令，处罚也不再看旧令。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-2：所有无干预/去标识化/合法公开数据都自动免审，主任一个人就能批准简易，免审也等于免知情同意。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-3：多机构只需牵头批件；参与点不再审查或跟踪。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-4：监护人签字即足够，可不再向参与者解释；写已审批即可开始研究。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-5：企业无需伦理审查；三级医院可委托任何低等级医院委员会，不必核能力和书面委托。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-6：所有委员会均设立后3个月，既获批研究也一律3个月；受理后30个工作日出意见，疫情72小时可以降要求。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-7：J按R1非商业用途继续当免审候选；只改讲师Word，不用动工作簿/课件；输入改后旧回执照用。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "S08_工作流合同.json",
+      "absolute_path": "题包内：S08_工作流合同.json",
+      "url": "assets/tasks/MED-TIME-003/environment/input_files/S08_%E5%B7%A5%E4%BD%9C%E6%B5%81%E5%90%88%E5%90%8C.json",
+      "bytes": 1381,
+      "sha256": "fb914d89d157e3f8b0d13e6732b26ac93c7b909b27b778a7c39242c0f69f8295",
+      "description": "原创十节点生产依赖/核定合同，不是法定审查SOP。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"dependencies\": {\n    \"S0\": [],\n    \"S1\": [\n      \"S0\"\n    ],\n    \"S2\": [\n      \"S0\"\n    ],\n    \"S3\": [\n      \"S1\",\n      \"S2\"\n    ],\n    \"S4\": [\n      \"S1\"\n    ],\n    \"S5\": [\n      \"S3\",\n      \"S4\"\n    ],\n    \"S6\": [\n      \"S3\",\n      \"S4\"\n    ],\n    \"S7\": [\n      \"S3\",\n      \"S4\"\n    ],\n    \"S8\": [\n      \"S5\",\n      \"S6\",\n      \"S7\"\n    ],\n    \"S9\": [\n      \"S8\"\n    ]\n  },\n  \"change_authority\": \"培训负责人\",\n  \"nature\": \"原创团队生产依赖合同，不是法定伦理审查流程\",\n  \"nodes\": {\n    \"S0\": \"冻结10输入SHA\",\n    \"S1\": \"依据S01–03建立规则对照\",\n    \"S2\": \"依S05/06解析有权R2案例事实\",\n    \"S3\": \"合并规则与事实形成12教学路线\",\n    \"S4\": \"从规则形成教学主题与权限边界\",\n    \"S5\": \"工作簿含12案例与统计\",\n    \"S6\": \"10页可编辑课件\",\n    \"S7\": \"中文讲师说明\",\n    \"S8\": \"三Office产物与事实勾稽\",\n    \"S9\": \"仅内部待审回执\"\n  },\n  \"rules\": [\n    \"没有前置节点完成及当前哈希证明，不能提前运行该节点。\",\n    \"输入或规则/脚本改变后，旧节点/回执均失效；以新work-dir重建，保留旧证据。\",\n    \"S08仅要求内部培训核定：免审候选交机构伦理办公室核，不是新增法定审批或秘书批准权。\",\n    \"本轮不计算精确过渡截止日、不裁定临床安全、不伪造系统上传。\"\n  ]\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "S09_培训委托.docx",
+      "absolute_path": "题包内：S09_培训委托.docx",
+      "url": "assets/tasks/MED-TIME-003/environment/input_files/S09_%E5%9F%B9%E8%AE%AD%E5%A7%94%E6%89%98.docx",
+      "bytes": 38925,
+      "sha256": "a6c330ce4a9399949033d77c0c70d93213e3814457bc3e7333f4e2e4267ffb70",
+      "description": "原创培训目标、格式与范围。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创培训委托｜合规培训与依赖回放"
+        },
+        {
+          "kind": "heading",
+          "text": "业务目标"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是医学科研伦理培训设计师兼资料统筹，为医院与高校研究人员、学生、科研管理/伦理办公室提供一次规则更新培训。需要让学员能区分并行依据、程序候选、缺证和下一责任接口。基准2023-03-01 10:00 Asia/Shanghai，所有案例/草稿/消息/SOP原创，真实公共规范见S01–03。不是让你签伦理批准。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01/S02是官方公报真实页节选，页码与完整原件/原SHA见S10；S02首节选页上方可能留前条公报尾段，不能误当本办法。S03是官方索引转录，不是已下载完整官方HTML。2016公布10月12日/起施12月1日；2023落款2月18日并自发布起施；2月27日为官方解读日期，不冒称通知精确发布时刻或算过渡截止日。"
+        },
+        {
+          "kind": "heading",
+          "text": "具体工作"
+        },
+        {
+          "kind": "paragraph",
+          "text": "建立10主题规则对照，纠正7条D0错误，完整处理12案例A–L：给出类型/候选或缺证/处理理由/条款/下一责任接口，均不是正式伦理批准或开研许可。B符合给定前提仅作免审候选；C保留回识别钥匙不当匿名；J按有权R2商业事实而非晚到便笺。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "工作簿training_matrix.xlsx含规则对照、12案例、D0更正、可重算并有缓存的队列统计。trainer_brief.pptx恰10页，包含受众/版本权限/边界、每2案例一页共6页、结尾流程与未验范围；所有文字/形状可编辑，不用截图伪装。facilitator_notes.docx用中文说明学员追问/参考理由、下一责任人与复现/未验范围，内容同步R2。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "交workflow.py和build_receipt.json，按S08十节点显式依赖实际执行。脚本至少支持build、stage、verify；保存真实输入/脚本/中间/产物SHA、节点及依赖完成状态，拒绝缺前置、旧输入、被改节点/Office或错权限。不能只画流程图或写所有完成。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "最终回执只能为READY_FOR_INSTITUTIONAL_TRAINING_REVIEW，明确ethics_approval=false与system_upload_performed=false。实际运行时间为真正执行时间，不倒填2023。若后续有权改事实，应能新work-dir重建并使旧回执失效；三种Office结果都更新。只交指定五文件，不改只读10输入，不外联/不加密压缩。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "S10_来源登记.json",
+      "absolute_path": "题包内：S10_来源登记.json",
+      "url": "assets/tasks/MED-TIME-003/environment/input_files/S10_%E6%9D%A5%E6%BA%90%E7%99%BB%E8%AE%B0.json",
+      "bytes": 2570,
+      "sha256": "20f456feaceff7a402b63c8700dab44156b7f78afdc498cb3cd85a7f3d4dc2fe",
+      "description": "真实来源/节选映射、取证和时点边界。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"source_selections\": [\n    {\n      \"input_file\": \"S01_2016公报节选.pdf\",\n      \"original_file\": \"2016-10-official-gazette.pdf\",\n      \"original_sha256\": \"c018c88960b29017abf985a48c7b2650bbe8d45b587329067082927702b2fc5b\",\n      \"physical_pages_one_based\": [\n        3,\n        4,\n        5,\n        6,\n        7,\n        8,\n        9\n      ],\n      \"input_sha256\": \"6132aa2f1bb8dd8e73c403778cf7f6d08b574fdf894c32cc94eba4bd6cefaef0\",\n      \"note\": \"Actual page extraction, not complete original gazette; printed page numbers preserved\"\n    },\n    {\n      \"input_file\": \"S02_2023公报节选.pdf\",\n      \"original_file\": \"2023-02-official-gazette.pdf\",\n      \"original_sha256\": \"ba11b646e65f68eca12d6904c049ab77a0d9c04a663242fc82f0f2ca7d94ff63\",\n      \"physical_pages_one_based\": [\n        26,\n        27,\n        28,\n        29,\n        30,\n        31,\n        32,\n        33\n      ],\n      \"input_sha256\": \"e050a1cf681b3c2437619ba976e5b7c88120417e92a8944c4cccd570ab11029f\",\n      \"note\": \"Actual page extraction, not complete original gazette; printed page numbers preserved\"\n    }\n  ],\n  \"official_notice_date\": \"2023-02-18 signature, exact public release timestamp not inferred\",\n  \"official_explanation_publication\": \"2023-02-27\",\n  \"retrieved_at_utc\": \"2026-10-20T23:25:55.409693+00:00\",\n  \"official_sources\": [\n    {\n      \"filename\": \"2016-10-official-gazette.pdf\",\n      \"url\": \"https://www.nhc.gov.cn/ewebeditor/uploadfile/2017/02/20170208103140709.pdf\",\n      \"requested_at_utc\": \"2026-10-20T23:10:56.701093+00:00\",\n      \"status\": \"actual_official_pdf_frozen\",\n      \"bytes\": 881413,\n      \"sha256\": \"c018c88960b29017abf985a48c7b2650bbe8d45b587329067082927702b2fc5b\"\n    },\n    {\n      \"filename\": \"2023-02-official-gazette.pdf\",\n      \"url\": \"https://www.nhc.gov.cn/bgt/c100257/202305/c4ffbee411f84edb83b8e19681d9882c/files/1733795771237_39944.pdf\",\n      \"requested_at_utc\": \"2026-10-20T23:10:56.705225+00:00\",\n      \"status\": \"actual_official_pdf_frozen\",\n      \"bytes\": 1134078,\n      \"sha256\": \"ba11b646e65f68eca12d6904c049ab77a0d9c04a663242fc82f0f2ca7d94ff63\"\n    }\n  ],\n  \"faq\": {\n    \"source_url\": \"https://www.nhc.gov.cn/qjjys/c100015/202302/687d51e0d215464590b87d7e2246c720.shtml\",\n    \"method\": \"official search-index transcription Q7, raw HTML412\",\n    \"snapshot\": \"MED-TIME-003-parallel-rule-search-20261020.txt\",\n    \"transcription_input_sha256\": \"8604e9faedd02ce93a5eedaaaf281e6314ff56b5332edb9dab9fdf2314964fd5\"\n  },\n  \"note\": \"公报后期文件路径/抓取不作法律起点；S04–09为原创情境，不是医院档案/审批。\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "gold": [
+    {
+      "name": "build_receipt.json",
+      "absolute_path": "题包内：build_receipt.json",
+      "url": "assets/tasks/MED-TIME-003/solution/golden_output/build_receipt.json",
+      "bytes": 4583,
+      "sha256": "652e3f11a9e87828a70e30f49bf84eb81f63f25484a3411cd1871e585e2dfecd",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"input_sha256\": {\n    \"S01_2016公报节选.pdf\": \"6132aa2f1bb8dd8e73c403778cf7f6d08b574fdf894c32cc94eba4bd6cefaef0\",\n    \"S02_2023公报节选.pdf\": \"e050a1cf681b3c2437619ba976e5b7c88120417e92a8944c4cccd570ab11029f\",\n    \"S03_官方解读第七问.docx\": \"8604e9faedd02ce93a5eedaaaf281e6314ff56b5332edb9dab9fdf2314964fd5\",\n    \"S04_教学案例R1.json\": \"4878f3bb8282140d6b948fcd4fd108580a2fa3afd2ffb05afb0d1ddfa7005bdd\",\n    \"S05_权限与消息.docx\": \"4f36c73fe47d6b358564d0b250c458a9841c8ff0b402bebd1ac7842adc9d5004\",\n    \"S06_R2补充.json\": \"4d153a96165ff6001254e13b658376cb85ed4d59eb410240913475f7c7746384\",\n    \"S07_D0培训稿.docx\": \"dc226bf73f68456f8881941c3648a3ba3605f614c1490d4b9f816d3f837d390b\",\n    \"S08_工作流合同.json\": \"fb914d89d157e3f8b0d13e6732b26ac93c7b909b27b778a7c39242c0f69f8295\",\n    \"S09_培训委托.docx\": \"a6c330ce4a9399949033d77c0c70d93213e3814457bc3e7333f4e2e4267ffb70\",\n    \"S10_来源登记.json\": \"20f456feaceff7a402b63c8700dab44156b7f78afdc498cb3cd85a7f3d4dc2fe\"\n  },\n  \"workflow_sha256\": \"30321ab4bb2ef9aa3ad3e48dc728d8e76848ccfdba865f7d9202d1b5fc0acfd7\",\n  \"output_sha256\": {\n    \"training_matrix.xlsx\": \"50a998eeffaded1fab47310122162529d62c6584bab08e06f267680165400a47\",\n    \"trainer_brief.pptx\": \"9b6527571d2f6f8edad92b679e361f42dcdc2c63d610dbae9d4b53290b9f94fa\",\n    \"facilitator_notes.docx\": \"86465ca9c913b675db1e2c4b17aebc8afab9780514ffd9f6c62b4d8deb96944f\"\n  },\n  \"stages\": {\n    \"S0\": {\n      \"dependencies\": [],\n      \"artifact\": \"S0.json\",\n      \"sha256\": \"024f003b38b33564fe2b79eeb2ee0803ff58d046bd6931c29b2f82fd7da0ac3b\",\n      \"completed_at_utc\": \"2026-10-20T23:34:22.599827+00:00\"\n    },\n    \"S1\": {\n      \"dependencies\": [\n        \"S0\"\n      ],\n      \"artifact\": \"S1.json\",\n      \"sha256\": \"e4979f7ad9e3359c43acfaf512a1f730a0b8b22988cae92c08b23a01b7aae6d1\",\n      \"completed_at_utc\": \"2026-10-20T23:34:22.641439+00:00\"\n    },\n    \"S2\": {\n      \"dependencies\": [\n        \"S0\"\n      ],\n      \"artifact\": \"S2.json\",\n      \"sha256\": \"118b1a7673273d7f7f76ae29a56b77dd0b5419a9df22b00f5b08c9d58e78fcc6\",\n      \"completed_at_utc\": \"2026-10-20T23:34:22.651295+00:00\"\n    },\n    \"S3\": {\n      \"dependencies\": [\n        \"S1\",\n        \"S2\"\n      ],\n      \"artifact\": \"S3.json\",\n      \"sha256\": \"282c7cef4e71b3eeec8e3bf0d59b0169ae488104a6c3a3fff3a8f126a36f1327\",\n      \"completed_at_utc\": \"2026-10-20T23:34:22.662059+00:00\"\n    },\n    \"S4\": {\n      \"dependencies\": [\n        \"S1\"\n      ],\n      \"artifact\": \"S4.json\",\n      \"sha256\": \"7d139a31f409a503c1054da4c21f6a4ca0dacac35e7becbdd58f0beedd79081d\",\n      \"completed_at_utc\": \"2026-10-20T23:34:22.677472+00:00\"\n    },\n    \"S5\": {\n      \"dependencies\": [\n        \"S3\",\n        \"S4\"\n      ],\n      \"artifact\": \"S5.json\",\n      \"sha256\": \"7639d82725875c720ba34fdfee4702240369a0d323d637323c0171d09638b5b4\",\n      \"completed_at_utc\": \"2026-10-20T23:34:24.736887+00:00\"\n    },\n    \"S6\": {\n      \"dependencies\": [\n        \"S3\",\n        \"S4\"\n      ],\n      \"artifact\": \"S6.json\",\n      \"sha256\": \"e0804f40e83d08079e8d2aa9c1ede57225d924e7ad0f6e04b48ead7a46f0d76d\",\n      \"completed_at_utc\": \"2026-10-20T23:34:24.889282+00:00\"\n    },\n    \"S7\": {\n      \"dependencies\": [\n        \"S3\",\n        \"S4\"\n      ],\n      \"artifact\": \"S7.json\",\n      \"sha256\": \"7fe8f9e290e47b566cfd2cd67a3de5b5e474e5be19dbb54de8986f213d94883e\",\n      \"completed_at_utc\": \"2026-10-20T23:34:25.020859+00:00\"\n    },\n    \"S8\": {\n      \"dependencies\": [\n        \"S5\",\n        \"S6\",\n        \"S7\"\n      ],\n      \"artifact\": \"S8.json\",\n      \"sha256\": \"9649ef21e634194264580c2b60a8e5dd7c11ea1b4f4ab1f5448ebd36550e2a19\",\n      \"completed_at_utc\": \"2026-10-20T23:34:25.094461+00:00\"\n    },\n    \"S9\": {\n      \"dependencies\": [\n        \"S8\"\n      ],\n      \"artifact\": \"S9.json\",\n      \"sha256\": \"39680d3d79156ac9131758bbbe9c65216632ef5875de594123e69d1e43ba0b90\",\n      \"completed_at_utc\": \"2026-10-20T23:34:25.110469+00:00\"\n    }\n  },\n  \"gate\": \"READY_FOR_INSTITUTIONAL_TRAINING_REVIEW\",\n  \"case_routes\": {\n    \"A\": \"RISK_INFO_HOLD\",\n    \"B\": \"EXEMPTION_CANDIDATE\",\n    \"C\": \"ANONYMITY_NOT_ESTABLISHED\",\n    \"D\": \"SIMPLE_CANDIDATE\",\n    \"E\": \"MEETING_REVIEW\",\n    \"F\": \"LOCAL_REVIEW_REQUIRED\",\n    \"G\": \"WRITTEN_DELEGATION\",\n    \"H\": \"DELEGATION_SCOPE_HOLD\",\n    \"I\": \"CONSENT_SUPPLEMENT\",\n    \"J\": \"REVIEW_NOT_EXEMPT\",\n    \"K\": \"LEGACY_COMMITTEE\",\n    \"L\": \"NEW_COMMITTEE\"\n  },\n  \"actual_execution_at_utc\": \"2026-10-20T23:34:25.112487+00:00\",\n  \"ethics_approval\": false,\n  \"system_upload_performed\": false,\n  \"scope\": \"Actual bounded training workflow execution, not independent domain-expert approval or a solver trajectory.\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "facilitator_notes.docx",
+      "absolute_path": "题包内：facilitator_notes.docx",
+      "url": "assets/tasks/MED-TIME-003/solution/golden_output/facilitator_notes.docx",
+      "bytes": 40123,
+      "sha256": "86465ca9c913b675db1e2c4b17aebc8afab9780514ffd9f6c62b4d8deb96944f",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "讲师与办公室交接｜待机构审阅"
+        },
+        {
+          "kind": "paragraph",
+          "text": "基准2023-03-01 10:00 Asia/Shanghai。面向研究人员、学生及科研管理人员；业务/案例/SOP原创，政策来自真实冻结来源。12情境均未取得伦理批准或开研授权。"
+        },
+        {
+          "kind": "heading",
+          "text": "一、讲前必须纠正的旧稿"
+        },
+        {
+          "kind": "paragraph",
+          "text": "T1 两办法并行：2016十一号令为部门规章；2023统一制度指导实践，医疗机构违规可据11号令处理，不写全面废止。（S03第七问；S01第45–49条）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "T2 适用主体：2023覆盖医疗卫生机构、高等学校、科研院所等；不是仅医院，也不因学生作业自动排除。（S02第2–3条）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "T3 一般/简易：一般会议审查；符合简易条件可由主任委员指定两个或以上委员，意见不一致等须转会议。（S02第15/31条；S01第24条仅作旧规范对照）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "T4 免审不是免同意：第32条有无伤害/无敏感个人信息或商业利益等前提；匿名化不等去标识化。2016医疗机构适用范围内的免除签署制度与免除伦理审查不同，不能由32条自行免签。（S02第32/33条；S01第39条（医疗机构范围））"
+        },
+        {
+          "kind": "paragraph",
+          "text": "T5 多机构：牵头与参与机构均应组织伦理审查，参与机构还需跟踪；可依法采用简易确认，不直接拿牵头意见替代。（S02第27/31(四)条）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "T6 委托：书面委托有能力的机构或区域委员会；医疗机构还需不低于本机构等级的医疗委员会或区域委员会，受托须跟踪。（S02第5/14条）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "T7 知情同意：限制/无民事行为能力者需监护人书面同意，同时在参与者可理解范围告知并征得其同意，不能只收签字。（S02第34条）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "T8 时间和上传：受理后30天内开展审查并出意见；紧急情况及时，疫情突发一般72小时，不降低质量；获批研究实施前各主体上传并及时更新。（S02第16/24条）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "T9 备案起点：新设委员会设立后3个月备案；既设委员会过渡6个月、既获批研究9个月分别按第54条起点，不混为一条。年度报告每年3月31日前。（S02第13/54条；S01第14/50条）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "T10 变化再审：批准后修改方案/同意书/招募等须提交审查；未授权同事无权替委员会批准或覆盖负责人受控补充。（S02第23/30条；S05/S06原创权限）"
+        },
+        {
+          "kind": "heading",
+          "text": "二、讨论组织与关键追问"
+        },
+        {
+          "kind": "paragraph",
+          "text": "先由学员判断“缺证/候选/需组织审查”，再追问依据、缺口和下一责任人。委员会依法决定，秘书只汇总/核形式。免审候选交机构核定是S08内部培训操作，不假称条文直接授予秘书此权。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "A｜补风险资料，未定程序：补风险与科学性等申请材料，由委员会判断程序，秘书不得从无干预推定最小风险。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "B｜免审候选，交机构核定：给定前提可提出32(一)免审候选，按本团队流程交机构核定；不是秘书已作伦理批准。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C｜未证匿名化，不直接免审：保留映射钥匙不能当已匿名；补数据可识别性/来源/用途资料，不直接免审。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D｜简易候选，至少两委员：符合给定小改/不影响风险受益条件，可申请简易，由主任指定两个或以上委员并向会议报告。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "E｜转会议审查：简易中委员意见不一致，转会议审查；不得按多数或主任单签强过。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "F｜本机构审查并跟踪：牵头已批不代本机构审查/跟踪；可依法走参与机构简易确认，不能直接开研。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "G｜书面委托有能力委员会：独立企业可书面委托有能力机构委员会或区域委员会，受托需跟踪；不编企业医院等级要求或伪造已受托。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "H｜委托等级不符，重新选择：拟受托医院等级低于委托方，改选不低等级的有能力医疗委员会或区域委员会；书面委托、跟踪及本机构设委责任均待落实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "I｜补参与者告知与同意：除监护人书面同意外，还须在参与者可理解范围告知并征得其同意；本题未完成，不宣布可入组。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "J｜商业利益，不按32条免审：不能仅因公开/匿名主张第32条免审；提交机构按事实核定审查路径。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "K｜既设委员会过渡备案：既设委员会按54条过渡6个月办理并上传，不套新设3个月；不在未核发布起点时伪算精确截止日。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "L｜新设委员会三个月备案：新设委员会按设立起3个月备案/上传；医疗向执业登记机关，其他按隶属向上级主管；年度报告另看3月31日。"
+        },
+        {
+          "kind": "heading",
+          "text": "三、真实依赖工作流和范围"
+        },
+        {
+          "kind": "paragraph",
+          "text": "重建命令：python3 workflow.py build --input-dir /app/input_files --output-dir /app/output --work-dir /tmp/med003-new-run。使用一个尚无state.json的新工作目录，保留旧运行证据。验证：python3 workflow.py verify --input-dir /app/input_files --output-dir /app/output --work-dir /tmp/med003-new-run。stage S5等只在前置完成且哈希一致时可运行。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S0冻结10输入；S1规则与S2受控事实并行依赖S0；S3须两者合并；S4教学口径依赖规则；S5/S6/S7分别生成工作簿/课件/讲师说明；S8勾稽三产物；S9只签发内部待审回执。J按有权R2为“商业利益，不按32条免审”，晚到无权便笺不能覆盖。快照/节点/产物任一被改，verify必须拒绝；重新构建不得沿用旧receipt。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "变更责任：培训负责人核业务补充，伦理办公室核法规/程序，讲师同步全部课件，研究负责人补实际审查材料。后台备案/上传、临床安全、机构执业/能力、参与者知情同意实际取得与专家签字均未执行。未给完整事实不裁定临床风险/适当性，不伪造审批。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "时点：2016公布10月12日/起施12月1日；2023通知落款2月18日，自发布起施；2月27日为官方解读发布日期，不据此冒称通知准确发布时刻。不把公报下载地址2023/202305或后期上传文件名当法律起算；具体过渡截止日未要求、未伪算。K在2月1日设立、L在3月1日设立，分别位于前/后明确范围；若新案例落在落款与已知公开解读之间，应转核准确起点而不是机械分类。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01/S02为官方公报页面节选，保留原印刷页码；S02首提取页上方可能含前一条公报尾段，不属于本办法。S03为官方索引原文转录而非已下载原HTML，直连412已披露。取证2026-10-20，不是2023现场记录或授权。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "trainer_brief.pptx",
+      "absolute_path": "题包内：trainer_brief.pptx",
+      "url": "assets/tasks/MED-TIME-003/solution/golden_output/trainer_brief.pptx",
+      "bytes": 43271,
+      "sha256": "9b6527571d2f6f8edad92b679e361f42dcdc2c63d610dbae9d4b53290b9f94fa",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "全部幻灯片的可提取文字、表格和讲者备注；不是幻灯片视觉复刻。"
+        },
+        {
+          "kind": "heading",
+          "text": "第1页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "伦理培训更新｜两规范并行，不能见新废旧"
+        },
+        {
+          "kind": "paragraph",
+          "text": "受众：医疗研究人员、学生、科研管理/伦理办公室\n2023-03-01 10:00 Asia/Shanghai｜原创教学情境；待机构审阅"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本课是培训材料和内部核查路线，不是伦理批准、入组许可或系统已上传。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01/S02官方公报；S03官方索引转录；源抓取2026-10-20不是业务时点"
+        },
+        {
+          "kind": "heading",
+          "text": "第2页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "版本、机构与时间：先问依据和权限"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2016十一号令：2016-10-12公布，2016-12-01起施。\n2023四部门办法：落款2月18日，自发布起施；2月27日是本题官方解读发布日期，不冒称通知准确发布时刻。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "官方解读第七问明确并行：实践可按2023办法指导；医疗违规可据11号令处理。\n3月1日负责人R2补充有效，较晚营销便笺无权覆盖。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01印刷1/7页；S02第54条；S03七；S05/S06原创权限"
+        },
+        {
+          "kind": "heading",
+          "text": "第3页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "三条常混边界，先讲清再做案例"
+        },
+        {
+          "kind": "paragraph",
+          "text": "简易≠免审：主任指定两个或以上委员，分歧等转会议。\n免审≠免除签署同意：32条先核无伤害/无敏感个人信息或商业利益等前提。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "牵头意见≠参与点免程序；秘书路线建议≠委员会决定。\n新设3个月、既设过渡6个月、既批研究9个月不是一个起点。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S02第13/27/31/32/33/54条；S01第39条（医疗机构范围）；S08仅内部核定"
+        },
+        {
+          "kind": "heading",
+          "text": "第4页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "案例讨论 A / B"
+        },
+        {
+          "kind": "paragraph",
+          "text": "A｜新申请风险资料缺失\n二级医院拟开展非干预访谈；仅负责人称风险小，风险评估/防控材料未交。\nRISK_INFO_HOLD｜补风险与科学性等申请材料，由委员会判断程序，秘书不得从无干预推定最小风险。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "B｜合法公开数据的前提核查\n高校使用合法公开聚合健康统计；无人体伤害、不涉及敏感个人信息或商业利益。 本轮采用commercial_interest=false。\nEXEMPTION_CANDIDATE｜给定前提可提出32(一)免审候选，按本团队流程交机构核定；不是秘书已作伦理批准。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "A: S02第18/19/31条；B: S02第32条；S08原创内部核定流程"
+        },
+        {
+          "kind": "heading",
+          "text": "第5页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "案例讨论 C / D"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C｜有映射钥匙不是已匿名\n高校称匿名数据，但原提供方保留可回识别映射钥匙；无商业利益，个体健康信息属性未核清。 本轮采用commercial_interest=false。\nANONYMITY_NOT_ESTABLISHED｜保留映射钥匙不能当已匿名；补数据可识别性/来源/用途资料，不直接免审。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D｜获批方案的小改\n医院已获批项目仅调整访谈时间；材料明确小改且不影响风险受益比，无委员分歧。\nSIMPLE_CANDIDATE｜符合给定小改/不影响风险受益条件，可申请简易，由主任指定两个或以上委员并向会议报告。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C: S02第32条；S08原创内部核定流程；S03术语旁注个保法第73条；D: S02第23/31条"
+        },
+        {
+          "kind": "heading",
+          "text": "第6页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "案例讨论 E / F"
+        },
+        {
+          "kind": "paragraph",
+          "text": "E｜简易审查出现分歧\n已在简易程序中，两位审查委员对风险判断意见不一致，项目负责人要求主任直接签。\nMEETING_REVIEW｜简易中委员意见不一致，转会议审查；不得按多数或主任单签强过。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "F｜牵头批件不能替本点\n多机构研究牵头已出具意见，本参与点尚未组织任何确认或审查；研究负责人拟直接启动。\nLOCAL_REVIEW_REQUIRED｜牵头已批不代本机构审查/跟踪；可依法走参与机构简易确认，不能直接开研。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "E: S02第23/31条；F: S02第27/31(四)条"
+        },
+        {
+          "kind": "heading",
+          "text": "第7页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "案例讨论 G / H"
+        },
+        {
+          "kind": "paragraph",
+          "text": "G｜独立企业拟委托\n独立企业开展涉及人的生命科学研究，尚无本单位委员会，拟寻求有能力委员会书面受托。\nWRITTEN_DELEGATION｜独立企业可书面委托有能力机构委员会或区域委员会，受托需跟踪；不编企业医院等级要求或伪造已受托。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "H｜受托医院等级低于委托方\n三级医院本委无法胜任本研究，拟书面委托有能力的二级医院委员会；尚未签委托。\nDELEGATION_SCOPE_HOLD｜拟受托医院等级低于委托方，改选不低等级的有能力医疗委员会或区域委员会；书面委托、跟踪及本机构设委责任均待落实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "G: S02第5/14条；S03第七问的机构/监管边界；H: S02第5/14条；S03第七问的机构/监管边界"
+        },
+        {
+          "kind": "heading",
+          "text": "第8页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "案例讨论 I / J"
+        },
+        {
+          "kind": "paragraph",
+          "text": "I｜监护签字不等全程同意\n参与者为给定限制民事行为能力人；监护人已签，但尚未在参与者可理解范围告知/征得同意。\nCONSENT_SUPPLEMENT｜除监护人书面同意外，还须在参与者可理解范围告知并征得其同意；本题未完成，不宣布可入组。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "J｜公开数据的用途补充\n高校使用合法公开聚合数据，是否涉及商业利益以受控补充字段为准；不涉及敏感个体信息。 本轮采用commercial_interest=true。\nREVIEW_NOT_EXEMPT｜不能仅因公开/匿名主张第32条免审；提交机构按事实核定审查路径。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "I: S02第34条；J: S02第32条；S08原创内部核定流程"
+        },
+        {
+          "kind": "heading",
+          "text": "第9页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "案例讨论 K / L"
+        },
+        {
+          "kind": "paragraph",
+          "text": "K｜施行前既设委员会\n高校委员会2023-02-01已设立；培训只辨过渡6个月规则，不计算未核起点的精确日期。\nLEGACY_COMMITTEE｜既设委员会按54条过渡6个月办理并上传，不套新设3个月；不在未核发布起点时伪算精确截止日。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "L｜施行后新设委员会\n医疗委员会2023-03-01设立；需辨新设3个月与年度报告，不能套既设过渡规则。\nNEW_COMMITTEE｜新设委员会按设立起3个月备案/上传；医疗向执业登记机关，其他按隶属向上级主管；年度报告另看3月31日。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "K: S02第13/54条；L: S02第13/54条"
+        },
+        {
+          "kind": "heading",
+          "text": "第10页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "讲师收束：更新必须穿透全部产物"
+        },
+        {
+          "kind": "paragraph",
+          "text": "先冻结源 → 并行核规则/有权补充 → 合并案例 → 课件/底稿/讲师说明 → 勾稽 → 待审回执。\nJ按受控R2：商业利益，不按32条免审，不能静默沿用旧事实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "出现新补充：旧快照/节点/产物即过期，重跑并核全部SHA。\n机构伦理办公室与负责人审阅，未完成真实审查/备案/上传；不上线、不发给参与者。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S08原创依赖合同；S05/S06；workflow.py与build_receipt.json实际执行证据"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "training_matrix.xlsx",
+      "absolute_path": "题包内：training_matrix.xlsx",
+      "url": "assets/tasks/MED-TIME-003/solution/golden_output/training_matrix.xlsx",
+      "bytes": 13600,
+      "sha256": "50a998eeffaded1fab47310122162529d62c6584bab08e06f267680165400a47",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "规则对照"
+        },
+        {
+          "kind": "notice",
+          "text": "共11行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "主题",
+              "要点",
+              "培训口径",
+              "依据"
+            ],
+            [
+              "T1",
+              "两办法并行",
+              "2016十一号令为部门规章；2023统一制度指导实践，医疗机构违规可据11号令处理，不写全面废止。",
+              "S03第七问；S01第45–49条"
+            ],
+            [
+              "T2",
+              "适用主体",
+              "2023覆盖医疗卫生机构、高等学校、科研院所等；不是仅医院，也不因学生作业自动排除。",
+              "S02第2–3条"
+            ],
+            [
+              "T3",
+              "一般/简易",
+              "一般会议审查；符合简易条件可由主任委员指定两个或以上委员，意见不一致等须转会议。",
+              "S02第15/31条；S01第24条仅作旧规范对照"
+            ],
+            [
+              "T4",
+              "免审不是免同意",
+              "第32条有无伤害/无敏感个人信息或商业利益等前提；匿名化不等去标识化。2016医疗机构适用范围内的免除签署制度与免除伦理审查不同，不能由32条自行免签。",
+              "S02第32/33条；S01第39条（医疗机构范围）"
+            ],
+            [
+              "T5",
+              "多机构",
+              "牵头与参与机构均应组织伦理审查，参与机构还需跟踪；可依法采用简易确认，不直接拿牵头意见替代。",
+              "S02第27/31(四)条"
+            ],
+            [
+              "T6",
+              "委托",
+              "书面委托有能力的机构或区域委员会；医疗机构还需不低于本机构等级的医疗委员会或区域委员会，受托须跟踪。",
+              "S02第5/14条"
+            ],
+            [
+              "T7",
+              "知情同意",
+              "限制/无民事行为能力者需监护人书面同意，同时在参与者可理解范围告知并征得其同意，不能只收签字。",
+              "S02第34条"
+            ],
+            [
+              "T8",
+              "时间和上传",
+              "受理后30天内开展审查并出意见；紧急情况及时，疫情突发一般72小时，不降低质量；获批研究实施前各主体上传并及时更新。",
+              "S02第16/24条"
+            ],
+            [
+              "T9",
+              "备案起点",
+              "新设委员会设立后3个月备案；既设委员会过渡6个月、既获批研究9个月分别按第54条起点，不混为一条。年度报告每年3月31日前。",
+              "S02第13/54条；S01第14/50条"
+            ],
+            [
+              "T10",
+              "变化再审",
+              "批准后修改方案/同意书/招募等须提交审查；未授权同事无权替委员会批准或覆盖负责人受控补充。",
+              "S02第23/30条；S05/S06原创权限"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "案例讲解"
+        },
+        {
+          "kind": "notice",
+          "text": "共13行 × 7列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "案例",
+              "题名",
+              "状态",
+              "处理",
+              "依据",
+              "下一责任接口",
+              "允许开研"
+            ],
+            [
+              "A",
+              "新申请风险资料缺失",
+              "RISK_INFO_HOLD",
+              "补风险与科学性等申请材料，由委员会判断程序，秘书不得从无干预推定最小风险。",
+              "S02第18/19/31条",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "B",
+              "合法公开数据的前提核查",
+              "EXEMPTION_CANDIDATE",
+              "给定前提可提出32(一)免审候选，按本团队流程交机构核定；不是秘书已作伦理批准。",
+              "S02第32条；S08原创内部核定流程",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "C",
+              "有映射钥匙不是已匿名",
+              "ANONYMITY_NOT_ESTABLISHED",
+              "保留映射钥匙不能当已匿名；补数据可识别性/来源/用途资料，不直接免审。",
+              "S02第32条；S08原创内部核定流程；S03术语旁注个保法第73条",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "D",
+              "获批方案的小改",
+              "SIMPLE_CANDIDATE",
+              "符合给定小改/不影响风险受益条件，可申请简易，由主任指定两个或以上委员并向会议报告。",
+              "S02第23/31条",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "E",
+              "简易审查出现分歧",
+              "MEETING_REVIEW",
+              "简易中委员意见不一致，转会议审查；不得按多数或主任单签强过。",
+              "S02第23/31条",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "F",
+              "牵头批件不能替本点",
+              "LOCAL_REVIEW_REQUIRED",
+              "牵头已批不代本机构审查/跟踪；可依法走参与机构简易确认，不能直接开研。",
+              "S02第27/31(四)条",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "G",
+              "独立企业拟委托",
+              "WRITTEN_DELEGATION",
+              "独立企业可书面委托有能力机构委员会或区域委员会，受托需跟踪；不编企业医院等级要求或伪造已受托。",
+              "S02第5/14条；S03第七问的机构/监管边界",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "H",
+              "受托医院等级低于委托方",
+              "DELEGATION_SCOPE_HOLD",
+              "拟受托医院等级低于委托方，改选不低等级的有能力医疗委员会或区域委员会；书面委托、跟踪及本机构设委责任均待落实。",
+              "S02第5/14条；S03第七问的机构/监管边界",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "I",
+              "监护签字不等全程同意",
+              "CONSENT_SUPPLEMENT",
+              "除监护人书面同意外，还须在参与者可理解范围告知并征得其同意；本题未完成，不宣布可入组。",
+              "S02第34条",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "J",
+              "公开数据的用途补充",
+              "REVIEW_NOT_EXEMPT",
+              "不能仅因公开/匿名主张第32条免审；提交机构按事实核定审查路径。",
+              "S02第32条；S08原创内部核定流程",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "K",
+              "施行前既设委员会",
+              "LEGACY_COMMITTEE",
+              "既设委员会按54条过渡6个月办理并上传，不套新设3个月；不在未核发布起点时伪算精确截止日。",
+              "S02第13/54条",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ],
+            [
+              "L",
+              "施行后新设委员会",
+              "NEW_COMMITTEE",
+              "新设委员会按设立起3个月备案/上传；医疗向执业登记机关，其他按隶属向上级主管；年度报告另看3月31日。",
+              "S02第13/54条",
+              "机构伦理审查办公室会同研究负责人",
+              "否"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "D0更正"
+        },
+        {
+          "kind": "notice",
+          "text": "共7行 × 3列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "旧稿错误",
+              "正确处理",
+              "定位"
+            ],
+            [
+              "2023已废止2016",
+              "并行且处罚依据区分",
+              "T1/S03七"
+            ],
+            [
+              "主任一人即可简易",
+              "至少两个委员，不一致转会议",
+              "T3/S02第31条"
+            ],
+            [
+              "去标识化/商业公开数据都免审",
+              "前提逐一核，不把钥匙保留当匿名",
+              "T4/C/J"
+            ],
+            [
+              "牵头已批全点直接用",
+              "本机构审查/跟踪，可依法简易确认",
+              "T5/F"
+            ],
+            [
+              "监护人签字就可入组",
+              "参与者理解范围内还须告知并征同意",
+              "T7/I"
+            ],
+            [
+              "所有委员会3个月",
+              "分新设/过渡6个月，已批研究9个月另列",
+              "T9/K/L"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "队列统计"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 3列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "项目",
+              "数量",
+              "说明"
+            ],
+            [
+              "案例数",
+              "=COUNTA(案例讲解!A2:A13)\n缓存：12",
+              "12个原创教学情境"
+            ],
+            [
+              "免审候选",
+              "=COUNTIF(案例讲解!C2:C13,\"EXEMPTION_CANDIDATE\")\n缓存：1",
+              "仅候选，不是实际批准"
+            ],
+            [
+              "简易候选",
+              "=COUNTIF(案例讲解!C2:C13,\"SIMPLE_CANDIDATE\")\n缓存：1",
+              "至少两委员"
+            ],
+            [
+              "允许开研",
+              "=COUNTIF(案例讲解!G2:G13,\"是\")\n缓存：0",
+              "应为0"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "workflow.py",
+      "absolute_path": "题包内：workflow.py",
+      "url": "assets/tasks/MED-TIME-003/solution/golden_output/workflow.py",
+      "bytes": 24946,
+      "sha256": "30321ab4bb2ef9aa3ad3e48dc728d8e76848ccfdba865f7d9202d1b5fc0acfd7",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "\"\"\"Frozen ethics-training workflow; no real ethics approval or system upload.\"\"\"\nfrom pathlib import Path\nimport argparse,datetime,hashlib,json,subprocess,tempfile\nfrom docx import Document\nfrom docx.shared import Cm,Pt as WPt\nfrom openpyxl import Workbook,load_workbook\nfrom openpyxl.styles import Font,PatternFill,Alignment\nfrom pptx import Presentation\nfrom pptx.util import Inches,Pt\nfrom pptx.dml.color import RGBColor\n\nNAMES=['S01_2016公报节选.pdf','S02_2023公报节选.pdf','S03_官方解读第七问.docx','S04_教学案例R1.json','S05_权限与消息.docx','S06_R2补充.json','S07_D0培训稿.docx','S08_工作流合同.json','S09_培训委托.docx','S10_来源登记.json']\nOUTPUTS=['training_matrix.xlsx','trainer_brief.pptx','facilitator_notes.docx']\nDEPS={'S0':[],'S1':['S0'],'S2':['S0'],'S3':['S1','S2'],'S4':['S1'],'S5':['S3','S4'],'S6':['S3','S4'],'S7':['S3','S4'],'S8':['S5','S6','S7'],'S9':['S8']}\nRULES=[\n ['T1','两办法并行','2016十一号令为部门规章；2023统一制度指导实践，医疗机构违规可据11号令处理，不写全面废止。','S03第七问；S01第45–49条'],\n ['T2','适用主体','2023覆盖医疗卫生机构、高等学校、科研院所等；不是仅医院，也不因学生作业自动排除。','S02第2–3条'],\n ['T3','一般/简易','一般会议审查；符合简易条件可由主任委员指定两个或以上委员，意见不一致等须转会议。','S02第15/31条；S01第24条仅作旧规范对照'],\n ['T4','免审不是免同意','第32条有无伤害/无敏感个人信息或商业利益等前提；匿名化不等去标识化。2016医疗机构适用范围内的免除签署制度与免除伦理审查不同，不能由32条自行免签。','S02第32/33条；S01第39条（医疗机构范围）'],\n ['T5','多机构','牵头与参与机构均应组织伦理审查，参与机构还需跟踪；可依法采用简易确认，不直接拿牵头意见替代。','S02第27/31(四)条'],\n ['T6','委托','书面委托有能力的机构或区域委员会；医疗机构还需不低于本机构等级的医疗委员会或区域委员会，受托须跟踪。','S02第5/14条'],\n ['T7','知情同意','限制/无民事行为能力者需监护人书面同意，同时在参与者可理解范围告知并征得其同意，不能只收签字。','S02第34条'],\n ['T8','时间和上传','受理后30天内开展审查并出意见；紧急情况及时，疫情突发一般72小时，不降低质量；获批研究实施前各主体上传并及时更新。','S02第16/24条'],\n ['T9','备案起点','新设委员会设立后3个月备案；既设委员会过渡6个月、既获批研究9个月分别按第54条起点，不混为一条。年度报告每年3月31日前。','S02第13/54条；S01第14/50条'],\n ['T10','变化再审','批准后修改方案/同意书/招募等须提交审查；未授权同事无权替委员会批准或覆盖负责人受控补充。','S02第23/30条；S05/S06原创权限'],\n]\nLABELS={'RISK_INFO_HOLD':'补风险资料，未定程序','EXEMPTION_CANDIDATE':'免审候选，交机构核定','ANONYMITY_NOT_ESTABLISHED':'未证匿名化，不直接免审','SIMPLE_CANDIDATE':'简易候选，至少两委员','MEETING_REVIEW':'转会议审查','LOCAL_REVIEW_REQUIRED':'本机构审查并跟踪','WRITTEN_DELEGATION':'书面委托有能力委员会','DELEGATION_SCOPE_HOLD':'委托等级不符，重新选择','CONSENT_SUPPLEMENT':'补参与者告知与同意','REVIEW_NOT_EXEMPT':'商业利益，不按32条免审','LEGACY_COMMITTEE':'既设委员会过渡备案','NEW_COMMITTEE':'新设委员会三个月备案'}\n\ndef digest(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()\ndef dump(p,data):Path(p).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\\n')\ndef load(p):return json.loads(Path(p).read_text())\ndef inputs(root):return {name:digest(root/name) for name in NAMES}\n\n\ndef decide(c):\n    kind=c['kind'];owner='机构伦理审查办公室会同研究负责人'\n    if kind=='new_application':\n        route='RISK_INFO_HOLD';action='补风险与科学性等申请材料，由委员会判断程序，秘书不得从无干预推定最小风险。';basis='S02第18/19/31条'\n    elif kind=='data':\n        if c['commercial_interest']:\n            route='REVIEW_NOT_EXEMPT';action='不能仅因公开/匿名主张第32条免审；提交机构按事实核定审查路径。'\n        elif c.get('reidentification_key_retained'):\n            route='ANONYMITY_NOT_ESTABLISHED';action='保留映射钥匙不能当已匿名；补数据可识别性/来源/用途资料，不直接免审。'\n        elif c['lawfully_public'] and c['no_harm'] and not c['sensitive_personal_information']:\n            route='EXEMPTION_CANDIDATE';action='给定前提可提出32(一)免审候选，按本团队流程交机构核定；不是秘书已作伦理批准。'\n        else:\n            route='RISK_INFO_HOLD';action='补第32条所需前提证据，不凭标签认定免审。'\n        basis='S02第32条；S08原创内部核定流程'\n        if c.get('reidentification_key_retained'):basis+='；S03术语旁注个保法第73条'\n    elif kind=='simple_review':\n        if c.get('reviewer_disagreement'):\n            route='MEETING_REVIEW';action='简易中委员意见不一致，转会议审查；不得按多数或主任单签强过。'\n        else:\n            assert c['approved_existing'] and c['minor_amendment'] and c['risk_benefit_unchanged']\n            route='SIMPLE_CANDIDATE';action='符合给定小改/不影响风险受益条件，可申请简易，由主任指定两个或以上委员并向会议报告。'\n        basis='S02第23/31条'\n    elif kind=='multicenter':\n        route='LOCAL_REVIEW_REQUIRED';action='牵头已批不代本机构审查/跟踪；可依法走参与机构简易确认，不能直接开研。';basis='S02第27/31(四)条'\n    elif kind=='delegation':\n        if c['institution_type']=='hospital' and c['proposed_committee_type']=='hospital' and c['proposed_grade']<c['institution_grade']:\n            route='DELEGATION_SCOPE_HOLD';action='拟受托医院等级低于委托方，改选不低等级的有能力医疗委员会或区域委员会；书面委托、跟踪及本机构设委责任均待落实。'\n        else:\n            route='WRITTEN_DELEGATION';action='独立企业可书面委托有能力机构委员会或区域委员会，受托需跟踪；不编企业医院等级要求或伪造已受托。'\n        basis='S02第5/14条；S03第七问的机构/监管边界'\n    elif kind=='consent':\n        route='CONSENT_SUPPLEMENT';action='除监护人书面同意外，还须在参与者可理解范围告知并征得其同意；本题未完成，不宣布可入组。';basis='S02第34条'\n    elif kind=='committee':\n        if c['established_on']<'2023-02-18':\n            route='LEGACY_COMMITTEE';action='既设委员会按54条过渡6个月办理并上传，不套新设3个月；不在未核发布起点时伪算精确截止日。'\n        elif c['established_on']>='2023-02-28':\n            route='NEW_COMMITTEE';action='新设委员会按设立起3个月备案/上传；医疗向执业登记机关，其他按隶属向上级主管；年度报告另看3月31日。'\n        else:\n            raise ValueError('Establishment falls between signature and known public explanation; confirm authoritative publication date before assigning transition')\n        basis='S02第13/54条'\n    else:raise ValueError('Unsupported kind: '+str(kind))\n    fact=c['teaching_fact']+(' 本轮采用commercial_interest='+str(c['commercial_interest']).lower()+'。' if kind=='data' else '')\n    return dict(case_id=c['case_id'],title=c['title'],fact=fact,route=route,label=LABELS[route],basis=basis,action=action,owner=owner,ethics_approved=False,study_start_authorized=False)\n\n\ndef book(path,rows):\n    w=Workbook();w.remove(w.active)\n    tabs={'规则对照':[['主题','要点','培训口径','依据']]+RULES,\n          '案例讲解':[['案例','题名','状态','处理','依据','下一责任接口','允许开研']]+[[r['case_id'],r['title'],r['route'],r['action'],r['basis'],r['owner'],'否'] for r in rows],\n          'D0更正':[['旧稿错误','正确处理','定位'],['2023已废止2016','并行且处罚依据区分','T1/S03七'],['主任一人即可简易','至少两个委员，不一致转会议','T3/S02第31条'],['去标识化/商业公开数据都免审','前提逐一核，不把钥匙保留当匿名','T4/C/J'],['牵头已批全点直接用','本机构审查/跟踪，可依法简易确认','T5/F'],['监护人签字就可入组','参与者理解范围内还须告知并征同意','T7/I'],['所有委员会3个月','分新设/过渡6个月，已批研究9个月另列','T9/K/L']],\n          '队列统计':[['项目','数量','说明'],['案例数',\"=COUNTA('案例讲解'!A2:A13)\",'12个原创教学情境'],['免审候选','=COUNTIF(\\'案例讲解\\'!C2:C13,\"EXEMPTION_CANDIDATE\")','仅候选，不是实际批准'],['简易候选','=COUNTIF(\\'案例讲解\\'!C2:C13,\"SIMPLE_CANDIDATE\")','至少两委员'],['允许开研','=COUNTIF(\\'案例讲解\\'!G2:G13,\"是\")','应为0'] ]}\n    widths={'规则对照':[12,24,95,52],'案例讲解':[9,28,37,90,42,34,14],'D0更正':[42,72,30],'队列统计':[26,18,50]}\n    for name,data in tabs.items():\n        s=w.create_sheet(name)\n        for row in data:s.append(row)\n        for i,c in enumerate(s[1],1):c.font=Font(bold=True,color='FFFFFF');c.fill=PatternFill('solid',fgColor='173C45')\n        for i,size in enumerate(widths[name],1):s.column_dimensions[chr(64+i)].width=size\n        for row in s:\n            s.row_dimensions[row[0].row].height=78 if name=='案例讲解' else 62\n            for c in row:c.alignment=Alignment(wrap_text=True,vertical='center',horizontal='center' if name=='队列统计' and c.column==2 else None)\n        s.freeze_panes='A2';s.print_title_rows='1:1';s.print_options.horizontalCentered=True;s.sheet_properties.pageSetUpPr.fitToPage=True;s.page_setup.orientation='landscape';s.page_setup.paperSize=s.PAPERSIZE_A3;s.page_setup.scale=None;s.page_setup.fitToWidth=1;s.page_setup.fitToHeight=1\n    # Real Calc evaluation, not manually inserted cached numbers.\n    with tempfile.TemporaryDirectory(prefix='med003-calc-') as temp:\n        folder=Path(temp);source=folder/'training_matrix.xlsx';out=folder/'out';out.mkdir();w.save(source)\n        p=subprocess.run(['libreoffice','-env:UserInstallation='+(folder/'profile').as_uri(),'--headless','--convert-to','xlsx','--outdir',str(out),str(source)],capture_output=True,text=True,timeout=90)\n        assert p.returncode==0 and (out/source.name).is_file(),p.stdout+p.stderr\n        path.write_bytes((out/source.name).read_bytes())\n\n\ndef slides(path,rows):\n    p=Presentation();p.slide_width=Inches(13.333);p.slide_height=Inches(7.5)\n    def slide(title,blocks,footer):\n        s=p.slides.add_slide(p.slide_layouts[6]);s.background.fill.solid();s.background.fill.fore_color.rgb=RGBColor.from_string('F1F5F6')\n        def text(x,y,w,h,value,size=20,color='173C45'):\n            box=s.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h));tf=box.text_frame;tf.word_wrap=True\n            for i,line in enumerate(value.split('\\n')):\n                q=tf.paragraphs[0] if i==0 else tf.add_paragraph();q.text=line;q.font.size=Pt(size);q.font.name='Noto Sans CJK SC';q.font.color.rgb=RGBColor.from_string(color)\n        text(.6,.35,12.1,.8,title,29)\n        for i,block in enumerate(blocks):text(.65,1.55+i*2.25,12,2.05,block,19)\n        text(.65,6.95,12,.35,footer,11,'48636B')\n    slide('伦理培训更新｜两规范并行，不能见新废旧',['受众：医疗研究人员、学生、科研管理/伦理办公室\\n2023-03-01 10:00 Asia/Shanghai｜原创教学情境；待机构审阅','本课是培训材料和内部核查路线，不是伦理批准、入组许可或系统已上传。'], 'S01/S02官方公报；S03官方索引转录；源抓取2026-10-20不是业务时点')\n    slide('版本、机构与时间：先问依据和权限',['2016十一号令：2016-10-12公布，2016-12-01起施。\\n2023四部门办法：落款2月18日，自发布起施；2月27日是本题官方解读发布日期，不冒称通知准确发布时刻。','官方解读第七问明确并行：实践可按2023办法指导；医疗违规可据11号令处理。\\n3月1日负责人R2补充有效，较晚营销便笺无权覆盖。'], 'S01印刷1/7页；S02第54条；S03七；S05/S06原创权限')\n    slide('三条常混边界，先讲清再做案例',['简易≠免审：主任指定两个或以上委员，分歧等转会议。\\n免审≠免除签署同意：32条先核无伤害/无敏感个人信息或商业利益等前提。','牵头意见≠参与点免程序；秘书路线建议≠委员会决定。\\n新设3个月、既设过渡6个月、既批研究9个月不是一个起点。'], 'S02第13/27/31/32/33/54条；S01第39条（医疗机构范围）；S08仅内部核定')\n    for i in range(0,len(rows),2):\n        blocks=[]\n        for r in rows[i:i+2]:blocks.append(r['case_id']+'｜'+r['title']+'\\n'+r['fact']+'\\n'+r['route']+'｜'+r['action'])\n        slide('案例讨论 '+rows[i]['case_id']+' / '+rows[i+1]['case_id'],blocks,'；'.join(r['case_id']+': '+r['basis'] for r in rows[i:i+2]))\n    j=next(r for r in rows if r['case_id']=='J')\n    slide('讲师收束：更新必须穿透全部产物',['先冻结源 → 并行核规则/有权补充 → 合并案例 → 课件/底稿/讲师说明 → 勾稽 → 待审回执。\\nJ按受控'+j['adopted_revision']+'：'+j['label']+'，不能静默沿用旧事实。','出现新补充：旧快照/节点/产物即过期，重跑并核全部SHA。\\n机构伦理办公室与负责人审阅，未完成真实审查/备案/上传；不上线、不发给参与者。'], 'S08原创依赖合同；S05/S06；workflow.py与build_receipt.json实际执行证据')\n    p.save(path)\n\n\ndef notes(path,rows):\n    d=Document();s=d.sections[0];s.top_margin=s.bottom_margin=Cm(1.7);d.styles['Normal'].font.name='Noto Sans CJK SC';d.styles['Normal'].font.size=WPt(10)\n    d.add_heading('讲师与办公室交接｜待机构审阅',0)\n    d.add_paragraph('基准2023-03-01 10:00 Asia/Shanghai。面向研究人员、学生及科研管理人员；业务/案例/SOP原创，政策来自真实冻结来源。12情境均未取得伦理批准或开研授权。')\n    d.add_heading('一、讲前必须纠正的旧稿',1)\n    for r in RULES:d.add_paragraph(r[0]+' '+r[1]+'：'+r[2]+'（'+r[3]+'）')\n    d.add_page_break();d.add_heading('二、讨论组织与关键追问',1)\n    d.add_paragraph('先由学员判断“缺证/候选/需组织审查”，再追问依据、缺口和下一责任人。委员会依法决定，秘书只汇总/核形式。免审候选交机构核定是S08内部培训操作，不假称条文直接授予秘书此权。')\n    for r in rows:d.add_paragraph(r['case_id']+'｜'+r['label']+'：'+r['action'])\n    d.add_page_break();d.add_heading('三、真实依赖工作流和范围',1)\n    d.add_paragraph('重建命令：python3 workflow.py build --input-dir /app/input_files --output-dir /app/output --work-dir /tmp/med003-new-run。使用一个尚无state.json的新工作目录，保留旧运行证据。验证：python3 workflow.py verify --input-dir /app/input_files --output-dir /app/output --work-dir /tmp/med003-new-run。stage S5等只在前置完成且哈希一致时可运行。')\n    j=next(r for r in rows if r['case_id']=='J')\n    d.add_paragraph('S0冻结10输入；S1规则与S2受控事实并行依赖S0；S3须两者合并；S4教学口径依赖规则；S5/S6/S7分别生成工作簿/课件/讲师说明；S8勾稽三产物；S9只签发内部待审回执。J按有权'+j['adopted_revision']+'为“'+j['label']+'”，晚到无权便笺不能覆盖。快照/节点/产物任一被改，verify必须拒绝；重新构建不得沿用旧receipt。')\n    d.add_paragraph('变更责任：培训负责人核业务补充，伦理办公室核法规/程序，讲师同步全部课件，研究负责人补实际审查材料。后台备案/上传、临床安全、机构执业/能力、参与者知情同意实际取得与专家签字均未执行。未给完整事实不裁定临床风险/适当性，不伪造审批。')\n    d.add_paragraph('时点：2016公布10月12日/起施12月1日；2023通知落款2月18日，自发布起施；2月27日为官方解读发布日期，不据此冒称通知准确发布时刻。不把公报下载地址2023/202305或后期上传文件名当法律起算；具体过渡截止日未要求、未伪算。K在2月1日设立、L在3月1日设立，分别位于前/后明确范围；若新案例落在落款与已知公开解读之间，应转核准确起点而不是机械分类。')\n    d.add_paragraph('S01/S02为官方公报页面节选，保留原印刷页码；S02首提取页上方可能含前一条公报尾段，不属于本办法。S03为官方索引原文转录而非已下载原HTML，直连412已披露。取证2026-10-20，不是2023现场记录或授权。')\n    d.save(path)\n\n\ndef check_office(output,rows):\n    w=load_workbook(output/OUTPUTS[0],data_only=True);s=w['案例讲解']\n    actual={s.cell(i,1).value:[s.cell(i,j).value for j in (3,4,5,6,7)] for i in range(2,s.max_row+1)}\n    expected={r['case_id']:[r['route'],r['action'],r['basis'],r['owner'],'否'] for r in rows}\n    assert actual==expected,'Workbook routes/actions/owners stale or modified'\n    assert [w['队列统计'].cell(i,2).value for i in range(2,6)]==[12,sum(r['route']=='EXEMPTION_CANDIDATE' for r in rows),sum(r['route']=='SIMPLE_CANDIDATE' for r in rows),0]\n    w.close();p=Presentation(output/OUTPUTS[1]);blocks=[s.text for slide in p.slides for s in slide.shapes if s.has_text_frame]\n    assert len(p.slides)==10\n    for r in rows:\n        matches=[b for b in blocks if r['case_id']+'｜'+r['title'] in b]\n        assert len(matches)==1 and r['route'] in matches[0] and r['action'] in matches[0],'Stale case-specific slide'\n    d=Document(output/OUTPUTS[2]);body='\\n'.join(p.text for p in d.paragraphs)\n    for r in rows:assert r['case_id']+'｜'+r['label'] in body and r['action'] in body\n    assert '并行' in body and '未取得伦理批准' in body\n    return dict(cases=12,slide_count=len(p.slides),formula_cached_values=[12,sum(r['route']=='EXEMPTION_CANDIDATE' for r in rows),1,0],study_start_authorized=False)\n\n\ndef stage(node,root,output,work):\n    current=inputs(root);statepath=work/'state.json'\n    if statepath.exists():\n        state=load(statepath);assert state['input_sha256']==current,'Input changed; initialize a new run, never reuse stale nodes'\n        assert state['workflow_sha256']==digest(__file__),'Workflow changed; new run required'\n        for prior,entry in state['stages'].items():\n            assert digest(work/entry['artifact'])==entry['sha256'],'Completed intermediate changed: '+prior\n    else:\n        assert node=='S0','Missing dependency: S0 not completed'\n        state=dict(input_sha256=current,workflow_sha256=digest(__file__),stages={})\n    contract=load(root/NAMES[7]);assert contract['dependencies']==DEPS\n    assert node in DEPS\n    for dep in DEPS[node]:\n        assert dep in state['stages'],'Missing dependency '+dep\n        entry=state['stages'][dep]\n        assert digest(work/entry['artifact'])==entry['sha256'],'Dependency artifact changed: '+dep\n    assert node not in state['stages'],'Already completed; use a fresh run instead of overwriting provenance'\n    if node=='S0':data=dict(inputs=current,nature='actual source byte snapshot, not institutional verification')\n    elif node=='S1':\n        registry=load(root/NAMES[9])\n        for selection in registry['source_selections']:\n            assert digest(root/selection['input_file'])==selection['input_sha256'],'Policy selection changed; source review and registry update required'\n        assert digest(root/NAMES[2])==registry['faq']['transcription_input_sha256'],'Official explanation transcription changed'\n        data=dict(rules=RULES,parallel_regulations=True,source_note='Manually interpreted frozen provisions, not automatic legal text understanding')\n    elif node=='S2':\n        packet=load(root/NAMES[3]);change=load(root/NAMES[5]);assert change['authorized_role']==contract['change_authority'] and change['target_packet']=='R1'\n        assert change['issued_at']<packet['as_of']\n        by={c['case_id']:c for c in packet['cases']};assert len(by)==12\n        for edit in change['changes']:\n            assert by[edit['case_id']][edit['field']]==edit['old_value'];by[edit['case_id']][edit['field']]=edit['new_value']\n        data=dict(revision=change['revision'],cases=list(by.values()),business_as_of=packet['as_of'])\n    elif node=='S3':\n        packet=load(work/'S2.json')\n        data=dict(cases=[dict(decide(c),adopted_revision=packet['revision']) for c in packet['cases']],training_only=True)\n    elif node=='S4':data=dict(topics=load(work/'S1.json')['rules'],decision_authority='机构/伦理委员会，非秘书',release='待机构审阅')\n    elif node in ('S5','S6','S7'):\n        rows=load(work/'S3.json')['cases'];name=OUTPUTS[{'S5':0,'S6':1,'S7':2}[node]]\n        {'S5':book,'S6':slides,'S7':notes}[node](output/name,rows)\n        data=dict(output=name,sha256=digest(output/name))\n    elif node=='S8':\n        for dep in ('S5','S6','S7'):\n            item=load(work/(dep+'.json'));assert digest(output/item['output'])==item['sha256'],'Output modified after generation'\n        data=check_office(output,load(work/'S3.json')['cases'])\n    else:data=dict(gate='READY_FOR_INSTITUTIONAL_TRAINING_REVIEW',ethics_approval=False,clinical_clearance=False,system_upload_performed=False)\n    artifact=node+'.json';dump(work/artifact,data)\n    state['stages'][node]=dict(dependencies=DEPS[node],artifact=artifact,sha256=digest(work/artifact),completed_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat())\n    dump(statepath,state)\n    return state\n\n\ndef receipt(root,output,work,state):\n    assert set(state['stages'])==set(DEPS)\n    dump(output/'build_receipt.json',dict(input_sha256=state['input_sha256'],workflow_sha256=digest(__file__),output_sha256={n:digest(output/n) for n in OUTPUTS},stages=state['stages'],gate=load(work/'S9.json')['gate'],case_routes={r['case_id']:r['route'] for r in load(work/'S3.json')['cases']},actual_execution_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),ethics_approval=False,system_upload_performed=False,scope='Actual bounded training workflow execution, not independent domain-expert approval or a solver trajectory.'))\n\n\ndef verify(root,output,work):\n    r=load(output/'build_receipt.json');state=load(work/'state.json')\n    assert r['input_sha256']==inputs(root)==state['input_sha256'],'Stale input snapshot'\n    assert r['workflow_sha256']==digest(__file__)==state['workflow_sha256'],'Stale workflow'\n    assert r['stages']==state['stages'] and set(r['stages'])==set(DEPS),'Missing or stale stage ledger'\n    for node,entry in r['stages'].items():\n        assert entry['dependencies']==DEPS[node] and all(dep in r['stages'] for dep in DEPS[node])\n        assert digest(work/entry['artifact'])==entry['sha256'],'Stale intermediate '+node\n    assert r['output_sha256']=={n:digest(output/n) for n in OUTPUTS},'Stale deliverable'\n    assert r['case_routes']=={x['case_id']:x['route'] for x in load(work/'S3.json')['cases']}\n    check_office(output,load(work/'S3.json')['cases'])\n    assert r['ethics_approval'] is False and r['system_upload_performed'] is False\n    return dict(pass_all=True,gate=r['gate'],stages=len(r['stages']),scope='Version/hash and authored consistency verification, not a general semantic judge')\n\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('command',choices=['build','verify','stage']);p.add_argument('node',nargs='?');p.add_argument('--input-dir',type=Path,required=True);p.add_argument('--output-dir',type=Path,required=True);p.add_argument('--work-dir',type=Path,required=True);a=p.parse_args()\n    root=a.input_dir.resolve();output=a.output_dir.resolve();work=a.work_dir.resolve();output.mkdir(parents=True,exist_ok=True);work.mkdir(parents=True,exist_ok=True)\n    try:\n        if a.command=='build':\n            assert not (work/'state.json').exists(),'Choose a fresh work-dir; prior run must not be silently overwritten'\n            for node in DEPS:state=stage(node,root,output,work)\n            receipt(root,output,work,state);result=verify(root,output,work)\n        elif a.command=='stage':\n            state=stage(a.node,root,output,work);result=dict(completed=a.node)\n            if a.node=='S9':receipt(root,output,work,state)\n        else:result=verify(root,output,work)\n        print(json.dumps(result,ensure_ascii=False))\n    except Exception as exc:\n        print(json.dumps(dict(pass_all=False,error=str(exc),scope='No approval or successful completion inferred'),ensure_ascii=False));raise SystemExit(2)\n\n\nif __name__=='__main__':main()\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": [
+    {
+      "name": "facilitator_notes.pdf",
+      "url": "assets/audit/render/MED-TIME-003/20261020T233457Z/facilitator_notes.pdf"
+    },
+    {
+      "name": "trainer_brief.pdf",
+      "url": "assets/audit/render/MED-TIME-003/20261020T233457Z/trainer_brief.pdf"
+    },
+    {
+      "name": "training_matrix.pdf",
+      "url": "assets/audit/render/MED-TIME-003/20261020T233457Z/training_matrix.pdf"
+    }
+  ]
+}

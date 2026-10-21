@@ -1,0 +1,1273 @@
+{
+  "id": "GA-TIME-001",
+  "title": "Godot4.3时代任务图工具迁移：可运行4.4.1工程与团队发布门禁",
+  "domain": "游戏",
+  "domain_l2": "GA1-引擎迁移（拟议扩展）",
+  "domain_l3": "Godot资源与脚本兼容版本",
+  "category": "skill-dependency",
+  "complexity": "C3",
+  "target_difficulty": "A2",
+  "as_of": "2025-04-09T09:00:00+08:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "官方4.4版本指南+真实4.4.1反射，代码/团队SOP/消息为原创fixture，非商业产品或官方发行规则。",
+  "instruction": "# Godot4.3时代任务图工具迁移：可运行4.4.1工程与团队发布门禁\n\n## 业务场景与任务说明\n\n你是游戏工具工程师，需把Quest Board历史接口写法工程迁移到目标4.4.1并准备回退工作包。团队R2发布流程位于预装Skill，后来产品经理的先发布消息未被批准。读取冻结指南、真实引擎接口、完整基线及委托，交付能实际运行的工程与真实头less证据，同时保留未验范围；不能用一份报告或手写pass代替项目和测试。\n\n业务判断基准时点：2025-04-09T09:00:00+08:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_Godot44迁移指南.docx`：Godot官方4.4分支4.3→4.4迁移指南全文；GDScript/C#矩阵和旧stdin默认1024。\n- `/app/input_files/S02_目标引擎接口反射.json`：真实目标Godot 4.4.1 ClassDB完整相关接口反射；不是手写官方规则。\n- `/app/input_files/S03_迁移委托与时序.docx`：原创团队范围、消息权限与行为契约，不是Godot官方政策。\n- `/app/input_files/baseline_game/addons/plugin.cfg`：原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。\n- `/app/input_files/baseline_game/addons/plugin.gd`：原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。\n- `/app/input_files/baseline_game/addons/quest_text_parser.gd`：原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。\n- `/app/input_files/baseline_game/data/dialogue.quest`：原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。\n- `/app/input_files/baseline_game/main.tscn`：原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。\n- `/app/input_files/baseline_game/project.godot`：原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。\n- `/app/input_files/baseline_game/scripts/quest_board.gd`：原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。\n- `/app/input_files/baseline_game/scripts/stdin_importer.gd`：原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。\n\n## 工作要求\n\n- [Q1] 按S03有效时序与预装Skill的团队发布合同修复基线工程，目标仅4.4.1；形成真实证据，不让较新未批准消息覆盖R2。\n- [Q2] migrated_game为完整可打开工程，保留主场景、GraphEdit/ChapterOne及两任务节点；按真实4.4接口记录Rect2位置/大小和frame身份，更新可见状态。\n- [Q3] 修复stdin显式缓冲参数，保留1024默认行为和去空白，不让GUI启动阻塞；修复翻译解析返回数组及空槽，保留3条语义、注释/空行处理、.quest识别和编辑器注册/卸载。\n- [Q4] 迁移报告逐文件对照三个API原/新签名、GDScript/C#不同兼容性、改动和离线材料/实际探针证据；不把未做C#或GPU验证写成完成。\n- [Q5] 使用预装Skill实际生成release_gate.json，记录当前工程哈希、命令/退出/观察、有效合同/引擎版本及发布分类，保留未验范围，不手填成功。\n- [Q6] 原样交付rollback_snapshot并列逐文件哈希、回退步骤/责任/验证计划；未运行4.3只能标未验，不重存基线或伪造回退/4.5/生产批准。\n\n## 可用技能\n\n- godot-migration-release：Quest Board团队R2发布合同、实际探针与回退证据工具。；入口`/skills/godot-migration-release/SKILL.md`；相对脚本路径以该技能目录为基准。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/migrated_game/addons/plugin.cfg`：修复目标工程源文件：addons/plugin.cfg\n- `/app/output/migrated_game/addons/plugin.gd`：修复目标工程源文件：addons/plugin.gd\n- `/app/output/migrated_game/addons/quest_text_parser.gd`：修复目标工程源文件：addons/quest_text_parser.gd\n- `/app/output/migrated_game/data/dialogue.quest`：修复目标工程源文件：data/dialogue.quest\n- `/app/output/migrated_game/main.tscn`：修复目标工程源文件：main.tscn\n- `/app/output/migrated_game/project.godot`：修复目标工程源文件：project.godot\n- `/app/output/migrated_game/scripts/quest_board.gd`：修复目标工程源文件：scripts/quest_board.gd\n- `/app/output/migrated_game/scripts/stdin_importer.gd`：修复目标工程源文件：scripts/stdin_importer.gd\n- `/app/output/rollback_snapshot/addons/plugin.cfg`：原样保全的历史工作区文件：addons/plugin.cfg\n- `/app/output/rollback_snapshot/addons/plugin.gd`：原样保全的历史工作区文件：addons/plugin.gd\n- `/app/output/rollback_snapshot/addons/quest_text_parser.gd`：原样保全的历史工作区文件：addons/quest_text_parser.gd\n- `/app/output/rollback_snapshot/data/dialogue.quest`：原样保全的历史工作区文件：data/dialogue.quest\n- `/app/output/rollback_snapshot/main.tscn`：原样保全的历史工作区文件：main.tscn\n- `/app/output/rollback_snapshot/project.godot`：原样保全的历史工作区文件：project.godot\n- `/app/output/rollback_snapshot/scripts/quest_board.gd`：原样保全的历史工作区文件：scripts/quest_board.gd\n- `/app/output/rollback_snapshot/scripts/stdin_importer.gd`：原样保全的历史工作区文件：scripts/stdin_importer.gd\n- `/app/output/migration_report.json`：逐文件迁移矩阵、范围和回退哈希。\n- `/app/output/release_gate.json`：Skill实际运行的门禁、命令、观察和源文件哈希。\n- `/app/output/rollback_and_handoff.md`：回退准备、待验与职责交接。\n\n## 硬约束（单独列明）\n\n- 仅交规定文件到/app/output/；不修改只读baseline_game，输出不含压缩包/导入缓存。\n- 两个工程严格按给定8文件结构交付，迁移文件可修复，rollback_snapshot必须原样保全。\n- 遵守预装Skill适用发布合同，但它是原创团队SOP，不冒充Godot官方规定；不得改工具/合同以伪造通过。\n- 只对实际运行的目标4.4.1头less探针作结论；4.3回退、C#、4.5、完整编辑器/平台效果未验如实标注。\n- JSON真实记录命令、错误、观察和源哈希；修复后重跑，不能复用不匹配源码的旧证据。\n",
+  "instruction_url": "assets/tasks/GA-TIME-001/instruction.md",
+  "absolute_path": "tasks/GA-TIME-001",
+  "spec_path": "manifest/GA-TIME-001.json",
+  "spec_url": "manifest/GA-TIME-001.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "三份报告/证据/交接采用R2合同questboard-release-r2-20250407及4月9日授权，不把4月8日先发布消息当批准。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "migration_report.json",
+        "release_gate.json",
+        "rollback_and_handoff.md"
+      ],
+      "evidence": "S03时序；Skill release-contract；JSON版本与交接首段。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R02",
+      "description": "目标引擎为4.4.1.stable.official，证据报告实际版本与目标一致；不把抓取时间写成变更发布日期。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q5"
+      ],
+      "deliverables": [
+        "migration_report.json",
+        "release_gate.json"
+      ],
+      "evidence": "S02实际版本；Skill contract target_engine_prefix。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R03",
+      "description": "迁移工程含可加载project.godot/main.tscn与所有被引用脚本/数据，实际4.4.1编辑器导入无脚本或解析错误；不用报告代替工程。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "migrated_game/addons/plugin.cfg",
+        "migrated_game/addons/plugin.gd",
+        "migrated_game/addons/quest_text_parser.gd",
+        "migrated_game/data/dialogue.quest",
+        "migrated_game/main.tscn",
+        "migrated_game/project.godot",
+        "migrated_game/scripts/quest_board.gd",
+        "migrated_game/scripts/stdin_importer.gd"
+      ],
+      "evidence": "实际import探针/加载，不能仅看退出码（Godot可报错仍exit0）。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R04",
+      "description": "主场景实际包含GraphEdit、ChapterOne GraphFrame和两任务GraphNode，保持任务图工具用途。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "migrated_game/addons/plugin.cfg",
+        "migrated_game/addons/plugin.gd",
+        "migrated_game/addons/quest_text_parser.gd",
+        "migrated_game/data/dialogue.quest",
+        "migrated_game/main.tscn",
+        "migrated_game/project.godot",
+        "migrated_game/scripts/quest_board.gd",
+        "migrated_game/scripts/stdin_importer.gd"
+      ],
+      "evidence": "原工程与实际ui_frame_signal node_count及节点类型。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R05",
+      "description": "frame_rect_changed完整处理两个参数frame:GraphFrame和new_rect:Rect2，不只给一个Rect2或仍以Vector2接收。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "migrated_game/addons/plugin.cfg",
+        "migrated_game/addons/plugin.gd",
+        "migrated_game/addons/quest_text_parser.gd",
+        "migrated_game/data/dialogue.quest",
+        "migrated_game/main.tscn",
+        "migrated_game/project.godot",
+        "migrated_game/scripts/quest_board.gd",
+        "migrated_game/scripts/stdin_importer.gd"
+      ],
+      "evidence": "S02完整signal参数；实际发送信号观察。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R06",
+      "description": "图框更新分别保留Rect2.position和size、以frame.name索引last_rects；例如探针13/27及321/189不能只存宽高或写固定测试值。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "migrated_game/addons/plugin.cfg",
+        "migrated_game/addons/plugin.gd",
+        "migrated_game/addons/quest_text_parser.gd",
+        "migrated_game/data/dialogue.quest",
+        "migrated_game/main.tscn",
+        "migrated_game/project.godot",
+        "migrated_game/scripts/quest_board.gd",
+        "migrated_game/scripts/stdin_importer.gd"
+      ],
+      "evidence": "实际信号和脚本通用实现，新增不同Rect2也应工作。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R07",
+      "description": "可见状态文字由实际图框回调更新，而不是只有JSON说明或无效UI信号连接。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "migrated_game/addons/plugin.cfg",
+        "migrated_game/addons/plugin.gd",
+        "migrated_game/addons/quest_text_parser.gd",
+        "migrated_game/data/dialogue.quest",
+        "migrated_game/main.tscn",
+        "migrated_game/project.godot",
+        "migrated_game/scripts/quest_board.gd",
+        "migrated_game/scripts/stdin_importer.gd"
+      ],
+      "evidence": "quest_board.gd状态更新及实际节点行为；指针交互仍待人工，不伪称已测。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R08",
+      "description": "read_checkpoint显式传入1024缓冲参数并保留strip_edges，与S01记录的4.3默认相符。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "migrated_game/scripts/stdin_importer.gd"
+      ],
+      "evidence": "S01 Core/1024；S02 OS方法参数；实际stdin探针。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R09",
+      "description": "stdin输入checkpoint_alpha换行实际返回去空白checkpoint_alpha，且GUI启动路径不调用阻塞stdin。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "migrated_game/addons/plugin.cfg",
+        "migrated_game/addons/plugin.gd",
+        "migrated_game/addons/quest_text_parser.gd",
+        "migrated_game/data/dialogue.quest",
+        "migrated_game/main.tscn",
+        "migrated_game/project.godot",
+        "migrated_game/scripts/quest_board.gd",
+        "migrated_game/scripts/stdin_importer.gd"
+      ],
+      "evidence": "实际stdin_checkpoint和main启动调用路径。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R10",
+      "description": "翻译插件改为_parse_file(path:String)->Array[PackedStringArray]，不保留旧msgids/msgids_context_plural形参作为4.4重写签名。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "migrated_game/addons/quest_text_parser.gd"
+      ],
+      "evidence": "S01 editor plugins/S02反射；真实编辑器parser探针。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R11",
+      "description": "解析3条样例保留msgid/context/plural/comment对应槽，Market的空plural和Return的空context/plural不被移位。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "migrated_game/addons/quest_text_parser.gd",
+        "migrated_game/data/dialogue.quest"
+      ],
+      "evidence": "实际editor_parser.entries与原创fixture。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R12",
+      "description": "注释/空行不会生成翻译项，实际识别扩展名包含quest；不是按固定字符串手写结果。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "migrated_game/addons/quest_text_parser.gd"
+      ],
+      "evidence": "data/dialogue.quest与实际parser测试、算法核查。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R13",
+      "description": "项目已启用的EditorPlugin在_enter_tree注册、_exit_tree卸载翻译parser，工程编辑器导入通过；不能只交独立未注册类。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "migrated_game/addons/plugin.cfg",
+        "migrated_game/addons/plugin.gd",
+        "migrated_game/addons/quest_text_parser.gd",
+        "migrated_game/project.godot"
+      ],
+      "evidence": "真实import插件装载；plugin.gd/config。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R14",
+      "description": "迁移报告列三个确实受影响文件及对应API，而不漏stdin/翻译插件或虚构不存在C#/渲染文件。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "migration_report.json"
+      ],
+      "evidence": "基线文件集合、报告changes[]。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R15",
+      "description": "报告GraphEdit从Vector2变Rect2，保留frame参数，注明GDScript及C#二进制/源码均不兼容。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "migration_report.json"
+      ],
+      "evidence": "S01 GUI矩阵、S02 signal；changes第一条。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R16",
+      "description": "报告stdin参数新增对GDScript不兼容，但C#二进制/源码兼容，不将不同语言一律判为破坏。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "migration_report.json"
+      ],
+      "evidence": "S01 Core矩阵；changes第二条。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R17",
+      "description": "报告翻译_parse_file原三参数void到单参数数组返回，三种兼容均false，并关联实际数据保留改动。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "migration_report.json"
+      ],
+      "evidence": "S01 Editor plugins/S02；changes第三条。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R18",
+      "description": "迁移报告每个改动可追到S01/S02及具体探针，而非只写“已修复、已通过”无证据。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "migration_report.json",
+        "release_gate.json"
+      ],
+      "evidence": "报告evidence与release_gate.probes实际命令/观察。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R19",
+      "description": "release_gate四类import/ui_frame_signal/stdin_checkpoint/editor_parser都有真实退出、输出及观察，脚本错误/超时不标pass。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "release_gate.json"
+      ],
+      "evidence": "重新执行预装Skill验证；不是只匹配pass标签。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R20",
+      "description": "release_gate source_hashes与最终migrated_game8源文件实际SHA256一致；导入缓存/临时探针不能混入最终工程证明。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "release_gate.json",
+        "migrated_game/addons/plugin.cfg",
+        "migrated_game/addons/plugin.gd",
+        "migrated_game/addons/quest_text_parser.gd",
+        "migrated_game/data/dialogue.quest",
+        "migrated_game/main.tscn",
+        "migrated_game/project.godot",
+        "migrated_game/scripts/quest_board.gd",
+        "migrated_game/scripts/stdin_importer.gd"
+      ],
+      "evidence": "实际重新计算当前源文件哈希。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R21",
+      "description": "headless成功仅归类READY_FOR_MANUAL_EDITOR_REVIEW且production_release=false，未验项目保留，不擅自改为生产批准。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "release_gate.json",
+        "migration_report.json",
+        "rollback_and_handoff.md"
+      ],
+      "evidence": "Skill合同success_gate和manual_pending；三产物一致。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R22",
+      "description": "rollback_snapshot8源文件逐字节匹配输入baseline_game，未由4.4导入重存或带.godot缓存/UID侧文件冒充原快照。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "rollback_snapshot/addons/plugin.cfg",
+        "rollback_snapshot/addons/plugin.gd",
+        "rollback_snapshot/addons/quest_text_parser.gd",
+        "rollback_snapshot/data/dialogue.quest",
+        "rollback_snapshot/main.tscn",
+        "rollback_snapshot/project.godot",
+        "rollback_snapshot/scripts/quest_board.gd",
+        "rollback_snapshot/scripts/stdin_importer.gd"
+      ],
+      "evidence": "实际对输入基线逐文件哈希，不按迁移工程来比。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R23",
+      "description": "migration_report的rollback_manifest覆盖8个原相对路径且每个哈希与输入/回退快照一致。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "migration_report.json",
+        "rollback_snapshot/addons/plugin.cfg",
+        "rollback_snapshot/addons/plugin.gd",
+        "rollback_snapshot/addons/quest_text_parser.gd",
+        "rollback_snapshot/data/dialogue.quest",
+        "rollback_snapshot/main.tscn",
+        "rollback_snapshot/project.godot",
+        "rollback_snapshot/scripts/quest_board.gd",
+        "rollback_snapshot/scripts/stdin_importer.gd"
+      ],
+      "evidence": "逐文件SHA256。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R24",
+      "description": "回退交接包含保全分支、隔离4.3工作区、核哈希、导入/运行三功能、失败留痕/负责人复核，不用“切回旧版即可”代替动作。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "rollback_and_handoff.md"
+      ],
+      "evidence": "Skill回退政策、S03；交接回退准备。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。",
+      "levels": {
+        "0": "五类均未提供可执行动作。",
+        "0.25": "提供1类。",
+        "0.5": "提供2–3类。",
+        "0.75": "提供4类。",
+        "1": "五类均提供；4.3未实际运行保持未验。"
+      }
+    },
+    {
+      "id": "R25",
+      "description": "报告/交接明确C#编译、完整POT、指针编辑器交互、平台包装/渲染和4.3恢复的未验范围，给出对应QA/本地化/技术负责人下一责任。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-迁移与实证",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4",
+        "Q6"
+      ],
+      "deliverables": [
+        "migration_report.json",
+        "rollback_and_handoff.md"
+      ],
+      "evidence": "S03范围和Skill manual_pending，实际已运行探针范围。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R26",
+      "description": "最终文件严格按完整清单，无压缩包/.godot缓存/未声明过程文件；JSON能解析、两个工程8文件均可读。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q5",
+        "Q6"
+      ],
+      "deliverables": [
+        "migrated_game/addons/plugin.cfg",
+        "migrated_game/addons/plugin.gd",
+        "migrated_game/addons/quest_text_parser.gd",
+        "migrated_game/data/dialogue.quest",
+        "migrated_game/main.tscn",
+        "migrated_game/project.godot",
+        "migrated_game/scripts/quest_board.gd",
+        "migrated_game/scripts/stdin_importer.gd",
+        "rollback_snapshot/addons/plugin.cfg",
+        "rollback_snapshot/addons/plugin.gd",
+        "rollback_snapshot/addons/quest_text_parser.gd",
+        "rollback_snapshot/data/dialogue.quest",
+        "rollback_snapshot/main.tscn",
+        "rollback_snapshot/project.godot",
+        "rollback_snapshot/scripts/quest_board.gd",
+        "rollback_snapshot/scripts/stdin_importer.gd",
+        "migration_report.json",
+        "release_gate.json",
+        "rollback_and_handoff.md"
+      ],
+      "evidence": "交付路径集合与实际内容。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    },
+    {
+      "id": "R27",
+      "description": "扣分：虚构已运行4.3/C#/4.5/平台导出日志或真实生产批准凭证；仅一般漏测、代码错误或范围说明缺失不触发此项以免重复扣分。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与授权",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "migration_report.json",
+        "release_gate.json",
+        "rollback_and_handoff.md"
+      ],
+      "evidence": "S03未授权范围与真实执行证据，检查伪造外部运行/批准事实。",
+      "weight_reason": "按工程行为、版本边界和可交接性影响设权，不能只凭标记或文件存在得核心分。"
+    }
+  ],
+  "source_facts": [],
+  "status": {
+    "task_id": "GA-TIME-001",
+    "domain": "游戏",
+    "domain_l2": "GA1-引擎迁移（拟议扩展）",
+    "category": "skill-dependency",
+    "inputs": 11,
+    "gold_files": 19,
+    "rubrics": 27,
+    "complexity": "C3",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:26427a27e2952d3f21001745096191de0aa7ccafdb6c3f7559de53b8501b406f",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/GA-TIME-001/20261021T005239Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 27.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_Godot44迁移指南.docx",
+      "absolute_path": "题包内：S01_Godot44迁移指南.docx",
+      "url": "",
+      "bytes": 39458,
+      "sha256": "cf9276eca29af1a83c48358b0a97745e91542f11785a4ee57861546fee05bf19",
+      "description": "Godot官方4.4分支4.3→4.4迁移指南全文；GDScript/C#矩阵和旧stdin默认1024。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://docs.godotengine.org/en/4.4/tutorials/migrating/upgrading_to_godot_4.4.html"
+      ]
+    },
+    {
+      "name": "S02_目标引擎接口反射.json",
+      "absolute_path": "题包内：S02_目标引擎接口反射.json",
+      "url": "",
+      "bytes": 7686,
+      "sha256": "bd10e04b9481e10299999729e608852a1525f640388cacf8ef6552075e5a0552",
+      "description": "真实目标Godot 4.4.1 ClassDB完整相关接口反射；不是手写官方规则。",
+      "sections": [],
+      "published": false,
+      "source_urls": []
+    },
+    {
+      "name": "S03_迁移委托与时序.docx",
+      "absolute_path": "题包内：S03_迁移委托与时序.docx",
+      "url": "assets/tasks/GA-TIME-001/environment/input_files/S03_%E8%BF%81%E7%A7%BB%E5%A7%94%E6%89%98%E4%B8%8E%E6%97%B6%E5%BA%8F.docx",
+      "bytes": 39556,
+      "sha256": "a035a2f5d97a9e919e96a9789bbfc3052168ad9e0a3065d9ff76438147f1e845",
+      "description": "原创团队范围、消息权限与行为契约，不是Godot官方政策。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创游戏工具迁移委托：Quest Board"
+        },
+        {
+          "kind": "heading",
+          "text": "任务范围与真实性"
+        },
+        {
+          "kind": "paragraph",
+          "text": "这是原创游戏任务编辑工具最小工程，不是商业产品或从benchmark复制的项目。baseline_game为4.3时代接口写法快照，尚未复测4.3引擎，不宣称是已验证的可回退发行版。目标为已安装Godot 4.4.1官方标准版，不涉及C#编译、GPU RenderingDevice项目或4.5。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是游戏工具工程师。保持可打开的Quest Board界面和注册的.quest翻译插件，修复图框回调、stdin缓冲参数、翻译解析接口；交付完整migrated_game、原样rollback_snapshot、migration_report.json、由团队Skill产生的release_gate.json和rollback_and_handoff.md。"
+        },
+        {
+          "kind": "heading",
+          "text": "可复现行为与文件合同"
+        },
+        {
+          "kind": "paragraph",
+          "text": "主场景main.tscn，根脚本scripts/quest_board.gd，board为GraphEdit，包含名为ChapterOne的GraphFrame及两个任务GraphNode。frame_rect_changed回调应识别frame和Rect2，把位置/大小存入last_rects[frame.name]并更新可见状态。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "scripts/stdin_importer.gd的read_checkpoint应保留旧默认1024字节缓冲行为并去除两端空白，不在GUI启动时阻塞stdin。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "addons/quest_text_parser.gd应按4.4返回Array[PackedStringArray]，保留样例Start/Market/Return的msgid、context、plural、comment位置，空槽不得挤掉，忽略注释和空行；插件须能在编辑器注册/卸载。data/dialogue.quest是原创测试数据。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "团队发布流程及证据schema在预装godot-migration-release Skill中，内容是原创团队SOP而非引擎官方政策。读取适用版本并实际运行工具形成证据；不能只手写pass标记。不得改只读基线，回退快照逐文件哈希要一致。"
+        },
+        {
+          "kind": "heading",
+          "text": "权限与版本消息"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "时间",
+              "角色/状态",
+              "消息"
+            ],
+            [
+              "2025-04-06 16:00",
+              "旧团队笔记/R1历史",
+              "过去有人把headless通过当生产批准，本轮不得据此放行。"
+            ],
+            [
+              "2025-04-07 09:00",
+              "技术负责人/R2批准",
+              "采用预装Skill内的新发布合同：目标4.4.1，headless只决定是否进入人工编辑器审查，未做项保持待验；原快照不得由4.4重存来冒充4.3回退。"
+            ],
+            [
+              "2025-04-08 18:00",
+              "产品经理/未批准消息",
+              "先宣称4.5也兼容、回退已验证、可直接发布，补测以后再说。"
+            ],
+            [
+              "2025-04-09 08:30",
+              "技术负责人/有效补充",
+              "不采纳该建议；三个API按实测与文档修复，C#仅按兼容矩阵说明不冒充编译实测。报告/门禁/交接稿必须全局一致。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "交付说明"
+        },
+        {
+          "kind": "paragraph",
+          "text": "基准2025-04-09 09:00 Asia/Shanghai。不要把抓取日当API变更发布日期，R2时间是原创团队授权时间，不是Godot官方政策日期。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "两个工程均保持8个明确列出的源文件，不交.godot导入缓存或压缩包。rollback_snapshot只表示原文件保全，不代表已经用4.3恢复执行。交接稿写清恢复到隔离4.3环境的步骤、验证动作、责任与未验范围；不要求伪造4.3日志或跨平台导出。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "迁移报告逐文件说明三个API的原/新签名、GDScript与C#兼容矩阵、实际改动和证据定位。对不在工程中的RenderingDevice/导入器/UID/4.5等不得自行虚构问题或新规则。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "baseline_game/addons/plugin.cfg",
+      "absolute_path": "题包内：baseline_game/addons/plugin.cfg",
+      "url": "assets/tasks/GA-TIME-001/environment/input_files/baseline_game/addons/plugin.cfg",
+      "bytes": 182,
+      "sha256": "c0916c86235e3e6d599271afc3c84191c58dfc96ca55d29f770d2f8280a10cab",
+      "description": "原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "此类型或大小不做网页内解析，请下载实际文件查看。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "baseline_game/addons/plugin.gd",
+      "absolute_path": "题包内：baseline_game/addons/plugin.gd",
+      "url": "assets/tasks/GA-TIME-001/environment/input_files/baseline_game/addons/plugin.gd",
+      "bytes": 362,
+      "sha256": "ca4530e77cfd110bfceca5cf21cb6617c820501a2cd004c908f496363cfe2b47",
+      "description": "原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "@tool\nextends EditorPlugin\nvar quest_parser: EditorTranslationParserPlugin\n\nfunc _enter_tree() -> void:\n    quest_parser = preload(\"res://addons/quest_text_parser.gd\").new()\n    add_translation_parser_plugin(quest_parser)\n\nfunc _exit_tree() -> void:\n    if quest_parser != null:\n        remove_translation_parser_plugin(quest_parser)\n        quest_parser = null\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "baseline_game/addons/quest_text_parser.gd",
+      "absolute_path": "题包内：baseline_game/addons/quest_text_parser.gd",
+      "url": "assets/tasks/GA-TIME-001/environment/input_files/baseline_game/addons/quest_text_parser.gd",
+      "bytes": 868,
+      "sha256": "bdeb41b438404579a7f858804a0f0297fb98556b38e36b4bc30732903fb8d380",
+      "description": "原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "@tool\nextends EditorTranslationParserPlugin\nfunc _get_recognized_extensions() -> PackedStringArray:\n    return PackedStringArray([\"quest\"])\nfunc _parse_file(path: String, msgids: Array[String], msgids_context_plural: Array[Array]) -> void:\n    var file := FileAccess.open(path, FileAccess.READ)\n    if file == null:\n        return\n    for line in file.get_as_text().split(\"\\n\"):\n        var clean: String = line.strip_edges()\n        if clean.is_empty() or clean.begins_with(\"#\"):\n            continue\n        var columns := clean.split(\"|\", true)\n        if columns[0].strip_edges().is_empty():\n            continue\n        var context: String = columns[1].strip_edges() if columns.size() > 1 else \"\"\n        var plural: String = columns[2].strip_edges() if columns.size() > 2 else \"\"\n        msgids_context_plural.append([columns[0].strip_edges(), context, plural])\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "baseline_game/data/dialogue.quest",
+      "absolute_path": "题包内：baseline_game/data/dialogue.quest",
+      "url": "assets/tasks/GA-TIME-001/environment/input_files/baseline_game/data/dialogue.quest",
+      "bytes": 162,
+      "sha256": "78925b65edef2f558a9c5a372d170eb7f1ef2b0495556a04479ab8351884e5c9",
+      "description": "原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "此类型或大小不做网页内解析，请下载实际文件查看。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "baseline_game/main.tscn",
+      "absolute_path": "题包内：baseline_game/main.tscn",
+      "url": "assets/tasks/GA-TIME-001/environment/input_files/baseline_game/main.tscn",
+      "bytes": 270,
+      "sha256": "7c2b3dacd763703ec75332f4033afd0d0fce7b38ce76366490145a5308ce5748",
+      "description": "原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "[gd_scene load_steps=2 format=3]\n[ext_resource type=\"Script\" path=\"res://scripts/quest_board.gd\" id=\"1\"]\n[node name=\"QuestBoard\" type=\"Control\"]\nlayout_mode=3\nanchors_preset=15\nanchor_right=1.0\nanchor_bottom=1.0\ngrow_horizontal=2\ngrow_vertical=2\nscript=ExtResource(\"1\")\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "baseline_game/project.godot",
+      "absolute_path": "题包内：baseline_game/project.godot",
+      "url": "assets/tasks/GA-TIME-001/environment/input_files/baseline_game/project.godot",
+      "bytes": 318,
+      "sha256": "e99636a805c21edfc6665b6f983b68eaf1cdcadd99fd51e3b4341d8d7ac23e15",
+      "description": "原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "config_version=5\n[application]\nconfig/name=\"Quest Board historical baseline fixture\"\nrun/main_scene=\"res://main.tscn\"\n[editor_plugins]\nenabled=PackedStringArray(\"res://addons/plugin.cfg\")\n[display]\nwindow/size/viewport_width=960\nwindow/size/viewport_height=640\n[rendering]\nrenderer/rendering_method=\"gl_compatibility\"\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "baseline_game/scripts/quest_board.gd",
+      "absolute_path": "题包内：baseline_game/scripts/quest_board.gd",
+      "url": "assets/tasks/GA-TIME-001/environment/input_files/baseline_game/scripts/quest_board.gd",
+      "bytes": 1539,
+      "sha256": "be09fb64772651cbe6d0c649f37aa0530afe03d9873487ec43b52856a0976df3",
+      "description": "原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends Control\nvar board: GraphEdit\nvar last_rects: Dictionary = {}\nvar status_label: Label\n\nfunc _ready() -> void:\n    var title := Label.new()\n    title.text = \"Quest Board · historical interface baseline (not release approval)\"\n    title.position = Vector2(20, 12)\n    add_child(title)\n    board = GraphEdit.new()\n    board.name = \"Board\"\n    board.position = Vector2(20, 60)\n    board.size = Vector2(900, 450)\n    board.frame_rect_changed.connect(_on_frame_rect_changed)\n    add_child(board)\n    var frame := GraphFrame.new()\n    frame.name = \"ChapterOne\"\n    frame.title = \"Chapter 1\"\n    frame.position_offset = Vector2(50, 50)\n    frame.size = Vector2(380, 240)\n    frame.resizable = true\n    board.add_child(frame)\n    for i in range(2):\n        var quest := GraphNode.new()\n        quest.name = \"Quest\" + str(i)\n        quest.title = [\"Visit the market\", \"Return to the gate\"][i]\n        quest.position_offset = Vector2(90 + i * 220, 100)\n        var text := Label.new()\n        text.text = \"Original synthetic quest fixture\"\n        quest.add_child(text)\n        board.add_child(quest)\n    status_label = Label.new()\n    status_label.position = Vector2(20, 540)\n    status_label.text = \"Resize the Chapter 1 frame to record its full Rect2.\"\n    add_child(status_label)\n\nfunc _on_frame_rect_changed(frame: GraphFrame, new_rect: Vector2) -> void:\n    last_rects[String(frame.name)] = {\"size\": [new_rect.x, new_rect.y]}\n    if is_instance_valid(status_label):\n        status_label.text = String(frame.name) + \": \" + str(new_rect)\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "baseline_game/scripts/stdin_importer.gd",
+      "absolute_path": "题包内：baseline_game/scripts/stdin_importer.gd",
+      "url": "assets/tasks/GA-TIME-001/environment/input_files/baseline_game/scripts/stdin_importer.gd",
+      "bytes": 180,
+      "sha256": "e6d5364ed4afd65bbaec9c941e49cceca3b3a667565ae6a54512e58d1e5a9fe9",
+      "description": "原创历史接口写法工程快照，须保全；不宣称已经通过4.3运行。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends RefCounted\n\nfunc read_checkpoint() -> String:\n    # Preserve the documented 4.3 default buffer size explicitly in 4.4.\n    return OS.read_string_from_stdin().strip_edges()\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "gold": [
+    {
+      "name": "migrated_game/addons/plugin.cfg",
+      "absolute_path": "题包内：migrated_game/addons/plugin.cfg",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/migrated_game/addons/plugin.cfg",
+      "bytes": 182,
+      "sha256": "c0916c86235e3e6d599271afc3c84191c58dfc96ca55d29f770d2f8280a10cab",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "此类型或大小不做网页内解析，请下载实际文件查看。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "migrated_game/addons/plugin.gd",
+      "absolute_path": "题包内：migrated_game/addons/plugin.gd",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/migrated_game/addons/plugin.gd",
+      "bytes": 362,
+      "sha256": "ca4530e77cfd110bfceca5cf21cb6617c820501a2cd004c908f496363cfe2b47",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "@tool\nextends EditorPlugin\nvar quest_parser: EditorTranslationParserPlugin\n\nfunc _enter_tree() -> void:\n    quest_parser = preload(\"res://addons/quest_text_parser.gd\").new()\n    add_translation_parser_plugin(quest_parser)\n\nfunc _exit_tree() -> void:\n    if quest_parser != null:\n        remove_translation_parser_plugin(quest_parser)\n        quest_parser = null\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "migrated_game/addons/quest_text_parser.gd",
+      "absolute_path": "题包内：migrated_game/addons/quest_text_parser.gd",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/migrated_game/addons/quest_text_parser.gd",
+      "bytes": 798,
+      "sha256": "c0cfe2d735312655e679a8201758b237a0bd72d7e9e0c15874add6f02f64db3a",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "@tool\nextends EditorTranslationParserPlugin\n\nfunc _get_recognized_extensions() -> PackedStringArray:\n    return PackedStringArray([\"quest\"])\n\nfunc _parse_file(path: String) -> Array[PackedStringArray]:\n    var result: Array[PackedStringArray] = []\n    var file := FileAccess.open(path, FileAccess.READ)\n    if file == null:\n        return result\n    for line in file.get_as_text().split(\"\\n\"):\n        var clean: String = line.strip_edges()\n        if clean.is_empty() or clean.begins_with(\"#\"):\n            continue\n        var columns := clean.split(\"|\", true)\n        if columns[0].strip_edges().is_empty():\n            continue\n        var entry := PackedStringArray()\n        for column in columns:\n            entry.append(column.strip_edges())\n        result.append(entry)\n    return result\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "migrated_game/data/dialogue.quest",
+      "absolute_path": "题包内：migrated_game/data/dialogue.quest",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/migrated_game/data/dialogue.quest",
+      "bytes": 162,
+      "sha256": "78925b65edef2f558a9c5a372d170eb7f1ef2b0495556a04479ab8351884e5c9",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "此类型或大小不做网页内解析，请下载实际文件查看。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "migrated_game/main.tscn",
+      "absolute_path": "题包内：migrated_game/main.tscn",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/migrated_game/main.tscn",
+      "bytes": 270,
+      "sha256": "7c2b3dacd763703ec75332f4033afd0d0fce7b38ce76366490145a5308ce5748",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "[gd_scene load_steps=2 format=3]\n[ext_resource type=\"Script\" path=\"res://scripts/quest_board.gd\" id=\"1\"]\n[node name=\"QuestBoard\" type=\"Control\"]\nlayout_mode=3\nanchors_preset=15\nanchor_right=1.0\nanchor_bottom=1.0\ngrow_horizontal=2\ngrow_vertical=2\nscript=ExtResource(\"1\")\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "migrated_game/project.godot",
+      "absolute_path": "题包内：migrated_game/project.godot",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/migrated_game/project.godot",
+      "bytes": 310,
+      "sha256": "5f3cdd85d75ec9741248f0857b0f268fee6f1bc600f4dd35e585f7509a381f94",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "config_version=5\n[application]\nconfig/name=\"Quest Board migration candidate\"\nrun/main_scene=\"res://main.tscn\"\n[editor_plugins]\nenabled=PackedStringArray(\"res://addons/plugin.cfg\")\n[display]\nwindow/size/viewport_width=960\nwindow/size/viewport_height=640\n[rendering]\nrenderer/rendering_method=\"gl_compatibility\"\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "migrated_game/scripts/quest_board.gd",
+      "absolute_path": "题包内：migrated_game/scripts/quest_board.gd",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/migrated_game/scripts/quest_board.gd",
+      "bytes": 1621,
+      "sha256": "116b78dd44e4d85691d802f333f64e515ce41f73413e5665b8890ceda45ac3b0",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends Control\nvar board: GraphEdit\nvar last_rects: Dictionary = {}\nvar status_label: Label\n\nfunc _ready() -> void:\n    var title := Label.new()\n    title.text = \"Quest Board · 4.4.1 migration candidate (not release approval)\"\n    title.position = Vector2(20, 12)\n    add_child(title)\n    board = GraphEdit.new()\n    board.name = \"Board\"\n    board.position = Vector2(20, 60)\n    board.size = Vector2(900, 450)\n    board.frame_rect_changed.connect(_on_frame_rect_changed)\n    add_child(board)\n    var frame := GraphFrame.new()\n    frame.name = \"ChapterOne\"\n    frame.title = \"Chapter 1\"\n    frame.position_offset = Vector2(50, 50)\n    frame.size = Vector2(380, 240)\n    frame.resizable = true\n    board.add_child(frame)\n    for i in range(2):\n        var quest := GraphNode.new()\n        quest.name = \"Quest\" + str(i)\n        quest.title = [\"Visit the market\", \"Return to the gate\"][i]\n        quest.position_offset = Vector2(90 + i * 220, 100)\n        var text := Label.new()\n        text.text = \"Original synthetic quest fixture\"\n        quest.add_child(text)\n        board.add_child(quest)\n    status_label = Label.new()\n    status_label.position = Vector2(20, 540)\n    status_label.text = \"Resize the Chapter 1 frame to record its full Rect2.\"\n    add_child(status_label)\n\nfunc _on_frame_rect_changed(frame: GraphFrame, new_rect: Rect2) -> void:\n    last_rects[String(frame.name)] = {\n        \"position\": [new_rect.position.x, new_rect.position.y],\n        \"size\": [new_rect.size.x, new_rect.size.y]\n    }\n    if is_instance_valid(status_label):\n        status_label.text = String(frame.name) + \": \" + str(new_rect)\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "migrated_game/scripts/stdin_importer.gd",
+      "absolute_path": "题包内：migrated_game/scripts/stdin_importer.gd",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/migrated_game/scripts/stdin_importer.gd",
+      "bytes": 184,
+      "sha256": "e9bd2b3814a7032ce39d10b538a1d5491732e624f91eb8d926f365c5a1b79d40",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends RefCounted\n\nfunc read_checkpoint() -> String:\n    # Preserve the documented 4.3 default buffer size explicitly in 4.4.\n    return OS.read_string_from_stdin(1024).strip_edges()\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "migration_report.json",
+      "absolute_path": "题包内：migration_report.json",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/migration_report.json",
+      "bytes": 3376,
+      "sha256": "f87843f80e4a2e07fa5f36a7e8d22e61eac96d30c5a0391df255e959d3da9931",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"provenance\": \"Authored migration analysis with actual engine probes; not expert/production acceptance\",\n  \"target_engine\": \"4.4.1.stable.official.49a5bc7b6\",\n  \"business_as_of\": \"2025-04-09T09:00:00+08:00\",\n  \"contract_version\": \"questboard-release-r2-20250407\",\n  \"scope\": \"GDScript Quest Board + editor translation parser; no C# runtime, no GPU or platform export verification\",\n  \"changes\": [\n    {\n      \"file\": \"scripts/quest_board.gd\",\n      \"api\": \"GraphEdit.frame_rect_changed\",\n      \"old\": \"frame: GraphFrame, new_rect: Vector2\",\n      \"new\": \"frame: GraphFrame, new_rect: Rect2\",\n      \"compatibility\": {\n        \"GDScript\": false,\n        \"CSharp_binary\": false,\n        \"CSharp_source\": false\n      },\n      \"action\": \"保留frame参数，改用Rect2并分别记录position/size；非仅修改类型名称。\",\n      \"evidence\": \"S01 GUI节点表；S02实际signal参数；release_gate.ui_frame_signal实际观察值\"\n    },\n    {\n      \"file\": \"scripts/stdin_importer.gd\",\n      \"api\": \"OS.read_string_from_stdin\",\n      \"old\": \"无参数调用，4.3默认缓冲1024\",\n      \"new\": \"显式buffer_size:int=1024，参数无默认值\",\n      \"compatibility\": {\n        \"GDScript\": false,\n        \"CSharp_binary\": true,\n        \"CSharp_source\": true\n      },\n      \"action\": \"显式1024，不在GUI启动调用，保留strip_edges。\",\n      \"evidence\": \"S01 Core表与默认1024说明；S02实际方法参数；stdin_checkpoint\"\n    },\n    {\n      \"file\": \"addons/quest_text_parser.gd\",\n      \"api\": \"EditorTranslationParserPlugin._parse_file\",\n      \"old\": \"path, msgids:Array[String], msgids_context_plural:Array[Array] -> void\",\n      \"new\": \"path:String -> Array[PackedStringArray]\",\n      \"compatibility\": {\n        \"GDScript\": false,\n        \"CSharp_binary\": false,\n        \"CSharp_source\": false\n      },\n      \"action\": \"返回每条[msgid,context,plural,comment]，空槽保留；保留已启用插件注册/卸载。\",\n      \"evidence\": \"S01 Editor plugins表；S02实际虚方法；editor_parser实际提取3条与扩展名\"\n    }\n  ],\n  \"rollback_manifest\": {\n    \"addons/plugin.cfg\": \"c0916c86235e3e6d599271afc3c84191c58dfc96ca55d29f770d2f8280a10cab\",\n    \"addons/plugin.gd\": \"ca4530e77cfd110bfceca5cf21cb6617c820501a2cd004c908f496363cfe2b47\",\n    \"addons/quest_text_parser.gd\": \"bdeb41b438404579a7f858804a0f0297fb98556b38e36b4bc30732903fb8d380\",\n    \"data/dialogue.quest\": \"78925b65edef2f558a9c5a372d170eb7f1ef2b0495556a04479ab8351884e5c9\",\n    \"main.tscn\": \"7c2b3dacd763703ec75332f4033afd0d0fce7b38ce76366490145a5308ce5748\",\n    \"project.godot\": \"e99636a805c21edfc6665b6f983b68eaf1cdcadd99fd51e3b4341d8d7ac23e15\",\n    \"scripts/quest_board.gd\": \"be09fb64772651cbe6d0c649f37aa0530afe03d9873487ec43b52856a0976df3\",\n    \"scripts/stdin_importer.gd\": \"e6d5364ed4afd65bbaec9c941e49cceca3b3a667565ae6a54512e58d1e5a9fe9\"\n  },\n  \"rollback_runtime\": \"NOT_RUN_4.3\",\n  \"headless_result\": \"READY_FOR_MANUAL_EDITOR_REVIEW\",\n  \"manual_pending\": [\n    \"editor interaction and resize with pointer\",\n    \"full editor POT generation workflow\",\n    \"target-platform packaging and rendering\",\n    \"4.3 rollback restore and runtime check on the original snapshot\"\n  ],\n  \"production_release\": false,\n  \"not_claimed\": [\n    \"C# build passed\",\n    \"Godot4.5 compatible\",\n    \"GPU rendering validated\",\n    \"4.3 rollback executed\",\n    \"production release approved\"\n  ]\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "release_gate.json",
+      "absolute_path": "题包内：release_gate.json",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/release_gate.json",
+      "bytes": 7264,
+      "sha256": "ea37c873721efecc0aa6af0e318028899ccf478c0a6b23e4a5daf96a6951838f",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"schema\": \"questboard-headless-evidence-v2\",\n  \"contract_version\": \"questboard-release-r2-20250407\",\n  \"source_hashes\": {\n    \"addons/plugin.cfg\": \"c0916c86235e3e6d599271afc3c84191c58dfc96ca55d29f770d2f8280a10cab\",\n    \"addons/plugin.gd\": \"ca4530e77cfd110bfceca5cf21cb6617c820501a2cd004c908f496363cfe2b47\",\n    \"addons/quest_text_parser.gd\": \"c0cfe2d735312655e679a8201758b237a0bd72d7e9e0c15874add6f02f64db3a\",\n    \"data/dialogue.quest\": \"78925b65edef2f558a9c5a372d170eb7f1ef2b0495556a04479ab8351884e5c9\",\n    \"main.tscn\": \"7c2b3dacd763703ec75332f4033afd0d0fce7b38ce76366490145a5308ce5748\",\n    \"project.godot\": \"5f3cdd85d75ec9741248f0857b0f268fee6f1bc600f4dd35e585f7509a381f94\",\n    \"scripts/quest_board.gd\": \"116b78dd44e4d85691d802f333f64e515ce41f73413e5665b8890ceda45ac3b0\",\n    \"scripts/stdin_importer.gd\": \"e9bd2b3814a7032ce39d10b538a1d5491732e624f91eb8d926f365c5a1b79d40\"\n  },\n  \"skill_resource_hashes\": {\n    \"SKILL.md\": \"be20d7c9e9db1ed67602d58818b3346053ff71ff14d928ac49c4bbdc48d2da63\",\n    \"references/release-contract.json\": \"4be2ea3ed96e0e80376f78cd5d99480f8dd203b22affa9ea87031382499b12d0\",\n    \"scripts/audit_release.py\": \"3afdcc2bb7765a43bfc490e1e8ff0c23552d44b28e92e8276d95a76ed7f34032\",\n    \"scripts/probe_editor_plugin.gd\": \"395913324760f791eab569ef3ed123c132c86702b1f658ac7e23db7ea9ccdc1e\",\n    \"scripts/probe_project.gd\": \"49c9b327fd4c5092c45e157d9e059404b673881956d33982e967e83b0a976c80\"\n  },\n  \"timestamp_utc\": \"2026-10-20T19:37:19.886457+00:00\",\n  \"probes\": [\n    {\n      \"probe\": \"import\",\n      \"command\": [\n        \"[本地题包根目录]/toolcache/godot4.4.1/Godot_v4.4.1-stable_linux.x86_64\",\n        \"--headless\",\n        \"--path\",\n        \"/tmp/questboard_release_w6xv60s4/project\",\n        \"--editor\",\n        \"--quit\"\n      ],\n      \"exit_code\": 0,\n      \"stdout\": \"Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\\n\\nfirst_scan_filesystem: begin: Project initialization steps: 5\\n\\tfirst_scan_filesystem: step 0: Scanning file structure...\\n\\tfirst_scan_filesystem: step 1: Loading global class names...\\n\\tfirst_scan_filesystem: step 2: Verifying GDExtensions...\\n\\tfirst_scan_filesystem: step 3: Creating autoload scripts...\\n\\tfirst_scan_filesystem: step 4: Initializing plugins...\\n\\tfirst_scan_filesystem: step 5: Starting file scan...\\nfirst_scan_filesystem: end\\nupdate_scripts_classes: begin: Registering global classes... steps: 5\\n\\tupdate_scripts_classes: step 0: \\n\\tupdate_scripts_classes: step 1: \\n\\tupdate_scripts_classes: step 2: \\n\\tupdate_scripts_classes: step 3: \\n\\tupdate_scripts_classes: step 4: \\nupdate_scripts_classes: end\\nupdate_script_paths_documentation: begin: Updating scripts documentation steps: 5\\n\\tupdate_script_paths_documentation: step 0: plugin.gd\\n\\tupdate_script_paths_documentation: step 1: quest_text_parser.gd\\n\\tupdate_script_paths_documentation: step 2: quest_board.gd\\n\\tupdate_script_paths_documentation: step 3: stdin_importer.gd\\n\\tupdate_script_paths_documentation: step 4: __release_probe.gd\\nupdate_script_paths_documentation: end\\nloading_editor_layout: begin: Loading editor steps: 5\\n\\tloading_editor_layout: step 0: Loading editor layout...\\nloading_editor_layout: end\\n\",\n      \"stderr\": \"\",\n      \"observed\": null,\n      \"pass\": true\n    },\n    {\n      \"probe\": \"ui_frame_signal\",\n      \"command\": [\n        \"[本地题包根目录]/toolcache/godot4.4.1/Godot_v4.4.1-stable_linux.x86_64\",\n        \"--headless\",\n        \"--path\",\n        \"/tmp/questboard_release_w6xv60s4/project\",\n        \"--script\",\n        \"res://__release_probe.gd\",\n        \"--\",\n        \"ui\"\n      ],\n      \"exit_code\": 0,\n      \"stdout\": \"Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\\n\\nQUESTBOARD_OBSERVATION={\\\"frame_name\\\":\\\"ChapterOne\\\",\\\"node_count\\\":4,\\\"observed\\\":{\\\"position\\\":[13.0,27.0],\\\"size\\\":[321.0,189.0]}}\\n\",\n      \"stderr\": \"\",\n      \"observed\": {\n        \"frame_name\": \"ChapterOne\",\n        \"node_count\": 4,\n        \"observed\": {\n          \"position\": [\n            13.0,\n            27.0\n          ],\n          \"size\": [\n            321.0,\n            189.0\n          ]\n        }\n      },\n      \"pass\": true\n    },\n    {\n      \"probe\": \"stdin_checkpoint\",\n      \"command\": [\n        \"[本地题包根目录]/toolcache/godot4.4.1/Godot_v4.4.1-stable_linux.x86_64\",\n        \"--headless\",\n        \"--path\",\n        \"/tmp/questboard_release_w6xv60s4/project\",\n        \"--script\",\n        \"res://__release_probe.gd\",\n        \"--\",\n        \"stdin\"\n      ],\n      \"exit_code\": 0,\n      \"stdout\": \"Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\\n\\nQUESTBOARD_OBSERVATION={\\\"checkpoint\\\":\\\"checkpoint_alpha\\\"}\\n\",\n      \"stderr\": \"\",\n      \"observed\": {\n        \"checkpoint\": \"checkpoint_alpha\"\n      },\n      \"pass\": true\n    },\n    {\n      \"probe\": \"editor_parser\",\n      \"command\": [\n        \"[本地题包根目录]/toolcache/godot4.4.1/Godot_v4.4.1-stable_linux.x86_64\",\n        \"--headless\",\n        \"--path\",\n        \"/tmp/questboard_release_w6xv60s4/project\",\n        \"--editor\"\n      ],\n      \"exit_code\": 0,\n      \"stdout\": \"Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\\n\\nfirst_scan_filesystem: begin: Project initialization steps: 5\\n\\tfirst_scan_filesystem: step 0: Scanning file structure...\\n\\tfirst_scan_filesystem: step 1: Loading global class names...\\n\\tfirst_scan_filesystem: step 2: Verifying GDExtensions...\\n\\tfirst_scan_filesystem: step 3: Creating autoload scripts...\\n\\tfirst_scan_filesystem: step 4: Initializing plugins...\\n\\tfirst_scan_filesystem: step 5: Starting file scan...\\nfirst_scan_filesystem: end\\nloading_editor_layout: begin: Loading editor steps: 5\\n\\tloading_editor_layout: step 0: Loading editor layout...\\nloading_editor_layout: end\\nQUESTBOARD_OBSERVATION={\\\"entries\\\":[[\\\"Start\\\",\\\"quest:intro\\\",\\\"Starts\\\",\\\"Intro action\\\"],[\\\"Market\\\",\\\"quest:market\\\",\\\"\\\",\\\"Location\\\"],[\\\"Return\\\",\\\"\\\",\\\"\\\",\\\"Exit action\\\"]],\\\"extensions\\\":[\\\"quest\\\"]}\\n\",\n      \"stderr\": \"\",\n      \"observed\": {\n        \"entries\": [\n          [\n            \"Start\",\n            \"quest:intro\",\n            \"Starts\",\n            \"Intro action\"\n          ],\n          [\n            \"Market\",\n            \"quest:market\",\n            \"\",\n            \"Location\"\n          ],\n          [\n            \"Return\",\n            \"\",\n            \"\",\n            \"Exit action\"\n          ]\n        ],\n        \"extensions\": [\n          \"quest\"\n        ]\n      },\n      \"pass\": true\n    }\n  ],\n  \"production_release\": false,\n  \"manual_pending\": [\n    \"editor interaction and resize with pointer\",\n    \"full editor POT generation workflow\",\n    \"target-platform packaging and rendering\",\n    \"4.3 rollback restore and runtime check on the original snapshot\"\n  ],\n  \"engine_version\": \"4.4.1.stable.official.49a5bc7b6\",\n  \"gate\": \"READY_FOR_MANUAL_EDITOR_REVIEW\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "rollback_and_handoff.md",
+      "absolute_path": "题包内：rollback_and_handoff.md",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/rollback_and_handoff.md",
+      "bytes": 1994,
+      "sha256": "1931ac5db29df3619c46454e10076afa453bc0f5a28c8a8433a334555deea756",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "# 迁移与回退交接（待人工审查）\n\n采用技术负责人2025-04-07 R2及4月9日补充，不采用4月8日未批准的先发布建议。\n当前目标Godot 4.4.1，四个实际headless探针通过，仅达到READY_FOR_MANUAL_EDITOR_REVIEW。\n这不是生产批准；指针交互、完整POT生成、目标平台包装/渲染、原快照4.3恢复运行均待验。\n\n## 文件和验证\n\n用4.4.1打开migrated_game/project.godot；主场景是任务图工具，拖动/缩放ChapterOne应更新位置与大小。\n翻译插件在编辑器启用，样例3条保留context/plural/comment，空槽保留；完整POT生成另由本地化负责人验证。\nstdin仅供CI read_checkpoint调用，显式1024，不能改成启动GUI就读输入。\nrelease_gate.json来自预装Skill的真实命令、观察值和当前项目哈希；修改源码后必须重跑，不复用旧证据。\nGDScript和C#兼容矩阵不同，后者只按文档说明，未执行C#编译。\n\n## 回退准备（未执行4.3运行验证）\n\n1. 暂停候选发布并保全当前迁移分支；由技术负责人决定是否进入回退演练。\n2. 把rollback_snapshot复制到新的、隔离的4.3工作区，不覆盖只读输入，不在4.4打开重存原快照。\n3. 逐文件核对migration_report.json的rollback_manifest；不带入4.4的.godot缓存或自动生成的UID侧文件。\n4. 用经核验的4.3环境导入、运行主场景并验证任务图、stdin、本地化插件；本包未运行该步骤，不写回退成功。\n5. 若4.3原快照仍有错误，保留失败并由工具负责人修复/复核，不伪造历史通过记录。通过相关平台和团队复核后再决定后续动作。\n\n## 责任与边界\n\n工具工程师处理脚本与头less证据，本地化负责人验证POT流程，QA核交互与目标平台，技术负责人决定发布。\n不涉及RenderingDevice项目，不虚构其修改；未交付C#，不声称完成C#验证；不无据承诺4.5、UID全局禁用或生产就绪。\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "rollback_snapshot/addons/plugin.cfg",
+      "absolute_path": "题包内：rollback_snapshot/addons/plugin.cfg",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/rollback_snapshot/addons/plugin.cfg",
+      "bytes": 182,
+      "sha256": "c0916c86235e3e6d599271afc3c84191c58dfc96ca55d29f770d2f8280a10cab",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "此类型或大小不做网页内解析，请下载实际文件查看。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "rollback_snapshot/addons/plugin.gd",
+      "absolute_path": "题包内：rollback_snapshot/addons/plugin.gd",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/rollback_snapshot/addons/plugin.gd",
+      "bytes": 362,
+      "sha256": "ca4530e77cfd110bfceca5cf21cb6617c820501a2cd004c908f496363cfe2b47",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "@tool\nextends EditorPlugin\nvar quest_parser: EditorTranslationParserPlugin\n\nfunc _enter_tree() -> void:\n    quest_parser = preload(\"res://addons/quest_text_parser.gd\").new()\n    add_translation_parser_plugin(quest_parser)\n\nfunc _exit_tree() -> void:\n    if quest_parser != null:\n        remove_translation_parser_plugin(quest_parser)\n        quest_parser = null\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "rollback_snapshot/addons/quest_text_parser.gd",
+      "absolute_path": "题包内：rollback_snapshot/addons/quest_text_parser.gd",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/rollback_snapshot/addons/quest_text_parser.gd",
+      "bytes": 868,
+      "sha256": "bdeb41b438404579a7f858804a0f0297fb98556b38e36b4bc30732903fb8d380",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "@tool\nextends EditorTranslationParserPlugin\nfunc _get_recognized_extensions() -> PackedStringArray:\n    return PackedStringArray([\"quest\"])\nfunc _parse_file(path: String, msgids: Array[String], msgids_context_plural: Array[Array]) -> void:\n    var file := FileAccess.open(path, FileAccess.READ)\n    if file == null:\n        return\n    for line in file.get_as_text().split(\"\\n\"):\n        var clean: String = line.strip_edges()\n        if clean.is_empty() or clean.begins_with(\"#\"):\n            continue\n        var columns := clean.split(\"|\", true)\n        if columns[0].strip_edges().is_empty():\n            continue\n        var context: String = columns[1].strip_edges() if columns.size() > 1 else \"\"\n        var plural: String = columns[2].strip_edges() if columns.size() > 2 else \"\"\n        msgids_context_plural.append([columns[0].strip_edges(), context, plural])\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "rollback_snapshot/data/dialogue.quest",
+      "absolute_path": "题包内：rollback_snapshot/data/dialogue.quest",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/rollback_snapshot/data/dialogue.quest",
+      "bytes": 162,
+      "sha256": "78925b65edef2f558a9c5a372d170eb7f1ef2b0495556a04479ab8351884e5c9",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "此类型或大小不做网页内解析，请下载实际文件查看。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "rollback_snapshot/main.tscn",
+      "absolute_path": "题包内：rollback_snapshot/main.tscn",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/rollback_snapshot/main.tscn",
+      "bytes": 270,
+      "sha256": "7c2b3dacd763703ec75332f4033afd0d0fce7b38ce76366490145a5308ce5748",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "[gd_scene load_steps=2 format=3]\n[ext_resource type=\"Script\" path=\"res://scripts/quest_board.gd\" id=\"1\"]\n[node name=\"QuestBoard\" type=\"Control\"]\nlayout_mode=3\nanchors_preset=15\nanchor_right=1.0\nanchor_bottom=1.0\ngrow_horizontal=2\ngrow_vertical=2\nscript=ExtResource(\"1\")\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "rollback_snapshot/project.godot",
+      "absolute_path": "题包内：rollback_snapshot/project.godot",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/rollback_snapshot/project.godot",
+      "bytes": 318,
+      "sha256": "e99636a805c21edfc6665b6f983b68eaf1cdcadd99fd51e3b4341d8d7ac23e15",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "config_version=5\n[application]\nconfig/name=\"Quest Board historical baseline fixture\"\nrun/main_scene=\"res://main.tscn\"\n[editor_plugins]\nenabled=PackedStringArray(\"res://addons/plugin.cfg\")\n[display]\nwindow/size/viewport_width=960\nwindow/size/viewport_height=640\n[rendering]\nrenderer/rendering_method=\"gl_compatibility\"\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "rollback_snapshot/scripts/quest_board.gd",
+      "absolute_path": "题包内：rollback_snapshot/scripts/quest_board.gd",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/rollback_snapshot/scripts/quest_board.gd",
+      "bytes": 1539,
+      "sha256": "be09fb64772651cbe6d0c649f37aa0530afe03d9873487ec43b52856a0976df3",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends Control\nvar board: GraphEdit\nvar last_rects: Dictionary = {}\nvar status_label: Label\n\nfunc _ready() -> void:\n    var title := Label.new()\n    title.text = \"Quest Board · historical interface baseline (not release approval)\"\n    title.position = Vector2(20, 12)\n    add_child(title)\n    board = GraphEdit.new()\n    board.name = \"Board\"\n    board.position = Vector2(20, 60)\n    board.size = Vector2(900, 450)\n    board.frame_rect_changed.connect(_on_frame_rect_changed)\n    add_child(board)\n    var frame := GraphFrame.new()\n    frame.name = \"ChapterOne\"\n    frame.title = \"Chapter 1\"\n    frame.position_offset = Vector2(50, 50)\n    frame.size = Vector2(380, 240)\n    frame.resizable = true\n    board.add_child(frame)\n    for i in range(2):\n        var quest := GraphNode.new()\n        quest.name = \"Quest\" + str(i)\n        quest.title = [\"Visit the market\", \"Return to the gate\"][i]\n        quest.position_offset = Vector2(90 + i * 220, 100)\n        var text := Label.new()\n        text.text = \"Original synthetic quest fixture\"\n        quest.add_child(text)\n        board.add_child(quest)\n    status_label = Label.new()\n    status_label.position = Vector2(20, 540)\n    status_label.text = \"Resize the Chapter 1 frame to record its full Rect2.\"\n    add_child(status_label)\n\nfunc _on_frame_rect_changed(frame: GraphFrame, new_rect: Vector2) -> void:\n    last_rects[String(frame.name)] = {\"size\": [new_rect.x, new_rect.y]}\n    if is_instance_valid(status_label):\n        status_label.text = String(frame.name) + \": \" + str(new_rect)\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "rollback_snapshot/scripts/stdin_importer.gd",
+      "absolute_path": "题包内：rollback_snapshot/scripts/stdin_importer.gd",
+      "url": "assets/tasks/GA-TIME-001/solution/golden_output/rollback_snapshot/scripts/stdin_importer.gd",
+      "bytes": 180,
+      "sha256": "e6d5364ed4afd65bbaec9c941e49cceca3b3a667565ae6a54512e58d1e5a9fe9",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends RefCounted\n\nfunc read_checkpoint() -> String:\n    # Preserve the documented 4.3 default buffer size explicitly in 4.4.\n    return OS.read_string_from_stdin().strip_edges()\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [
+    {
+      "name": "godot-migration-release",
+      "description": "Quest Board团队R2发布合同、实际探针与回退证据工具。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/GA-TIME-001/environment/skills/godot-migration-release/SKILL.md",
+          "bytes": 1699,
+          "sha256": "be20d7c9e9db1ed67602d58818b3346053ff71ff14d928ac49c4bbdc48d2da63",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: godot-migration-release\ndescription: Run the Quest Board team's offline Godot migration evidence and release gate, including headless probes and rollback boundaries. Use for this team's migration candidates, not unrelated Godot development.\n---\n\n# Quest Board migration evidence\n\nThis is an original team workflow supplied for the benchmark, not an official\nGodot release policy. The versioned local contract determines the evidence\nschema and what a headless result can authorize. Read\n[release-contract.json](references/release-contract.json) before deciding the gate.\nPublic API facts still come from the frozen engine documentation.\n\nRun the actual checks against a working copy of the project:\n\n```bash\npython3 /skills/godot-migration-release/scripts/audit_release.py \\\n  --project /app/output/migrated_game --godot godot \\\n  --out /app/output/release_gate.json\n```\n\nThe tool copies the project to isolated temporary storage, imports it, executes\nthe UI signal, stdin, and editor-parser probes, and records real commands,\nexit codes, observations and source hashes. It never approves production or\nmodifies the input snapshot. `--godot` may name another verified executable in\nan author QA environment; the benchmark image provides `godot`.\n\nOn a failing command, retain the failure evidence, fix the project and rerun;\ndo not relabel the failure as success or replace the observed output. On a tool\nor environment error, report that condition rather than inventing a score.\nKeep the 4.3 rollback snapshot untouched: 4.4 import caches/UID sidecars are not\nrollback evidence. A successful headless candidate is still pending the manual\neditor/platform checks required by the contract.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "references/release-contract.json",
+          "absolute_path": "题包内：references/release-contract.json",
+          "url": "assets/tasks/GA-TIME-001/environment/skills/godot-migration-release/references/release-contract.json",
+          "bytes": 1111,
+          "sha256": "4be2ea3ed96e0e80376f78cd5d99480f8dd203b22affa9ea87031382499b12d0",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "{\n  \"provenance\": \"Original team SOP and evidence contract, not Godot official policy\",\n  \"contract_version\": \"questboard-release-r2-20250407\",\n  \"effective_team_time\": \"2025-04-07T09:00:00+08:00\",\n  \"target_engine_prefix\": \"4.4.1.stable.official\",\n  \"evidence_schema\": \"questboard-headless-evidence-v2\",\n  \"required_probes\": [\n    \"import\",\n    \"ui_frame_signal\",\n    \"stdin_checkpoint\",\n    \"editor_parser\"\n  ],\n  \"success_gate\": \"READY_FOR_MANUAL_EDITOR_REVIEW\",\n  \"failure_gate\": \"HOLD_FIX_AND_RETEST\",\n  \"on_tool_error\": \"HOLD_ENVIRONMENT\",\n  \"production_release\": \"not_authorized_by_headless_evidence\",\n  \"manual_pending\": [\n    \"editor interaction and resize with pointer\",\n    \"full editor POT generation workflow\",\n    \"target-platform packaging and rendering\",\n    \"4.3 rollback restore and runtime check on the original snapshot\"\n  ],\n  \"rollback_policy\": \"preserve the original 4.3 snapshot and hashes; do not reopen/save it using 4.4 to manufacture rollback evidence\",\n  \"reporting\": \"pass requires actual observations and current project SHA256 map; missing checks are not pass; later unofficial chat cannot override this approved R2\"\n}"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "scripts/audit_release.py",
+          "absolute_path": "题包内：scripts/audit_release.py",
+          "url": "assets/tasks/GA-TIME-001/environment/skills/godot-migration-release/scripts/audit_release.py",
+          "bytes": 6546,
+          "sha256": "3afdcc2bb7765a43bfc490e1e8ff0c23552d44b28e92e8276d95a76ed7f34032",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "\"\"\"Actual isolated project probes and original team release decision.\"\"\"\nimport argparse,datetime,hashlib,json,re,shutil,subprocess,tempfile\nfrom pathlib import Path\n\nSKILL=Path(__file__).resolve().parents[1]\n\ndef main():\n    parser=argparse.ArgumentParser();parser.add_argument('--project',type=Path,required=True);parser.add_argument('--godot',default='godot');parser.add_argument('--out',type=Path,required=True);args=parser.parse_args()\n    source=args.project.resolve();assert (source/'project.godot').is_file(),'Expected complete project'\n    contract=json.loads((SKILL/'references/release-contract.json').read_text())\n    assert not args.out.resolve().is_relative_to(source),'Evidence must not be included in the hashed project'\n    hashes={str(p.relative_to(source)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(source.rglob('*')) if p.is_file() and '.godot' not in p.parts and not p.name.endswith('.uid')}\n    tool_hashes={str(p.relative_to(SKILL)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(SKILL.rglob('*')) if p.is_file() and '__pycache__' not in p.parts}\n    result={'schema':contract['evidence_schema'],'contract_version':contract['contract_version'],'source_hashes':hashes,'skill_resource_hashes':tool_hashes,'timestamp_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'probes':[],'production_release':False,'manual_pending':contract['manual_pending']}\n    def execute(label,command,expected=None,stdin=None):\n        try:\n            completed=subprocess.run(command,input=stdin,capture_output=True,text=True,timeout=50)\n        except subprocess.TimeoutExpired as exc:\n            def decoded(value):return value.decode(errors='replace') if isinstance(value,bytes) else (value or '')\n            result['probes'].append({'probe':label,'command':command,'exit_code':124,'stdout':decoded(exc.stdout),'stderr':decoded(exc.stderr),'observed':None,'pass':False,'timed_out':True})\n            return False\n        row={'probe':label,'command':command,'exit_code':completed.returncode,'stdout':completed.stdout,'stderr':completed.stderr}\n        matches=re.findall(r'^QUESTBOARD_OBSERVATION=(.*)$',completed.stdout,re.M)\n        observed=json.loads(matches[-1]) if matches else None\n        row['observed']=observed\n        # Godot sometimes reports a script failure but exits zero. Check both\n        # the runtime error channel and concrete observations.\n        row['pass']=completed.returncode==0 and not any(s in completed.stderr for s in ['SCRIPT ERROR','Parse Error','ERROR:'])\n        if expected is not None:row['pass']=row['pass'] and expected(observed)\n        result['probes'].append(row)\n        return row['pass']\n    try:\n        version=subprocess.run([args.godot,'--version'],capture_output=True,text=True,timeout=20)\n        result['engine_version']=version.stdout.strip()\n        assert version.returncode==0 and result['engine_version'].startswith(contract['target_engine_prefix']),'Engine version does not match approved target'\n        with tempfile.TemporaryDirectory(prefix='questboard_release_') as tmp:\n            project=Path(tmp)/'project';shutil.copytree(source,project,ignore=shutil.ignore_patterns('.godot','*.uid'))\n            shutil.copy2(SKILL/'scripts/probe_project.gd',project/'__release_probe.gd')\n            base=[args.godot,'--headless','--path',str(project)]\n            if not execute('import',base+['--editor','--quit']):\n                for pending in ['ui_frame_signal','stdin_checkpoint','editor_parser']:\n                    result['probes'].append({'probe':pending,'command':[],'exit_code':None,'stdout':'','stderr':'','observed':None,'pass':False,'status':'not_run_after_failed_import'})\n                result['gate']=contract['failure_gate']\n                args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps(result,ensure_ascii=False,indent=2))\n                print(json.dumps({'gate':result['gate'],'reason':'actual import failed; dependent probes not run'}))\n                return\n            execute('ui_frame_signal',base+['--script','res://__release_probe.gd','--','ui'],lambda o:o is not None and o.get('frame_name')=='ChapterOne' and o.get('observed')=={'position':[13,27],'size':[321,189]} and o.get('node_count',0)>=3)\n            execute('stdin_checkpoint',base+['--script','res://__release_probe.gd','--','stdin'],lambda o:o=={'checkpoint':'checkpoint_alpha'},stdin='checkpoint_alpha\\n')\n            # Editor-only classes cannot be instantiated in a runtime SceneTree.\n            # Load a separate QA plugin in the *native* editor main loop; do not\n            # substitute a SceneTree for that loop (which leaked editor RIDs).\n            probe_plugin=project/'__probe_plugin';probe_plugin.mkdir()\n            shutil.copy2(SKILL/'scripts/probe_editor_plugin.gd',probe_plugin/'probe.gd')\n            (probe_plugin/'plugin.cfg').write_text('[plugin]\\nname=\"Release parser probe\"\\ndescription=\"Temporary isolated QA plugin\"\\nauthor=\"QA tool\"\\nversion=\"1\"\\nscript=\"probe.gd\"\\n')\n            cfg=project/'project.godot';body=cfg.read_text()\n            pattern=r'(\\[editor_plugins\\][\\s\\S]*?enabled\\s*=\\s*PackedStringArray\\()([^)]*)(\\))'\n            match=re.search(pattern,body)\n            if match:\n                entries=match.group(2).strip();entries+=(\", \" if entries else \"\")+'\"res://__probe_plugin/plugin.cfg\"'\n                body=body[:match.start(2)]+entries+body[match.end(2):]\n            else:body+='\\n[editor_plugins]\\nenabled=PackedStringArray(\"res://__probe_plugin/plugin.cfg\")\\n'\n            cfg.write_text(body)\n            execute('editor_parser',base+['--editor'],lambda o:o is not None and o.get('entries')==[['Start','quest:intro','Starts','Intro action'],['Market','quest:market','','Location'],['Return','','','Exit action']] and o.get('extensions')==['quest'])\n        passed=all(p['pass'] for p in result['probes']) and {p['probe'] for p in result['probes']}==set(contract['required_probes'])\n        result['gate']=contract['success_gate'] if passed else contract['failure_gate']\n    except (OSError,subprocess.SubprocessError,AssertionError,ValueError) as exc:\n        result.update(gate=contract['on_tool_error'],environment_error=type(exc).__name__+': '+str(exc))\n    args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps(result,ensure_ascii=False,indent=2))\n    print(json.dumps({'gate':result['gate'],'probes':[{k:p[k] for k in ['probe','pass','exit_code']} for p in result['probes']]},ensure_ascii=False))\n\nif __name__=='__main__':main()\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "scripts/probe_editor_plugin.gd",
+          "absolute_path": "题包内：scripts/probe_editor_plugin.gd",
+          "url": "assets/tasks/GA-TIME-001/environment/skills/godot-migration-release/scripts/probe_editor_plugin.gd",
+          "bytes": 600,
+          "sha256": "395913324760f791eab569ef3ed123c132c86702b1f658ac7e23db7ea9ccdc1e",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "@tool\nextends EditorPlugin\n\nfunc _enter_tree() -> void:\n    call_deferred(\"capture_parser\")\n\nfunc capture_parser() -> void:\n    await get_tree().create_timer(0.5).timeout\n    var parser = load(\"res://addons/quest_text_parser.gd\").new()\n    var extracted: Array = parser._parse_file(\"res://data/dialogue.quest\")\n    var rows: Array = []\n    for entry in extracted:\n        rows.append(Array(entry))\n    var extensions := Array(parser._get_recognized_extensions())\n    parser = null\n    print(\"QUESTBOARD_OBSERVATION=\" + JSON.stringify({\"entries\":rows,\"extensions\":extensions}))\n    get_tree().quit(0)\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "scripts/probe_project.gd",
+          "absolute_path": "题包内：scripts/probe_project.gd",
+          "url": "assets/tasks/GA-TIME-001/environment/skills/godot-migration-release/scripts/probe_project.gd",
+          "bytes": 932,
+          "sha256": "49c9b327fd4c5092c45e157d9e059404b673881956d33982e967e83b0a976c80",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "extends SceneTree\n\nfunc _initialize() -> void:\n    call_deferred(\"run_probe\")\n\nfunc emit_result(result: Dictionary) -> void:\n    print(\"QUESTBOARD_OBSERVATION=\" + JSON.stringify(result))\n    call_deferred(\"quit\", 0)\n\nfunc run_probe() -> void:\n    var mode := OS.get_cmdline_user_args()[0]\n    if mode == \"ui\":\n        var scene = load(\"res://main.tscn\").instantiate()\n        root.add_child(scene)\n        await process_frame\n        var frame: GraphFrame = scene.board.get_node(\"ChapterOne\")\n        scene.board.frame_rect_changed.emit(frame, Rect2(13, 27, 321, 189))\n        emit_result({\"frame_name\":String(frame.name),\"observed\":scene.last_rects.get(\"ChapterOne\"),\"node_count\":scene.board.get_child_count()})\n    elif mode == \"stdin\":\n        var reader = load(\"res://scripts/stdin_importer.gd\").new()\n        emit_result({\"checkpoint\":reader.read_checkpoint()})\n    else:\n        emit_result({\"error\":\"unknown runtime probe\"})\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    }
+  ],
+  "renders": []
+}

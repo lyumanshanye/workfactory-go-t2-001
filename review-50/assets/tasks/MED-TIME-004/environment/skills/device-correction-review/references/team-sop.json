@@ -1,0 +1,26 @@
+{
+  "sop_id": "LOCAL-QM-20261020-R2",
+  "authority": "Original fictional US facility quality lead, 2026-10-20 09:00 America/New_York. Not an FDA approval requirement.",
+  "source_scope": "Four exact model/UDI pairs explicitly listed in frozen S01; not the unavailable complete affected-product workbook and not all Philips recalls.",
+  "models": {
+    "DS2110X11B": {"name": "Trilogy Evo", "udi": "00606959051942"},
+    "DS2200X11B": {"name": "Trilogy EV300", "udi": "00606959052017"},
+    "DS2100X11B": {"name": "Trilogy Evo O2", "udi": "00606959051997"},
+    "DS2000X11B": {"name": "Trilogy Evo Universal", "udi": "00606959052000"}
+  },
+  "software_target_in_frozen_us_notice": "1.05.15.00",
+  "identity_rule": "A known model whose UDI differs or is missing remains HOLD_IDENTITY. Never silently overwrite an identity from a generic product label.",
+  "service_evidence_rule": "Use only service records at the frozen as_of observation and authority primary. Multiple such records with different installed versions remain HOLD_SERVICE_CONFLICT; do not choose by ticket order or late email. A note is not a replacement record.",
+  "required_internal_checks": [
+    "at least one primary same-observation service record; all agree; installed version exactly the stated frozen US target",
+    "current manufacturer addendum checked according to the given internal register",
+    "known historical sensor-deposit concern has a checked service resolution; unknown history requires clarification",
+    "current nebulizer guidance briefing acknowledged",
+    "for transferred assets, actual current-recipient acknowledgement of the updated notice and addendum in the given register"
+  ],
+  "states": ["HOLD_IDENTITY", "HOLD_SERVICE_CONFLICT", "ACTION_PENDING", "READY_FOR_AUTHORIZED_REVIEW", "OUTSIDE_GIVEN_MATRIX"],
+  "priority_rule": "identity hold before service conflict before other missing gates; retain transfer followup separately. No priority order is an instruction to stop a patient's ventilator.",
+  "other_versions": "Do not numerically order firmware or force a downgrade. A different version, including 1.06.15.00, needs US model/channel-specific clinical-engineering/manufacturer confirmation; it does not prove completion.",
+  "permissions": {"clinical_release": false, "external_send": false, "patient_settings_change": false, "device_operation": false},
+  "status_note": "READY_FOR_AUTHORIZED_REVIEW is an internal evidence handoff only, never final clinical authorization. Case records are fictional task facts, not genuine supplier certificates."
+}

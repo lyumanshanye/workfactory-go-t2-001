@@ -1,0 +1,2743 @@
+{
+  "id": "FIN-TIME-004",
+  "title": "个人养老金三条时间线：家庭流动性、产品持有期与领取沟通",
+  "domain": "金融",
+  "domain_l2": "Fin4-财富管理",
+  "domain_l3": "养老产品冷静期与家庭规划边界",
+  "category": "weakness-driven",
+  "complexity": "C3",
+  "target_difficulty": "A2",
+  "as_of": "2025-09-05 10:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "真实87/21/39号官方冻结正文及真实提供商产品概要；家庭、流水、余额、D0和权限均原创虚构。旧备份为相同授权冻结版本，不是新调查。",
+  "instruction": "# 个人养老金三条时间线：家庭流动性、产品持有期与领取沟通\n\n## 业务场景与任务说明\n\n你是财富团队分析助理，供负责人复核12个家庭原来询并改写错误客服草稿。官方扩围、税收及2025新增领取条件时间不同，基金0赎回费又被误认为可随时提现。原导出默认文件同步缺失，但有登记授权备份。请实际恢复数据，形成专业可追溯的工作簿、逐案家庭答复及待审交接。\n\n业务判断基准时点：2025-09-05 10:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_全国扩围通知阅读器全文.docx`：87号真实官方阅读器正文及时间/取证说明\n- `/app/input_files/S02_税收公告全文.docx`：21号税收公告完整冻结正文与来源\n- `/app/input_files/S03_2025领取通知阅读器全文.docx`：39号真实官方阅读器正文及施行日\n- `/app/input_files/S04_真实Y类产品资料概要20240531.pdf`：实际提供商2024年7页Y类产品概要PDF\n- `/app/input_files/S05_家庭访谈冻结备份.xlsx`：完整授权备份：12案原创家庭访谈/资金快照/每笔到期事实\n- `/app/input_files/S06_失业保险金领取流水.csv`：60条原创月度失业保险金领取记录，须按各案窗口复算\n- `/app/input_files/S07_D0客服回复草稿.docx`：有实质错误的原创D0待审回复，不是权威规则\n- `/app/input_files/S08_负责人委托与恢复指引.docx`：原创负责人委托、权限/恢复/交付合同及家庭事实边界\n- `/app/input_files/export_households.py`：真实离线导出CLI：默认文件缺失，需授权备份恢复；不含业务答案\n- `/app/input_files/S10_授权备份登记.json`：授权备份SHA/列名/行数与来源登记\n- `/app/input_files/S11_家庭沟通稿模板.docx`：原创中文沟通稿结构模板，不含每案答案\n\n## 工作要求\n\n- [REQ01] 逐案复核12项，F01–F04用各自历史business_on，不把当前规则倒填旧答复；每案有结论、证据定位、产品/资金边界、下一动作/接口。\n- [REQ02] 分开记录扩围、税收和领取通知成文/网页已知日期/起施及真实抓取日；正确处理12月14/16参加基础条件与税收追溯边界。\n- [REQ03] F02分别复算年度剩余额度、账户外储备余量、建议追加上限及勾稽；可更审慎/延后，不保证退税额或把家庭储备当法定条件。\n- [REQ04] 逐笔按申请日前2年窗口复算F04/F05/F06/F07/F10累计月数，原流水、纳入/排除定位及可用公式；按原日期判断39号是否已施行。\n- [REQ05] F05/F08/F10/F11区分条件初筛与社保核实→平台状态→银行代扣→本人社保卡流程，其他案不无据批准；F08不自行按固定年龄推算。\n- [REQ06] 核真实产品的最低持有、0赎回费、不保本和概要局限；F07/F10未到期持仓与现金分开，F09满期不等于有对外领取资格；未给特别安排保持待核而非永不可能。\n- [REQ07] 仅对给定F05/F08现金10000、F10现金4000、F11现金12000做3%附条件税/净额演示，有公式与缓存；不加基金快照，不声明已获批/到账。\n- [REQ08] F11向家庭说明按月/分次/一次性及变更选择；F12核非年龄路径领取后再缴恢复缴存、需重新条件，不沿用已停止低保。\n- [REQ09] 先真实运行默认导出，识别缺文件阻塞；按S10核授权备份SHA/列名/12案完整性，以--source恢复；不改源/登记/脚本、不空造数据或反复等缺失文件。\n- [REQ10] execution_evidence.json保留真实两次UTC/argv/退出码/stdout/stderr、完整导出12案及输入SHA、窗口依据、初筛与金额演示，执行环境如实标注；哈希不作身份/审批认证。\n- [REQ11] household_messages.docx完整12案中文可读草稿，逐案直接答来询/风险/下一步；advisor_handoff.docx列D0实质纠错及受影响事项/交付定位、恢复经过、产品/社保/家庭/负责人责任接口和待核事项。\n- [REQ12] 无依据的统一7天冷静期不能宣传，核具体合同/渠道/撤单时限；不把养老/稳健/0费当保本或免费，不虚构产品/资格/批准、外部联系或专家认证。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/triage_workbook.xlsx`：12案分流、原流水/窗口公式、F02缴费/储备与附条件现金计算、规则/D0定位的可用原生工作簿。\n- `/app/output/household_messages.docx`：12案完整中文家庭答复草稿，逐案可用/边界/下一步，待审未发送。\n- `/app/output/advisor_handoff.docx`：负责人交接：D0纠错传播、真实恢复经过、专业边界与具体责任接口。\n- `/app/output/execution_evidence.json`：真实缺文件/恢复执行、原12案、输入SHA、窗口与初筛/金额依据，不只是摘要哈希。\n\n## 硬约束（单独列明）\n\n- 只交/app/output/triage_workbook.xlsx、household_messages.docx、advisor_handoff.docx、execution_evidence.json四文件；中文，允许等价正确计算/布局。\n- 输入只读，不修改CLI/登记/原事实；不需要联网，冻结资料未知处提出具体核查问题，不编产品权利/官方数据或实际批准。\n- 各案仅初筛，所有对外发送/开户/交易/社保核实与审批均未授权。保留历史业务时点，不用抓取日或成文日替施行日。\n",
+  "instruction_url": "assets/tasks/FIN-TIME-004/instruction.md",
+  "absolute_path": "tasks/FIN-TIME-004",
+  "spec_path": "manifest/FIN-TIME-004.json",
+  "spec_url": "manifest/FIN-TIME-004.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "工作簿完整覆盖F01–F12且ID与给定事实对应；不以汇总文字代替逐案分流。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ01"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx"
+      ],
+      "dimension": "指令遵循",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R02",
+      "description": "F01以2024-12-14尚未扩围及给定此前非先行为边界，不因税收自1月起就认定年初开户/已缴。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ02"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R03",
+      "description": "F03明确两类基本养老保险参加条件尚缺，不能因全国扩围直接认定可参加。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ02"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R04",
+      "description": "F02年度限额12000减本年实缴3000得到剩余额度9000；此为缴费/扣除额度而非退款。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ03"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R05",
+      "description": "F02账户外20000减家庭约定储备18000得2000，与年度余额9000取较小上限2000；允许0–2000或延后，不建议10000耗储备。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ03"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R06",
+      "description": "不承诺F02退税3600；说明税前据实扣除/平台凭证及缺税基无法确定个人退税，家庭储备非官方门槛。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ03"
+      ],
+      "deliverables": [
+        "household_messages.docx",
+        "advisor_handoff.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R07",
+      "description": "F04虽窗口内12月，但2025-08-25不能把39号2025-09-01起施或2024具体办法另定条文当当天直接领取依据；不以后法倒填。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ04"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R08",
+      "description": "失业流水按申请前2年筛选，有真实逐笔依据及窗口；F04/F05/F07/F10各12个月。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ04"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "execution_evidence.json"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R09",
+      "description": "F06历史总12笔中排除2023-08-15，窗口内11个月，未达12；不以总笔数认定可领。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ04"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R10",
+      "description": "F05仅为条件初筛，说明申请/社保核实、平台状态及银行代扣转本人社保卡，不把顾问判断当批准。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ05"
+      ],
+      "deliverables": [
+        "household_messages.docx",
+        "advisor_handoff.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R11",
+      "description": "F08采用题给年龄条件摘录，不擅按统一60/65岁推算且不免除本次申请核实。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ05"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R12",
+      "description": "F07不把基金6000快照视为当前可取现金；登记持有期未到、0费不解除限制，特别办理依据不足应核查，不承诺5820即到也不主张永无例外。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ06"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R13",
+      "description": "F09满持有期只支持进一步核正常赎回，未给任何账户领取情形，不能直接转银行卡买房。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ06"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R14",
+      "description": "F10将现金4000与未到期基金8000分开，只对现金作当前附条件演示，不将合计12000当即时可领。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ06",
+        "REQ07"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R15",
+      "description": "四案现金演示按3%：F05/F08税300净9700，F10税120净3880，F11税360净11640；工作簿可复算公式/缓存，均附核实及实际银行办理前提。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ07"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R16",
+      "description": "F11说明按月/分次/一次性及按需变更，由家庭自主选择；不限制只有按月或替其选定。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ08"
+      ],
+      "deliverables": [
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R17",
+      "description": "F12非年龄路径再缴回到缴存，当前低保已停且无其他给定条件，需重新达条件；不永久沿用旧领取状态。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ08"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R18",
+      "description": "真实默认导出失败的UTC/argv/非零退出码与stderr可检查；识别BLOCKED_SOURCE_MISSING且失败未产生伪成功数据，不只写叙述“遇到错误”。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ09",
+        "REQ10"
+      ],
+      "deliverables": [
+        "execution_evidence.json"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R19",
+      "description": "真实恢复以S10授权完整备份正确SHA、列名/12案核对，--source执行成功并有stdout/退出码；不能改登记或用D0替代原事实。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ09",
+        "REQ10"
+      ],
+      "deliverables": [
+        "execution_evidence.json"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R20",
+      "description": "证据JSON包含完整12条导出原事实和窗口纳入/排除ID，不仅哈希；实际路径/环境真实标注，不把作者本地执行当solver/Docker/社保核实。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ10"
+      ],
+      "deliverables": [
+        "execution_evidence.json"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R21",
+      "description": "交接稿将D0关键错误映射到受影响案及可检查成果位置，而非仅泛称已修订；可跟踪日期、税、失业、产品、状态与话术变更。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ11"
+      ],
+      "deliverables": [
+        "advisor_handoff.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R22",
+      "description": "7天冷静期保持具体合同/渠道/时限待核，不宣传无依据统一天数，也不推论所有产品绝无撤单/特别安排。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ12"
+      ],
+      "deliverables": [
+        "household_messages.docx",
+        "advisor_handoff.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R23",
+      "description": "资料边界清楚：养老/稳健名称不保本、0赎回费不是全部费用0；概要非完整销售文件，当前临时公告/具体办理需产品运营核。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ06",
+        "REQ12"
+      ],
+      "deliverables": [
+        "advisor_handoff.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    },
+    {
+      "id": "R24",
+      "description": "12案家庭稿能直接回答来询、说明该案关键限制并给针对性下一步；按缺少上述结构的案数判，不依Gold措辞。",
+      "weight": 7,
+      "type": "Gradient",
+      "requirement_refs": [
+        "REQ11"
+      ],
+      "deliverables": [
+        "household_messages.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。",
+      "levels": {
+        "1": "12案均有直接答复、关键限制和针对下一步；无遗漏。",
+        "0.75": "仅1案遗漏其中任一结构，其余完整。",
+        "0.5": "2–3案遗漏结构，其余可用。",
+        "0.25": "4–6案遗漏结构。",
+        "0": "7案以上遗漏结构或没有可读家庭稿。"
+      }
+    },
+    {
+      "id": "R25",
+      "description": "交接待核问题明确对象/问题/依赖，覆盖产品撤单及提前办理、社保核实、F02家庭追加选择、负责人审核四接口；评价接口可执行性不重复金额准确性。",
+      "weight": 7,
+      "type": "Gradient",
+      "requirement_refs": [
+        "REQ11"
+      ],
+      "deliverables": [
+        "advisor_handoff.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。",
+      "levels": {
+        "1": "四接口均有明确问题、责任方及前置/后续动作。",
+        "0.75": "恰3接口完整可执行。",
+        "0.5": "恰2接口完整。",
+        "0.25": "恰1接口完整。",
+        "0": "无完整接口或仅泛称待确认。"
+      }
+    },
+    {
+      "id": "R26",
+      "description": "仅当交付中出现伪造的外部批准回执/已发送联系/专家签字或声称真实业务已执行时为yes扣分；没有这些事件为no，不把条件性演示/题给虚构事实认作伪造。",
+      "weight": -7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ12"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "household_messages.docx",
+        "advisor_handoff.docx",
+        "execution_evidence.json"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "按业务错误后果加权；资格/资金误放10，专业判断7，结构/追溯辅助3。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+      "locator": "一（一）、四（一）",
+      "fact": "2024-12-15扩围且原新增领取办法另定"
+    },
+    {
+      "url": "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+      "locator": "一/二",
+      "fact": "2024-01-01全国递延税，12000据实扣除、领取3%及银行代扣"
+    },
+    {
+      "url": "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+      "locator": "一/二/三/四/七",
+      "fact": "2025-09-01新增领取细则、窗口/产品/核实/返缴状态"
+    },
+    {
+      "url": "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993",
+      "locator": "原PDF1/3/5/6/7",
+      "fact": "每份一年、赎回费0、风险与概要滞后/完整销售文件边界"
+    }
+  ],
+  "status": {
+    "task_id": "FIN-TIME-004",
+    "domain": "金融",
+    "domain_l2": "Fin4-财富管理",
+    "category": "weakness-driven",
+    "inputs": 11,
+    "gold_files": 4,
+    "rubrics": 26,
+    "complexity": "C3",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:7495ab82b6bcedf8f97e8a6e750ef267b93f52c6c1e6776c6265ab3ab39e8f36",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/FIN-TIME-004/20261021T023338Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 26.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_全国扩围通知阅读器全文.docx",
+      "absolute_path": "题包内：S01_全国扩围通知阅读器全文.docx",
+      "url": "",
+      "bytes": 40373,
+      "sha256": "17c992cedcbb5de367a9ee2de1c4be1a5839e74dbe4b2a04ef5e694eba12ac23",
+      "description": "87号真实官方阅读器正文及时间/取证说明",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    },
+    {
+      "name": "S02_税收公告全文.docx",
+      "absolute_path": "题包内：S02_税收公告全文.docx",
+      "url": "",
+      "bytes": 38839,
+      "sha256": "ee63e0c3be12b7d8c033df617a400108ea7faf9d101af8980ff8ccb43d44bc54",
+      "description": "21号税收公告完整冻结正文与来源",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    },
+    {
+      "name": "S03_2025领取通知阅读器全文.docx",
+      "absolute_path": "题包内：S03_2025领取通知阅读器全文.docx",
+      "url": "",
+      "bytes": 39574,
+      "sha256": "000670d88a2f45f8ccc3feda554bf1d125fe98f8f8a4930894ba3fb2ab6a96da",
+      "description": "39号真实官方阅读器正文及施行日",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    },
+    {
+      "name": "S04_真实Y类产品资料概要20240531.pdf",
+      "absolute_path": "题包内：S04_真实Y类产品资料概要20240531.pdf",
+      "url": "",
+      "bytes": 443790,
+      "sha256": "4940e2cd2f3d71ee1e61b11d03aa005a494764bdaa5c234dcf7e6e3518b2c347",
+      "description": "实际提供商2024年7页Y类产品概要PDF",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    },
+    {
+      "name": "S05_家庭访谈冻结备份.xlsx",
+      "absolute_path": "题包内：S05_家庭访谈冻结备份.xlsx",
+      "url": "assets/tasks/FIN-TIME-004/environment/input_files/S05_%E5%AE%B6%E5%BA%AD%E8%AE%BF%E8%B0%88%E5%86%BB%E7%BB%93%E5%A4%87%E4%BB%BD.xlsx",
+      "bytes": 8130,
+      "sha256": "29c53ae431b7ee680498921d5dd73927c12693b03b267add45275984a9c288da",
+      "description": "完整授权备份：12案原创家庭访谈/资金快照/每笔到期事实",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "家庭访谈"
+        },
+        {
+          "kind": "notice",
+          "text": "共13行 × 16列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "case_id",
+              "business_on",
+              "basic_insured",
+              "pilot_before_expansion",
+              "paid_this_year",
+              "requested_contribution",
+              "outside_liquid_cash",
+              "family_reserve_floor",
+              "pension_cash",
+              "fund_value_snapshot",
+              "lot_maturity_in_record",
+              "age_condition_evidence",
+              "current_dibao",
+              "recontributed_after_early_withdrawal",
+              "question",
+              "evidence_note"
+            ],
+            [
+              "F01",
+              "2024-12-14",
+              true,
+              false,
+              0,
+              12000,
+              40000,
+              18000,
+              0,
+              0,
+              null,
+              "无",
+              false,
+              false,
+              "今天可否新开户并追认今年1月已缴？",
+              "该地区此前非先行地区为情境给定；无历史缴费凭证。"
+            ],
+            [
+              "F02",
+              "2024-12-16",
+              true,
+              false,
+              3000,
+              10000,
+              20000,
+              18000,
+              3000,
+              0,
+              null,
+              "无",
+              false,
+              false,
+              "想再缴10000并保证退税3600。",
+              "3000为本年度实际缴费且已取得平台凭证；20000是本次追加前账户外流动现金。最低储备为家庭自己约定，非国家门槛。"
+            ],
+            [
+              "F03",
+              "2024-12-16",
+              false,
+              false,
+              0,
+              12000,
+              50000,
+              18000,
+              0,
+              0,
+              null,
+              "无",
+              false,
+              false,
+              "全国扩围后不参基本养老保险也能参加吗？",
+              "未参加城镇职工或城乡居民基本养老保险；不存在其他参加依据。"
+            ],
+            [
+              "F04",
+              "2025-08-25",
+              true,
+              true,
+              0,
+              0,
+              5000,
+              18000,
+              10000,
+              0,
+              null,
+              "无",
+              false,
+              false,
+              "已累计领12个月失业保险，今天可按39号提款吗？",
+              "仅失业情形；无完全丧失劳动能力、出国定居或年龄条件，无其他领取依据。"
+            ],
+            [
+              "F05",
+              "2025-09-05",
+              true,
+              true,
+              0,
+              0,
+              5000,
+              18000,
+              10000,
+              0,
+              null,
+              "无",
+              false,
+              false,
+              "失业后申请一次性领现金10000，净得多少？",
+              "仅做条件初筛，未递交领取申请、未取得社保核实或平台变更；流水只作题给记录。"
+            ],
+            [
+              "F06",
+              "2025-09-05",
+              true,
+              true,
+              0,
+              0,
+              5000,
+              18000,
+              10000,
+              0,
+              null,
+              "无",
+              false,
+              false,
+              "流水总共12笔，是否能直接提款？",
+              "仅失业情形；无其他领取依据。逐笔月份/时间见S06，不按历史总笔数判断。"
+            ],
+            [
+              "F07",
+              "2025-09-05",
+              true,
+              true,
+              0,
+              0,
+              1000,
+              18000,
+              0,
+              6000,
+              "2026-03-10",
+              "无",
+              false,
+              false,
+              "满足失业条件，基金赎回费为0，今天是否到账5820？",
+              "仅持017363，业务登记给定每笔持有期到期日2026-03-10；没有提前赎回特别办理文件/机构确认。基金数值仅访谈快照，非可提现现金。"
+            ],
+            [
+              "F08",
+              "2025-09-05",
+              true,
+              true,
+              0,
+              0,
+              10000,
+              18000,
+              10000,
+              0,
+              null,
+              "题给社保信息摘录支持已达到领取基本养老金年龄",
+              false,
+              false,
+              "现金10000一次领，是否无税且顾问可以批准？",
+              "年龄条件为题给摘录结论，不按出生年份推算；本次领取申请尚未核实。"
+            ],
+            [
+              "F09",
+              "2025-09-05",
+              true,
+              true,
+              0,
+              0,
+              8000,
+              18000,
+              0,
+              8000,
+              "2025-08-01",
+              "无",
+              false,
+              false,
+              "基金已满一年，想赎到银行卡用于买房。",
+              "无任何法定领取情形；无退休、失能、出国定居、合格医药、失业或低保事实。赎回开放日/确认到账需销售机构核实。"
+            ],
+            [
+              "F10",
+              "2025-09-05",
+              true,
+              true,
+              0,
+              0,
+              3000,
+              18000,
+              4000,
+              8000,
+              "2026-04-10",
+              "无",
+              false,
+              false,
+              "失业符合，现金4000与基金8000都能马上提吗？",
+              "基金仅017363，持有期到期日2026-04-10；无提前赎回特别文件。申请和机构核实均未完成。"
+            ],
+            [
+              "F11",
+              "2025-09-05",
+              true,
+              true,
+              0,
+              0,
+              1000,
+              18000,
+              12000,
+              0,
+              null,
+              "无",
+              true,
+              false,
+              "正在领城乡低保，申请现金12000，一次性还是分次？",
+              "当前低保为题给有效记录，仅作初筛，社保核实未完成；可说明法定领取方式供本人选择，不替本人决定。"
+            ],
+            [
+              "F12",
+              "2025-09-05",
+              true,
+              true,
+              500,
+              0,
+              1000,
+              18000,
+              9500,
+              0,
+              null,
+              "无",
+              false,
+              true,
+              "9月1日低保提前领过，9月3日又缴500，今天还能沿用旧领取状态吗？",
+              "9月1日按当时有效低保事实办理过提前领取为题给情境；2025-09-02起不再领低保；9月3日重新缴费发生于旧提前领取之后；无其他当前领取情形。旧领取/返缴仅情境记录，非真实社保凭证。"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    },
+    {
+      "name": "S06_失业保险金领取流水.csv",
+      "absolute_path": "题包内：S06_失业保险金领取流水.csv",
+      "url": "assets/tasks/FIN-TIME-004/environment/input_files/S06_%E5%A4%B1%E4%B8%9A%E4%BF%9D%E9%99%A9%E9%87%91%E9%A2%86%E5%8F%96%E6%B5%81%E6%B0%B4.csv",
+      "bytes": 4392,
+      "sha256": "610cf0fe0d1d2c3093ca48403b66176af827821e62db0010ecb51d82e0749a04",
+      "description": "60条原创月度失业保险金领取记录，须按各案窗口复算",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "共61行；全部展示。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "payment_id",
+              "case_id",
+              "paid_on",
+              "benefit_month",
+              "months_credited",
+              "record_status"
+            ],
+            [
+              "F04-U01",
+              "F04",
+              "2024-09-15",
+              "2024-09",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U02",
+              "F04",
+              "2024-10-15",
+              "2024-10",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U03",
+              "F04",
+              "2024-11-15",
+              "2024-11",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U04",
+              "F04",
+              "2024-12-15",
+              "2024-12",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U05",
+              "F04",
+              "2025-01-15",
+              "2025-01",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U06",
+              "F04",
+              "2025-02-15",
+              "2025-02",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U07",
+              "F04",
+              "2025-03-15",
+              "2025-03",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U08",
+              "F04",
+              "2025-04-15",
+              "2025-04",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U09",
+              "F04",
+              "2025-05-15",
+              "2025-05",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U10",
+              "F04",
+              "2025-06-15",
+              "2025-06",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U11",
+              "F04",
+              "2025-07-15",
+              "2025-07",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U12",
+              "F04",
+              "2025-08-15",
+              "2025-08",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U01",
+              "F05",
+              "2024-09-15",
+              "2024-09",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U02",
+              "F05",
+              "2024-10-15",
+              "2024-10",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U03",
+              "F05",
+              "2024-11-15",
+              "2024-11",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U04",
+              "F05",
+              "2024-12-15",
+              "2024-12",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U05",
+              "F05",
+              "2025-01-15",
+              "2025-01",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U06",
+              "F05",
+              "2025-02-15",
+              "2025-02",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U07",
+              "F05",
+              "2025-03-15",
+              "2025-03",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U08",
+              "F05",
+              "2025-04-15",
+              "2025-04",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U09",
+              "F05",
+              "2025-05-15",
+              "2025-05",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U10",
+              "F05",
+              "2025-06-15",
+              "2025-06",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U11",
+              "F05",
+              "2025-07-15",
+              "2025-07",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U12",
+              "F05",
+              "2025-08-15",
+              "2025-08",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U01",
+              "F06",
+              "2023-08-15",
+              "2023-08",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U02",
+              "F06",
+              "2024-10-15",
+              "2024-10",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U03",
+              "F06",
+              "2024-11-15",
+              "2024-11",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U04",
+              "F06",
+              "2024-12-15",
+              "2024-12",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U05",
+              "F06",
+              "2025-01-15",
+              "2025-01",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U06",
+              "F06",
+              "2025-02-15",
+              "2025-02",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U07",
+              "F06",
+              "2025-03-15",
+              "2025-03",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U08",
+              "F06",
+              "2025-04-15",
+              "2025-04",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U09",
+              "F06",
+              "2025-05-15",
+              "2025-05",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U10",
+              "F06",
+              "2025-06-15",
+              "2025-06",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U11",
+              "F06",
+              "2025-07-15",
+              "2025-07",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U12",
+              "F06",
+              "2025-08-15",
+              "2025-08",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U01",
+              "F07",
+              "2024-09-15",
+              "2024-09",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U02",
+              "F07",
+              "2024-10-15",
+              "2024-10",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U03",
+              "F07",
+              "2024-11-15",
+              "2024-11",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U04",
+              "F07",
+              "2024-12-15",
+              "2024-12",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U05",
+              "F07",
+              "2025-01-15",
+              "2025-01",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U06",
+              "F07",
+              "2025-02-15",
+              "2025-02",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U07",
+              "F07",
+              "2025-03-15",
+              "2025-03",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U08",
+              "F07",
+              "2025-04-15",
+              "2025-04",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U09",
+              "F07",
+              "2025-05-15",
+              "2025-05",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U10",
+              "F07",
+              "2025-06-15",
+              "2025-06",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U11",
+              "F07",
+              "2025-07-15",
+              "2025-07",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U12",
+              "F07",
+              "2025-08-15",
+              "2025-08",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U01",
+              "F10",
+              "2024-09-15",
+              "2024-09",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U02",
+              "F10",
+              "2024-10-15",
+              "2024-10",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U03",
+              "F10",
+              "2024-11-15",
+              "2024-11",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U04",
+              "F10",
+              "2024-12-15",
+              "2024-12",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U05",
+              "F10",
+              "2025-01-15",
+              "2025-01",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U06",
+              "F10",
+              "2025-02-15",
+              "2025-02",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U07",
+              "F10",
+              "2025-03-15",
+              "2025-03",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U08",
+              "F10",
+              "2025-04-15",
+              "2025-04",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U09",
+              "F10",
+              "2025-05-15",
+              "2025-05",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U10",
+              "F10",
+              "2025-06-15",
+              "2025-06",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U11",
+              "F10",
+              "2025-07-15",
+              "2025-07",
+              "1",
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U12",
+              "F10",
+              "2025-08-15",
+              "2025-08",
+              "1",
+              "题给已领取记录_非真实客户"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    },
+    {
+      "name": "S07_D0客服回复草稿.docx",
+      "absolute_path": "题包内：S07_D0客服回复草稿.docx",
+      "url": "assets/tasks/FIN-TIME-004/environment/input_files/S07_D0%E5%AE%A2%E6%9C%8D%E5%9B%9E%E5%A4%8D%E8%8D%89%E7%A8%BF.docx",
+      "bytes": 38000,
+      "sha256": "ac146b88ee24b3e677da7b9f4257f90d742fd5c6ce36f8d4a08fc68c7e0a5f58",
+      "description": "有实质错误的原创D0待审回复，不是权威规则",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0客服草稿｜待纠错，不是规范"
+        },
+        {
+          "kind": "heading",
+          "text": "2025-09-05 08:00 客服原稿"
+        },
+        {
+          "kind": "paragraph",
+          "text": "所有家庭都统一按2024年1月1日全国开办处理；没参加基本保险也能开。每人再缴12000就一定退税3600。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "39号7月已发，F04在8月就能按失业条款领。F05/F06流水各12笔，全部通过；顾问可以替社保批准。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Y基金赎回费0，F07立即到账5820；满一年F09可直接买房；F10合计12000立刻净到11640。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "F08到年龄不征税；F11只能按月；F12过去低保领过就永久有领取状态。所有养老金都有7天无损撤单冷静期，养老名称代表本金安全。"
+        },
+        {
+          "kind": "heading",
+          "text": "使用边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "以上均为原创待审草稿，不是官方/机构有效规定；不得复制为客户最终答复。需对实质错误做可追溯更正，不要求保留其版式。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    },
+    {
+      "name": "S08_负责人委托与恢复指引.docx",
+      "absolute_path": "题包内：S08_负责人委托与恢复指引.docx",
+      "url": "assets/tasks/FIN-TIME-004/environment/input_files/S08_%E8%B4%9F%E8%B4%A3%E4%BA%BA%E5%A7%94%E6%89%98%E4%B8%8E%E6%81%A2%E5%A4%8D%E6%8C%87%E5%BC%95.docx",
+      "bytes": 40132,
+      "sha256": "a228906bae24d550da5b6c694bb311478fe356199770bb404ba4198e0202a1ea",
+      "description": "原创负责人委托、权限/恢复/交付合同及家庭事实边界",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "负责人工作委托｜家庭养老金待审沟通包"
+        },
+        {
+          "kind": "heading",
+          "text": "业务、角色与权限"
+        },
+        {
+          "kind": "paragraph",
+          "text": "基准2025-09-05 10:00 Asia/Shanghai。你是财富规划团队分析助理，供负责人审阅12个原始访谈事项，纠正D0并拟中文家庭沟通，不开户、不下单、不递交社保申请或对外联系。F01–F04历史来询必须按各行business_on作历史复核，不以后法倒填；其余按9月5日。全部家庭/流水/余额/内部消息为原创虚构，不是真实客户或官方样本。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "09:00负责人确认：S01–S04是真实冻结专业依据，S05/S06是训练访谈和流水，S07只是待改草稿。09:40营销留言称“用7天冷静期和稳定退税引导尽快买”，未经负责人授权，不得覆盖产品合同/官方条件。不要把真实公开产品名称当虚构保本产品，也不作适当性最终认定。"
+        },
+        {
+          "kind": "heading",
+          "text": "导出阻塞与合法恢复"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原操作手册先执行 python3 /app/input_files/export_households.py --out /tmp/households.json；默认的S05_households_latest.xlsx同步失败，本包没有该文件。S10登记有同一冻结版本的完整授权备份，先核对其SHA256、列名与12行完整性，再以 --source 指向实际存在的登记文件恢复导出。不能反复搜索缺失原名、改只读输入/脚本/登记、空造12行或拿D0代数据。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "导出工具仅做原始事实传输，不输出业务判断。必须保留这次真实默认失败与合法恢复执行的UTC、argv、returncode、stdout/stderr，及成功导出的完整12条事实到execution_evidence.json。路径写实际执行路径，不假称本地跑在Docker；sha是完整性标识，不是社保核实/专家签字。"
+        },
+        {
+          "kind": "heading",
+          "text": "专业问题与边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "分开判断：能否参加制度、年度缴费限额与家庭可用资金、初步领取条件、产品赎回条件、社保核实/账户状态/银行代扣/银行卡转账。对未核实事项保持待审，别把条件初筛等同已批准/已到账。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "逐笔以申请日前2年窗口核S06，不按所有历史总笔数。为本题流水每行表示互不重复的1个领取月，paid_on就是该次领取日；端点不含歧义。F04/F05/F06等仅失业路径，未给其他领取事实；F08年龄条件由给定摘录支持，不从年龄60/65猜退休。F11当前低保仅作初筛；F12旧状态及返缴需按新通知处理。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "产品017363使用S04冻结概要复核D0，S05已给每笔持有期到期日，不从开户日或0%赎回费倒算；未给提前赎回特别安排、当前完整销售文件、临时公告/业务确认。因此不得保证未到期基金可提前赎回，亦不主张永不例外。满持有期也还需核开放日/交易确认，产品赎回不等于账户对外领取。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "“7天冷静期”未提供产品/销售机构权利条款依据；应向产品运营核查具体合同、渠道、撤单截至与适用条件，不能以无依据统一天数宣传，也不能断言所有产品都绝无冷静安排。养老与稳健名称、0赎回费均非保本/总成本零。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "税率3%仅作给定现金余额的附条件演示。只对F05/F08现金10000、F10现金4000、F11现金12000算税与净额；未审批、产品快照不当可支取现金，不把F07/F09/F10基金估值加进去。缴费是据实扣除不是等额退税；无完整税基/边际税率不算保证税收收益。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "F02应同时算年度剩余额度、家庭最低储备以上可用金额及建议追加上限；最低储备18000是家庭偏好，不是法定财务门槛。允许在可承受上限内更审慎建议、延后，不能只看12000年度上限劝其耗尽应急金。"
+        },
+        {
+          "kind": "heading",
+          "text": "交付与可接受答案"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只交 triage_workbook.xlsx、household_messages.docx、advisor_handoff.docx、execution_evidence.json。工作簿至少可定位12案、法规时间与产品边界、流水窗口和关键公式；中文沟通稿12案各有对来询的直接答复、依据/风险与具体下一步，供负责人审后发送，非已发送。交接备忘应有D0错误→修正→受影响事项/交付定位、恢复经过与有责任接口的核查问题。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "精确词句/页布局不限，允许等价正确公式。核心工作是形成可用交接，不把JSON哈希列表/空表当业务成果。Excel关键限额/流动性/现金税额、队列勾稽可复算，打开有缓存；保留原事实，不擅自更改材料。所有正式专业/专家签核、模型校准、真实外部办理均未完成。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    },
+    {
+      "name": "export_households.py",
+      "absolute_path": "题包内：export_households.py",
+      "url": "assets/tasks/FIN-TIME-004/environment/input_files/export_households.py",
+      "bytes": 2072,
+      "sha256": "23ae74d5c6d33c980d97363b9c9090f32fcced058ffe981a6ee3bab1ec7d6a9a",
+      "description": "真实离线导出CLI：默认文件缺失，需授权备份恢复；不含业务答案",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "\"\"\"Offline export only. Contains no investment decision or eligibility answer.\"\"\"\nimport argparse,datetime,hashlib,json,sys\nfrom pathlib import Path\nfrom openpyxl import load_workbook\n\ndef main():\n    root=Path(__file__).resolve().parent\n    parser=argparse.ArgumentParser();parser.add_argument('--source',type=Path,default=root/'S05_households_latest.xlsx');parser.add_argument('--out',type=Path,required=True);args=parser.parse_args()\n    if not args.source.is_file():\n        print(json.dumps(dict(status='BLOCKED_SOURCE_MISSING',source=str(args.source),hint='No data exported. Check the approved recovery register; do not invent household records.'),ensure_ascii=False),file=sys.stderr);return 2\n    register=json.loads((root/'S10_授权备份登记.json').read_text())\n    digest=hashlib.sha256(args.source.read_bytes()).hexdigest()\n    if digest!=register['approved_sha256']:\n        print(json.dumps(dict(status='UNAPPROVED_SOURCE_BYTES',actual_sha256=digest),ensure_ascii=False),file=sys.stderr);return 3\n    book=load_workbook(args.source,data_only=True,read_only=True);rows=list(book['家庭访谈'].values);head=rows[0]\n    if list(head)!=register['columns'] or len(rows)-1!=register['case_count']:\n        print('SOURCE_SCHEMA_OR_ROWCOUNT_MISMATCH',file=sys.stderr);book.close();return 4\n    records=[dict(zip(head,r)) for r in rows[1:]];book.close()\n    ids=[r['case_id'] for r in records]\n    if len(ids)!=len(set(ids)):print('DUPLICATE_CASE_ID',file=sys.stderr);return 5\n    payload=dict(status='EXPORTED_NOT_APPROVED',executed_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_name=args.source.name,source_sha256=digest,case_count=len(records),records=records,scope='Frozen fictional interview facts only; not policy conclusions, verified entitlements or payment approval.')\n    args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps(payload,ensure_ascii=False,indent=2));print(json.dumps({k:v for k,v in payload.items() if k!='records'},ensure_ascii=False));return 0\nif __name__=='__main__':sys.exit(main())\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    },
+    {
+      "name": "S10_授权备份登记.json",
+      "absolute_path": "题包内：S10_授权备份登记.json",
+      "url": "assets/tasks/FIN-TIME-004/environment/input_files/S10_%E6%8E%88%E6%9D%83%E5%A4%87%E4%BB%BD%E7%99%BB%E8%AE%B0.json",
+      "bytes": 949,
+      "sha256": "81ca1323f875a57f287eeae29e876c9099ac6bc80a04723ae69fab01437054f0",
+      "description": "授权备份SHA/列名/行数与来源登记",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"version\": \"HOUSEHOLD-FREEZE-20250905-0900\",\n  \"approved_source\": \"S05_家庭访谈冻结备份.xlsx\",\n  \"approved_sha256\": \"29c53ae431b7ee680498921d5dd73927c12693b03b267add45275984a9c288da\",\n  \"columns\": [\n    \"case_id\",\n    \"business_on\",\n    \"basic_insured\",\n    \"pilot_before_expansion\",\n    \"paid_this_year\",\n    \"requested_contribution\",\n    \"outside_liquid_cash\",\n    \"family_reserve_floor\",\n    \"pension_cash\",\n    \"fund_value_snapshot\",\n    \"lot_maturity_in_record\",\n    \"age_condition_evidence\",\n    \"current_dibao\",\n    \"recontributed_after_early_withdrawal\",\n    \"question\",\n    \"evidence_note\"\n  ],\n  \"case_count\": 12,\n  \"authority\": \"原创团队负责人09:00授权：原始冻结版本完整备份；非官方许可\",\n  \"missing_default\": \"S05_households_latest.xlsx\",\n  \"allowed_action\": \"Verify checksum/columns/count, export with --source; preserve actual failure and recovery evidence. No new interview or D0 substitution.\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    },
+    {
+      "name": "S11_家庭沟通稿模板.docx",
+      "absolute_path": "题包内：S11_家庭沟通稿模板.docx",
+      "url": "assets/tasks/FIN-TIME-004/environment/input_files/S11_%E5%AE%B6%E5%BA%AD%E6%B2%9F%E9%80%9A%E7%A8%BF%E6%A8%A1%E6%9D%BF.docx",
+      "bytes": 37869,
+      "sha256": "49a9622b22ce108daf7550edfed7c5ce3c23833402ecc533f500fbbec38f6c8d",
+      "description": "原创中文沟通稿结构模板，不含每案答案",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "家庭答复｜待负责人审核模板"
+        },
+        {
+          "kind": "heading",
+          "text": "每案可直接填写的结构"
+        },
+        {
+          "kind": "paragraph",
+          "text": "事项ID / 对应来询业务日期"
+        },
+        {
+          "kind": "paragraph",
+          "text": "给家庭的直接答复（不用内部路由代码代替）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "已给事实与适用材料条/页定位"
+        },
+        {
+          "kind": "paragraph",
+          "text": "可做/不能承诺什么；金额演示的前提"
+        },
+        {
+          "kind": "paragraph",
+          "text": "下一步需要什么、由谁核实/选择；本稿未发送"
+        },
+        {
+          "kind": "heading",
+          "text": "沟通原则"
+        },
+        {
+          "kind": "paragraph",
+          "text": "不对家庭展示其他家庭资料；不堆政策全文取代答复；避免把初筛称批准、把税前扣除称确定退款或把基金快照称现金。未知产品撤单权利与机构流程明确待核，不编电话回复、真实客户隐私或签字。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c7524086/content.shtml",
+        "https://app.www.gov.cn/govdata/gov/202412/13/522679/article.html",
+        "https://fgk.chinatax.gov.cn/zcfgk/c100013/c5242402/content.html",
+        "https://www.chinaamc.com/front/ui/contentcore/resource/download?ID=398993"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "advisor_handoff.docx",
+      "absolute_path": "题包内：advisor_handoff.docx",
+      "url": "assets/tasks/FIN-TIME-004/solution/golden_output/advisor_handoff.docx",
+      "bytes": 39940,
+      "sha256": "f2d6cf3fcfa0eced3925b57a285a3bf7f4bff4ebf43475f542b881053243d1af",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "负责人交接｜历史答复纠错与待核问题"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2025-09-05 10:00 Asia/Shanghai。12案均为原创训练访谈；专业依据是真实官方文本/真实产品概要，实际取证2026-10-21不等于其历史发布日。本包仅内部待审，未发送、未开户、未申请、未批准或完成实际付款。D0的保证退税3600应删除：税前扣除不是退款，缺完整税基不能确定退税额。"
+        },
+        {
+          "kind": "heading",
+          "text": "恢复经过与证据"
+        },
+        {
+          "kind": "paragraph",
+          "text": "默认导出实际返回2/BLOCKED_SOURCE_MISSING，没有产生JSON。随后核对S10登记、备份SHA/列名/12案完整性，以--source指向原版授权备份实际成功返回0。execution_evidence.json保留本机真实argv/UTC/stdout/stderr与完整导出，不冒充容器solver或社保记录；没有修改只读源、虚构替代数据或反复请求缺失文件。"
+        },
+        {
+          "kind": "heading",
+          "text": "关键纠错与传播位置"
+        },
+        {
+          "kind": "paragraph",
+          "text": "扩围：2024-12-15起，参加两类基本养老保险的劳动者均可参加。影响F01/F02/F03；成文12-10/网页12-12/扩围12-15不是同一天。定位S01一（一）；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "税收：2024-01-01全国递延纳税；实际缴费按12000/年限额据实扣除；平台凭证。影响F01/F02；税收起点不创造实际开户/缴费；扣除额不是退款额。定位S02一/二；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "领取新情形：2024原则写具体办法另定；39号2025-09-01实施。影响F04/F05；成文2025-07-13不等于8月已可按本通知办理。定位S01四（一）；S03一/七；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "失业窗口：申请日前2年领取失业保险金累计达到12个月。影响F04–F07/F10；不按历史总笔数，F06旧1笔在窗口外。定位S03一（五）；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "领取程序：社保核实→平台领取状态→银行代扣税→本人社保卡银行账户。影响F05/F08/F10/F11；顾问初筛不能批准、确认已到账或替本人选方式。定位S03三；S02二；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "已购买产品：账户具领取条件，产品仍遵循相关规定；每份至少一年；赎回费0。影响F07/F09/F10；0费不消除持有期；满期不等于账户可对外领。定位S03二；S04原PDF1/3/5页；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "名称/风险：可能损失本金，养老名称不保证收益或退休收入。影响全部；稳健/养老不等于保本；0赎回费不代表全部费用0。定位S04原PDF5/6页；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "非年龄路径返缴：再次缴费恢复缴存状态，需重新达到领取条件。影响F12；历史低保与旧领取状态不能永久沿用。定位S03四；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "领取方式：可按月、分次、一次性并按需变更。影响F11；让家庭选择，非顾问替选或限制只有按月。定位S03二；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "7天冷静期：核具体销售文件/渠道/撤单时限；当前不宣传确定天数。影响全部，尤其F07；当前资料不足不等于一切产品绝无冷静/提前办理安排。定位S04并未提供统一7天权利；S08待核；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "家庭流动性：家庭储备为客户偏好，建议追加≤年度余额及账户外储备余量。影响F02；可延后或更审慎，不用税惠驱动耗尽应急金。定位S05 F02；S08约定；工作簿“规则与D0更正”、对应“案件分流”及家庭稿同ID。"
+        },
+        {
+          "kind": "heading",
+          "text": "核查接口与行动顺序"
+        },
+        {
+          "kind": "paragraph",
+          "text": "负责人先核12案历史日期、初筛与金额一致性；F02让家庭确认应急金与追加选择，追加0–2000或延后均可，实际扣除依平台凭证。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "社保经办接口：核F05/F08/F10/F11给定条件和真实申请；F06核是否有窗口内漏登真实月份；F12核返缴后的当前状态与重新资格。不用旧低保状态或顾问签字代核实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "产品运营/销售机构：核017363当前完整销售文件、临时公告、每笔到期与开放/确认、是否存在具体适用提前办理安排；对7天说法核合同、渠道、撤单截止及适用权利。在答复前不作统一天数、保证退款或到账承诺。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本题只对给定现金F05/F08 10000→税300/净9700，F10 4000→税120/净3880，F11 12000→税360/净11640作附条件演示。基金估值、净值变化、交易日和未核资格不混入可付现金。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "专业边界：S04概要不是完整招募说明书，当前产品条款或特别办理未查全；不能用冻结概要替代实际适当性/新公告审核。三solver校准、领域专家审查、正式judge和真实业务办理均不能由作者本地计算代替。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "execution_evidence.json",
+      "absolute_path": "题包内：execution_evidence.json",
+      "url": "assets/tasks/FIN-TIME-004/solution/golden_output/execution_evidence.json",
+      "bytes": 22340,
+      "sha256": "6a810681a56c459eda20419fed8e9d0c2fc2019bc37bb7abf6cade446fc92232",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"task_id\": \"FIN-TIME-004\",\n  \"created_at_utc\": \"2026-10-21T02:29:24.612402+00:00\",\n  \"scope\": \"Actual local author execution, not Docker/solver trace, social-insurance verification, expert certification or actual payment.\",\n  \"input_sha256\": {\n    \"S01_全国扩围通知阅读器全文.docx\": \"17c992cedcbb5de367a9ee2de1c4be1a5839e74dbe4b2a04ef5e694eba12ac23\",\n    \"S02_税收公告全文.docx\": \"ee63e0c3be12b7d8c033df617a400108ea7faf9d101af8980ff8ccb43d44bc54\",\n    \"S03_2025领取通知阅读器全文.docx\": \"000670d88a2f45f8ccc3feda554bf1d125fe98f8f8a4930894ba3fb2ab6a96da\",\n    \"S04_真实Y类产品资料概要20240531.pdf\": \"4940e2cd2f3d71ee1e61b11d03aa005a494764bdaa5c234dcf7e6e3518b2c347\",\n    \"S05_家庭访谈冻结备份.xlsx\": \"29c53ae431b7ee680498921d5dd73927c12693b03b267add45275984a9c288da\",\n    \"S06_失业保险金领取流水.csv\": \"610cf0fe0d1d2c3093ca48403b66176af827821e62db0010ecb51d82e0749a04\",\n    \"S07_D0客服回复草稿.docx\": \"ac146b88ee24b3e677da7b9f4257f90d742fd5c6ce36f8d4a08fc68c7e0a5f58\",\n    \"S08_负责人委托与恢复指引.docx\": \"a228906bae24d550da5b6c694bb311478fe356199770bb404ba4198e0202a1ea\",\n    \"export_households.py\": \"23ae74d5c6d33c980d97363b9c9090f32fcced058ffe981a6ee3bab1ec7d6a9a\",\n    \"S10_授权备份登记.json\": \"81ca1323f875a57f287eeae29e876c9099ac6bc80a04723ae69fab01437054f0\",\n    \"S11_家庭沟通稿模板.docx\": \"49a9622b22ce108daf7550edfed7c5ce3c23833402ecc533f500fbbec38f6c8d\"\n  },\n  \"recovery\": {\n    \"register_version\": \"HOUSEHOLD-FREEZE-20250905-0900\",\n    \"actual_default_attempt\": {\n      \"started_at_utc\": \"2026-10-21T02:29:23.455426+00:00\",\n      \"completed_at_utc\": \"2026-10-21T02:29:24.047268+00:00\",\n      \"argv\": [\n        \"[本地题包根目录]/.venv/bin/python\",\n        \"-B\",\n        \"[本地题包根目录]/authoring_assets/FIN-TIME-004/input_stage_v2/export_households.py\",\n        \"--out\",\n        \"[本地题包根目录]/authoring_runs/FIN-TIME-004/20261021T022923Z/households.json\"\n      ],\n      \"returncode\": 2,\n      \"stdout\": \"\",\n      \"stderr\": \"{\\\"status\\\": \\\"BLOCKED_SOURCE_MISSING\\\", \\\"source\\\": \\\"[本地题包根目录]/authoring_assets/FIN-TIME-004/input_stage_v2/S05_households_latest.xlsx\\\", \\\"hint\\\": \\\"No data exported. Check the approved recovery register; do not invent household records.\\\"}\\n\"\n    },\n    \"approved_backup_sha256\": \"29c53ae431b7ee680498921d5dd73927c12693b03b267add45275984a9c288da\",\n    \"actual_recovery_attempt\": {\n      \"started_at_utc\": \"2026-10-21T02:29:24.048309+00:00\",\n      \"completed_at_utc\": \"2026-10-21T02:29:24.610203+00:00\",\n      \"argv\": [\n        \"[本地题包根目录]/.venv/bin/python\",\n        \"-B\",\n        \"[本地题包根目录]/authoring_assets/FIN-TIME-004/input_stage_v2/export_households.py\",\n        \"--source\",\n        \"[本地题包根目录]/authoring_assets/FIN-TIME-004/input_stage_v2/S05_家庭访谈冻结备份.xlsx\",\n        \"--out\",\n        \"[本地题包根目录]/authoring_runs/FIN-TIME-004/20261021T022923Z/households.json\"\n      ],\n      \"returncode\": 0,\n      \"stdout\": \"{\\\"status\\\": \\\"EXPORTED_NOT_APPROVED\\\", \\\"executed_at_utc\\\": \\\"2026-10-21T02:29:24.539047+00:00\\\", \\\"source_name\\\": \\\"S05_家庭访谈冻结备份.xlsx\\\", \\\"source_sha256\\\": \\\"29c53ae431b7ee680498921d5dd73927c12693b03b267add45275984a9c288da\\\", \\\"case_count\\\": 12, \\\"scope\\\": \\\"Frozen fictional interview facts only; not policy conclusions, verified entitlements or payment approval.\\\"}\\n\",\n      \"stderr\": \"\"\n    }\n  },\n  \"export\": {\n    \"status\": \"EXPORTED_NOT_APPROVED\",\n    \"executed_at_utc\": \"2026-10-21T02:29:24.539047+00:00\",\n    \"source_name\": \"S05_家庭访谈冻结备份.xlsx\",\n    \"source_sha256\": \"29c53ae431b7ee680498921d5dd73927c12693b03b267add45275984a9c288da\",\n    \"case_count\": 12,\n    \"records\": [\n      {\n        \"case_id\": \"F01\",\n        \"business_on\": \"2024-12-14\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": false,\n        \"paid_this_year\": 0,\n        \"requested_contribution\": 12000,\n        \"outside_liquid_cash\": 40000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 0,\n        \"fund_value_snapshot\": 0,\n        \"lot_maturity_in_record\": null,\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"今天可否新开户并追认今年1月已缴？\",\n        \"evidence_note\": \"该地区此前非先行地区为情境给定；无历史缴费凭证。\"\n      },\n      {\n        \"case_id\": \"F02\",\n        \"business_on\": \"2024-12-16\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": false,\n        \"paid_this_year\": 3000,\n        \"requested_contribution\": 10000,\n        \"outside_liquid_cash\": 20000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 3000,\n        \"fund_value_snapshot\": 0,\n        \"lot_maturity_in_record\": null,\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"想再缴10000并保证退税3600。\",\n        \"evidence_note\": \"3000为本年度实际缴费且已取得平台凭证；20000是本次追加前账户外流动现金。最低储备为家庭自己约定，非国家门槛。\"\n      },\n      {\n        \"case_id\": \"F03\",\n        \"business_on\": \"2024-12-16\",\n        \"basic_insured\": false,\n        \"pilot_before_expansion\": false,\n        \"paid_this_year\": 0,\n        \"requested_contribution\": 12000,\n        \"outside_liquid_cash\": 50000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 0,\n        \"fund_value_snapshot\": 0,\n        \"lot_maturity_in_record\": null,\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"全国扩围后不参基本养老保险也能参加吗？\",\n        \"evidence_note\": \"未参加城镇职工或城乡居民基本养老保险；不存在其他参加依据。\"\n      },\n      {\n        \"case_id\": \"F04\",\n        \"business_on\": \"2025-08-25\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": true,\n        \"paid_this_year\": 0,\n        \"requested_contribution\": 0,\n        \"outside_liquid_cash\": 5000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 10000,\n        \"fund_value_snapshot\": 0,\n        \"lot_maturity_in_record\": null,\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"已累计领12个月失业保险，今天可按39号提款吗？\",\n        \"evidence_note\": \"仅失业情形；无完全丧失劳动能力、出国定居或年龄条件，无其他领取依据。\"\n      },\n      {\n        \"case_id\": \"F05\",\n        \"business_on\": \"2025-09-05\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": true,\n        \"paid_this_year\": 0,\n        \"requested_contribution\": 0,\n        \"outside_liquid_cash\": 5000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 10000,\n        \"fund_value_snapshot\": 0,\n        \"lot_maturity_in_record\": null,\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"失业后申请一次性领现金10000，净得多少？\",\n        \"evidence_note\": \"仅做条件初筛，未递交领取申请、未取得社保核实或平台变更；流水只作题给记录。\"\n      },\n      {\n        \"case_id\": \"F06\",\n        \"business_on\": \"2025-09-05\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": true,\n        \"paid_this_year\": 0,\n        \"requested_contribution\": 0,\n        \"outside_liquid_cash\": 5000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 10000,\n        \"fund_value_snapshot\": 0,\n        \"lot_maturity_in_record\": null,\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"流水总共12笔，是否能直接提款？\",\n        \"evidence_note\": \"仅失业情形；无其他领取依据。逐笔月份/时间见S06，不按历史总笔数判断。\"\n      },\n      {\n        \"case_id\": \"F07\",\n        \"business_on\": \"2025-09-05\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": true,\n        \"paid_this_year\": 0,\n        \"requested_contribution\": 0,\n        \"outside_liquid_cash\": 1000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 0,\n        \"fund_value_snapshot\": 6000,\n        \"lot_maturity_in_record\": \"2026-03-10\",\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"满足失业条件，基金赎回费为0，今天是否到账5820？\",\n        \"evidence_note\": \"仅持017363，业务登记给定每笔持有期到期日2026-03-10；没有提前赎回特别办理文件/机构确认。基金数值仅访谈快照，非可提现现金。\"\n      },\n      {\n        \"case_id\": \"F08\",\n        \"business_on\": \"2025-09-05\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": true,\n        \"paid_this_year\": 0,\n        \"requested_contribution\": 0,\n        \"outside_liquid_cash\": 10000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 10000,\n        \"fund_value_snapshot\": 0,\n        \"lot_maturity_in_record\": null,\n        \"age_condition_evidence\": \"题给社保信息摘录支持已达到领取基本养老金年龄\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"现金10000一次领，是否无税且顾问可以批准？\",\n        \"evidence_note\": \"年龄条件为题给摘录结论，不按出生年份推算；本次领取申请尚未核实。\"\n      },\n      {\n        \"case_id\": \"F09\",\n        \"business_on\": \"2025-09-05\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": true,\n        \"paid_this_year\": 0,\n        \"requested_contribution\": 0,\n        \"outside_liquid_cash\": 8000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 0,\n        \"fund_value_snapshot\": 8000,\n        \"lot_maturity_in_record\": \"2025-08-01\",\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"基金已满一年，想赎到银行卡用于买房。\",\n        \"evidence_note\": \"无任何法定领取情形；无退休、失能、出国定居、合格医药、失业或低保事实。赎回开放日/确认到账需销售机构核实。\"\n      },\n      {\n        \"case_id\": \"F10\",\n        \"business_on\": \"2025-09-05\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": true,\n        \"paid_this_year\": 0,\n        \"requested_contribution\": 0,\n        \"outside_liquid_cash\": 3000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 4000,\n        \"fund_value_snapshot\": 8000,\n        \"lot_maturity_in_record\": \"2026-04-10\",\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"失业符合，现金4000与基金8000都能马上提吗？\",\n        \"evidence_note\": \"基金仅017363，持有期到期日2026-04-10；无提前赎回特别文件。申请和机构核实均未完成。\"\n      },\n      {\n        \"case_id\": \"F11\",\n        \"business_on\": \"2025-09-05\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": true,\n        \"paid_this_year\": 0,\n        \"requested_contribution\": 0,\n        \"outside_liquid_cash\": 1000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 12000,\n        \"fund_value_snapshot\": 0,\n        \"lot_maturity_in_record\": null,\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": true,\n        \"recontributed_after_early_withdrawal\": false,\n        \"question\": \"正在领城乡低保，申请现金12000，一次性还是分次？\",\n        \"evidence_note\": \"当前低保为题给有效记录，仅作初筛，社保核实未完成；可说明法定领取方式供本人选择，不替本人决定。\"\n      },\n      {\n        \"case_id\": \"F12\",\n        \"business_on\": \"2025-09-05\",\n        \"basic_insured\": true,\n        \"pilot_before_expansion\": true,\n        \"paid_this_year\": 500,\n        \"requested_contribution\": 0,\n        \"outside_liquid_cash\": 1000,\n        \"family_reserve_floor\": 18000,\n        \"pension_cash\": 9500,\n        \"fund_value_snapshot\": 0,\n        \"lot_maturity_in_record\": null,\n        \"age_condition_evidence\": \"无\",\n        \"current_dibao\": false,\n        \"recontributed_after_early_withdrawal\": true,\n        \"question\": \"9月1日低保提前领过，9月3日又缴500，今天还能沿用旧领取状态吗？\",\n        \"evidence_note\": \"9月1日按当时有效低保事实办理过提前领取为题给情境；2025-09-02起不再领低保；9月3日重新缴费发生于旧提前领取之后；无其他当前领取情形。旧领取/返缴仅情境记录，非真实社保凭证。\"\n      }\n    ],\n    \"scope\": \"Frozen fictional interview facts only; not policy conclusions, verified entitlements or payment approval.\"\n  },\n  \"unemployment_windows\": [\n    {\n      \"case_id\": \"F04\",\n      \"start_inclusive\": \"2023-08-25\",\n      \"end_exclusive\": \"2025-08-25\",\n      \"months\": 12,\n      \"included_ids\": [\n        \"F04-U01\",\n        \"F04-U02\",\n        \"F04-U03\",\n        \"F04-U04\",\n        \"F04-U05\",\n        \"F04-U06\",\n        \"F04-U07\",\n        \"F04-U08\",\n        \"F04-U09\",\n        \"F04-U10\",\n        \"F04-U11\",\n        \"F04-U12\"\n      ],\n      \"excluded_ids\": []\n    },\n    {\n      \"case_id\": \"F05\",\n      \"start_inclusive\": \"2023-09-05\",\n      \"end_exclusive\": \"2025-09-05\",\n      \"months\": 12,\n      \"included_ids\": [\n        \"F05-U01\",\n        \"F05-U02\",\n        \"F05-U03\",\n        \"F05-U04\",\n        \"F05-U05\",\n        \"F05-U06\",\n        \"F05-U07\",\n        \"F05-U08\",\n        \"F05-U09\",\n        \"F05-U10\",\n        \"F05-U11\",\n        \"F05-U12\"\n      ],\n      \"excluded_ids\": []\n    },\n    {\n      \"case_id\": \"F06\",\n      \"start_inclusive\": \"2023-09-05\",\n      \"end_exclusive\": \"2025-09-05\",\n      \"months\": 11,\n      \"included_ids\": [\n        \"F06-U02\",\n        \"F06-U03\",\n        \"F06-U04\",\n        \"F06-U05\",\n        \"F06-U06\",\n        \"F06-U07\",\n        \"F06-U08\",\n        \"F06-U09\",\n        \"F06-U10\",\n        \"F06-U11\",\n        \"F06-U12\"\n      ],\n      \"excluded_ids\": [\n        \"F06-U01\"\n      ]\n    },\n    {\n      \"case_id\": \"F07\",\n      \"start_inclusive\": \"2023-09-05\",\n      \"end_exclusive\": \"2025-09-05\",\n      \"months\": 12,\n      \"included_ids\": [\n        \"F07-U01\",\n        \"F07-U02\",\n        \"F07-U03\",\n        \"F07-U04\",\n        \"F07-U05\",\n        \"F07-U06\",\n        \"F07-U07\",\n        \"F07-U08\",\n        \"F07-U09\",\n        \"F07-U10\",\n        \"F07-U11\",\n        \"F07-U12\"\n      ],\n      \"excluded_ids\": []\n    },\n    {\n      \"case_id\": \"F10\",\n      \"start_inclusive\": \"2023-09-05\",\n      \"end_exclusive\": \"2025-09-05\",\n      \"months\": 12,\n      \"included_ids\": [\n        \"F10-U01\",\n        \"F10-U02\",\n        \"F10-U03\",\n        \"F10-U04\",\n        \"F10-U05\",\n        \"F10-U06\",\n        \"F10-U07\",\n        \"F10-U08\",\n        \"F10-U09\",\n        \"F10-U10\",\n        \"F10-U11\",\n        \"F10-U12\"\n      ],\n      \"excluded_ids\": []\n    }\n  ],\n  \"preliminary_decisions\": [\n    {\n      \"case_id\": \"F01\",\n      \"preliminary\": \"12月14日不能仅据全国扩围新开户；先准备12月15日后核实\",\n      \"product_cash_consequence\": \"无已缴事实，不追认1月缴费\",\n      \"next_action\": \"核实基本保险与开户条件后再按实际缴费取得凭证\",\n      \"source_locator\": \"S01一（一）；S02一/二；S05 F01\"\n    },\n    {\n      \"case_id\": \"F02\",\n      \"preliminary\": \"参加基础条件满足；建议追加最多2000或延后\",\n      \"product_cash_consequence\": \"年度剩余额度9000；家庭现金储备余量2000，不能照缴10000\",\n      \"next_action\": \"负责人复核现金需求，由家庭决定0–2000或暂缓；按实缴平台凭证办扣除\",\n      \"source_locator\": \"S01一（一）；S02一/二；S05 F02；S08\"\n    },\n    {\n      \"case_id\": \"F03\",\n      \"preliminary\": \"当前缺基本养老保险参加条件，不能仅据扩围入制度\",\n      \"product_cash_consequence\": \"不作缴费或退款承诺\",\n      \"next_action\": \"由家庭先向基本养老保险服务渠道核实自身参加情况\",\n      \"source_locator\": \"S01一（一）；S05 F03\"\n    },\n    {\n      \"case_id\": \"F04\",\n      \"preliminary\": \"8月25日不能把尚未施行39号当当前直接领取依据\",\n      \"product_cash_consequence\": \"窗口内12个月，但本通知9月1日才实施；不批准或演示已到账\",\n      \"next_action\": \"告知历史答复应待实施后按实际条件重新申请核实\",\n      \"source_locator\": \"S01四（一）；S03一（五）/七；S06 F04\"\n    },\n    {\n      \"case_id\": \"F05\",\n      \"preliminary\": \"两年窗口12个月，失业路径初筛满足，尚待社保核实\",\n      \"product_cash_consequence\": \"给定现金10000仅作附条件税300、净9700演示\",\n      \"next_action\": \"申请渠道/社保核实→平台状态→银行代扣→本人社保卡\",\n      \"source_locator\": \"S03一（五）/三；S02一/二；S06 F05\"\n    },\n    {\n      \"case_id\": \"F06\",\n      \"preliminary\": \"窗口内11个月，未达失业路径12个月；历史总12笔不能算\",\n      \"product_cash_consequence\": \"不给确定可领取/净到账额；无其他给定领取依据\",\n      \"next_action\": \"核查是否另有窗口内漏登领取月；没有就待达到条件\",\n      \"source_locator\": \"S03一（五）；S06 F06\"\n    },\n    {\n      \"case_id\": \"F07\",\n      \"preliminary\": \"失业路径初筛满足，但不等于产品立即可取\",\n      \"product_cash_consequence\": \"现金0；6000是基金快照且持有期未到，不演示5820到账\",\n      \"next_action\": \"产品运营核当前合同/特别提前办理安排/交易流程；再协调申请\",\n      \"source_locator\": \"S03一（五）/二；S04原PDF1/3/5页；S05 F07\"\n    },\n    {\n      \"case_id\": \"F08\",\n      \"preliminary\": \"给定年龄条件有摘录支持；当前领取申请仍待核\",\n      \"product_cash_consequence\": \"给定现金10000附条件税300、净9700，不是免税\",\n      \"next_action\": \"按社保核实/平台状态/银行代扣程序办理，不由顾问批准\",\n      \"source_locator\": \"S03一（一）/三；S02一/二；S05 F08\"\n    },\n    {\n      \"case_id\": \"F09\",\n      \"preliminary\": \"无任何给定账户领取情形，满持有期不自动取得对外领取资格\",\n      \"product_cash_consequence\": \"基金已满期可核交易开放/确认；赎回款不等于银行卡可用款\",\n      \"next_action\": \"先核基金正常赎回流程；住房资金需另评账户外合法流动性\",\n      \"source_locator\": \"S03一/二/三；S04原PDF1/3页；S05 F09\"\n    },\n    {\n      \"case_id\": \"F10\",\n      \"preliminary\": \"失业初筛满足；现金与锁定基金必须分开\",\n      \"product_cash_consequence\": \"现金4000附条件税120、净3880；基金8000不纳入当前演示\",\n      \"next_action\": \"先申请核实现金领取；产品运营另核未到期持仓安排\",\n      \"source_locator\": \"S03一（五）/二/三；S02一；S04原PDF1/3页；S05 F10\"\n    },\n    {\n      \"case_id\": \"F11\",\n      \"preliminary\": \"当前低保事实支持领取初筛，待社保核实\",\n      \"product_cash_consequence\": \"现金12000附条件税360、净11640；方式由本人选\",\n      \"next_action\": \"提供按月/分次/一次性及变更选择，按家庭需求确认后申请\",\n      \"source_locator\": \"S03一（六）/二/三；S02一；S05 F11\"\n    },\n    {\n      \"case_id\": \"F12\",\n      \"preliminary\": \"非年龄路径返缴后回到缴存状态，须重新达到领取条件；当前无依据\",\n      \"product_cash_consequence\": \"旧低保/旧领取状态不能沿用为本次批准\",\n      \"next_action\": \"社保接口核当前状态与资格；当前不递交虚假延续低保事实\",\n      \"source_locator\": \"S03四；S05 F12\"\n    }\n  ],\n  \"conditional_cash_examples\": [\n    {\n      \"case_id\": \"F05\",\n      \"gross\": 10000,\n      \"tax_rate\": 0.03,\n      \"tax\": 300.0,\n      \"net\": 9700.0,\n      \"condition\": \"Only if verified, account status updated and bank actually processes given cash; not an approved payment.\"\n    },\n    {\n      \"case_id\": \"F08\",\n      \"gross\": 10000,\n      \"tax_rate\": 0.03,\n      \"tax\": 300.0,\n      \"net\": 9700.0,\n      \"condition\": \"Only if verified, account status updated and bank actually processes given cash; not an approved payment.\"\n    },\n    {\n      \"case_id\": \"F10\",\n      \"gross\": 4000,\n      \"tax_rate\": 0.03,\n      \"tax\": 120.0,\n      \"net\": 3880.0,\n      \"condition\": \"Only if verified, account status updated and bank actually processes given cash; not an approved payment.\"\n    },\n    {\n      \"case_id\": \"F11\",\n      \"gross\": 12000,\n      \"tax_rate\": 0.03,\n      \"tax\": 360.0,\n      \"net\": 11640.0,\n      \"condition\": \"Only if verified, account status updated and bank actually processes given cash; not an approved payment.\"\n    }\n  ],\n  \"unresolved\": [\n    \"Product-specific cooling/cancellation and current sales/temporary documents must be confirmed; no universal seven-day promise.\",\n    \"Any specific early redemption arrangement and actual processing dates need provider confirmation.\",\n    \"All household claims remain interview facts, not verified government determinations; expert and formal model calibration pending.\"\n  ]\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "household_messages.docx",
+      "absolute_path": "题包内：household_messages.docx",
+      "url": "assets/tasks/FIN-TIME-004/solution/golden_output/household_messages.docx",
+      "bytes": 40487,
+      "sha256": "cf94ea79ddbfe18f182137ef50e59304daf14599592a3cc17e6fa88358205ab3",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "个人养老金｜12案家庭答复草稿"
+        },
+        {
+          "kind": "paragraph",
+          "text": "供负责人审核。各案只供对应家庭阅读；此合订本为内部交接，未发送。F01–F04按原来询日期复核，其余2025-09-05；各案不是相互共享的真实客户资料。"
+        },
+        {
+          "kind": "heading",
+          "text": "F01｜2024-12-14"
+        },
+        {
+          "kind": "paragraph",
+          "text": "您这次问的是2024年12月14日，当时全国扩围尚未到12月15日生效；给定此前非先行地区，不能把税收追溯至1月1日理解成您已在1月缴过。可先准备基本养老保险信息，15日后由银行核实开户与实际缴费；没有发生的缴费不能补造扣除凭证。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S01一（一）；S02一/二；S05 F01。接口/下一步：核实基本保险与开户条件后再按实际缴费取得凭证。"
+        },
+        {
+          "kind": "heading",
+          "text": "F02｜2024-12-16"
+        },
+        {
+          "kind": "paragraph",
+          "text": "您12月16日已满足参加制度的给定基本条件。今年已实际缴3000，12000年度限额剩9000；但账户外20000扣除家庭自己要求的18000储备只剩2000。因此建议本次最多追加2000，也可以暂缓，不建议追加10000。税前据实扣除不是等额退款，缺完整税基不能承诺退税3600；追加后以实际缴费和平台凭证办理扣除。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S01一（一）；S02一/二；S05 F02；S08。接口/下一步：负责人复核现金需求，由家庭决定0–2000或暂缓；按实缴平台凭证办扣除。"
+        },
+        {
+          "kind": "heading",
+          "text": "F03｜2024-12-16"
+        },
+        {
+          "kind": "paragraph",
+          "text": "全国推广不代表无条件参加。您给定未参加城镇职工或城乡居民基本养老保险，当前不能只凭扩围消息认定个人养老金参加资格。请先向基本养老保险服务渠道核实自身参保情况，再由银行核开户条件；现在不建议以承诺退税方式缴款。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S01一（一）；S05 F03。接口/下一步：由家庭先向基本养老保险服务渠道核实自身参加情况。"
+        },
+        {
+          "kind": "heading",
+          "text": "F04｜2025-08-25"
+        },
+        {
+          "kind": "paragraph",
+          "text": "您这次问的是2025年8月25日。流水在两年窗口内确有12个领取月，但39号自9月1日施行，不能按成文日期倒推8月已可按该条直接办理；2024通知也注明具体办法另定。就给定仅失业的情况，不能确认当天可领。可在实施后按当时事实向规定渠道申请，由社保核实，不能把本草稿当批准。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S01四（一）；S03一（五）/七；S06 F04。接口/下一步：告知历史答复应待实施后按实际条件重新申请核实。"
+        },
+        {
+          "kind": "heading",
+          "text": "F05｜2025-09-05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "截至9月5日，申请前两年流水累计12个月，给定事实支持失业路径初筛。若社保核实通过、平台变为领取状态并由银行实际办理，现金10000按3%演示税300、净9700，非今天已到账。请通过规定服务入口或开户银行等申请，需补材料时按社保要求提供；我们没有代您批准或发出申请。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S03一（五）/三；S02一/二；S06 F05。接口/下一步：申请渠道/社保核实→平台状态→银行代扣→本人社保卡。"
+        },
+        {
+          "kind": "heading",
+          "text": "F06｜2025-09-05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "您的历史流水虽12笔，但2023年8月15日那1个月早于2023年9月5日窗口起点，当前两年内只有11个月，未达到12个月。材料没有其他领取情形，因此现在不能按此路径确认可领。可请经办接口核对是否存在窗口内漏登的真实领取月份；不能把窗口外记录移进来凑数。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S03一（五）；S06 F06。接口/下一步：核查是否另有窗口内漏登领取月；没有就待达到条件。"
+        },
+        {
+          "kind": "heading",
+          "text": "F07｜2025-09-05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "您失业记录支持领取条件初筛，但当前没有养老金现金，6000是基金持仓快照。登记到期日2026年3月10日尚未到，0%赎回费不等于随时能赎；缺特别提前办理依据，不能承诺今天到账5820。请由产品运营核当前销售文件、是否存在适用的特别安排及交易确认，再由规定渠道核实领取；也不能以统一7天冷静期作退款承诺。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S03一（五）/二；S04原PDF1/3/5页；S05 F07。接口/下一步：产品运营核当前合同/特别提前办理安排/交易流程；再协调申请。"
+        },
+        {
+          "kind": "heading",
+          "text": "F08｜2025-09-05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "题给社保信息摘录支持您已达到领取基本养老金年龄，我们不另外假定人人60岁。领取申请仍需核实，不是顾问可以批准。若获核实并实际办理，给定现金10000按3%演示税300、净9700，并非年龄达标就免税；款项由银行依规定划至本人社保卡银行账户，到账时间以办理结果为准。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S03一（一）/三；S02一/二；S05 F08。接口/下一步：按社保核实/平台状态/银行代扣程序办理，不由顾问批准。"
+        },
+        {
+          "kind": "heading",
+          "text": "F09｜2025-09-05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "您的基金登记持有期已到，可以请销售机构核开放日、赎回申请与确认，但未给任何个人养老金领取情形。基金赎回和养老金账户对外领取是两步，不能因为满一年就直接转银行卡买房。请先核产品交易流程；住房资金应另评估账户外流动性，不把这8000基金快照承诺为马上可用的购房款。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S03一/二/三；S04原PDF1/3页；S05 F09。接口/下一步：先核基金正常赎回流程；住房资金需另评账户外合法流动性。"
+        },
+        {
+          "kind": "heading",
+          "text": "F10｜2025-09-05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "您两年内失业领取记录满足初筛，但12000不能合成即时可提现额。现金4000若经社保核实及银行实际办理，按3%演示税120、净3880；另8000是未到2026年4月10日持有期的基金快照，缺提前办理依据，暂不能计入可领现金。请分开核现金申请与产品安排，不承诺立刻净到11640。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S03一（五）/二/三；S02一；S04原PDF1/3页；S05 F10。接口/下一步：先申请核实现金领取；产品运营另核未到期持仓安排。"
+        },
+        {
+          "kind": "heading",
+          "text": "F11｜2025-09-05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "给定目前正在领取城乡低保，支持相应领取条件初筛，但还需社保核实。您可按月、分次或一次性领取，也可按需要申请变更，并非只能按月。若您选择一次性并经核实实际办理，现金12000按3%演示税360、净11640；这不是到账确认。请结合近期生活费需求自主选择方式，我们整理待审材料供您确认。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S03一（六）/二/三；S02一；S05 F11。接口/下一步：提供按月/分次/一次性及变更选择，按家庭需求确认后申请。"
+        },
+        {
+          "kind": "heading",
+          "text": "F12｜2025-09-05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "您9月1日按当时低保事实提前领过，但9月3日又缴费，非年龄路径再次缴费会恢复缴存状态，需重新达到领取条件才能再领。给定9月2日起已不领低保且没有其他当前条件，不能沿用旧领取状态认定今天可领。请通过社保渠道核当前资格/状态，不补造持续低保证明；这不否定过去那次给定领取事实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部核查定位：S03四；S05 F12。接口/下一步：社保接口核当前状态与资格；当前不递交虚假延续低保事实。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "triage_workbook.xlsx",
+      "absolute_path": "题包内：triage_workbook.xlsx",
+      "url": "assets/tasks/FIN-TIME-004/solution/golden_output/triage_workbook.xlsx",
+      "bytes": 23627,
+      "sha256": "5715ed3ed4b7067a39f9018ecf926f8f65b057a3bd525b688016a85a449d5388",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "案件分流"
+        },
+        {
+          "kind": "notice",
+          "text": "共13行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "业务日期",
+              "条件初筛/历史判断",
+              "产品与现金边界",
+              "下一步与接口",
+              "条/页定位"
+            ],
+            [
+              "F01",
+              "2024-12-14",
+              "12月14日不能仅据全国扩围新开户；先准备12月15日后核实",
+              "无已缴事实，不追认1月缴费",
+              "核实基本保险与开户条件后再按实际缴费取得凭证",
+              "S01一（一）；S02一/二；S05 F01"
+            ],
+            [
+              "F02",
+              "2024-12-16",
+              "参加基础条件满足；建议追加最多2000或延后",
+              "年度剩余额度9000；家庭现金储备余量2000，不能照缴10000",
+              "负责人复核现金需求，由家庭决定0–2000或暂缓；按实缴平台凭证办扣除",
+              "S01一（一）；S02一/二；S05 F02；S08"
+            ],
+            [
+              "F03",
+              "2024-12-16",
+              "当前缺基本养老保险参加条件，不能仅据扩围入制度",
+              "不作缴费或退款承诺",
+              "由家庭先向基本养老保险服务渠道核实自身参加情况",
+              "S01一（一）；S05 F03"
+            ],
+            [
+              "F04",
+              "2025-08-25",
+              "8月25日不能把尚未施行39号当当前直接领取依据",
+              "窗口内12个月，但本通知9月1日才实施；不批准或演示已到账",
+              "告知历史答复应待实施后按实际条件重新申请核实",
+              "S01四（一）；S03一（五）/七；S06 F04"
+            ],
+            [
+              "F05",
+              "2025-09-05",
+              "两年窗口12个月，失业路径初筛满足，尚待社保核实",
+              "给定现金10000仅作附条件税300、净9700演示",
+              "申请渠道/社保核实→平台状态→银行代扣→本人社保卡",
+              "S03一（五）/三；S02一/二；S06 F05"
+            ],
+            [
+              "F06",
+              "2025-09-05",
+              "窗口内11个月，未达失业路径12个月；历史总12笔不能算",
+              "不给确定可领取/净到账额；无其他给定领取依据",
+              "核查是否另有窗口内漏登领取月；没有就待达到条件",
+              "S03一（五）；S06 F06"
+            ],
+            [
+              "F07",
+              "2025-09-05",
+              "失业路径初筛满足，但不等于产品立即可取",
+              "现金0；6000是基金快照且持有期未到，不演示5820到账",
+              "产品运营核当前合同/特别提前办理安排/交易流程；再协调申请",
+              "S03一（五）/二；S04原PDF1/3/5页；S05 F07"
+            ],
+            [
+              "F08",
+              "2025-09-05",
+              "给定年龄条件有摘录支持；当前领取申请仍待核",
+              "给定现金10000附条件税300、净9700，不是免税",
+              "按社保核实/平台状态/银行代扣程序办理，不由顾问批准",
+              "S03一（一）/三；S02一/二；S05 F08"
+            ],
+            [
+              "F09",
+              "2025-09-05",
+              "无任何给定账户领取情形，满持有期不自动取得对外领取资格",
+              "基金已满期可核交易开放/确认；赎回款不等于银行卡可用款",
+              "先核基金正常赎回流程；住房资金需另评账户外合法流动性",
+              "S03一/二/三；S04原PDF1/3页；S05 F09"
+            ],
+            [
+              "F10",
+              "2025-09-05",
+              "失业初筛满足；现金与锁定基金必须分开",
+              "现金4000附条件税120、净3880；基金8000不纳入当前演示",
+              "先申请核实现金领取；产品运营另核未到期持仓安排",
+              "S03一（五）/二/三；S02一；S04原PDF1/3页；S05 F10"
+            ],
+            [
+              "F11",
+              "2025-09-05",
+              "当前低保事实支持领取初筛，待社保核实",
+              "现金12000附条件税360、净11640；方式由本人选",
+              "提供按月/分次/一次性及变更选择，按家庭需求确认后申请",
+              "S03一（六）/二/三；S02一；S05 F11"
+            ],
+            [
+              "F12",
+              "2025-09-05",
+              "非年龄路径返缴后回到缴存状态，须重新达到领取条件；当前无依据",
+              "旧低保/旧领取状态不能沿用为本次批准",
+              "社保接口核当前状态与资格；当前不递交虚假延续低保事实",
+              "S03四；S05 F12"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "领取流水"
+        },
+        {
+          "kind": "notice",
+          "text": "共61行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "流水ID",
+              "事项",
+              "领取日",
+              "领取月",
+              "累计月数",
+              "记录性质"
+            ],
+            [
+              "F04-U01",
+              "F04",
+              "2024-09-15T00:00:00",
+              "2024-09",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U02",
+              "F04",
+              "2024-10-15T00:00:00",
+              "2024-10",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U03",
+              "F04",
+              "2024-11-15T00:00:00",
+              "2024-11",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U04",
+              "F04",
+              "2024-12-15T00:00:00",
+              "2024-12",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U05",
+              "F04",
+              "2025-01-15T00:00:00",
+              "2025-01",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U06",
+              "F04",
+              "2025-02-15T00:00:00",
+              "2025-02",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U07",
+              "F04",
+              "2025-03-15T00:00:00",
+              "2025-03",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U08",
+              "F04",
+              "2025-04-15T00:00:00",
+              "2025-04",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U09",
+              "F04",
+              "2025-05-15T00:00:00",
+              "2025-05",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U10",
+              "F04",
+              "2025-06-15T00:00:00",
+              "2025-06",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U11",
+              "F04",
+              "2025-07-15T00:00:00",
+              "2025-07",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F04-U12",
+              "F04",
+              "2025-08-15T00:00:00",
+              "2025-08",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U01",
+              "F05",
+              "2024-09-15T00:00:00",
+              "2024-09",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U02",
+              "F05",
+              "2024-10-15T00:00:00",
+              "2024-10",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U03",
+              "F05",
+              "2024-11-15T00:00:00",
+              "2024-11",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U04",
+              "F05",
+              "2024-12-15T00:00:00",
+              "2024-12",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U05",
+              "F05",
+              "2025-01-15T00:00:00",
+              "2025-01",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U06",
+              "F05",
+              "2025-02-15T00:00:00",
+              "2025-02",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U07",
+              "F05",
+              "2025-03-15T00:00:00",
+              "2025-03",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U08",
+              "F05",
+              "2025-04-15T00:00:00",
+              "2025-04",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U09",
+              "F05",
+              "2025-05-15T00:00:00",
+              "2025-05",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U10",
+              "F05",
+              "2025-06-15T00:00:00",
+              "2025-06",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U11",
+              "F05",
+              "2025-07-15T00:00:00",
+              "2025-07",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F05-U12",
+              "F05",
+              "2025-08-15T00:00:00",
+              "2025-08",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U01",
+              "F06",
+              "2023-08-15T00:00:00",
+              "2023-08",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U02",
+              "F06",
+              "2024-10-15T00:00:00",
+              "2024-10",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U03",
+              "F06",
+              "2024-11-15T00:00:00",
+              "2024-11",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U04",
+              "F06",
+              "2024-12-15T00:00:00",
+              "2024-12",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U05",
+              "F06",
+              "2025-01-15T00:00:00",
+              "2025-01",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U06",
+              "F06",
+              "2025-02-15T00:00:00",
+              "2025-02",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U07",
+              "F06",
+              "2025-03-15T00:00:00",
+              "2025-03",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U08",
+              "F06",
+              "2025-04-15T00:00:00",
+              "2025-04",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U09",
+              "F06",
+              "2025-05-15T00:00:00",
+              "2025-05",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U10",
+              "F06",
+              "2025-06-15T00:00:00",
+              "2025-06",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U11",
+              "F06",
+              "2025-07-15T00:00:00",
+              "2025-07",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F06-U12",
+              "F06",
+              "2025-08-15T00:00:00",
+              "2025-08",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U01",
+              "F07",
+              "2024-09-15T00:00:00",
+              "2024-09",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U02",
+              "F07",
+              "2024-10-15T00:00:00",
+              "2024-10",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U03",
+              "F07",
+              "2024-11-15T00:00:00",
+              "2024-11",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U04",
+              "F07",
+              "2024-12-15T00:00:00",
+              "2024-12",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U05",
+              "F07",
+              "2025-01-15T00:00:00",
+              "2025-01",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U06",
+              "F07",
+              "2025-02-15T00:00:00",
+              "2025-02",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U07",
+              "F07",
+              "2025-03-15T00:00:00",
+              "2025-03",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U08",
+              "F07",
+              "2025-04-15T00:00:00",
+              "2025-04",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U09",
+              "F07",
+              "2025-05-15T00:00:00",
+              "2025-05",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U10",
+              "F07",
+              "2025-06-15T00:00:00",
+              "2025-06",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U11",
+              "F07",
+              "2025-07-15T00:00:00",
+              "2025-07",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F07-U12",
+              "F07",
+              "2025-08-15T00:00:00",
+              "2025-08",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U01",
+              "F10",
+              "2024-09-15T00:00:00",
+              "2024-09",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U02",
+              "F10",
+              "2024-10-15T00:00:00",
+              "2024-10",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U03",
+              "F10",
+              "2024-11-15T00:00:00",
+              "2024-11",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U04",
+              "F10",
+              "2024-12-15T00:00:00",
+              "2024-12",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U05",
+              "F10",
+              "2025-01-15T00:00:00",
+              "2025-01",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U06",
+              "F10",
+              "2025-02-15T00:00:00",
+              "2025-02",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U07",
+              "F10",
+              "2025-03-15T00:00:00",
+              "2025-03",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U08",
+              "F10",
+              "2025-04-15T00:00:00",
+              "2025-04",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U09",
+              "F10",
+              "2025-05-15T00:00:00",
+              "2025-05",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U10",
+              "F10",
+              "2025-06-15T00:00:00",
+              "2025-06",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U11",
+              "F10",
+              "2025-07-15T00:00:00",
+              "2025-07",
+              1,
+              "题给已领取记录_非真实客户"
+            ],
+            [
+              "F10-U12",
+              "F10",
+              "2025-08-15T00:00:00",
+              "2025-08",
+              1,
+              "题给已领取记录_非真实客户"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "窗口复算"
+        },
+        {
+          "kind": "notice",
+          "text": "共6行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "窗口起点（含）",
+              "窗口终点（不含）",
+              "窗口内月数公式",
+              "路径检查",
+              "需注意的排除"
+            ],
+            [
+              "F04",
+              "2023-08-25T00:00:00",
+              "2025-08-25T00:00:00",
+              "=SUMIFS(领取流水!$E$2:$E$61,领取流水!$B$2:$B$61,A2,领取流水!$C$2:$C$61,\">=\"&B2,领取流水!$C$2:$C$61,\"<\"&C2)\n缓存：12",
+              "=IF(D2>=12,\"月数达到，仍须核实施行及申请\",\"月数不足\")\n缓存：月数达到，仍须核实施行及申请",
+              "无窗口外记录"
+            ],
+            [
+              "F05",
+              "2023-09-05T00:00:00",
+              "2025-09-05T00:00:00",
+              "=SUMIFS(领取流水!$E$2:$E$61,领取流水!$B$2:$B$61,A3,领取流水!$C$2:$C$61,\">=\"&B3,领取流水!$C$2:$C$61,\"<\"&C3)\n缓存：12",
+              "=IF(D3>=12,\"月数达到，仍须核实施行及申请\",\"月数不足\")\n缓存：月数达到，仍须核实施行及申请",
+              "无窗口外记录"
+            ],
+            [
+              "F06",
+              "2023-09-05T00:00:00",
+              "2025-09-05T00:00:00",
+              "=SUMIFS(领取流水!$E$2:$E$61,领取流水!$B$2:$B$61,A4,领取流水!$C$2:$C$61,\">=\"&B4,领取流水!$C$2:$C$61,\"<\"&C4)\n缓存：11",
+              "=IF(D4>=12,\"月数达到，仍须核实施行及申请\",\"月数不足\")\n缓存：月数不足",
+              "F06-U01"
+            ],
+            [
+              "F07",
+              "2023-09-05T00:00:00",
+              "2025-09-05T00:00:00",
+              "=SUMIFS(领取流水!$E$2:$E$61,领取流水!$B$2:$B$61,A5,领取流水!$C$2:$C$61,\">=\"&B5,领取流水!$C$2:$C$61,\"<\"&C5)\n缓存：12",
+              "=IF(D5>=12,\"月数达到，仍须核实施行及申请\",\"月数不足\")\n缓存：月数达到，仍须核实施行及申请",
+              "无窗口外记录"
+            ],
+            [
+              "F10",
+              "2023-09-05T00:00:00",
+              "2025-09-05T00:00:00",
+              "=SUMIFS(领取流水!$E$2:$E$61,领取流水!$B$2:$B$61,A6,领取流水!$C$2:$C$61,\">=\"&B6,领取流水!$C$2:$C$61,\"<\"&C6)\n缓存：12",
+              "=IF(D6>=12,\"月数达到，仍须核实施行及申请\",\"月数不足\")\n缓存：月数达到，仍须核实施行及申请",
+              "无窗口外记录"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "F02缴费规划"
+        },
+        {
+          "kind": "notice",
+          "text": "共2行 × 9列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "F02年度实缴",
+              "年度限额",
+              "年度剩余",
+              "账户外流动现金",
+              "家庭最低储备",
+              "储备以上余量",
+              "原拟追加",
+              "建议追加上限",
+              "上限与储备勾稽"
+            ],
+            [
+              3000,
+              12000,
+              "=MAX(0,B2-A2)\n缓存：9000",
+              20000,
+              18000,
+              "=MAX(0,D2-E2)\n缓存：2000",
+              10000,
+              "=MIN(C2,F2)\n缓存：2000",
+              "=IF(AND(H2<=C2,D2-H2>=E2),0,1)\n缓存：0"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "附条件现金演示"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "给定现金本金",
+              "演示税率",
+              "附条件税额",
+              "附条件净额",
+              "说明"
+            ],
+            [
+              "F05",
+              10000,
+              0.03,
+              "=ROUND(B2*C2,2)\n缓存：300",
+              "=B2-D2\n缓存：9700",
+              "待社保核实/平台状态/银行实际办理；不含基金估值，不是已到账"
+            ],
+            [
+              "F08",
+              10000,
+              0.03,
+              "=ROUND(B3*C3,2)\n缓存：300",
+              "=B3-D3\n缓存：9700",
+              "待社保核实/平台状态/银行实际办理；不含基金估值，不是已到账"
+            ],
+            [
+              "F10",
+              4000,
+              0.03,
+              "=ROUND(B4*C4,2)\n缓存：120",
+              "=B4-D4\n缓存：3880",
+              "待社保核实/平台状态/银行实际办理；不含基金估值，不是已到账"
+            ],
+            [
+              "F11",
+              12000,
+              0.03,
+              "=ROUND(B5*C5,2)\n缓存：360",
+              "=B5-D5\n缓存：11640",
+              "待社保核实/平台状态/银行实际办理；不含基金估值，不是已到账"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "规则与D0更正"
+        },
+        {
+          "kind": "notice",
+          "text": "共12行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "依据",
+              "正确规则",
+              "影响事项",
+              "D0应纠正/边界"
+            ],
+            [
+              "扩围",
+              "S01一（一）",
+              "2024-12-15起，参加两类基本养老保险的劳动者均可参加",
+              "F01/F02/F03",
+              "成文12-10/网页12-12/扩围12-15不是同一天"
+            ],
+            [
+              "税收",
+              "S02一/二",
+              "2024-01-01全国递延纳税；实际缴费按12000/年限额据实扣除；平台凭证",
+              "F01/F02",
+              "税收起点不创造实际开户/缴费；扣除额不是退款额"
+            ],
+            [
+              "领取新情形",
+              "S01四（一）；S03一/七",
+              "2024原则写具体办法另定；39号2025-09-01实施",
+              "F04/F05",
+              "成文2025-07-13不等于8月已可按本通知办理"
+            ],
+            [
+              "失业窗口",
+              "S03一（五）",
+              "申请日前2年领取失业保险金累计达到12个月",
+              "F04–F07/F10",
+              "不按历史总笔数，F06旧1笔在窗口外"
+            ],
+            [
+              "领取程序",
+              "S03三；S02二",
+              "社保核实→平台领取状态→银行代扣税→本人社保卡银行账户",
+              "F05/F08/F10/F11",
+              "顾问初筛不能批准、确认已到账或替本人选方式"
+            ],
+            [
+              "已购买产品",
+              "S03二；S04原PDF1/3/5页",
+              "账户具领取条件，产品仍遵循相关规定；每份至少一年；赎回费0",
+              "F07/F09/F10",
+              "0费不消除持有期；满期不等于账户可对外领"
+            ],
+            [
+              "名称/风险",
+              "S04原PDF5/6页",
+              "可能损失本金，养老名称不保证收益或退休收入",
+              "全部",
+              "稳健/养老不等于保本；0赎回费不代表全部费用0"
+            ],
+            [
+              "非年龄路径返缴",
+              "S03四",
+              "再次缴费恢复缴存状态，需重新达到领取条件",
+              "F12",
+              "历史低保与旧领取状态不能永久沿用"
+            ],
+            [
+              "领取方式",
+              "S03二",
+              "可按月、分次、一次性并按需变更",
+              "F11",
+              "让家庭选择，非顾问替选或限制只有按月"
+            ],
+            [
+              "7天冷静期",
+              "S04并未提供统一7天权利；S08待核",
+              "核具体销售文件/渠道/撤单时限；当前不宣传确定天数",
+              "全部，尤其F07",
+              "当前资料不足不等于一切产品绝无冷静/提前办理安排"
+            ],
+            [
+              "家庭流动性",
+              "S05 F02；S08约定",
+              "家庭储备为客户偏好，建议追加≤年度余额及账户外储备余量",
+              "F02",
+              "可延后或更审慎，不用税惠驱动耗尽应急金"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": [
+    {
+      "name": "advisor_handoff.pdf",
+      "url": "assets/audit/render/FIN-TIME-004/20261021T022936Z/advisor_handoff.pdf"
+    },
+    {
+      "name": "household_messages.pdf",
+      "url": "assets/audit/render/FIN-TIME-004/20261021T022936Z/household_messages.pdf"
+    },
+    {
+      "name": "triage_workbook.pdf",
+      "url": "assets/audit/render/FIN-TIME-004/20261021T022936Z/triage_workbook.pdf"
+    }
+  ]
+}

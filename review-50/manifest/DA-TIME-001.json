@@ -1,0 +1,1581 @@
+{
+  "id": "DA-TIME-001",
+  "title": "ACS收入监测更正：已调通胀基数、产品断点与显著性",
+  "domain": "数据分析",
+  "domain_l2": "DA1-统计与推断（拟议扩展）",
+  "domain_l3": "普查ACS单年与五年窗口",
+  "category": "weakness-driven",
+  "complexity": "C2",
+  "target_difficulty": "A2",
+  "as_of": "2022-12-15 10:00",
+  "timezone": "America/New_York",
+  "source_note": "真实Census ACSBR-011选行及官方手册/比较指南离线摘录；委托与错稿为明确原创，不虚构真实统计。原PDF下载受限，web reader取证已冻结，不冒充已下载PDF。",
+  "instruction": "# ACS收入监测更正：已调通胀基数、产品断点与显著性\n\n## 业务场景与任务说明\n\n你是公益项目研究分析员，需在2022年末审查一份区域收入监测旧稿。助理机械套通胀因子，传播专员提出补2020实验值、接五年产品并自动拨款；研究负责人要求先完成12州可比统计与发布更正。利用冻结官方材料，交付实际可复算工作簿及待审备忘，让项目团队明确哪些结论有依据、哪些尚不能作出。\n\n业务判断基准时点：2022-12-15 10:00；时区：America/New_York。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_官方报告数据摘录.docx`：真实官方报告相关数据和方法的明确选摘，包含12州及全国核对行；不是完整PDF。\n- `/app/input_files/S02_官方比较与检验方法.docx`：官方手册/比较指南相关规则的离线摘述及原文短摘录，含明确公式。\n- `/app/input_files/S03_委托与草稿变更记录.docx`：原创委托、时序权限、12州范围和精度/建议处置要求。\n- `/app/input_files/S04_未审旧稿.xlsx`：原创未审草稿：真实原数配上错误派生公式与标签，供纠错，不是官方计算结果。\n\n## 工作要求\n\n- [Q1] 核对时点与消息权限，确定S01两期的价格基准和1年产品；保留真实来源定位，不把2026取证日当2022发布日期。\n- [Q2] 工作簿纳入指定12州的两年收入及90% MOE原数，含来源定位；派生值用有效公式且打开可见结果，不修改只读原件。\n- [Q3] 逐州计算2021减2019的美元差、跨期百分比、SE、差90% MOE、差区间及z；按90%阈值分显著上升/下降/未发现显著差异，检验全精度，显示精度按S03。\n- [Q4] 逐州重现S04双重通胀旧稿增长、正确增长、旧减新百分点差；指出点值分类忽略MOE的影响，不以旧法作主结果。\n- [Q5] 记录并解释2020实验序列、1年/5年拼接及重叠窗口、12州中位数平均称全国并自动拨款三项建议处置；说明批准权限和待补材料。\n- [Q6] 备忘独立呈现12州差/增长/检验结果和汇总，说明统计解释边界及具体复核/研究跟进行动；不得声称真实发布或伪造外部服务成功记录。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/acs_audit.xlsx`：原数/定位、公式分析、差异检验、旧稿纠错及建议处置的可用工作簿。\n- `/app/output/release_memo.docx`：含12州结果、错法更正、解释边界与研究跟进行动的待审中文备忘。\n\n## 硬约束（单独列明）\n\n- 只交acs_audit.xlsx、release_memo.docx到/app/output/，不加密或压缩。\n- 冻结输入只读；派生公式和业务消息是原创情境，不能冒充官方记录。\n- 不得凭空补2020统计、混接1年/5年产品、伪造API/外部联系/真实批准记录；不真正发布或拨款。\n- 按S03精度显示，检验保留全精度；不得把跨期变化叫单年同比。\n",
+  "instruction_url": "assets/tasks/DA-TIME-001/instruction.md",
+  "absolute_path": "tasks/DA-TIME-001",
+  "spec_path": "manifest/DA-TIME-001.json",
+  "spec_url": "manifest/DA-TIME-001.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "主计算确认S01的2019与2021列均为2021美元，不再乘通胀因子；以具体报告表头/脚注为依据而非机械套一般指南。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx",
+        "release_memo.docx"
+      ],
+      "evidence": "S01页2脚注5/Table 1表头；S02指南的适用前提。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R02",
+      "description": "原始收入表准确保留十二指定州的2019/2021估计与MOE，并逐行定位到S01 Table 1对应州和列。全国行不计入州样本。",
+      "weight": 10,
+      "type": "Gradient",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx"
+      ],
+      "evidence": "S01 Table 1十二州四个整数列；工作簿原始收入。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。",
+      "levels": {
+        "0": "正确且可追溯州数0–2。",
+        "0.25": "3–5州四值及定位均正确。",
+        "0.5": "6–8州四值及定位均正确。",
+        "0.75": "9–11州四值及定位均正确。",
+        "1": "12州四值及定位均正确，且未把全国行计为第13州。"
+      }
+    },
+    {
+      "id": "R03",
+      "description": "只评价美元差这一指标：按2021减2019，Arizona/California/Colorado/Florida/Georgia/Illinois/New York/Ohio/Pennsylvania/Texas/Virginia/Washington依次为3292/-341/517/295/875/-1117/-2104/115/1701/-898/-63/857，美元容差0.01。按正确州数分档。",
+      "weight": 10,
+      "type": "Gradient",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx"
+      ],
+      "evidence": "逐州分析F列；S01两期整数差。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。",
+      "levels": {
+        "0": "正确州数0–2。",
+        "0.25": "正确州数3–5。",
+        "0.5": "正确州数6–8。",
+        "0.75": "正确州数9–11。",
+        "1": "十二州全部正确。"
+      }
+    },
+    {
+      "id": "R04",
+      "description": "只评价跨期百分比这一指标：2021/2019-1，上述州依次显示5.01%/-0.40%/0.63%/0.47%/1.33%/-1.52%/-2.75%/0.19%/2.53%/-1.32%/-0.08%/1.03%，容差0.01个百分点；按正确州数分档。不要求使用某个特定单元格布局。",
+      "weight": 10,
+      "type": "Gradient",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx"
+      ],
+      "evidence": "逐州分析G列；S01两期整数之比，不由已舍入公布变化列反算。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。",
+      "levels": {
+        "0": "正确州数0–2。",
+        "0.25": "正确州数3–5。",
+        "0.5": "正确州数6–8。",
+        "0.75": "正确州数9–11。",
+        "1": "十二州全部正确。"
+      }
+    },
+    {
+      "id": "R05",
+      "description": "两个年度SE由各自90% MOE除1.645计算；十二州均保持一致币值，无重复调整MOE。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx"
+      ],
+      "evidence": "逐州分析H/I列；S02第7章印刷页55。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R06",
+      "description": "差的90% MOE=sqrt(MOE19²+MOE21²)，逐州差区间为差±该MOE，保留负下限而不截为零。各金额容差0.01。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx"
+      ],
+      "evidence": "逐州分析J:L列；S02方法；区间描述的是美元差不是人数。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R07",
+      "description": "z逐州按abs(差)/sqrt(SE19²+SE21²)计算，用全精度值与1.645比较，不用两个置信区间重叠作为替代。z容差0.001。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx"
+      ],
+      "evidence": "逐州分析M列公式、S02印刷页56。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R08",
+      "description": "只评价单州90%统计分类准确性：Arizona/Georgia/Pennsylvania为显著上升，Illinois/New York/Texas为显著下降，California/Colorado/Florida/Ohio/Virginia/Washington为未发现显著差异；按正确州数分档。不额外按同一分类事实对每个州重复加权。",
+      "weight": 10,
+      "type": "Gradient",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx"
+      ],
+      "evidence": "S01官方星号与S02差异检验；任意清晰等价表述均可。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。",
+      "levels": {
+        "0": "正确州数0–2。",
+        "0.25": "正确州数3–5。",
+        "0.5": "正确州数6–8。",
+        "0.75": "正确州数9–11。",
+        "1": "十二州全部正确。"
+      }
+    },
+    {
+      "id": "R09",
+      "description": "旧稿审计逐州保存S04错误增长（2021/(报告2019×1.05976096)-1），明确只用于追踪旧错，不作为发布主结果。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx"
+      ],
+      "evidence": "S04旧公式；旧稿审计B列；与逐州分析分区。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R10",
+      "description": "旧稿审计逐州计算错误增长减正确增长，单位为百分点；方向和×100正确，容差0.01个百分点。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx"
+      ],
+      "evidence": "旧稿审计D列；S03符号约定。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R11",
+      "description": "备忘指出只看点值即称改善的错法，至少以Florida为例说明点值上升并不代表90%显著上升。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "release_memo.docx"
+      ],
+      "evidence": "S04分类、S01 Florida、备忘纠错段；不与工作簿公式分重复检查同一位置。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R12",
+      "description": "备忘独立列出12州差、跨期增长与检验结果，并汇总3升/3降/6未显著；这些数值与工作簿同步。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "release_memo.docx",
+        "acs_audit.xlsx"
+      ],
+      "evidence": "备忘结果表、汇总与工作簿逐州分析；只检查传播同步关系，基础计算按前项检查。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R13",
+      "description": "2020建议处置明确不把实验估计接入常规2019/2021序列，也不以插值伪造普通缺年值，并解释是非应答/权重方法问题。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx",
+        "release_memo.docx"
+      ],
+      "evidence": "建议处置记录；S01页1及S02指南。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R14",
+      "description": "五年产品处置明确不与1年拼接，指出2015–2019与2017–2021重叠3年；若另做五年分析应另立一致、优先非重叠窗口。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx",
+        "release_memo.docx"
+      ],
+      "evidence": "S02第4章及S03传播建议；不得把五年终止年当单年数据。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R15",
+      "description": "不以12州收入中位数简单平均代表全国中位数，说明全国需用官方全国统计；不能由州中位数作这种聚合。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx",
+        "release_memo.docx"
+      ],
+      "evidence": "第三建议处置；S01全国单独行与中位数定义。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R16",
+      "description": "后续资源决策明确尚缺项目需求/服务缺口、成本与效果证据，并给出补证责任人；不能只按本表自动拨款。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5",
+        "Q6"
+      ],
+      "deliverables": [
+        "release_memo.docx"
+      ],
+      "evidence": "S03用途；备忘建议与下一步。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R17",
+      "description": "解释家庭税前现金收入中位数，不写成均值、个人可支配收入或同一户面板；适用家庭人口范围，不含group quarters。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "release_memo.docx"
+      ],
+      "evidence": "S01定义/Table 1范围；备忘解释边界。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R18",
+      "description": "说明访问前12个月和2010/2020权重人口基数变化导致比较需谨慎，不能宣称两个完整自然年经济状况精确对比。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "release_memo.docx"
+      ],
+      "evidence": "S01页1–2；备忘解释边界。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R19",
+      "description": "统计表述区分单州90%检验与多重检验整体结论，未宣称已做家族误差校正；未显著并非证明零变化。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3",
+        "Q6"
+      ],
+      "deliverables": [
+        "release_memo.docx"
+      ],
+      "evidence": "S02约定；备忘待审结论。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R20",
+      "description": "后续行动包含替换旧底表/摘要、研究负责人复核后才能发布草案的顺序；未批准的传播建议不覆盖负责人委托。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q6"
+      ],
+      "deliverables": [
+        "release_memo.docx"
+      ],
+      "evidence": "S03消息权限；备忘下一步。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R21",
+      "description": "派生分析及纠错对照用引用原数的可复算公式、缓存值可见，无Excel错误值；不要求原数也写公式。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q4"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx"
+      ],
+      "evidence": "实际公式/data_only/Office打开。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R22",
+      "description": "两份指定文件名称/扩展名正确、可打开，美元显示2位、增长2位百分数、z3位且判定未用舍入值。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q3",
+        "Q6"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx",
+        "release_memo.docx"
+      ],
+      "evidence": "S03精度约定；实际文件显示。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R23",
+      "description": "时间溯源区分2022-12-15业务基准、October 2022报告与2026-10-20取证；不凭空补准确报告日。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-统计分析",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx",
+        "release_memo.docx"
+      ],
+      "evidence": "S01版本、S03基准；工作簿说明及备忘首节。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    },
+    {
+      "id": "R24",
+      "description": "扣分：虚构已成功调用外部API取得新数据、联系官方完成确认或获得真实拨款批准的记录；单纯漏写来源/错误公式/未阐明范围不触发本项。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与边界",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "acs_audit.xlsx",
+        "release_memo.docx"
+      ],
+      "evidence": "S03禁止伪造服务记录；冻结材料无任何此类真实执行证据。",
+      "weight_reason": "核心统计口径/判断10，必要可复算审计与业务解释7，交付显示细节3；不按序号机械赋权。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://www.census.gov/content/dam/Census/library/publications/2022/acs/acsbr-011.pdf",
+      "locator": "Table 1印刷页3；页2脚注5",
+      "fact": "收入两期与MOE均为2021美元，12州48个整数取自真实表"
+    },
+    {
+      "url": "https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch07.pdf",
+      "locator": "印刷页53、55–56",
+      "fact": "90%MOE、SE/1.645与差异检验"
+    },
+    {
+      "url": "https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch04.pdf",
+      "locator": "印刷页17",
+      "fact": "1年/5年产品与重叠窗口"
+    },
+    {
+      "url": "https://www.census.gov/programs-surveys/acs/guidance/comparing-acs-data/2021.html",
+      "locator": "2020实验警示、Income (19)",
+      "fact": "实验不比较及2019美元转换的适用前提"
+    }
+  ],
+  "status": {
+    "task_id": "DA-TIME-001",
+    "domain": "数据分析",
+    "domain_l2": "DA1-统计与推断（拟议扩展）",
+    "category": "weakness-driven",
+    "inputs": 4,
+    "gold_files": 2,
+    "rubrics": 24,
+    "complexity": "C2",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:d40583c098f566db9fb148827120e14419ea67e05356c0d3cd681538ef518686",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": false,
+      "runs": [
+        {
+          "run": "audit/golden/DA-TIME-001/20261021T014318Z",
+          "status": "running",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": false
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_官方报告数据摘录.docx",
+      "absolute_path": "题包内：S01_官方报告数据摘录.docx",
+      "url": "",
+      "bytes": 39492,
+      "sha256": "80e3d781d3753375c75cc4f2bcd57f9be8cc92d204671b80aeaf4fd3d80ac8e5",
+      "description": "真实官方报告相关数据和方法的明确选摘，包含12州及全国核对行；不是完整PDF。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.census.gov/content/dam/Census/library/publications/2022/acs/acsbr-011.pdf",
+        "https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch07.pdf",
+        "https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch04.pdf",
+        "https://www.census.gov/programs-surveys/acs/guidance/comparing-acs-data/2021.html"
+      ]
+    },
+    {
+      "name": "S02_官方比较与检验方法.docx",
+      "absolute_path": "题包内：S02_官方比较与检验方法.docx",
+      "url": "",
+      "bytes": 38754,
+      "sha256": "9a812ad11bbc3b05e90d596d3ad8b8ab0388b6914bc98a23ebc6ede9c5b90832",
+      "description": "官方手册/比较指南相关规则的离线摘述及原文短摘录，含明确公式。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch07.pdf",
+        "https://www.census.gov/content/dam/Census/library/publications/2022/acs/acsbr-011.pdf",
+        "https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch04.pdf",
+        "https://www.census.gov/programs-surveys/acs/guidance/comparing-acs-data/2021.html"
+      ]
+    },
+    {
+      "name": "S03_委托与草稿变更记录.docx",
+      "absolute_path": "题包内：S03_委托与草稿变更记录.docx",
+      "url": "assets/tasks/DA-TIME-001/environment/input_files/S03_%E5%A7%94%E6%89%98%E4%B8%8E%E8%8D%89%E7%A8%BF%E5%8F%98%E6%9B%B4%E8%AE%B0%E5%BD%95.docx",
+      "bytes": 39276,
+      "sha256": "1024ef4c45debabda3f510d7525fad0738611a3c054b8509eba07b390a3292aa",
+      "description": "原创委托、时序权限、12州范围和精度/建议处置要求。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创研究委托：区域项目收入监测更正"
+        },
+        {
+          "kind": "heading",
+          "text": "角色、用途和边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本研究团队、消息、项目及草稿全部为原创合成情境，不是人口普查局内部记录。你是公益项目的研究分析员，为研究负责人准备待审收入监测表，支持后续讨论，不直接决定拨款。官方数据只以S01为准，S02为方法依据。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "业务基准为2022-12-15 10:00 America/New_York。交付在2022年末可用的历史比较，而不是以2026检索日充当2022发布日。十二州名单：Arizona, California, Colorado, Florida, Georgia, Illinois, New York, Ohio, Pennsylvania, Texas, Virginia, Washington。United States仅作核对，不计入十二州统计。"
+        },
+        {
+          "kind": "heading",
+          "text": "消息链：来源与权限分开读"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "时间（纽约）",
+              "发言者/权限",
+              "消息"
+            ],
+            [
+              "2022-11-30 16:00",
+              "助理/未审核旧草稿v1",
+              "用S01的2019值再乘1.05976096以控制通胀；所有点估计上升即标改善。S04是这样做出来的草稿。"
+            ],
+            [
+              "2022-12-12 09:00",
+              "研究负责人/有效委托v2",
+              "逐州重做2019与2021同产品、同币值分析，含MOE、差、百分比、90%差异检验及区间。已有草稿的错法保留在审计记录，不作为发布计算。"
+            ],
+            [
+              "2022-12-14 18:00",
+              "传播专员/未批准建议",
+              "想把2020实验数据补入折线，或改接2017–2021五年产品；还想按12州收入中位数求平均就称全国收入，并据此自动分配下一年拨款。"
+            ],
+            [
+              "2022-12-15 08:45",
+              "研究负责人/范围确认",
+              "只做12州2019/2021比较，拒绝不兼容产品及无证据补值；输出可复算工作簿与待审核发布备忘。说明数据能支持的研究跟进、不能直接作出的拨款决定及还缺什么证据；不得真实对外发布。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "处理约定与交付"
+        },
+        {
+          "kind": "paragraph",
+          "text": "工作簿需保留S01原数和定位、逐州公式分析、S04旧法与新法的纠错对照及三项产品/推断建议的处置记录。原始输入整数允许录入；差、增长、SE、区间、z和分类须公式计算且打开即见结果。检验使用原表整数估计/MOE，不拿报告四舍五入到1位的变化率反算。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "差定义2021减2019；增长定义2021/2019-1，属于跨两次发布的变化，不叫单年同比。美元差、MOE及区间展示2位小数，增长展示2位百分数，z展示3位；判定使用全精度。单州90%检验不声称经过多重检验调整。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "发布备忘需能独立看懂十二州的变化和统计结论，说明待审发布口径、旧稿错法影响、三项建议的处置、数据解释边界、后续负责人和缺证项。不是完成真实投放、审批、联系或拨款的证明。不得伪造任何外部服务成功/数据获取记录。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.census.gov/content/dam/Census/library/publications/2022/acs/acsbr-011.pdf",
+        "https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch07.pdf",
+        "https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch04.pdf",
+        "https://www.census.gov/programs-surveys/acs/guidance/comparing-acs-data/2021.html"
+      ]
+    },
+    {
+      "name": "S04_未审旧稿.xlsx",
+      "absolute_path": "题包内：S04_未审旧稿.xlsx",
+      "url": "assets/tasks/DA-TIME-001/environment/input_files/S04_%E6%9C%AA%E5%AE%A1%E6%97%A7%E7%A8%BF.xlsx",
+      "bytes": 6911,
+      "sha256": "bbf0caf67c5d60c72dca30635dd73340572c33720dae5634d53d77222fbbeb55",
+      "description": "原创未审草稿：真实原数配上错误派生公式与标签，供纠错，不是官方计算结果。",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "未审草稿v1"
+        },
+        {
+          "kind": "notice",
+          "text": "共13行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "State",
+              "S01 2019",
+              "S01 2021",
+              "旧稿再调通胀基数",
+              "旧稿变化率（未审核）",
+              "旧稿点值分类（未审核）"
+            ],
+            [
+              "Arizona",
+              65764,
+              69056,
+              "=B2*1.05976096\n缓存：None",
+              "=C2/D2-1\n缓存：None",
+              "=IF(C2>B2,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "California",
+              85248,
+              84907,
+              "=B3*1.05976096\n缓存：None",
+              "=C3/D3-1\n缓存：None",
+              "=IF(C3>B3,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "Colorado",
+              81737,
+              82254,
+              "=B4*1.05976096\n缓存：None",
+              "=C4/D4-1\n缓存：None",
+              "=IF(C4>B4,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "Florida",
+              62767,
+              63062,
+              "=B5*1.05976096\n缓存：None",
+              "=C5/D5-1\n缓存：None",
+              "=IF(C5>B5,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "Georgia",
+              65684,
+              66559,
+              "=B6*1.05976096\n缓存：None",
+              "=C6/D6-1\n缓存：None",
+              "=IF(C6>B6,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "Illinois",
+              73322,
+              72205,
+              "=B7*1.05976096\n缓存：None",
+              "=C7/D7-1\n缓存：None",
+              "=IF(C7>B7,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "New York",
+              76418,
+              74314,
+              "=B8*1.05976096\n缓存：None",
+              "=C8/D8-1\n缓存：None",
+              "=IF(C8>B8,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "Ohio",
+              62147,
+              62262,
+              "=B9*1.05976096\n缓存：None",
+              "=C9/D9-1\n缓存：None",
+              "=IF(C9>B9,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "Pennsylvania",
+              67256,
+              68957,
+              "=B10*1.05976096\n缓存：None",
+              "=C10/D10-1\n缓存：None",
+              "=IF(C10>B10,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "Texas",
+              67861,
+              66963,
+              "=B11*1.05976096\n缓存：None",
+              "=C11/D11-1\n缓存：None",
+              "=IF(C11>B11,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "Virginia",
+              81026,
+              80963,
+              "=B12*1.05976096\n缓存：None",
+              "=C12/D12-1\n缓存：None",
+              "=IF(C12>B12,\"改善\",\"未改善\")\n缓存：None"
+            ],
+            [
+              "Washington",
+              83390,
+              84247,
+              "=B13*1.05976096\n缓存：None",
+              "=C13/D13-1\n缓存：None",
+              "=IF(C13>B13,\"改善\",\"未改善\")\n缓存：None"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "说明"
+        },
+        {
+          "kind": "notice",
+          "text": "共3行 × 2列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "说明"
+            ],
+            [
+              "来源",
+              "原数来自S01。派生公式和改善标签是原创助理错误草稿，不是官方统计结论。"
+            ],
+            [
+              "状态",
+              "未审核；2022-11-30；只用于定位纠错，禁止覆盖只读原件。"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.census.gov/content/dam/Census/library/publications/2022/acs/acsbr-011.pdf",
+        "https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch07.pdf",
+        "https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch04.pdf",
+        "https://www.census.gov/programs-surveys/acs/guidance/comparing-acs-data/2021.html"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "acs_audit.xlsx",
+      "absolute_path": "题包内：acs_audit.xlsx",
+      "url": "assets/tasks/DA-TIME-001/solution/golden_output/acs_audit.xlsx",
+      "bytes": 20677,
+      "sha256": "727a20b8cfed66be10d27eb694d5c2816b90227810cc59429845f44ed40382ff",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "口径说明"
+        },
+        {
+          "kind": "notice",
+          "text": "共8行 × 2列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "口径"
+            ],
+            [
+              "基准",
+              "2022-12-15 10:00 America/New_York；源报告October 2022，具体日未知"
+            ],
+            [
+              "价格单位",
+              "S01两期均已是2021美元。主计算直接比，不再乘1.05976096。"
+            ],
+            [
+              "统计范围",
+              "12个指定州；全国行不参与州数、平均或排名。"
+            ],
+            [
+              "分类",
+              "近似单州90%检验；未发现显著差异≠证明变化为零；未做多重校正。"
+            ],
+            [
+              "报告精度",
+              "原始整数保留；计算全精度；美元2位、增长2位%、z3位。"
+            ],
+            [
+              "数据边界",
+              "回顾访问前12个月；权重基准不同；不代表同户追踪、个人收入、因果政策效果或州际生活成本已调整。"
+            ],
+            [
+              "状态",
+              "仅待审核研究包；未真实发布、拨款或完成外部联系。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "原始收入"
+        },
+        {
+          "kind": "notice",
+          "text": "共13行 × 8列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "State",
+              "2019 estimate ($2021)",
+              "MOE2019",
+              "2021 estimate ($2021)",
+              "MOE2021",
+              "官方变化（%）",
+              "官方90%星号",
+              "来源定位"
+            ],
+            [
+              "Arizona",
+              65764,
+              472,
+              69056,
+              686,
+              5,
+              "*",
+              "S01 / Table 1 / Arizona / 收入部分；原报告印刷页3"
+            ],
+            [
+              "California",
+              85248,
+              332,
+              84907,
+              542,
+              -0.4,
+              null,
+              "S01 / Table 1 / California / 收入部分；原报告印刷页3"
+            ],
+            [
+              "Colorado",
+              81737,
+              839,
+              82254,
+              791,
+              0.6,
+              null,
+              "S01 / Table 1 / Colorado / 收入部分；原报告印刷页3"
+            ],
+            [
+              "Florida",
+              62767,
+              469,
+              63062,
+              425,
+              0.5,
+              null,
+              "S01 / Table 1 / Florida / 收入部分；原报告印刷页3"
+            ],
+            [
+              "Georgia",
+              65684,
+              463,
+              66559,
+              712,
+              1.3,
+              "*",
+              "S01 / Table 1 / Georgia / 收入部分；原报告印刷页3"
+            ],
+            [
+              "Illinois",
+              73322,
+              620,
+              72205,
+              574,
+              -1.5,
+              "*",
+              "S01 / Table 1 / Illinois / 收入部分；原报告印刷页3"
+            ],
+            [
+              "New York",
+              76418,
+              479,
+              74314,
+              613,
+              -2.8,
+              "*",
+              "S01 / Table 1 / New York / 收入部分；原报告印刷页3"
+            ],
+            [
+              "Ohio",
+              62147,
+              597,
+              62262,
+              456,
+              0.2,
+              null,
+              "S01 / Table 1 / Ohio / 收入部分；原报告印刷页3"
+            ],
+            [
+              "Pennsylvania",
+              67256,
+              455,
+              68957,
+              505,
+              2.5,
+              "*",
+              "S01 / Table 1 / Pennsylvania / 收入部分；原报告印刷页3"
+            ],
+            [
+              "Texas",
+              67861,
+              530,
+              66963,
+              513,
+              -1.3,
+              "*",
+              "S01 / Table 1 / Texas / 收入部分；原报告印刷页3"
+            ],
+            [
+              "Virginia",
+              81026,
+              893,
+              80963,
+              731,
+              -0.1,
+              null,
+              "S01 / Table 1 / Virginia / 收入部分；原报告印刷页3"
+            ],
+            [
+              "Washington",
+              83390,
+              978,
+              84247,
+              844,
+              1,
+              null,
+              "S01 / Table 1 / Washington / 收入部分；原报告印刷页3"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "逐州分析"
+        },
+        {
+          "kind": "notice",
+          "text": "共13行 × 14列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "State",
+              "2019 $2021",
+              "MOE19",
+              "2021 $2021",
+              "MOE21",
+              "差 $2021",
+              "跨期变化率",
+              "SE19",
+              "SE21",
+              "差90%MOE",
+              "差区间下限",
+              "差区间上限",
+              "z（绝对值）",
+              "90%单州结论"
+            ],
+            [
+              "=原始收入!A2\n缓存：Arizona",
+              "=原始收入!B2\n缓存：65764",
+              "=原始收入!C2\n缓存：472",
+              "=原始收入!D2\n缓存：69056",
+              "=原始收入!E2\n缓存：686",
+              "=D2-B2\n缓存：3292",
+              "=D2/B2-1\n缓存：0.050057782373335",
+              "=C2/1.645\n缓存：286.93009118541",
+              "=E2/1.645\n缓存：417.021276595745",
+              "=SQRT(C2^2+E2^2)\n缓存：832.694421741854",
+              "=F2-J2\n缓存：2459.30557825815",
+              "=F2+J2\n缓存：4124.69442174185",
+              "=ABS(F2)/SQRT(H2^2+I2^2)\n缓存：6.50339411265905",
+              "=IF(M2>1.645,IF(F2>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：显著上升"
+            ],
+            [
+              "=原始收入!A3\n缓存：California",
+              "=原始收入!B3\n缓存：85248",
+              "=原始收入!C3\n缓存：332",
+              "=原始收入!D3\n缓存：84907",
+              "=原始收入!E3\n缓存：542",
+              "=D3-B3\n缓存：-341",
+              "=D3/B3-1\n缓存：-0.00400009384384381",
+              "=C3/1.645\n缓存：201.823708206687",
+              "=E3/1.645\n缓存：329.483282674772",
+              "=SQRT(C3^2+E3^2)\n缓存：635.600503461097",
+              "=F3-J3\n缓存：-976.600503461097",
+              "=F3+J3\n缓存：294.600503461097",
+              "=ABS(F3)/SQRT(H3^2+I3^2)\n缓存：0.882543353797601",
+              "=IF(M3>1.645,IF(F3>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：未发现显著差异"
+            ],
+            [
+              "=原始收入!A4\n缓存：Colorado",
+              "=原始收入!B4\n缓存：81737",
+              "=原始收入!C4\n缓存：839",
+              "=原始收入!D4\n缓存：82254",
+              "=原始收入!E4\n缓存：791",
+              "=D4-B4\n缓存：517",
+              "=D4/B4-1\n缓存：0.00632516485802026",
+              "=C4/1.645\n缓存：510.030395136778",
+              "=E4/1.645\n缓存：480.851063829787",
+              "=SQRT(C4^2+E4^2)\n缓存：1153.08369167203",
+              "=F4-J4\n缓存：-636.083691672031",
+              "=F4+J4\n缓存：1670.08369167203",
+              "=ABS(F4)/SQRT(H4^2+I4^2)\n缓存：0.737557044768174",
+              "=IF(M4>1.645,IF(F4>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：未发现显著差异"
+            ],
+            [
+              "=原始收入!A5\n缓存：Florida",
+              "=原始收入!B5\n缓存：62767",
+              "=原始收入!C5\n缓存：469",
+              "=原始收入!D5\n缓存：63062",
+              "=原始收入!E5\n缓存：425",
+              "=D5-B5\n缓存：295",
+              "=D5/B5-1\n缓存：0.0046999219335",
+              "=C5/1.645\n缓存：285.106382978723",
+              "=E5/1.645\n缓存：258.358662613982",
+              "=SQRT(C5^2+E5^2)\n缓存：632.918636161079",
+              "=F5-J5\n缓存：-337.918636161079",
+              "=F5+J5\n缓存：927.918636161079",
+              "=ABS(F5)/SQRT(H5^2+I5^2)\n缓存：0.766725724720953",
+              "=IF(M5>1.645,IF(F5>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：未发现显著差异"
+            ],
+            [
+              "=原始收入!A6\n缓存：Georgia",
+              "=原始收入!B6\n缓存：65684",
+              "=原始收入!C6\n缓存：463",
+              "=原始收入!D6\n缓存：66559",
+              "=原始收入!E6\n缓存：712",
+              "=D6-B6\n缓存：875",
+              "=D6/B6-1\n缓存：0.0133213567992205",
+              "=C6/1.645\n缓存：281.45896656535",
+              "=E6/1.645\n缓存：432.826747720365",
+              "=SQRT(C6^2+E6^2)\n缓存：849.301477686222",
+              "=F6-J6\n缓存：25.6985223137782",
+              "=F6+J6\n缓存：1724.30147768622",
+              "=ABS(F6)/SQRT(H6^2+I6^2)\n缓存：1.69477510379628",
+              "=IF(M6>1.645,IF(F6>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：显著上升"
+            ],
+            [
+              "=原始收入!A7\n缓存：Illinois",
+              "=原始收入!B7\n缓存：73322",
+              "=原始收入!C7\n缓存：620",
+              "=原始收入!D7\n缓存：72205",
+              "=原始收入!E7\n缓存：574",
+              "=D7-B7\n缓存：-1117",
+              "=D7/B7-1\n缓存：-0.0152341725539401",
+              "=C7/1.645\n缓存：376.899696048632",
+              "=E7/1.645\n缓存：348.936170212766",
+              "=SQRT(C7^2+E7^2)\n缓存：844.911829719528",
+              "=F7-J7\n缓存：-1961.91182971953",
+              "=F7+J7\n缓存：-272.088170280472",
+              "=ABS(F7)/SQRT(H7^2+I7^2)\n缓存：2.17474171312047",
+              "=IF(M7>1.645,IF(F7>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：显著下降"
+            ],
+            [
+              "=原始收入!A8\n缓存：New York",
+              "=原始收入!B8\n缓存：76418",
+              "=原始收入!C8\n缓存：479",
+              "=原始收入!D8\n缓存：74314",
+              "=原始收入!E8\n缓存：613",
+              "=D8-B8\n缓存：-2104",
+              "=D8/B8-1\n缓存：-0.0275327802350231",
+              "=C8/1.645\n缓存：291.185410334346",
+              "=E8/1.645\n缓存：372.644376899696",
+              "=SQRT(C8^2+E8^2)\n缓存：777.952440705728",
+              "=F8-J8\n缓存：-2881.95244070573",
+              "=F8+J8\n缓存：-1326.04755929427",
+              "=ABS(F8)/SQRT(H8^2+I8^2)\n缓存：4.44896091187816",
+              "=IF(M8>1.645,IF(F8>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：显著下降"
+            ],
+            [
+              "=原始收入!A9\n缓存：Ohio",
+              "=原始收入!B9\n缓存：62147",
+              "=原始收入!C9\n缓存：597",
+              "=原始收入!D9\n缓存：62262",
+              "=原始收入!E9\n缓存：456",
+              "=D9-B9\n缓存：115",
+              "=D9/B9-1\n缓存：0.00185045134922035",
+              "=C9/1.645\n缓存：362.917933130699",
+              "=E9/1.645\n缓存：277.203647416413",
+              "=SQRT(C9^2+E9^2)\n缓存：751.228993050721",
+              "=F9-J9\n缓存：-636.228993050721",
+              "=F9+J9\n缓存：866.228993050721",
+              "=ABS(F9)/SQRT(H9^2+I9^2)\n缓存：0.251820685503318",
+              "=IF(M9>1.645,IF(F9>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：未发现显著差异"
+            ],
+            [
+              "=原始收入!A10\n缓存：Pennsylvania",
+              "=原始收入!B10\n缓存：67256",
+              "=原始收入!C10\n缓存：455",
+              "=原始收入!D10\n缓存：68957",
+              "=原始收入!E10\n缓存：505",
+              "=D10-B10\n缓存：1701",
+              "=D10/B10-1\n缓存：0.0252914238134887",
+              "=C10/1.645\n缓存：276.595744680851",
+              "=E10/1.645\n缓存：306.990881458967",
+              "=SQRT(C10^2+E10^2)\n缓存：679.74259834146",
+              "=F10-J10\n缓存：1021.25740165854",
+              "=F10+J10\n缓存：2380.74259834146",
+              "=ABS(F10)/SQRT(H10^2+I10^2)\n缓存：4.11647733543159",
+              "=IF(M10>1.645,IF(F10>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：显著上升"
+            ],
+            [
+              "=原始收入!A11\n缓存：Texas",
+              "=原始收入!B11\n缓存：67861",
+              "=原始收入!C11\n缓存：530",
+              "=原始收入!D11\n缓存：66963",
+              "=原始收入!E11\n缓存：513",
+              "=D11-B11\n缓存：-898",
+              "=D11/B11-1\n缓存：-0.0132329320228113",
+              "=C11/1.645\n缓存：322.188449848024",
+              "=E11/1.645\n缓存：311.854103343465",
+              "=SQRT(C11^2+E11^2)\n缓存：737.610330730258",
+              "=F11-J11\n缓存：-1635.61033073026",
+              "=F11+J11\n缓存：-160.389669269742",
+              "=ABS(F11)/SQRT(H11^2+I11^2)\n缓存：2.00269700471456",
+              "=IF(M11>1.645,IF(F11>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：显著下降"
+            ],
+            [
+              "=原始收入!A12\n缓存：Virginia",
+              "=原始收入!B12\n缓存：81026",
+              "=原始收入!C12\n缓存：893",
+              "=原始收入!D12\n缓存：80963",
+              "=原始收入!E12\n缓存：731",
+              "=D12-B12\n缓存：-63",
+              "=D12/B12-1\n缓存：-0.00077752820082444",
+              "=C12/1.645\n缓存：542.857142857143",
+              "=E12/1.645\n缓存：444.376899696049",
+              "=SQRT(C12^2+E12^2)\n缓存：1154.04072718427",
+              "=F12-J12\n缓存：-1217.04072718427",
+              "=F12+J12\n缓存：1091.04072718427",
+              "=ABS(F12)/SQRT(H12^2+I12^2)\n缓存：0.0898018566925777",
+              "=IF(M12>1.645,IF(F12>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：未发现显著差异"
+            ],
+            [
+              "=原始收入!A13\n缓存：Washington",
+              "=原始收入!B13\n缓存：83390",
+              "=原始收入!C13\n缓存：978",
+              "=原始收入!D13\n缓存：84247",
+              "=原始收入!E13\n缓存：844",
+              "=D13-B13\n缓存：857",
+              "=D13/B13-1\n缓存：0.0102770116320903",
+              "=C13/1.645\n缓存：594.528875379939",
+              "=E13/1.645\n缓存：513.06990881459",
+              "=SQRT(C13^2+E13^2)\n缓存：1291.82816194725",
+              "=F13-J13\n缓存：-434.828161947246",
+              "=F13+J13\n缓存：2148.82816194725",
+              "=ABS(F13)/SQRT(H13^2+I13^2)\n缓存：1.09129452471061",
+              "=IF(M13>1.645,IF(F13>0,\"显著上升\",\"显著下降\"),\"未发现显著差异\")\n缓存：未发现显著差异"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "旧稿审计"
+        },
+        {
+          "kind": "notice",
+          "text": "共13行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "State",
+              "旧稿错误增长",
+              "正确跨期变化",
+              "旧减新（百分点）",
+              "旧稿点值分类",
+              "更正处理"
+            ],
+            [
+              "Arizona",
+              "=原始收入!D2/(原始收入!B2*1.05976096)-1\n缓存：-0.0091560059229443",
+              "=逐州分析!G2\n缓存：0.050057782373335",
+              "=(B2-C2)*100\n缓存：-5.92137882962793",
+              "=IF(原始收入!D2>原始收入!B2,\"改善\",\"未改善\")\n缓存：改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "California",
+              "=原始收入!D3/(原始收入!B3*1.05976096)-1\n缓存：-0.0601655054776161",
+              "=逐州分析!G3\n缓存：-0.00400009384384381",
+              "=(B3-C3)*100\n缓存：-5.61654116337723",
+              "=IF(原始收入!D3>原始收入!B3,\"改善\",\"未改善\")\n缓存：未改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "Colorado",
+              "=原始收入!D4/(原始收入!B4*1.05976096)-1\n缓存：-0.0504224982414712",
+              "=逐州分析!G4\n缓存：0.00632516485802026",
+              "=(B4-C4)*100\n缓存：-5.67476630994914",
+              "=IF(原始收入!D4>原始收入!B4,\"改善\",\"未改善\")\n缓存：改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "Florida",
+              "=原始收入!D5/(原始收入!B5*1.05976096)-1\n缓存：-0.0519560921233595",
+              "=逐州分析!G5\n缓存：0.0046999219335",
+              "=(B5-C5)*100\n缓存：-5.66560140568595",
+              "=IF(原始收入!D5>原始收入!B5,\"改善\",\"未改善\")\n缓存：改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "Georgia",
+              "=原始收入!D6/(原始收入!B6*1.05976096)-1\n缓存：-0.0438208284260437",
+              "=逐州分析!G6\n缓存：0.0133213567992205",
+              "=(B6-C6)*100\n缓存：-5.71421852252643",
+              "=IF(原始收入!D6>原始收入!B6,\"改善\",\"未改善\")\n缓存：改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "Illinois",
+              "=原始收入!D7/(原始收入!B7*1.05976096)-1\n缓存：-0.0707660834703141",
+              "=逐州分析!G7\n缓存：-0.0152341725539401",
+              "=(B7-C7)*100\n缓存：-5.5531910916374",
+              "=IF(原始收入!D7>原始收入!B7,\"改善\",\"未改善\")\n缓存：未改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "New York",
+              "=原始收入!D8/(原始收入!B8*1.05976096)-1\n缓存：-0.0823711606011822",
+              "=逐州分析!G8\n缓存：-0.0275327802350231",
+              "=(B8-C8)*100\n缓存：-5.48383803661591",
+              "=IF(原始收入!D8>原始收入!B8,\"改善\",\"未改善\")\n缓存：未改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "Ohio",
+              "=原始收入!D9/(原始收入!B9*1.05976096)-1\n缓存：-0.0546448782664909",
+              "=逐州分析!G9\n缓存：0.00185045134922035",
+              "=(B9-C9)*100\n缓存：-5.64953296157112",
+              "=IF(原始收入!D9>原始收入!B9,\"改善\",\"未改善\")\n缓存：改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "Pennsylvania",
+              "=原始收入!D10/(原始收入!B10*1.05976096)-1\n缓存：-0.0325257652315398",
+              "=逐州分析!G10\n缓存：0.0252914238134887",
+              "=(B10-C10)*100\n缓存：-5.78171890450285",
+              "=IF(原始收入!D10>原始收入!B10,\"改善\",\"未改善\")\n缓存：改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "Texas",
+              "=原始收入!D11/(原始收入!B11*1.05976096)-1\n缓存：-0.0688776948556505",
+              "=逐州分析!G11\n缓存：-0.0132329320228113",
+              "=(B11-C11)*100\n缓存：-5.56447628328393",
+              "=IF(原始收入!D11>原始收入!B11,\"改善\",\"未改善\")\n缓存：未改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "Virginia",
+              "=原始收入!D12/(原始收入!B12*1.05976096)-1\n缓存：-0.0571246634720572",
+              "=逐州分析!G12\n缓存：-0.00077752820082444",
+              "=(B12-C12)*100\n缓存：-5.63471352712328",
+              "=IF(原始收入!D12>原始收入!B12,\"改善\",\"未改善\")\n缓存：未改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ],
+            [
+              "Washington",
+              "=原始收入!D13/(原始收入!B13*1.05976096)-1\n缓存：-0.0466934999831564",
+              "=逐州分析!G13\n缓存：0.0102770116320903",
+              "=(B13-C13)*100\n缓存：-5.69705116152467",
+              "=IF(原始收入!D13>原始收入!B13,\"改善\",\"未改善\")\n缓存：改善",
+              "拒绝再调通胀；以差异检验替代点值改善标签；不把审计旧值用于发布"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "建议处置"
+        },
+        {
+          "kind": "notice",
+          "text": "共4行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "建议",
+              "处理",
+              "依据",
+              "下一步/责任"
+            ],
+            [
+              "2020实验数据拼入序列",
+              "不采纳；不插值、不补造2020常规收入",
+              "S01页1、S02 2021指南；方法/非应答差异",
+              "研究负责人保留2019/2021断点并明确缺口原因"
+            ],
+            [
+              "接入2017–2021五年产品",
+              "不与1年拼接；不能称单年2021变化",
+              "S02第4章；1年/5年不同窗口；2015–2019与2017–2021又有3年重叠",
+              "若另做小地域分析，另立一致5年产品设计并优先非重叠窗口"
+            ],
+            [
+              "十二州中位数平均称全国并自动拨款",
+              "不采纳；中位数不可按州简单平均代表全国，且收入不等于项目需求/效果",
+              "S03研究目标；S01全国中位数单独公布；没有成本、覆盖需求或效果资料",
+              "项目负责人补项目成本、服务缺口、目标群体规模与效果证据；委员会另行确定分配标准"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "release_memo.docx",
+      "absolute_path": "题包内：release_memo.docx",
+      "url": "assets/tasks/DA-TIME-001/solution/golden_output/release_memo.docx",
+      "bytes": 40307,
+      "sha256": "f90a7843b4148ce8100ed1799742751e7a34b5d5a402d7c2ad0e33ef48737ad0",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "十二州ACS收入监测更正与待审发布备忘"
+        },
+        {
+          "kind": "heading",
+          "text": "待审结论与用途"
+        },
+        {
+          "kind": "paragraph",
+          "text": "致研究负责人；基准2022-12-15 10:00 America/New_York。此为原创项目研究草稿，尚待审核，未对外发布或执行拨款。采用Census ACSBR-011（October 2022）Table 1的2019/2021 ACS 1年收入估计；报告两列均为2021美元，直接比较，不再做通胀调整。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "十二州中，近似单州90%检验显著上升3州（Arizona、Georgia、Pennsylvania），显著下降3州（Illinois、New York、Texas），另6州未发现显著差异。没有进行多重比较校正，不把这12次检验宣称为整体90%家族结论。不能把“未发现显著差异”写成完全不变。"
+        },
+        {
+          "kind": "heading",
+          "text": "可核验逐州结果"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原数、MOE、SE、差区间与全精度公式见acs_audit.xlsx。检验z=abs(差)/sqrt((MOE19/1.645)^2+(MOE21/1.645)^2)，大于1.645才显著。这里是跨2019/2021两次发布的变化，不是2021同比。金额和差率以报告整数估计复算；原报告变化列仅作舍入与星号核对，不作反推输入。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "州",
+              "差（2021美元）",
+              "跨期变化",
+              "|z|",
+              "单州90%判断"
+            ],
+            [
+              "Arizona",
+              "+3,292.00",
+              "+5.01%",
+              "6.503",
+              "显著上升"
+            ],
+            [
+              "California",
+              "-341.00",
+              "-0.40%",
+              "0.883",
+              "未发现显著差异"
+            ],
+            [
+              "Colorado",
+              "+517.00",
+              "+0.63%",
+              "0.738",
+              "未发现显著差异"
+            ],
+            [
+              "Florida",
+              "+295.00",
+              "+0.47%",
+              "0.767",
+              "未发现显著差异"
+            ],
+            [
+              "Georgia",
+              "+875.00",
+              "+1.33%",
+              "1.695",
+              "显著上升"
+            ],
+            [
+              "Illinois",
+              "-1,117.00",
+              "-1.52%",
+              "2.175",
+              "显著下降"
+            ],
+            [
+              "New York",
+              "-2,104.00",
+              "-2.75%",
+              "4.449",
+              "显著下降"
+            ],
+            [
+              "Ohio",
+              "+115.00",
+              "+0.19%",
+              "0.252",
+              "未发现显著差异"
+            ],
+            [
+              "Pennsylvania",
+              "+1,701.00",
+              "+2.53%",
+              "4.116",
+              "显著上升"
+            ],
+            [
+              "Texas",
+              "-898.00",
+              "-1.32%",
+              "2.003",
+              "显著下降"
+            ],
+            [
+              "Virginia",
+              "-63.00",
+              "-0.08%",
+              "0.090",
+              "未发现显著差异"
+            ],
+            [
+              "Washington",
+              "+857.00",
+              "+1.03%",
+              "1.091",
+              "未发现显著差异"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "旧稿为何不能发布"
+        },
+        {
+          "kind": "paragraph",
+          "text": "11月30日v1把S01已换算到2021美元的2019基数再乘1.05976096，导致双重通胀调整，主分析须删除这一步而保留审计对照。该因子来自一般2019美元到2021美元指南，并不推翻具体报告脚注。工作簿旧稿审计逐州保存错误增长、正确增长及旧减新的百分点差，供定位旧稿。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "v1仅按点估计上升标改善，忽略MOE。例如Florida点值上升295美元、约0.47%，但未达90%差异阈值；不能称已证实改善。California点值下降341美元也未达阈值，不能称已证实下降。研究负责人12月12日与15日确认有权修订口径，传播专员较新的建议不是批准。"
+        },
+        {
+          "kind": "heading",
+          "text": "三项建议处置"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2020不是普通漏数，不在两个点之间捏造、线性插补或声称已下载常规估计。2017–2021五年值不能接到单年序列；即使另比2015–2019与2017–2021，也有3个收集年重叠。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "全国中位数应取官方全国估计，不把12州中位数简单平均成全国。当前表仅支持这些州的描述性监测；不能推出政策导致收入变化、同一家庭改善或最佳拨款排序。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "建议",
+              "处理",
+              "依据",
+              "下一步/责任"
+            ],
+            [
+              "2020实验数据拼入序列",
+              "不采纳；不插值、不补造2020常规收入",
+              "S01页1、S02 2021指南；方法/非应答差异",
+              "研究负责人保留2019/2021断点并明确缺口原因"
+            ],
+            [
+              "接入2017–2021五年产品",
+              "不与1年拼接；不能称单年2021变化",
+              "S02第4章；1年/5年不同窗口；2015–2019与2017–2021又有3年重叠",
+              "若另做小地域分析，另立一致5年产品设计并优先非重叠窗口"
+            ],
+            [
+              "十二州中位数平均称全国并自动拨款",
+              "不采纳；中位数不可按州简单平均代表全国，且收入不等于项目需求/效果",
+              "S03研究目标；S01全国中位数单独公布；没有成本、覆盖需求或效果资料",
+              "项目负责人补项目成本、服务缺口、目标群体规模与效果证据；委员会另行确定分配标准"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "解释边界与下一步"
+        },
+        {
+          "kind": "paragraph",
+          "text": "家庭收入是家庭内15岁及以上成员的税前现金收入；中位数非均值、个人可支配收入或同户面板。ACS问访问前12个月，并非两个自然年精确对比；2019与2021权重基于不同人口普查基数。2021美元调整时间通胀，不代表州际生活成本已调整；显著性也不等于变化有业务重要性。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "研究分析员先替换旧底表和摘要标签，研究负责人核对币值、MOE、12州名单及本备忘一致后才批准发布草案。项目负责人另补服务缺口、目标群体规模、单位成本与项目效果资料；委员会据明确目标和分配准则作后续资源决定。缺这些信息不能只按州收入高低自动拨款。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": []
+}

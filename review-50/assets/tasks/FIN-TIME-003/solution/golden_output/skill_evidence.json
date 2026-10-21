@@ -1,0 +1,427 @@
+{
+  "as_of": "2023-09-29T10:00:00+08:00",
+  "executor": "amac-transition-triage",
+  "local_sop_schema": "amac-transition-triage/1",
+  "input_sha256": {
+    "S01_五月切换公告选摘.docx": "4e80669c278f7e148cd8e9c93228b2b2c6dd0f7b15d03a6df361dc92c3083a68",
+    "S02_九月切换公告选摘.docx": "e353eb9910b5bf6b4e5ab94fe699ec336c4df50fe676c1acc59267fdbf7cc17f",
+    "S03_指引2阅读器全文.docx": "77677e0518439ea6625f788ff44c9ca70742c6322929f6ff906a8bd21b70cca9",
+    "S04_受理事项.json": "a7f5188b5af4a1f80e9e112b126cd56e010a24c08f98249a5a49dcd2e314ba61",
+    "S05_证据登记.xlsx": "6fd09f1182b1bfe0de06c658fbe9bc389149e653fd18961f8985b206879d3835",
+    "S06_材料登记.xlsx": "4dd92f44ba8e54460f4ad36ff3d48b48ce86a8d768f2276a1164603950266ca9",
+    "S07_H变更文件摘录.docx": "62760903bf0f0b715ba125842659eff5ab2ba11ac1493f0170f87fddbd0011db",
+    "S08_工作委托.docx": "8e79f005ccfd6f6669fd9ff8c9550bb16572a260833bb4390020c29dc84f0507"
+  },
+  "skill_sha256": {
+    "SKILL.md": "4078c54ab7bf49e7f22be2484699928be881b2afb21accb9d0e1e39b43807cee",
+    "references/team-sop.json": "50761d6db7da8c8e11b47ae568407da0563d9aa0c5318adb728e43f176936cc5",
+    "scripts/triage.py": "2fe7e20ae1a075faf66a4af672ca53fa92da624145db18f8d4e690941bcc8cef"
+  },
+  "cases": [
+    {
+      "case_id": "A",
+      "operation": "manager_registration",
+      "action_submitted_on": "2023-04-10",
+      "evidence_ids": [
+        "A-sys",
+        "A-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "action_completed_on": "2023-04-28"
+      },
+      "conflict_fields": [],
+      "route": "PRE_MAY_COMPLETED_ARCHIVE",
+      "review_scope": "既有办结事实归档；不重新认证旧法全条件",
+      "source_basis": [
+        "S01 items I/III"
+      ],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "HISTORICAL_NOTE_ONLY",
+      "next_owner": "项目法务",
+      "next_action": "保留办理时间与证据索引，不把该已完成事项当5月后未办结事项重做。",
+      "clarification_question": null,
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "B",
+      "operation": "manager_registration",
+      "action_submitted_on": "2023-04-20",
+      "evidence_ids": [
+        "B-sys",
+        "B-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "action_completed_on": null
+      },
+      "conflict_fields": [],
+      "route": "MAY_NEW_REGISTRATION",
+      "review_scope": "新办法登记要求审阅，不是登记已经通过",
+      "source_basis": [
+        "S01 items I/III"
+      ],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "LEGAL_REVIEW_PENDING",
+      "next_owner": "项目法务",
+      "next_action": "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+      "clarification_question": null,
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "C",
+      "operation": "manager_registration",
+      "action_submitted_on": "2023-05-02",
+      "evidence_ids": [
+        "C-sys",
+        "C-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "action_completed_on": null
+      },
+      "conflict_fields": [],
+      "route": "MAY_NEW_REGISTRATION",
+      "review_scope": "新办法登记要求审阅，不是登记已经通过",
+      "source_basis": [
+        "S01 items I/III"
+      ],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "LEGAL_REVIEW_PENDING",
+      "next_owner": "项目法务",
+      "next_action": "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+      "clarification_question": null,
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "D",
+      "operation": "manager_change",
+      "action_submitted_on": "2023-09-29",
+      "evidence_ids": [
+        "D-sys",
+        "D-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "registered_on": "2021-01-15",
+        "actual_control_change": false,
+        "action_completed_on": null
+      },
+      "conflict_fields": [],
+      "route": "MAY_RELATED_CHANGE_REVIEW",
+      "review_scope": "相关变更事项符合新办法；不是全体存量条件重做",
+      "source_basis": [
+        "S01 items I/III",
+        "S01 item II"
+      ],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "LEGAL_REVIEW_PENDING",
+      "next_owner": "项目法务",
+      "next_action": "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+      "clarification_question": null,
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "E",
+      "operation": "manager_change",
+      "action_submitted_on": "2023-09-29",
+      "evidence_ids": [
+        "E-sys",
+        "E-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "registered_on": "2021-01-15",
+        "actual_control_change": true,
+        "action_completed_on": null
+      },
+      "conflict_fields": [],
+      "route": "MAY_CONTROL_FULL_REVIEW",
+      "review_scope": "变更后管理人全面符合新办法登记要求的核查范围",
+      "source_basis": [
+        "S01 items I/III",
+        "S01 item II"
+      ],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "LEGAL_REVIEW_PENDING",
+      "next_owner": "项目法务",
+      "next_action": "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+      "clarification_question": null,
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "F",
+      "operation": "manager_change",
+      "action_submitted_on": "2023-09-29",
+      "evidence_ids": [
+        "F-sys",
+        "F-cmp"
+      ],
+      "ignored_note_ids": [
+        "F-sales"
+      ],
+      "evidence_state": "CONFLICT",
+      "adopted_facts": null,
+      "conflict_fields": [
+        "actual_control_change"
+      ],
+      "route": "UNDETERMINED",
+      "review_scope": "待证据确认",
+      "source_basis": [],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "HOLD_PENDING_CLARIFICATION",
+      "next_owner": "合规负责人会同运营取证员",
+      "next_action": "暂停对该事项选定确定分支，核实同字段冲突；不按新便笺、文件顺序或营销要求选边。",
+      "clarification_question": "F：请对actual_control_change确认09:00的真实值，并说明F-sys,F-cmp何者需受控更正及依据；未获澄清前保留冲突。",
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "G",
+      "operation": "fund_operation",
+      "action_submitted_on": null,
+      "evidence_ids": [
+        "G-sys",
+        "G-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "filed_on": "2023-09-20"
+      },
+      "conflict_fields": [],
+      "route": "LEGACY_OPERATIONS_SCOPE",
+      "review_scope": "仅继续募集/投资运作可按原有规定，非一切新要求豁免",
+      "source_basis": [
+        "S02 item II"
+      ],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "LEGAL_REVIEW_PENDING",
+      "next_owner": "项目法务",
+      "next_action": "保持该狭义存续运作分支，后续备案信息变更另走新要求审阅。",
+      "clarification_question": null,
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "H",
+      "operation": "fund_change",
+      "action_submitted_on": "2023-09-29",
+      "evidence_ids": [
+        "H-sys",
+        "H-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "filed_on": "2023-09-20"
+      },
+      "conflict_fields": [],
+      "route": "GUIDE2_RELATED_CHANGE",
+      "review_scope": "相关变更事项符合新指引；不因已备案而免变更材料",
+      "source_basis": [
+        "S02 items I/II",
+        "S03 article2",
+        "S03 article27(II), opening paragraph"
+      ],
+      "material_gaps": [
+        "new_custody_agreement_or_fund_contract"
+      ],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "HOLD_PENDING_CLARIFICATION",
+      "next_owner": "运营材料专员",
+      "next_action": "补齐缺失新托管协议或基金合同；已收三项仅为原创摘录，不宣称全套法律实体合规。",
+      "clarification_question": "H：请补new_custody_agreement_or_fund_contract的有效新文本；三项旧摘录不替代新协议组。",
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "I",
+      "operation": "fund_filing",
+      "action_submitted_on": "2023-09-29",
+      "evidence_ids": [
+        "I-sys",
+        "I-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "filed_on": null
+      },
+      "conflict_fields": [],
+      "route": "GUIDE2_NEW_FILING",
+      "review_scope": "按新指引办理备案，完整条件交法务继续核查",
+      "source_basis": [
+        "S02 items I/II",
+        "S03 article2",
+        "S03 article9"
+      ],
+      "material_gaps": [],
+      "name_check": "RENAME_REQUIRED",
+      "dispatch_stage": "HOLD_PENDING_CLARIFICATION",
+      "next_owner": "基金设立经办人会同项目法务",
+      "next_action": "改掉禁止性名称词并核正确策略标识，回到法务审阅；不由经办人自行宣称获得例外。",
+      "clarification_question": "I：请提出不含理财等禁词、符合股权/创投策略标识的新名称供法务核定。",
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "J",
+      "operation": "fund_filing",
+      "action_submitted_on": "2023-09-29",
+      "evidence_ids": [
+        "J-sys",
+        "J-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "filed_on": null
+      },
+      "conflict_fields": [],
+      "route": "GUIDE2_NEW_FILING",
+      "review_scope": "按新指引办理备案，完整条件交法务继续核查",
+      "source_basis": [
+        "S02 items I/II",
+        "S03 article2",
+        "S03 article9"
+      ],
+      "material_gaps": [],
+      "name_check": "LIMITED_NAME_CHECK_OK",
+      "dispatch_stage": "LEGAL_REVIEW_PENDING",
+      "next_owner": "项目法务",
+      "next_action": "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+      "clarification_question": null,
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "K",
+      "operation": "fund_liquidation",
+      "action_submitted_on": "2023-09-29",
+      "evidence_ids": [
+        "K-sys",
+        "K-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "filed_on": "2023-09-20"
+      },
+      "conflict_fields": [],
+      "route": "GUIDE2_LIQUIDATION",
+      "review_scope": "按新指引办理清算业务；未认定清算已经完成",
+      "source_basis": [
+        "S02 items I/II",
+        "S03 article2"
+      ],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "LEGAL_REVIEW_PENDING",
+      "next_owner": "项目法务",
+      "next_action": "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+      "clarification_question": null,
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "L",
+      "operation": "fund_operation",
+      "action_submitted_on": null,
+      "evidence_ids": [
+        "L-sys",
+        "L-cmp"
+      ],
+      "ignored_note_ids": [
+        "L-sales"
+      ],
+      "evidence_state": "CONFLICT",
+      "adopted_facts": null,
+      "conflict_fields": [
+        "filed_on"
+      ],
+      "route": "UNDETERMINED",
+      "review_scope": "待证据确认",
+      "source_basis": [],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "HOLD_PENDING_CLARIFICATION",
+      "next_owner": "合规负责人会同运营取证员",
+      "next_action": "暂停对该事项选定确定分支，核实同字段冲突；不按新便笺、文件顺序或营销要求选边。",
+      "clarification_question": "L：请对filed_on确认09:00的真实值，并说明L-sys,L-cmp何者需受控更正及依据；未获澄清前保留冲突。",
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "M",
+      "operation": "manager_change",
+      "action_submitted_on": "2023-04-20",
+      "evidence_ids": [
+        "M-sys",
+        "M-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "registered_on": "2021-01-15",
+        "actual_control_change": false,
+        "action_completed_on": null
+      },
+      "conflict_fields": [],
+      "route": "MAY_RELATED_CHANGE_REVIEW",
+      "review_scope": "相关变更事项符合新办法；不是全体存量条件重做",
+      "source_basis": [
+        "S01 items I/III",
+        "S01 item II"
+      ],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "LEGAL_REVIEW_PENDING",
+      "next_owner": "项目法务",
+      "next_action": "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+      "clarification_question": null,
+      "external_submission_authorized": false
+    },
+    {
+      "case_id": "N",
+      "operation": "fund_filing",
+      "action_submitted_on": "2023-09-27",
+      "evidence_ids": [
+        "N-sys",
+        "N-cmp"
+      ],
+      "ignored_note_ids": [],
+      "evidence_state": "CONSISTENT",
+      "adopted_facts": {
+        "filed_on": null
+      },
+      "conflict_fields": [],
+      "route": "GUIDE2_PENDING_FILING",
+      "review_scope": "按新指引办理备案，完整条件交法务继续核查",
+      "source_basis": [
+        "S02 items I/II",
+        "S03 article2"
+      ],
+      "material_gaps": [],
+      "name_check": "NOT_IN_LIMITED_SCOPE",
+      "dispatch_stage": "LEGAL_REVIEW_PENDING",
+      "next_owner": "项目法务",
+      "next_action": "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+      "clarification_question": null,
+      "external_submission_authorized": false
+    }
+  ],
+  "counts": {
+    "total": 14,
+    "hold": 4,
+    "archive": 1,
+    "legal_review_pending": 9
+  },
+  "external_submission_authorized": false,
+  "scope": "Actual local SOP execution on fictional cases and real frozen rule excerpts. Not live AMAC data, filing approval, full compliance or a trusted execution signature."
+}

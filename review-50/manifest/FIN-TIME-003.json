@@ -1,0 +1,1753 @@
+{
+  "id": "FIN-TIME-003",
+  "title": "私募双切换受理分流：平级证据冲突与Skill依赖",
+  "domain": "金融",
+  "domain_l2": "Fin3-私募股权",
+  "domain_l3": "私募管理人登记过渡规则",
+  "category": "skill-dependency",
+  "complexity": "C3",
+  "target_difficulty": "A2",
+  "as_of": "2023-09-29 10:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "真实AMAC官方阅读器2公告/14页指引文本，原PDF直连WAF失败披露；事项/证据/摘录/内部SOP原创，不造真实基金记录或协会批准。",
+  "instruction": "# 私募双切换受理分流：平级证据冲突与Skill依赖\n\n## 业务场景与任务说明\n\n你是私募股权/创投运营质控员，要把14项事项交法务待审。两次规则切换与老基金/老管理人标签交织，两平级来源对控制权和备案状态矛盾，营销更晚催直接通过。请使用已安装团队Skill分流和保留冲突，有限核查H变更材料/IJ名称，交可追溯底稿、备忘、未发送澄清稿与真实执行证据；不实际备案或冒称全部合规。\n\n业务判断基准时点：2023-09-29 10:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_五月切换公告选摘.docx`：真实2023五号公告阅读器选摘，原PDF直连失败，非完整83条办法。\n- `/app/input_files/S02_九月切换公告选摘.docx`：真实2023二十一号公告正文/签发选摘。\n- `/app/input_files/S03_指引2阅读器全文.docx`：真实指引2完整338行阅读器转录，保留原PDF页/行，非原PDF文件。\n- `/app/input_files/S04_受理事项.json`：原创14项受理事项与业务时点，非真实登记记录。\n- `/app/input_files/S05_证据登记.xlsx`：原创两类平级证据/较晚便笺30条，含F/L真实未消解情境冲突。\n- `/app/input_files/S06_材料登记.xlsx`：H四组材料收件登记，非全套有效性认定。\n- `/app/input_files/S07_H变更文件摘录.docx`：H三份实际原创未签摘录，与缺失H-D4明确区分。\n- `/app/input_files/S08_工作委托.docx`：原创业务委托/权限、交付与限定范围。\n\n## 工作要求\n\n- [Q1] 分开两次切换时点/生效及14项业务类型，准确确定版本与核查范围，不按老管理人/老基金一刀切。\n- [Q2] 实际使用已安装Skill及其内部证据/阶段规则，保留真实输入与Skill哈希、14项结果及统计。\n- [Q3] 同观察时点平级证据冲突不按新便笺/文件顺序选边，保留精确字段、两ID、暂停和责任接口。\n- [Q4] 仅核H四组核心材料、I/J名称及例外，边界清楚；未给全套证据不认定全面合规。\n- [Q5] 工作簿逐项完整可追溯，队列公式合计/暂停/归档/待审/勾稽/越级为14/4/1/9/0/0且缓存可见。\n- [Q6] 备忘与未发送请求有F/L精确澄清、H补新协议、I更名、N新材料审阅的动作/负责人，三个文本与JSON/表一致。\n- [Q7] 四交付可打开不改输入/Skill；不越级报送、不伪造审批/机构确认/外部联系，区分内部目标与法定时限及未验专业范围。\n\n## 可用技能\n\n- amac-transition-triage：历史双切换与平级证据冲突、内部待审门禁SOP；含实际分流helper，不作协会审批。；入口`/skills/amac-transition-triage/SKILL.md`；相对脚本路径以该技能目录为基准。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/triage_workbook.xlsx`：规则矩阵、14项分流/证据、可重算队列统计。\n- `/app/output/review_memo.docx`：法务负责人中文待审备忘，说明两切换、四暂停/责任接口/范围。\n- `/app/output/followup_requests.docx`：F/L精确澄清、H补件、I更名、N更新的未发送草稿。\n- `/app/output/skill_evidence.json`：真实Skill/8输入哈希、14项采用事实/冲突/阶段及计数。\n\n## 硬约束（单独列明）\n\n- 只交4指定文件到/app/output，不改只读输入/Skill、不联网查询真实对象或执行外部联系。\n- 官方规范与原创团队SOP分开，原PDF未下载不冒称原件；未知准确发布时刻/未来规则不倒灌2023。\n- 平级证据冲突须依Skill暂停并精确澄清，不以更晚营销/顺序择一。\n- 名称/四材料组核对不等全套专业审定；不编资本数值、法定截止日、机构确认或实际报送成功。\n- 内部15:00目标不是法定期限，所有结果保留待审/暂停或归档、不越级READY_TO_SUBMIT。\n",
+  "instruction_url": "assets/tasks/FIN-TIME-003/instruction.md",
+  "absolute_path": "tasks/FIN-TIME-003",
+  "spec_path": "manifest/FIN-TIME-003.json",
+  "spec_url": "manifest/FIN-TIME-003.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "区分5号公告2023-02-24发布/5月1日施行与21号公告9月28日发布即施行，2026取证不混为业务效力时点。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S01/S02原文日期/条I–III。"
+    },
+    {
+      "id": "R02",
+      "description": "A按5月前已办结归档；B和M虽然4月提交但5月未完成，依5号III转新办法，不永久旧规。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S04提交、S05完成/未完成事实，S01 III。"
+    },
+    {
+      "id": "R03",
+      "description": "C新登记按新办法审阅；D/M普通管理人变更仅相关事项应符合新规定，不无依据扩大为全面旧主体重做。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx"
+      ],
+      "evidence": "S01 I/II；原始事项及证据。"
+    },
+    {
+      "id": "R04",
+      "description": "E明确实控权变更后管理人须全面符合新办法登记要求的审阅范围，不能只核单个字段或写成已实际符合。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S01 II；E的原始控制权变更为true。"
+    },
+    {
+      "id": "R05",
+      "description": "G在9月28日前已备案且仅继续原募集/投资运作，保留S02 II狭义旧范围，不推广为任何新业务豁免。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S02 II，G filed_on和operation。"
+    },
+    {
+      "id": "R06",
+      "description": "H相关变更、K清算、I/J新备案均按新指引；N在9月28日仍在办也按新指引处理，不因9月27日已提交祖父化。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S02 I/II，S03 article2；非完整实体合法性认定。"
+    },
+    {
+      "id": "R07",
+      "description": "实际执行已安装amac-transition-triage，不只自述使用；JSON8输入哈希、Skill入口/SOP/脚本三哈希与真实文件一致，14项结果可重跑。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "skill_evidence.json"
+      ],
+      "evidence": "实际Skill/输入与CLI重放。"
+    },
+    {
+      "id": "R08",
+      "description": "F保留F-sys/F-cmp的actual_control_change=false/true同级冲突，暂停并不采用任何确定控制权事实/普通或全面变更分支。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S05 F两主证据/Skill同级规则；销售便笺不能消解。"
+    },
+    {
+      "id": "R09",
+      "description": "L保留L-sys/L-cmp对同一主体首次备案完成日filed_on=2023-09-20/2023-09-29的明确矛盾，暂停不任选日期套用9月28日前既备案存续范围。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S05 L两明确日期、无优先/更正链；不是空值缺记录被当作相反事实。"
+    },
+    {
+      "id": "R10",
+      "description": "对两个更晚sales_note明确非决定性，不以“最新消息”或文件顺序替代平级证据确认；F/L责任接口为合规负责人会同运营取证员。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "review_memo.docx",
+        "followup_requests.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "Skill references/team-sop.json；S05销售09:40。"
+    },
+    {
+      "id": "R11",
+      "description": "H四材料组中三摘录已收、H-D4新托管协议或基金合同缺失，不能用托管人变更协议代替新协议组，安排运营补件。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "followup_requests.docx"
+      ],
+      "evidence": "S03第27条首段/II，S06/S07真实原创摘录。"
+    },
+    {
+      "id": "R12",
+      "description": "I含“理财”按第9条要求更名，不编给定材料没有的法定例外或授权。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "review_memo.docx",
+        "followup_requests.docx"
+      ],
+      "evidence": "S03第9条，S04 I名字。"
+    },
+    {
+      "id": "R13",
+      "description": "J合伙型创投已给经营范围“从事创业投资活动”，可用第9条名称例外；不机械判所有名称必须含创业投资基金。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "review_memo.docx"
+      ],
+      "evidence": "S03第9条；S04 J法律形式/经营范围。"
+    },
+    {
+      "id": "R14",
+      "description": "未把名称/四材料组小范围核对当完整资本/适当性/合同/反洗钱或登记条件审定；E范围全面核查不等于已核全部合格。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q4",
+        "Q7"
+      ],
+      "deliverables": [
+        "review_memo.docx"
+      ],
+      "evidence": "S08明确范围与未给证据。"
+    },
+    {
+      "id": "R15",
+      "description": "14项工作簿逐项有事项/提交时点、版本/范围、证据索引、阶段、下一动作/责任人及来源；按7类信息×14项共98槽核完整性。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx"
+      ],
+      "evidence": "S04/S05/S06逐项对应，不要求参考排版或同一代码措辞。",
+      "levels": {
+        "0": "完成0–19槽。",
+        "0.25": "20–39槽。",
+        "0.5": "40–59槽。",
+        "0.75": "60–97槽。",
+        "1": "98槽完整且不混入未给事项。"
+      }
+    },
+    {
+      "id": "R16",
+      "description": "工作簿队列统计用实际公式/缓存：总14、暂停4、归档1、待审9、分流勾稽0、READY_TO_SUBMIT计数0，非手填统计。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx"
+      ],
+      "evidence": "实际公式及Office重算，不以阶段字符串碰巧存在为准。"
+    },
+    {
+      "id": "R17",
+      "description": "F/L澄清草稿各明确观察时点、两证据ID、冲突字段、需确认真实值/更正依据、责任接口，共两案×5类信息10槽。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "followup_requests.docx"
+      ],
+      "evidence": "S05事实及SkillSOP，具体可发送但尚未发送。",
+      "levels": {
+        "0": "满足0–1槽。",
+        "0.25": "2–3槽。",
+        "0.5": "4–5槽。",
+        "0.75": "6–9槽。",
+        "1": "10槽完整，未虚构对方回复。"
+      }
+    },
+    {
+      "id": "R18",
+      "description": "请求稿除F/L外有H补新协议、I更名、N按新指引补审阅的具体动作/责任人，不能只泛写请加强审核。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "followup_requests.docx"
+      ],
+      "evidence": "S08事项/职责范围。"
+    },
+    {
+      "id": "R19",
+      "description": "四交付对14项分支/4暂停/责任人一致，无表格已通过而备忘仍暂停、请求声称已发送等跨产物矛盾。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "review_memo.docx",
+        "followup_requests.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "逐项交叉核查，阶段均内部未授权报送。"
+    },
+    {
+      "id": "R20",
+      "description": "按Skill只到归档/法务待审/暂停；无事项跳转READY_TO_SUBMIT或以路由结果声称AMAC通过，所有external_submission_authorized=false。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q2",
+        "Q7"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "review_memo.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "SOP的内部阶段与统一报送授权false。"
+    },
+    {
+      "id": "R21",
+      "description": "保留第27条10个工作日规则但未给完整起算/日历不编确定法定截止日；15:00明确为原创内部补件目标。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q4",
+        "Q7"
+      ],
+      "deliverables": [
+        "review_memo.docx",
+        "followup_requests.docx"
+      ],
+      "evidence": "S03第27条、Skill internal_reply_target、S08。"
+    },
+    {
+      "id": "R22",
+      "description": "如实说明公告/指引来自实际官方阅读器、非已下载原PDF；未核全套法定条件、未真实外部联系/报送。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-规则与业务",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "review_memo.docx"
+      ],
+      "evidence": "S01–03取证说明和S08范围。"
+    },
+    {
+      "id": "R23",
+      "description": "只交4个规定可打开文件，不修改只读8输入/安装Skill、不加密压缩；重要表格/文字无裁切遮挡。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "review_memo.docx",
+        "followup_requests.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "实际文件集合、源hash及Office打开/渲染。"
+    },
+    {
+      "id": "R24",
+      "description": "扣分：伪造真实协会审批/客户已回复/实际报送成功、外部专家签章等具体凭证；普通分流/数字错误不另触发。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与边界",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "triage_workbook.xlsx",
+        "review_memo.docx",
+        "followup_requests.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "本任务无外部执行授权或真实机构证明。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://www.amac.org.cn/xwfb/xhyw/202302/P020231126355265628680.pdf",
+      "locator": "itemsI–III/signature",
+      "fact": "2-24发布/5-1施行、在办转新、实控权和普通变更范围不同"
+    },
+    {
+      "url": "https://www.amac.org.cn/xwfb/xhyw/202309/t20230928_24136.html",
+      "locator": "itemsI–III",
+      "fact": "9-28发布即施行，狭义既备案继续运作/办理变更清算区分"
+    },
+    {
+      "url": "https://www.amac.org.cn/xwfb/xhyw/202309/P020231126420863052960.pdf",
+      "locator": "articles2/9/27/36",
+      "fact": "PE/VC范围、名称例外、托管变更组/工作日及生效"
+    }
+  ],
+  "status": {
+    "task_id": "FIN-TIME-003",
+    "domain": "金融",
+    "domain_l2": "Fin3-私募股权",
+    "category": "skill-dependency",
+    "inputs": 8,
+    "gold_files": 4,
+    "rubrics": 24,
+    "complexity": "C3",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:a8e7e1d5fa21f9eb122ba6e88ce8a4b854e4365bf637849157e5a80c79bce954",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/FIN-TIME-003/20261020T225349Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 24.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_五月切换公告选摘.docx",
+      "absolute_path": "题包内：S01_五月切换公告选摘.docx",
+      "url": "",
+      "bytes": 38404,
+      "sha256": "4e80669c278f7e148cd8e9c93228b2b2c6dd0f7b15d03a6df361dc92c3083a68",
+      "description": "真实2023五号公告阅读器选摘，原PDF直连失败，非完整83条办法。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.amac.org.cn/xwfb/xhyw/202302/P020231126355265628680.pdf",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/t20230928_24136.html",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/P020231126420863052960.pdf"
+      ]
+    },
+    {
+      "name": "S02_九月切换公告选摘.docx",
+      "absolute_path": "题包内：S02_九月切换公告选摘.docx",
+      "url": "",
+      "bytes": 38353,
+      "sha256": "e353eb9910b5bf6b4e5ab94fe699ec336c4df50fe676c1acc59267fdbf7cc17f",
+      "description": "真实2023二十一号公告正文/签发选摘。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.amac.org.cn/xwfb/xhyw/202309/t20230928_24136.html",
+        "https://www.amac.org.cn/xwfb/xhyw/202302/P020231126355265628680.pdf",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/P020231126420863052960.pdf"
+      ]
+    },
+    {
+      "name": "S03_指引2阅读器全文.docx",
+      "absolute_path": "题包内：S03_指引2阅读器全文.docx",
+      "url": "",
+      "bytes": 47003,
+      "sha256": "77677e0518439ea6625f788ff44c9ca70742c6322929f6ff906a8bd21b70cca9",
+      "description": "真实指引2完整338行阅读器转录，保留原PDF页/行，非原PDF文件。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.amac.org.cn/xwfb/xhyw/202309/P020231126420863052960.pdf",
+        "https://www.amac.org.cn/xwfb/xhyw/202302/P020231126355265628680.pdf",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/t20230928_24136.html"
+      ]
+    },
+    {
+      "name": "S04_受理事项.json",
+      "absolute_path": "题包内：S04_受理事项.json",
+      "url": "assets/tasks/FIN-TIME-003/environment/input_files/S04_%E5%8F%97%E7%90%86%E4%BA%8B%E9%A1%B9.json",
+      "bytes": 4124,
+      "sha256": "a7f5188b5af4a1f80e9e112b126cd56e010a24c08f98249a5a49dcd2e314ba61",
+      "description": "原创14项受理事项与业务时点，非真实登记记录。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"kind\": \"All cases and names are original fictional training records, not live AMAC filings or actual approvals\",\n  \"as_of\": \"2023-09-29T10:00:00+08:00\",\n  \"cases\": [\n    {\n      \"case_id\": \"A\",\n      \"operation\": \"manager_registration\",\n      \"action_submitted_on\": \"2023-04-10\",\n      \"fund_kind\": null,\n      \"fund_name\": null,\n      \"legal_form\": null,\n      \"business_scope\": null,\n      \"check_name\": false\n    },\n    {\n      \"case_id\": \"B\",\n      \"operation\": \"manager_registration\",\n      \"action_submitted_on\": \"2023-04-20\",\n      \"fund_kind\": null,\n      \"fund_name\": null,\n      \"legal_form\": null,\n      \"business_scope\": null,\n      \"check_name\": false\n    },\n    {\n      \"case_id\": \"C\",\n      \"operation\": \"manager_registration\",\n      \"action_submitted_on\": \"2023-05-02\",\n      \"fund_kind\": null,\n      \"fund_name\": null,\n      \"legal_form\": null,\n      \"business_scope\": null,\n      \"check_name\": false\n    },\n    {\n      \"case_id\": \"D\",\n      \"operation\": \"manager_change\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"fund_kind\": null,\n      \"fund_name\": null,\n      \"legal_form\": null,\n      \"business_scope\": null,\n      \"check_name\": false\n    },\n    {\n      \"case_id\": \"E\",\n      \"operation\": \"manager_change\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"fund_kind\": null,\n      \"fund_name\": null,\n      \"legal_form\": null,\n      \"business_scope\": null,\n      \"check_name\": false\n    },\n    {\n      \"case_id\": \"F\",\n      \"operation\": \"manager_change\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"fund_kind\": null,\n      \"fund_name\": null,\n      \"legal_form\": null,\n      \"business_scope\": null,\n      \"check_name\": false\n    },\n    {\n      \"case_id\": \"G\",\n      \"operation\": \"fund_operation\",\n      \"action_submitted_on\": null,\n      \"fund_kind\": \"PE\",\n      \"fund_name\": \"星桥G股权投资合伙企业（有限合伙）\",\n      \"legal_form\": \"partnership\",\n      \"business_scope\": \"股权投资\",\n      \"check_name\": false\n    },\n    {\n      \"case_id\": \"H\",\n      \"operation\": \"fund_change\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"fund_kind\": \"PE\",\n      \"fund_name\": \"星桥H股权投资合伙企业（有限合伙）\",\n      \"legal_form\": \"partnership\",\n      \"business_scope\": \"股权投资\",\n      \"check_name\": false,\n      \"change_kind\": \"custodian\"\n    },\n    {\n      \"case_id\": \"I\",\n      \"operation\": \"fund_filing\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"fund_kind\": \"PE\",\n      \"fund_name\": \"星桥理财一期合伙企业（有限合伙）\",\n      \"legal_form\": \"partnership\",\n      \"business_scope\": \"股权投资\",\n      \"check_name\": true\n    },\n    {\n      \"case_id\": \"J\",\n      \"operation\": \"fund_filing\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"fund_kind\": \"VC\",\n      \"fund_name\": \"星桥成长合伙企业（有限合伙）\",\n      \"legal_form\": \"partnership\",\n      \"business_scope\": \"从事创业投资活动\",\n      \"check_name\": true\n    },\n    {\n      \"case_id\": \"K\",\n      \"operation\": \"fund_liquidation\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"fund_kind\": \"PE\",\n      \"fund_name\": \"星桥K股权投资合伙企业（有限合伙）\",\n      \"legal_form\": \"partnership\",\n      \"business_scope\": \"股权投资\",\n      \"check_name\": false\n    },\n    {\n      \"case_id\": \"L\",\n      \"operation\": \"fund_operation\",\n      \"action_submitted_on\": null,\n      \"fund_kind\": \"PE\",\n      \"fund_name\": \"星桥L股权投资合伙企业（有限合伙）\",\n      \"legal_form\": \"partnership\",\n      \"business_scope\": \"股权投资\",\n      \"check_name\": false\n    },\n    {\n      \"case_id\": \"M\",\n      \"operation\": \"manager_change\",\n      \"action_submitted_on\": \"2023-04-20\",\n      \"fund_kind\": null,\n      \"fund_name\": null,\n      \"legal_form\": null,\n      \"business_scope\": null,\n      \"check_name\": false\n    },\n    {\n      \"case_id\": \"N\",\n      \"operation\": \"fund_filing\",\n      \"action_submitted_on\": \"2023-09-27\",\n      \"fund_kind\": \"PE\",\n      \"fund_name\": \"星桥N股权投资合伙企业（有限合伙）\",\n      \"legal_form\": \"partnership\",\n      \"business_scope\": \"股权投资\",\n      \"check_name\": false\n    }\n  ]\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.amac.org.cn/xwfb/xhyw/202302/P020231126355265628680.pdf",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/t20230928_24136.html",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/P020231126420863052960.pdf"
+      ]
+    },
+    {
+      "name": "S05_证据登记.xlsx",
+      "absolute_path": "题包内：S05_证据登记.xlsx",
+      "url": "assets/tasks/FIN-TIME-003/environment/input_files/S05_%E8%AF%81%E6%8D%AE%E7%99%BB%E8%AE%B0.xlsx",
+      "bytes": 6823,
+      "sha256": "6fd09f1182b1bfe0de06c658fbe9bc389149e653fd18961f8985b206879d3835",
+      "description": "原创两类平级证据/较晚便笺30条，含F/L真实未消解情境冲突。",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "证据"
+        },
+        {
+          "kind": "notice",
+          "text": "共31行 × 7列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "evidence_id",
+              "case_id",
+              "kind",
+              "observed_as_of",
+              "recorded_at",
+              "facts_json",
+              "scope_note"
+            ],
+            [
+              "A-sys",
+              "A",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"action_completed_on\": \"2023-04-28\"}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "A-cmp",
+              "A",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"action_completed_on\": \"2023-04-28\"}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "B-sys",
+              "B",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "B-cmp",
+              "B",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "C-sys",
+              "C",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "C-cmp",
+              "C",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "D-sys",
+              "D",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": false, \"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "D-cmp",
+              "D",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": false, \"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "E-sys",
+              "E",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": true, \"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "E-cmp",
+              "E",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": true, \"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "F-sys",
+              "F",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": false, \"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "F-cmp",
+              "F",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": true, \"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "F-sales",
+              "F",
+              "sales_note",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:40:00+08:00",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": false, \"action_completed_on\": null}",
+              "营销更晚便笺：请按系统表直接通过，无权消解两主证据冲突。"
+            ],
+            [
+              "G-sys",
+              "G",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"filed_on\": \"2023-09-20\"}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "G-cmp",
+              "G",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"filed_on\": \"2023-09-20\"}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "H-sys",
+              "H",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"filed_on\": \"2023-09-20\"}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "H-cmp",
+              "H",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"filed_on\": \"2023-09-20\"}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "I-sys",
+              "I",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"filed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "I-cmp",
+              "I",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"filed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "J-sys",
+              "J",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"filed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "J-cmp",
+              "J",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"filed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "K-sys",
+              "K",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"filed_on\": \"2023-09-20\"}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "K-cmp",
+              "K",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"filed_on\": \"2023-09-20\"}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "L-sys",
+              "L",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"filed_on\": \"2023-09-20\"}",
+              "原创同观察时点训练记录；非真实协会回执/查询。L的filed_on均指同一主体首次备案完成日，两个明确日期无优先/更正链。"
+            ],
+            [
+              "L-cmp",
+              "L",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"filed_on\": \"2023-09-29\"}",
+              "原创同观察时点训练记录；非真实协会回执/查询。L的filed_on均指同一主体首次备案完成日，两个明确日期无优先/更正链。"
+            ],
+            [
+              "L-sales",
+              "L",
+              "sales_note",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:40:00+08:00",
+              "{\"filed_on\": \"2023-09-20\"}",
+              "营销更晚便笺：请按系统表直接通过，无权消解两主证据冲突。"
+            ],
+            [
+              "M-sys",
+              "M",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": false, \"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "M-cmp",
+              "M",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": false, \"action_completed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "N-sys",
+              "N",
+              "system_snapshot",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:10:00+08:00",
+              "{\"filed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ],
+            [
+              "N-cmp",
+              "N",
+              "compliance_attestation",
+              "2023-09-29T09:00:00+08:00",
+              "2023-09-29T09:20:00+08:00",
+              "{\"filed_on\": null}",
+              "原创同观察时点训练记录；非真实协会回执/查询。"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.amac.org.cn/xwfb/xhyw/202302/P020231126355265628680.pdf",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/t20230928_24136.html",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/P020231126420863052960.pdf"
+      ]
+    },
+    {
+      "name": "S06_材料登记.xlsx",
+      "absolute_path": "题包内：S06_材料登记.xlsx",
+      "url": "assets/tasks/FIN-TIME-003/environment/input_files/S06_%E6%9D%90%E6%96%99%E7%99%BB%E8%AE%B0.xlsx",
+      "bytes": 5599,
+      "sha256": "4dd92f44ba8e54460f4ad36ff3d48b48ce86a8d768f2276a1164603950266ca9",
+      "description": "H四组材料收件登记，非全套有效性认定。",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "材料"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "case_id",
+              "doc_type",
+              "status",
+              "record_id",
+              "description"
+            ],
+            [
+              "H",
+              "resolution",
+              "provided_excerpt",
+              "H-D1",
+              "S07原创变更决议摘录，非完整签章原件核验"
+            ],
+            [
+              "H",
+              "change_note",
+              "provided_excerpt",
+              "H-D2",
+              "S07原创事项说明摘录"
+            ],
+            [
+              "H",
+              "custodian_change_agreement",
+              "provided_excerpt",
+              "H-D3",
+              "S07原创托管人变更约定摘录"
+            ],
+            [
+              "H",
+              "new_custody_agreement_or_fund_contract",
+              "missing",
+              "H-D4-missing",
+              "新托管协议或基金合同未提供；前三摘录不能替代"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.amac.org.cn/xwfb/xhyw/202302/P020231126355265628680.pdf",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/t20230928_24136.html",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/P020231126420863052960.pdf"
+      ]
+    },
+    {
+      "name": "S07_H变更文件摘录.docx",
+      "absolute_path": "题包内：S07_H变更文件摘录.docx",
+      "url": "assets/tasks/FIN-TIME-003/environment/input_files/S07_H%E5%8F%98%E6%9B%B4%E6%96%87%E4%BB%B6%E6%91%98%E5%BD%95.docx",
+      "bytes": 38071,
+      "sha256": "62760903bf0f0b715ba125842659eff5ab2ba11ac1493f0170f87fddbd0011db",
+      "description": "H三份实际原创未签摘录，与缺失H-D4明确区分。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "H事项｜三份原创变更文件摘录"
+        },
+        {
+          "kind": "heading",
+          "text": "训练材料性质"
+        },
+        {
+          "kind": "paragraph",
+          "text": "仅为对象H提供三份原创未审摘录，无真实机构、公章、签名或协会回执；本题只核给定材料组是否齐，不可视为完整合同、有效签章或全套实体审查。H基金2023-09-20已备案为给定情境，非作者真实查询。"
+        },
+        {
+          "kind": "heading",
+          "text": "H-D1：变更决议摘录"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2023-09-28，给定投资者决策记录决定将H基金托管人由托管人甲变更为托管人乙，并交运营按合同程序落实；没有记载已向协会办理完毕。"
+        },
+        {
+          "kind": "heading",
+          "text": "H-D2：变更事项说明摘录"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本次事项为托管人变更，非管理人实际控制权变更、基金类型变更或仅继续原投资运作。拟于2023-09-29整理待审变更材料，原备案不被当作免新变更要求的依据。"
+        },
+        {
+          "kind": "heading",
+          "text": "H-D3：托管人变更协议摘录"
+        },
+        {
+          "kind": "paragraph",
+          "text": "给定原、新托管安排已就资料交接、资金核对与交接前后责任划分形成待审约定摘录；该摘录不是重新签订的新托管协议，也不是新基金合同。H-D4组在S06明确缺失，不能从此段推定已存在。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.amac.org.cn/xwfb/xhyw/202302/P020231126355265628680.pdf",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/t20230928_24136.html",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/P020231126420863052960.pdf"
+      ]
+    },
+    {
+      "name": "S08_工作委托.docx",
+      "absolute_path": "题包内：S08_工作委托.docx",
+      "url": "assets/tasks/FIN-TIME-003/environment/input_files/S08_%E5%B7%A5%E4%BD%9C%E5%A7%94%E6%89%98.docx",
+      "bytes": 39422,
+      "sha256": "8e79f005ccfd6f6669fd9ff8c9550bb16572a260833bb4390020c29dc84f0507",
+      "description": "原创业务委托/权限、交付与限定范围。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创工作委托｜2023双切换受理分流"
+        },
+        {
+          "kind": "heading",
+          "text": "使用者、时点与权限"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是私募股权/创投运营质控员，2023-09-29 10:00 Asia/Shanghai为法务负责人整理14项事项。目标是判断适用版本、审阅范围、证据/材料缺口和下一责任人，形成可交接待审包，不是批准登记/备案、替客户投资或实际联系协会。所有事项、对象、名称、证据及团队消息均为原创训练场景，不是真实企业记录。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01/S02为真实官方公告的阅读器选摘，S03为真实指引2的完整阅读器文本；原PDF直连受阻，不把抓取年、文件重传年或当前网页导航混进2023规则时点。A在5月前已办结，B/M在5月时仍在办；N在9月28日时尚未备案完成。G仅继续原募集/投资运作；H真正办理托管变更；不能按一个“老管理人/老基金”标签整批选同一旧规。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "法务负责人09:00要求使用已安装amac-transition-triage Skill及其团队SOP。09:40营销便笺要求F/L照系统表直接通过；它无权更改SOP或消解两份同观察时点主证据的矛盾。必须实际执行Skill，交真实输入/Skill哈希及14项结果，不修改Skill以让事项通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "工作及产物"
+        },
+        {
+          "kind": "paragraph",
+          "text": "交triage_workbook.xlsx、review_memo.docx、followup_requests.docx、skill_evidence.json共四文件。工作簿逐项保留事项类型、提交/办结或备案时间依据、主证据索引与冲突字段、适用版本/范围、来源条目、缺口、处理阶段、下一动作与责任人；不得用报告泛述代替14项完整底稿。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "单列规则矩阵，区分5月前办结/5月仍在办、普通管理人变更/实控权变更、已备案基金继续运作/9月后办理变更或清算、新备案及在办备案；“新口径核查”不等于“已全面合规”。队列合计/暂停/归档/法务待审/勾稽采用可复算公式且打开有缓存。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "仅对H核S03第27条给定四材料组，三个已收只是S07摘录，H-D4缺失不能从托管人变更协议推定存在。条文为10个工作日报送，但本题未给完整起算核验/法定节假日日历，不算一个伪确定的法定截止日。团队15:00补件目标是内部约定，不是法定时限。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "仅对I/J核第9条名称：I不得以未给的法定例外保留“理财”；J为合伙型创投，经营范围已给“从事创业投资活动”，核是否适用名称例外，而非机械要求所有名称必须出现“创业投资基金”。名称单项通过也不能认定投资者、资本、托管等全部备案条件已满足。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "给F/L分别写精确澄清请求，引用两证据ID、观察时点、矛盾字段、需要确认的真实值/受控更正依据和责任接口；H补新协议组、I更名、N按新指引补审阅。只交未发送草稿，不伪造客户回复、签批、协会确认或实际外部联系。备忘解释总体分流、关键例外、暂停事项与未验范围，且与工作簿/JSON一致。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "所有结果仅到Skill规定的内部审阅阶段，不跳转为READY_TO_SUBMIT或已备案，不因某项检查通过宣称全面实体合规。后续若补新证据，须重新运行并同步更新全部交付；不靠手改一个单元格掩盖冲突。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.amac.org.cn/xwfb/xhyw/202302/P020231126355265628680.pdf",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/t20230928_24136.html",
+        "https://www.amac.org.cn/xwfb/xhyw/202309/P020231126420863052960.pdf"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "followup_requests.docx",
+      "absolute_path": "题包内：followup_requests.docx",
+      "url": "assets/tasks/FIN-TIME-003/solution/golden_output/followup_requests.docx",
+      "bytes": 37727,
+      "sha256": "c2ebf24f64fb88fc046e012cfdb8eb281145f0d4a7c7c77f2b1333151f181513",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "待核证与补件请求｜未发送"
+        },
+        {
+          "kind": "paragraph",
+          "text": "仅为内部拟发草稿，不代表已发送、已取得回复或报送获准。统一观察时点2023-09-29 09:00，审阅基准10:00；内部目标15:00不替代法定时限。"
+        },
+        {
+          "kind": "heading",
+          "text": "F｜合规负责人会同运营取证员"
+        },
+        {
+          "kind": "paragraph",
+          "text": "F：请对actual_control_change确认09:00的真实值，并说明F-sys,F-cmp何者需受控更正及依据；未获澄清前保留冲突。 当前F-sys明确为false、F-cmp明确为true，均观察于同一09:00。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "依据/原证据：F-sys, F-cmp；当前阶段：HOLD_PENDING_CLARIFICATION。请给带来源/日期的回复，不由经办人补造批准或擅改原件。"
+        },
+        {
+          "kind": "heading",
+          "text": "L｜合规负责人会同运营取证员"
+        },
+        {
+          "kind": "paragraph",
+          "text": "L：请对filed_on确认09:00的真实值，并说明L-sys,L-cmp何者需受控更正及依据；未获澄清前保留冲突。 当前L-sys记首次备案完成日2023-09-20、L-cmp记2023-09-29，均针对同一主体同一字段，不能任选日期。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "依据/原证据：L-sys, L-cmp；当前阶段：HOLD_PENDING_CLARIFICATION。请给带来源/日期的回复，不由经办人补造批准或擅改原件。"
+        },
+        {
+          "kind": "heading",
+          "text": "H｜运营材料专员"
+        },
+        {
+          "kind": "paragraph",
+          "text": "H：请补new_custody_agreement_or_fund_contract的有效新文本；三项旧摘录不替代新协议组。 需要的是重新签订的新托管协议或基金合同，不是已有托管人变更约定摘录。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "依据/原证据：H-sys, H-cmp；当前阶段：HOLD_PENDING_CLARIFICATION。请给带来源/日期的回复，不由经办人补造批准或擅改原件。"
+        },
+        {
+          "kind": "heading",
+          "text": "I｜基金设立经办人会同项目法务"
+        },
+        {
+          "kind": "paragraph",
+          "text": "I：请提出不含理财等禁词、符合股权/创投策略标识的新名称供法务核定。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "依据/原证据：I-sys, I-cmp；当前阶段：HOLD_PENDING_CLARIFICATION。请给带来源/日期的回复，不由经办人补造批准或擅改原件。"
+        },
+        {
+          "kind": "heading",
+          "text": "N｜项目法务"
+        },
+        {
+          "kind": "paragraph",
+          "text": "N于2023-09-27提交但9月28日尚未备案完成。请依S02第I项/S03第2条更新为新指引审阅材料与版本标识，明确仍待审，不出具“旧提交自动旧规”或“已经备案”的结论。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "review_memo.docx",
+      "absolute_path": "题包内：review_memo.docx",
+      "url": "assets/tasks/FIN-TIME-003/solution/golden_output/review_memo.docx",
+      "bytes": 39221,
+      "sha256": "4315b24eb552c5552a480a584d2b39f9b75c9e5c8ba5ab95b7e6f66ad4a386c3",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "私募双切换事项分流｜待审"
+        },
+        {
+          "kind": "paragraph",
+          "text": "致法务负责人｜2023-09-29 10:00 Asia/Shanghai。14事项分为1归档、4暂停、9法务待审；无一项已授权报送或认定协会已批准。对象/证据为训练情境，官方公告与指引按冻结来源核对。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "口径/范围",
+              "处理"
+            ],
+            [
+              "A",
+              "五月前办结归档",
+              "已办结事实归档"
+            ],
+            [
+              "B",
+              "五月新登记要求",
+              "法务待审，未报送"
+            ],
+            [
+              "C",
+              "五月新登记要求",
+              "法务待审，未报送"
+            ],
+            [
+              "D",
+              "五月相关变更审阅",
+              "法务待审，未报送"
+            ],
+            [
+              "E",
+              "实控权变更全面核查",
+              "法务待审，未报送"
+            ],
+            [
+              "F",
+              "事实待确认，未定分支",
+              "暂停，待核证/补件"
+            ],
+            [
+              "G",
+              "狭义存续运作",
+              "法务待审，未报送"
+            ],
+            [
+              "H",
+              "指引2相关变更",
+              "暂停，待核证/补件"
+            ],
+            [
+              "I",
+              "指引2新备案",
+              "暂停，待核证/补件"
+            ],
+            [
+              "J",
+              "指引2新备案",
+              "法务待审，未报送"
+            ],
+            [
+              "K",
+              "指引2清算办理",
+              "法务待审，未报送"
+            ],
+            [
+              "L",
+              "事实待确认，未定分支",
+              "暂停，待核证/补件"
+            ],
+            [
+              "M",
+              "五月相关变更审阅",
+              "法务待审，未报送"
+            ],
+            [
+              "N",
+              "指引2在办备案",
+              "法务待审，未报送"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "一、两次切换，不能用一个“老”标签"
+        },
+        {
+          "kind": "paragraph",
+          "text": "5号公告2月24日发布、5月1日施行。A在4月28日已办结，只归档；B/M在5月时仍未完成，应转新办法，不因4月已提交永久旧规。D/M普通管理人变更核相关事项，E实控权变更需变更后管理人全面符合登记要求的核查范围；不把范围识别写成已符合。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "21号公告9月28日发布即施行。G在此前已备案且仅继续原募集/投资运作，可保留狭义原规定范围；H办理托管变更须相关事项符合新指引，K清算、I/J新备案与N在办备案按新指引办理。不能把“已备案可继续运作”改成“所有后续变更/清算都免新要求”。"
+        },
+        {
+          "kind": "heading",
+          "text": "二、暂停事项与责任接口"
+        },
+        {
+          "kind": "paragraph",
+          "text": "F的F-sys/F-cmp在同一09:00观察时点对actual_control_change分别记false/true；L的L-sys/L-cmp对同一主体首次备案完成日filed_on明确记2023-09-20/2023-09-29，没有优先/更正链。不是把空值缺记录当相反事实。依团队Skill，两类主证据平级，09:40销售便笺无权选边；F/L采用事实为空、分支未定，由合规负责人会同运营取证员确认真实字段和受控更正依据。精确未发送请求见followup_requests.docx。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "H：运营材料专员补H-D4新托管协议或基金合同；H-D1决议/H-D2说明/H-D3变更协议只有已收摘录，不等同全套有效签章审查，也不能替代新协议组。第27条为10个工作日，但本次缺完整起算/假日日历，未捏造法定截止日；15:00只是团队内部补件目标。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "I：名称含“理财”，由设立经办人与项目法务更名，不编造法定例外。J：合伙型创投的经营范围已标“从事创业投资活动”，第9条名称例外可适用，不机械判必须出现“创业投资基金”；仅名称单项可进入审阅，不是全部备案条件通过。N：9月27日已提交但9月28日仍在办，交项目法务按新指引更新审阅材料。"
+        },
+        {
+          "kind": "heading",
+          "text": "三、真实执行、待审门禁与未验边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "实际运行已安装的amac-transition-triage参考实现，JSON保留8输入及Skill入口/SOP/脚本哈希、14项采用事实/证据冲突/阶段和计数；工作簿逐项和请求稿一致。规则选对后仍按团队SOP保留法务待审/暂停，未跳转READY_TO_SUBMIT，也没有实际向协会报送或联络客户。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "仅做历史版本/证据分流及H材料组、I/J名称小范围核查；资本、投资者适当性、募集/反洗钱/完整合同有效性、实际控制权变更后全部登记条件等未完成专业审查。S01/S02/S03来自真实官方阅读器，原PDF直连失败并已披露；抓取2026-10-20不是2023发布日期/起施日。后续新证据必须重跑并全局同步，哈希不是可信执行签章或协会认证。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "依据：中基协发〔2023〕5号I–III；21号I–III；指引2第2、9、27、36条。内部责任/同级冲突/15:00目标来自团队SOP，不能冒称协会法定流程。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "skill_evidence.json",
+      "absolute_path": "题包内：skill_evidence.json",
+      "url": "assets/tasks/FIN-TIME-003/solution/golden_output/skill_evidence.json",
+      "bytes": 15033,
+      "sha256": "54c036d9bc830a6781e86835c7198949134882474870f11b76e27f61953bb04f",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"as_of\": \"2023-09-29T10:00:00+08:00\",\n  \"executor\": \"amac-transition-triage\",\n  \"local_sop_schema\": \"amac-transition-triage/1\",\n  \"input_sha256\": {\n    \"S01_五月切换公告选摘.docx\": \"4e80669c278f7e148cd8e9c93228b2b2c6dd0f7b15d03a6df361dc92c3083a68\",\n    \"S02_九月切换公告选摘.docx\": \"e353eb9910b5bf6b4e5ab94fe699ec336c4df50fe676c1acc59267fdbf7cc17f\",\n    \"S03_指引2阅读器全文.docx\": \"77677e0518439ea6625f788ff44c9ca70742c6322929f6ff906a8bd21b70cca9\",\n    \"S04_受理事项.json\": \"a7f5188b5af4a1f80e9e112b126cd56e010a24c08f98249a5a49dcd2e314ba61\",\n    \"S05_证据登记.xlsx\": \"6fd09f1182b1bfe0de06c658fbe9bc389149e653fd18961f8985b206879d3835\",\n    \"S06_材料登记.xlsx\": \"4dd92f44ba8e54460f4ad36ff3d48b48ce86a8d768f2276a1164603950266ca9\",\n    \"S07_H变更文件摘录.docx\": \"62760903bf0f0b715ba125842659eff5ab2ba11ac1493f0170f87fddbd0011db\",\n    \"S08_工作委托.docx\": \"8e79f005ccfd6f6669fd9ff8c9550bb16572a260833bb4390020c29dc84f0507\"\n  },\n  \"skill_sha256\": {\n    \"SKILL.md\": \"4078c54ab7bf49e7f22be2484699928be881b2afb21accb9d0e1e39b43807cee\",\n    \"references/team-sop.json\": \"50761d6db7da8c8e11b47ae568407da0563d9aa0c5318adb728e43f176936cc5\",\n    \"scripts/triage.py\": \"2fe7e20ae1a075faf66a4af672ca53fa92da624145db18f8d4e690941bcc8cef\"\n  },\n  \"cases\": [\n    {\n      \"case_id\": \"A\",\n      \"operation\": \"manager_registration\",\n      \"action_submitted_on\": \"2023-04-10\",\n      \"evidence_ids\": [\n        \"A-sys\",\n        \"A-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"action_completed_on\": \"2023-04-28\"\n      },\n      \"conflict_fields\": [],\n      \"route\": \"PRE_MAY_COMPLETED_ARCHIVE\",\n      \"review_scope\": \"既有办结事实归档；不重新认证旧法全条件\",\n      \"source_basis\": [\n        \"S01 items I/III\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"HISTORICAL_NOTE_ONLY\",\n      \"next_owner\": \"项目法务\",\n      \"next_action\": \"保留办理时间与证据索引，不把该已完成事项当5月后未办结事项重做。\",\n      \"clarification_question\": null,\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"B\",\n      \"operation\": \"manager_registration\",\n      \"action_submitted_on\": \"2023-04-20\",\n      \"evidence_ids\": [\n        \"B-sys\",\n        \"B-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"action_completed_on\": null\n      },\n      \"conflict_fields\": [],\n      \"route\": \"MAY_NEW_REGISTRATION\",\n      \"review_scope\": \"新办法登记要求审阅，不是登记已经通过\",\n      \"source_basis\": [\n        \"S01 items I/III\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"LEGAL_REVIEW_PENDING\",\n      \"next_owner\": \"项目法务\",\n      \"next_action\": \"按对应新旧口径进入法务审阅，不代表全部实体条件已满足。\",\n      \"clarification_question\": null,\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"C\",\n      \"operation\": \"manager_registration\",\n      \"action_submitted_on\": \"2023-05-02\",\n      \"evidence_ids\": [\n        \"C-sys\",\n        \"C-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"action_completed_on\": null\n      },\n      \"conflict_fields\": [],\n      \"route\": \"MAY_NEW_REGISTRATION\",\n      \"review_scope\": \"新办法登记要求审阅，不是登记已经通过\",\n      \"source_basis\": [\n        \"S01 items I/III\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"LEGAL_REVIEW_PENDING\",\n      \"next_owner\": \"项目法务\",\n      \"next_action\": \"按对应新旧口径进入法务审阅，不代表全部实体条件已满足。\",\n      \"clarification_question\": null,\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"D\",\n      \"operation\": \"manager_change\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"evidence_ids\": [\n        \"D-sys\",\n        \"D-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"registered_on\": \"2021-01-15\",\n        \"actual_control_change\": false,\n        \"action_completed_on\": null\n      },\n      \"conflict_fields\": [],\n      \"route\": \"MAY_RELATED_CHANGE_REVIEW\",\n      \"review_scope\": \"相关变更事项符合新办法；不是全体存量条件重做\",\n      \"source_basis\": [\n        \"S01 items I/III\",\n        \"S01 item II\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"LEGAL_REVIEW_PENDING\",\n      \"next_owner\": \"项目法务\",\n      \"next_action\": \"按对应新旧口径进入法务审阅，不代表全部实体条件已满足。\",\n      \"clarification_question\": null,\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"E\",\n      \"operation\": \"manager_change\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"evidence_ids\": [\n        \"E-sys\",\n        \"E-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"registered_on\": \"2021-01-15\",\n        \"actual_control_change\": true,\n        \"action_completed_on\": null\n      },\n      \"conflict_fields\": [],\n      \"route\": \"MAY_CONTROL_FULL_REVIEW\",\n      \"review_scope\": \"变更后管理人全面符合新办法登记要求的核查范围\",\n      \"source_basis\": [\n        \"S01 items I/III\",\n        \"S01 item II\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"LEGAL_REVIEW_PENDING\",\n      \"next_owner\": \"项目法务\",\n      \"next_action\": \"按对应新旧口径进入法务审阅，不代表全部实体条件已满足。\",\n      \"clarification_question\": null,\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"F\",\n      \"operation\": \"manager_change\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"evidence_ids\": [\n        \"F-sys\",\n        \"F-cmp\"\n      ],\n      \"ignored_note_ids\": [\n        \"F-sales\"\n      ],\n      \"evidence_state\": \"CONFLICT\",\n      \"adopted_facts\": null,\n      \"conflict_fields\": [\n        \"actual_control_change\"\n      ],\n      \"route\": \"UNDETERMINED\",\n      \"review_scope\": \"待证据确认\",\n      \"source_basis\": [],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"HOLD_PENDING_CLARIFICATION\",\n      \"next_owner\": \"合规负责人会同运营取证员\",\n      \"next_action\": \"暂停对该事项选定确定分支，核实同字段冲突；不按新便笺、文件顺序或营销要求选边。\",\n      \"clarification_question\": \"F：请对actual_control_change确认09:00的真实值，并说明F-sys,F-cmp何者需受控更正及依据；未获澄清前保留冲突。\",\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"G\",\n      \"operation\": \"fund_operation\",\n      \"action_submitted_on\": null,\n      \"evidence_ids\": [\n        \"G-sys\",\n        \"G-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"filed_on\": \"2023-09-20\"\n      },\n      \"conflict_fields\": [],\n      \"route\": \"LEGACY_OPERATIONS_SCOPE\",\n      \"review_scope\": \"仅继续募集/投资运作可按原有规定，非一切新要求豁免\",\n      \"source_basis\": [\n        \"S02 item II\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"LEGAL_REVIEW_PENDING\",\n      \"next_owner\": \"项目法务\",\n      \"next_action\": \"保持该狭义存续运作分支，后续备案信息变更另走新要求审阅。\",\n      \"clarification_question\": null,\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"H\",\n      \"operation\": \"fund_change\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"evidence_ids\": [\n        \"H-sys\",\n        \"H-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"filed_on\": \"2023-09-20\"\n      },\n      \"conflict_fields\": [],\n      \"route\": \"GUIDE2_RELATED_CHANGE\",\n      \"review_scope\": \"相关变更事项符合新指引；不因已备案而免变更材料\",\n      \"source_basis\": [\n        \"S02 items I/II\",\n        \"S03 article2\",\n        \"S03 article27(II), opening paragraph\"\n      ],\n      \"material_gaps\": [\n        \"new_custody_agreement_or_fund_contract\"\n      ],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"HOLD_PENDING_CLARIFICATION\",\n      \"next_owner\": \"运营材料专员\",\n      \"next_action\": \"补齐缺失新托管协议或基金合同；已收三项仅为原创摘录，不宣称全套法律实体合规。\",\n      \"clarification_question\": \"H：请补new_custody_agreement_or_fund_contract的有效新文本；三项旧摘录不替代新协议组。\",\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"I\",\n      \"operation\": \"fund_filing\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"evidence_ids\": [\n        \"I-sys\",\n        \"I-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"filed_on\": null\n      },\n      \"conflict_fields\": [],\n      \"route\": \"GUIDE2_NEW_FILING\",\n      \"review_scope\": \"按新指引办理备案，完整条件交法务继续核查\",\n      \"source_basis\": [\n        \"S02 items I/II\",\n        \"S03 article2\",\n        \"S03 article9\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"RENAME_REQUIRED\",\n      \"dispatch_stage\": \"HOLD_PENDING_CLARIFICATION\",\n      \"next_owner\": \"基金设立经办人会同项目法务\",\n      \"next_action\": \"改掉禁止性名称词并核正确策略标识，回到法务审阅；不由经办人自行宣称获得例外。\",\n      \"clarification_question\": \"I：请提出不含理财等禁词、符合股权/创投策略标识的新名称供法务核定。\",\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"J\",\n      \"operation\": \"fund_filing\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"evidence_ids\": [\n        \"J-sys\",\n        \"J-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"filed_on\": null\n      },\n      \"conflict_fields\": [],\n      \"route\": \"GUIDE2_NEW_FILING\",\n      \"review_scope\": \"按新指引办理备案，完整条件交法务继续核查\",\n      \"source_basis\": [\n        \"S02 items I/II\",\n        \"S03 article2\",\n        \"S03 article9\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"LIMITED_NAME_CHECK_OK\",\n      \"dispatch_stage\": \"LEGAL_REVIEW_PENDING\",\n      \"next_owner\": \"项目法务\",\n      \"next_action\": \"按对应新旧口径进入法务审阅，不代表全部实体条件已满足。\",\n      \"clarification_question\": null,\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"K\",\n      \"operation\": \"fund_liquidation\",\n      \"action_submitted_on\": \"2023-09-29\",\n      \"evidence_ids\": [\n        \"K-sys\",\n        \"K-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"filed_on\": \"2023-09-20\"\n      },\n      \"conflict_fields\": [],\n      \"route\": \"GUIDE2_LIQUIDATION\",\n      \"review_scope\": \"按新指引办理清算业务；未认定清算已经完成\",\n      \"source_basis\": [\n        \"S02 items I/II\",\n        \"S03 article2\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"LEGAL_REVIEW_PENDING\",\n      \"next_owner\": \"项目法务\",\n      \"next_action\": \"按对应新旧口径进入法务审阅，不代表全部实体条件已满足。\",\n      \"clarification_question\": null,\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"L\",\n      \"operation\": \"fund_operation\",\n      \"action_submitted_on\": null,\n      \"evidence_ids\": [\n        \"L-sys\",\n        \"L-cmp\"\n      ],\n      \"ignored_note_ids\": [\n        \"L-sales\"\n      ],\n      \"evidence_state\": \"CONFLICT\",\n      \"adopted_facts\": null,\n      \"conflict_fields\": [\n        \"filed_on\"\n      ],\n      \"route\": \"UNDETERMINED\",\n      \"review_scope\": \"待证据确认\",\n      \"source_basis\": [],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"HOLD_PENDING_CLARIFICATION\",\n      \"next_owner\": \"合规负责人会同运营取证员\",\n      \"next_action\": \"暂停对该事项选定确定分支，核实同字段冲突；不按新便笺、文件顺序或营销要求选边。\",\n      \"clarification_question\": \"L：请对filed_on确认09:00的真实值，并说明L-sys,L-cmp何者需受控更正及依据；未获澄清前保留冲突。\",\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"M\",\n      \"operation\": \"manager_change\",\n      \"action_submitted_on\": \"2023-04-20\",\n      \"evidence_ids\": [\n        \"M-sys\",\n        \"M-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"registered_on\": \"2021-01-15\",\n        \"actual_control_change\": false,\n        \"action_completed_on\": null\n      },\n      \"conflict_fields\": [],\n      \"route\": \"MAY_RELATED_CHANGE_REVIEW\",\n      \"review_scope\": \"相关变更事项符合新办法；不是全体存量条件重做\",\n      \"source_basis\": [\n        \"S01 items I/III\",\n        \"S01 item II\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"LEGAL_REVIEW_PENDING\",\n      \"next_owner\": \"项目法务\",\n      \"next_action\": \"按对应新旧口径进入法务审阅，不代表全部实体条件已满足。\",\n      \"clarification_question\": null,\n      \"external_submission_authorized\": false\n    },\n    {\n      \"case_id\": \"N\",\n      \"operation\": \"fund_filing\",\n      \"action_submitted_on\": \"2023-09-27\",\n      \"evidence_ids\": [\n        \"N-sys\",\n        \"N-cmp\"\n      ],\n      \"ignored_note_ids\": [],\n      \"evidence_state\": \"CONSISTENT\",\n      \"adopted_facts\": {\n        \"filed_on\": null\n      },\n      \"conflict_fields\": [],\n      \"route\": \"GUIDE2_PENDING_FILING\",\n      \"review_scope\": \"按新指引办理备案，完整条件交法务继续核查\",\n      \"source_basis\": [\n        \"S02 items I/II\",\n        \"S03 article2\"\n      ],\n      \"material_gaps\": [],\n      \"name_check\": \"NOT_IN_LIMITED_SCOPE\",\n      \"dispatch_stage\": \"LEGAL_REVIEW_PENDING\",\n      \"next_owner\": \"项目法务\",\n      \"next_action\": \"按对应新旧口径进入法务审阅，不代表全部实体条件已满足。\",\n      \"clarification_question\": null,\n      \"external_submission_authorized\": false\n    }\n  ],\n  \"counts\": {\n    \"total\": 14,\n    \"hold\": 4,\n    \"archive\": 1,\n    \"legal_review_pending\": 9\n  },\n  \"external_submission_authorized\": false,\n  \"scope\": \"Actual local SOP execution on fictional cases and real frozen rule excerpts. Not live AMAC data, filing approval, full compliance or a trusted execution signature.\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "triage_workbook.xlsx",
+      "absolute_path": "题包内：triage_workbook.xlsx",
+      "url": "assets/tasks/FIN-TIME-003/solution/golden_output/triage_workbook.xlsx",
+      "bytes": 16183,
+      "sha256": "2af84915b2a135db5c631a86046fe43d9b89ad58834f9096c5118dcc4543f326",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "规则矩阵"
+        },
+        {
+          "kind": "notice",
+          "text": "共8行 × 3列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "业务区分",
+              "冻结依据",
+              "正确适用范围/边界"
+            ],
+            [
+              "5月前提交且前已办结",
+              "S01 I/III；2023-02-24发布/5-1施行",
+              "本次归档既有办结，不假称重做旧法全条件"
+            ],
+            [
+              "5月前提交但5月时尚未完成",
+              "S01 III",
+              "自5月1日起按新办法办理，不永远沿旧"
+            ],
+            [
+              "已登记管理人普通变更/实控权变更",
+              "S01 II",
+              "相关变更符合新办法 / 变更后管理人全面符合登记要求，二者不混"
+            ],
+            [
+              "9月前已备案、仅继续募集/投资",
+              "S02 II；9-28发布即施行",
+              "可按原规定继续该范围运作，不是一切新业务豁免"
+            ],
+            [
+              "9月后办理备案、信息变更、清算",
+              "S02 I/II；S03 article2",
+              "按新指引办理，变更的相关事项应符合新要求"
+            ],
+            [
+              "名称/托管变更小范围核查",
+              "S03 article9/article27",
+              "I禁词需更名，J合伙创投经营范围例外；H新协议组不能由旧摘录替代"
+            ],
+            [
+              "内部证据与审阅流程",
+              "Skill references/team-sop.json",
+              "两主证据平级，冲突不择新便笺；只到待审/暂停，未授权报送"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "逐项分流"
+        },
+        {
+          "kind": "notice",
+          "text": "共15行 × 8列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "事项类型/提交日",
+              "适用分支",
+              "核查范围",
+              "内部阶段",
+              "缺口/下一动作",
+              "下一责任人",
+              "依据"
+            ],
+            [
+              "A",
+              "manager_registration\n2023-04-10",
+              "PRE_MAY_COMPLETED_ARCHIVE",
+              "既有办结事实归档；不重新认证旧法全条件",
+              "HISTORICAL_NOTE_ONLY",
+              "保留办理时间与证据索引，不把该已完成事项当5月后未办结事项重做。",
+              "项目法务",
+              "S01 items I/III"
+            ],
+            [
+              "B",
+              "manager_registration\n2023-04-20",
+              "MAY_NEW_REGISTRATION",
+              "新办法登记要求审阅，不是登记已经通过",
+              "LEGAL_REVIEW_PENDING",
+              "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+              "项目法务",
+              "S01 items I/III"
+            ],
+            [
+              "C",
+              "manager_registration\n2023-05-02",
+              "MAY_NEW_REGISTRATION",
+              "新办法登记要求审阅，不是登记已经通过",
+              "LEGAL_REVIEW_PENDING",
+              "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+              "项目法务",
+              "S01 items I/III"
+            ],
+            [
+              "D",
+              "manager_change\n2023-09-29",
+              "MAY_RELATED_CHANGE_REVIEW",
+              "相关变更事项符合新办法；不是全体存量条件重做",
+              "LEGAL_REVIEW_PENDING",
+              "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+              "项目法务",
+              "S01 items I/III; S01 item II"
+            ],
+            [
+              "E",
+              "manager_change\n2023-09-29",
+              "MAY_CONTROL_FULL_REVIEW",
+              "变更后管理人全面符合新办法登记要求的核查范围",
+              "LEGAL_REVIEW_PENDING",
+              "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+              "项目法务",
+              "S01 items I/III; S01 item II"
+            ],
+            [
+              "F",
+              "manager_change\n2023-09-29",
+              "UNDETERMINED",
+              "待证据确认",
+              "HOLD_PENDING_CLARIFICATION",
+              "暂停对该事项选定确定分支，核实同字段冲突；不按新便笺、文件顺序或营销要求选边。",
+              "合规负责人会同运营取证员",
+              "SOP：冲突未定，不猜分支"
+            ],
+            [
+              "G",
+              "fund_operation\n非本次报送事项",
+              "LEGACY_OPERATIONS_SCOPE",
+              "仅继续募集/投资运作可按原有规定，非一切新要求豁免",
+              "LEGAL_REVIEW_PENDING",
+              "保持该狭义存续运作分支，后续备案信息变更另走新要求审阅。",
+              "项目法务",
+              "S02 item II"
+            ],
+            [
+              "H",
+              "fund_change\n2023-09-29",
+              "GUIDE2_RELATED_CHANGE",
+              "相关变更事项符合新指引；不因已备案而免变更材料",
+              "HOLD_PENDING_CLARIFICATION",
+              "补齐缺失新托管协议或基金合同；已收三项仅为原创摘录，不宣称全套法律实体合规。",
+              "运营材料专员",
+              "S02 items I/II; S03 article2; S03 article27(II), opening paragraph"
+            ],
+            [
+              "I",
+              "fund_filing\n2023-09-29",
+              "GUIDE2_NEW_FILING",
+              "按新指引办理备案，完整条件交法务继续核查",
+              "HOLD_PENDING_CLARIFICATION",
+              "改掉禁止性名称词并核正确策略标识，回到法务审阅；不由经办人自行宣称获得例外。",
+              "基金设立经办人会同项目法务",
+              "S02 items I/II; S03 article2; S03 article9"
+            ],
+            [
+              "J",
+              "fund_filing\n2023-09-29",
+              "GUIDE2_NEW_FILING",
+              "按新指引办理备案，完整条件交法务继续核查",
+              "LEGAL_REVIEW_PENDING",
+              "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+              "项目法务",
+              "S02 items I/II; S03 article2; S03 article9"
+            ],
+            [
+              "K",
+              "fund_liquidation\n2023-09-29",
+              "GUIDE2_LIQUIDATION",
+              "按新指引办理清算业务；未认定清算已经完成",
+              "LEGAL_REVIEW_PENDING",
+              "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+              "项目法务",
+              "S02 items I/II; S03 article2"
+            ],
+            [
+              "L",
+              "fund_operation\n非本次报送事项",
+              "UNDETERMINED",
+              "待证据确认",
+              "HOLD_PENDING_CLARIFICATION",
+              "暂停对该事项选定确定分支，核实同字段冲突；不按新便笺、文件顺序或营销要求选边。",
+              "合规负责人会同运营取证员",
+              "SOP：冲突未定，不猜分支"
+            ],
+            [
+              "M",
+              "manager_change\n2023-04-20",
+              "MAY_RELATED_CHANGE_REVIEW",
+              "相关变更事项符合新办法；不是全体存量条件重做",
+              "LEGAL_REVIEW_PENDING",
+              "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+              "项目法务",
+              "S01 items I/III; S01 item II"
+            ],
+            [
+              "N",
+              "fund_filing\n2023-09-27",
+              "GUIDE2_PENDING_FILING",
+              "按新指引办理备案，完整条件交法务继续核查",
+              "LEGAL_REVIEW_PENDING",
+              "按对应新旧口径进入法务审阅，不代表全部实体条件已满足。",
+              "项目法务",
+              "S02 items I/II; S03 article2"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "证据核对"
+        },
+        {
+          "kind": "notice",
+          "text": "共15行 × 7列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "两主证据ID",
+              "忽略便笺ID",
+              "证据状态",
+              "采用事实",
+              "冲突字段",
+              "名称/材料组检查"
+            ],
+            [
+              "A",
+              "A-sys, A-cmp",
+              null,
+              "CONSISTENT",
+              "{\"action_completed_on\": \"2023-04-28\"}",
+              null,
+              "NOT_IN_LIMITED_SCOPE / "
+            ],
+            [
+              "B",
+              "B-sys, B-cmp",
+              null,
+              "CONSISTENT",
+              "{\"action_completed_on\": null}",
+              null,
+              "NOT_IN_LIMITED_SCOPE / "
+            ],
+            [
+              "C",
+              "C-sys, C-cmp",
+              null,
+              "CONSISTENT",
+              "{\"action_completed_on\": null}",
+              null,
+              "NOT_IN_LIMITED_SCOPE / "
+            ],
+            [
+              "D",
+              "D-sys, D-cmp",
+              null,
+              "CONSISTENT",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": false, \"action_completed_on\": null}",
+              null,
+              "NOT_IN_LIMITED_SCOPE / "
+            ],
+            [
+              "E",
+              "E-sys, E-cmp",
+              null,
+              "CONSISTENT",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": true, \"action_completed_on\": null}",
+              null,
+              "NOT_IN_LIMITED_SCOPE / "
+            ],
+            [
+              "F",
+              "F-sys, F-cmp",
+              "F-sales",
+              "CONFLICT",
+              "null",
+              "actual_control_change",
+              "NOT_IN_LIMITED_SCOPE / "
+            ],
+            [
+              "G",
+              "G-sys, G-cmp",
+              null,
+              "CONSISTENT",
+              "{\"filed_on\": \"2023-09-20\"}",
+              null,
+              "NOT_IN_LIMITED_SCOPE / "
+            ],
+            [
+              "H",
+              "H-sys, H-cmp",
+              null,
+              "CONSISTENT",
+              "{\"filed_on\": \"2023-09-20\"}",
+              null,
+              "NOT_IN_LIMITED_SCOPE / new_custody_agreement_or_fund_contract"
+            ],
+            [
+              "I",
+              "I-sys, I-cmp",
+              null,
+              "CONSISTENT",
+              "{\"filed_on\": null}",
+              null,
+              "RENAME_REQUIRED / "
+            ],
+            [
+              "J",
+              "J-sys, J-cmp",
+              null,
+              "CONSISTENT",
+              "{\"filed_on\": null}",
+              null,
+              "LIMITED_NAME_CHECK_OK / "
+            ],
+            [
+              "K",
+              "K-sys, K-cmp",
+              null,
+              "CONSISTENT",
+              "{\"filed_on\": \"2023-09-20\"}",
+              null,
+              "NOT_IN_LIMITED_SCOPE / "
+            ],
+            [
+              "L",
+              "L-sys, L-cmp",
+              "L-sales",
+              "CONFLICT",
+              "null",
+              "filed_on",
+              "NOT_IN_LIMITED_SCOPE / "
+            ],
+            [
+              "M",
+              "M-sys, M-cmp",
+              null,
+              "CONSISTENT",
+              "{\"registered_on\": \"2021-01-15\", \"actual_control_change\": false, \"action_completed_on\": null}",
+              null,
+              "NOT_IN_LIMITED_SCOPE / "
+            ],
+            [
+              "N",
+              "N-sys, N-cmp",
+              null,
+              "CONSISTENT",
+              "{\"filed_on\": null}",
+              null,
+              "NOT_IN_LIMITED_SCOPE / "
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "队列统计"
+        },
+        {
+          "kind": "notice",
+          "text": "共7行 × 3列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "指标",
+              "公式/结果",
+              "范围"
+            ],
+            [
+              "事项合计",
+              "=COUNTA(逐项分流!A2:A15)\n缓存：14",
+              "14原创训练事项"
+            ],
+            [
+              "暂停",
+              "=COUNTIF(逐项分流!E2:E15,\"HOLD_PENDING_CLARIFICATION\")\n缓存：4",
+              "F/H/I/L"
+            ],
+            [
+              "归档",
+              "=COUNTIF(逐项分流!E2:E15,\"HISTORICAL_NOTE_ONLY\")\n缓存：1",
+              "A"
+            ],
+            [
+              "法务待审",
+              "=COUNTIF(逐项分流!E2:E15,\"LEGAL_REVIEW_PENDING\")\n缓存：9",
+              "仅路由，非全部合规"
+            ],
+            [
+              "分流勾稽",
+              "=B3+B4+B5-B2\n缓存：0",
+              "应为0"
+            ],
+            [
+              "越级待报送",
+              "=COUNTIF(逐项分流!E2:E15,\"READY_TO_SUBMIT\")\n缓存：0",
+              "应为0；本包无报送授权"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [
+    {
+      "name": "amac-transition-triage",
+      "description": "历史双切换与平级证据冲突、内部待审门禁SOP；含实际分流helper，不作协会审批。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/FIN-TIME-003/environment/skills/amac-transition-triage/SKILL.md",
+          "bytes": 1666,
+          "sha256": "4078c54ab7bf49e7f22be2484699928be881b2afb21accb9d0e1e39b43807cee",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: amac-transition-triage\ndescription: Route the frozen 2023 AMAC registration and PE/VC filing transition packet, using the team's evidence-conflict and internal handoff SOP. Use for version/scope triage and targeted clarification, not filing submission, whole-fund compliance certification or current legal advice.\n---\n\n# AMAC transition triage\n\nRead [references/team-sop.json](references/team-sop.json). Its public-source\nanchors are distinct from the original team's evidence and dispatch rules.\nApply both layers: correct public-rule selection alone does not authorize\nchoosing between conflicting equal-authority case facts or bypassing review.\n\n```bash\npython3 scripts/triage.py --input-dir /app/input_files --out /app/output/skill_evidence.json\n```\n\nUse S01/S02 for the May 1 and September 28 transitions; S03 is an explicitly\nlabelled reader transcription of guideline2, not a downloaded original PDF.\nThe packet's custody check and two name checks are limited-scope checks,\nnot the complete conditions for a fund filing or manager registration.\n\nTwo primary evidence types have equal authority. A later note, file order or\na manager's wish cannot resolve their disagreement. Preserve the field,\nboth evidence IDs and the precise clarification requested. Do not manufacture\na replacement system receipt, approval or conclusion from a missing fact.\n\nAfter actual helper execution, build the editable worklist, review memo and\nunsent clarification drafts. A routed item remains an internal review item;\nno record may claim submission, AMAC approval or external contact. Do not\nmodify the installed Skill, raw evidence or cases to make the output pass.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "references/team-sop.json",
+          "absolute_path": "题包内：references/team-sop.json",
+          "url": "assets/tasks/FIN-TIME-003/environment/skills/amac-transition-triage/references/team-sop.json",
+          "bytes": 2441,
+          "sha256": "50761d6db7da8c8e11b47ae568407da0563d9aa0c5318adb728e43f176936cc5",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "{\n  \"schema\": \"amac-transition-triage/1\",\n  \"scope\": \"Original fictional team SOP, not an AMAC rule or real approval\",\n  \"as_of\": \"2023-09-29T10:00:00+08:00\",\n  \"public_source_dates\": {\n    \"notice5\": {\n      \"published_on\": \"2023-02-24\",\n      \"effective_on\": \"2023-05-01\",\n      \"source\": \"S01: announcement items I-III\"\n    },\n    \"notice21\": {\n      \"published_on\": \"2023-09-28\",\n      \"effective_on\": \"2023-09-28\",\n      \"source\": \"S02: announcement items I-III\"\n    },\n    \"guideline2\": {\n      \"effective_on\": \"2023-09-28\",\n      \"source\": \"S03: articles2/9/27/36\"\n    }\n  },\n  \"local_evidence\": {\n    \"equal_primary_types\": [\n      \"system_snapshot\",\n      \"compliance_attestation\"\n    ],\n    \"non_decisive_types\": [\n      \"sales_note\"\n    ],\n    \"required_same_observation_time\": \"2023-09-29T09:00:00+08:00\",\n    \"conflict_rule\": \"If either primary has a different value for the same field, do not choose by file/date/order. Mark HOLD_CONFLICT with both IDs, unresolved fields, owner and exact question. Missing a primary or required fact means HOLD_MISSING_EVIDENCE, not guessed consent.\",\n    \"clarification_owner\": \"合规负责人会同运营取证员\",\n    \"internal_reply_target\": \"2023-09-29 15:00 Asia/Shanghai; original internal target, not a statutory deadline\"\n  },\n  \"local_dispatch\": {\n    \"normal_stage\": \"LEGAL_REVIEW_PENDING\",\n    \"blocked_stage\": \"HOLD_PENDING_CLARIFICATION\",\n    \"archive_stage\": \"HISTORICAL_NOTE_ONLY\",\n    \"skip_to_ready_for_submit\": false,\n    \"all_external_submission_authorized\": false,\n    \"case_workflow_owner\": \"项目法务\",\n    \"material_owner\": \"运营材料专员\",\n    \"name_owner\": \"基金设立经办人会同项目法务\"\n  },\n  \"limited_material_check\": {\n    \"only_for\": \"fund_change/custodian\",\n    \"source\": \"S03 guideline2 article27\",\n    \"required_document_groups\": [\n      \"resolution\",\n      \"change_note\",\n      \"custodian_change_agreement\",\n      \"new_custody_agreement_or_fund_contract\"\n    ],\n    \"provided_excerpt_is_not_full_legal_validation\": true\n  },\n  \"limits\": [\n    \"This helper routes historical packet facts, not live AMAC status.\",\n    \"A completed pre-May case is archived under the stated former processing period, not re-certified under every old requirement.\",\n    \"Legacy operations permission is confined to the announcement's continued fundraising/investment operation scope, not blanket exemption.\",\n    \"No full capital/investor/AML/custody or manager-control eligibility assessment is performed.\",\n    \"No statutory working-day due date is computed without the necessary calendar/start evidence.\"\n  ]\n}"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "scripts/triage.py",
+          "absolute_path": "题包内：scripts/triage.py",
+          "url": "assets/tasks/FIN-TIME-003/environment/skills/amac-transition-triage/scripts/triage.py",
+          "bytes": 11444,
+          "sha256": "2fe7e20ae1a075faf66a4af672ca53fa92da624145db18f8d4e690941bcc8cef",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "\"\"\"Actual offline routing helper under an explicit local evidence SOP.\"\"\"\nimport argparse,datetime,hashlib,json\nfrom pathlib import Path\nfrom openpyxl import load_workbook\n\nNAMES=['S01_五月切换公告选摘.docx','S02_九月切换公告选摘.docx','S03_指引2阅读器全文.docx','S04_受理事项.json','S05_证据登记.xlsx','S06_材料登记.xlsx','S07_H变更文件摘录.docx','S08_工作委托.docx']\nSKILL=Path(__file__).resolve().parents[1]\nPOLICY=SKILL/'references/team-sop.json'\n\ndef sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()\ndef date(v):return datetime.date.fromisoformat(v) if v else None\ndef xrows(p):\n    w=load_workbook(p,data_only=True);rows=list(w.active.values);head=rows.pop(0);w.close()\n    return [dict(zip(head,r)) for r in rows]\n\ndef run(inp):\n    policy=json.loads(POLICY.read_text());packet=json.loads((inp/NAMES[3]).read_text())\n    asof=datetime.datetime.fromisoformat(packet['as_of'])\n    if asof.tzinfo is None or packet['as_of']!=policy['as_of']:raise ValueError('Wrong frozen business time/SOP')\n    may=date(policy['public_source_dates']['notice5']['effective_on']);sep=date(policy['public_source_dates']['notice21']['effective_on'])\n    evidence=xrows(inp/NAMES[4]);materials=xrows(inp/NAMES[5]);cases=packet['cases']\n    ids=[c['case_id'] for c in cases]\n    if len(set(ids))!=len(ids):raise ValueError('Duplicate case ID')\n    if any(r['case_id'] not in ids for r in evidence+materials):raise ValueError('Orphan evidence/material')\n    evidids=[r['evidence_id'] for r in evidence]\n    if len(set(evidids))!=len(evidids):raise ValueError('Duplicate evidence ID')\n    validtypes=policy['local_evidence']['equal_primary_types']+policy['local_evidence']['non_decisive_types']\n    for r in evidence:\n        if r['kind'] not in validtypes:raise ValueError('Unknown evidence authority')\n        when=datetime.datetime.fromisoformat(r['recorded_at']);observed=datetime.datetime.fromisoformat(r['observed_as_of'])\n        if when.tzinfo is None or observed.tzinfo is None or when>asof or observed>when:raise ValueError('Invalid/future evidence time')\n        if r['observed_as_of']!=policy['local_evidence']['required_same_observation_time']:raise ValueError('Evidence observation time mismatch')\n    result=[]\n    for case in cases:\n        cid=case['case_id'];op=case['operation'];submitted=date(case['action_submitted_on'])\n        if submitted and submitted>asof.date():raise ValueError('Future application date')\n        docs=[r for r in evidence if r['case_id']==cid]\n        primary=[r for r in docs if r['kind'] in policy['local_evidence']['equal_primary_types']]\n        ignored=[r['evidence_id'] for r in docs if r['kind'] in policy['local_evidence']['non_decisive_types']]\n        row=dict(case_id=cid,operation=op,action_submitted_on=case['action_submitted_on'],evidence_ids=[r['evidence_id'] for r in primary],ignored_note_ids=ignored,evidence_state='CONSISTENT',adopted_facts=None,conflict_fields=[],route='UNDETERMINED',review_scope='待证据确认',source_basis=[],material_gaps=[],name_check='NOT_IN_LIMITED_SCOPE',dispatch_stage=policy['local_dispatch']['normal_stage'],next_owner=policy['local_dispatch']['case_workflow_owner'],next_action='按对应新旧口径进入法务审阅，不代表全部实体条件已满足。',clarification_question=None,external_submission_authorized=False)\n        if len(primary)!=2 or {r['kind'] for r in primary}!=set(policy['local_evidence']['equal_primary_types']):\n            row.update(evidence_state='MISSING',dispatch_stage=policy['local_dispatch']['blocked_stage'],next_owner=policy['local_evidence']['clarification_owner'],next_action='补齐两个同观察时点的原始证据，不以销售便笺代替。',clarification_question=f'{cid}：请补齐system_snapshot及compliance_attestation在09:00的原始证据及适用字段。');result.append(row);continue\n        facts=[json.loads(r['facts_json']) for r in primary]\n        conflicts=[k for k in set(facts[0])|set(facts[1]) if facts[0].get(k)!=facts[1].get(k)]\n        if conflicts:\n            row.update(evidence_state='CONFLICT',conflict_fields=sorted(conflicts),dispatch_stage=policy['local_dispatch']['blocked_stage'],next_owner=policy['local_evidence']['clarification_owner'],next_action='暂停对该事项选定确定分支，核实同字段冲突；不按新便笺、文件顺序或营销要求选边。',clarification_question=f\"{cid}：请对{','.join(sorted(conflicts))}确认09:00的真实值，并说明{','.join(row['evidence_ids'])}何者需受控更正及依据；未获澄清前保留冲突。\");result.append(row);continue\n        f=facts[0];row['adopted_facts']=f\n        required=['action_completed_on'] if op=='manager_registration' else ['registered_on','actual_control_change','action_completed_on'] if op=='manager_change' else ['filed_on']\n        if any(k not in f for k in required):\n            row.update(evidence_state='MISSING',dispatch_stage=policy['local_dispatch']['blocked_stage'],next_action='缺必要事实，补证后再分流。',clarification_question=f'{cid}：请补充必要字段{required}及可追溯依据。');result.append(row);continue\n        for key in ['registered_on','filed_on','action_completed_on']:\n            value=date(f.get(key))\n            if value and value>asof.date():raise ValueError('Future established fact')\n        if op in ['manager_registration','manager_change']:\n            if submitted is None:raise ValueError('Manager action needs submission date')\n            completed=date(f['action_completed_on'])\n            if completed and completed<submitted:raise ValueError('Completion precedes submission')\n            row['source_basis']=['S01 items I/III']\n            if submitted<may and completed and completed<may:\n                row.update(route='PRE_MAY_COMPLETED_ARCHIVE',review_scope='既有办结事实归档；不重新认证旧法全条件',dispatch_stage=policy['local_dispatch']['archive_stage'],next_action='保留办理时间与证据索引，不把该已完成事项当5月后未办结事项重做。')\n            elif op=='manager_registration':row.update(route='MAY_NEW_REGISTRATION',review_scope='新办法登记要求审阅，不是登记已经通过')\n            else:\n                registered=date(f['registered_on'])\n                if registered is None or registered>=submitted or not isinstance(f['actual_control_change'],bool):raise ValueError('Existing manager/change nature not established')\n                row['source_basis']+=['S01 item II']\n                row.update(route='MAY_CONTROL_FULL_REVIEW' if f['actual_control_change'] else 'MAY_RELATED_CHANGE_REVIEW',review_scope='变更后管理人全面符合新办法登记要求的核查范围' if f['actual_control_change'] else '相关变更事项符合新办法；不是全体存量条件重做')\n        elif op=='fund_operation':\n            filed=date(f['filed_on']);row['source_basis']=['S02 item II']\n            if filed and filed<sep:row.update(route='LEGACY_OPERATIONS_SCOPE',review_scope='仅继续募集/投资运作可按原有规定，非一切新要求豁免',next_action='保持该狭义存续运作分支，后续备案信息变更另走新要求审阅。')\n            else:row.update(evidence_state='MISSING',dispatch_stage=policy['local_dispatch']['blocked_stage'],next_action='不具备明确9月28日前已备案依据，不能使用存续运作例外。',clarification_question=f'{cid}：请补9月28日前实际备案完成日期及对应证据。')\n        elif op in ['fund_filing','fund_change','fund_liquidation']:\n            if case['fund_kind'] not in ['PE','VC']:raise ValueError('Outside PE/VC packet scope')\n            row['source_basis']=['S02 items I/II','S03 article2']\n            if op=='fund_filing':row.update(route='GUIDE2_PENDING_FILING' if submitted and submitted<sep else 'GUIDE2_NEW_FILING',review_scope='按新指引办理备案，完整条件交法务继续核查')\n            elif op=='fund_change':row.update(route='GUIDE2_RELATED_CHANGE',review_scope='相关变更事项符合新指引；不因已备案而免变更材料')\n            else:row.update(route='GUIDE2_LIQUIDATION',review_scope='按新指引办理清算业务；未认定清算已经完成')\n            if op=='fund_change' and case.get('change_kind')=='custodian':\n                subset=[r for r in materials if r['case_id']==cid];given={r['doc_type']:r['status'] for r in subset}\n                if len(given)!=len(subset):raise ValueError('Duplicate material group')\n                row['material_gaps']=[k for k in policy['limited_material_check']['required_document_groups'] if given.get(k)!='provided_excerpt']\n                row['source_basis']+=['S03 article27(II), opening paragraph']\n                if row['material_gaps']:row.update(dispatch_stage=policy['local_dispatch']['blocked_stage'],next_owner=policy['local_dispatch']['material_owner'],next_action='补齐缺失新托管协议或基金合同；已收三项仅为原创摘录，不宣称全套法律实体合规。',clarification_question=f\"{cid}：请补{','.join(row['material_gaps'])}的有效新文本；三项旧摘录不替代新协议组。\")\n            if op=='fund_filing' and case.get('check_name'):\n                name=case['fund_name'];forbidden=any(w in name for w in ['理财','资管产品','资管计划'])\n                permitted=('股权基金' in name or '股权投资' in name) if case['fund_kind']=='PE' else ('创业投资基金' in name or case['legal_form'] in ['company','partnership'] and '从事创业投资活动' in case['business_scope'])\n                row['name_check']='RENAME_REQUIRED' if forbidden or not permitted else 'LIMITED_NAME_CHECK_OK'\n                row['source_basis']+=['S03 article9']\n                if row['name_check']=='RENAME_REQUIRED':row.update(dispatch_stage=policy['local_dispatch']['blocked_stage'],next_owner=policy['local_dispatch']['name_owner'],next_action='改掉禁止性名称词并核正确策略标识，回到法务审阅；不由经办人自行宣称获得例外。',clarification_question=f'{cid}：请提出不含理财等禁词、符合股权/创投策略标识的新名称供法务核定。')\n        else:raise ValueError('Unsupported operation')\n        result.append(row)\n    return dict(as_of=packet['as_of'],executor='amac-transition-triage',local_sop_schema=policy['schema'],input_sha256={n:sha(inp/n) for n in NAMES},skill_sha256={str(p.relative_to(SKILL)):sha(p) for p in [SKILL/'SKILL.md',POLICY,Path(__file__).resolve()]},cases=result,counts={'total':len(result),'hold':sum(r['dispatch_stage']==policy['local_dispatch']['blocked_stage'] for r in result),'archive':sum(r['dispatch_stage']==policy['local_dispatch']['archive_stage'] for r in result),'legal_review_pending':sum(r['dispatch_stage']==policy['local_dispatch']['normal_stage'] for r in result)},external_submission_authorized=False,scope='Actual local SOP execution on fictional cases and real frozen rule excerpts. Not live AMAC data, filing approval, full compliance or a trusted execution signature.')\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--input-dir',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args();r=run(a.input_dir)\n    a.out.parent.mkdir(parents=True,exist_ok=True);a.out.write_text(json.dumps(r,ensure_ascii=False,indent=2)+'\\n');print(json.dumps(r['counts']))\n\nif __name__=='__main__':main()\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    }
+  ],
+  "renders": [
+    {
+      "name": "followup_requests.pdf",
+      "url": "assets/audit/render/FIN-TIME-003/20261020T224956Z/followup_requests.pdf"
+    },
+    {
+      "name": "review_memo.pdf",
+      "url": "assets/audit/render/FIN-TIME-003/20261020T224956Z/review_memo.pdf"
+    },
+    {
+      "name": "triage_workbook.pdf",
+      "url": "assets/audit/render/FIN-TIME-003/20261020T224956Z/triage_workbook.pdf"
+    }
+  ]
+}

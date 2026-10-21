@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>城市服务预约 · 无障碍交互原型</title>
+<style>
+*{box-sizing:border-box}html{scroll-padding-bottom:130px}body{margin:0;background:#f3f6f7;color:#172c35;font:17px/1.65 system-ui,sans-serif;padding-bottom:130px}header,main,aside{max-width:900px;margin:auto;padding:24px}header{padding-bottom:0}.eyebrow{color:#365968;font-weight:700}h1{font-size:clamp(26px,5vw,38px);line-height:1.25}h2{line-height:1.35}section,aside{background:white;border:1px solid #b9cad0;border-radius:12px;margin-bottom:24px;padding:24px}aside{width:calc(100% - 48px)}button,input{font:inherit}button,a.action{min-width:44px;min-height:44px;padding:10px 16px;border:2px solid #245968;border-radius:7px;background:#fff;color:#163f4c;cursor:pointer}button.primary{background:#175668;color:#fff}button:disabled{opacity:.65;cursor:default}input{width:100%;max-width:440px;min-height:48px;border:2px solid #496874;border-radius:6px;padding:8px;display:block;margin:6px 0 18px}label{font-weight:600}:focus-visible{outline:3px solid #1437c4;outline-offset:3px}button,a,input,summary,h2{scroll-margin-block:24px 140px}.notice{padding:14px;border-left:5px solid #245968;background:#edf4f6}.steps{display:flex;gap:20px;padding:0;list-style:none}.steps [aria-current]{font-weight:800;border-bottom:3px solid}ol.requests{padding-left:30px}.requests li{margin-bottom:16px;padding:12px;background:#f2f6f7}.requests button{margin:5px 5px 0 0}.actions{display:flex;flex-wrap:wrap;gap:12px}.dock{position:fixed;bottom:0;left:0;right:0;background:#163f4c;color:white;padding:12px 24px;font-size:15px;z-index:2}#help-content{padding-top:12px}[hidden]{display:none!important}#live{min-height:2em;color:#163f4c;font-weight:600}small{display:block}a{color:#173fa0} @media(max-width:500px){header,main{padding:16px}aside{width:calc(100% - 32px)}section{padding:18px}.dock{padding:10px 16px}}
+</style>
+<header><p class="eyebrow">CityConnect / 预约体验演示</p><h1>让服务预约，不再重复与费力</h1><p class="notice">离线原型，不连接真实政务、邮箱或身份服务。认证和提交均为本机模拟，不发送邮件，不保存个人信息。请仅输入虚构资料。</p><ol class="steps" aria-label="预约步骤"><li id="step-label-1" aria-current="step">1. 资料与模拟认证</li><li id="step-label-2">2. 服务顺序与确认</li></ol></header>
+<main id="main">
+<section id="screen1" aria-labelledby="title1">
+<h2 id="title1" tabindex="-1">第一步：填写预约资料</h2>
+<form id="identity-form"><label for="name">称呼（示例资料）</label><input id="name" name="name" autocomplete="name" required placeholder="例如：示例用户"><label for="email">邮箱（只在本机使用）</label><input id="email" name="email" type="email" autocomplete="email" required placeholder="demo@example.invalid"><button class="primary" type="submit">生成本机模拟登录链接</button></form>
+<div id="inbox" hidden><h3>本机模拟收件箱</h3><p>演示链接已在本机生成，未发送邮件。此流程不要求背诵密码或转录验证码。</p><button id="auth">打开模拟链接并继续</button></div>
+</section>
+<section id="screen2" aria-labelledby="title2" hidden>
+<h2 id="title2" tabindex="-1">第二步：确认服务与资料</h2><p>资料来自同一预约过程的上一步。无需重复输入；需要时可以修改。</p>
+<label for="confirm-name">预约称呼</label><input id="confirm-name" autocomplete="name" required><label for="confirm-email">联系邮箱</label><input id="confirm-email" type="email" autocomplete="email" required>
+<h3>调整服务顺序</h3><p>使用“上移”“下移”即可调整，无需按住鼠标拖动。</p>
+<ol id="requests" class="requests"><li data-id="A"><span>创业咨询</span><div><button type="button" data-move="-1" aria-label="上移创业咨询">上移</button><button type="button" data-move="1" aria-label="下移创业咨询">下移</button></div></li><li data-id="B"><span>材料预审</span><div><button type="button" data-move="-1" aria-label="上移材料预审">上移</button><button type="button" data-move="1" aria-label="下移材料预审">下移</button></div></li><li data-id="C"><span>办理指引</span><div><button type="button" data-move="-1" aria-label="上移办理指引">上移</button><button type="button" data-move="1" aria-label="下移办理指引">下移</button></div></li></ol>
+<div class="actions"><button id="back" type="button">返回第一步</button><button id="submit" class="primary" type="button">生成本机预约摘要</button></div>
+<div id="summary" hidden><h3>本机预约摘要</h3><p id="summary-text"></p><p>未提交至任何服务系统。此原型不代表完成身份核验、预约或WCAG全站认证。</p></div>
+</section>
+<p id="live" role="status" aria-live="polite"></p>
+</main>
+<aside aria-label="预约帮助"><h2>预约帮助</h2><p>在两个步骤中，此入口都在主要任务内容之后、底部提示之前；并非仅靠固定屏幕坐标。</p><button id="help" aria-expanded="false" aria-controls="help-content">展开操作帮助</button><div id="help-content" hidden><p>资料只留在当前页面内存。生成本机模拟链接后，点击“打开模拟链接并继续”。第二步可调整顺序或返回修改。刷新页面会清空资料。遇到真实服务问题，应通过实际服务渠道联系工作人员。</p></div></aside>
+<footer class="dock">离线交互样例 · 目标为新增A/AA准则的组件示范，不是全站符合性声明。</footer>
+<script>
+const $=id=>document.getElementById(id), state={name:'',email:''};
+const say=text=>{$('live').textContent=text};
+function show(n){$('screen1').hidden=n!==1;$('screen2').hidden=n!==2;for(let i=1;i<=2;i++){if(i===n)$('step-label-'+i).setAttribute('aria-current','step');else $('step-label-'+i).removeAttribute('aria-current')}$(n===1?'title1':'title2').focus()}
+$('identity-form').addEventListener('submit',e=>{e.preventDefault();state.name=$('name').value;state.email=$('email').value;$('inbox').hidden=false;$('auth').focus();say('本机模拟链接已生成；未发送邮件。')});
+$('auth').addEventListener('click',()=>{$('confirm-name').value=state.name;$('confirm-email').value=state.email;show(2);say('已进入本机模拟认证后的预约步骤，资料已自动带入。')});
+$('back').addEventListener('click',()=>{state.name=$('confirm-name').value;state.email=$('confirm-email').value;$('name').value=state.name;$('email').value=state.email;show(1);say('修改后的资料已保留。')});
+$('requests').addEventListener('click',e=>{const b=e.target.closest('button[data-move]');if(!b)return;const li=b.closest('li'),dir=Number(b.dataset.move),other=dir<0?li.previousElementSibling:li.nextElementSibling;if(!other){say('已在'+(dir<0?'首位':'末位')+'，顺序保持不变。');return}if(dir<0)li.before(other) /* swap below corrects upward order */;if(dir<0)other.before(li);else other.after(li);b.focus();say(li.querySelector('span').textContent+'已移至第'+([...li.parentNode.children].indexOf(li)+1)+'位。')});
+$('submit').addEventListener('click',()=>{for(const id of ['confirm-name','confirm-email'])if(!$(id).reportValidity())return;$('summary').hidden=false;const order=[...$('requests').children].map(li=>li.querySelector('span').textContent).join(' → ');$('summary-text').textContent=$('confirm-name').value+'；'+$('confirm-email').value+'；服务顺序：'+order;say('本机摘要已更新；没有实际预约提交。')});
+$('help').addEventListener('click',()=>{const opened=$('help').getAttribute('aria-expanded')==='true';$('help').setAttribute('aria-expanded',String(!opened));$('help-content').hidden=opened});
+document.addEventListener('focusin',e=>{requestAnimationFrame(()=>{const r=e.target.getBoundingClientRect(),top=document.querySelector('.dock').getBoundingClientRect().top;if(r.bottom>top-12||r.top<12)e.target.scrollIntoView({block:'center',behavior:'instant'})})});
+</script>
+</html>

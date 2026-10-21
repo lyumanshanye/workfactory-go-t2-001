@@ -1,0 +1,307 @@
+{
+  "task_id": "MED-TIME-004",
+  "executed_at_utc": "2026-10-21T02:55:34.563028+00:00",
+  "sop_id": "LOCAL-QM-20261020-R2",
+  "input_sha256": {
+    "S06_受控维修证据.json": "43a193d59104ec59deb9aab463e83efced7b970b7813005e251b453c84c10a21",
+    "S05_设备冻结清单.xlsx": "b2a4a9f17a2a3c87923e7b977cd3899aa998b546a829d6258dbd73b476402028",
+    "S11_来源与字段登记.docx": "621a6b8c98acb4b92a9d191ad17aec076ac61a58eb15c9f8fc32365f93339283",
+    "S09_D0批量放行草稿.docx": "284e77f5a09d0b83dc6a6e7a5b9dddae1ffa489e26671b98106e3221d9c46818",
+    "S10_质量负责人工作委托.docx": "4c35f5e9b81efc09db4e7fe30773c0ebcf10e7e44b5b41258dd31efe856c6675",
+    "S02_FDA2024电源事件全文.docx": "c1b82e53de310fd6468685b60ae8344d791612d1cec4d66ab642b539f2a4c97e",
+    "S04_FDA五月更新邮件全文.docx": "a926a227f0a1822187beb3281f30f7c226c3e8a75d100b3400a783d20a03cb74",
+    "S07_历史与培训登记.csv": "c4b4f2ee18f70bf17beda7c9a3d1ea47574021456ac3d165d375a3d156e9c1db",
+    "S01_FDA当前更正通报全文.docx": "9690861b00565c90318c558fc09fa25f163a48c0aa6bc37bdbcf4b4d9694e552",
+    "S08_转出设备沟通登记.xlsx": "b778aa442b7b9ccc7bc2f7525e40c5e8feab5e6594b4783d61f896ca008d2f98",
+    "S03_FDA四月邮件全文.docx": "fcd908ddc99b0c04e3a65651c78286e0780211178fe99d71e5d8dde50286974e"
+  },
+  "skill_sha256": {
+    "SKILL.md": "c42a811192a9ba3e4d082ca42a9e31081b752eb887598d2f5eb4a2cfe158cc04",
+    "references/team-sop.json": "97e8ec165fcb80586607246cb0207d4c421a996b8611101c46668a4dba7d149a",
+    "scripts/review.py": "45139ff7ce8d1074476563cf601e85512de3a3c2f01fca3b57785e3026bdc73a"
+  },
+  "service_observation": "2026-10-20T09:00:00-04:00",
+  "assets": [
+    {
+      "asset_id": "D01",
+      "model": "DS2110X11B",
+      "udi_di": "00606959051942",
+      "custody": "on_site",
+      "state": "READY_FOR_AUTHORIZED_REVIEW",
+      "adopted_service_ids": [
+        "SVC-D01-A"
+      ],
+      "observed_versions": [
+        "1.05.15.00"
+      ],
+      "gaps": [],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D02",
+      "model": "DS2200X11B",
+      "udi_di": "00606959052017",
+      "custody": "on_site",
+      "state": "ACTION_PENDING",
+      "adopted_service_ids": [
+        "SVC-D02-A"
+      ],
+      "observed_versions": [
+        "1.05.06.00"
+      ],
+      "gaps": [
+        "版本非冻结美国通知目标，核型号/地区适用及更新；不得自行降级"
+      ],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D03",
+      "model": "DS2100X11B",
+      "udi_di": "00606959051997",
+      "custody": "on_site",
+      "state": "ACTION_PENDING",
+      "adopted_service_ids": [
+        "SVC-D03-A"
+      ],
+      "observed_versions": [
+        "1.05.15.00"
+      ],
+      "gaps": [
+        "历史传感器沉积事项尚未服务闭环，软件更新不能代替"
+      ],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D04",
+      "model": "DS2000X11B",
+      "udi_di": "00606959052000",
+      "custody": "on_site",
+      "state": "ACTION_PENDING",
+      "adopted_service_ids": [
+        "SVC-D04-A"
+      ],
+      "observed_versions": [
+        "1.05.15.00"
+      ],
+      "gaps": [
+        "最新使用手册补充说明未完成核验"
+      ],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D05",
+      "model": "DS2110X11B",
+      "udi_di": "00606959051942",
+      "custody": "on_site",
+      "state": "ACTION_PENDING",
+      "adopted_service_ids": [
+        "SVC-D05-A"
+      ],
+      "observed_versions": [
+        "1.05.15.00"
+      ],
+      "gaps": [
+        "新版雾化指导告知/培训未确认"
+      ],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D06",
+      "model": "DS2200X11B",
+      "udi_di": "00606959052017",
+      "custody": "transferred",
+      "state": "ACTION_PENDING",
+      "adopted_service_ids": [
+        "SVC-D06-A"
+      ],
+      "observed_versions": [
+        "1.05.15.00"
+      ],
+      "gaps": [
+        "转出接收方未确认新版通知及补充说明，须追踪沟通"
+      ],
+      "transfer_recipient": "合作机构甲设备管理员",
+      "transfer_current_ack": false,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D07",
+      "model": "DS2100X11B",
+      "udi_di": "00606959051997",
+      "custody": "transferred",
+      "state": "ACTION_PENDING",
+      "adopted_service_ids": [
+        "SVC-D07-A"
+      ],
+      "observed_versions": [
+        "1.05.15.00"
+      ],
+      "gaps": [
+        "转出接收方未确认新版通知及补充说明，须追踪沟通"
+      ],
+      "transfer_recipient": "合作机构乙呼吸治疗接口",
+      "transfer_current_ack": false,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D08",
+      "model": "DS2110X11B",
+      "udi_di": "00606959052017",
+      "custody": "on_site",
+      "state": "HOLD_IDENTITY",
+      "adopted_service_ids": [],
+      "observed_versions": [],
+      "gaps": [
+        "型号/UDI-DI不一致或缺失，需实物身份核查"
+      ],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D09",
+      "model": "DS2110X11B",
+      "udi_di": "00606959051942",
+      "custody": "on_site",
+      "state": "HOLD_SERVICE_CONFLICT",
+      "adopted_service_ids": [
+        "SVC-D09-A",
+        "SVC-D09-B"
+      ],
+      "observed_versions": [
+        "1.05.06.00",
+        "1.05.15.00"
+      ],
+      "gaps": [
+        "同观察时点平级维修证据矛盾，不能择新消息覆盖"
+      ],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D10",
+      "model": "TR100-GIVEN-NONMATCH",
+      "udi_di": "题给非四组UDI",
+      "custody": "on_site",
+      "state": "OUTSIDE_GIVEN_MATRIX",
+      "adopted_service_ids": [],
+      "observed_versions": [],
+      "gaps": [
+        "S01四型号矩阵未匹配，非其他召回均已排除"
+      ],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D11",
+      "model": "DS2100X11B",
+      "udi_di": "00606959051997",
+      "custody": "on_site",
+      "state": "ACTION_PENDING",
+      "adopted_service_ids": [
+        "SVC-D11-A"
+      ],
+      "observed_versions": [
+        "UNKNOWN"
+      ],
+      "gaps": [
+        "缺当前软件实证，需临床工程核查",
+        "历史雾化/传感器情况未知，需核查而非填无风险"
+      ],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D12",
+      "model": "DS2000X11B",
+      "udi_di": "00606959052000",
+      "custody": "on_site",
+      "state": "ACTION_PENDING",
+      "adopted_service_ids": [
+        "SVC-D12-A"
+      ],
+      "observed_versions": [
+        "1.05.15.00"
+      ],
+      "gaps": [
+        "新版雾化指导告知/培训未确认"
+      ],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D13",
+      "model": "DS2110X11B",
+      "udi_di": "00606959051942",
+      "custody": "transferred",
+      "state": "READY_FOR_AUTHORIZED_REVIEW",
+      "adopted_service_ids": [
+        "SVC-D13-A"
+      ],
+      "observed_versions": [
+        "1.05.15.00"
+      ],
+      "gaps": [],
+      "transfer_recipient": "合作机构丙设备管理员",
+      "transfer_current_ack": true,
+      "clinical_release": false,
+      "external_send": false
+    },
+    {
+      "asset_id": "D14",
+      "model": "DS2200X11B",
+      "udi_di": "00606959052017",
+      "custody": "on_site",
+      "state": "ACTION_PENDING",
+      "adopted_service_ids": [
+        "SVC-D14-A"
+      ],
+      "observed_versions": [
+        "1.06.15.00"
+      ],
+      "gaps": [
+        "版本非冻结美国通知目标，核型号/地区适用及更新；不得自行降级"
+      ],
+      "transfer_recipient": null,
+      "transfer_current_ack": null,
+      "clinical_release": false,
+      "external_send": false
+    }
+  ],
+  "counts": {
+    "HOLD_IDENTITY": 1,
+    "HOLD_SERVICE_CONFLICT": 1,
+    "ACTION_PENDING": 9,
+    "READY_FOR_AUTHORIZED_REVIEW": 2,
+    "OUTSIDE_GIVEN_MATRIX": 1
+  },
+  "clinical_release": false,
+  "external_send": false,
+  "scope": "Actual deterministic internal evidence gate, fictional records; not FDA or clinical authorization, not a solver trajectory."
+}

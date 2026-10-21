@@ -1,0 +1,803 @@
+{
+  "id": "GA-TIME-002",
+  "title": "Godot4.4.1菜单与玩法输入分流：真实暂停及键盘恢复",
+  "domain": "游戏",
+  "domain_l2": "Ga1-引擎与交互开发",
+  "domain_l3": "UI与游戏输入优先级",
+  "category": "weakness-driven",
+  "complexity": "C2",
+  "target_difficulty": "A2",
+  "as_of": "2025-06-16 10:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "官方Godot4.4技术事实摘要与真实4.4.1运行，工程/消息/玩法R2均原创；非官方游戏或发布规范。",
+  "instruction": "# Godot4.4.1菜单与玩法输入分流：真实暂停及键盘恢复\n\n## 业务场景与任务说明\n\n你接手一个原创Godot原型：UI点击会先触发世界开火，暂停后路由/菜单又失灵。R1背景关闭草案已被R2替换，而更晚的外包建议想删交互赶工。请修完整可运行工程，保留世界输入、菜单、暂停、滑块、文本及键盘恢复，实测而非全局禁用输入。\n\n业务判断基准时点：2025-06-16 10:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/starter_game/project.godot`：原创4.4.1待修工程源码；只读输入，复制后修复。\n- `/app/input_files/starter_game/main.tscn`：原创4.4.1待修工程源码；只读输入，复制后修复。\n- `/app/input_files/starter_game/main.gd`：原创4.4.1待修工程源码；只读输入，复制后修复。\n- `/app/input_files/starter_game/world.gd`：原创4.4.1待修工程源码；只读输入，复制后修复。\n- `/app/input_files/S01_Godot4_4依据摘要.docx`：作者中文摘要/精确4.4官方链接及抓取/许可边界，非完整官方译文。\n- `/app/input_files/S02_原创变更与验收.docx`：原创R1/R2/晚未批准建议及六组行为/交付合同，不是官方玩法规则。\n\n## 工作要求\n\n- [Q1] 交可独立运行的Godot4.4.1修复工程，保留世界左键/Space开火、Right步进与真实HUD，无UI处不能全屏吞输入。\n- [Q2] GUI先于玩法消费：菜单按钮/装饰点击不附带开火；R2背景吸收、不关闭；不能全部IGNORE造成穿透。\n- [Q3] 菜单使用真实暂停，世界tick/输入停而UI继续，不能删暂停或全局停输入。\n- [Q4] 滑块、文本、鼠标/Enter恢复与Esc单次非echo开关均可用，UI按键不触发玩法。\n- [Q5] 恢复后玩法重新工作，计数/设置保留；两窗口尺寸布局均可交互。\n- [Q6] 交源码、实际引擎事件回放及观察JSON、交接说明，覆盖前述要求且不编未跑检查/设备/发布结论；输入只读，最终目录无缓存。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/fixed_game/project.godot`：修复工程源码/真实事件回放脚本；独立可运行，不含缓存。\n- `/app/output/fixed_game/main.tscn`：修复工程源码/真实事件回放脚本；独立可运行，不含缓存。\n- `/app/output/fixed_game/main.gd`：修复工程源码/真实事件回放脚本；独立可运行，不含缓存。\n- `/app/output/fixed_game/world.gd`：修复工程源码/真实事件回放脚本；独立可运行，不含缓存。\n- `/app/output/fixed_game/input_probe.gd`：修复工程源码/真实事件回放脚本；独立可运行，不含缓存。\n- `/app/output/input_evidence.json`：真实引擎观察/哈希/失败与范围，不是评分或设备普适结论。\n- `/app/output/handoff.md`：R2取舍、技术修复、复现命令和未验范围的交接。\n\n## 硬约束（单独列明）\n\n- 只交规定7个物理文件到/app/output/，不加压缩包或生成缓存；修改的是复制工程，不动输入。\n- Godot4.4.1；不得以更换引擎、删玩法/键盘/控件或不暂停世界绕过要求。\n- R2是最终有权要求，R1和外包晚建议不可替代；素材/代码/消息均为原创训练情境。\n- 可以改内部结构/视觉，不固定变量名或逐字代码；回放必须真实注入/观察，不伪造外部QA或设备/发布通过。\n",
+  "instruction_url": "assets/tasks/GA-TIME-002/instruction.md",
+  "absolute_path": "tasks/GA-TIME-002",
+  "spec_path": "manifest/GA-TIME-002.json",
+  "spec_url": "manifest/GA-TIME-002.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "工程在规定4.4.1可打开运行main.tscn，无缺资源/解析/脚本错误；不是只交回放器或截图。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "实际独立引擎导入/主场景启动。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R02",
+      "description": "菜单关闭时世界左键pressed只开火一次，release不另开火，HUD读真实计数，不以禁用所有输入作修复。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "实际注入世界鼠标按下/松开，观察计数。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R03",
+      "description": "Space开火、Right步进在世界输入可用时工作，不能为了修UI删除键盘玩法。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "世界实际按键事件及位置/计数。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R04",
+      "description": "点击菜单按钮及其装饰区域能打开菜单，且该次事件不附带世界开火；只修按钮本体但图标仍抢点击不通过。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "实际分别点按钮/图标区域，前后shots与open。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R05",
+      "description": "按最终R2菜单背景点击只消费、不关菜单，也不传给世界；不沿用R1任意背景关闭。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "实际背景区域点击，菜单仍开、shots不变。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R06",
+      "description": "玩法使用GUI有机会消费后的输入路径或等价有证据的分流，不能把仅改变mouse_filter当能逆转先_input已开火的充分修复。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "源代码传播顺序与实际点击双重核对，允许等价实现。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R07",
+      "description": "打开菜单时SceneTree.paused为true，世界物理tick在暂停区间不增加；不能只放遮罩而玩法继续跑。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "实际暂停区间tick前后/paused观察，不要求固定绝对tick。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R08",
+      "description": "暂停时滑块可鼠标调整、文本框可输入，不能继承暂停导致UI完全停用或删控件。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3",
+        "Q4"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "真实GUI滑块/文本注入，非直接设置value/text伪造。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R09",
+      "description": "暂停UI使用的Right等键不移动/开火到世界，控件焦点输入与玩法隔离。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "聚焦滑块/文本时发键事件，world计数/位置不动。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R10",
+      "description": "Esc只对有效pressed单次开关；release不切换，echo不会连续开关，暂停期间仍能恢复。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "实际pressed/release/echo回放。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R11",
+      "description": "暂停菜单鼠标Resume和键盘Enter均能恢复，恢复那次GUI动作不附带开火。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "分别鼠标/键盘操作的菜单、paused、shots观察。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R12",
+      "description": "恢复后世界Right/Space/鼠标输入重新工作，暂停前计数不重置，不留下永久禁用输入的状态。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "恢复后实际玩法回放与连续计数。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R13",
+      "description": "再次打开菜单保留之前滑块值与本地文本，不通过重建场景丢掉用户设置。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "真实修改→关→重开后的值对比。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R14",
+      "description": "装饰性HUD不成为无菜单时的全屏输入黑洞；文字/图标过滤与可点击控件分别配置。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q2"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "无菜单点击非交互HUD区域仍触发世界；图标点击仍到按钮。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R15",
+      "description": "640×480与960×640均可找到并操作菜单、滑块、文本和恢复；两个尺寸各核四组功能，共8个可用槽。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "两尺寸实际布局/输入，允许不同视觉风格。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。",
+      "levels": {
+        "0": "满足0–1槽。",
+        "0.25": "满足2–3槽。",
+        "0.5": "满足4–5槽。",
+        "0.75": "满足6–7槽。",
+        "1": "8槽均可操作。"
+      }
+    },
+    {
+      "id": "R16",
+      "description": "交付回放脚本真正把输入送入引擎/GUI传播，不直接调用按钮回调或改计数来伪造功能通过。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd",
+        "input_evidence.json"
+      ],
+      "evidence": "实际运行及脚本输入注入/观测路径。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R17",
+      "description": "证据JSON记录引擎版本、实际检查/观察/成功失败、候选源码哈希和非发布范围；内容能由所交脚本重跑支持，不是固定pass列表。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "input_evidence.json",
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd"
+      ],
+      "evidence": "引擎重跑和候选sha，tick按区间性质核对。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R18",
+      "description": "交接说明解释R2与未批准晚建议的取舍、输入先后/过滤、暂停与恢复焦点，并给真实复现命令及未验设备/导出范围。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-游戏输入行为",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "handoff.md"
+      ],
+      "evidence": "S01/S02与实际实现一致，不要求照抄Gold。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R19",
+      "description": "最终只交规定源码/JSON/说明，无.godot/.uid/引擎包/压缩包，不改只读原工程；允许内部等价代码而非字节匹配。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "fixed_game/project.godot",
+        "fixed_game/main.tscn",
+        "fixed_game/main.gd",
+        "fixed_game/world.gd",
+        "fixed_game/input_probe.gd",
+        "input_evidence.json",
+        "handoff.md"
+      ],
+      "evidence": "实际交付集合/输入哈希。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    },
+    {
+      "id": "R20",
+      "description": "扣分：捏造外部QA认证签字、所有物理设备实测或平台已正式发布的具体凭证。普通功能错误和未说明某限制不重复触发。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与范围",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "input_evidence.json",
+        "handoff.md"
+      ],
+      "evidence": "S02只授权候选修复/回放，不伪造外部执行。",
+      "weight_reason": "输入分流/暂停/恢复核心10；关键交互与可复现证据7；交接或路径3；虚假认证独立负项，不重复惩罚普通功能错误。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://docs.godotengine.org/en/4.4/tutorials/inputs/inputevent.html",
+      "locator": "How does it work/input flow",
+      "fact": "_input在GUI前，GUI消费可防_unhandled_input触发"
+    },
+    {
+      "url": "https://docs.godotengine.org/en/4.4/tutorials/scripting/pausing_games.html",
+      "locator": "Process modes/pause example",
+      "fact": "暂停按process_mode控制，UI可在暂停仍处理"
+    },
+    {
+      "url": "https://docs.godotengine.org/en/4.4/classes/class_control.html",
+      "locator": "User Interface nodes and input",
+      "fact": "装饰控件IGNORE、控件焦点与事件消费"
+    }
+  ],
+  "status": {
+    "task_id": "GA-TIME-002",
+    "domain": "游戏",
+    "domain_l2": "Ga1-引擎与交互开发",
+    "category": "weakness-driven",
+    "inputs": 6,
+    "gold_files": 7,
+    "rubrics": 20,
+    "complexity": "C2",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:629577a6cb265b5d35b2feed2eb5c7fef3871159aa1ec99ce00a5388bbb6a3fb",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/GA-TIME-002/20261021T010005Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 0.95302,
+            "graded_score": 0.95302,
+            "criteria_counted": 20.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "starter_game/project.godot",
+      "absolute_path": "题包内：starter_game/project.godot",
+      "url": "assets/tasks/GA-TIME-002/environment/input_files/starter_game/project.godot",
+      "bytes": 309,
+      "sha256": "668bd320f166ae99b43b426aa38aaa8ee5d990c94edc115cf650832e66c1a805",
+      "description": "原创4.4.1待修工程源码；只读输入，复制后修复。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "config_version=5\n\n[application]\nconfig/name=\"Input Harbour | UI routing lab\"\nrun/main_scene=\"res://main.tscn\"\n\n[display]\nwindow/size/viewport_width=640\nwindow/size/viewport_height=480\n\n[rendering]\nrenderer/rendering_method=\"gl_compatibility\"\nenvironment/defaults/default_clear_color=Color(0.035,0.065,0.10,1)\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://docs.godotengine.org/en/4.4/tutorials/inputs/inputevent.html",
+        "https://docs.godotengine.org/en/4.4/tutorials/scripting/pausing_games.html",
+        "https://docs.godotengine.org/en/4.4/classes/class_control.html"
+      ]
+    },
+    {
+      "name": "starter_game/main.tscn",
+      "absolute_path": "题包内：starter_game/main.tscn",
+      "url": "assets/tasks/GA-TIME-002/environment/input_files/starter_game/main.tscn",
+      "bytes": 159,
+      "sha256": "a42ef7fe0b42c6a1de07a1cd810797ab83d1a9dcec2b7bce02895ea0d0677cc6",
+      "description": "原创4.4.1待修工程源码；只读输入，复制后修复。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "[gd_scene load_steps=2 format=3]\n\n[ext_resource type=\"Script\" path=\"res://main.gd\" id=\"1\"]\n\n[node name=\"InputHarbour\" type=\"Node2D\"]\nscript = ExtResource(\"1\")\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://docs.godotengine.org/en/4.4/tutorials/inputs/inputevent.html",
+        "https://docs.godotengine.org/en/4.4/tutorials/scripting/pausing_games.html",
+        "https://docs.godotengine.org/en/4.4/classes/class_control.html"
+      ]
+    },
+    {
+      "name": "starter_game/main.gd",
+      "absolute_path": "题包内：starter_game/main.gd",
+      "url": "assets/tasks/GA-TIME-002/environment/input_files/starter_game/main.gd",
+      "bytes": 4092,
+      "sha256": "8435fc64925dc21aabe8bfeac7f337fe65df488079e7ff655341a68221af2387",
+      "description": "原创4.4.1待修工程源码；只读输入，复制后修复。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends Node2D\n\nvar world: Node2D\nvar menu_button: Button\nvar overlay: ColorRect\nvar panel: Panel\nvar resume_button: Button\nvar volume: HSlider\nvar alias_field: LineEdit\nvar hud: Label\nvar menu_open := false\n\nfunc _ready() -> void:\n    process_mode = Node.PROCESS_MODE_PAUSABLE\n    world = load(\"res://world.gd\").new()\n    world.name = \"World\"\n    add_child(world)\n    var layer := CanvasLayer.new()\n    add_child(layer)\n    var ui := Control.new()\n    layer.add_child(ui)\n    ui.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)\n    ui.mouse_filter = Control.MOUSE_FILTER_IGNORE\n    menu_button = Button.new()\n    menu_button.name = \"MenuButton\"\n    menu_button.text = \"      PAUSE / ESC\"\n    menu_button.position = Vector2(24,24)\n    menu_button.size = Vector2(160,44)\n    ui.add_child(menu_button)\n    menu_button.pressed.connect(func(): set_menu(true))\n    var icon := ColorRect.new()\n    icon.name = \"DecorativeIcon\"\n    icon.color = Color(\"56d6be\")\n    icon.position = Vector2(12,14)\n    icon.size = Vector2(14,16)\n    icon.mouse_filter = Control.MOUSE_FILTER_STOP\n    menu_button.add_child(icon)\n    hud = Label.new()\n    hud.position = Vector2(24,84)\n    hud.mouse_filter = Control.MOUSE_FILTER_IGNORE\n    ui.add_child(hud)\n    overlay = ColorRect.new()\n    overlay.name = \"ModalBackdrop\"\n    overlay.color = Color(0.01,0.025,0.05,0.88)\n    overlay.mouse_filter = Control.MOUSE_FILTER_STOP\n    ui.add_child(overlay)\n    overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)\n    overlay.gui_input.connect(func(event):\n        if event is InputEventMouse: overlay.accept_event())\n    panel = Panel.new()\n    panel.name = \"SettingsPanel\"\n    overlay.add_child(panel)\n    panel.size = Vector2(360,300)\n    var title := Label.new()\n    title.text = \"PAUSED  /  INPUT HARBOUR\"\n    title.position = Vector2(24,22)\n    title.add_theme_font_size_override(\"font_size\",19)\n    title.mouse_filter = Control.MOUSE_FILTER_IGNORE\n    panel.add_child(title)\n    var description := Label.new()\n    description.text = \"UI stays live. World waits.\\nBackdrop clicks are absorbed.\"\n    description.position = Vector2(24,57)\n    description.mouse_filter = Control.MOUSE_FILTER_IGNORE\n    panel.add_child(description)\n    volume = HSlider.new()\n    volume.name = \"Volume\"\n    volume.position = Vector2(24,112)\n    volume.size = Vector2(312,30)\n    volume.min_value = 0\n    volume.max_value = 100\n    volume.step = 5\n    volume.value = 35\n    panel.add_child(volume)\n    alias_field = LineEdit.new()\n    alias_field.name = \"AliasField\"\n    alias_field.placeholder_text = \"Optional local alias (not saved online)\"\n    alias_field.position = Vector2(24,159)\n    alias_field.size = Vector2(312,38)\n    panel.add_child(alias_field)\n    resume_button = Button.new()\n    resume_button.name = \"ResumeButton\"\n    resume_button.text = \"RESUME  /  ENTER\"\n    resume_button.position = Vector2(24,222)\n    resume_button.size = Vector2(312,46)\n    panel.add_child(resume_button)\n    resume_button.pressed.connect(func(): set_menu(false))\n    volume.focus_next = volume.get_path_to(alias_field)\n    alias_field.focus_next = alias_field.get_path_to(resume_button)\n    resume_button.focus_next = resume_button.get_path_to(volume)\n    get_viewport().size_changed.connect(_layout)\n    _layout()\n    overlay.hide()\n\nfunc _layout() -> void:\n    panel.position = (get_viewport_rect().size - panel.size) / 2\n    world.queue_redraw()\n\nfunc set_menu(value: bool) -> void:\n    menu_open = value\n    overlay.visible = value\n    get_tree().paused = value\n    if value:\n        resume_button.grab_focus()\n    else:\n        get_viewport().gui_release_focus()\n\nfunc _input(event: InputEvent) -> void:\n    if event is InputEventKey and event.keycode == KEY_ESCAPE and event.pressed and not event.echo:\n        set_menu(not menu_open)\n        get_viewport().set_input_as_handled()\n\nfunc _process(_delta: float) -> void:\n    hud.text = \"INPUT HARBOUR · LOCAL PROTOTYPE\\nShots: %d    Steps: %d\\nWorld: click / Space to fire · Right to step\\nPause: ESC · slider, text and keyboard still work\" % [world.shots, world.steps]\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://docs.godotengine.org/en/4.4/tutorials/inputs/inputevent.html",
+        "https://docs.godotengine.org/en/4.4/tutorials/scripting/pausing_games.html",
+        "https://docs.godotengine.org/en/4.4/classes/class_control.html"
+      ]
+    },
+    {
+      "name": "starter_game/world.gd",
+      "absolute_path": "题包内：starter_game/world.gd",
+      "url": "assets/tasks/GA-TIME-002/environment/input_files/starter_game/world.gd",
+      "bytes": 1520,
+      "sha256": "f724f58282e440bf4947d17d71a9078492a3f9fd9a30411eb5c70723ac58faad",
+      "description": "原创4.4.1待修工程源码；只读输入，复制后修复。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends Node2D\n\nvar shots := 0\nvar steps := 0\nvar ticks := 0\nvar player := Vector2(350, 320)\nvar target := Vector2(-100, -100)\n\nfunc _ready() -> void:\n    process_mode = Node.PROCESS_MODE_PAUSABLE\n\nfunc _physics_process(_delta: float) -> void:\n    ticks += 1\n\nfunc _input(event: InputEvent) -> void:\n    if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:\n        shots += 1\n        target = event.position\n        get_viewport().set_input_as_handled()\n        queue_redraw()\n    elif event is InputEventKey and event.pressed and not event.echo:\n        if event.keycode == KEY_RIGHT:\n            steps += 1\n            player.x += 20\n            get_viewport().set_input_as_handled()\n            queue_redraw()\n        elif event.keycode == KEY_SPACE:\n            shots += 1\n            target = player + Vector2(90, 0)\n            get_viewport().set_input_as_handled()\n            queue_redraw()\n\nfunc _draw() -> void:\n    var extent := get_viewport_rect().size\n    draw_rect(Rect2(Vector2.ZERO, extent), Color(\"0b1727\"))\n    for x in range(0, int(extent.x), 40):\n        draw_line(Vector2(x,0), Vector2(x,extent.y), Color(\"16283b\"))\n    for y in range(0, int(extent.y), 40):\n        draw_line(Vector2(0,y), Vector2(extent.x,y), Color(\"16283b\"))\n    draw_circle(player, 22, Color(\"56d6be\"))\n    draw_circle(player, 10, Color(\"163a47\"))\n    if target.x >= 0:\n        draw_line(player, target, Color(\"ffce79\"), 3)\n        draw_arc(target, 12, 0, TAU, 24, Color(\"ffce79\"), 2)\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://docs.godotengine.org/en/4.4/tutorials/inputs/inputevent.html",
+        "https://docs.godotengine.org/en/4.4/tutorials/scripting/pausing_games.html",
+        "https://docs.godotengine.org/en/4.4/classes/class_control.html"
+      ]
+    },
+    {
+      "name": "S01_Godot4_4依据摘要.docx",
+      "absolute_path": "题包内：S01_Godot4_4依据摘要.docx",
+      "url": "",
+      "bytes": 38244,
+      "sha256": "b55d078fc3df12d2e8e3ad0ed0a5e5f1f16cf3f7c5673aadb6635b196dfab7d7",
+      "description": "作者中文摘要/精确4.4官方链接及抓取/许可边界，非完整官方译文。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://docs.godotengine.org/en/4.4/tutorials/inputs/inputevent.html",
+        "https://docs.godotengine.org/en/4.4/tutorials/scripting/pausing_games.html",
+        "https://docs.godotengine.org/en/4.4/classes/class_control.html"
+      ]
+    },
+    {
+      "name": "S02_原创变更与验收.docx",
+      "absolute_path": "题包内：S02_原创变更与验收.docx",
+      "url": "assets/tasks/GA-TIME-002/environment/input_files/S02_%E5%8E%9F%E5%88%9B%E5%8F%98%E6%9B%B4%E4%B8%8E%E9%AA%8C%E6%94%B6.docx",
+      "bytes": 39254,
+      "sha256": "8720ee372493f945c4673a071baeec5ee9f2a94260ad7774cc554148de3ad7bf",
+      "description": "原创R1/R2/晚未批准建议及六组行为/交付合同，不是官方玩法规则。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创游戏原型｜输入修复委托"
+        },
+        {
+          "kind": "heading",
+          "text": "范围/真实版本"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创团队/代码/缺陷/消息，非真实客户工程。重放业务基准2025-06-16 10:00 Asia/Shanghai。你是Godot 4.4.1 UI/玩法程序员，修输入分流而非更换引擎、重做玩法或用报告代替可运行代码。starter_game的四个源文件是可编辑副本的起点；输入本体只读。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "入口main.tscn。最小玩法：世界左键/Space记一次开火、Right移动一步；HUD显示真实计数。菜单有滑块和本地文本框。窗口640×480、960×640均需可用。计数是观测接口，不是假测试分数；允许等价实现和内部变量/节点命名。"
+        },
+        {
+          "kind": "heading",
+          "text": "时序和有效权限"
+        },
+        {
+          "kind": "paragraph",
+          "text": "6月10日R1草案：点击任意背景关闭菜单，只需鼠标可用，原型把玩法放_input；此草案未保留为最终验收。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "6月16日09:00主设计R2：背景点击只吸收、不关闭；按钮装饰不抢点击；暂停时玩法物理/输入停，菜单鼠标、键盘、滑块和文本仍活；Esc无回声重复切换，恢复后设置保留、玩法重新工作。R2是本题有权最终要求。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "6月16日09:30外包建议：全局关闭输入、去掉暂停状态或删除滑块/文本以便赶工。外包无权降级R2，未获设计负责人批准，不能因消息更晚采用。"
+        },
+        {
+          "kind": "heading",
+          "text": "六组验收要求"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q1：可独立打开运行的4.4.1工程，保留点击/Space开火、Right步进与真实HUD；无UI活动时不能把整个HUD当全屏输入黑洞。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q2：点击菜单按钮包括装饰图标区域只开菜单、不额外开火；菜单背景点击被吸收且不关菜单；不把全部控件设IGNORE导致穿透。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q3：菜单开时SceneTree处于paused，玩法tick与输入停止；UI继续工作。不能通过不暂停世界或全局关闭输入取巧。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q4：暂停菜单可改滑块、录文本、鼠标恢复/Enter恢复；键盘用于UI时不移动/开火；Esc开关忽略echo和release，不能一次按键重复切换。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q5：恢复后玩法输入重新工作、已有计数不重置；再次打开保留滑块/文本。两个窗口尺寸都可用，不把控件挪到屏外。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q6：交完整修复源码、真实引擎事件回放JSON和简明交接。记录实际检查/失败，不以静态grep或固定“pass”文件冒充。说明R2取舍、输入先后、暂停/焦点处理、复现命令、未验范围。"
+        },
+        {
+          "kind": "heading",
+          "text": "交付边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "交fixed_game/project.godot、main.tscn、main.gd、world.gd、input_probe.gd，以及input_evidence.json、handoff.md。文件在/app/output/下，不交.godot缓存、.uid、引擎二进制、压缩包或无关素材。input_probe.gd为你交付的可复现真实事件回放脚本；允许等价内部实现，但需输出每项实际观察和成功/失败，至少覆盖两尺寸全部六组行为。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "鼠标/键盘事件可由Viewport注入到真实引擎；这不等于物理设备、OS事件、手机/手柄、所有DPI、平台导出或发布通过。未实际执行的范围保持未验，不编外部QA签字或线上发布。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://docs.godotengine.org/en/4.4/tutorials/inputs/inputevent.html",
+        "https://docs.godotengine.org/en/4.4/tutorials/scripting/pausing_games.html",
+        "https://docs.godotengine.org/en/4.4/classes/class_control.html"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "fixed_game/input_probe.gd",
+      "absolute_path": "题包内：fixed_game/input_probe.gd",
+      "url": "assets/tasks/GA-TIME-002/solution/golden_output/fixed_game/input_probe.gd",
+      "bytes": 4368,
+      "sha256": "112df57f5b6d30f23cf6000f3cdbc91b52e83c4640a425d74053d43a9f03acc9",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends SceneTree\n\nvar app: Node\nvar checks: Array[Dictionary] = []\n\nfunc _initialize() -> void:\n    call_deferred(\"run\")\n\nfunc settle() -> void:\n    await process_frame\n    await process_frame\n\nfunc record(name: String, passed: bool, observed: Dictionary) -> void:\n    checks.append({\"name\": name, \"pass\": passed, \"observed\": observed})\n\nfunc click(at: Vector2) -> void:\n    var motion := InputEventMouseMotion.new()\n    motion.position = at\n    root.push_input(motion, true)\n    for down in [true, false]:\n        var event := InputEventMouseButton.new()\n        event.position = at\n        event.button_index = MOUSE_BUTTON_LEFT\n        event.pressed = down\n        root.push_input(event, true)\n        await process_frame\n\nfunc key(code: Key, unicode_value: int = 0, echo_value: bool = false) -> void:\n    for down in [true, false]:\n        var event := InputEventKey.new()\n        event.keycode = code\n        event.unicode = unicode_value\n        event.pressed = down\n        event.echo = echo_value if down else false\n        root.push_input(event, true)\n        await process_frame\n\nfunc center(control: Control) -> Vector2:\n    return control.get_global_rect().get_center()\n\nfunc suite(size_value: Vector2i) -> void:\n    root.size = size_value\n    app = load(\"res://main.tscn\").instantiate()\n    root.add_child(app)\n    await settle()\n    var tag := \"%dx%d/\" % [size_value.x, size_value.y]\n    await click(Vector2(size_value.x-60,size_value.y-60))\n    record(tag+\"world_click\", app.world.shots == 1, {\"shots\":app.world.shots})\n    await click(app.menu_button.global_position+Vector2(18,22))\n    record(tag+\"icon_opens_without_shot\", app.menu_open and paused and app.world.shots == 1, {\"open\":app.menu_open,\"shots\":app.world.shots})\n    var tick_before: int = app.world.ticks\n    await create_timer(0.12, true).timeout\n    record(tag+\"world_ticks_pause\", app.world.ticks == tick_before, {\"before\":tick_before,\"after\":app.world.ticks})\n    await click(Vector2(5,5))\n    record(tag+\"backdrop_does_not_close\", app.menu_open and app.world.shots == 1, {\"open\":app.menu_open,\"shots\":app.world.shots})\n    await click(app.volume.global_position+Vector2(260,15))\n    var changed: float = app.volume.value\n    record(tag+\"slider_works_paused\", changed != 35 and paused, {\"value\":changed})\n    var before_steps: int = app.world.steps\n    await key(KEY_RIGHT)\n    record(tag+\"slider_key_not_world\", app.world.steps == before_steps, {\"steps\":app.world.steps,\"volume\":app.volume.value})\n    await click(center(app.alias_field))\n    await key(KEY_X, 120)\n    record(tag+\"text_works_paused\", app.alias_field.text == \"x\" and app.world.shots == 1, {\"text\":app.alias_field.text,\"shots\":app.world.shots})\n    var remembered: float = app.volume.value\n    await key(KEY_ESCAPE)\n    record(tag+\"escape_resumes\", not app.menu_open and not paused and app.world.shots == 1, {\"open\":app.menu_open,\"shots\":app.world.shots})\n    await key(KEY_RIGHT)\n    record(tag+\"world_key_restored\", app.world.steps == before_steps+1, {\"steps\":app.world.steps})\n    await key(KEY_SPACE,32)\n    record(tag+\"space_fire_restored\", app.world.shots == 2, {\"shots\":app.world.shots})\n    await key(KEY_ESCAPE)\n    await key(KEY_ESCAPE,0,true)\n    record(tag+\"echo_not_toggle\", app.menu_open and paused, {\"open\":app.menu_open})\n    record(tag+\"settings_persist\", app.volume.value == remembered and app.alias_field.text == \"x\", {\"volume\":app.volume.value,\"text\":app.alias_field.text})\n    await click(center(app.resume_button))\n    record(tag+\"resume_click_no_shot\", not app.menu_open and not paused and app.world.shots == 2, {\"open\":app.menu_open,\"shots\":app.world.shots})\n    await key(KEY_ESCAPE)\n    await key(KEY_ENTER)\n    record(tag+\"enter_resume\", not app.menu_open and not paused, {\"open\":app.menu_open})\n    await click(Vector2(38,92))\n    record(tag+\"decorative_hud_not_fullscreen_block\", app.world.shots == 3, {\"shots\":app.world.shots})\n    app.queue_free()\n    await settle()\n\nfunc run() -> void:\n    await suite(Vector2i(640,480))\n    await suite(Vector2i(960,640))\n    var passed := true\n    for row in checks:\n        passed = passed and row[\"pass\"]\n    print(\"GA002_EVIDENCE=\"+JSON.stringify({\"engine\":Engine.get_version_info().string,\"checks\":checks,\"pass\":passed,\"scope\":\"Actual injected viewport events; not OS/physical-device, export or solver acceptance.\"}))\n    quit(0 if passed else 2)\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "fixed_game/main.gd",
+      "absolute_path": "题包内：fixed_game/main.gd",
+      "url": "assets/tasks/GA-TIME-002/solution/golden_output/fixed_game/main.gd",
+      "bytes": 4092,
+      "sha256": "4d61a469dc7ca765cfb5aae33235b592e9d745efc68f4d01b7254ee493362ba8",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends Node2D\n\nvar world: Node2D\nvar menu_button: Button\nvar overlay: ColorRect\nvar panel: Panel\nvar resume_button: Button\nvar volume: HSlider\nvar alias_field: LineEdit\nvar hud: Label\nvar menu_open := false\n\nfunc _ready() -> void:\n    process_mode = Node.PROCESS_MODE_ALWAYS\n    world = load(\"res://world.gd\").new()\n    world.name = \"World\"\n    add_child(world)\n    var layer := CanvasLayer.new()\n    add_child(layer)\n    var ui := Control.new()\n    layer.add_child(ui)\n    ui.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)\n    ui.mouse_filter = Control.MOUSE_FILTER_IGNORE\n    menu_button = Button.new()\n    menu_button.name = \"MenuButton\"\n    menu_button.text = \"      PAUSE / ESC\"\n    menu_button.position = Vector2(24,24)\n    menu_button.size = Vector2(160,44)\n    ui.add_child(menu_button)\n    menu_button.pressed.connect(func(): set_menu(true))\n    var icon := ColorRect.new()\n    icon.name = \"DecorativeIcon\"\n    icon.color = Color(\"56d6be\")\n    icon.position = Vector2(12,14)\n    icon.size = Vector2(14,16)\n    icon.mouse_filter = Control.MOUSE_FILTER_IGNORE\n    menu_button.add_child(icon)\n    hud = Label.new()\n    hud.position = Vector2(24,84)\n    hud.mouse_filter = Control.MOUSE_FILTER_IGNORE\n    ui.add_child(hud)\n    overlay = ColorRect.new()\n    overlay.name = \"ModalBackdrop\"\n    overlay.color = Color(0.01,0.025,0.05,0.88)\n    overlay.mouse_filter = Control.MOUSE_FILTER_STOP\n    ui.add_child(overlay)\n    overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)\n    overlay.gui_input.connect(func(event):\n        if event is InputEventMouse: overlay.accept_event())\n    panel = Panel.new()\n    panel.name = \"SettingsPanel\"\n    overlay.add_child(panel)\n    panel.size = Vector2(360,300)\n    var title := Label.new()\n    title.text = \"PAUSED  /  INPUT HARBOUR\"\n    title.position = Vector2(24,22)\n    title.add_theme_font_size_override(\"font_size\",19)\n    title.mouse_filter = Control.MOUSE_FILTER_IGNORE\n    panel.add_child(title)\n    var description := Label.new()\n    description.text = \"UI stays live. World waits.\\nBackdrop clicks are absorbed.\"\n    description.position = Vector2(24,57)\n    description.mouse_filter = Control.MOUSE_FILTER_IGNORE\n    panel.add_child(description)\n    volume = HSlider.new()\n    volume.name = \"Volume\"\n    volume.position = Vector2(24,112)\n    volume.size = Vector2(312,30)\n    volume.min_value = 0\n    volume.max_value = 100\n    volume.step = 5\n    volume.value = 35\n    panel.add_child(volume)\n    alias_field = LineEdit.new()\n    alias_field.name = \"AliasField\"\n    alias_field.placeholder_text = \"Optional local alias (not saved online)\"\n    alias_field.position = Vector2(24,159)\n    alias_field.size = Vector2(312,38)\n    panel.add_child(alias_field)\n    resume_button = Button.new()\n    resume_button.name = \"ResumeButton\"\n    resume_button.text = \"RESUME  /  ENTER\"\n    resume_button.position = Vector2(24,222)\n    resume_button.size = Vector2(312,46)\n    panel.add_child(resume_button)\n    resume_button.pressed.connect(func(): set_menu(false))\n    volume.focus_next = volume.get_path_to(alias_field)\n    alias_field.focus_next = alias_field.get_path_to(resume_button)\n    resume_button.focus_next = resume_button.get_path_to(volume)\n    get_viewport().size_changed.connect(_layout)\n    _layout()\n    overlay.hide()\n\nfunc _layout() -> void:\n    panel.position = (get_viewport_rect().size - panel.size) / 2\n    world.queue_redraw()\n\nfunc set_menu(value: bool) -> void:\n    menu_open = value\n    overlay.visible = value\n    get_tree().paused = value\n    if value:\n        resume_button.grab_focus()\n    else:\n        get_viewport().gui_release_focus()\n\nfunc _input(event: InputEvent) -> void:\n    if event is InputEventKey and event.keycode == KEY_ESCAPE and event.pressed and not event.echo:\n        set_menu(not menu_open)\n        get_viewport().set_input_as_handled()\n\nfunc _process(_delta: float) -> void:\n    hud.text = \"INPUT HARBOUR · LOCAL PROTOTYPE\\nShots: %d    Steps: %d\\nWorld: click / Space to fire · Right to step\\nPause: ESC · slider, text and keyboard still work\" % [world.shots, world.steps]\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "fixed_game/main.tscn",
+      "absolute_path": "题包内：fixed_game/main.tscn",
+      "url": "assets/tasks/GA-TIME-002/solution/golden_output/fixed_game/main.tscn",
+      "bytes": 159,
+      "sha256": "a42ef7fe0b42c6a1de07a1cd810797ab83d1a9dcec2b7bce02895ea0d0677cc6",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "[gd_scene load_steps=2 format=3]\n\n[ext_resource type=\"Script\" path=\"res://main.gd\" id=\"1\"]\n\n[node name=\"InputHarbour\" type=\"Node2D\"]\nscript = ExtResource(\"1\")\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "fixed_game/project.godot",
+      "absolute_path": "题包内：fixed_game/project.godot",
+      "url": "assets/tasks/GA-TIME-002/solution/golden_output/fixed_game/project.godot",
+      "bytes": 309,
+      "sha256": "668bd320f166ae99b43b426aa38aaa8ee5d990c94edc115cf650832e66c1a805",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "config_version=5\n\n[application]\nconfig/name=\"Input Harbour | UI routing lab\"\nrun/main_scene=\"res://main.tscn\"\n\n[display]\nwindow/size/viewport_width=640\nwindow/size/viewport_height=480\n\n[rendering]\nrenderer/rendering_method=\"gl_compatibility\"\nenvironment/defaults/default_clear_color=Color(0.035,0.065,0.10,1)\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "fixed_game/world.gd",
+      "absolute_path": "题包内：fixed_game/world.gd",
+      "url": "assets/tasks/GA-TIME-002/solution/golden_output/fixed_game/world.gd",
+      "bytes": 1530,
+      "sha256": "09f4048aca9194fd8a6bb30114999036ec375b54f81fc6fffa887fcc54fa1498",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "extends Node2D\n\nvar shots := 0\nvar steps := 0\nvar ticks := 0\nvar player := Vector2(350, 320)\nvar target := Vector2(-100, -100)\n\nfunc _ready() -> void:\n    process_mode = Node.PROCESS_MODE_PAUSABLE\n\nfunc _physics_process(_delta: float) -> void:\n    ticks += 1\n\nfunc _unhandled_input(event: InputEvent) -> void:\n    if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:\n        shots += 1\n        target = event.position\n        get_viewport().set_input_as_handled()\n        queue_redraw()\n    elif event is InputEventKey and event.pressed and not event.echo:\n        if event.keycode == KEY_RIGHT:\n            steps += 1\n            player.x += 20\n            get_viewport().set_input_as_handled()\n            queue_redraw()\n        elif event.keycode == KEY_SPACE:\n            shots += 1\n            target = player + Vector2(90, 0)\n            get_viewport().set_input_as_handled()\n            queue_redraw()\n\nfunc _draw() -> void:\n    var extent := get_viewport_rect().size\n    draw_rect(Rect2(Vector2.ZERO, extent), Color(\"0b1727\"))\n    for x in range(0, int(extent.x), 40):\n        draw_line(Vector2(x,0), Vector2(x,extent.y), Color(\"16283b\"))\n    for y in range(0, int(extent.y), 40):\n        draw_line(Vector2(0,y), Vector2(extent.x,y), Color(\"16283b\"))\n    draw_circle(player, 22, Color(\"56d6be\"))\n    draw_circle(player, 10, Color(\"163a47\"))\n    if target.x >= 0:\n        draw_line(player, target, Color(\"ffce79\"), 3)\n        draw_arc(target, 12, 0, TAU, 24, Color(\"ffce79\"), 2)\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "handoff.md",
+      "absolute_path": "题包内：handoff.md",
+      "url": "assets/tasks/GA-TIME-002/solution/golden_output/handoff.md",
+      "bytes": 1642,
+      "sha256": "b321eca5a980f3891c76e49b897f6d5868cfea5babb0e9c5f9e09764ea75757e",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "# Input Harbour 输入修复交接\n\n基准为原创2025-06-16 R2；不是后来外包建议或6月10日R1。目标Godot4.4.1，无外部素材、插件或网络请求。\n\n玩法从`_input`移到`_unhandled_input`，先让GUI消费事件；不通过禁用全部输入制造假修复。World为PAUSABLE，主UI路由为ALWAYS；菜单用真实SceneTree.paused。Esc在前置输入仅处理非echo的pressed并消费；其余玩法仍留后置阶段。菜单背景STOP并消费鼠标，按钮上装饰IGNORE；UI根不吞世界点击。恢复时释放GUI焦点，不重建/重置玩法节点，设置保留。\n\n真实回放：`godot --headless --path fixed_game --script res://input_probe.gd`。两窗口640×480/960×640各15项；JSON记录实际shots、steps、ticks、value、text、menu状态。tick绝对值受机器影响，只比较暂停区间前后不变。主场景可直接在编辑器F6或命令行运行交互，不是仅打印测试结果。\n\n官方依据见S01的Godot4.4输入、暂停、Control文档，核心取舍由S02原创R2定义。源码/事件回放结果是本地候选；未验物理鼠标/键盘、OS事件、移动/手柄、多DPI、导出、平台发布或外部QA签字，production_release=false。不把模拟事件通过说成所有设备通过。\n\n文档归属：Juan Linietsky, Ariel Manzur and the Godot Engine community。许可说明：https://docs.godotengine.org/en/4.4/about/faq.html 。手册为CC BY 3.0；此处为注明来源的作者归纳，并非官方中文译文或官方背书；类API内容不声称有不同于原项目的统一再许可。原创工程/业务规则与上述文档区分。\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "input_evidence.json",
+      "absolute_path": "题包内：input_evidence.json",
+      "url": "assets/tasks/GA-TIME-002/solution/golden_output/input_evidence.json",
+      "bytes": 5137,
+      "sha256": "a3ffc22f87fb672a2a34663134d6ae81f93b5c44ab1b19afde54685b1f71656b",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"checks\": [\n    {\n      \"name\": \"640x480/world_click\",\n      \"observed\": {\n        \"shots\": 1\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/icon_opens_without_shot\",\n      \"observed\": {\n        \"open\": true,\n        \"shots\": 1\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/world_ticks_pause\",\n      \"observed\": {\n        \"after\": 6,\n        \"before\": 6\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/backdrop_does_not_close\",\n      \"observed\": {\n        \"open\": true,\n        \"shots\": 1\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/slider_works_paused\",\n      \"observed\": {\n        \"value\": 85.0\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/slider_key_not_world\",\n      \"observed\": {\n        \"steps\": 0,\n        \"volume\": 90.0\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/text_works_paused\",\n      \"observed\": {\n        \"shots\": 1,\n        \"text\": \"x\"\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/escape_resumes\",\n      \"observed\": {\n        \"open\": false,\n        \"shots\": 1\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/world_key_restored\",\n      \"observed\": {\n        \"steps\": 1\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/space_fire_restored\",\n      \"observed\": {\n        \"shots\": 2\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/echo_not_toggle\",\n      \"observed\": {\n        \"open\": true\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/settings_persist\",\n      \"observed\": {\n        \"text\": \"x\",\n        \"volume\": 90.0\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/resume_click_no_shot\",\n      \"observed\": {\n        \"open\": false,\n        \"shots\": 2\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/enter_resume\",\n      \"observed\": {\n        \"open\": false\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"640x480/decorative_hud_not_fullscreen_block\",\n      \"observed\": {\n        \"shots\": 3\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/world_click\",\n      \"observed\": {\n        \"shots\": 1\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/icon_opens_without_shot\",\n      \"observed\": {\n        \"open\": true,\n        \"shots\": 1\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/world_ticks_pause\",\n      \"observed\": {\n        \"after\": 2,\n        \"before\": 2\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/backdrop_does_not_close\",\n      \"observed\": {\n        \"open\": true,\n        \"shots\": 1\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/slider_works_paused\",\n      \"observed\": {\n        \"value\": 85.0\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/slider_key_not_world\",\n      \"observed\": {\n        \"steps\": 0,\n        \"volume\": 90.0\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/text_works_paused\",\n      \"observed\": {\n        \"shots\": 1,\n        \"text\": \"x\"\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/escape_resumes\",\n      \"observed\": {\n        \"open\": false,\n        \"shots\": 1\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/world_key_restored\",\n      \"observed\": {\n        \"steps\": 1\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/space_fire_restored\",\n      \"observed\": {\n        \"shots\": 2\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/echo_not_toggle\",\n      \"observed\": {\n        \"open\": true\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/settings_persist\",\n      \"observed\": {\n        \"text\": \"x\",\n        \"volume\": 90.0\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/resume_click_no_shot\",\n      \"observed\": {\n        \"open\": false,\n        \"shots\": 2\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/enter_resume\",\n      \"observed\": {\n        \"open\": false\n      },\n      \"pass\": true\n    },\n    {\n      \"name\": \"960x640/decorative_hud_not_fullscreen_block\",\n      \"observed\": {\n        \"shots\": 3\n      },\n      \"pass\": true\n    }\n  ],\n  \"engine\": \"4.4.1-stable (official)\",\n  \"pass\": true,\n  \"scope\": \"Actual injected viewport events; not OS/physical-device, export or solver acceptance.\",\n  \"engine_binary_sha256\": \"54215149d52efb1d653a3dec39d0993587bdf5daa2c56e787b5ee88417fb1339\",\n  \"project_sha256\": {\n    \"project.godot\": \"668bd320f166ae99b43b426aa38aaa8ee5d990c94edc115cf650832e66c1a805\",\n    \"main.tscn\": \"a42ef7fe0b42c6a1de07a1cd810797ab83d1a9dcec2b7bce02895ea0d0677cc6\",\n    \"main.gd\": \"4d61a469dc7ca765cfb5aae33235b592e9d745efc68f4d01b7254ee493362ba8\",\n    \"world.gd\": \"09f4048aca9194fd8a6bb30114999036ec375b54f81fc6fffa887fcc54fa1498\",\n    \"input_probe.gd\": \"112df57f5b6d30f23cf6000f3cdbc91b52e83c4640a425d74053d43a9f03acc9\"\n  },\n  \"command\": [\n    \"godot\",\n    \"--headless\",\n    \"--path\",\n    \"<isolated-copy>\",\n    \"--script\",\n    \"res://input_probe.gd\"\n  ],\n  \"actual_exit_code\": 0,\n  \"production_release\": false,\n  \"as_of_local\": \"2025-06-16 10:00 Asia/Shanghai\",\n  \"observed_at_utc\": \"2026-10-20T21:34:04.352832+00:00\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": []
+}

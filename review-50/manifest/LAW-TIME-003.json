@@ -1,0 +1,1179 @@
+{
+  "id": "LAW-TIME-003",
+  "title": "存量出资期限核查：正式与草案权限、选择性脱敏交付",
+  "domain": "法律",
+  "domain_l2": "Law2-非诉律师",
+  "domain_l3": "公司法出资期限过渡",
+  "category": "weakness-driven",
+  "complexity": "C2",
+  "target_difficulty": "A2",
+  "as_of": "2024-07-05 10:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "司法部正式PDF和税务总局/市监总局官方阅读器索引转录；六对象/私密字段/消息/披露合同均原创虚构，不是真实企业审批或隐私记录。",
+  "instruction": "# 存量出资期限核查：正式与草案权限、选择性脱敏交付\n\n## 业务场景与任务说明\n\n你是非诉律师团队法务助理，按7月5日历史时点核六个原创公司情境。旧稿混正式与草案权限、存量与新设、20日与工作日，并要求向投资方附原名/编号。请依真实材料修正期限与状态、形成两份可编辑脱敏待审Office及真实自查；保留判断所需日期/金额，不能把私密内容藏进元数据或反向删掉证据。\n\n业务判断基准时点：2024-07-05 10:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_正式规定.pdf`：正式784号令司法部原PDF13条/3页。\n- `/app/input_files/S02_公司法与草案历史.docx`：公司法47/266和2月6日草案解读阅读器/索引选摘，直连403披露。\n- `/app/input_files/S03_客户演练记录.xlsx`：原创6对象法律事实和3类私密训练字段，无真实隐私/批件。\n- `/app/input_files/S04_委托与版本权限.docx`：原创律师/D0/营销权限时序及交付范围。\n- `/app/input_files/S05_对外披露合同.json`：原创对外移除/保留字段与Office隐藏结构披露合同。\n\n## 工作要求\n\n- [Q1] 区分正式规定/公司法/草案历史/消息权限，正确使用7月1日起施和7月5日历史时点，不倒灌未来规则。\n- [Q2] 逐六对象核类型、成立日、原期限、金额、特别安排及公示状态，形成可回源结论而非一律3+5。\n- [Q3] 准确写剩余期限/缴足/章程/例外同意与第3/4条边界，给负责律师/项目法务补证动作，不伪算工作日截止或替机关判异常。\n- [Q4] 按S05做选择性脱敏，原名/联系人/内部编号不进入最终Office/JSON的正文与隐藏结构，草稿只在临时目录，不能过度删除代号/日期/金额。\n- [Q5] 实际披露自查包括Office文本/元数据/关系/附件边界及保留字段，绑定当前Office、来源和合同SHA，JSON不回显私密值，不伪称OCR/专家认证。\n- [Q6] 三指定文件中文可读、可编辑、逐对象和版本/来源一致，仅对外待审，无真实外发、登记或批准断言。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/public_review.xlsx`：脱敏对象事实、逐项法律核查与版本边界工作簿。\n- `/app/output/public_memo.docx`：中文脱敏投资方阅读版待律师复核简报。\n- `/app/output/disclosure_check.json`：当前两Office实际隐私/元数据及保留字段检查，真实哈希与范围。\n\n## 硬约束（单独列明）\n\n- 只交三指定文件；输入5份只读，草稿用任务临时目录，通过检查才入最终目录。\n- 原公司名/联系人/内部编号禁止进入最终文件正文、隐藏结构或JSON；代号、日级日期、金额/单位和依据须保留。\n- 不嵌源/截图/附件/媒体/私密映射/外链，不加密压缩；官方规范URL正文引用允许。\n- 历史2024-07-05核查，不用2025规则、会议日代生效、草案代正式、营销代法定同意。\n- 不伪算本题未给的工作日历/临界期间算法，不替机关审批/认定/外发或宣称全面尽调完成。\n",
+  "instruction_url": "assets/tasks/LAW-TIME-003/instruction.md",
+  "absolute_path": "tasks/LAW-TIME-003",
+  "spec_path": "manifest/LAW-TIME-003.json",
+  "spec_url": "manifest/LAW-TIME-003.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "正式784号令6月7日通过与7月1日公布施行区分，不从会议日/URL抓取日当生效。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01页首/第13条。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R02",
+      "description": "公司法2023修订与2024-07-01起施正确，5年新设规则与存量逐步调整依据分开。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S02第47/266条。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R03",
+      "description": "2月6日解释明确为征求意见稿历史，不当正式规定或以较晚营销便笺覆盖律师和正式法定权限。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S02草案标签/S04时间线。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R04",
+      "description": "C01存量LLC原2040期限，按2027-07-01起剩余超过五年分支，在2027-06-30前调整至五年内并记章程。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01第2条；S03 C01，不用成立+5或一律立即缴足。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R05",
+      "description": "C02原2030期限剩余不足五年，不因该过渡条款强制缩短，也不自动延长至2032或免除原缴资义务。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01第2条条件；S03 C02。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R06",
+      "description": "C03为存量JSC，发起人2027-06-30前缴足认购股款，不能套LLC剩余再五年。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01第2条第1款；S03 C03。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R07",
+      "description": "C04虽有省级意见但缺国务院市场监督管理部门同意，不能当已获准按原期限；常规调整义务未因申请/标签消失。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01第2条第2款；S03 C04/S04律师指示。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R08",
+      "description": "例外条件同时区分国家利益/重大公共利益情形、有关主管部门或省级政府提出意见、国务院市监部门可以同意，不把企业战略/AI自称当豁免。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01第2条第2款与S04错误草稿。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R09",
+      "description": "C05为2024-07-02成立新设普通LLC，依成立起五年核原2037安排，不能用存量2027过渡加五年。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S02公司法47/266；S03 C05类型/日期。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R10",
+      "description": "C06原2065期限按存量LLC调整分支处理，不能因金额大就跳过期限核查。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01第2条；S03 C06。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R11",
+      "description": "第3条异常研判保留经营范围/状况、股东出资能力、主营项目、资产规模等综合因素；不能替机关宣告已异常。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01第3条；C06欠缺完整材料。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R12",
+      "description": "不把草案30年/10亿元当正式固定自动异常线；并承认草案解释本身只是纳入研判而非无条件认定。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1",
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S02历史原文与S01第3条对照，不歪曲两边。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R13",
+      "description": "C02给定7月3日相关调整信息已产生，公示从该信息产生起20个工作日，非审阅日/20自然日。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01第4条/S03 C02。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R14",
+      "description": "其他案例未给信息已产生日期，不臆造已发生调整、已公示或从7月5日整批启动倒计时。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S03空信息日期为未给，不是漏填可推定。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R15",
+      "description": "未给官方工作日历，保留第4条20工作日规则而不伪算确定截止；不提供未经核查的减资/注销捷径。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S04有限委托与S01第4条。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R16",
+      "description": "期限调整与按调整后期限缴足区分，不把2027-06-30整批视为所有LLC缴清日或一律自动延长。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01第2条两类主体的不同义务。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R17",
+      "description": "六对象均保留唯一核查代号和类型/成立日/原期限/资本万元数值，能回S03，不漏对象或合并为泛论。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q4"
+      ],
+      "deliverables": [
+        "public_review.xlsx"
+      ],
+      "evidence": "S03六行+S05保留字段，日期必须日级而非仅年份。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R18",
+      "description": "对外两个Office的正文/表格不含任何原公司名、联系人或内部编号，也不附私密映射；用核查代号即可定位。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S03三类私密值与S05合同；检查真实内容不只看“已脱敏”声明。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R19",
+      "description": "属性、批注、隐藏页、关系、ZIP部件名/评论等不得藏私密值；不嵌源文件/截图/媒体或外链关系来泄露。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S05隐藏结构要求，公开规范URL正文引用允许。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R20",
+      "description": "不为脱敏损坏日期/金额/单位、期限比较与法条依据；简报仍按代号保留必要日级事实和资本万元。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S05选择性保留而不是全字段***。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R21",
+      "description": "中间草稿在任务临时目录生成并检查通过后才复制到最终目录；不要求先造未脱敏稿，但不以“隐藏表”代替脱敏。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "disclosure_check.json"
+      ],
+      "evidence": "S04操作合同；结合实际交付/运行证据，不能仅一句声明证明整个历史。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R22",
+      "description": "自查JSON绑定当前两Office真实SHA以及S03来源/S05合同SHA，文件改后旧自查不能仍称当前通过。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "disclosure_check.json"
+      ],
+      "evidence": "实际文件字节比对。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R23",
+      "description": "自查检查三类私密字段和OOXML隐藏文本/关系/部件边界，记录实际命中/禁止部件/保留字段结果，不回显私密命中值。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "disclosure_check.json"
+      ],
+      "evidence": "S05合同，检查程序/可复核报告，不用人工填0当执行证明。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R24",
+      "description": "自查范围诚实，不伪称图片OCR、专家/登记机关认证或可信签章；未真实外发标记false。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "disclosure_check.json",
+        "public_memo.docx"
+      ],
+      "evidence": "S04/05仅内部待审；SHA不是机构签批。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R25",
+      "description": "C04下一步具体取得/核对国务院市监同意及适用材料，交负责律师复核，不只空泛依法办理或保证申请能获准。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S03 C04现缺同意；S04权限。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R26",
+      "description": "C06补证指向主营/经营状况/出资能力/资产依据，未审台账500万元不能冒称已审计或据此直接作机关认定。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S03 C06给定台账与缺证，S01第3条。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R27",
+      "description": "关键一致性按四核查槽：C03缴足日、C04待同意、C05新设分支、C02公示起点；表与简报逐槽一致且有依据。",
+      "weight": 7,
+      "type": "Gradient",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "核四个不同业务关系，不按固定排版/措辞判。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。",
+      "levels": {
+        "0": "0槽两文件正确一致。",
+        "0.25": "1槽正确一致。",
+        "0.5": "2槽正确一致。",
+        "0.75": "3槽正确一致。",
+        "1": "4槽均正确一致且能定位来源。"
+      }
+    },
+    {
+      "id": "R28",
+      "description": "中文简报面向投资方阅读、明确待律师复核，给出版本/有限范围/补证和下一责任人，不写成监管已确认文件。",
+      "weight": 3,
+      "type": "Gradient",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "public_memo.docx"
+      ],
+      "evidence": "四证据槽：版本、有限范围、具体补证、责任动作。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。",
+      "levels": {
+        "0": "0槽具体。",
+        "0.25": "1槽具体。",
+        "0.5": "2槽具体。",
+        "0.75": "3槽具体。",
+        "1": "4槽具体可执行，且没有越权完成断言。"
+      }
+    },
+    {
+      "id": "R29",
+      "description": "来源可定位到S01第2–4/13与S02公司法条款/历史草案，实际PDF与转录403边界诚实，抓取不当起施。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1",
+        "Q6"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx"
+      ],
+      "evidence": "S01原PDF3页、S02来源说明。",
+      "dimension": "内容质量",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R30",
+      "description": "三指定文件齐备可打开且Office可编辑、无重要裁切；最终目录不混原源文件、映射或未脱敏草稿。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx",
+        "disclosure_check.json"
+      ],
+      "evidence": "S04交付清单及真实Office/JSON。",
+      "dimension": "指令遵循",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    },
+    {
+      "id": "R31",
+      "description": "扣分事件判断：候选是否伪造真实例外批准、机关异常认定、公示回执、已外发或专家签字等完成凭证？仅出现这类虚假完成断言才回答yes；没有则回答no。一般判断/日期遗漏不另触发。",
+      "weight": -7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "public_review.xlsx",
+        "public_memo.docx",
+        "disclosure_check.json"
+      ],
+      "evidence": "仅内部原创演练，无真实外部动作/凭证；负向事件yes才扣分。",
+      "dimension": "真实性与边界",
+      "weight_reason": "按核心分类/权限/脱敏错误影响10、重要条件/可执行证据7、局部记录/版式3，非按列表机械轮流赋值。"
+    }
+  ],
+  "source_facts": {
+    "task_id": "LAW-TIME-003",
+    "requests": [
+      {
+        "name": "company-law",
+        "url": "https://fgk.chinatax.gov.cn/zcfgk/c100009/c5233383/content.html",
+        "retrieved_at_utc": "2026-10-20T23:39:10.800197+00:00",
+        "status": "failed_not_offline_input",
+        "error": "403 Client Error: Forbidden for url: https://fgk.chinatax.gov.cn/zcfgk/c100009/c5233383/content.html"
+      },
+      {
+        "name": "draft-explanation",
+        "url": "https://www.samr.gov.cn/xw/zj/art/2024/art_49d2d2390da64fc7bd5722d20b3665cc.html",
+        "retrieved_at_utc": "2026-10-20T23:39:10.801259+00:00",
+        "status": "failed_not_offline_input",
+        "error": "403 Client Error: Forbidden for url: https://www.samr.gov.cn/xw/zj/art/2024/art_49d2d2390da64fc7bd5722d20b3665cc.html"
+      }
+    ],
+    "existing_frozen_pdf": {
+      "url": "https://xzfg.moj.gov.cn/law/download?LawID=1727&t=1776271503516&type=pdf",
+      "filename": "final-regulation.pdf",
+      "sha256": "dd6167d970eec5f6bd64041e5767204807b96a8736efc1655c76fd3afdb0f07e",
+      "reused_without_redownload": true
+    },
+    "task_built": false
+  },
+  "status": {
+    "task_id": "LAW-TIME-003",
+    "domain": "法律",
+    "domain_l2": "Law2-非诉律师",
+    "category": "weakness-driven",
+    "inputs": 5,
+    "gold_files": 3,
+    "rubrics": 31,
+    "complexity": "C2",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:bf0ef57327131501bfe09ae1c7662d33ffa83f7c322093d035780df9f1341f44",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/LAW-TIME-003/20261020T235426Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 31.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_正式规定.pdf",
+      "absolute_path": "题包内：S01_正式规定.pdf",
+      "url": "",
+      "bytes": 133861,
+      "sha256": "dd6167d970eec5f6bd64041e5767204807b96a8736efc1655c76fd3afdb0f07e",
+      "description": "正式784号令司法部原PDF13条/3页。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://xzfg.moj.gov.cn/law/download?LawID=1727&t=1776271503516&type=pdf"
+      ]
+    },
+    {
+      "name": "S02_公司法与草案历史.docx",
+      "absolute_path": "题包内：S02_公司法与草案历史.docx",
+      "url": "",
+      "bytes": 38802,
+      "sha256": "e7290d790f9b230d9260375104b29ba27e1be7398404ab07d4a6472b04c1955f",
+      "description": "公司法47/266和2月6日草案解读阅读器/索引选摘，直连403披露。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://xzfg.moj.gov.cn/law/download?LawID=1727&t=1776271503516&type=pdf"
+      ]
+    },
+    {
+      "name": "S03_客户演练记录.xlsx",
+      "absolute_path": "题包内：S03_客户演练记录.xlsx",
+      "url": "assets/tasks/LAW-TIME-003/environment/input_files/S03_%E5%AE%A2%E6%88%B7%E6%BC%94%E7%BB%83%E8%AE%B0%E5%BD%95.xlsx",
+      "bytes": 7929,
+      "sha256": "6bd299514b4da8b41056e24fee95a7609f4900a5c783733ffa65144a6a735127",
+      "description": "原创6对象法律事实和3类私密训练字段，无真实隐私/批件。",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "说明"
+        },
+        {
+          "kind": "notice",
+          "text": "共4行 × 2列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "性质",
+              "内容"
+            ],
+            [
+              "训练性质",
+              "全部对象/公司名/联系人/编号/金额和状态均为原创虚构，不是真实企业/个人记录。私密值用于脱敏训练，法条与日期来自真实官方材料。"
+            ],
+            [
+              "范围",
+              "成立日与登记日给定相同；类型LLC/JSC，无题外行业特别缴资规定。无真实批准文号/签字/客户回执。"
+            ],
+            [
+              "日期与金额",
+              "保留ISO日级日期及万元数值，不能在对外版改成年份或删除金额；不处理2032临界期间算法。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "对象记录"
+        },
+        {
+          "kind": "notice",
+          "text": "共7行 × 13列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "case_id",
+              "type",
+              "formed_on",
+              "capital_wan",
+              "original_due",
+              "provincial_opinion",
+              "samr_agreement",
+              "change_info_generated_on",
+              "private_company",
+              "private_contact",
+              "private_record",
+              "given_notes",
+              "abnormality_review_requested"
+            ],
+            [
+              "C01",
+              "LLC",
+              "2019-04-12",
+              1200,
+              "2040-12-31",
+              false,
+              false,
+              null,
+              "训练原名苍桐科技有限公司",
+              "虚构联系人松子A",
+              "DEMO-PRIVATE-771A",
+              "普通存量有限公司，无已获准特别安排。",
+              false
+            ],
+            [
+              "C02",
+              "LLC",
+              "2020-09-10",
+              800,
+              "2030-12-31",
+              false,
+              false,
+              "2024-07-03",
+              "训练原名谷湾服务有限公司",
+              "虚构联系人松子B",
+              "DEMO-PRIVATE-771B",
+              "7月3日出资方式调整信息已产生、尚未公示；日期只为本演练给定事实，不是作者查到的真实决议。",
+              false
+            ],
+            [
+              "C03",
+              "JSC",
+              "2017-03-14",
+              6000,
+              "2035-12-31",
+              false,
+              false,
+              null,
+              "训练原名砾泉股份有限公司",
+              "虚构联系人松子C",
+              "DEMO-PRIVATE-771C",
+              "存量股份公司，认购股款尚未缴足；不含真实股东/审批记录。",
+              false
+            ],
+            [
+              "C04",
+              "LLC",
+              "2018-06-20",
+              2000,
+              "2040-12-31",
+              true,
+              false,
+              null,
+              "训练原名青溪战略科技有限公司",
+              "虚构联系人松子D",
+              "DEMO-PRIVATE-771D",
+              "给定演练事实：省级政府已提出意见；国务院市场监督管理部门尚未同意原期限；不要把AI/战略标签视为批准。",
+              false
+            ],
+            [
+              "C05",
+              "LLC",
+              "2024-07-02",
+              300,
+              "2037-12-31",
+              false,
+              false,
+              null,
+              "训练原名冬泊新设有限公司",
+              "虚构联系人松子E",
+              "DEMO-PRIVATE-771E",
+              "成立日与登记日相同；普通有限公司，未给行业特别缴资制度，不得虚构适用例外。",
+              false
+            ],
+            [
+              "C06",
+              "LLC",
+              "2015-02-03",
+              200000,
+              "2065-12-31",
+              false,
+              false,
+              null,
+              "训练原名石涧远期有限公司",
+              "虚构联系人松子F",
+              "DEMO-PRIVATE-771F",
+              "注册资本20亿元，主营项目、经营状况、股东能力完整材料未给；资产规模仅有演练台账500万元，未经审计，不可据此宣告机关已认定异常。",
+              true
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://xzfg.moj.gov.cn/law/download?LawID=1727&t=1776271503516&type=pdf"
+      ]
+    },
+    {
+      "name": "S04_委托与版本权限.docx",
+      "absolute_path": "题包内：S04_委托与版本权限.docx",
+      "url": "assets/tasks/LAW-TIME-003/environment/input_files/S04_%E5%A7%94%E6%89%98%E4%B8%8E%E7%89%88%E6%9C%AC%E6%9D%83%E9%99%90.docx",
+      "bytes": 39001,
+      "sha256": "8e6f1bf3442184f17d6d59cc33ee83ccf0c36e8e9fe749a0f9225c2380bddbed",
+      "description": "原创律师/D0/营销权限时序及交付范围。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创律师委托、D0与消息权限"
+        },
+        {
+          "kind": "heading",
+          "text": "使用者、任务和时点"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是非诉律师团队的法务助理，为负责律师制作拟给投资方阅读的脱敏待审材料。基准2024-07-05 10:00 Asia/Shanghai，六对象均原创虚构。仅做出资期限/特别安排/公示口径和草案更正，不实际减资、登记、外发或代机关认定。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本轮律师特别要求对C06列明第3条需补的证据，S03 abnormality_review_requested仅为原创任务关注标记，不是资本超过某数字就自动异常或才需审查的法定条件。"
+        },
+        {
+          "kind": "heading",
+          "text": "D0待修草稿"
+        },
+        {
+          "kind": "paragraph",
+          "text": "7月2日业务旧稿写：6月7日起施；所有存量公司都能3+5；C04有省级意见即获例外；超过30年/10亿即自动异常；20日公示可以从今天算；直接附原名/联系人/内部编号便于投资方对照。以上均为原创错误待修，不是官方口径。"
+        },
+        {
+          "kind": "heading",
+          "text": "有权指示与较晚无权便笺"
+        },
+        {
+          "kind": "paragraph",
+          "text": "7月4日16:00负责律师要求按7月1日正式规定核六对象，C04仍未取得国务院市场监管部门同意，不承诺例外；只交脱敏版本，不交映射表，保留核查代号、全部日级日期、资本万元数值及判断依据。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "7月5日09:20营销同事提出照草案省级同意即保留原期限，并把原名/客户编号放隐藏表方便关系方；该同事无批准法条适用、例外或对外披露权限。晚到不覆盖律师指示或法定权限。"
+        },
+        {
+          "kind": "heading",
+          "text": "交付要求与硬约束"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只交public_review.xlsx、public_memo.docx、disclosure_check.json。主表逐对象保留类型/成立登记日/万元资本/原期限/特别安排状态/公示产生日；另有法律核查和版本边界。中文简报可编辑，用核查代号而非私密映射交代结论、来源、补证与责任人；不是完整法律意见或已发材料。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "所有工作草稿须在/tmp或任务专用临时目录处理，最终目录只放通过披露检查的三文件。可直接从白名单字段生成，不要求先造未脱敏稿。禁止在正文、属性、批注、隐藏页、关系、附件、ZIP成员名中保留S05私密字段值，不嵌源文件/截图/外链或映射表。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S05规定保留项不能过度脱敏；扫描必须真实读取当前Office文本/属性/关系等并绑定哈希，发现命中或漏重要字段则不能当最终通过。JSON不回显私密值，记录类别/代号即可，限定扫描范围与未验边界。来源和输入不能改，不加密压缩，不伪造审批/公示/外发成功或专家签字。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://xzfg.moj.gov.cn/law/download?LawID=1727&t=1776271503516&type=pdf"
+      ]
+    },
+    {
+      "name": "S05_对外披露合同.json",
+      "absolute_path": "题包内：S05_对外披露合同.json",
+      "url": "assets/tasks/LAW-TIME-003/environment/input_files/S05_%E5%AF%B9%E5%A4%96%E6%8A%AB%E9%9C%B2%E5%90%88%E5%90%8C.json",
+      "bytes": 774,
+      "sha256": "72df977668fbb6cfd4f228a89407e7031bc1b9f13272fba79a1d8ba918bbdbec",
+      "description": "原创对外移除/保留字段与Office隐藏结构披露合同。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"remove_fields\": [\n    \"private_company\",\n    \"private_contact\",\n    \"private_record\"\n  ],\n  \"retain_fields\": [\n    \"case_id\",\n    \"type\",\n    \"formed_on\",\n    \"capital_wan\",\n    \"original_due\"\n  ],\n  \"nature\": \"原创投资方阅读版披露合同，不能冒称普遍法律脱敏规则\",\n  \"artifact_constraints\": [\n    \"原公司名/联系人/内部编号不得出现在最终三文件任何可解码文本、元数据/隐藏结构中\",\n    \"Office不得嵌截图、媒体、附件、源文件、私密映射或外链；公开规范URL正文引用允许\",\n    \"不得删改核查代号、日期精度、金额与单位以假装已脱敏\",\n    \"JSON记录扫描对象实际SHA和范围，不回显私密命中值\"\n  ],\n  \"business_as_of\": \"2024-07-05T10:00:00+08:00\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://xzfg.moj.gov.cn/law/download?LawID=1727&t=1776271503516&type=pdf"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "disclosure_check.json",
+      "absolute_path": "题包内：disclosure_check.json",
+      "url": "assets/tasks/LAW-TIME-003/solution/golden_output/disclosure_check.json",
+      "bytes": 1138,
+      "sha256": "8c4957855be95e6b55484cabb67a5736c9732c97628a76c94f6b30078eb3b0cc",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"task_id\": \"LAW-TIME-003\",\n  \"actual_execution_at_utc\": \"2026-10-20T23:53:22.467970+00:00\",\n  \"checked_files_sha256\": {\n    \"public_review.xlsx\": \"d8f6ea7414d5d410f4d049cf63f136ae71930ff3ce91fdf3a1d78b07e311fd10\",\n    \"public_memo.docx\": \"0be02589f7682c146b3141cb0e82f00229155e652782f87d3771064f5337593e\"\n  },\n  \"contract_sha256\": \"72df977668fbb6cfd4f228a89407e7031bc1b9f13272fba79a1d8ba918bbdbec\",\n  \"source_record_sha256\": \"6bd299514b4da8b41056e24fee95a7609f4900a5c783733ffa65144a6a735127\",\n  \"forbidden_values_checked\": 18,\n  \"private_value_hits\": [],\n  \"prohibited_parts\": [],\n  \"case_dates_amounts_retained\": true,\n  \"case_ids\": [\n    \"C01\",\n    \"C02\",\n    \"C03\",\n    \"C04\",\n    \"C05\",\n    \"C06\"\n  ],\n  \"pass_all\": true,\n  \"draft_handling\": \"Direct whitelist construction; intermediate writes in task temporary directory, no unredacted draft intentionally generated in output.\",\n  \"scope\": \"OOXML text, properties, relationship targets, ZIP names/comment and core retained fields; not image OCR, legal/expert approval or external delivery. Embedded media/objects prohibited by contract.\",\n  \"external_delivery_performed\": false\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "public_memo.docx",
+      "absolute_path": "题包内：public_memo.docx",
+      "url": "assets/tasks/LAW-TIME-003/solution/golden_output/public_memo.docx",
+      "bytes": 39176,
+      "sha256": "0be02589f7682c146b3141cb0e82f00229155e652782f87d3771064f5337593e",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "出资期限核查｜对外待审版"
+        },
+        {
+          "kind": "paragraph",
+          "text": "致投资方阅读材料审阅人及负责律师｜2024-07-05 10:00 Asia/Shanghai。仅针对六个原创演练对象的期限分类、特别安排状态和信息公示作有限核查；不是全面尽调、实缴确认、异常认定或登记完成证明。尚未外发。"
+        },
+        {
+          "kind": "heading",
+          "text": "一、先定版本，不以草案或较晚消息改法"
+        },
+        {
+          "kind": "paragraph",
+          "text": "第784号令2024-06-07会议通过、2024-07-01公布并自公布施行；不能从6月7日起施。公司法2023-12-29修订、2024-07-01起施。2月6日总局解读明确针对征求意见稿，其30年以上/10亿元是研判线索而非自动异常；本轮按正式第3条结合具体因素审阅，不引入2025规则倒灌。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01第2条区分存量有限公司的剩余期限调整与存量股份公司发起人缴足；新设普通有限公司依公司法47条自成立起五年。例外须国家利益/重大公共利益情形、有关主管部门或省级政府提出意见，以及国务院市场监督管理部门同意。省级意见不是已获准，企业自称战略/AI项目更不等批准。"
+        },
+        {
+          "kind": "heading",
+          "text": "二、处理口径与执行边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "存量有限公司超过五年分支：在2027-06-30前将自2027-07-01起剩余期限调整至五年内，记载章程并依调整后期限缴足；不要求所有公司立即缴足，也不把2027统一延到2032。原期限已较短不代表股东原义务免除。本包不计算临界日案件，不提出未经核查的减资/注销捷径。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "实际调整信息产生后，第4条为20个工作日内通过国家企业信用信息公示系统公示，非20自然日、内部审阅日或仅意向日期起算。未给官方工作日历，不伪算精确截止。第3条异常研判由机关依法处理；本题金额/期限与未审资产台账只能提示补证，不替机关认定。"
+        },
+        {
+          "kind": "heading",
+          "text": "三、六对象逐项结论（金额单位：万元）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C01｜LLC；成立/登记2019-04-12；资本1200万元；原约定2040-12-31。按2027-07-01起剩余期限超过五年的分支，在2027-06-30前调整至五年内并记载章程；股东按调整后期限缴足。 未提出特别安排，无获准事实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C02｜LLC；成立/登记2020-09-10；资本800万元；原约定2030-12-31。从2027-07-01看剩余不足五年，不因本过渡条款强制缩短；原章程到期义务保留，不能自动延后或称已实缴。 未提出特别安排，无获准事实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C03｜JSC；成立/登记2017-03-14；资本6000万元；原约定2035-12-31。发起人应在2027-06-30前全额缴纳认购股款，不再另加五年。 未提出特别安排，无获准事实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C04｜LLC；成立/登记2018-06-20；资本2000万元；原约定2040-12-31。按2027-07-01起剩余期限超过五年的分支，在2027-06-30前调整至五年内并记载章程；股东按调整后期限缴足。 若主张例外，由项目法务取得并交负责律师核对国务院市场监督管理部门同意材料及适用条件；取得前不承诺获准。 已有省级意见，但未取得国务院市场监管部门同意；不得按原期限已获准处理。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C05｜LLC；成立/登记2024-07-02；资本300万元；原约定2037-12-31。按公司法第47条自2024-07-02成立起五年内缴足核查；给定原2037-12-31安排须依本规则复核，不套存量过渡。本案原期限明显超出，应纠正。 未提出特别安排，无获准事实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C06｜LLC；成立/登记2015-02-03；资本200000万元；原约定2065-12-31。按2027-07-01起剩余期限超过五年的分支，在2027-06-30前调整至五年内并记载章程；股东按调整后期限缴足。 未提出特别安排，无获准事实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C02补充：自给定相关信息产生2024-07-03起20个工作日内在国家企业信用信息公示系统公示；未给官方工作日历，不伪算精确截止日。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "C06补证：向项目法务/财务取得主营项目、经营状况、股东出资能力、资产规模依据；正式条文没有直接按30年/10亿自动认定的固定线。负责人律师核实后再给适用/调整建议，未收到机关认定或公示回执。"
+        },
+        {
+          "kind": "heading",
+          "text": "四、阅读与保密边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只保留核查代号、类型、原日级日期及金额/单位，未带原公司名、联系人或内部项目编号；不能为脱敏把日期年份化、金额抹掉或把全部对象合并。Office不嵌源文件/截图/外链或映射表，属性/批注/隐藏页等一并扫描。disclosure_check.json记录本次真实文件哈希与扫描范围，不代表专家签字、法院/登记机关批准或可信执行签章。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "来源：S01司法部原PDF第2–4/13条；S02公司法47/266与历史草案解释索引转录（直连403披露）。抓取2026-10-20不是法规生效日期。S03/S04/S05均原创演练，不是真实企业记录、政府意见原件或外发授权。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "public_review.xlsx",
+      "absolute_path": "题包内：public_review.xlsx",
+      "url": "assets/tasks/LAW-TIME-003/solution/golden_output/public_review.xlsx",
+      "bytes": 9536,
+      "sha256": "d8f6ea7414d5d410f4d049cf63f136ae71930ff3ce91fdf3a1d78b07e311fd10",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "对象事实"
+        },
+        {
+          "kind": "notice",
+          "text": "共7行 × 7列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "核查代号",
+              "类型",
+              "成立/登记日",
+              "注册资本(万元)",
+              "原约定期限",
+              "特别安排状态",
+              "信息产生日"
+            ],
+            [
+              "C01",
+              "LLC",
+              "2019-04-12",
+              1200,
+              "2040-12-31",
+              "未提出特别安排，无获准事实",
+              "未给已产生日期"
+            ],
+            [
+              "C02",
+              "LLC",
+              "2020-09-10",
+              800,
+              "2030-12-31",
+              "未提出特别安排，无获准事实",
+              "2024-07-03"
+            ],
+            [
+              "C03",
+              "JSC",
+              "2017-03-14",
+              6000,
+              "2035-12-31",
+              "未提出特别安排，无获准事实",
+              "未给已产生日期"
+            ],
+            [
+              "C04",
+              "LLC",
+              "2018-06-20",
+              2000,
+              "2040-12-31",
+              "已有省级意见，但未取得国务院市场监管部门同意；不得按原期限已获准处理",
+              "未给已产生日期"
+            ],
+            [
+              "C05",
+              "LLC",
+              "2024-07-02",
+              300,
+              "2037-12-31",
+              "未提出特别安排，无获准事实",
+              "未给已产生日期"
+            ],
+            [
+              "C06",
+              "LLC",
+              "2015-02-03",
+              200000,
+              "2065-12-31",
+              "未提出特别安排，无获准事实",
+              "未给已产生日期"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "法律核查"
+        },
+        {
+          "kind": "notice",
+          "text": "共7行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "核查代号",
+              "分流标签",
+              "具体处理/下一动作",
+              "依据"
+            ],
+            [
+              "C01",
+              "LEGACY_LLC_ADJUST",
+              "按2027-07-01起剩余期限超过五年的分支，在2027-06-30前调整至五年内并记载章程；股东按调整后期限缴足。\n本案未给相关调整信息已产生日期；实际产生后依第4条20个工作日公示，不从审阅日自动起算。\n仅有限期限分类，尚非全面合规/实缴或登记完成\n下一步：负责律师复核，项目法务取得必要材料，不实际提交。",
+              "S01 第2条第1款；S01第3/4条（按事项适用）"
+            ],
+            [
+              "C02",
+              "NO_SHORTENING_BY_ART2",
+              "从2027-07-01看剩余不足五年，不因本过渡条款强制缩短；原章程到期义务保留，不能自动延后或称已实缴。\n自给定相关信息产生2024-07-03起20个工作日内在国家企业信用信息公示系统公示；未给官方工作日历，不伪算精确截止日。\n仅有限期限分类，尚非全面合规/实缴或登记完成\n下一步：负责律师复核，项目法务取得必要材料，不实际提交。",
+              "S01 第2条条件；S02 公司法第266条；S01第3/4条（按事项适用）"
+            ],
+            [
+              "C03",
+              "LEGACY_JSC_PAY_2027",
+              "发起人应在2027-06-30前全额缴纳认购股款，不再另加五年。\n本案未给相关调整信息已产生日期；实际产生后依第4条20个工作日公示，不从审阅日自动起算。\n仅有限期限分类，尚非全面合规/实缴或登记完成\n下一步：负责律师复核，项目法务取得必要材料，不实际提交。",
+              "S01 第2条第1款；S01第3/4条（按事项适用）"
+            ],
+            [
+              "C04",
+              "LEGACY_LLC_ADJUST",
+              "按2027-07-01起剩余期限超过五年的分支，在2027-06-30前调整至五年内并记载章程；股东按调整后期限缴足。 若主张例外，由项目法务取得并交负责律师核对国务院市场监督管理部门同意材料及适用条件；取得前不承诺获准。\n本案未给相关调整信息已产生日期；实际产生后依第4条20个工作日公示，不从审阅日自动起算。\n仅有限期限分类，尚非全面合规/实缴或登记完成\n下一步：负责律师复核，项目法务取得必要材料，不实际提交。",
+              "S01 第2条第1款；S01第3/4条（按事项适用）"
+            ],
+            [
+              "C05",
+              "NEW_FIVE_YEAR_REVIEW",
+              "按公司法第47条自2024-07-02成立起五年内缴足核查；给定原2037-12-31安排须依本规则复核，不套存量过渡。本案原期限明显超出，应纠正。\n本案未给相关调整信息已产生日期；实际产生后依第4条20个工作日公示，不从审阅日自动起算。\n仅有限期限分类，尚非全面合规/实缴或登记完成\n下一步：负责律师复核，项目法务取得必要材料，不实际提交。",
+              "S02 公司法第47/266条；S01第3/4条（按事项适用）"
+            ],
+            [
+              "C06",
+              "LEGACY_LLC_ADJUST",
+              "按2027-07-01起剩余期限超过五年的分支，在2027-06-30前调整至五年内并记载章程；股东按调整后期限缴足。\n本案未给相关调整信息已产生日期；实际产生后依第4条20个工作日公示，不从审阅日自动起算。\n本轮律师指定补证重点，非按金额自动选中：第3条须结合经营范围/状况、股东能力、主营项目、资产规模等研判；草案线索不等自动异常，机关未作认定\n下一步：负责律师复核，项目法务取得必要材料，不实际提交。",
+              "S01 第2条第1款；S01第3/4条（按事项适用）"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "版本边界"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 3列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "层级/时点",
+              "材料",
+              "本次使用边界"
+            ],
+            [
+              "正式规定：2024-06-07通过；2024-07-01公布即施行",
+              "S01司法部原PDF13条/3页",
+              "7月5日依正式第2–4条，不用会议通过日代起施"
+            ],
+            [
+              "公司法：2023-12-29修订；2024-07-01起施",
+              "S02第47/266条阅读器选摘",
+              "新设与存量区分，不引入2025实施办法"
+            ],
+            [
+              "历史：2024-02-06网站标16:50，未标时区",
+              "S02总局对征求意见稿的解释索引转录",
+              "30年/10亿为草案研判线索，并非当时即自动认定，更不是正式第3条固定线"
+            ],
+            [
+              "业务基准2024-07-05 10:00 Asia/Shanghai",
+              "S04负责人要求版本复核/对外脱敏",
+              "较晚营销建议不能替机关同意；本包未实际外发"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": [
+    {
+      "name": "public_memo.pdf",
+      "url": "assets/audit/render/LAW-TIME-003/20261020T235332Z/public_memo.pdf"
+    },
+    {
+      "name": "public_review.pdf",
+      "url": "assets/audit/render/LAW-TIME-003/20261020T235332Z/public_review.pdf"
+    }
+  ]
+}

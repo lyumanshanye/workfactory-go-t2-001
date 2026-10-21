@@ -1,0 +1,139 @@
+{
+  "schema": "questboard-headless-evidence-v2",
+  "contract_version": "questboard-release-r2-20250407",
+  "source_hashes": {
+    "addons/plugin.cfg": "c0916c86235e3e6d599271afc3c84191c58dfc96ca55d29f770d2f8280a10cab",
+    "addons/plugin.gd": "ca4530e77cfd110bfceca5cf21cb6617c820501a2cd004c908f496363cfe2b47",
+    "addons/quest_text_parser.gd": "c0cfe2d735312655e679a8201758b237a0bd72d7e9e0c15874add6f02f64db3a",
+    "data/dialogue.quest": "78925b65edef2f558a9c5a372d170eb7f1ef2b0495556a04479ab8351884e5c9",
+    "main.tscn": "7c2b3dacd763703ec75332f4033afd0d0fce7b38ce76366490145a5308ce5748",
+    "project.godot": "5f3cdd85d75ec9741248f0857b0f268fee6f1bc600f4dd35e585f7509a381f94",
+    "scripts/quest_board.gd": "116b78dd44e4d85691d802f333f64e515ce41f73413e5665b8890ceda45ac3b0",
+    "scripts/stdin_importer.gd": "e9bd2b3814a7032ce39d10b538a1d5491732e624f91eb8d926f365c5a1b79d40"
+  },
+  "skill_resource_hashes": {
+    "SKILL.md": "be20d7c9e9db1ed67602d58818b3346053ff71ff14d928ac49c4bbdc48d2da63",
+    "references/release-contract.json": "4be2ea3ed96e0e80376f78cd5d99480f8dd203b22affa9ea87031382499b12d0",
+    "scripts/audit_release.py": "3afdcc2bb7765a43bfc490e1e8ff0c23552d44b28e92e8276d95a76ed7f34032",
+    "scripts/probe_editor_plugin.gd": "395913324760f791eab569ef3ed123c132c86702b1f658ac7e23db7ea9ccdc1e",
+    "scripts/probe_project.gd": "49c9b327fd4c5092c45e157d9e059404b673881956d33982e967e83b0a976c80"
+  },
+  "timestamp_utc": "2026-10-20T19:37:19.886457+00:00",
+  "probes": [
+    {
+      "probe": "import",
+      "command": [
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/toolcache/godot4.4.1/Godot_v4.4.1-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/questboard_release_w6xv60s4/project",
+        "--editor",
+        "--quit"
+      ],
+      "exit_code": 0,
+      "stdout": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nfirst_scan_filesystem: begin: Project initialization steps: 5\n\tfirst_scan_filesystem: step 0: Scanning file structure...\n\tfirst_scan_filesystem: step 1: Loading global class names...\n\tfirst_scan_filesystem: step 2: Verifying GDExtensions...\n\tfirst_scan_filesystem: step 3: Creating autoload scripts...\n\tfirst_scan_filesystem: step 4: Initializing plugins...\n\tfirst_scan_filesystem: step 5: Starting file scan...\nfirst_scan_filesystem: end\nupdate_scripts_classes: begin: Registering global classes... steps: 5\n\tupdate_scripts_classes: step 0: \n\tupdate_scripts_classes: step 1: \n\tupdate_scripts_classes: step 2: \n\tupdate_scripts_classes: step 3: \n\tupdate_scripts_classes: step 4: \nupdate_scripts_classes: end\nupdate_script_paths_documentation: begin: Updating scripts documentation steps: 5\n\tupdate_script_paths_documentation: step 0: plugin.gd\n\tupdate_script_paths_documentation: step 1: quest_text_parser.gd\n\tupdate_script_paths_documentation: step 2: quest_board.gd\n\tupdate_script_paths_documentation: step 3: stdin_importer.gd\n\tupdate_script_paths_documentation: step 4: __release_probe.gd\nupdate_script_paths_documentation: end\nloading_editor_layout: begin: Loading editor steps: 5\n\tloading_editor_layout: step 0: Loading editor layout...\nloading_editor_layout: end\n",
+      "stderr": "",
+      "observed": null,
+      "pass": true
+    },
+    {
+      "probe": "ui_frame_signal",
+      "command": [
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/toolcache/godot4.4.1/Godot_v4.4.1-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/questboard_release_w6xv60s4/project",
+        "--script",
+        "res://__release_probe.gd",
+        "--",
+        "ui"
+      ],
+      "exit_code": 0,
+      "stdout": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nQUESTBOARD_OBSERVATION={\"frame_name\":\"ChapterOne\",\"node_count\":4,\"observed\":{\"position\":[13.0,27.0],\"size\":[321.0,189.0]}}\n",
+      "stderr": "",
+      "observed": {
+        "frame_name": "ChapterOne",
+        "node_count": 4,
+        "observed": {
+          "position": [
+            13.0,
+            27.0
+          ],
+          "size": [
+            321.0,
+            189.0
+          ]
+        }
+      },
+      "pass": true
+    },
+    {
+      "probe": "stdin_checkpoint",
+      "command": [
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/toolcache/godot4.4.1/Godot_v4.4.1-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/questboard_release_w6xv60s4/project",
+        "--script",
+        "res://__release_probe.gd",
+        "--",
+        "stdin"
+      ],
+      "exit_code": 0,
+      "stdout": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nQUESTBOARD_OBSERVATION={\"checkpoint\":\"checkpoint_alpha\"}\n",
+      "stderr": "",
+      "observed": {
+        "checkpoint": "checkpoint_alpha"
+      },
+      "pass": true
+    },
+    {
+      "probe": "editor_parser",
+      "command": [
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/toolcache/godot4.4.1/Godot_v4.4.1-stable_linux.x86_64",
+        "--headless",
+        "--path",
+        "/tmp/questboard_release_w6xv60s4/project",
+        "--editor"
+      ],
+      "exit_code": 0,
+      "stdout": "Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org\n\nfirst_scan_filesystem: begin: Project initialization steps: 5\n\tfirst_scan_filesystem: step 0: Scanning file structure...\n\tfirst_scan_filesystem: step 1: Loading global class names...\n\tfirst_scan_filesystem: step 2: Verifying GDExtensions...\n\tfirst_scan_filesystem: step 3: Creating autoload scripts...\n\tfirst_scan_filesystem: step 4: Initializing plugins...\n\tfirst_scan_filesystem: step 5: Starting file scan...\nfirst_scan_filesystem: end\nloading_editor_layout: begin: Loading editor steps: 5\n\tloading_editor_layout: step 0: Loading editor layout...\nloading_editor_layout: end\nQUESTBOARD_OBSERVATION={\"entries\":[[\"Start\",\"quest:intro\",\"Starts\",\"Intro action\"],[\"Market\",\"quest:market\",\"\",\"Location\"],[\"Return\",\"\",\"\",\"Exit action\"]],\"extensions\":[\"quest\"]}\n",
+      "stderr": "",
+      "observed": {
+        "entries": [
+          [
+            "Start",
+            "quest:intro",
+            "Starts",
+            "Intro action"
+          ],
+          [
+            "Market",
+            "quest:market",
+            "",
+            "Location"
+          ],
+          [
+            "Return",
+            "",
+            "",
+            "Exit action"
+          ]
+        ],
+        "extensions": [
+          "quest"
+        ]
+      },
+      "pass": true
+    }
+  ],
+  "production_release": false,
+  "manual_pending": [
+    "editor interaction and resize with pointer",
+    "full editor POT generation workflow",
+    "target-platform packaging and rendering",
+    "4.3 rollback restore and runtime check on the original snapshot"
+  ],
+  "engine_version": "4.4.1.stable.official.49a5bc7b6",
+  "gate": "READY_FOR_MANUAL_EDITOR_REVIEW"
+}

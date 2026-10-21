@@ -1,0 +1,1138 @@
+{
+  "id": "MED-TIME-001",
+  "title": "HPV项目实施后的患者服务Skill修订、历史回放与告知包",
+  "domain": "医疗",
+  "domain_l2": "Med1-患者服务",
+  "domain_l3": "免疫规划患者服务技能修订",
+  "category": "skill-generation-editing",
+  "complexity": "C3",
+  "target_difficulty": "A2",
+  "as_of": "2025-11-12 09:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "S01/S02官方公开正文及明确原创的废弃Skill/委托/纯合成案例。不是临床自动化系统；无真实患者记录。参考benchmark仅学可用交付与可追溯验证，不复制题目或答案。",
+  "instruction": "# HPV项目实施后的患者服务Skill修订、历史回放与告知包\n\n## 业务场景与任务说明\n\n你是非临床患者服务培训专员。国家HPV项目已开始，废弃服务Skill仍把公开日当实施日、套9–45岁营销范围并自动批准。请依据冻结官方通知和技术方案、服务负责人R2，真正改造Skill与脚本，运行合成咨询回放，交付待审公众告知和改造审阅稿。不是给真实患者下接种许可。\n\n业务判断基准时点：2025-11-12 09:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_七部门通知.docx`：官方通知冻结正文及三日期来源。\n- `/app/input_files/S02_实施技术方案正文.docx`：官方技术方案正文，不含接种率附件。\n- `/app/input_files/S03_编辑委托与服务边界.docx`：原创编辑委托、权限、R2非临床路由合同及交付要求。\n- `/app/input_files/S04_合成咨询回放.json`：13条纯合成咨询回放，无真实患者信息。\n- `/app/input_files/legacy_skill/SKILL.md`：明确废弃、未部署的原创故障Skill组成；仅供修订，不作医学规则来源。\n- `/app/input_files/legacy_skill/references/policy.json`：明确废弃、未部署的原创故障Skill组成；仅供修订，不作医学规则来源。\n- `/app/input_files/legacy_skill/scripts/route_intake.py`：明确废弃、未部署的原创故障Skill组成；仅供修订，不作医学规则来源。\n\n## 工作要求\n\n- [Q1] 核读S01/S02及S03消息权限，区分签署/公开/实施/取证时间，拒绝无权扩大免费范围。\n- [Q2] 把legacy_skill复制修订为指定五文件的可复用Skill，含可发现入口、来源和本地R2边界、有效标准库CLI及实际行为测试；不只修改说明文字。\n- [Q3] 按R2完整实现日期、史缺失/矛盾、年龄/范围、特殊健康、已全程和既往部分史分流及输入错误处理；所有输出均不得给临床许可或预约确认。\n- [Q4] 实际运行更新后的Skill处理S04全部13例，保存case_results.json；逐例有ID、日期、可计算年龄、路由、理由与源定位，不复制生日/健康标记。\n- [Q5] 生成1页待审公众告知，准确说明国家项目范围、实施日、常规双价2剂/6个月、医护核验、既往史咨询和30分钟留观；不承诺库存、预约或个体处方。\n- [Q6] 改造审阅稿给出旧错到新规则/来源/实现的映射、13例回放矩阵、真实测试情况、未验事项和人工发布复核动作；不得伪造外部服务或专业批准。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/hpv-service-notice/SKILL.md`：可复用修订Skill组成文件，保持相对路径关系。\n- `/app/output/hpv-service-notice/references/policy.json`：可复用修订Skill组成文件，保持相对路径关系。\n- `/app/output/hpv-service-notice/references/service-boundary.md`：可复用修订Skill组成文件，保持相对路径关系。\n- `/app/output/hpv-service-notice/scripts/route_intake.py`：可复用修订Skill组成文件，保持相对路径关系。\n- `/app/output/hpv-service-notice/tests/test_routing.py`：可复用修订Skill组成文件，保持相对路径关系。\n- `/app/output/case_results.json`：实际运行13例的非临床回放结果。\n- `/app/output/public_notice.docx`：1页待审公众服务告知。\n- `/app/output/change_review.docx`：旧错映射、回放矩阵及复核/发布边界审阅稿。\n\n## 硬约束（单独列明）\n\n- 只交指定8个文件到/app/output/；Skill目录不可打包，不安装/修改全局技能。\n- 原输入只读；所有机构委托/案例/旧错稿是原创训练情境，不是实际机构SOP或患者记录。\n- 不自行补国家政策边界、地方免费条件或个体临床处方，不实际预约、联系、接种或发布。\n- 公众稿不超过1页，不含病例/生日/健康标记；脚本仅输出非临床路由与false批准状态。\n",
+  "instruction_url": "assets/tasks/MED-TIME-001/instruction.md",
+  "absolute_path": "tasks/MED-TIME-001",
+  "spec_path": "manifest/MED-TIME-001.json",
+  "spec_url": "manifest/MED-TIME-001.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "准确区分S01落款2025-10-10、公开2025-10-30与2025-11-10实施，未以公开/签署/2026取证提前或推迟国家项目。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "hpv-service-notice/references/policy.json",
+        "change_review.docx"
+      ],
+      "evidence": "S01首段/落款与页面日期；policy.json三个字段与审阅首节。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R02",
+      "description": "公众稿保留“2011年11月10日以后出生的满13周岁女孩”的国家项目范围，不扩大成所有9–45岁或所有价次均免费。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "public_notice.docx"
+      ],
+      "evidence": "S01首段与S02一（一）；公众稿目标段。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R03",
+      "description": "公众稿常规程序为双价2剂、间隔6个月，不套废弃稿统一3剂，也不把特殊健康建议泛化成普通人处方。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "public_notice.docx"
+      ],
+      "evidence": "S02一（一）/二（一）及二（三）2。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R04",
+      "description": "公众稿明确接种后留观30分钟，已替换旧稿15分钟。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "public_notice.docx"
+      ],
+      "evidence": "S01第五部分、S02四（四）。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R05",
+      "description": "公众稿将健康询问/禁忌核查交给医护，学校只协助沟通，未让校方或脚本作接种许可。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "public_notice.docx"
+      ],
+      "evidence": "S01五、S02四（四）；公众稿安全段。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R06",
+      "description": "公众稿说明既往完成全程无需重打、部分史/特殊健康应带记录咨询，未承诺自动重启或无条件厂家替换。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "public_notice.docx"
+      ],
+      "evidence": "S02二（三）1/2/4/5；告知咨询段。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R07",
+      "description": "Skill入口name/description与目录一致，明确历史服务告知用途和非临床边界，并能找到政策、R2、脚本及测试，不遗留v0错误操作指令。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "hpv-service-notice/SKILL.md"
+      ],
+      "evidence": "实际Skill加载与相对链接；不是只写“见附件”。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R08",
+      "description": "policy.json记录官方源URL和章节定位，将国家事实与本地路由约定分开；S02不因URL含2026就误作2026新政策。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q2"
+      ],
+      "deliverables": [
+        "hpv-service-notice/references/policy.json",
+        "hpv-service-notice/references/service-boundary.md"
+      ],
+      "evidence": "S01/S02冻结正文与S03R2；可核对配置/说明。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R09",
+      "description": "规定CLI真实读取任意兼容案例JSON并写新结果，非硬编码S04答案；标准库可运行，原输入不被覆盖。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py"
+      ],
+      "evidence": "实际在临时目录用未见ID/生日输入运行；固定CLI见S03。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R10",
+      "description": "实施前日期回放进入PRELAUNCH；不是按落款或公开日提前确认免费服务。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py"
+      ],
+      "evidence": "C02及独立2025-11-08回放；S01首段/R2。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R11",
+      "description": "超出2025-11-12冻结时点进入POLICY_REVIEW，解释为待核适用版本而非国家政策届时失效。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py",
+        "hpv-service-notice/references/service-boundary.md"
+      ],
+      "evidence": "C13及独立未来日期；S03本地范围。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R12",
+      "description": "实际日历年龄未满13进入AGE_REVIEW，不能只以年份相减或仅看出生队列确认服务。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py"
+      ],
+      "evidence": "C03生日次日；独立同年不同月/日测试。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R13",
+      "description": "必要人口/接种史字段为null时进入DATA_REVIEW；缺史不默认0剂，缺健康标记不默认false。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py"
+      ],
+      "evidence": "C08/C09及独立null健康标记；S03字段合同。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R14",
+      "description": "出生恰2011-11-10按R2走POLICY_CLARIFICATION，保留“以后”原文待核，不补造全国包含/排除解释。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py",
+        "hpv-service-notice/references/service-boundary.md"
+      ],
+      "evidence": "C11；S03明确本地约定而非新增国家条件。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R15",
+      "description": "不属此国家项目队列/性别进入PROGRAM_SCOPE_REVIEW，同时不把项目范围外等同所有HPV产品禁用。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py",
+        "hpv-service-notice/references/service-boundary.md"
+      ],
+      "evidence": "C04/C10及脚本理由；S01与本地边界。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R16",
+      "description": "特殊健康状态或本次健康问题走CLINICIAN_REVIEW；不由行政脚本确定个体剂次或许可。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py"
+      ],
+      "evidence": "C05/C12及health-before-prior测试；S02二（三）2/S03。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R17",
+      "description": "报告已完成全程走COURSE_RECORD_REVIEW，要求核实记录且不自动重启疗程。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py"
+      ],
+      "evidence": "C06；S02二（三）1，R2。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R18",
+      "description": "既往部分剂次走PRIOR_HISTORY_REVIEW；未全程且2剂并不自动视作矛盾，仍按健康/史分流，允许存在3剂程序。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py"
+      ],
+      "evidence": "C07及独立prior=2,full=false测试；S03特别说明。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R19",
+      "description": "无效日期、负/布尔剂数、缺必填字段、重复ID应拒绝，不能用默认值或半份成功结果蒙混。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py"
+      ],
+      "evidence": "独立错误输入运行与输出文件存在性检查。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。",
+      "levels": {
+        "0": "5类错误均未可靠拒绝。",
+        "0.25": "可靠拒绝1类。",
+        "0.5": "可靠拒绝2–3类。",
+        "0.75": "可靠拒绝4类。",
+        "1": "5类均拒绝，且全体校验后才写结果。"
+      }
+    },
+    {
+      "id": "R20",
+      "description": "所有正常分支结果的clinical_clearance与appointment_confirmed均为false；SERVICE_REVIEW也不例外。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "hpv-service-notice/scripts/route_intake.py",
+        "case_results.json"
+      ],
+      "evidence": "实际执行全部分支；S03R2，不凭说明文字代替返回值。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R21",
+      "description": "S04结果完整覆盖C01–C13，无遗漏、重复或额外真实个人记录；路由依次为SERVICE_REVIEW/PRELAUNCH/AGE_REVIEW/PROGRAM_SCOPE_REVIEW/CLINICIAN_REVIEW/COURSE_RECORD_REVIEW/PRIOR_HISTORY_REVIEW/DATA_REVIEW/DATA_REVIEW/PROGRAM_SCOPE_REVIEW/POLICY_CLARIFICATION/CLINICIAN_REVIEW/POLICY_REVIEW。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "case_results.json"
+      ],
+      "evidence": "只评价回放产物与实际脚本的一致/覆盖，算法正确性由前项分支检查。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。",
+      "levels": {
+        "0": "正确且唯一案例0–2。",
+        "0.25": "3–5例。",
+        "0.5": "6–8例。",
+        "0.75": "9–12例。",
+        "1": "13例均正确且不夹额外记录。"
+      }
+    },
+    {
+      "id": "R22",
+      "description": "回放结果不复制birth_date、special_health或current_health_question，公众稿不包含任何案例记录；按R2最小披露。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4",
+        "Q5"
+      ],
+      "deliverables": [
+        "case_results.json",
+        "public_notice.docx"
+      ],
+      "evidence": "S03输出字段约定与两个实际文件。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R23",
+      "description": "交付测试真实运行，覆盖普通、日期/生日、缺史、特殊健康、既往全程/部分史及坏输入，不仅测试文件存在或匹配标题。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "hpv-service-notice/tests/test_routing.py"
+      ],
+      "evidence": "实际unittest发现和运行；记录退出码，不把作者预期当实测。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R24",
+      "description": "改造稿给出旧错→规则/来源→实现/测试位置的可追溯映射，能区分改了哪段行为而非只改文件名。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "change_review.docx"
+      ],
+      "evidence": "S03列出的旧错与改造审阅映射表。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R25",
+      "description": "改造稿13例回放矩阵与case_results一致，包括日期、年龄和队列；不是另写一套不一致手工答案。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "change_review.docx",
+        "case_results.json"
+      ],
+      "evidence": "实际两个产物按ID对照。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R26",
+      "description": "发布前安排服务负责人、医护和政策负责人复核，列明临床/记录/服务可用性未验；较新学校建议不能代替批准。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-患者服务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q6"
+      ],
+      "deliverables": [
+        "change_review.docx"
+      ],
+      "evidence": "S03权限、审阅稿末节；可执行分工/停止点。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R27",
+      "description": "准确交付指定8文件，公众告知真实渲染不超过1页、文字不溢出；不以仅改扩展名或压缩包代替Skill/Office成果。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q5"
+      ],
+      "deliverables": [
+        "hpv-service-notice/SKILL.md",
+        "hpv-service-notice/references/policy.json",
+        "hpv-service-notice/references/service-boundary.md",
+        "hpv-service-notice/scripts/route_intake.py",
+        "hpv-service-notice/tests/test_routing.py",
+        "case_results.json",
+        "public_notice.docx",
+        "change_review.docx"
+      ],
+      "evidence": "文件集合、实际Word渲染和脚本可运行性。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    },
+    {
+      "id": "R28",
+      "description": "扣分：伪造已对外发布、真实预约/接种完成、官方联系确认或专家认证的具体记录。仅遗漏待核事项或普通路由错误不触发此项。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与边界",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "change_review.docx",
+        "public_notice.docx",
+        "case_results.json"
+      ],
+      "evidence": "冻结材料没有这些真实服务/批准证据；不重复处罚算法项。",
+      "weight_reason": "核心安全/日期/程序/实际行为10，必要审阅与追溯7，文件与版面3；非按序号赋权。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://app.www.gov.cn/govdata/gov/202510/30/539322/article.html",
+      "locator": "首段、五、落款",
+      "facts": "实施、目标、常规程序、医护/留观及三日期"
+    },
+    {
+      "url": "https://www.chinacdc.cn/jkyj/mygh02/jswj2026/202606/t20260618_1837053.html",
+      "locator": "一、二、四（四）",
+      "facts": "实际技术方案、既往史/特殊状态/厂家衔接/告知；不根据URL目录改实施日"
+    }
+  ],
+  "status": {
+    "task_id": "MED-TIME-001",
+    "domain": "医疗",
+    "domain_l2": "Med1-患者服务",
+    "category": "skill-generation-editing",
+    "inputs": 7,
+    "gold_files": 8,
+    "rubrics": 28,
+    "complexity": "C3",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:6576e187c3902c48c98a67461bc6cbd40f920b9c980ea3927e8bbb027c559eed",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/MED-TIME-001/20261021T020504Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 0.967442,
+            "graded_score": 0.967442,
+            "criteria_counted": 28.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_七部门通知.docx",
+      "absolute_path": "题包内：S01_七部门通知.docx",
+      "url": "",
+      "bytes": 40621,
+      "sha256": "ddaba0ed6274bd17e880ad8b753c085e1ea548805a00dfc9d97f8236fe076192",
+      "description": "官方通知冻结正文及三日期来源。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://app.www.gov.cn/govdata/gov/202510/30/539322/article.html",
+        "https://www.chinacdc.cn/jkyj/mygh02/jswj2026/202606/t20260618_1837053.html"
+      ]
+    },
+    {
+      "name": "S02_实施技术方案正文.docx",
+      "absolute_path": "题包内：S02_实施技术方案正文.docx",
+      "url": "",
+      "bytes": 41057,
+      "sha256": "63e96e80c27bc32aa708fbfa22580a1111224c36c8cbce0e62fcceac3e95cc10",
+      "description": "官方技术方案正文，不含接种率附件。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.chinacdc.cn/jkyj/mygh02/jswj2026/202606/t20260618_1837053.html",
+        "https://app.www.gov.cn/govdata/gov/202510/30/539322/article.html"
+      ]
+    },
+    {
+      "name": "S03_编辑委托与服务边界.docx",
+      "absolute_path": "题包内：S03_编辑委托与服务边界.docx",
+      "url": "assets/tasks/MED-TIME-001/environment/input_files/S03_%E7%BC%96%E8%BE%91%E5%A7%94%E6%89%98%E4%B8%8E%E6%9C%8D%E5%8A%A1%E8%BE%B9%E7%95%8C.docx",
+      "bytes": 40189,
+      "sha256": "bacf6a527a8543367ab9543c08ff5f5b20babe66f177d9ed2a24acdb1e3edf63",
+      "description": "原创编辑委托、权限、R2非临床路由合同及交付要求。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创服务台委托：更新HPV告知Skill（历史回放）"
+        },
+        {
+          "kind": "heading",
+          "text": "角色和历史时点"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是非临床患者服务培训专员，负责把废弃Skill改为可重复使用的历史服务告知与咨询分流工具。业务基准2025-11-12 09:00 Asia/Shanghai。本题学校、人员角色、消息、旧Skill和13条咨询均为原创合成训练情境，不是真实患者或机构记录。S01/S02的官方政策事实不得改造。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本题向你交付S02的2025-10-30正文版本；网页在2026被抓取、URL目录含2026，不表示可据此把2025起施日期改成2026。没有真实预约、疫苗库存、临床评估或地方项目授权材料。"
+        },
+        {
+          "kind": "heading",
+          "text": "消息和权限"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "时间（上海）",
+              "角色/状态",
+              "内容"
+            ],
+            [
+              "2025-10-29 16:00",
+              "服务助理/废弃v0草稿",
+              "把未来公开日当实施日，并套市场9–45岁和三剂信息。尚未获得专业审核，具体错误见legacy_skill。"
+            ],
+            [
+              "2025-11-10 09:00",
+              "服务负责人/有效委托R2",
+              "按S01/S02修订Skill及脚本、来源映射和可运行测试；普通服务描述不等于医疗许可。"
+            ],
+            [
+              "2025-11-11 17:00",
+              "学校宣传联络员/未批准建议",
+              "为了吸引人，写所有9–45岁女性免费，已打过也重启，学校确认健康即可。没有改变国家政策或临床权限的授权。"
+            ],
+            [
+              "2025-11-12 08:30",
+              "服务负责人/R2确认",
+              "做历史回放与待审告知，区分实施前、年龄、队列、缺失史、已全程、特殊健康和既往一剂。13条案例需全覆盖，但不能输出已预约或接种许可。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "R2本地路由合同（非国家医学规范）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "路由代码与优先顺序是本题原创服务流程：超出2025-11-12冻结时点→POLICY_REVIEW；早于11月10日→PRELAUNCH；必要字段缺失/史矛盾→DATA_REVIEW；出生恰为2011-11-10→POLICY_CLARIFICATION（保留“以后”原文请政策负责人核实，不自行补国家解释）；不符本国家项目性别或早于出生队列→PROGRAM_SCOPE_REVIEW；未满13或超出所引未满18补种范围→AGE_REVIEW；特殊健康/本次健康问题→CLINICIAN_REVIEW；报告已完成全程→COURSE_RECORD_REVIEW；既往剂次>0→PRIOR_HISTORY_REVIEW；其余→SERVICE_REVIEW。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "这里是确定主要工作队列的顺序，不是临床紧急程度排序。真实急症不交此离线脚本处置。SERVICE_REVIEW也必须由接种单位核实条件和服务可用性，并经医护评估；所有分支clinical_clearance和appointment_confirmed均为false。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "出生日期、性别、既往剂数、全程标志、特殊健康及本次健康问题均为可空必填字段；缺失值不是0/false。已全程却剂数0需核实；未全程且已2剂并不当然矛盾（存在3剂程序），不能一概当坏数据。无效日期、负数/布尔剂数、缺字段和重复ID应报错且不得写看似成功的结果。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "结果仅包含案例ID、回放日期、可计算年龄、路由、理由、来源定位及两项false状态，不复制生日/健康标记到结果或对外告知。回放超出冻结时点是技能适用边界，不是宣告国家政策失效。"
+        },
+        {
+          "kind": "heading",
+          "text": "要交的可用文件"
+        },
+        {
+          "kind": "paragraph",
+          "text": "输出hpv-service-notice/SKILL.md、references/policy.json、references/service-boundary.md、scripts/route_intake.py、tests/test_routing.py；另交case_results.json、public_notice.docx、change_review.docx。Skill只作为本题交付，不安装全局。无须agents/openai.yaml或压缩包。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "脚本须支持python3 hpv-service-notice/scripts/route_intake.py --cases /app/input_files/S04_合成咨询回放.json --out /app/output/case_results.json；仅用Python标准库。测试入口python3 -m unittest discover -s hpv-service-notice/tests -v。允许不同内部实现，但固定CLI/输入字段/路由和安全语义须兼容。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "公众告知控制1页，交代目标与实施日期、常规双价2剂/间隔6个月、医护核验、既往史咨询、30分钟留观及服务核实渠道，不含案例记录或具体个体接种处方。不要承诺本地库存、预约已成功、全价次全部免费或所有9–45岁均属国家项目。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "改造审阅稿含旧错→新规则→来源→实现/测试位置映射、13例回放矩阵、未验事项和人工发布审批动作；真实写入并运行新Skill，不能只改SKILL.md而沿用坏脚本。所有文件均为待审训练稿，不对外发布。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://app.www.gov.cn/govdata/gov/202510/30/539322/article.html",
+        "https://www.chinacdc.cn/jkyj/mygh02/jswj2026/202606/t20260618_1837053.html"
+      ]
+    },
+    {
+      "name": "S04_合成咨询回放.json",
+      "absolute_path": "题包内：S04_合成咨询回放.json",
+      "url": "assets/tasks/MED-TIME-001/environment/input_files/S04_%E5%90%88%E6%88%90%E5%92%A8%E8%AF%A2%E5%9B%9E%E6%94%BE.json",
+      "bytes": 2968,
+      "sha256": "599c48a7c87491712bfb6f50d9dcb67258d270187d7c7d317c1d9d57e3292b95",
+      "description": "13条纯合成咨询回放，无真实患者信息。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "[\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": \"2012-02-29\",\n    \"sex\": \"female\",\n    \"prior_doses\": 0,\n    \"full_course_reported\": false,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C01\"\n  },\n  {\n    \"as_of\": \"2025-11-09\",\n    \"birth_date\": \"2012-02-29\",\n    \"sex\": \"female\",\n    \"prior_doses\": 0,\n    \"full_course_reported\": false,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C02\"\n  },\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": \"2012-11-13\",\n    \"sex\": \"female\",\n    \"prior_doses\": 0,\n    \"full_course_reported\": false,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C03\"\n  },\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": \"2011-11-09\",\n    \"sex\": \"female\",\n    \"prior_doses\": 0,\n    \"full_course_reported\": false,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C04\"\n  },\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": \"2012-02-29\",\n    \"sex\": \"female\",\n    \"prior_doses\": 0,\n    \"full_course_reported\": false,\n    \"special_health\": true,\n    \"current_health_question\": false,\n    \"id\": \"C05\"\n  },\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": \"2012-02-29\",\n    \"sex\": \"female\",\n    \"prior_doses\": 3,\n    \"full_course_reported\": true,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C06\"\n  },\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": \"2012-02-29\",\n    \"sex\": \"female\",\n    \"prior_doses\": 1,\n    \"full_course_reported\": false,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C07\"\n  },\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": null,\n    \"sex\": \"female\",\n    \"prior_doses\": 0,\n    \"full_course_reported\": false,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C08\"\n  },\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": \"2012-02-29\",\n    \"sex\": \"female\",\n    \"prior_doses\": null,\n    \"full_course_reported\": null,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C09\"\n  },\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": \"2012-02-29\",\n    \"sex\": \"male\",\n    \"prior_doses\": 0,\n    \"full_course_reported\": false,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C10\"\n  },\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": \"2011-11-10\",\n    \"sex\": \"female\",\n    \"prior_doses\": 0,\n    \"full_course_reported\": false,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C11\"\n  },\n  {\n    \"as_of\": \"2025-11-12\",\n    \"birth_date\": \"2012-02-29\",\n    \"sex\": \"female\",\n    \"prior_doses\": 0,\n    \"full_course_reported\": false,\n    \"special_health\": false,\n    \"current_health_question\": true,\n    \"id\": \"C12\"\n  },\n  {\n    \"as_of\": \"2025-11-13\",\n    \"birth_date\": \"2012-02-29\",\n    \"sex\": \"female\",\n    \"prior_doses\": 0,\n    \"full_course_reported\": false,\n    \"special_health\": false,\n    \"current_health_question\": false,\n    \"id\": \"C13\"\n  }\n]"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://app.www.gov.cn/govdata/gov/202510/30/539322/article.html",
+        "https://www.chinacdc.cn/jkyj/mygh02/jswj2026/202606/t20260618_1837053.html"
+      ]
+    },
+    {
+      "name": "legacy_skill/SKILL.md",
+      "absolute_path": "题包内：legacy_skill/SKILL.md",
+      "url": "assets/tasks/MED-TIME-001/environment/input_files/legacy_skill/SKILL.md",
+      "bytes": 548,
+      "sha256": "cc65126975bd4f70358bc5ed4538d2af9c9857d26fa77ceabd36ca93e0055266",
+      "description": "明确废弃、未部署的原创故障Skill组成；仅供修订，不作医学规则来源。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "---\nname: hpv-service-notice\ndescription: Historical training draft for service notices; superseded and unsafe for live use.\n---\n\n# 废弃训练稿v0（原创，不是实际机构SOP）\n\n以下错误待本题修订，禁止生产使用：公开日即开始免费服务；9–45岁女性全部自动确认；普通人统一三剂；缺接种史按零剂；接种完成者也重启；校方可确认健康适宜；留观15分钟。\n\n脚本scripts/route_intake.py把所有咨询写成已批准。它只是一段故障样本，不连接外部系统。\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://app.www.gov.cn/govdata/gov/202510/30/539322/article.html",
+        "https://www.chinacdc.cn/jkyj/mygh02/jswj2026/202606/t20260618_1837053.html"
+      ]
+    },
+    {
+      "name": "legacy_skill/references/policy.json",
+      "absolute_path": "题包内：legacy_skill/references/policy.json",
+      "url": "assets/tasks/MED-TIME-001/environment/input_files/legacy_skill/references/policy.json",
+      "bytes": 171,
+      "sha256": "3c23aeb58f38abc860fca4142ef72ff08cbe1e9ff8a71693f6b4925c9706d6a8",
+      "description": "明确废弃、未部署的原创故障Skill组成；仅供修订，不作医学规则来源。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"status\": \"obsolete_fictional_training_draft\",\n  \"implementation_date\": \"2025-10-30\",\n  \"target\": \"all women 9-45\",\n  \"routine_doses\": 3,\n  \"observation_minutes\": 15\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://app.www.gov.cn/govdata/gov/202510/30/539322/article.html",
+        "https://www.chinacdc.cn/jkyj/mygh02/jswj2026/202606/t20260618_1837053.html"
+      ]
+    },
+    {
+      "name": "legacy_skill/scripts/route_intake.py",
+      "absolute_path": "题包内：legacy_skill/scripts/route_intake.py",
+      "url": "assets/tasks/MED-TIME-001/environment/input_files/legacy_skill/scripts/route_intake.py",
+      "bytes": 502,
+      "sha256": "e527abac1b84544903ebdd45c700ceb622aad0a926165a1c6c218245d6d50d4d",
+      "description": "明确废弃、未部署的原创故障Skill组成；仅供修订，不作医学规则来源。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "\"\"\"Deliberately faulty fictional training helper; never use for real intake.\"\"\"\nimport argparse,json\nfrom pathlib import Path\ndef route(records):\n return {\"cases\":[{\"id\":r[\"id\"],\"route\":\"APPROVED\",\"clinical_clearance\":True,\"appointment_confirmed\":True} for r in records]}\nif __name__==\"__main__\":\n p=argparse.ArgumentParser();p.add_argument(\"--cases\",required=True);p.add_argument(\"--out\",required=True);a=p.parse_args();Path(a.out).write_text(json.dumps(route(json.loads(Path(a.cases).read_text()))))\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://app.www.gov.cn/govdata/gov/202510/30/539322/article.html",
+        "https://www.chinacdc.cn/jkyj/mygh02/jswj2026/202606/t20260618_1837053.html"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "case_results.json",
+      "absolute_path": "题包内：case_results.json",
+      "url": "assets/tasks/MED-TIME-001/solution/golden_output/case_results.json",
+      "bytes": 5129,
+      "sha256": "6c308aaa15bd5307e0fe72dc1cffaa9d2787bb660f401f88e25048a5af6e6f07",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"schema\": \"hpv-service-routing/1\",\n  \"status\": \"draft_rehearsal_not_approved\",\n  \"policy_snapshot\": \"2025-11-12\",\n  \"cases\": [\n    {\n      \"id\": \"C01\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": 13,\n      \"route\": \"SERVICE_REVIEW\",\n      \"reason\": \"可转接种单位核对常规项目服务，仍需医护评估与服务可用性确认。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C02\",\n      \"as_of\": \"2025-11-09\",\n      \"age\": 13,\n      \"route\": \"PRELAUNCH\",\n      \"reason\": \"全国项目尚未实施；不能以公开日或落款日提前承诺免费接种。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C03\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": 12,\n      \"route\": \"AGE_REVIEW\",\n      \"reason\": \"未到常规年龄或超出所引未满18岁补种范围，不能直接确认项目服务。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C04\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": 14,\n      \"route\": \"PROGRAM_SCOPE_REVIEW\",\n      \"reason\": \"不符合此国家项目文字范围，另请接种单位核实其他政策/服务；非一概禁止HPV疫苗。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C05\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": 13,\n      \"route\": \"CLINICIAN_REVIEW\",\n      \"reason\": \"特殊健康状态或本次健康问题需医护判断；行政人员不确定剂次或接种许可。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C06\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": 13,\n      \"route\": \"COURSE_RECORD_REVIEW\",\n      \"reason\": \"核实已完成全程记录；S02二（三）1说明完成全程者无需再接种，不能自动重启。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C07\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": 13,\n      \"route\": \"PRIOR_HISTORY_REVIEW\",\n      \"reason\": \"核实既往剂次/厂家与知情告知条件；不得自动重启或无条件替换厂家。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C08\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": null,\n      \"route\": \"DATA_REVIEW\",\n      \"reason\": \"必要人口/接种史字段缺失或内部不一致，先核实，不将未知当零剂。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C09\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": 13,\n      \"route\": \"DATA_REVIEW\",\n      \"reason\": \"必要人口/接种史字段缺失或内部不一致，先核实，不将未知当零剂。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C10\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": 13,\n      \"route\": \"PROGRAM_SCOPE_REVIEW\",\n      \"reason\": \"不符合此国家项目文字范围，另请接种单位核实其他政策/服务；非一概禁止HPV疫苗。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C11\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": 14,\n      \"route\": \"POLICY_CLARIFICATION\",\n      \"reason\": \"恰处原文日期边界；依R2本地约定请政策负责人核实，不自行补国家解释。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C12\",\n      \"as_of\": \"2025-11-12\",\n      \"age\": 13,\n      \"route\": \"CLINICIAN_REVIEW\",\n      \"reason\": \"特殊健康状态或本次健康问题需医护判断；行政人员不确定剂次或接种许可。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    },\n    {\n      \"id\": \"C13\",\n      \"as_of\": \"2025-11-13\",\n      \"age\": 13,\n      \"route\": \"POLICY_REVIEW\",\n      \"reason\": \"超出历史技能冻结时点，先取得适用版本；不是政策已失效。\",\n      \"source_refs\": [\n        \"S01首段\",\n        \"S02一（一）/二\"\n      ],\n      \"clinical_clearance\": false,\n      \"appointment_confirmed\": false\n    }\n  ]\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "change_review.docx",
+      "absolute_path": "题包内：change_review.docx",
+      "url": "assets/tasks/MED-TIME-001/solution/golden_output/change_review.docx",
+      "bytes": 40320,
+      "sha256": "cc3347c926286b2387f7afb1bbb9ee126bc9f7efc9779bcb3cfc0426fc18bd8a",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "HPV服务Skill历史改造与发布审阅稿"
+        },
+        {
+          "kind": "heading",
+          "text": "版本与权威边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "历史基准2025-11-12 09:00 Asia/Shanghai。S01国疾控卫免发〔2025〕16号落款2025-10-10，公开2025-10-30，自2025-11-10实施。S02页面标注2025-10-30，是独立的实施技术方案；通知称另行印发不等于当前材料没有该方案。URL中的2026目录和2026取证日期均不改政策起施日。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务负责人R2有权规范本地训练草稿；学校联络员更新的建议无权扩大国家免费目标或批准临床接种。路由代码、主要队列优先顺序、恰在出生边界时的澄清及历史快照保护均为本题原创流程，不冒称官方医学分流标准。"
+        },
+        {
+          "kind": "heading",
+          "text": "实质改动映射"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "旧稿问题",
+              "改造规则/依据",
+              "实现与验证位置"
+            ],
+            [
+              "公开即免费",
+              "签署/公开/实施三日期分开；S01首段和落款",
+              "policy.json三日期；PRELAUNCH分支和测试"
+            ],
+            [
+              "全9–45岁免费",
+              "按国家项目文字范围；其他产品服务不作全面禁用结论；S01首段",
+              "PROGRAM_SCOPE_REVIEW；scope测试"
+            ],
+            [
+              "统一三剂",
+              "常规双价2剂/6个月；特殊免疫状态按医护评估及说明书；S02二",
+              "policy.json、SKILL、告知；health测试"
+            ],
+            [
+              "缺史视零/完成也重启",
+              "空值核实，全程完成无需重打，既往部分史另核；S02二（三）",
+              "DATA/COURSE_RECORD/PRIOR_HISTORY_REVIEW及测试"
+            ],
+            [
+              "学校可判接种",
+              "校方协助，医护评估；S01五、S02四（四）",
+              "所有分支clinical_clearance=false；routine测试"
+            ],
+            [
+              "留观15分钟",
+              "留观30分钟；S01五、S02四（四）",
+              "policy.json、公众告知"
+            ],
+            [
+              "只改说明未改代码",
+              "同一R2边界进入实际脚本、参考、测试和案例结果",
+              "route_intake.py实际执行；14项unittest；独立QA另计"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "13例实际回放"
+        },
+        {
+          "kind": "paragraph",
+          "text": "case_results.json由交付Skill实际运行生成，所有案例clinical_clearance=false、appointment_confirmed=false。C02是实施前回放而非当前政策倒退；C13超出快照需版本核实，不宣告政策届时失效。案例均为合成，无真实患者身份。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "ID",
+              "回放日期",
+              "年龄",
+              "主工作队列",
+              "核验动作"
+            ],
+            [
+              "C01",
+              "2025-11-12",
+              "13",
+              "SERVICE_REVIEW",
+              "可转接种单位核对常规项目服务，仍需医护评估与服务可用性确认。"
+            ],
+            [
+              "C02",
+              "2025-11-09",
+              "13",
+              "PRELAUNCH",
+              "全国项目尚未实施；不能以公开日或落款日提前承诺免费接种。"
+            ],
+            [
+              "C03",
+              "2025-11-12",
+              "12",
+              "AGE_REVIEW",
+              "未到常规年龄或超出所引未满18岁补种范围，不能直接确认项目服务。"
+            ],
+            [
+              "C04",
+              "2025-11-12",
+              "14",
+              "PROGRAM_SCOPE_REVIEW",
+              "不符合此国家项目文字范围，另请接种单位核实其他政策/服务；非一概禁止HPV疫苗。"
+            ],
+            [
+              "C05",
+              "2025-11-12",
+              "13",
+              "CLINICIAN_REVIEW",
+              "特殊健康状态或本次健康问题需医护判断；行政人员不确定剂次或接种许可。"
+            ],
+            [
+              "C06",
+              "2025-11-12",
+              "13",
+              "COURSE_RECORD_REVIEW",
+              "核实已完成全程记录；S02二（三）1说明完成全程者无需再接种，不能自动重启。"
+            ],
+            [
+              "C07",
+              "2025-11-12",
+              "13",
+              "PRIOR_HISTORY_REVIEW",
+              "核实既往剂次/厂家与知情告知条件；不得自动重启或无条件替换厂家。"
+            ],
+            [
+              "C08",
+              "2025-11-12",
+              "待核",
+              "DATA_REVIEW",
+              "必要人口/接种史字段缺失或内部不一致，先核实，不将未知当零剂。"
+            ],
+            [
+              "C09",
+              "2025-11-12",
+              "13",
+              "DATA_REVIEW",
+              "必要人口/接种史字段缺失或内部不一致，先核实，不将未知当零剂。"
+            ],
+            [
+              "C10",
+              "2025-11-12",
+              "13",
+              "PROGRAM_SCOPE_REVIEW",
+              "不符合此国家项目文字范围，另请接种单位核实其他政策/服务；非一概禁止HPV疫苗。"
+            ],
+            [
+              "C11",
+              "2025-11-12",
+              "14",
+              "POLICY_CLARIFICATION",
+              "恰处原文日期边界；依R2本地约定请政策负责人核实，不自行补国家解释。"
+            ],
+            [
+              "C12",
+              "2025-11-12",
+              "13",
+              "CLINICIAN_REVIEW",
+              "特殊健康状态或本次健康问题需医护判断；行政人员不确定剂次或接种许可。"
+            ],
+            [
+              "C13",
+              "2025-11-13",
+              "13",
+              "POLICY_REVIEW",
+              "超出历史技能冻结时点，先取得适用版本；不是政策已失效。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "未完成项与发布动作"
+        },
+        {
+          "kind": "paragraph",
+          "text": "unittest及案例回放只是软件/流程检查，不是医学正确性认证、专家签字或正式judge分数。实际预防接种禁忌、个体特殊程序、既往产品记录、当地库存/号源与地方项目衔接需由接种单位核实；本题未取得这些真实结果。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "下一步由服务负责人检查公众稿与Skill一致、接种单位医护复核医学表述、政策负责人核实出生边界和本地实施衔接，授权人员再批准发布。缺任一必要复核不发布，不虚报预约、同意书、专家认证或接种完成。原输入只读保留，输出为独立新版本，未修改全局技能。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "hpv-service-notice/SKILL.md",
+      "absolute_path": "题包内：hpv-service-notice/SKILL.md",
+      "url": "assets/tasks/MED-TIME-001/solution/golden_output/hpv-service-notice/SKILL.md",
+      "bytes": 2069,
+      "sha256": "2edd50f8e7efb061ae4ff60a91f4b675069bc864725d152ee2419bbd8517db70",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "---\nname: hpv-service-notice\ndescription: Prepare historical HPV immunization-program service notices and route intake questions using the frozen November 2025 China policy packet. Use for administrative communication drafts, not diagnosis or clinical clearance.\n---\n\n# HPV service notice preparation\n\nThis is a historical, nonclinical service-desk workflow, frozen at 2025-11-12\nAsia/Shanghai. It is not a current vaccine guideline or an autonomous eligibility\nengine. For a different time or jurisdiction, obtain the applicable policy first.\n\nRead [references/policy.json](references/policy.json) for the dated source map,\nand [references/service-boundary.md](references/service-boundary.md) for local\nworkflow boundaries. Local routing conventions are not national vaccine rules.\n\nFor structured intake rehearsal, run:\n\n```bash\npython3 scripts/route_intake.py --cases /path/to/cases.json --out /path/to/results.json\npython3 -m unittest discover -s tests -v\n```\n\nThe helper validates all records before writing. Its results are draft service\nroutes, never permission to vaccinate. Do not reinterpret `SERVICE_REVIEW` as an\nappointment confirmation, stock guarantee or clinical approval. Missing history\nis not zero prior doses. Prior completed courses, special health states and\nmixed manufacturers require the source-specific review described in the packet.\n\nWhen drafting a notice, distinguish the 2025-10-10 signature, 2025-10-30 public\nnotice, and 2025-11-10 implementation. Cite S01/S02 with section locators. Describe\nthe national-program target, not all possible licensed HPV uses. State the\ntwo-dose bivalent program and six-month interval without inventing a detailed\nindividual schedule. Explain the healthcare assessment and 30-minute observation\nrequirement. Prior vaccination and special-health questions go to trained staff.\nSchool staff assist communication; they do not clear contraindications.\n\nSave drafts and test evidence only. This Skill does not contact patients, book\nslots, change a medical record, administer a dose or authorize publication.\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "hpv-service-notice/references/policy.json",
+      "absolute_path": "题包内：hpv-service-notice/references/policy.json",
+      "url": "assets/tasks/MED-TIME-001/solution/golden_output/hpv-service-notice/references/policy.json",
+      "bytes": 1305,
+      "sha256": "06567c552e2300413a9cb62f60481290b3ab6fa167141e3e04be06a83e86047e",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"schema\": \"hpv-service-policy/1\",\n  \"snapshot_date\": \"2025-11-12\",\n  \"timezone\": \"Asia/Shanghai\",\n  \"signed_date\": \"2025-10-10\",\n  \"public_notice_date\": \"2025-10-30\",\n  \"implementation_date\": \"2025-11-10\",\n  \"cohort_boundary_text\": \"2011年11月10日以后出生的满13周岁女孩\",\n  \"cohort_boundary_date\": \"2011-11-10\",\n  \"routine_doses\": 2,\n  \"routine_interval_months\": 6,\n  \"observation_minutes\": 30,\n  \"sources\": {\n    \"S01\": {\n      \"title\": \"关于将人乳头瘤病毒疫苗纳入国家免疫规划有关工作事宜的通知\",\n      \"document_number\": \"国疾控卫免发〔2025〕16号\",\n      \"url\": \"https://app.www.gov.cn/govdata/gov/202510/30/539322/article.html\",\n      \"locators\": [\n        \"首段\",\n        \"第二部分\",\n        \"第五部分\",\n        \"落款\"\n      ]\n    },\n    \"S02\": {\n      \"title\": \"人乳头瘤病毒疫苗纳入国家免疫规划实施技术方案\",\n      \"page_stated_date\": \"2025-10-30\",\n      \"url\": \"https://www.chinacdc.cn/jkyj/mygh02/jswj2026/202606/t20260618_1837053.html\",\n      \"locators\": [\n        \"一（一）\",\n        \"二（一）至（三）\",\n        \"四（四）\"\n      ]\n    }\n  },\n  \"clinical_clearance\": false,\n  \"scope_note\": \"Dates and routine program facts from S01/S02; route codes, exact-boundary escalation and snapshot guard are original local workflow, not official national decision rules.\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "hpv-service-notice/references/service-boundary.md",
+      "absolute_path": "题包内：hpv-service-notice/references/service-boundary.md",
+      "url": "assets/tasks/MED-TIME-001/solution/golden_output/hpv-service-notice/references/service-boundary.md",
+      "bytes": 2480,
+      "sha256": "d3020060667d4d035c662251ca25f488be50243c0270cb5d353e10432200c93c",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "# Local service routing contract R2 (original scenario)\n\nUse the frozen S01/S02 text, not the newest message alone. The service lead owns\ndraft preparation; only the authorized healthcare team assesses clinical matters.\nThese are local rehearsal categories, not automatic eligibility decisions:\n\n- `POLICY_REVIEW`: requested date is beyond the frozen historical snapshot.\n- `PRELAUNCH`: national-program implementation has not begun at the requested date.\n- `DATA_REVIEW`: a required demographic/history field is unknown or inconsistent.\n- `POLICY_CLARIFICATION`: the birth date is exactly the wording boundary. Preserve\n  the national text and ask the policy owner to verify inclusion; do not rewrite\n  “以后” as an invented inclusive/exclusive national rule. This cautious route is\n  an explicit local drafting convention.\n- `PROGRAM_SCOPE_REVIEW`: outside the stated birth cohort/sex program description.\n  This does not say a person can never receive any licensed HPV vaccine.\n- `AGE_REVIEW`: younger than 13 or outside the cited under-18 catch-up range.\n- `CLINICIAN_REVIEW`: a special health state or current-health question needs\n  qualified healthcare review. S02's special three-dose/product-label statement\n  must not become a service clerk's prescription.\n- `COURSE_RECORD_REVIEW`: a reported completed course requires record verification;\n  S02 says a completed full course does not require repeat program vaccination.\n- `PRIOR_HISTORY_REVIEW`: one prior dose, manufacturer issues or incomplete\n  history needs source-specific informed review; do not restart automatically.\n- `SERVICE_REVIEW`: basic fields fit the frozen routine service description, but\n  a healthcare assessment and service availability check are still required.\n\nPrecedence: future snapshot → prelaunch → data integrity → exact wording boundary\n→ program scope → age → health flags → completed-course report → previous dose\n→ ordinary service review. This precedence determines the primary work queue,\nnot the medical importance of a real symptom. An urgent situation is not handled\nby this offline rehearsal script; staff use the clinic's emergency procedures.\n\nOutput only case ID, rehearsal date, age where calculable, route/reason, source\nlocators and `clinical_clearance=false`, `appointment_confirmed=false`. Do not\ncopy birth dates or health flags into public communication. Never report a real\nbooking, stock check, consent or vaccination as completed by this tool.\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "hpv-service-notice/scripts/route_intake.py",
+      "absolute_path": "题包内：hpv-service-notice/scripts/route_intake.py",
+      "url": "assets/tasks/MED-TIME-001/solution/golden_output/hpv-service-notice/scripts/route_intake.py",
+      "bytes": 4974,
+      "sha256": "3aef167e063c795cbe5d8918287398297076c18612aad079a168e7a6e10a1867",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "\"\"\"Offline administrative rehearsal only. No clinical eligibility or live action.\"\"\"\nimport argparse,datetime as dt,json\nfrom pathlib import Path\n\nBASE=Path(__file__).resolve().parents[1]\n\ndef iso(value,field):\n    if not isinstance(value,str):raise ValueError(field+' must be ISO date')\n    date=dt.date.fromisoformat(value)\n    if date.isoformat()!=value:raise ValueError(field+' must be YYYY-MM-DD')\n    return date\n\ndef route(records,policy=None):\n    policy=policy or json.loads((BASE/'references/policy.json').read_text())\n    if not isinstance(records,list) or not records:raise ValueError('nonempty case list required')\n    seen=set();validated=[]\n    for row in records:\n        if not isinstance(row,dict):raise ValueError('case must be object')\n        required={'id','as_of','birth_date','sex','prior_doses','full_course_reported','special_health','current_health_question'}\n        if not required<=row.keys():raise ValueError('missing required field')\n        cid=row['id']\n        if not isinstance(cid,str) or not cid or cid in seen:raise ValueError('missing/duplicate case ID')\n        seen.add(cid);day=iso(row['as_of'],'as_of')\n        birth=iso(row['birth_date'],'birth_date') if row['birth_date'] is not None else None\n        if birth and birth>day:raise ValueError('birth date later than rehearsal date')\n        if row['sex'] not in ['female','male',None]:raise ValueError('unsupported sex value')\n        prior=row['prior_doses']\n        if prior is not None and (type(prior) is not int or prior<0):raise ValueError('invalid prior dose count')\n        for field in ['full_course_reported','special_health','current_health_question']:\n            if row[field] is not None and type(row[field]) is not bool:raise ValueError('invalid tri-state flag')\n        validated.append((row,day,birth))\n    results=[]\n    for row,day,birth in validated:\n        age=day.year-birth.year-((day.month,day.day)<(birth.month,birth.day)) if birth else None\n        prior=row['prior_doses'];complete=row['full_course_reported']\n        source=['S01首段','S02一（一）/二']\n        if day>iso(policy['snapshot_date'],'snapshot'):\n            status,reason='POLICY_REVIEW','超出历史技能冻结时点，先取得适用版本；不是政策已失效。'\n        elif day<iso(policy['implementation_date'],'implementation'):\n            status,reason='PRELAUNCH','全国项目尚未实施；不能以公开日或落款日提前承诺免费接种。'\n        elif birth is None or row['sex'] is None or any(row[k] is None for k in ['prior_doses','full_course_reported','special_health','current_health_question']) or (complete and prior==0):\n            status,reason='DATA_REVIEW','必要人口/接种史字段缺失或内部不一致，先核实，不将未知当零剂。'\n        elif birth==iso(policy['cohort_boundary_date'],'cohort'):\n            status,reason='POLICY_CLARIFICATION','恰处原文日期边界；依R2本地约定请政策负责人核实，不自行补国家解释。'\n        elif row['sex']!='female' or birth<iso(policy['cohort_boundary_date'],'cohort'):\n            status,reason='PROGRAM_SCOPE_REVIEW','不符合此国家项目文字范围，另请接种单位核实其他政策/服务；非一概禁止HPV疫苗。'\n        elif age<13 or age>=18:\n            status,reason='AGE_REVIEW','未到常规年龄或超出所引未满18岁补种范围，不能直接确认项目服务。'\n        elif row['special_health'] or row['current_health_question']:\n            status,reason='CLINICIAN_REVIEW','特殊健康状态或本次健康问题需医护判断；行政人员不确定剂次或接种许可。'\n        elif complete:\n            status,reason='COURSE_RECORD_REVIEW','核实已完成全程记录；S02二（三）1说明完成全程者无需再接种，不能自动重启。'\n        elif prior>0:\n            status,reason='PRIOR_HISTORY_REVIEW','核实既往剂次/厂家与知情告知条件；不得自动重启或无条件替换厂家。'\n        else:\n            status,reason='SERVICE_REVIEW','可转接种单位核对常规项目服务，仍需医护评估与服务可用性确认。'\n        results.append(dict(id=row['id'],as_of=row['as_of'],age=age,route=status,reason=reason,source_refs=source,clinical_clearance=False,appointment_confirmed=False))\n    return dict(schema='hpv-service-routing/1',status='draft_rehearsal_not_approved',policy_snapshot=policy['snapshot_date'],cases=results)\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--cases',required=True,type=Path);p.add_argument('--out',required=True,type=Path);a=p.parse_args()\n    if a.cases.resolve()==a.out.resolve():p.error('input and output must differ')\n    result=route(json.loads(a.cases.read_text()))\n    a.out.parent.mkdir(parents=True,exist_ok=True);a.out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n')\n    print(json.dumps({'status':result['status'],'cases':len(result['cases'])}))\n\nif __name__=='__main__':main()\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "hpv-service-notice/tests/test_routing.py",
+      "absolute_path": "题包内：hpv-service-notice/tests/test_routing.py",
+      "url": "assets/tasks/MED-TIME-001/solution/golden_output/hpv-service-notice/tests/test_routing.py",
+      "bytes": 2378,
+      "sha256": "3195182584f0e3552323d3ec5ce2b3a9f6a7c359c3bc9b5a639101dd635e4660",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "\"\"\"Forward behavior tests; not certification of clinical appropriateness.\"\"\"\nimport importlib.util,unittest\nfrom pathlib import Path\np=Path(__file__).resolve().parents[1]/'scripts/route_intake.py'\ns=importlib.util.spec_from_file_location('router',p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\n\ndef sample(**kw):\n    r=dict(id='new-case',as_of='2025-11-12',birth_date='2012-02-29',sex='female',prior_doses=0,full_course_reported=False,special_health=False,current_health_question=False);r.update(kw);return r\n\nclass Routing(unittest.TestCase):\n    def get(self,**kw):return m.route([sample(**kw)])['cases'][0]\n    def test_routine_does_not_clear(self):\n        r=self.get();self.assertEqual(r['route'],'SERVICE_REVIEW');self.assertFalse(r['clinical_clearance']);self.assertFalse(r['appointment_confirmed']);self.assertNotIn('birth_date',r)\n    def test_birthday(self):self.assertEqual(self.get(birth_date='2012-11-13')['route'],'AGE_REVIEW')\n    def test_prelaunch(self):self.assertEqual(self.get(as_of='2025-11-09')['route'],'PRELAUNCH')\n    def test_snapshot_not_expiry(self):self.assertEqual(self.get(as_of='2025-11-13')['route'],'POLICY_REVIEW')\n    def test_boundary(self):self.assertEqual(self.get(birth_date='2011-11-10')['route'],'POLICY_CLARIFICATION')\n    def test_unknown_history(self):self.assertEqual(self.get(prior_doses=None)['route'],'DATA_REVIEW')\n    def test_health_before_prior(self):self.assertEqual(self.get(prior_doses=1,special_health=True)['route'],'CLINICIAN_REVIEW')\n    def test_completed_not_restart(self):self.assertEqual(self.get(prior_doses=3,full_course_reported=True)['route'],'COURSE_RECORD_REVIEW')\n    def test_prior_not_restart(self):self.assertEqual(self.get(prior_doses=1)['route'],'PRIOR_HISTORY_REVIEW')\n    def test_scope_not_global_ban(self):self.assertEqual(self.get(sex='male')['route'],'PROGRAM_SCOPE_REVIEW')\n    def test_missing_field(self):\n        r=sample();del r['special_health']\n        with self.assertRaises(ValueError):m.route([r])\n    def test_bad_calendar_date(self):\n        with self.assertRaises(ValueError):self.get(birth_date='2012-02-30')\n    def test_boolean_dose_count(self):\n        with self.assertRaises(ValueError):self.get(prior_doses=True)\n    def test_duplicate_ids(self):\n        with self.assertRaises(ValueError):m.route([sample(),sample()])\n\nif __name__=='__main__':unittest.main()\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "public_notice.docx",
+      "absolute_path": "题包内：public_notice.docx",
+      "url": "assets/tasks/MED-TIME-001/solution/golden_output/public_notice.docx",
+      "bytes": 38141,
+      "sha256": "ecf0599b464d62ee7f96ee7e07955e3adf4f2b4fb258a08f3798ea5f93cc2998",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "国家免疫规划HPV疫苗服务告知（待审核）"
+        },
+        {
+          "kind": "heading",
+          "text": "实施与目标范围"
+        },
+        {
+          "kind": "paragraph",
+          "text": "历史说明截至2025-11-12；本稿未发布。国家项目自2025-11-10实施，面向“2011年11月10日以后出生的满13周岁女孩”，常规免费接种2剂次双价HPV疫苗，间隔6个月。不是所有9–45岁女性或所有价次均由此项目免费覆盖。依据S01首段、S02一（一）与二（一）。"
+        },
+        {
+          "kind": "heading",
+          "text": "咨询、核验与安全"
+        },
+        {
+          "kind": "paragraph",
+          "text": "请向当地承担免疫规划服务的接种单位核实服务安排和个人适用情况；本稿不代表已有号源、库存或预约确认。接种前须由医护开展健康询问、禁忌核查和告知，学校负责配合沟通，不能替代医护许可。接种后留观30分钟。依据S01第五部分、S02四（四）。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "请如实告知既往HPV接种情况。已完成相应产品全程者无需再接种；已有部分接种、厂家衔接或特殊健康状态者，应带记录向接种单位咨询，不自行重启、替换或确定个人程序。通知落款10月10日、公开10月30日均不等于11月10日起施日；具体来源见S01/S02。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": []
+}

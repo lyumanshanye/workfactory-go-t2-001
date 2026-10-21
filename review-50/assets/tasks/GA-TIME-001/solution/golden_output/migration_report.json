@@ -1,0 +1,74 @@
+{
+  "provenance": "Authored migration analysis with actual engine probes; not expert/production acceptance",
+  "target_engine": "4.4.1.stable.official.49a5bc7b6",
+  "business_as_of": "2025-04-09T09:00:00+08:00",
+  "contract_version": "questboard-release-r2-20250407",
+  "scope": "GDScript Quest Board + editor translation parser; no C# runtime, no GPU or platform export verification",
+  "changes": [
+    {
+      "file": "scripts/quest_board.gd",
+      "api": "GraphEdit.frame_rect_changed",
+      "old": "frame: GraphFrame, new_rect: Vector2",
+      "new": "frame: GraphFrame, new_rect: Rect2",
+      "compatibility": {
+        "GDScript": false,
+        "CSharp_binary": false,
+        "CSharp_source": false
+      },
+      "action": "保留frame参数，改用Rect2并分别记录position/size；非仅修改类型名称。",
+      "evidence": "S01 GUI节点表；S02实际signal参数；release_gate.ui_frame_signal实际观察值"
+    },
+    {
+      "file": "scripts/stdin_importer.gd",
+      "api": "OS.read_string_from_stdin",
+      "old": "无参数调用，4.3默认缓冲1024",
+      "new": "显式buffer_size:int=1024，参数无默认值",
+      "compatibility": {
+        "GDScript": false,
+        "CSharp_binary": true,
+        "CSharp_source": true
+      },
+      "action": "显式1024，不在GUI启动调用，保留strip_edges。",
+      "evidence": "S01 Core表与默认1024说明；S02实际方法参数；stdin_checkpoint"
+    },
+    {
+      "file": "addons/quest_text_parser.gd",
+      "api": "EditorTranslationParserPlugin._parse_file",
+      "old": "path, msgids:Array[String], msgids_context_plural:Array[Array] -> void",
+      "new": "path:String -> Array[PackedStringArray]",
+      "compatibility": {
+        "GDScript": false,
+        "CSharp_binary": false,
+        "CSharp_source": false
+      },
+      "action": "返回每条[msgid,context,plural,comment]，空槽保留；保留已启用插件注册/卸载。",
+      "evidence": "S01 Editor plugins表；S02实际虚方法；editor_parser实际提取3条与扩展名"
+    }
+  ],
+  "rollback_manifest": {
+    "addons/plugin.cfg": "c0916c86235e3e6d599271afc3c84191c58dfc96ca55d29f770d2f8280a10cab",
+    "addons/plugin.gd": "ca4530e77cfd110bfceca5cf21cb6617c820501a2cd004c908f496363cfe2b47",
+    "addons/quest_text_parser.gd": "bdeb41b438404579a7f858804a0f0297fb98556b38e36b4bc30732903fb8d380",
+    "data/dialogue.quest": "78925b65edef2f558a9c5a372d170eb7f1ef2b0495556a04479ab8351884e5c9",
+    "main.tscn": "7c2b3dacd763703ec75332f4033afd0d0fce7b38ce76366490145a5308ce5748",
+    "project.godot": "e99636a805c21edfc6665b6f983b68eaf1cdcadd99fd51e3b4341d8d7ac23e15",
+    "scripts/quest_board.gd": "be09fb64772651cbe6d0c649f37aa0530afe03d9873487ec43b52856a0976df3",
+    "scripts/stdin_importer.gd": "e6d5364ed4afd65bbaec9c941e49cceca3b3a667565ae6a54512e58d1e5a9fe9"
+  },
+  "rollback_runtime": "NOT_RUN_4.3",
+  "headless_result": "READY_FOR_MANUAL_EDITOR_REVIEW",
+  "manual_pending": [
+    "editor interaction and resize with pointer",
+    "full editor POT generation workflow",
+    "target-platform packaging and rendering",
+    "4.3 rollback restore and runtime check on the original snapshot"
+  ],
+  "production_release": false,
+  "not_claimed": [
+    "C# build passed",
+    "Godot4.5 compatible",
+    "GPU rendering validated",
+    "4.3 rollback executed",
+    "production release approved"
+  ]
+}

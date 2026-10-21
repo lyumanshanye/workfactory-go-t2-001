@@ -1,0 +1,146 @@
+{
+  "schema": "go002-release/1",
+  "input_hashes": {
+    "S01_2013旧办法.docx": "c6737cf3e54457a6b2b54b06b60733dbbd0d267bd4c883a31c2e336b6e34340e",
+    "S02_2024修订.docx": "57a9f2e673aa8d4393f0d2ae0425499a532035ee7a55b7ce46c443ca58ceff84",
+    "S03_2025年度安排.docx": "82349cae0439a053505ccfc05074aeae017d1bfdce2834c3576107c219c4a9af",
+    "S04_官方日历摘录.json": "4d31685d9944483535288ec16d62008a14986943295ee60a7ee6cba4939d83b3",
+    "S05_未审预排v0.xlsx": "cc321ed72867e6e3320dac97f9a25901b91bc5ea8fd404f19b1de9b4ec3f680c",
+    "S06_运营委托与依赖合同.docx": "432e8a138404aecd26a66279de3f56dbc55fb7f8413a23f7a5c51aae7d181102",
+    "S07_岗位表.csv": "04613b5ed9a9a7086e8b980ff3e228c7247fed353614ecf40e9834d40c29a74e",
+    "S08_请假培训.csv": "d62585c2d700525657d33ae36ceda9431601075e3bfd697c1d3023d42cad2935",
+    "S09_公司停服.csv": "08437e9d5fbccdc265ae0587d1808a5e5016ef23e3b6810e93a1b447eee47748",
+    "S10_客户里程碑.csv": "476138554c92c66491b2f84376b49f39012b7cf118b59891b8710d9b5b106b17",
+    "S11_版本冻结登记.json": "83ab78a9a4460cb6fac5c0440503c55f6c62033bae39561c3420694027dfbaf8",
+    "S12_公农历核对.docx": "7c370ecf5b0435fc1e276cf425255492558882f994b79174632c011c0d9eff55"
+  },
+  "output_hashes": {
+    "operations_plan.xlsx": "bfb223eb172413f8010daf5b6ee16295988f6e43e4353047ecbb31e9bd0dc00d",
+    "client_messages.docx": "76d52cc140381d19524f4b69829c9c39a390f60b1f5ed300ae00711bd6cf1641",
+    "governance_note.docx": "d71ba4c8a632a1e5e462b29cd38a447674b75c77b5e9ef78285927f95c9bb72a",
+    "workflow.py": "661ede5f3e572a12f4fe0a0e555813eec7c5476e24828acd9e0f6215ec5942a0"
+  },
+  "stages": [
+    {
+      "id": "sources",
+      "parents": [],
+      "parent_hashes": {},
+      "artifact": "sources.json",
+      "artifact_sha256": "5fedc881b04df0c324e546f1e6752befc7f7b4b75e918f82d06b6465427d1151",
+      "completed_at_utc": "2026-10-20T21:03:31.715691+00:00",
+      "node_hash": "95ef25b4e4400129b35a50ff24d280dc06032ecad2558f26a9776b4dc355201c"
+    },
+    {
+      "id": "calendar",
+      "parents": [
+        "sources"
+      ],
+      "parent_hashes": {
+        "sources": "95ef25b4e4400129b35a50ff24d280dc06032ecad2558f26a9776b4dc355201c"
+      },
+      "artifact": "calendar.json",
+      "artifact_sha256": "311b3512ccd85fa6164a0d9cf5d655053b4f2f21d6418b339831f8dd6aa6d983",
+      "completed_at_utc": "2026-10-20T21:03:31.748734+00:00",
+      "node_hash": "57a0093563eb081b7ce6982b65c40c126e5b9ef7e792b67f0c29f1914070ded1"
+    },
+    {
+      "id": "service",
+      "parents": [
+        "calendar"
+      ],
+      "parent_hashes": {
+        "calendar": "57a0093563eb081b7ce6982b65c40c126e5b9ef7e792b67f0c29f1914070ded1"
+      },
+      "artifact": "service.json",
+      "artifact_sha256": "9052845389f895b90aa4571bfdcd80dbcdaef82c1dd2e4b6ea3ff7e891d56d0a",
+      "completed_at_utc": "2026-10-20T21:03:31.769880+00:00",
+      "node_hash": "345f3fd034b332cb1a530b48940f570d139ed7310fb0839907d3fa6cc1f842fd"
+    },
+    {
+      "id": "availability",
+      "parents": [
+        "service"
+      ],
+      "parent_hashes": {
+        "service": "345f3fd034b332cb1a530b48940f570d139ed7310fb0839907d3fa6cc1f842fd"
+      },
+      "artifact": "availability.json",
+      "artifact_sha256": "19c3f4fda2423002d88229fa7609dd7c2dfef5c6f05efaefcc5c23e098ff62ec",
+      "completed_at_utc": "2026-10-20T21:03:31.810981+00:00",
+      "node_hash": "1fc57fcc8e9df987ec433f08d0b482c36480b1296b0f61737a3cd06c81571b6c"
+    },
+    {
+      "id": "meetings",
+      "parents": [
+        "service"
+      ],
+      "parent_hashes": {
+        "service": "345f3fd034b332cb1a530b48940f570d139ed7310fb0839907d3fa6cc1f842fd"
+      },
+      "artifact": "meetings.json",
+      "artifact_sha256": "a8188a27c620541376cf60badccebf655b7003d9422e1771d9957b85854b7571",
+      "completed_at_utc": "2026-10-20T21:03:31.821215+00:00",
+      "node_hash": "f38b4b9365b0276818b4a493a280ab8c6d88b26fcb42ffe8b1a7768b88bac4db"
+    },
+    {
+      "id": "allocation",
+      "parents": [
+        "availability",
+        "meetings"
+      ],
+      "parent_hashes": {
+        "availability": "1fc57fcc8e9df987ec433f08d0b482c36480b1296b0f61737a3cd06c81571b6c",
+        "meetings": "f38b4b9365b0276818b4a493a280ab8c6d88b26fcb42ffe8b1a7768b88bac4db"
+      },
+      "artifact": "allocation.json",
+      "artifact_sha256": "6e3224090764baf8aab861984a013a95d7bbe7d726d3c0f985a765775b3699cb",
+      "completed_at_utc": "2026-10-20T21:03:31.834337+00:00",
+      "node_hash": "d512eed31f618deecabb7a51d937c97e129dfbbdf8e45e651e4ac5a25234535e"
+    },
+    {
+      "id": "documents",
+      "parents": [
+        "allocation",
+        "calendar"
+      ],
+      "parent_hashes": {
+        "allocation": "d512eed31f618deecabb7a51d937c97e129dfbbdf8e45e651e4ac5a25234535e",
+        "calendar": "57a0093563eb081b7ce6982b65c40c126e5b9ef7e792b67f0c29f1914070ded1"
+      },
+      "artifact": "documents.json",
+      "artifact_sha256": "6a0fd7260dea8793ef9747ca6c69d6143035ace08c582c8348c6bd3a9f1f4098",
+      "completed_at_utc": "2026-10-20T21:03:35.197527+00:00",
+      "node_hash": "2d07f5a7bbb35db56e67bb7b18ce75f2ead5ee19d573383d2299c2fc4d3a3c10"
+    },
+    {
+      "id": "preflight",
+      "parents": [
+        "documents"
+      ],
+      "parent_hashes": {
+        "documents": "2d07f5a7bbb35db56e67bb7b18ce75f2ead5ee19d573383d2299c2fc4d3a3c10"
+      },
+      "artifact": "preflight.json",
+      "artifact_sha256": "70283dd918dde18e96a983829604e26fcea409403b2c706389667b208c4fb421",
+      "completed_at_utc": "2026-10-20T21:03:35.205368+00:00",
+      "node_hash": "9e63e722d52a2b047071001718fa94f4a4ae3e9ccb0b0e57f48d4463f559a55c"
+    }
+  ],
+  "stats": {
+    "national_workdays": 248,
+    "statutory_days": 13,
+    "rest_window_days": 28,
+    "company_open_days": 247,
+    "status_counts": {
+      "PLANNED_FIXED": 12,
+      "BLOCKED_DATE": 3,
+      "PROPOSED_CLIENT_CONFIRMATION": 5,
+      "BLOCKED_CAPACITY": 1,
+      "OUT_OF_SCOPE": 1
+    },
+    "jobs": 34
+  },
+  "gate": "READY_FOR_INTERNAL_REVIEW_WITH_DISCLOSED_BLOCKERS",
+  "external_release": false,
+  "external_actions_performed": false
+}

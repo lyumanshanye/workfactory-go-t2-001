@@ -1,0 +1,1271 @@
+{
+  "id": "FIN-TIME-002",
+  "title": "微软分部重述后的FY25可比增长与错误口径更正包",
+  "domain": "金融",
+  "domain_l2": "Fin2-股票研究",
+  "domain_l3": "财报重述与比较期差异",
+  "category": "weakness-driven",
+  "complexity": "C3",
+  "target_difficulty": "A3",
+  "as_of": "2025-08-05T09:00:00+08:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "使用微软投资者关系页面公开的FY25 Q4与FY24 Q4分部收入与营业利润表。FY25 Q4版本对2024财年及之前期间进行了重述。",
+  "instruction": "# 微软分部重述后的FY25可比增长与错误口径更正包\n\n## 业务场景与任务说明\n\n你是外部股票研究团队分析师，正为投委会准备微软FY25年度分部研究。助理沿用了旧FY24分部基数，销售又提出未批准的亮眼口径建议。请核读两份公开年度表和原创消息链，重做可比增长、FY24重述桥接并同步三份交付。不得把原始公开数字改造为虚构公司数据；文件名Q4不表示表内是单季度。\n\n业务判断基准时点：2025-08-05T09:00:00+08:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_FY25_公开分部表.docx`：微软IR FY25 Q4页面完整冻结正文；按表内Year Ended June 30的整财年读取，单位百万美元。\n- `/app/input_files/S02_FY24_公开分部表.docx`：微软IR FY24 Q4页面完整冻结正文；按表内Year Ended June 30的整财年读取，单位百万美元。\n- `/app/input_files/S03_委托与时序消息.docx`：原创外部研究委托、权限及更正消息；不是发行人内部记录。\n\n## 工作要求\n\n- [Q1] 核验S03消息权限与基准，采用FY25披露中重述FY24比较期作为FY25同比主口径；旧口径只留有标签纠错诊断。\n- [Q2] 工作簿逐项录入两份原文全部三分部及合并行、三个年度的收入/营业利润，并定位原文版本/行/年。派生数字用公式引用原数，不硬编码。\n- [Q3] 对FY24三分部及合并行做新旧收入/营业利润桥接，定义新减旧，并验证两指标分部差合计及合并差是否一致。\n- [Q4] 计算FY25三分部及合并的同口径收入和利润同比，另列误用旧FY24基数诊断值及错误减正确的百分点差；报告显示2位小数，工作簿保存全精度可见结果。\n- [Q5] 备忘列FY24各分部两指标新旧及差、FY25两指标同比和一个误算更正实例；区分口径重述与实际增长，说明材料不能支持的具体归因及补证动作。\n- [Q6] 交付待审核更正邮件，拒绝未经批准的口径变更，提出撤换/复核动作；三产物的期间、单位和主结论一致，不声称真实发送或专家认证。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/recast_workbook.xlsx`：包含重述桥接计算与同比增速的数据底稿。\n- `/app/output/ic_memo.docx`：提交给投委会的关于分部数据重述及口径调整的更正备忘录。\n- `/app/output/sales_reply.txt`：回复销售团队负责人的正式邮件文本。\n\n## 硬约束（单独列明）\n\n- 只交指定三个文件到/app/output/，不真实发送邮件。\n- 财务来源限冻结S01/S02；原创委托不是真实微软内部记录。\n- 历史旧口径只可作明确标注的诊断；不得伪造具体产品划转/并购/汇率依据或自动扩大为投资建议。\n- 源数百万美元整数；增长显示2位小数；诊断误差是错误减正确、单位百分点；保留全精度公式与可见结果。\n",
+  "instruction_url": "assets/tasks/FIN-TIME-002/instruction.md",
+  "absolute_path": "tasks/FIN-TIME-002",
+  "spec_path": "manifest/FIN-TIME-002.json",
+  "spec_url": "manifest/FIN-TIME-002.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "采用8月5日研究负责人补充后的现时口径，不让8月4日晚销售未批准建议覆盖授权；历史旧版只作有标签诊断。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "ic_memo.docx",
+        "sales_reply.txt"
+      ],
+      "evidence": "S03消息链；备忘首节、邮件首段。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R02",
+      "description": "工作簿输入的三分部及合并行、各三个年度两指标与两份原文全部一致且能定位版本/分部/年；不同版本不覆盖同一条记录。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "S01/S02原表；披露数据24行48个数值。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R03",
+      "description": "FY24桥接中PBP收入新减旧差为+29,092百万美元，并由对应同年度两版本数据引用计算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "原表Productivity and Business Processes 2024收入；FY24桥接对应D列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R04",
+      "description": "FY24桥接中PBP营业利润新减旧差为+19,121百万美元，并由对应同年度两版本数据引用计算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "原表Productivity and Business Processes 2024利润；FY24桥接对应G列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R05",
+      "description": "FY24桥接中IC收入新减旧差为-17,898百万美元，并由对应同年度两版本数据引用计算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "原表Intelligent Cloud 2024收入；FY24桥接对应D列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R06",
+      "description": "FY24桥接中IC营业利润新减旧差为-11,771百万美元，并由对应同年度两版本数据引用计算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "原表Intelligent Cloud 2024利润；FY24桥接对应G列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R07",
+      "description": "FY24桥接中MPC收入新减旧差为-11,194百万美元，并由对应同年度两版本数据引用计算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "原表More Personal Computing 2024收入；FY24桥接对应D列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R08",
+      "description": "FY24桥接中MPC营业利润新减旧差为-7,350百万美元，并由对应同年度两版本数据引用计算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "原表More Personal Computing 2024利润；FY24桥接对应G列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R09",
+      "description": "收入桥接验证三分部差合计0、合并差0且两版合并额245122百万美元；不是只写“总额不变”。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "FY24桥接D2:D5与勾稽B2:B3。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R10",
+      "description": "营业利润桥接验证三分部差合计0、合并差0且两版合并额109433百万美元。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "FY24桥接G2:G5与勾稽C2:C3。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R11",
+      "description": "FY25 PBP收入同比用FY25表两年度同口径计算，显示13.10%，未把旧基数误算值当主结论；容差0.01个百分点。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "S01 Productivity and Business Processes收入2025/2024；FY25同比D列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R12",
+      "description": "FY25 IC收入同比用FY25表两年度同口径计算，显示21.50%，未把旧基数误算值当主结论；容差0.01个百分点。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "S01 Intelligent Cloud收入2025/2024；FY25同比D列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R13",
+      "description": "FY25 MPC收入同比用FY25表两年度同口径计算，显示7.50%，未把旧基数误算值当主结论；容差0.01个百分点。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "S01 More Personal Computing收入2025/2024；FY25同比D列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R14",
+      "description": "FY25 合并收入同比用FY25表两年度同口径计算，显示14.93%，未把旧基数误算值当主结论；容差0.01个百分点。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "S01 Total收入2025/2024；FY25同比D列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R15",
+      "description": "FY25营业利润三分部及合并同比均用FY25表比较期，显示分别为16.95%、17.92%、18.45%、17.45%；各容差0.01个百分点。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "S01营业利润；FY25同比J2:J5。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R16",
+      "description": "收入误算诊断使用FY25收入/旧FY24收入-1，三分部及合并均标记诊断，不与同口径同比混淆。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "S01 FY25收入与S02 FY24收入；FY25同比E:F列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R17",
+      "description": "利润误算诊断使用FY25利润/旧FY24利润-1，三分部及合并均可复算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "S01 FY25利润与S02 FY24利润；FY25同比K:L列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R18",
+      "description": "诊断误差按（错误同比-正确同比）×100为百分点，两指标各行方向与单位正确，未把百分点误写成百分比。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "S03精度/符号约定；FY25同比G/M列。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R19",
+      "description": "派生单元格为引用原数的有效公式、打开有缓存数值且无#VALUE!/除零等错误；原始输入可以录入整数，不要求把原数据也变成公式。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q4"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "实际Office打开、公式与data_only数值检查。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R20",
+      "description": "备忘完整列三分部FY24新旧两指标及有符号差、FY25两指标同比，且与工作簿一致。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "ic_memo.docx",
+        "recast_workbook.xlsx"
+      ],
+      "evidence": "备忘对照表与工作簿桥接/同比。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R21",
+      "description": "备忘明确FY24重述差是同一历史期间披露分布差，不代表FY25实际增量或自然增长；并用PBP旧基数误算更正说明影响。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "ic_memo.docx"
+      ],
+      "evidence": "备忘数据节；S01 recast原句。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R22",
+      "description": "邮件提出撤换旧主结论、同步修改客户摘要并交研究负责人复核的可执行动作，标明为待审核草稿而不是已经发出的消息。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "sales_reply.txt"
+      ],
+      "evidence": "S03委托；邮件末段。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R23",
+      "description": "三交付的财年/百万美元单位/新口径主结论同步，纠正后不残留55%以上为自然增长的主断言。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5",
+        "Q6"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx",
+        "ic_memo.docx",
+        "sales_reply.txt"
+      ],
+      "evidence": "跨产物比对。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R24",
+      "description": "交付准确三个可打开文件，中文备忘、邮件可阅读；同比百分数与诊断百分点在表中区分显示并保留两位小数。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4",
+        "Q6"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx",
+        "ic_memo.docx",
+        "sales_reply.txt"
+      ],
+      "evidence": "实际文件/格式/数字显示。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    },
+    {
+      "id": "R25",
+      "description": "归因边界交代四个可核验要点：两表不足确认具体产品调拨、不能分解并购或汇率贡献、不能据此衡量有机增长、提出补取发行人正式重述解释后再研究。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-财务与证据",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "ic_memo.docx"
+      ],
+      "evidence": "备忘证据边界节。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。",
+      "levels": {
+        "0": "四项均未说明。",
+        "0.25": "说明1项。",
+        "0.5": "说明2项。",
+        "0.75": "说明3项。",
+        "1": "四项均明确，且未冒充已取得缺失材料。"
+      }
+    },
+    {
+      "id": "R26",
+      "description": "扣分：捏造具体产品线转移金额/并购或汇率贡献，或虚称得到发行人内部确认、专家认证、邮件已经实际发送。单纯计算错误或遗漏边界不触发此项。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与边界",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5",
+        "Q6"
+      ],
+      "deliverables": [
+        "recast_workbook.xlsx",
+        "ic_memo.docx",
+        "sales_reply.txt"
+      ],
+      "evidence": "S03无此内部依据/真实服务授权；逐处查虚假具体断言。",
+      "weight_reason": "依据错误对可比研究结论或交付使用性的影响设权，不按出现顺序分配。"
+    }
+  ],
+  "source_facts": [
+    {
+      "source_id": "9cd71908772a98e35c25",
+      "quote": "We have recast certain prior period amounts to conform to the way we internally manage and monitor our business.",
+      "claim": "FY25 Q4财报明确说明对前期数据进行了重述，以符合内部管理和监控业务的方式。"
+    },
+    {
+      "source_id": "9cd71908772a98e35c25",
+      "quote": "msft:ProductivityAndBusinessProcessesMember\nProductivity and Business Processes\n$\n120,810\n$\n106,820\n$\n94,151",
+      "claim": "FY25 Q4重述后口径：PBP 2024财年收入为106,820百万美元。"
+    },
+    {
+      "source_id": "9cd71908772a98e35c25",
+      "quote": "msft:IntelligentCloudMember\nIntelligent Cloud\n106,265\n87,464\n72,944",
+      "claim": "FY25 Q4重述后口径：IC 2024财年收入为87,464百万美元。"
+    },
+    {
+      "source_id": "9cd71908772a98e35c25",
+      "quote": "msft:MorePersonalComputingMember\nMore Personal Computing\n54,649\n50,838\n44,820",
+      "claim": "FY25 Q4重述后口径：MPC 2024财年收入为50,838百万美元。"
+    },
+    {
+      "source_id": "9cd71908772a98e35c25",
+      "quote": "us-gaap:OperatingIncomeLoss\nmsft:ProductivityAndBusinessProcessesMember\nProductivity and Business Processes\n$\n69,773\n$\n59,661\n$\n50,074",
+      "claim": "FY25 Q4重述后口径：PBP 2024财年营业利润为59,661百万美元。"
+    },
+    {
+      "source_id": "c125959ec11013c013f3",
+      "quote": "msft:ProductivityAndBusinessProcessesMember\nProductivity and Business Processes\n$\n77,728\n$\n69,274\n$\n63,364",
+      "claim": "FY24 Q4旧口径：PBP 2024财年收入为77,728百万美元。"
+    },
+    {
+      "source_id": "c125959ec11013c013f3",
+      "quote": "msft:IntelligentCloudMember\nIntelligent Cloud\n105,362\n87,907\n74,965",
+      "claim": "FY24 Q4旧口径：IC 2024财年收入为105,362百万美元。"
+    },
+    {
+      "source_id": "c125959ec11013c013f3",
+      "quote": "msft:MorePersonalComputingMember\nMore Personal Computing\n62,032\n54,734\n59,941",
+      "claim": "FY24 Q4旧口径：MPC 2024财年收入为62,032百万美元。"
+    },
+    {
+      "source_id": "c125959ec11013c013f3",
+      "quote": "us-gaap:OperatingIncomeLoss\nmsft:ProductivityAndBusinessProcessesMember\nProductivity and Business Processes\n$\n40,540\n$\n34,189\n$\n29,690",
+      "claim": "FY24 Q4旧口径：PBP 2024财年营业利润为40,540百万美元。"
+    }
+  ],
+  "status": {
+    "task_id": "FIN-TIME-002",
+    "domain": "金融",
+    "domain_l2": "Fin2-股票研究",
+    "category": "weakness-driven",
+    "inputs": 3,
+    "gold_files": 3,
+    "rubrics": 26,
+    "complexity": "C3",
+    "target_difficulty": "A3",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:79b50103a9aaab030b3615805b2ea50c7f9b10518c8ddaed83d8a3903852129f",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/FIN-TIME-002/20261020T211103Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 26.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_FY25_公开分部表.docx",
+      "absolute_path": "题包内：S01_FY25_公开分部表.docx",
+      "url": "",
+      "bytes": 38131,
+      "sha256": "c142925cb884868f60f6f9170f15e73d1999a67987f945ca0f35f6b30cf2bac6",
+      "description": "微软IR FY25 Q4页面完整冻结正文；按表内Year Ended June 30的整财年读取，单位百万美元。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.microsoft.com/en-us/investor/earnings/fy-2025-q4/segment-revenues"
+      ]
+    },
+    {
+      "name": "S02_FY24_公开分部表.docx",
+      "absolute_path": "题包内：S02_FY24_公开分部表.docx",
+      "url": "",
+      "bytes": 38022,
+      "sha256": "854fd9272692332065d187bf6f341c8339370f8410cdfe66925a34cbdc0a0576",
+      "description": "微软IR FY24 Q4页面完整冻结正文；按表内Year Ended June 30的整财年读取，单位百万美元。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.microsoft.com/en-us/investor/earnings/FY-2024-Q4/segment-revenues"
+      ]
+    },
+    {
+      "name": "S03_委托与时序消息.docx",
+      "absolute_path": "题包内：S03_委托与时序消息.docx",
+      "url": "assets/tasks/FIN-TIME-002/environment/input_files/S03_%E5%A7%94%E6%89%98%E4%B8%8E%E6%97%B6%E5%BA%8F%E6%B6%88%E6%81%AF.docx",
+      "bytes": 39017,
+      "sha256": "e24e6b3c5d2e453da954059bcaaba7ecdf143da29bc14d2b4f5b122a13ea5861",
+      "description": "原创外部研究委托、权限及更正消息；不是发行人内部记录。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创情境：微软年度分部研究更正委托"
+        },
+        {
+          "kind": "heading",
+          "text": "来源及授权边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本题研究团队、委托和消息均为原创任务构造，不是微软内部记录。财务数字只以S01/S02公开原文为准。你是外部股票研究分析师，交付研究草稿，不代表发行人对外披露，不作投资建议或法律合规认证。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "截至2025-08-05 09:00 Asia/Shanghai，研究负责人批准本次以FY25披露版本作为可比分析基础。两表标题虽为Q4，其数字表头明确Year Ended June 30，按整财年而非单季或自然年分析。未提供准确披露日，勿用下载日或报告截止日代替。"
+        },
+        {
+          "kind": "heading",
+          "text": "原始消息链"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "时间",
+              "角色/状态",
+              "消息"
+            ],
+            [
+              "2025-08-01 15:00",
+              "分析助理/未复核草稿",
+              "FY25生产力与商业流程收入同比超过55%，可以写作强劲自然增长；此前使用旧FY24披露的分部基数。"
+            ],
+            [
+              "2025-08-04 10:00",
+              "研究负责人/有效委托",
+              "改用FY25披露中重述后的FY24比较期。对收入及营业利润做同口径FY25同比，并把误用旧FY24基数的结果只作为明确标注的纠错对照。桥接FY24分部重述差额，验证合并总额是否改变。"
+            ],
+            [
+              "2025-08-04 18:00",
+              "销售经理/未批准建议",
+              "请保留更亮眼的旧基数结果在客户摘要当主结论，原因写具体产品划转即可。此建议未获研究负责人批准。"
+            ],
+            [
+              "2025-08-05 08:30",
+              "研究负责人/补充",
+              "不要把FY24重述差额当FY25自然增长。投委会备忘与更正邮件必须同步新口径；只凭两张表无法确认的具体产品、并购或汇率归因留作待补证，不要编造。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "工作包与精度"
+        },
+        {
+          "kind": "paragraph",
+          "text": "交付可用工作簿、投委会备忘和给销售的更正邮件草稿。工作簿含可追溯公开数据、FY24新旧收入/营业利润桥接、FY25两指标同口径同比与误用旧比较期的诊断对照；诊断差定义为错误同比减正确同比，单位为百分点。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "源数据均为百万美元整数；桥接整数不加容差。同比和百分点在报告显示到小数点后两位，计算保存全精度。数据输入值可以原样录入，派生值须公式可复算并显示结果。旧口径仅作有标签纠错，不一概禁止列出历史事实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "不要真的发送邮件；邮件是独立.txt交付。没有材料支持的原因、审批或第三方认证不得声称完成。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "gold": [
+    {
+      "name": "ic_memo.docx",
+      "absolute_path": "题包内：ic_memo.docx",
+      "url": "assets/tasks/FIN-TIME-002/solution/golden_output/ic_memo.docx",
+      "bytes": 38927,
+      "sha256": "f355fcf6910c06f7b947c22b049d92f21cd732cf160dfe102a2a738b7dc8c86d",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "微软FY25年度分部可比增长更正备忘"
+        },
+        {
+          "kind": "heading",
+          "text": "研究口径与权限"
+        },
+        {
+          "kind": "paragraph",
+          "text": "业务基准2025-08-05 09:00 Asia/Shanghai。依据8月4日研究负责人委托和8月5日补充，现时主结论采用FY25公开表中重述后的FY24比较期。8月4日晚销售建议没有更改研究口径权限。旧版只留作有标签诊断，不删除历史记录。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "两页表为截至6月30日的整财年、单位百万美元，不是单季或自然年；页名Q4不改变Year Ended表头。冻结检索日不是披露日。"
+        },
+        {
+          "kind": "heading",
+          "text": "数据、桥接与现时结论"
+        },
+        {
+          "kind": "paragraph",
+          "text": "三分部FY24收入重述差合计0，营业利润重述差合计0；合并FY24收入245,122、营业利润109,433不变。重述差是同一历史年度在不同分部披露口径下的重分布，不是2025实际新增业绩。详细输入定位和公式见工作簿。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "例如PBP误用旧FY24基数的FY25收入同比为55.43%，同口径为13.10%，误差为42.33个百分点。不能把错误的55%以上当自然增长。其他分部/利润误差在FY25同比工作表完整列出。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "分部",
+              "FY24收入旧→重述/差",
+              "FY24利润旧→重述/差",
+              "FY25收入同比（同口径）",
+              "FY25利润同比（同口径）"
+            ],
+            [
+              "Productivity and Business Processes",
+              "77,728 → 106,820 / +29,092",
+              "40,540 → 59,661 / +19,121",
+              "13.10%",
+              "16.95%"
+            ],
+            [
+              "Intelligent Cloud",
+              "105,362 → 87,464 / -17,898",
+              "49,584 → 37,813 / -11,771",
+              "21.50%",
+              "17.92%"
+            ],
+            [
+              "More Personal Computing",
+              "62,032 → 50,838 / -11,194",
+              "19,309 → 11,959 / -7,350",
+              "7.50%",
+              "18.45%"
+            ],
+            [
+              "Total",
+              "245,122 → 245,122 / +0",
+              "109,433 → 109,433 / +0",
+              "14.93%",
+              "17.45%"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "证据边界与后续行动"
+        },
+        {
+          "kind": "paragraph",
+          "text": "FY25原文仅说明recast是为了与内部管理和监控方式一致。两表不能确定具体产品归属变化、并购或汇率贡献，亦不足以衡量有机增长。请补充发行人正式分部重述说明后再研究这些归因；当前不作无据拆分。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "先撤下使用旧基数作为主结论的草稿，研究负责人复核工作簿与本备忘后，再由销售替换客户草稿。附带更正邮件只是待审核文本，没有实际发送，不代表发行人合规认证或投资建议。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "recast_workbook.xlsx",
+      "absolute_path": "题包内：recast_workbook.xlsx",
+      "url": "assets/tasks/FIN-TIME-002/solution/golden_output/recast_workbook.xlsx",
+      "bytes": 17868,
+      "sha256": "7a5ff5b62fef7d11ab36218464b6fa89b724fb72af29e380dd28311bfd5141c7",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "使用说明"
+        },
+        {
+          "kind": "notice",
+          "text": "共9行 × 2列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "项目",
+              "解释"
+            ],
+            [
+              "业务基准",
+              "2025-08-05 09:00 Asia/Shanghai"
+            ],
+            [
+              "期间/单位",
+              "截至6月30日的整财年；百万美元。页名Q4不改变年度表头。"
+            ],
+            [
+              "主口径",
+              "FY25表中FY24比较期与FY25，均为同一披露版本。"
+            ],
+            [
+              "诊断差定义",
+              "错误同比-正确同比；乘100后为百分点，不是百分比增长。"
+            ],
+            [
+              "历史保留",
+              "旧FY24作为历史记录和纠错诊断，不作现时主结论。"
+            ],
+            [
+              "归因限制",
+              "公开表只称recast以符合内部管理监控方式；不能识别具体产品划转、汇率、并购或有机增长。"
+            ],
+            [
+              "精度",
+              "原数百万美元整数；公式全精度；显示同比百分数和差值百分点均2位小数。"
+            ],
+            [
+              "审批/交付状态",
+              "销售较新建议未批准；本工作包为研究草稿，不是已发送邮件或投资建议。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "披露数据"
+        },
+        {
+          "kind": "notice",
+          "text": "共25行 × 7列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "披露版本",
+              "财年截至日期",
+              "分部",
+              "财年",
+              "收入（百万美元）",
+              "营业利润（百万美元）",
+              "来源定位"
+            ],
+            [
+              "FY25",
+              "2025-06-30",
+              "Productivity and Business Processes",
+              2025,
+              120810,
+              69773,
+              "S01 / Revenue和Operating Income / Productivity and Business Processes / 2025列"
+            ],
+            [
+              "FY25",
+              "2024-06-30",
+              "Productivity and Business Processes",
+              2024,
+              106820,
+              59661,
+              "S01 / Revenue和Operating Income / Productivity and Business Processes / 2024列"
+            ],
+            [
+              "FY25",
+              "2023-06-30",
+              "Productivity and Business Processes",
+              2023,
+              94151,
+              50074,
+              "S01 / Revenue和Operating Income / Productivity and Business Processes / 2023列"
+            ],
+            [
+              "FY25",
+              "2025-06-30",
+              "Intelligent Cloud",
+              2025,
+              106265,
+              44589,
+              "S01 / Revenue和Operating Income / Intelligent Cloud / 2025列"
+            ],
+            [
+              "FY25",
+              "2024-06-30",
+              "Intelligent Cloud",
+              2024,
+              87464,
+              37813,
+              "S01 / Revenue和Operating Income / Intelligent Cloud / 2024列"
+            ],
+            [
+              "FY25",
+              "2023-06-30",
+              "Intelligent Cloud",
+              2023,
+              72944,
+              28411,
+              "S01 / Revenue和Operating Income / Intelligent Cloud / 2023列"
+            ],
+            [
+              "FY25",
+              "2025-06-30",
+              "More Personal Computing",
+              2025,
+              54649,
+              14166,
+              "S01 / Revenue和Operating Income / More Personal Computing / 2025列"
+            ],
+            [
+              "FY25",
+              "2024-06-30",
+              "More Personal Computing",
+              2024,
+              50838,
+              11959,
+              "S01 / Revenue和Operating Income / More Personal Computing / 2024列"
+            ],
+            [
+              "FY25",
+              "2023-06-30",
+              "More Personal Computing",
+              2023,
+              44820,
+              10038,
+              "S01 / Revenue和Operating Income / More Personal Computing / 2023列"
+            ],
+            [
+              "FY25",
+              "2025-06-30",
+              "Total",
+              2025,
+              281724,
+              128528,
+              "S01 / Revenue和Operating Income / Total / 2025列"
+            ],
+            [
+              "FY25",
+              "2024-06-30",
+              "Total",
+              2024,
+              245122,
+              109433,
+              "S01 / Revenue和Operating Income / Total / 2024列"
+            ],
+            [
+              "FY25",
+              "2023-06-30",
+              "Total",
+              2023,
+              211915,
+              88523,
+              "S01 / Revenue和Operating Income / Total / 2023列"
+            ],
+            [
+              "FY24",
+              "2024-06-30",
+              "Productivity and Business Processes",
+              2024,
+              77728,
+              40540,
+              "S02 / Revenue和Operating Income / Productivity and Business Processes / 2024列"
+            ],
+            [
+              "FY24",
+              "2023-06-30",
+              "Productivity and Business Processes",
+              2023,
+              69274,
+              34189,
+              "S02 / Revenue和Operating Income / Productivity and Business Processes / 2023列"
+            ],
+            [
+              "FY24",
+              "2022-06-30",
+              "Productivity and Business Processes",
+              2022,
+              63364,
+              29690,
+              "S02 / Revenue和Operating Income / Productivity and Business Processes / 2022列"
+            ],
+            [
+              "FY24",
+              "2024-06-30",
+              "Intelligent Cloud",
+              2024,
+              105362,
+              49584,
+              "S02 / Revenue和Operating Income / Intelligent Cloud / 2024列"
+            ],
+            [
+              "FY24",
+              "2023-06-30",
+              "Intelligent Cloud",
+              2023,
+              87907,
+              37884,
+              "S02 / Revenue和Operating Income / Intelligent Cloud / 2023列"
+            ],
+            [
+              "FY24",
+              "2022-06-30",
+              "Intelligent Cloud",
+              2022,
+              74965,
+              33203,
+              "S02 / Revenue和Operating Income / Intelligent Cloud / 2022列"
+            ],
+            [
+              "FY24",
+              "2024-06-30",
+              "More Personal Computing",
+              2024,
+              62032,
+              19309,
+              "S02 / Revenue和Operating Income / More Personal Computing / 2024列"
+            ],
+            [
+              "FY24",
+              "2023-06-30",
+              "More Personal Computing",
+              2023,
+              54734,
+              16450,
+              "S02 / Revenue和Operating Income / More Personal Computing / 2023列"
+            ],
+            [
+              "FY24",
+              "2022-06-30",
+              "More Personal Computing",
+              2022,
+              59941,
+              20490,
+              "S02 / Revenue和Operating Income / More Personal Computing / 2022列"
+            ],
+            [
+              "FY24",
+              "2024-06-30",
+              "Total",
+              2024,
+              245122,
+              109433,
+              "S02 / Revenue和Operating Income / Total / 2024列"
+            ],
+            [
+              "FY24",
+              "2023-06-30",
+              "Total",
+              2023,
+              211915,
+              88523,
+              "S02 / Revenue和Operating Income / Total / 2023列"
+            ],
+            [
+              "FY24",
+              "2022-06-30",
+              "Total",
+              2022,
+              198270,
+              83383,
+              "S02 / Revenue和Operating Income / Total / 2022列"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "FY24桥接"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 7列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "分部",
+              "FY24旧收入",
+              "FY24重述收入",
+              "收入重述差（新减旧）",
+              "FY24旧营业利润",
+              "FY24重述营业利润",
+              "利润重述差（新减旧）"
+            ],
+            [
+              "Productivity and Business Processes",
+              "=披露数据!E14\n缓存：77728",
+              "=披露数据!E3\n缓存：106820",
+              "=C2-B2\n缓存：29092",
+              "=披露数据!F14\n缓存：40540",
+              "=披露数据!F3\n缓存：59661",
+              "=F2-E2\n缓存：19121"
+            ],
+            [
+              "Intelligent Cloud",
+              "=披露数据!E17\n缓存：105362",
+              "=披露数据!E6\n缓存：87464",
+              "=C3-B3\n缓存：-17898",
+              "=披露数据!F17\n缓存：49584",
+              "=披露数据!F6\n缓存：37813",
+              "=F3-E3\n缓存：-11771"
+            ],
+            [
+              "More Personal Computing",
+              "=披露数据!E20\n缓存：62032",
+              "=披露数据!E9\n缓存：50838",
+              "=C4-B4\n缓存：-11194",
+              "=披露数据!F20\n缓存：19309",
+              "=披露数据!F9\n缓存：11959",
+              "=F4-E4\n缓存：-7350"
+            ],
+            [
+              "Total",
+              "=披露数据!E23\n缓存：245122",
+              "=披露数据!E12\n缓存：245122",
+              "=C5-B5\n缓存：0",
+              "=披露数据!F23\n缓存：109433",
+              "=披露数据!F12\n缓存：109433",
+              "=F5-E5\n缓存：0"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "FY25同比"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 13列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "分部",
+              "FY25收入",
+              "FY24重述收入",
+              "正确收入同比",
+              "FY24旧收入",
+              "误用旧基数收入同比（诊断）",
+              "收入误差（百分点）",
+              "FY25营业利润",
+              "FY24重述营业利润",
+              "正确利润同比",
+              "FY24旧营业利润",
+              "误用旧基数利润同比（诊断）",
+              "利润误差（百分点）"
+            ],
+            [
+              "Productivity and Business Processes",
+              "=披露数据!E2\n缓存：120810",
+              "=披露数据!E3\n缓存：106820",
+              "=B2/C2-1\n缓存：0.130967983523685",
+              "=披露数据!E14\n缓存：77728",
+              "=B2/E2-1\n缓存：0.554266158913133",
+              "=(F2-D2)*100\n缓存：42.3298175389448",
+              "=披露数据!F2\n缓存：69773",
+              "=披露数据!F3\n缓存：59661",
+              "=H2/I2-1\n缓存：0.169490957241749",
+              "=披露数据!F14\n缓存：40540",
+              "=H2/K2-1\n缓存：0.721090281203749",
+              "=(L2-J2)*100\n缓存：55.1599323962"
+            ],
+            [
+              "Intelligent Cloud",
+              "=披露数据!E5\n缓存：106265",
+              "=披露数据!E6\n缓存：87464",
+              "=B3/C3-1\n缓存：0.214957010884478",
+              "=披露数据!E17\n缓存：105362",
+              "=B3/E3-1\n缓存：0.00857045234524789",
+              "=(F3-D3)*100\n缓存：-20.638655853923",
+              "=披露数据!F5\n缓存：44589",
+              "=披露数据!F6\n缓存：37813",
+              "=H3/I3-1\n缓存：0.179197630444556",
+              "=披露数据!F17\n缓存：49584",
+              "=H3/K3-1\n缓存：-0.100738141335915",
+              "=(L3-J3)*100\n缓存：-27.9935771780471"
+            ],
+            [
+              "More Personal Computing",
+              "=披露数据!E8\n缓存：54649",
+              "=披露数据!E9\n缓存：50838",
+              "=B4/C4-1\n缓存：0.0749636098981077",
+              "=披露数据!E20\n缓存：62032",
+              "=B4/E4-1\n缓存：-0.119019215888574",
+              "=(F4-D4)*100\n缓存：-19.3982825786681",
+              "=披露数据!F8\n缓存：14166",
+              "=披露数据!F9\n缓存：11959",
+              "=H4/I4-1\n缓存：0.18454720294339",
+              "=披露数据!F20\n缓存：19309",
+              "=H4/K4-1\n缓存：-0.266352478119012",
+              "=(L4-J4)*100\n缓存：-45.0899681062402"
+            ],
+            [
+              "Total",
+              "=披露数据!E11\n缓存：281724",
+              "=披露数据!E12\n缓存：245122",
+              "=B5/C5-1\n缓存：0.149321562324067",
+              "=披露数据!E23\n缓存：245122",
+              "=B5/E5-1\n缓存：0.149321562324067",
+              "=(F5-D5)*100\n缓存：0",
+              "=披露数据!F11\n缓存：128528",
+              "=披露数据!F12\n缓存：109433",
+              "=H5/I5-1\n缓存：0.174490327414948",
+              "=披露数据!F23\n缓存：109433",
+              "=H5/K5-1\n缓存：0.174490327414948",
+              "=(L5-J5)*100\n缓存：0"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "勾稽"
+        },
+        {
+          "kind": "notice",
+          "text": "共4行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "检查",
+              "收入",
+              "营业利润",
+              "预期"
+            ],
+            [
+              "FY24分部重述差合计",
+              "=SUM(FY24桥接!D2:D4)\n缓存：0",
+              "=SUM(FY24桥接!G2:G4)\n缓存：0",
+              0
+            ],
+            [
+              "FY24合并总额重述差",
+              "=FY24桥接!D5\n缓存：0",
+              "=FY24桥接!G5\n缓存：0",
+              0
+            ],
+            [
+              "FY25分部和与合并数之差",
+              "=SUM(FY25同比!B2:B4)-FY25同比!B5\n缓存：0",
+              "=SUM(FY25同比!H2:H4)-FY25同比!H5\n缓存：0",
+              0
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "sales_reply.txt",
+      "absolute_path": "题包内：sales_reply.txt",
+      "url": "assets/tasks/FIN-TIME-002/solution/golden_output/sales_reply.txt",
+      "bytes": 964,
+      "sha256": "ca3ac009744a9ff4de7961a0c1146e65b3244de4620a6369b166ef0ed5e1712f",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "To: 销售经理\nSubject: FY25分部增长口径更正（待审核邮件草稿，未发送）\nDate: 2025-08-05 09:00 Asia/Shanghai\n\n你好：\n依据研究负责人8月4日委托及8月5日补充，客户草稿请改用FY25披露中的重述后FY24比较期。你昨晚建议保留亮眼旧基数结果未经研究负责人批准，本轮不采纳。旧版数据可标明历史来源用于解释误算，不能拿来作为现时同口径增长主结论；这不是宣称旧公开披露本身违法。\n\nPBP的FY25收入同比应为13.10%，不是误用旧基数所得的55.43%。三分部FY24重述差合计为零，不代表FY25自然增长。报告期间是截至6月30日的整财年，单位百万美元。具体产品、并购和汇率归因尚无材料支持，请勿写入客户结论。\n\n请先撤下旧主结论并同步替换底稿和客户摘要，待研究负责人复核后再对外使用。本文件仅为邮件草稿，未实际发送。\n研究团队\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": []
+}

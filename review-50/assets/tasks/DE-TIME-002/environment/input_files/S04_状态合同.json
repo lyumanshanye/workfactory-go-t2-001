@@ -1,0 +1,86 @@
+{
+  "target_version": "5.0.0",
+  "business_as_of": "2024-01-10T10:00:00+00:00",
+  "timezone": "Europe/London",
+  "nature": "原创团队冻结合同，不是官方通用验收标准；所有业务和示例资料虚构。",
+  "states": [
+    {
+      "id": "s-ready",
+      "tag": "button",
+      "disabled": false,
+      "label": "开始本机模拟"
+    },
+    {
+      "id": "s-empty",
+      "tag": "button",
+      "disabled": true,
+      "label": "暂不能继续"
+    },
+    {
+      "id": "s-disabled",
+      "tag": "input",
+      "disabled": true,
+      "label": "原生禁用输入"
+    },
+    {
+      "id": "s-boolfalse",
+      "tag": "input",
+      "disabled": true,
+      "label": "属性存在仍禁用"
+    },
+    {
+      "id": "s-busy",
+      "tag": "button",
+      "disabled": true,
+      "label": "处理中，请稍候"
+    },
+    {
+      "id": "s-complete",
+      "tag": "p",
+      "disabled": false,
+      "label": "已生成本机摘要，尚未提交"
+    },
+    {
+      "id": "s-link",
+      "tag": "a",
+      "disabled": false,
+      "label": "查看办理说明",
+      "href": "#guide"
+    },
+    {
+      "id": "s-unavailable",
+      "tag": "p",
+      "disabled": false,
+      "label": "预览暂不可用"
+    }
+  ],
+  "state_contract": "保留8个DOM id和标签，文字可补充；布局颜色可自定。原生disabled按存在性判断。s-boolfalse故意用disabled=\"false\"作为隔离教学探针，不建议生产如此编码；须显示解释。",
+  "live_demo": {
+    "ids": [
+      "live-form",
+      "subject",
+      "outcome",
+      "simulate",
+      "reset",
+      "live-status",
+      "attempts",
+      "summary"
+    ],
+    "input": "subject为示例材料名称，不输入真实个人信息；空白不可开始。",
+    "outcome_options": [
+      "failure",
+      "success"
+    ],
+    "initial": "simulate原生禁用，live-status在动作前已存在role=status。",
+    "busy": "启动后立即有处理中反馈且防重复模拟；450至1000ms内完成本机异步回放。",
+    "failure": "模拟失败文字，保留输入、按钮重新可用且提示重试，结果不称已提交。",
+    "success": "已生成本机摘要，含当前材料名称、未提交声明。允许再次模拟。",
+    "reset": "取消未完成计时器、清空输入和摘要、次数归零并重新禁用空表单。",
+    "counter": "attempts为真正启动次数；忙碌期间两次激活只增加1。",
+    "keyboard": "Enter启动与导航；Space可重置；焦点清晰，无键盘陷阱。",
+    "no_javascript": "给出可见未启用说明，初始按钮仍禁用，不误称无脚本也可执行。"
+  },
+  "geometry": "1280x900与390x844无横向溢出；可见按钮/输入/选择器/链接至少44x44 CSS像素，此为团队合同而非声称官方所有状态均此要求。",
+  "evidence": "只记录实际执行时间、浏览器版本、HTML/合同/脚本SHA、逐项结果；缺依赖报未运行，不捏造pass。",
+  "scope": "自包含离线原创原型，不加载官方完整组件库；不能用前端模拟证明服务器幂等、真实提交、全WCAG或辅助技术认证；不外联、不存Cookie/持久存储。"
+}

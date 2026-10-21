@@ -1,0 +1,2097 @@
+{
+  "id": "DA-TIME-002",
+  "title": "四国GDP研究底稿R2：混价旧稿修复与Skill发现",
+  "domain": "数据分析",
+  "domain_l2": "DA2-指标与口径治理（拟议扩展）",
+  "domain_l3": "世界银行指标版本回溯",
+  "category": "skill-discovery",
+  "complexity": "C3",
+  "target_difficulty": "A2",
+  "as_of": "2026-10-21 09:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "World Bank真实API72观测/三定义及官方知识；委托/权限/污染D0/Skill原创，绝不假造历史官方vintage。",
+  "instruction": "# 四国GDP研究底稿R2：混价旧稿修复与Skill发现\n\n## 业务场景与任务说明\n\n你是四国宏观研究数据分析员。R1现价规模简报中的D0混接指标并误称实际增长；有权R2已改做实际增长审阅，营销更晚要求直接发布旧百分比。请基于真实冻结WDI数据和指标定义，判断可用Skill是否适用，实际完成可复算底稿、纠错/补查备忘及真实执行证据，不伪造第二官方历史快照或市场决策授权。\n\n业务判断基准时点：2026-10-21 09:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_WDI原始观测.json`：官方API原始72条三指标/四国/六年观测，完整未改响应。\n- `/app/input_files/S02_指标定义汇编.json`：三份官方指标定义的作者汇编，保留原响应/URL/哈希/抓取时间。\n- `/app/input_files/S03_口径与修订依据.docx`：官方价格/修订/换算方法的中文作者归纳和原链接，非官方译文。\n- `/app/input_files/S04_待审旧稿D0.xlsx`：原创污染内部稿，实际值均可定位S01；非官方历史vintage。\n- `/app/input_files/S05_研究委托.docx`：原创使用者/业务决策、时间/权限、产物和核对约定。\n- `/app/input_files/S06_版本与授权.json`：原创R1/R2/M3权限/时点契约，非官方数据规则。\n\n## 工作要求\n\n- [Q1] 按R2批准范围及真实快照/元数据选择三指标，区分数据年/更新/抓取/业务消息；不以营销或2010例子覆盖。\n- [Q2] 判断4候选Skill适用性及是否使用，实际运行合适工作流或可复核替代实现，证据如实。\n- [Q3] 保留72原观测、3指标字典及24年度记录，2015美元/十亿/百分数/百分点口径明确。\n- [Q4] 实际与现价同比、2019指数、官方核对均可复算；2019缺2018水平派生同比留空。\n- [Q5] 逐国纠正D0混价或现价错称实际，保留原稿证据；不伪造官方历史vintage/统一修复系数。\n- [Q6] 备忘和2024补查表表达4国实际增长、负增长名单/最低恢复、具体撤回/补查/复核动作与责任人。\n- [Q7] 三个最终成果同步可打开，不改只读输入/Skill；禁止伪造外部发布/专家/官方确认或超范围市场决策。\n\n## 可用技能\n\n- wdi-series-reconcile：同快照三指标/实际增长/D0诊断与批准范围的组合核对，含可执行helper。；入口`/skills/wdi-series-reconcile/SKILL.md`；相对脚本路径以该技能目录为基准。\n- wdi-indicator-dictionary：指标定义/单位字典解释，不完成数值修复。；入口`/skills/wdi-indicator-dictionary/SKILL.md`；相对脚本路径以该技能目录为基准。\n- wdi-nominal-market-size：现价美元规模对照，非实际增长或投资建议。；入口`/skills/wdi-nominal-market-size/SKILL.md`；相对脚本路径以该技能目录为基准。\n- wdi-vintage-investigation：有两份真实官方历史快照时的修订调查，不拿内部D0代替。；入口`/skills/wdi-vintage-investigation/SKILL.md`；相对脚本路径以该技能目录为基准。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/macro_review.xlsx`：可重算72原数/24年度/4纠错及补查工作簿。\n- `/app/output/research_memo.docx`：面向首席分析师的中文R2纠错、Skill理由、国别补查和未验边界。\n- `/app/output/skill_evidence.json`：实际执行器/输入与Skill或替代脚本哈希、24计算结果及4诊断的真实证据。\n\n## 硬约束（单独列明）\n\n- 只交3指定文件到/app/output，不改只读输入/Skill，不联网换数据或混入第二快照。\n- 数据年/更新/实际抓取/原创业务消息分别保留；未知发布日期不补造。\n- 2019缺2018水平，派生同比留空而非0；KD参照2015不被旧2010例子覆盖。\n- 可用Skill也可有依据不用，但必须实际执行可复核实现，如实记录哈希与结果；不以调用标签替代交付。\n- 不把D0冒充官方vintage，不编造修订/通胀解释、专家确认或实际发布/投资批准。\n",
+  "instruction_url": "assets/tasks/DA-TIME-002/instruction.md",
+  "absolute_path": "tasks/DA-TIME-002",
+  "spec_path": "manifest/DA-TIME-002.json",
+  "spec_url": "manifest/DA-TIME-002.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "采用chief_analyst已批准R2实际增长目标，不以较晚未批准M3营销消息或旧R1现价规模覆盖。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "research_memo.docx"
+      ],
+      "evidence": "S05时间线及S06版本/权限。"
+    },
+    {
+      "id": "R02",
+      "description": "三指标按代码准确区分CD现价美元、KD为2015不变美元、ZG实际年度增长；不把2010帮助例子当本次参照年。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q1",
+        "Q3"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "research_memo.docx"
+      ],
+      "evidence": "S02各raw_api_response[1][0].name/sourceNote；S03。"
+    },
+    {
+      "id": "R03",
+      "description": "正确区分数据2019–2024、数据集lastupdated2026-10-08、UTC实际抓取和2026-10-21业务基准；未知国别发布日期不补造。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "research_memo.docx"
+      ],
+      "evidence": "S01响应metadata、S02观测抓取字段、S05。"
+    },
+    {
+      "id": "R04",
+      "description": "解释4候选Skill与本题的适用范围，选择能覆盖R2组合工作流或有依据不用并实际实现替代；不为凑调用用不适用vintage/现价Skill。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "research_memo.docx"
+      ],
+      "evidence": "实际4入口；允许合理不同组合，不强制特定Skill字符串。"
+    },
+    {
+      "id": "R05",
+      "description": "证据JSON来自实际运行所选Skill或替代实现；6输入哈希对应实际文件、执行器/所用脚本哈希真实，并保存24年度结果/4旧稿诊断，不只自述调用。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "skill_evidence.json"
+      ],
+      "evidence": "实际只读6输入和使用脚本重跑对照；哈希不是可信签名。"
+    },
+    {
+      "id": "R06",
+      "description": "工作簿完整保留72条country/year/indicator原值与来源键，三指标字典可定位；不得静默漏国/漏年、填0或用四舍五入显示值重造原数据。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "macro_review.xlsx"
+      ],
+      "evidence": "S01实际72键、S02定义；数值容差原值0.1美元、增长1e-8个百分点。"
+    },
+    {
+      "id": "R07",
+      "description": "24条年度分析四国×2019–2024完整；现价/不变价水平在同国年份与原数一致，十亿美元缩放正确，不以KD/CD混列。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "macro_review.xlsx"
+      ],
+      "evidence": "S01逐键；按单位还原差≤0.1美元。"
+    },
+    {
+      "id": "R08",
+      "description": "2020–2024共20条实际增长按100*(KD_t/KD_t-1-1)正确复算，误差≤0.00001个百分点。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S01同国相邻KD，不能用CD或其他国家分母。"
+    },
+    {
+      "id": "R09",
+      "description": "20条现价美元同比按同国CD比率计算，明确诊断用而非实际产出增长；名义减实际差是百分点。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "macro_review.xlsx"
+      ],
+      "evidence": "S01 CD/KD；数值误差≤0.00001个百分点。"
+    },
+    {
+      "id": "R10",
+      "description": "20条实际增长与官方ZG复核差值正确且绝对值≤团队0.00001个百分点，容差标明原创约定。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S01 ZG；差为派生实际减官方。"
+    },
+    {
+      "id": "R11",
+      "description": "四国2019派生同比和派生-官方差保留空值并说明无2018水平；允许照录官方2019增长但不称已由本包水平复算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "skill_evidence.json",
+        "research_memo.docx"
+      ],
+      "evidence": "S01年份范围；2019 index=100不意味着增长0。"
+    },
+    {
+      "id": "R12",
+      "description": "24条实际指数以各国2019 KD为100，2024最低恢复者日本；不把跨国金额排名当各国内恢复指数。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q4",
+        "Q6"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "research_memo.docx"
+      ],
+      "evidence": "S01同国KD；指数容差1e-6，最低恢复按指数比较。"
+    },
+    {
+      "id": "R13",
+      "description": "BRA/JPN旧稿KD分子与CD分母的混价比率被识别并撤回，保留原分子/分母代码与百分比作证据。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "macro_review.xlsx"
+      ],
+      "evidence": "S04 D0两行；不是简单单位/舍入差。"
+    },
+    {
+      "id": "R14",
+      "description": "GBR/USA旧稿同口径CD同比被识别为名义美元变化，不能沿用为实际增长。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "macro_review.xlsx"
+      ],
+      "evidence": "S04 D0两行与S02。"
+    },
+    {
+      "id": "R15",
+      "description": "纠错底稿逐国列原D0百分比、正确2024实际增长和差额/动作，4国共12槽（旧值/新值、错误机制、可执行更正）。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "macro_review.xlsx"
+      ],
+      "evidence": "S04/S01与原委托，合理等价组织可接受。",
+      "levels": {
+        "0": "满足0–2槽。",
+        "0.25": "满足3–5槽。",
+        "0.5": "满足6–8槽。",
+        "0.75": "满足9–11槽。",
+        "1": "12槽完整且不把D0冒称官方vintage。"
+      }
+    },
+    {
+      "id": "R16",
+      "description": "四国2024实际增长约BRA3.419315%、GBR1.080277%、JPN−0.240084%、USA2.793187%，实际负增长名单仅日本，备忘/补查表一致。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "research_memo.docx"
+      ],
+      "evidence": "S01 ZG及KD复算，显示可保留2位；不可按现价符号误报巴西。"
+    },
+    {
+      "id": "R17",
+      "description": "解释巴西现价美元约−0.24%而实际约+3.42%并纠正衰退措辞；不用CD/KD美元比值直接称国内通胀。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q5",
+        "Q6"
+      ],
+      "deliverables": [
+        "research_memo.docx"
+      ],
+      "evidence": "S01两种真实变化与S03价格/汇率边界。"
+    },
+    {
+      "id": "R18",
+      "description": "不把D0差额认作已核实官方版本修订；指出只有单一官方快照、无第二历史vintage，不编造国别重估事件或比例补旧年。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "research_memo.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S03官方一般修订知识≠本例修订证据。"
+    },
+    {
+      "id": "R19",
+      "description": "关键派生单元格是可复算公式且打开有缓存，无#VALUE!/#DIV/0等错误；显示百分数/百分点/十亿单位不重复乘100。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q3",
+        "Q4"
+      ],
+      "deliverables": [
+        "macro_review.xlsx"
+      ],
+      "evidence": "真实Office重算、formula/data_only与显示格式。"
+    },
+    {
+      "id": "R20",
+      "description": "交接动作覆盖原D0撤回替换、国别补查、首席分析师复核、对外审批未授权；每项责任人/动作明确，共4动作槽。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "research_memo.docx"
+      ],
+      "evidence": "S05使用者/门禁；不是泛写建议加强审核。",
+      "levels": {
+        "0": "0槽可执行。",
+        "0.25": "1槽。",
+        "0.5": "2槽。",
+        "0.75": "3槽。",
+        "1": "4槽完整，不伪称已经实际对外执行。"
+      }
+    },
+    {
+      "id": "R21",
+      "description": "保留GDP研究边界：无行业/订单/利润/风险证据不作公司投资/进入市场放行，不把GDP指数当PPP福利/生活成本或回报排名。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q6",
+        "Q7"
+      ],
+      "deliverables": [
+        "research_memo.docx"
+      ],
+      "evidence": "S05授权范围和未给材料。"
+    },
+    {
+      "id": "R22",
+      "description": "工作簿、备忘和JSON同一24年度/4国结论及R2范围，无报告与表格矛盾、JSON另用一批快照。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据与业务",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "research_memo.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "逐国同比/指数/来源与状态交叉核查。"
+    },
+    {
+      "id": "R23",
+      "description": "仅交3个规定可打开文件，不压缩/加密，不修改只读6输入和4Skill；页面文字/表格不遮挡重要数据。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "research_memo.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "文件集合、实际打开/渲染、源哈希。"
+    },
+    {
+      "id": "R24",
+      "description": "扣分：伪造已对外发布、真实World Bank确认、真实专家签字或已投资/进入市场批准等具体执行凭证；普通数值/措辞错误不重复触发。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与边界",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "macro_review.xlsx",
+        "research_memo.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S05/S06明确无此授权和凭证。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/114942-what-is-the-difference-between-current-and-constan",
+      "locator": "current/constant definitions and devaluation paragraph",
+      "fact": "现价美元变化不等实际量增长"
+    },
+    {
+      "url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/114968-how-do-you-derive-your-constant-price-series-for-t",
+      "locator": "constant LCU conversion paragraph",
+      "fact": "当前共同参照2015并保留增长率"
+    },
+    {
+      "url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/680284-why-do-countries-revise-their-national-accounts",
+      "locator": "Current Practices",
+      "fact": "一般修订知识不证明特定国别事件"
+    },
+    {
+      "url": "https://api.worldbank.org/v2/country/BRA;GBR;USA;JPN/indicator/NY.GDP.MKTP.CD;NY.GDP.MKTP.KD;NY.GDP.MKTP.KD.ZG?source=2&date=2019:2024&format=json&per_page=500",
+      "locator": "72 raw records/metadata.lastupdated",
+      "fact": "2026-10-08数据集更新、三指标四国六年真实数"
+    }
+  ],
+  "status": {
+    "task_id": "DA-TIME-002",
+    "domain": "数据分析",
+    "domain_l2": "DA2-指标与口径治理（拟议扩展）",
+    "category": "skill-discovery",
+    "inputs": 6,
+    "gold_files": 3,
+    "rubrics": 24,
+    "complexity": "C3",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:be738989511be4f4320c3d80628f068dcacbb894468913f84b1592ea4d5c0ef0",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/DA-TIME-002/20261020T221916Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 24.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_WDI原始观测.json",
+      "absolute_path": "题包内：S01_WDI原始观测.json",
+      "url": "",
+      "bytes": 15473,
+      "sha256": "673a3610b7406a2dfade5f7ab6c8f6e93973b94cbdd30db1080170b9bed04c92",
+      "description": "官方API原始72条三指标/四国/六年观测，完整未改响应。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114942-what-is-the-difference-between-current-and-constan",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114968-how-do-you-derive-your-constant-price-series-for-t",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/680284-why-do-countries-revise-their-national-accounts",
+        "https://api.worldbank.org/v2/country/BRA;GBR;USA;JPN/indicator/NY.GDP.MKTP.CD;NY.GDP.MKTP.KD;NY.GDP.MKTP.KD.ZG?source=2&date=2019:2024&format=json&per_page=500"
+      ]
+    },
+    {
+      "name": "S02_指标定义汇编.json",
+      "absolute_path": "题包内：S02_指标定义汇编.json",
+      "url": "",
+      "bytes": 4890,
+      "sha256": "03913d10d2b0eb69ceeccf4902a34fd46c50188a3fc4230990099ed4743378f4",
+      "description": "三份官方指标定义的作者汇编，保留原响应/URL/哈希/抓取时间。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114942-what-is-the-difference-between-current-and-constan",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114968-how-do-you-derive-your-constant-price-series-for-t",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/680284-why-do-countries-revise-their-national-accounts",
+        "https://api.worldbank.org/v2/country/BRA;GBR;USA;JPN/indicator/NY.GDP.MKTP.CD;NY.GDP.MKTP.KD;NY.GDP.MKTP.KD.ZG?source=2&date=2019:2024&format=json&per_page=500"
+      ]
+    },
+    {
+      "name": "S03_口径与修订依据.docx",
+      "absolute_path": "题包内：S03_口径与修订依据.docx",
+      "url": "",
+      "bytes": 38922,
+      "sha256": "646ae225409a91f15dbe115e51e7bda36837ea01bd658c37eb4c6a31997c8115",
+      "description": "官方价格/修订/换算方法的中文作者归纳和原链接，非官方译文。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114942-what-is-the-difference-between-current-and-constan",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114968-how-do-you-derive-your-constant-price-series-for-t",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/680284-why-do-countries-revise-their-national-accounts",
+        "https://api.worldbank.org/v2/country/BRA;GBR;USA;JPN/indicator/NY.GDP.MKTP.CD;NY.GDP.MKTP.KD;NY.GDP.MKTP.KD.ZG?source=2&date=2019:2024&format=json&per_page=500"
+      ]
+    },
+    {
+      "name": "S04_待审旧稿D0.xlsx",
+      "absolute_path": "题包内：S04_待审旧稿D0.xlsx",
+      "url": "assets/tasks/DA-TIME-002/environment/input_files/S04_%E5%BE%85%E5%AE%A1%E6%97%A7%E7%A8%BFD0.xlsx",
+      "bytes": 6975,
+      "sha256": "6c1543a98717abecea06649776be0dcce22e83e43167927552fac0e46ea66d73",
+      "description": "原创污染内部稿，实际值均可定位S01；非官方历史vintage。",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "D0"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 8列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "country",
+              "year",
+              "numerator_indicator",
+              "denominator_indicator",
+              "numerator_value",
+              "denominator_value",
+              "draft_growth_pct",
+              "draft_label"
+            ],
+            [
+              "BRA",
+              2024,
+              "NY.GDP.MKTP.KD",
+              "NY.GDP.MKTP.CD",
+              2028136327872.37,
+              2191131765684.63,
+              "=(E2/F2-1)*100\n缓存：-7.4388697368609",
+              "实际增长；2010不变美元（未审错标）"
+            ],
+            [
+              "GBR",
+              2024,
+              "NY.GDP.MKTP.CD",
+              "NY.GDP.MKTP.CD",
+              3695539513534.15,
+              3420796653789.08,
+              "=(E3/F3-1)*100\n缓存：8.0315460856391",
+              "实际增长；2010不变美元（未审错标）"
+            ],
+            [
+              "JPN",
+              2024,
+              "NY.GDP.MKTP.KD",
+              "NY.GDP.MKTP.CD",
+              4708167683577.82,
+              4384854269961.93,
+              "=(E4/F4-1)*100\n缓存：7.37341297362426",
+              "实际增长；2010不变美元（未审错标）"
+            ],
+            [
+              "USA",
+              2024,
+              "NY.GDP.MKTP.CD",
+              "NY.GDP.MKTP.CD",
+              29298013000000,
+              27811517000000,
+              "=(E5/F5-1)*100\n缓存：5.34489362806063",
+              "实际增长；2010不变美元（未审错标）"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114942-what-is-the-difference-between-current-and-constan",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114968-how-do-you-derive-your-constant-price-series-for-t",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/680284-why-do-countries-revise-their-national-accounts",
+        "https://api.worldbank.org/v2/country/BRA;GBR;USA;JPN/indicator/NY.GDP.MKTP.CD;NY.GDP.MKTP.KD;NY.GDP.MKTP.KD.ZG?source=2&date=2019:2024&format=json&per_page=500"
+      ]
+    },
+    {
+      "name": "S05_研究委托.docx",
+      "absolute_path": "题包内：S05_研究委托.docx",
+      "url": "assets/tasks/DA-TIME-002/environment/input_files/S05_%E7%A0%94%E7%A9%B6%E5%A7%94%E6%89%98.docx",
+      "bytes": 39452,
+      "sha256": "29cc4d86dfecb773f32b329ba9030bb6acb8f893f655fe4bffcb498f7f493c36",
+      "description": "原创使用者/业务决策、时间/权限、产物和核对约定。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创研究委托R2｜先修复宏观背景，不作投资或扩张放行"
+        },
+        {
+          "kind": "heading",
+          "text": "使用者、决策与时间线"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是四国研究简报的宏观数据分析员。首席分析师要判断哪些旧简报必须撤回、哪些国家的2024实际产出需补查，并形成可交接的研究底稿，不是批准投资或市场进入。业务基准2026-10-21 09:00 Asia/Shanghai。四国及GDP是真实公开数据；团队角色/委托/旧稿和消息均为作者原创。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "10月20日15:00 R1原本研究现价美元规模；17:00助理的D0却把两类指标混接、套“实际增长/2010不变美元”。21日08:00首席分析师签R2改做实际增长审阅，明确替换R1目标。08:35营销建议保留D0百分比、凡美元额下降都写衰退，方便发布；该建议未批准，不能以消息更晚覆盖R2。原始API于20日UTC实际冻结，数据集更新日10月8日，不把任何原创团队时间伪称WDI正式发布日期。"
+        },
+        {
+          "kind": "heading",
+          "text": "计算与交付"
+        },
+        {
+          "kind": "paragraph",
+          "text": "从多个Skill的名称/描述与入口判断是否使用、哪些适用。可选择合适Skill实际运行，或说明不用的理由并实际运行可复核替代实现；不强制运行全部Skill，不把只读元数据、现价规模或历史vintage调查当成已完成组合修复。skill_evidence.json应真实记录执行器、输入哈希、所用Skill/脚本哈希及计算结果，不伪造运行轨迹。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "交宏观底稿macro_review.xlsx、research_memo.docx和skill_evidence.json共三个文件。工作簿应有清晰单位/版本/来源说明、72原始记录与三指标字典、四国2019–2024的24条年度分析、4行旧稿纠错及2024补查结论。只要结构可追溯可等价组织，不要求与参考文件同表名/排版。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "每年保留现价美元、2015不变美元、官方增长；2019不变价指数=100。2020–2024分别由同国相邻同口径水平复算实际增长及现价美元变化，再以百分点比较实际增长与官方值；差值绝对值≤0.00001个百分点是本团队核对约定，不是World Bank精度保证。2019缺2018水平，派生同比/差值留空标明原因，不填0或假数。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "关键派生单元格需可复算公式、打开可见缓存；源值保留全精度，美元可按十亿显示（两位）、增长百分数/百分点两位，2019指数两位。分清数值单位：如3.42表示3.42%，不要再套百分比格式显示342%。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0逐国保留分子/分母指标、原百分比、混价或现价误称实际的诊断、正确2024实际增长和纠错动作。不得对整列套一个修复系数，不把D0当旧官方vintage；缺历史官方快照就保留未能归因的边界。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "备忘向首席分析师说明4个Skill适用性/选择或不用理由、R2与营销权限、四国2024实际增长、实际负增长需补查名单、2019→2024实际指数与最低恢复者、旧稿撤回动作/负责人/复核门禁。宏观GDP不直接决定公司业务、居民福利、生活成本或投资回报；没有订单/行业/利润/风险资料就不作市场进入放行。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "数值依据以S01/S02为准，知识说明见S03。不得联网换数据后混进同一底稿，也不得把2010说明例子改写成此快照的参照年；无第二官方历史快照，不重造历史vintage或断言某次统计修订导致D0差额。所有成果待审，未对外发布、未真实联系World Bank或专家。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114942-what-is-the-difference-between-current-and-constan",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114968-how-do-you-derive-your-constant-price-series-for-t",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/680284-why-do-countries-revise-their-national-accounts",
+        "https://api.worldbank.org/v2/country/BRA;GBR;USA;JPN/indicator/NY.GDP.MKTP.CD;NY.GDP.MKTP.KD;NY.GDP.MKTP.KD.ZG?source=2&date=2019:2024&format=json&per_page=500"
+      ]
+    },
+    {
+      "name": "S06_版本与授权.json",
+      "absolute_path": "题包内：S06_版本与授权.json",
+      "url": "assets/tasks/DA-TIME-002/environment/input_files/S06_%E7%89%88%E6%9C%AC%E4%B8%8E%E6%8E%88%E6%9D%83.json",
+      "bytes": 1466,
+      "sha256": "be651eb665e8baeb1b367d9ec1b624f57a0c69f4eb220dcc00ea3e2e9689c398",
+      "description": "原创R1/R2/M3权限/时点契约，非官方数据规则。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"kind\": \"Original fictional business authorization, not a World Bank rule or actual approval\",\n  \"as_of\": \"2026-10-21T09:00:00+08:00\",\n  \"versions\": [\n    {\n      \"id\": \"R1\",\n      \"effective_at\": \"2026-10-20T15:00:00+08:00\",\n      \"approved\": true,\n      \"authority\": \"chief_analyst\",\n      \"objective\": \"nominal_market_size\",\n      \"countries\": [\n        \"BRA\",\n        \"GBR\",\n        \"JPN\",\n        \"USA\"\n      ],\n      \"years\": [\n        2019,\n        2020,\n        2021,\n        2022,\n        2023,\n        2024\n      ],\n      \"baseline_year\": 2019\n    },\n    {\n      \"id\": \"R2\",\n      \"effective_at\": \"2026-10-21T08:00:00+08:00\",\n      \"approved\": true,\n      \"authority\": \"chief_analyst\",\n      \"objective\": \"real_gdp_review\",\n      \"countries\": [\n        \"BRA\",\n        \"GBR\",\n        \"JPN\",\n        \"USA\"\n      ],\n      \"years\": [\n        2019,\n        2020,\n        2021,\n        2022,\n        2023,\n        2024\n      ],\n      \"baseline_year\": 2019,\n      \"growth_tolerance_pp\": 1e-05\n    },\n    {\n      \"id\": \"M3\",\n      \"effective_at\": \"2026-10-21T08:35:00+08:00\",\n      \"approved\": false,\n      \"authority\": \"marketing\",\n      \"objective\": \"reuse_draft_without_review\",\n      \"countries\": [\n        \"BRA\",\n        \"GBR\",\n        \"JPN\",\n        \"USA\"\n      ],\n      \"years\": [\n        2019,\n        2020,\n        2021,\n        2022,\n        2023,\n        2024\n      ],\n      \"baseline_year\": 2019\n    }\n  ],\n  \"external_release_authorized\": false\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114942-what-is-the-difference-between-current-and-constan",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/114968-how-do-you-derive-your-constant-price-series-for-t",
+        "https://datahelpdesk.worldbank.org/knowledgebase/articles/680284-why-do-countries-revise-their-national-accounts",
+        "https://api.worldbank.org/v2/country/BRA;GBR;USA;JPN/indicator/NY.GDP.MKTP.CD;NY.GDP.MKTP.KD;NY.GDP.MKTP.KD.ZG?source=2&date=2019:2024&format=json&per_page=500"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "macro_review.xlsx",
+      "absolute_path": "题包内：macro_review.xlsx",
+      "url": "assets/tasks/DA-TIME-002/solution/golden_output/macro_review.xlsx",
+      "bytes": 25267,
+      "sha256": "68eb72d8ad1ec3ab37fb16b88d19d552d4a6fd0e8cfa152cfd26599a03015593",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "口径说明"
+        },
+        {
+          "kind": "notice",
+          "text": "共11行 × 2列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "项目",
+              "口径与执行边界"
+            ],
+            [
+              "目标/版本",
+              "R2 2026-10-21 08:00 chief_analyst approved；09:00 Asia/Shanghai基准；不采用未批准08:35营销建议"
+            ],
+            [
+              "数据",
+              "World Bank WDI，单次真实冻结，数据集lastupdated=2026-10-08；不是国别发布日期或旧vintage。S01/S02可逐键追溯。"
+            ],
+            [
+              "单位",
+              "C/D列为十亿美元；原始观测美元全精度。增长列3.42表示3.42%，不是3.42份额；差为百分点。"
+            ],
+            [
+              "公式",
+              "2020–2024同国相邻同口径比率×100；2019缺2018水平保留空值，官方2019增长可照录。2019指数基准100。"
+            ],
+            [
+              "核对容差",
+              "绝对差≤0.00001个百分点为团队约定，不是World Bank法定或官方精度标准。"
+            ],
+            [
+              "Skill执行",
+              "实际运行wdi-series-reconcile；4候选入口适用性见备忘，JSON记录真实源/Skill哈希，不等于签名认证。"
+            ],
+            [
+              "来源归属",
+              "World Bank WDI及其元数据所列国家官方统计、OECD和WB估计；保留原API与知识来源URL，非World Bank背书。"
+            ],
+            [
+              "禁止推断",
+              "现价美元同比不直接等于实际增长；CD/KD美元比值非国内通胀；GDP不证明福利/生活成本/投资回报；无第二官方快照不编造修订归因。"
+            ],
+            [
+              "交接状态",
+              "待首席分析师复核，外部发布/投资/进入市场均未获批准，未执行外部联系。"
+            ],
+            [
+              null,
+              null
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "指标字典"
+        },
+        {
+          "kind": "notice",
+          "text": "共4行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "indicator",
+              "name",
+              "price/unit",
+              "source",
+              "raw_api_unit",
+              "reference_note"
+            ],
+            [
+              "NY.GDP.MKTP.CD",
+              "GDP (current US$)",
+              "current USD",
+              "https://api.worldbank.org/v2/indicator/NY.GDP.MKTP.CD?source=2&format=json",
+              null,
+              "S02原定义/sourceNote；2010帮助页仅举例"
+            ],
+            [
+              "NY.GDP.MKTP.KD",
+              "GDP (constant 2015 US$)",
+              "constant 2015 USD",
+              "https://api.worldbank.org/v2/indicator/NY.GDP.MKTP.KD?source=2&format=json",
+              null,
+              "S02原定义/sourceNote；2010帮助页仅举例"
+            ],
+            [
+              "NY.GDP.MKTP.KD.ZG",
+              "GDP growth (annual %)",
+              "percent",
+              "https://api.worldbank.org/v2/indicator/NY.GDP.MKTP.KD.ZG?source=2&format=json",
+              null,
+              "S02原定义/sourceNote；2010帮助页仅举例"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "原始观测"
+        },
+        {
+          "kind": "notice",
+          "text": "共73行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "country",
+              "year",
+              "indicator",
+              "raw_value",
+              "source_key",
+              "snapshot_lastupdated"
+            ],
+            [
+              "BRA",
+              2019,
+              "NY.GDP.MKTP.CD",
+              1873288205059.69,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2019,
+              "NY.GDP.MKTP.KD",
+              1819683217699.38,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2019,
+              "NY.GDP.MKTP.KD.ZG",
+              1.22077782360842,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2020,
+              "NY.GDP.MKTP.CD",
+              1476107231310.49,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2020,
+              "NY.GDP.MKTP.KD",
+              1760056587795.46,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2020,
+              "NY.GDP.MKTP.KD.ZG",
+              -3.2767587964736,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2021,
+              "NY.GDP.MKTP.CD",
+              1670647398904.9,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2021,
+              "NY.GDP.MKTP.KD",
+              1843881119920.2,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2021,
+              "NY.GDP.MKTP.KD.ZG",
+              4.76260437908608,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2022,
+              "NY.GDP.MKTP.CD",
+              1951923942083.32,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2022,
+              "NY.GDP.MKTP.KD",
+              1899505377558.02,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2022,
+              "NY.GDP.MKTP.KD.ZG",
+              3.01669435393015,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2023,
+              "NY.GDP.MKTP.CD",
+              2191131765684.63,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2023,
+              "NY.GDP.MKTP.KD",
+              1961080794855.6,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2023,
+              "NY.GDP.MKTP.KD.ZG",
+              3.24165532906981,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2024,
+              "NY.GDP.MKTP.CD",
+              2185821610689.31,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2024,
+              "NY.GDP.MKTP.KD",
+              2028136327872.37,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "BRA",
+              2024,
+              "NY.GDP.MKTP.KD.ZG",
+              3.41931516501906,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2019,
+              "NY.GDP.MKTP.CD",
+              2875710080015.3,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2019,
+              "NY.GDP.MKTP.KD",
+              3189276748351.15,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2019,
+              "NY.GDP.MKTP.KD.ZG",
+              1.25629899760824,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2020,
+              "NY.GDP.MKTP.CD",
+              2724001478304.59,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2020,
+              "NY.GDP.MKTP.KD",
+              2868821517197.41,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2020,
+              "NY.GDP.MKTP.KD.ZG",
+              -10.047896637362,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2021,
+              "NY.GDP.MKTP.CD",
+              3194559188925.93,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2021,
+              "NY.GDP.MKTP.KD",
+              3113908148054.35,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2021,
+              "NY.GDP.MKTP.KD.ZG",
+              8.5431118453255,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2022,
+              "NY.GDP.MKTP.CD",
+              3181244350465.41,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2022,
+              "NY.GDP.MKTP.KD",
+              3274265196937.19,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2022,
+              "NY.GDP.MKTP.KD.ZG",
+              5.14970388522993,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2023,
+              "NY.GDP.MKTP.CD",
+              3420796653789.08,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2023,
+              "NY.GDP.MKTP.KD",
+              3283159739927.95,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2023,
+              "NY.GDP.MKTP.KD.ZG",
+              0.271650048355255,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2024,
+              "NY.GDP.MKTP.CD",
+              3695539513534.15,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2024,
+              "NY.GDP.MKTP.KD",
+              3318626965006.66,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "GBR",
+              2024,
+              "NY.GDP.MKTP.KD.ZG",
+              1.08027716858781,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2019,
+              "NY.GDP.MKTP.CD",
+              5245755000479.03,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2019,
+              "NY.GDP.MKTP.KD",
+              4664812538574.46,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2019,
+              "NY.GDP.MKTP.KD.ZG",
+              -0.308496921143259,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2020,
+              "NY.GDP.MKTP.CD",
+              5189197543645.38,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2020,
+              "NY.GDP.MKTP.KD",
+              4465005582812.98,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2020,
+              "NY.GDP.MKTP.KD.ZG",
+              -4.28327942675573,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2021,
+              "NY.GDP.MKTP.CD",
+              5225933520753.1,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2021,
+              "NY.GDP.MKTP.KD",
+              4624147102598.69,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2021,
+              "NY.GDP.MKTP.KD.ZG",
+              3.56419531474475,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2022,
+              "NY.GDP.MKTP.CD",
+              4447976207314.78,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2022,
+              "NY.GDP.MKTP.KD",
+              4685724442189.07,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2022,
+              "NY.GDP.MKTP.KD.ZG",
+              1.33164750653741,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2023,
+              "NY.GDP.MKTP.CD",
+              4384854269961.93,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2023,
+              "NY.GDP.MKTP.KD",
+              4719498455389.44,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2023,
+              "NY.GDP.MKTP.KD.ZG",
+              0.720785304749811,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2024,
+              "NY.GDP.MKTP.CD",
+              4190008188358.57,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2024,
+              "NY.GDP.MKTP.KD",
+              4708167683577.82,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "JPN",
+              2024,
+              "NY.GDP.MKTP.KD.ZG",
+              -0.240084236041696,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2019,
+              "NY.GDP.MKTP.CD",
+              21539982000000,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2019,
+              "NY.GDP.MKTP.KD",
+              20159639089819,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2019,
+              "NY.GDP.MKTP.KD.ZG",
+              2.58382533052225,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2020,
+              "NY.GDP.MKTP.CD",
+              21375281000000,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2020,
+              "NY.GDP.MKTP.KD",
+              19740041204593.2,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2020,
+              "NY.GDP.MKTP.KD.ZG",
+              -2.081375977796,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2021,
+              "NY.GDP.MKTP.CD",
+              23725645000000,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2021,
+              "NY.GDP.MKTP.KD",
+              20954452976799.5,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2021,
+              "NY.GDP.MKTP.KD.ZG",
+              6.15202247867526,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2022,
+              "NY.GDP.MKTP.CD",
+              26054614000000,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2022,
+              "NY.GDP.MKTP.KD",
+              21483388181185,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2022,
+              "NY.GDP.MKTP.KD.ZG",
+              2.52421385073222,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2023,
+              "NY.GDP.MKTP.CD",
+              27811517000000,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2023,
+              "NY.GDP.MKTP.KD",
+              22113788823329.1,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2023,
+              "NY.GDP.MKTP.KD.ZG",
+              2.93436322440155,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2024,
+              "NY.GDP.MKTP.CD",
+              29298013000000,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2024,
+              "NY.GDP.MKTP.KD",
+              22731468331925.1,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ],
+            [
+              "USA",
+              2024,
+              "NY.GDP.MKTP.KD.ZG",
+              2.79318715363841,
+              "S01 raw API: countryiso3code/date/indicator.id",
+              "2026-10-08"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "年度分析"
+        },
+        {
+          "kind": "notice",
+          "text": "共25行 × 11列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "country",
+              "year",
+              "current USD bn",
+              "constant2015 USD bn",
+              "official real growth %",
+              "derived real growth %",
+              "nominal USD growth %",
+              "nominal minus real pp",
+              "real index 2019=100",
+              "derived-official pp",
+              "status"
+            ],
+            [
+              "BRA",
+              2019,
+              "=原始观测!D2/1000000000\n缓存：1873.28820505969",
+              "=原始观测!D3/1000000000\n缓存：1819.68321769938",
+              "=原始观测!D4\n缓存：1.22077782360842",
+              null,
+              null,
+              null,
+              "=D2/D2*100\n缓存：100",
+              null,
+              "NO_2018_LEVEL"
+            ],
+            [
+              "BRA",
+              2020,
+              "=原始观测!D5/1000000000\n缓存：1476.10723131049",
+              "=原始观测!D6/1000000000\n缓存：1760.05658779546",
+              "=原始观测!D7\n缓存：-3.2767587964736",
+              "=(D3/D2-1)*100\n缓存：-3.27675879647369",
+              "=(C3/C2-1)*100\n缓存：-21.2023420996527",
+              "=G3-F3\n缓存：-17.9255833031791",
+              "=D3/D2*100\n缓存：96.7232412035263",
+              "=F3-E3\n缓存：-8.88178419700125e-14",
+              "RECONCILED"
+            ],
+            [
+              "BRA",
+              2021,
+              "=原始观测!D8/1000000000\n缓存：1670.6473989049",
+              "=原始观测!D9/1000000000\n缓存：1843.8811199202",
+              "=原始观测!D10\n缓存：4.76260437908608",
+              "=(D4/D3-1)*100\n缓存：4.76260437908611",
+              "=(C4/C3-1)*100\n缓存：13.1792706835869",
+              "=G4-F4\n缓存：8.4166663045008",
+              "=D4/D2*100\n缓存：101.329786524679",
+              "=F4-E4\n缓存：3.01980662698043e-14",
+              "RECONCILED"
+            ],
+            [
+              "BRA",
+              2022,
+              "=原始观测!D11/1000000000\n缓存：1951.92394208332",
+              "=原始观测!D12/1000000000\n缓存：1899.50537755802",
+              "=原始观测!D13\n缓存：3.01669435393015",
+              "=(D5/D4-1)*100\n缓存：3.01669435393033",
+              "=(C5/C4-1)*100\n缓存：16.8363799185151",
+              "=G5-F5\n缓存：13.8196855645848",
+              "=D5/D2*100\n缓存：104.386596473619",
+              "=F5-E5\n缓存：1.77191594730175e-13",
+              "RECONCILED"
+            ],
+            [
+              "BRA",
+              2023,
+              "=原始观测!D14/1000000000\n缓存：2191.13176568463",
+              "=原始观测!D15/1000000000\n缓存：1961.0807948556",
+              "=原始观测!D16\n缓存：3.24165532906981",
+              "=(D6/D5-1)*100\n缓存：3.24165532906997",
+              "=(C6/C5-1)*100\n缓存：12.2549766639985",
+              "=G6-F6\n缓存：9.01332133492849",
+              "=D6/D2*100\n缓存：107.770450141041",
+              "=F6-E6\n缓存：1.60316204755873e-13",
+              "RECONCILED"
+            ],
+            [
+              "BRA",
+              2024,
+              "=原始观测!D17/1000000000\n缓存：2185.82161068931",
+              "=原始观测!D18/1000000000\n缓存：2028.13632787237",
+              "=原始观测!D19\n缓存：3.41931516501906",
+              "=(D7/D6-1)*100\n缓存：3.41931516501888",
+              "=(C7/C6-1)*100\n缓存：-0.242347588514868",
+              "=G7-F7\n缓存：-3.66166275353375",
+              "=D7/D2*100\n缓存：111.455461486123",
+              "=F7-E7\n缓存：-1.82964754458226e-13",
+              "RECONCILED"
+            ],
+            [
+              "GBR",
+              2019,
+              "=原始观测!D20/1000000000\n缓存：2875.7100800153",
+              "=原始观测!D21/1000000000\n缓存：3189.27674835115",
+              "=原始观测!D22\n缓存：1.25629899760824",
+              null,
+              null,
+              null,
+              "=D8/D8*100\n缓存：100",
+              null,
+              "NO_2018_LEVEL"
+            ],
+            [
+              "GBR",
+              2020,
+              "=原始观测!D23/1000000000\n缓存：2724.00147830459",
+              "=原始观测!D24/1000000000\n缓存：2868.82151719741",
+              "=原始观测!D25\n缓存：-10.047896637362",
+              "=(D9/D8-1)*100\n缓存：-10.0478966373619",
+              "=(C9/C8-1)*100\n缓存：-5.27551795867762",
+              "=G9-F9\n缓存：4.77237867868426",
+              "=D9/D8*100\n缓存：89.9521033626381",
+              "=F9-E9\n缓存：1.13686837721616e-13",
+              "RECONCILED"
+            ],
+            [
+              "GBR",
+              2021,
+              "=原始观测!D26/1000000000\n缓存：3194.55918892593",
+              "=原始观测!D27/1000000000\n缓存：3113.90814805435",
+              "=原始观测!D28\n缓存：8.5431118453255",
+              "=(D10/D9-1)*100\n缓存：8.54311184532555",
+              "=(C10/C9-1)*100\n缓存：17.2745027625394",
+              "=G10-F10\n缓存：8.73139091721385",
+              "=D10/D8*100\n缓存：97.6368121601311",
+              "=F10-E10\n缓存：4.61852778244065e-14",
+              "RECONCILED"
+            ],
+            [
+              "GBR",
+              2022,
+              "=原始观测!D29/1000000000\n缓存：3181.24435046541",
+              "=原始观测!D30/1000000000\n缓存：3274.26519693719",
+              "=原始观测!D31\n缓存：5.14970388522993",
+              "=(D11/D10-1)*100\n缓存：5.14970388522973",
+              "=(C11/C10-1)*100\n缓存：-0.41679736305017",
+              "=G11-F11\n缓存：-5.5665012482799",
+              "=D11/D8*100\n缓存：102.664818869356",
+              "=F11-E11\n缓存：-2.01616501271928e-13",
+              "RECONCILED"
+            ],
+            [
+              "GBR",
+              2023,
+              "=原始观测!D32/1000000000\n缓存：3420.79665378908",
+              "=原始观测!D33/1000000000\n缓存：3283.15973992795",
+              "=原始观测!D34\n缓存：0.271650048355255",
+              "=(D12/D11-1)*100\n缓存：0.271650048355299",
+              "=(C12/C11-1)*100\n缓存：7.53014471486995",
+              "=G12-F12\n缓存：7.25849466651465",
+              "=D12/D8*100\n缓存：102.943707899458",
+              "=F12-E12\n缓存：4.35762537165374e-14",
+              "RECONCILED"
+            ],
+            [
+              "GBR",
+              2024,
+              "=原始观测!D35/1000000000\n缓存：3695.53951353415",
+              "=原始观测!D36/1000000000\n缓存：3318.62696500666",
+              "=原始观测!D37\n缓存：1.08027716858781",
+              "=(D13/D12-1)*100\n缓存：1.08027716858785",
+              "=(C13/C12-1)*100\n缓存：8.0315460856391",
+              "=G13-F13\n缓存：6.95126891705125",
+              "=D13/D8*100\n缓存：104.055785272394",
+              "=F13-E13\n缓存：4.08562073062058e-14",
+              "RECONCILED"
+            ],
+            [
+              "JPN",
+              2019,
+              "=原始观测!D38/1000000000\n缓存：5245.75500047903",
+              "=原始观测!D39/1000000000\n缓存：4664.81253857446",
+              "=原始观测!D40\n缓存：-0.308496921143259",
+              null,
+              null,
+              null,
+              "=D14/D14*100\n缓存：100",
+              null,
+              "NO_2018_LEVEL"
+            ],
+            [
+              "JPN",
+              2020,
+              "=原始观测!D41/1000000000\n缓存：5189.19754364538",
+              "=原始观测!D42/1000000000\n缓存：4465.00558281298",
+              "=原始观测!D43\n缓存：-4.28327942675573",
+              "=(D15/D14-1)*100\n缓存：-4.28327942675567",
+              "=(C15/C14-1)*100\n缓存：-1.07815665864086",
+              "=G15-F15\n缓存：3.20512276811481",
+              "=D15/D14*100\n缓存：95.7167205732443",
+              "=F15-E15\n缓存：5.86197757002083e-14",
+              "RECONCILED"
+            ],
+            [
+              "JPN",
+              2021,
+              "=原始观测!D44/1000000000\n缓存：5225.9335207531",
+              "=原始观测!D45/1000000000\n缓存：4624.14710259869",
+              "=原始观测!D46\n缓存：3.56419531474475",
+              "=(D16/D15-1)*100\n缓存：3.5641953147447",
+              "=(C16/C15-1)*100\n缓存：0.707931752428781",
+              "=G16-F16\n缓存：-2.85626356231592",
+              "=D16/D14*100\n缓存：99.1282514433432",
+              "=F16-E16\n缓存：-4.9737991503207e-14",
+              "RECONCILED"
+            ],
+            [
+              "JPN",
+              2022,
+              "=原始观测!D47/1000000000\n缓存：4447.97620731478",
+              "=原始观测!D48/1000000000\n缓存：4685.72444218907",
+              "=原始观测!D49\n缓存：1.33164750653741",
+              "=(D17/D16-1)*100\n缓存：1.33164750653747",
+              "=(C17/C16-1)*100\n缓存：-14.8864755043078",
+              "=G17-F17\n缓存：-16.2181230108452",
+              "=D17/D14*100\n缓存：100.448290331963",
+              "=F17-E17\n缓存：5.99520433297585e-14",
+              "RECONCILED"
+            ],
+            [
+              "JPN",
+              2023,
+              "=原始观测!D50/1000000000\n缓存：4384.85426996193",
+              "=原始观测!D51/1000000000\n缓存：4719.49845538944",
+              "=原始观测!D52\n缓存：0.720785304749811",
+              "=(D18/D17-1)*100\n缓存：0.720785304749838",
+              "=(C18/C17-1)*100\n缓存：-1.41911589475333",
+              "=G18-F18\n缓存：-2.13990119950317",
+              "=D18/D14*100\n缓存：101.172306847548",
+              "=F18-E18\n缓存：2.70894418008538e-14",
+              "RECONCILED"
+            ],
+            [
+              "JPN",
+              2024,
+              "=原始观测!D53/1000000000\n缓存：4190.00818835857",
+              "=原始观测!D54/1000000000\n缓存：4708.16768357782",
+              "=原始观测!D55\n缓存：-0.240084236041696",
+              "=(D19/D18-1)*100\n缓存：-0.240084236041649",
+              "=(C19/C18-1)*100\n缓存：-4.44361590163068",
+              "=G19-F19\n缓存：-4.20353166558903",
+              "=D19/D14*100\n缓存：100.929408087567",
+              "=F19-E19\n缓存：4.71289673953379e-14",
+              "RECONCILED"
+            ],
+            [
+              "USA",
+              2019,
+              "=原始观测!D56/1000000000\n缓存：21539.982",
+              "=原始观测!D57/1000000000\n缓存：20159.639089819",
+              "=原始观测!D58\n缓存：2.58382533052225",
+              null,
+              null,
+              null,
+              "=D20/D20*100\n缓存：100",
+              null,
+              "NO_2018_LEVEL"
+            ],
+            [
+              "USA",
+              2020,
+              "=原始观测!D59/1000000000\n缓存：21375.281",
+              "=原始观测!D60/1000000000\n缓存：19740.0412045932",
+              "=原始观测!D61\n缓存：-2.081375977796",
+              "=(D21/D20-1)*100\n缓存：-2.08137597779569",
+              "=(C21/C20-1)*100\n缓存：-0.764629236923231",
+              "=G21-F21\n缓存：1.31674674087245",
+              "=D21/D20*100\n缓存：97.9186240222043",
+              "=F21-E21\n缓存：3.14859249783694e-13",
+              "RECONCILED"
+            ],
+            [
+              "USA",
+              2021,
+              "=原始观测!D62/1000000000\n缓存：23725.645",
+              "=原始观测!D63/1000000000\n缓存：20954.4529767995",
+              "=原始观测!D64\n缓存：6.15202247867526",
+              "=(D22/D21-1)*100\n缓存：6.1520224786751",
+              "=(C22/C21-1)*100\n缓存：10.9957104189648",
+              "=G22-F22\n缓存：4.84368794028969",
+              "=D22/D20*100\n缓存：103.94259978286",
+              "=F22-E22\n缓存：-1.58983937126322e-13",
+              "RECONCILED"
+            ],
+            [
+              "USA",
+              2022,
+              "=原始观测!D65/1000000000\n缓存：26054.614",
+              "=原始观测!D66/1000000000\n缓存：21483.388181185",
+              "=原始观测!D67\n缓存：2.52421385073222",
+              "=(D23/D22-1)*100\n缓存：2.524213850732",
+              "=(C23/C22-1)*100\n缓存：9.81625157082138",
+              "=G23-F23\n缓存：7.29203772008937",
+              "=D23/D20*100\n缓存：106.56633328339",
+              "=F23-E23\n缓存：-2.1538326677728e-13",
+              "RECONCILED"
+            ],
+            [
+              "USA",
+              2023,
+              "=原始观测!D68/1000000000\n缓存：27811.517",
+              "=原始观测!D69/1000000000\n缓存：22113.7888233291",
+              "=原始观测!D70\n缓存：2.93436322440155",
+              "=(D24/D23-1)*100\n缓存：2.93436322440146",
+              "=(C24/C23-1)*100\n缓存：6.7431549743934",
+              "=G24-F24\n缓存：3.80879174999194",
+              "=D24/D20*100\n缓存：109.69337657685",
+              "=F24-E24\n缓存：-9.05941988094128e-14",
+              "RECONCILED"
+            ],
+            [
+              "USA",
+              2024,
+              "=原始观测!D71/1000000000\n缓存：29298.013",
+              "=原始观测!D72/1000000000\n缓存：22731.4683319251",
+              "=原始观测!D73\n缓存：2.79318715363841",
+              "=(D25/D24-1)*100\n缓存：2.79318715363861",
+              "=(C25/C24-1)*100\n缓存：5.34489362806063",
+              "=G25-F25\n缓存：2.55170647442202",
+              "=D25/D20*100\n缓存：112.757317879787",
+              "=F25-E25\n缓存：1.99840144432528e-13",
+              "RECONCILED"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "旧稿纠错"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 8列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "country",
+              "D0 numerator indicator",
+              "D0 denominator indicator",
+              "D0 growth %",
+              "diagnosis",
+              "correct real2024 %",
+              "D0 minus correct pp",
+              "action"
+            ],
+            [
+              "BRA",
+              "NY.GDP.MKTP.KD",
+              "NY.GDP.MKTP.CD",
+              -7.4388697368609,
+              "MIXED_PRICE_BASIS_INVALID",
+              "=年度分析!F7\n缓存：3.41931516501888",
+              "=D2-F2\n缓存：-10.8581849018798",
+              "撤回D0衰退/实际增长标签，替换同口径研究结论；不能称官方vintage修订"
+            ],
+            [
+              "GBR",
+              "NY.GDP.MKTP.CD",
+              "NY.GDP.MKTP.CD",
+              8.0315460856391,
+              "NOMINAL_USD_NOT_REAL",
+              "=年度分析!F13\n缓存：1.08027716858785",
+              "=D3-F3\n缓存：6.95126891705125",
+              "撤回D0衰退/实际增长标签，替换同口径研究结论；不能称官方vintage修订"
+            ],
+            [
+              "JPN",
+              "NY.GDP.MKTP.KD",
+              "NY.GDP.MKTP.CD",
+              7.37341297362426,
+              "MIXED_PRICE_BASIS_INVALID",
+              "=年度分析!F19\n缓存：-0.240084236041649",
+              "=D4-F4\n缓存：7.61349720966591",
+              "撤回D0衰退/实际增长标签，替换同口径研究结论；不能称官方vintage修订"
+            ],
+            [
+              "USA",
+              "NY.GDP.MKTP.CD",
+              "NY.GDP.MKTP.CD",
+              5.34489362806063,
+              "NOMINAL_USD_NOT_REAL",
+              "=年度分析!F25\n缓存：2.79318715363861",
+              "=D5-F5\n缓存：2.55170647442202",
+              "撤回D0衰退/实际增长标签，替换同口径研究结论；不能称官方vintage修订"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "2024补查"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "country",
+              "2024 real growth %",
+              "2019→2024 real index",
+              "real negative?",
+              "next research action"
+            ],
+            [
+              "BRA",
+              "=年度分析!F7\n缓存：3.41931516501888",
+              "=年度分析!I7\n缓存：111.455461486123",
+              "=IF(B2<0,\"YES\",\"NO\")\n缓存：NO",
+              "保留实际增长描述，若旧稿误报负增长则更正；企业行动另需经营证据"
+            ],
+            [
+              "GBR",
+              "=年度分析!F13\n缓存：1.08027716858785",
+              "=年度分析!I13\n缓存：104.055785272394",
+              "=IF(B3<0,\"YES\",\"NO\")\n缓存：NO",
+              "保留实际增长描述，若旧稿误报负增长则更正；企业行动另需经营证据"
+            ],
+            [
+              "JPN",
+              "=年度分析!F19\n缓存：-0.240084236041649",
+              "=年度分析!I19\n缓存：100.929408087567",
+              "=IF(B4<0,\"YES\",\"NO\")\n缓存：YES",
+              "实际负增长：补查国别行业构成/需求证据，暂不对外下公司决策"
+            ],
+            [
+              "USA",
+              "=年度分析!F25\n缓存：2.79318715363861",
+              "=年度分析!I25\n缓存：112.757317879787",
+              "=IF(B5<0,\"YES\",\"NO\")\n缓存：NO",
+              "保留实际增长描述，若旧稿误报负增长则更正；企业行动另需经营证据"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "research_memo.docx",
+      "absolute_path": "题包内：research_memo.docx",
+      "url": "assets/tasks/DA-TIME-002/solution/golden_output/research_memo.docx",
+      "bytes": 39443,
+      "sha256": "927d33701a6eef026cf2dc78c6bde9606ba55a5d7da32195f2f0aa356d2ac0c4",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "四国GDP纠错与补查｜R2待审"
+        },
+        {
+          "kind": "paragraph",
+          "text": "致首席分析师｜2026-10-21 09:00 Asia/Shanghai。真实WDI快照的更新字段为2026-10-08，实际抓取为2026-10-20 UTC；国别原始发布日期未给。本次先修宏观研究底稿，不作市场进入或投资决定。"
+        },
+        {
+          "kind": "heading",
+          "text": "一、立即撤回旧稿“实际增长”结论"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "国别",
+              "2024实际增长",
+              "2019=100指数",
+              "旧稿实质错误"
+            ],
+            [
+              "BRA",
+              "3.42%",
+              "111.46",
+              "混接KD分子/CD分母"
+            ],
+            [
+              "GBR",
+              "1.08%",
+              "104.06",
+              "CD同比错称实际增长"
+            ],
+            [
+              "JPN",
+              "-0.24%",
+              "100.93",
+              "混接KD分子/CD分母"
+            ],
+            [
+              "USA",
+              "2.79%",
+              "112.76",
+              "CD同比错称实际增长"
+            ]
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "四国中仅日本2024实际负增长，交国别研究员补查行业构成和需求证据；日本的点值约−0.24%，不能改写成D0的混价结果。巴西现价美元同比约−0.24%但实际约+3.42%，旧稿的衰退措辞撤回；英国约+1.08%、美国约+2.79%。以2019为100，最低恢复者为日本；这不是PPP、居民福利或未来回报排名。"
+        },
+        {
+          "kind": "heading",
+          "text": "二、口径、范围和权限"
+        },
+        {
+          "kind": "paragraph",
+          "text": "R1现价规模委托已由08:00 chief_analyst批准R2的实际增长目标替换；08:35营销消息未批准，即使更晚也不能变更。三个指标均按官方代码保留，KD为2015不变美元，2010只是帮助页例子。按同国相邻KD复算2020–2024增长，与官方ZG逐行差值均在团队0.00001个百分点容差内；现价同比另列诊断，差额用百分点，不把CD/KD美元比率解读为国内通胀。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2019指数为100；无2018水平，所以2019派生同比/复核差留空NO_2018_LEVEL。官方2019增长照录但不冒称已独立复算。只有一次官方快照：D0为内部未审稿而非官方历史快照，不能将其差额归因为已核实的统计局重估或伪造旧官方vintage，也不按一个系数修全列。"
+        },
+        {
+          "kind": "heading",
+          "text": "三、Skill发现与执行证据"
+        },
+        {
+          "kind": "paragraph",
+          "text": "选择并实际运行wdi-series-reconcile：覆盖同键筛选、三指标/参照年核对、同口径计算、基年空值、D0诊断和有权R2选择。skill_evidence.json保留6输入及SKILL/参考/脚本真实SHA256，24年表及4旧稿诊断；哈希用于文件版本核对，不代表独立验证签章或专家签字。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "wdi-indicator-dictionary只帮助解释元数据，不能单独完成年度计算；wdi-nominal-market-size适合已被替换的R1现价规模而非本次R2；wdi-vintage-investigation须两份真正官方快照，本题条件不满足，不能为使用它而把D0冒充档案。因此没有运行其余三个入口，也未修改/安装全局Skill。允许别的合适实现，但必须如实记录实际脚本和证据，不能只换一个“已调用”标签。"
+        },
+        {
+          "kind": "heading",
+          "text": "四、交接与复核门禁"
+        },
+        {
+          "kind": "paragraph",
+          "text": "数据分析员：用R2底稿替换D0，保留原D0/差错定位；重点复核巴西和日本混价、英国和美国现价错称实际。国别研究员：日本补查实际负增长和最低恢复背景，其他国家只保留本批数据支持的增长描述；后续如需版本归因，再申请有日期/来源的第二官方档案，不编补。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "首席分析师：复核24条、72原值、20条派生增长核对、4条D0纠错、Skill/输入哈希及备忘一致后，才讨论后续发布审批。营销只可提交文案建议，尚无外发许可。GDP单变量不能推出公司订单、行业利润、居民生活成本、因果政策效果或投资回报；未给经营证据不批准市场进入。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "已完成本地数据/公式核对和脚本重放，独立经济研究复核与业务发布审批尚未完成，未实际对外联络。资料只用于内部待审研究，不构成World Bank背书或市场行动授权。"
+        },
+        {
+          "kind": "heading",
+          "text": "依据与未验事项"
+        },
+        {
+          "kind": "paragraph",
+          "text": "World Bank WDI官方API三指标，原响应S01/S02及其URL；价格/修订说明S03，原创委托/授权S05/S06。国家原始发布日期、第二官方vintage、行业/订单与投资风险未提供。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "https://datahelpdesk.worldbank.org/knowledgebase/articles/114942-what-is-the-difference-between-current-and-constan\nhttps://datahelpdesk.worldbank.org/knowledgebase/articles/114968-how-do-you-derive-your-constant-price-series-for-t\nhttps://datahelpdesk.worldbank.org/knowledgebase/articles/680284-why-do-countries-revise-their-national-accounts"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "skill_evidence.json",
+      "absolute_path": "题包内：skill_evidence.json",
+      "url": "assets/tasks/DA-TIME-002/solution/golden_output/skill_evidence.json",
+      "bytes": 13828,
+      "sha256": "7e3fee2eab29bb6539f98b876414fe93bc13c0c74fb0195541a10d8225cb125b",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"executor\": \"wdi-series-reconcile\",\n  \"selected_contract\": \"R2\",\n  \"as_of\": \"2026-10-21T09:00:00+08:00\",\n  \"snapshot_lastupdated\": \"2026-10-08\",\n  \"snapshot_retrieved_at_utc\": \"2026-10-20T22:02:54.604530+00:00\",\n  \"input_sha256\": {\n    \"S01_WDI原始观测.json\": \"673a3610b7406a2dfade5f7ab6c8f6e93973b94cbdd30db1080170b9bed04c92\",\n    \"S02_指标定义汇编.json\": \"03913d10d2b0eb69ceeccf4902a34fd46c50188a3fc4230990099ed4743378f4\",\n    \"S03_口径与修订依据.docx\": \"646ae225409a91f15dbe115e51e7bda36837ea01bd658c37eb4c6a31997c8115\",\n    \"S04_待审旧稿D0.xlsx\": \"6c1543a98717abecea06649776be0dcce22e83e43167927552fac0e46ea66d73\",\n    \"S05_研究委托.docx\": \"29cc4d86dfecb773f32b329ba9030bb6acb8f893f655fe4bffcb498f7f493c36\",\n    \"S06_版本与授权.json\": \"be651eb665e8baeb1b367d9ec1b624f57a0c69f4eb220dcc00ea3e2e9689c398\"\n  },\n  \"skill_sha256\": {\n    \"SKILL.md\": \"358f199c7ebd45fec0a74677489ce5bff92a0761d4dd0de6b9a9b126acba6ce7\",\n    \"references/packet-rules.md\": \"362e1df1718ded91e10d3d0abc2bc24319fdb85bd880531367ff1d432ef6415d\",\n    \"scripts/reconcile.py\": \"5023fc3574840f0efa4771016eebe68e015150d09b4bb8b5ba46b31c0627dd85\"\n  },\n  \"rows\": [\n    {\n      \"country\": \"BRA\",\n      \"year\": 2019,\n      \"current_usd\": 1873288205059.69,\n      \"constant_2015_usd\": 1819683217699.38,\n      \"official_growth_pct\": 1.22077782360842,\n      \"derived_real_growth_pct\": null,\n      \"nominal_usd_growth_pct\": null,\n      \"nominal_minus_real_pp\": null,\n      \"real_index_2019\": 100.0,\n      \"reconcile_delta_pp\": null,\n      \"derived_growth_status\": \"NO_2018_LEVEL\"\n    },\n    {\n      \"country\": \"BRA\",\n      \"year\": 2020,\n      \"current_usd\": 1476107231310.49,\n      \"constant_2015_usd\": 1760056587795.46,\n      \"official_growth_pct\": -3.2767587964736,\n      \"derived_real_growth_pct\": -3.276758796473694,\n      \"nominal_usd_growth_pct\": -21.20234209965275,\n      \"nominal_minus_real_pp\": -17.925583303179057,\n      \"real_index_2019\": 96.7232412035263,\n      \"reconcile_delta_pp\": -9.43732125588e-14,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"BRA\",\n      \"year\": 2021,\n      \"current_usd\": 1670647398904.9,\n      \"constant_2015_usd\": 1843881119920.2,\n      \"official_growth_pct\": 4.76260437908608,\n      \"derived_real_growth_pct\": 4.762604379086102,\n      \"nominal_usd_growth_pct\": 13.179270683586921,\n      \"nominal_minus_real_pp\": 8.41666630450082,\n      \"real_index_2019\": 101.32978652467946,\n      \"reconcile_delta_pp\": 2.19178198555e-14,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"BRA\",\n      \"year\": 2022,\n      \"current_usd\": 1951923942083.32,\n      \"constant_2015_usd\": 1899505377558.02,\n      \"official_growth_pct\": 3.01669435393015,\n      \"derived_real_growth_pct\": 3.0166943539303293,\n      \"nominal_usd_growth_pct\": 16.836379918515135,\n      \"nominal_minus_real_pp\": 13.819685564584804,\n      \"real_index_2019\": 104.38659647361912,\n      \"reconcile_delta_pp\": 1.79418115437e-13,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"BRA\",\n      \"year\": 2023,\n      \"current_usd\": 2191131765684.63,\n      \"constant_2015_usd\": 1961080794855.6,\n      \"official_growth_pct\": 3.24165532906981,\n      \"derived_real_growth_pct\": 3.241655329069959,\n      \"nominal_usd_growth_pct\": 12.254976663998477,\n      \"nominal_minus_real_pp\": 9.013321334928518,\n      \"real_index_2019\": 107.77045014104095,\n      \"reconcile_delta_pp\": 1.48980838611e-13,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"BRA\",\n      \"year\": 2024,\n      \"current_usd\": 2185821610689.31,\n      \"constant_2015_usd\": 2028136327872.37,\n      \"official_growth_pct\": 3.41931516501906,\n      \"derived_real_growth_pct\": 3.4193151650188636,\n      \"nominal_usd_growth_pct\": -0.24234758851487034,\n      \"nominal_minus_real_pp\": -3.661662753533734,\n      \"real_index_2019\": 111.45546148612266,\n      \"reconcile_delta_pp\": -1.964555080843e-13,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"GBR\",\n      \"year\": 2019,\n      \"current_usd\": 2875710080015.3,\n      \"constant_2015_usd\": 3189276748351.15,\n      \"official_growth_pct\": 1.25629899760824,\n      \"derived_real_growth_pct\": null,\n      \"nominal_usd_growth_pct\": null,\n      \"nominal_minus_real_pp\": null,\n      \"real_index_2019\": 100.0,\n      \"reconcile_delta_pp\": null,\n      \"derived_growth_status\": \"NO_2018_LEVEL\"\n    },\n    {\n      \"country\": \"GBR\",\n      \"year\": 2020,\n      \"current_usd\": 2724001478304.59,\n      \"constant_2015_usd\": 2868821517197.41,\n      \"official_growth_pct\": -10.047896637362,\n      \"derived_real_growth_pct\": -10.047896637361895,\n      \"nominal_usd_growth_pct\": -5.27551795867763,\n      \"nominal_minus_real_pp\": 4.772378678684265,\n      \"real_index_2019\": 89.9521033626381,\n      \"reconcile_delta_pp\": 1.0458891215344e-13,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"GBR\",\n      \"year\": 2021,\n      \"current_usd\": 3194559188925.93,\n      \"constant_2015_usd\": 3113908148054.35,\n      \"official_growth_pct\": 8.5431118453255,\n      \"derived_real_growth_pct\": 8.543111845325546,\n      \"nominal_usd_growth_pct\": 17.27450276253938,\n      \"nominal_minus_real_pp\": 8.731390917213835,\n      \"real_index_2019\": 97.63681216013111,\n      \"reconcile_delta_pp\": 4.6716684879e-14,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"GBR\",\n      \"year\": 2022,\n      \"current_usd\": 3181244350465.41,\n      \"constant_2015_usd\": 3274265196937.19,\n      \"official_growth_pct\": 5.14970388522993,\n      \"derived_real_growth_pct\": 5.14970388522973,\n      \"nominal_usd_growth_pct\": -0.4167973630501645,\n      \"nominal_minus_real_pp\": -5.566501248279895,\n      \"real_index_2019\": 102.66481886935584,\n      \"reconcile_delta_pp\": -1.998410365044e-13,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"GBR\",\n      \"year\": 2023,\n      \"current_usd\": 3420796653789.08,\n      \"constant_2015_usd\": 3283159739927.95,\n      \"official_growth_pct\": 0.271650048355255,\n      \"derived_real_growth_pct\": 0.2716500483552806,\n      \"nominal_usd_growth_pct\": 7.530144714869952,\n      \"nominal_minus_real_pp\": 7.258494666514672,\n      \"real_index_2019\": 102.94370789945832,\n      \"reconcile_delta_pp\": 2.55938269866e-14,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"GBR\",\n      \"year\": 2024,\n      \"current_usd\": 3695539513534.15,\n      \"constant_2015_usd\": 3318626965006.66,\n      \"official_growth_pct\": 1.08027716858781,\n      \"derived_real_growth_pct\": 1.0802771685878536,\n      \"nominal_usd_growth_pct\": 8.031546085639095,\n      \"nominal_minus_real_pp\": 6.951268917051241,\n      \"real_index_2019\": 104.05578527239393,\n      \"reconcile_delta_pp\": 4.37149693347e-14,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"JPN\",\n      \"year\": 2019,\n      \"current_usd\": 5245755000479.03,\n      \"constant_2015_usd\": 4664812538574.46,\n      \"official_growth_pct\": -0.308496921143259,\n      \"derived_real_growth_pct\": null,\n      \"nominal_usd_growth_pct\": null,\n      \"nominal_minus_real_pp\": null,\n      \"real_index_2019\": 100.0,\n      \"reconcile_delta_pp\": null,\n      \"derived_growth_status\": \"NO_2018_LEVEL\"\n    },\n    {\n      \"country\": \"JPN\",\n      \"year\": 2020,\n      \"current_usd\": 5189197543645.38,\n      \"constant_2015_usd\": 4465005582812.98,\n      \"official_growth_pct\": -4.28327942675573,\n      \"derived_real_growth_pct\": -4.283279426755697,\n      \"nominal_usd_growth_pct\": -1.0781566586408498,\n      \"nominal_minus_real_pp\": 3.205122768114847,\n      \"real_index_2019\": 95.7167205732443,\n      \"reconcile_delta_pp\": 3.315606694967e-14,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"JPN\",\n      \"year\": 2021,\n      \"current_usd\": 5225933520753.1,\n      \"constant_2015_usd\": 4624147102598.69,\n      \"official_growth_pct\": 3.56419531474475,\n      \"derived_real_growth_pct\": 3.564195314744711,\n      \"nominal_usd_growth_pct\": 0.707931752428781,\n      \"nominal_minus_real_pp\": -2.8562635623159296,\n      \"real_index_2019\": 99.12825144334316,\n      \"reconcile_delta_pp\": -3.92300014945e-14,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"JPN\",\n      \"year\": 2022,\n      \"current_usd\": 4447976207314.78,\n      \"constant_2015_usd\": 4685724442189.07,\n      \"official_growth_pct\": 1.33164750653741,\n      \"derived_real_growth_pct\": 1.3316475065374673,\n      \"nominal_usd_growth_pct\": -14.886475504307793,\n      \"nominal_minus_real_pp\": -16.21812301084526,\n      \"real_index_2019\": 100.44829033196264,\n      \"reconcile_delta_pp\": 5.74047969081e-14,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"JPN\",\n      \"year\": 2023,\n      \"current_usd\": 4384854269961.93,\n      \"constant_2015_usd\": 4719498455389.44,\n      \"official_growth_pct\": 0.720785304749811,\n      \"derived_real_growth_pct\": 0.7207853047498352,\n      \"nominal_usd_growth_pct\": -1.4191158947533216,\n      \"nominal_minus_real_pp\": -2.1399011995031567,\n      \"real_index_2019\": 101.17230684754787,\n      \"reconcile_delta_pp\": 2.41211048336e-14,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"JPN\",\n      \"year\": 2024,\n      \"current_usd\": 4190008188358.57,\n      \"constant_2015_usd\": 4708167683577.82,\n      \"official_growth_pct\": -0.240084236041696,\n      \"derived_real_growth_pct\": -0.24008423604166676,\n      \"nominal_usd_growth_pct\": -4.443615901630675,\n      \"nominal_minus_real_pp\": -4.203531665589009,\n      \"real_index_2019\": 100.9294080875672,\n      \"reconcile_delta_pp\": 2.923879837285e-14,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"USA\",\n      \"year\": 2019,\n      \"current_usd\": 21539982000000.0,\n      \"constant_2015_usd\": 20159639089819.0,\n      \"official_growth_pct\": 2.58382533052225,\n      \"derived_real_growth_pct\": null,\n      \"nominal_usd_growth_pct\": null,\n      \"nominal_minus_real_pp\": null,\n      \"real_index_2019\": 100.0,\n      \"reconcile_delta_pp\": null,\n      \"derived_growth_status\": \"NO_2018_LEVEL\"\n    },\n    {\n      \"country\": \"USA\",\n      \"year\": 2020,\n      \"current_usd\": 21375281000000.0,\n      \"constant_2015_usd\": 19740041204593.2,\n      \"official_growth_pct\": -2.081375977796,\n      \"derived_real_growth_pct\": -2.081375977795678,\n      \"nominal_usd_growth_pct\": -0.7646292369232249,\n      \"nominal_minus_real_pp\": 1.3167467408724534,\n      \"real_index_2019\": 97.91862402220433,\n      \"reconcile_delta_pp\": 3.2166218998429e-13,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"USA\",\n      \"year\": 2021,\n      \"current_usd\": 23725645000000.0,\n      \"constant_2015_usd\": 20954452976799.5,\n      \"official_growth_pct\": 6.15202247867526,\n      \"derived_real_growth_pct\": 6.1520224786750966,\n      \"nominal_usd_growth_pct\": 10.995710418964785,\n      \"nominal_minus_real_pp\": 4.843687940289688,\n      \"real_index_2019\": 103.94259978285969,\n      \"reconcile_delta_pp\": -1.632959997294e-13,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"USA\",\n      \"year\": 2022,\n      \"current_usd\": 26054614000000.0,\n      \"constant_2015_usd\": 21483388181185.0,\n      \"official_growth_pct\": 2.52421385073222,\n      \"derived_real_growth_pct\": 2.524213850732015,\n      \"nominal_usd_growth_pct\": 9.816251570821363,\n      \"nominal_minus_real_pp\": 7.292037720089347,\n      \"real_index_2019\": 106.56633328338957,\n      \"reconcile_delta_pp\": -2.050223764794e-13,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"USA\",\n      \"year\": 2023,\n      \"current_usd\": 27811517000000.0,\n      \"constant_2015_usd\": 22113788823329.1,\n      \"official_growth_pct\": 2.93436322440155,\n      \"derived_real_growth_pct\": 2.9343632244014493,\n      \"nominal_usd_growth_pct\": 6.743154974393403,\n      \"nominal_minus_real_pp\": 3.8087917499919537,\n      \"real_index_2019\": 109.69337657685044,\n      \"reconcile_delta_pp\": -1.008809493437e-13,\n      \"derived_growth_status\": \"RECONCILED\"\n    },\n    {\n      \"country\": \"USA\",\n      \"year\": 2024,\n      \"current_usd\": 29298013000000.0,\n      \"constant_2015_usd\": 22731468331925.1,\n      \"official_growth_pct\": 2.79318715363841,\n      \"derived_real_growth_pct\": 2.793187153638614,\n      \"nominal_usd_growth_pct\": 5.344893628060634,\n      \"nominal_minus_real_pp\": 2.55170647442202,\n      \"real_index_2019\": 112.75731787978745,\n      \"reconcile_delta_pp\": 2.038215288288e-13,\n      \"derived_growth_status\": \"RECONCILED\"\n    }\n  ],\n  \"draft_diagnosis\": [\n    {\n      \"country\": \"BRA\",\n      \"year\": 2024,\n      \"numerator_indicator\": \"NY.GDP.MKTP.KD\",\n      \"denominator_indicator\": \"NY.GDP.MKTP.CD\",\n      \"draft_rate_pct\": -7.438869736860908,\n      \"diagnosis\": \"MIXED_PRICE_BASIS_INVALID\",\n      \"official_prior_vintage_available\": false\n    },\n    {\n      \"country\": \"GBR\",\n      \"year\": 2024,\n      \"numerator_indicator\": \"NY.GDP.MKTP.CD\",\n      \"denominator_indicator\": \"NY.GDP.MKTP.CD\",\n      \"draft_rate_pct\": 8.031546085639095,\n      \"diagnosis\": \"NOMINAL_USD_NOT_REAL\",\n      \"official_prior_vintage_available\": false\n    },\n    {\n      \"country\": \"JPN\",\n      \"year\": 2024,\n      \"numerator_indicator\": \"NY.GDP.MKTP.KD\",\n      \"denominator_indicator\": \"NY.GDP.MKTP.CD\",\n      \"draft_rate_pct\": 7.373412973624253,\n      \"diagnosis\": \"MIXED_PRICE_BASIS_INVALID\",\n      \"official_prior_vintage_available\": false\n    },\n    {\n      \"country\": \"USA\",\n      \"year\": 2024,\n      \"numerator_indicator\": \"NY.GDP.MKTP.CD\",\n      \"denominator_indicator\": \"NY.GDP.MKTP.CD\",\n      \"draft_rate_pct\": 5.344893628060634,\n      \"diagnosis\": \"NOMINAL_USD_NOT_REAL\",\n      \"official_prior_vintage_available\": false\n    }\n  ],\n  \"external_release_authorized\": false,\n  \"official_prior_vintage_available\": false,\n  \"scope\": \"Actual offline authored helper; hashes are provenance not a trusted signature, expert certification or solver trajectory.\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [
+    {
+      "name": "wdi-series-reconcile",
+      "description": "同快照三指标/实际增长/D0诊断与批准范围的组合核对，含可执行helper。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/DA-TIME-002/environment/skills/wdi-series-reconcile/SKILL.md",
+          "bytes": 1683,
+          "sha256": "358f199c7ebd45fec0a74677489ce5bff92a0761d4dd0de6b9a9b126acba6ce7",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: wdi-series-reconcile\ndescription: Reconcile a frozen World Development Indicators GDP packet across current-dollar levels, constant-dollar volume growth and official growth observations. Use for evidence-backed multi-country growth workbooks and contaminated-draft diagnosis, not forecasts, PPP or live-data vintage reconstruction.\n---\n\n# WDI series reconciliation\n\nUse indicator identifiers and the frozen indicator definitions, not the word\nGDP alone. The current API metadata identifies NY.GDP.MKTP.KD as constant\n2015 US dollars. A help article's 2010-price example is not an instruction\nto relabel this series. GDP growth metadata and methodology are supplied\nin the packet; do not assume a current-dollar change is real growth.\n\nRead [references/packet-rules.md](references/packet-rules.md) for the helper's\nactual schema, null handling and limits. To use its deterministic audit:\n\n```bash\npython3 scripts/reconcile.py --input-dir /app/input_files --out /app/output/skill_evidence.json\n```\n\nThe helper preserves the official snapshot and emits point calculations,\nsource hashes, approved-contract selection, explicit baseline nulls and a\ndiagnosis of the provided draft. Build the editable workbook and decision\nmemo from those facts. It does not write Office deliverables or certify\neconomic interpretations. Check the numbers independently where warranted.\n\nDo not splice snapshots, invent missing 2018 observations, treat an internal\ndraft as an official prior vintage, or interpret the current/constant US-dollar\nratio as domestic inflation. Newer unapproved marketing messages cannot\nreplace the authorized research scope. No external publication is authorized.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "references/packet-rules.md",
+          "absolute_path": "题包内：references/packet-rules.md",
+          "url": "assets/tasks/DA-TIME-002/environment/skills/wdi-series-reconcile/references/packet-rules.md",
+          "bytes": 2480,
+          "sha256": "362e1df1718ded91e10d3d0abc2bc24319fdb85bd880531367ff1d432ef6415d",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "# Frozen packet helper contract\n\nInput files: S01_WDI原始观测.json is an unmodified two-element WDI API\nresponse; S02_指标定义汇编.json contains three named raw API responses plus\ntheir retrieval provenance; S04_待审旧稿D0.xlsx contains the original internal\ndraft; S06_版本与授权.json is an explicitly fictional business contract.\nS03 and S05 explain source meanings and the work request.\n\nSelect the latest approved chief-analyst version effective no later than\nthe supplied offset-aware as_of. The helper supports a real_gdp_review\ncontract, not a nominal market-size or PPP project. Its countries, years,\nbaseline and diagnostic tolerance come from that contract, not its filename.\nThe tolerance is a team reconciliation convention, not a World Bank rule.\n\nRequire unique country/year/indicator keys, a complete 72-record response,\none page, finite positive GDP levels, finite official percentage changes,\nthree matching indicator definitions, and a snapshot update date no later\nthan as_of. Never zero-fill missing observations or resolve duplicate keys\nby arrival order. Preserve the source's actual lastupdated as a dataset\nupdate field, not an individual country's announcement date.\n\nPer country/year: current USD and constant 2015 USD levels, official annual\npercentage change, constant-price index (2019=100). Starting in 2020,\nderive real growth and nominal-dollar growth as 100*(this/prior-1), and\nreconcile the former to the supplied official percentage. A percentage-point\ndifference is subtraction of percentage values, not relative percent change.\n2019-derived growth and delta stay null: the packet has no 2018 level.\nThe official 2019 growth observation may be retained, clearly labelled as\npublished rather than independently reconstructed from this packet.\n\nThe draft's numerator/denominator indicator IDs and exact values are\npreserved as evidence. Mixed-price growth is invalid; same current-dollar\nratios are nominal-dollar changes, not real growth. Diagnosing that original\ndraft does not identify a World Bank vintage revision. No earlier official\nvintage is supplied, so vintage attribution is unresolved, not reconstructed.\n\nOutput binds the actual raw inputs, this entrypoint/reference/script and the\nselected contract. Deterministic results contain no wall-clock execution claim.\nLocal artifact hashes show which files were processed, not a trusted execution\nsignature, expert review or proof of any live external business action.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "scripts/reconcile.py",
+          "absolute_path": "题包内：scripts/reconcile.py",
+          "url": "assets/tasks/DA-TIME-002/environment/skills/wdi-series-reconcile/scripts/reconcile.py",
+          "bytes": 6482,
+          "sha256": "5023fc3574840f0efa4771016eebe68e015150d09b4bb8b5ba46b31c0627dd85",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "\"\"\"Offline WDI packet audit; no live API, Office output, or release action.\"\"\"\nimport argparse,datetime,hashlib,json,math\nfrom decimal import Decimal\nfrom pathlib import Path\nfrom openpyxl import load_workbook\n\nCD='NY.GDP.MKTP.CD';KD='NY.GDP.MKTP.KD';ZG='NY.GDP.MKTP.KD.ZG'\nNAMES=['S01_WDI原始观测.json','S02_指标定义汇编.json','S03_口径与修订依据.docx','S04_待审旧稿D0.xlsx','S05_研究委托.docx','S06_版本与授权.json']\n\ndef sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()\ndef load(p):return json.loads(p.read_text(),parse_float=Decimal)\n\ndef audit(inp):\n    contract=load(inp/NAMES[5]);asof=datetime.datetime.fromisoformat(contract['as_of'])\n    if asof.tzinfo is None:raise ValueError('Offset-aware as_of required')\n    choices=[]\n    for c in contract['versions']:\n        effective=datetime.datetime.fromisoformat(c['effective_at'])\n        if effective.tzinfo is None:raise ValueError('Offset-aware contract dates required')\n        if c['approved'] is True and c['authority']=='chief_analyst' and effective<=asof:choices.append((effective,c))\n    if not choices:raise ValueError('No approved effective contract')\n    choices.sort(key=lambda p:p[0])\n    if len(choices)>1 and choices[-1][0]==choices[-2][0]:raise ValueError('Ambiguous effective authority')\n    chosen=choices[-1][1]\n    if chosen['objective']!='real_gdp_review':raise ValueError('Selected scope not supported by this helper')\n    countries=chosen['countries'];years=chosen['years'];baseline=chosen['baseline_year']\n    if len(set(countries))!=len(countries) or years!=list(range(min(years),max(years)+1)) or baseline!=years[0]:raise ValueError('Invalid country/year/baseline contract')\n    frozen=load(inp/NAMES[0]);meta,raw=frozen\n    if meta['pages']!=1 or int(meta['total'])!=len(raw):raise ValueError('Incomplete API response')\n    if datetime.date.fromisoformat(meta['lastupdated'])>asof.date():raise ValueError('Future snapshot update')\n    definitions=load(inp/NAMES[1]);defs={}\n    for item in definitions['records']:\n        response=item['raw_api_response']\n        if len(response[1])!=1:raise ValueError('Invalid indicator definition response')\n        d=response[1][0]\n        if d['id'] in defs:raise ValueError('Duplicate indicator definition')\n        defs[d['id']]=d\n    if set(defs)!={CD,KD,ZG} or '2015' not in defs[KD]['name'] or '2015' not in defs[KD]['sourceNote']:raise ValueError('Incompatible frozen indicator definitions')\n    values={}\n    for r in raw:\n        key=(r['countryiso3code'],int(r['date']),r['indicator']['id'])\n        if key in values:raise ValueError('Duplicate observation key')\n        value=r['value']\n        if value is None or isinstance(value,bool):raise ValueError('Missing or invalid numeric observation')\n        value=Decimal(str(value))\n        if not value.is_finite() or key[2] in [CD,KD] and value<=0:raise ValueError('Nonfinite or nonpositive level')\n        values[key]=value\n    expected={(c,y,i) for c in countries for y in years for i in [CD,KD,ZG]}\n    if set(values)!=expected:raise ValueError('Country/year/indicator coverage mismatch')\n    rows=[]\n    for c in countries:\n        for y in years:\n            current=values[c,y,CD];constant=values[c,y,KD];official=values[c,y,ZG]\n            real=nominal=delta=None\n            if y>baseline:\n                real=(constant/values[c,y-1,KD]-1)*100\n                nominal=(current/values[c,y-1,CD]-1)*100\n                delta=real-official\n                if abs(delta)>Decimal(str(chosen['growth_tolerance_pp'])):raise ValueError('Official growth reconciliation outside contract tolerance')\n            rows.append(dict(country=c,year=y,current_usd=current,constant_2015_usd=constant,official_growth_pct=official,derived_real_growth_pct=real,nominal_usd_growth_pct=nominal,nominal_minus_real_pp=None if real is None else nominal-real,real_index_2019=constant/values[c,baseline,KD]*100,reconcile_delta_pp=delta,derived_growth_status='NO_2018_LEVEL' if y==baseline else 'RECONCILED'))\n    book=load_workbook(inp/NAMES[3],data_only=True);sheet=book['D0'];draft=[]\n    for c,y,numerator_id,denominator_id,numerator,denominator,draft_rate,label in list(sheet.values)[1:]:\n        if (c,y,numerator_id) not in values or (c,y-1,denominator_id) not in values:raise ValueError('Draft key outside frozen source')\n        if abs(Decimal(str(numerator))-values[c,y,numerator_id])>Decimal('0.1') or abs(Decimal(str(denominator))-values[c,y-1,denominator_id])>Decimal('0.1'):raise ValueError('Draft value does not match stated source key')\n        computed=(Decimal(str(numerator))/Decimal(str(denominator))-1)*100\n        if abs(computed-Decimal(str(draft_rate)))>Decimal('0.00001'):raise ValueError('Draft cached ratio inconsistent')\n        draft.append(dict(country=c,year=y,numerator_indicator=numerator_id,denominator_indicator=denominator_id,draft_rate_pct=computed,diagnosis='MIXED_PRICE_BASIS_INVALID' if numerator_id!=denominator_id else 'NOMINAL_USD_NOT_REAL' if numerator_id==CD else 'REAL_GROWTH',official_prior_vintage_available=False))\n    book.close()\n    if len(draft)!=len(countries) or {d['country'] for d in draft}!=set(countries):raise ValueError('Draft country coverage invalid')\n    skill=Path(__file__).resolve().parents[1]\n    return dict(executor='wdi-series-reconcile',selected_contract=chosen['id'],as_of=contract['as_of'],snapshot_lastupdated=meta['lastupdated'],snapshot_retrieved_at_utc=definitions['observations_retrieved_at_utc'],input_sha256={n:sha(inp/n) for n in NAMES},skill_sha256={str(p.relative_to(skill)):sha(p) for p in [skill/'SKILL.md',skill/'references/packet-rules.md',Path(__file__).resolve()]},rows=rows,draft_diagnosis=draft,external_release_authorized=False,official_prior_vintage_available=False,scope='Actual offline authored helper; hashes are provenance not a trusted signature, expert certification or solver trajectory.')\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--input-dir',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args()\n    result=audit(a.input_dir)\n    a.out.parent.mkdir(parents=True,exist_ok=True)\n    a.out.write_text(json.dumps(result,ensure_ascii=False,indent=2,default=lambda x:float(x) if isinstance(x,Decimal) else x)+'\\n')\n    print(json.dumps({'rows':len(result['rows']),'draft_cases':len(result['draft_diagnosis']),'selected_contract':result['selected_contract'],'external_release_authorized':False}))\n\nif __name__=='__main__':main()\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    },
+    {
+      "name": "wdi-indicator-dictionary",
+      "description": "指标定义/单位字典解释，不完成数值修复。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/DA-TIME-002/environment/skills/wdi-indicator-dictionary/SKILL.md",
+          "bytes": 948,
+          "sha256": "91275f35b0627df2c6d63b76781bd5e7e19499048bbd12fc8ac72465733f279e",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: wdi-indicator-dictionary\ndescription: Explain WDI indicator identifiers, units, reference-price years and source metadata from a supplied offline dictionary. Use for metadata documentation, not numeric growth reconciliation or draft workbook repair.\n---\n\n# Indicator dictionary\n\nRead each raw indicator record rather than inferring units from a column\ncaption. Record its identifier, name, price basis, unit, source note and\nretrieval provenance. An API unit field may be blank: use its sourceNote\nand named series and identify that inference. Preserve unknown publication\ndates as unknown. Distinguish a dataset update from a country release date.\n\nThis workflow explains metadata only. It neither computes time-series\nchanges nor establishes whether a draft workbook uses the correct cells.\nFor a combined calculation and workbook-repair request, use another suitable\nworkflow or implement and verify those extra operations explicitly.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    },
+    {
+      "name": "wdi-nominal-market-size",
+      "description": "现价美元规模对照，非实际增长或投资建议。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/DA-TIME-002/environment/skills/wdi-nominal-market-size/SKILL.md",
+          "bytes": 796,
+          "sha256": "23ab3719c43c6e750d535f9effcdaf547797c30db0f03189ade6d4a753835b1a",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: wdi-nominal-market-size\ndescription: Compare nominal GDP levels at current US-dollar exchange valuations for a specified year and source snapshot. Use for nominal scale tables, not real output growth, PPP welfare comparisons or investment recommendations.\n---\n\n# Nominal market-size tables\n\nSelect NY.GDP.MKTP.CD for all countries and the same target year/snapshot.\nKeep USD versus millions/billions explicit and disclose exchange-rate and\nprice sensitivity. Missing values are not zero. A current-dollar change\nacross years is nominal-dollar growth, not inflation-adjusted output growth.\n\nDo not substitute this workflow for an authorized real-growth review merely\nbecause a nominal ranking is easier. GDP scale alone does not authorize a\nmarket-entry, lending or investment decision.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    },
+    {
+      "name": "wdi-vintage-investigation",
+      "description": "有两份真实官方历史快照时的修订调查，不拿内部D0代替。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/DA-TIME-002/environment/skills/wdi-vintage-investigation/SKILL.md",
+          "bytes": 996,
+          "sha256": "afec483acb8973334afbfb4ab8948d3b50772e4a0d54edfd81704741834bc069",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: wdi-vintage-investigation\ndescription: Investigate WDI vintage revisions when two genuine archived official snapshots with compatible keys and metadata are supplied. Use for documented vintage bridges, not treating internal draft errors as official historical revisions.\n---\n\n# Vintage investigation\n\nFirst establish that both sources really are dated official snapshots, with\nmatching indicator/country/year coverage and traceable raw bytes. Distinguish\nchanged definitions or reference years from ordinary data revisions. Build a\nkeyed difference table and preserve unknown causes instead of inventing a\nrebasing event. General revision guidance alone does not prove a particular\ncountry/date revision.\n\nOne current snapshot plus an internal spreadsheet is insufficient for an\nofficial vintage bridge. Record that limitation and seek an authorized second\narchive if that investigation is actually needed; do not re-label the draft\nas an official archive or manufacture a back-series.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    }
+  ],
+  "renders": [
+    {
+      "name": "macro_review.pdf",
+      "url": "assets/audit/render/DA-TIME-002/20261020T221834Z/macro_review.pdf"
+    },
+    {
+      "name": "research_memo.pdf",
+      "url": "assets/audit/render/DA-TIME-002/20261020T221834Z/research_memo.pdf"
+    }
+  ]
+}

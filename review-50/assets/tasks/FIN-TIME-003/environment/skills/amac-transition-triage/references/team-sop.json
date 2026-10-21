@@ -1,0 +1,41 @@
+{
+  "schema": "amac-transition-triage/1",
+  "scope": "Original fictional team SOP, not an AMAC rule or real approval",
+  "as_of": "2023-09-29T10:00:00+08:00",
+  "public_source_dates": {
+    "notice5": {"published_on":"2023-02-24","effective_on":"2023-05-01","source":"S01: announcement items I-III"},
+    "notice21": {"published_on":"2023-09-28","effective_on":"2023-09-28","source":"S02: announcement items I-III"},
+    "guideline2": {"effective_on":"2023-09-28","source":"S03: articles2/9/27/36"}
+  },
+  "local_evidence": {
+    "equal_primary_types": ["system_snapshot","compliance_attestation"],
+    "non_decisive_types": ["sales_note"],
+    "required_same_observation_time": "2023-09-29T09:00:00+08:00",
+    "conflict_rule": "If either primary has a different value for the same field, do not choose by file/date/order. Mark HOLD_CONFLICT with both IDs, unresolved fields, owner and exact question. Missing a primary or required fact means HOLD_MISSING_EVIDENCE, not guessed consent.",
+    "clarification_owner": "合规负责人会同运营取证员",
+    "internal_reply_target": "2023-09-29 15:00 Asia/Shanghai; original internal target, not a statutory deadline"
+  },
+  "local_dispatch": {
+    "normal_stage":"LEGAL_REVIEW_PENDING",
+    "blocked_stage":"HOLD_PENDING_CLARIFICATION",
+    "archive_stage":"HISTORICAL_NOTE_ONLY",
+    "skip_to_ready_for_submit":false,
+    "all_external_submission_authorized":false,
+    "case_workflow_owner":"项目法务",
+    "material_owner":"运营材料专员",
+    "name_owner":"基金设立经办人会同项目法务"
+  },
+  "limited_material_check": {
+    "only_for":"fund_change/custodian",
+    "source":"S03 guideline2 article27",
+    "required_document_groups":["resolution","change_note","custodian_change_agreement","new_custody_agreement_or_fund_contract"],
+    "provided_excerpt_is_not_full_legal_validation":true
+  },
+  "limits":[
+    "This helper routes historical packet facts, not live AMAC status.",
+    "A completed pre-May case is archived under the stated former processing period, not re-certified under every old requirement.",
+    "Legacy operations permission is confined to the announcement's continued fundraising/investment operation scope, not blanket exemption.",
+    "No full capital/investor/AML/custody or manager-control eligibility assessment is performed.",
+    "No statutory working-day due date is computed without the necessary calendar/start evidence."
+  ]
+}

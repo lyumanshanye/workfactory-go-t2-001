@@ -1,0 +1,65 @@
+{
+  "input_count": 20,
+  "interface": "workflow.py build|stage|verify --input-dir INPUT --output-dir OUTPUT --work-dir WORK; stage adds --name NODE",
+  "nodes": [
+    "N0_freeze",
+    "N1_authority",
+    "N2_metrics",
+    "N3_story",
+    "N4_deck",
+    "N5_structure",
+    "N6_render",
+    "N7_handoff",
+    "N8_release"
+  ],
+  "dependencies": {
+    "N0_freeze": [],
+    "N1_authority": [
+      "N0_freeze"
+    ],
+    "N2_metrics": [
+      "N0_freeze",
+      "N1_authority"
+    ],
+    "N3_story": [
+      "N1_authority",
+      "N2_metrics"
+    ],
+    "N4_deck": [
+      "N3_story"
+    ],
+    "N5_structure": [
+      "N1_authority",
+      "N2_metrics",
+      "N4_deck"
+    ],
+    "N6_render": [
+      "N4_deck",
+      "N5_structure"
+    ],
+    "N7_handoff": [
+      "N1_authority",
+      "N2_metrics",
+      "N5_structure",
+      "N6_render"
+    ],
+    "N8_release": [
+      "N7_handoff"
+    ]
+  },
+  "official_input_sha256": {
+    "S16_official_source_packet.docx": "cdb2bd1d87edec7abd7c762744258798ccb463f1f12946833cecf324680c524b",
+    "S17_native_extension_excerpt.json": "eefa1dec9ad0a66ce5734ea9f13731c3c9d3d8f6307af66132c8f48857cbb789",
+    "S18_OpenXML_SDK_MIT_LICENSE.txt": "ed03ba352313a4ba7019d5bed4bd3218ac17f3e44442a3bb1aaff54dcca9a2bc"
+  },
+  "release": "INTERNAL_REVIEW_REQUIRED; external_release=false; no real approval supplied",
+  "allowed_revision": "R2 current; actual authorized R3 with updated data SHA permitted; unsupported authority/unknown version reject",
+  "deliverables": [
+    "repaired_deck.pptx",
+    "accessibility_review.xlsx",
+    "handoff.docx",
+    "workflow.py",
+    "release_receipt.json"
+  ],
+  "scope": "原创演练接口，9节点是真实依赖，不是可信身份认证；没有真实PowerPoint/读屏环境则明确未运行，不准写PASS"
+}

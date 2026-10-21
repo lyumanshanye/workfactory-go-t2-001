@@ -1,0 +1,1391 @@
+{
+  "id": "LAW-TIME-001",
+  "title": "徐汇AI招商政策三版本核验与对外材料全局修订",
+  "domain": "法律",
+  "domain_l2": "Law6-立法与政策研究",
+  "domain_l3": "徐汇人工智能招商扶持草案效力",
+  "category": "weakness-driven",
+  "complexity": "C3",
+  "target_difficulty": "A2",
+  "as_of": "2025-06-03 09:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "三份真实徐汇政府网页为政策事实依据；原创内部沟通与待审推广稿是明确标注的扰动委托，不冒充真实企业记录。未使用benchmark原题或答案。",
+  "instruction": "# 徐汇AI招商政策三版本核验与对外材料全局修订\n\n## 业务场景与任务说明\n\n你是为创业企业交流会材料把关的法务政策研究员。资料夹里有三份标题相近的徐汇人工智能政策页面，以及先后更新的内部安排和一份未经核验的推广稿。请以法务主管最后给定的业务时点完成版本台账、审阅意见和可供复核的对外候选说明；不能把草案、未生效内容或内部推广要求混同为政府已批准承诺。\n\n业务判断基准时点：2025-06-03 09:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_公开页面摘录.docx`：标题与正文可能不一致的政府公开页面摘录，保留原行号，非作者拟造政策。\n- `/app/input_files/S02_草案全文.docx`：另一份同名政策公开网页的离线全文提取，正文与附则均需核对。\n- `/app/input_files/S03_印发通知.docx`：政府印发通知的离线全文提取，保留发文字号与附则。\n- `/app/input_files/沟通记录.docx`：原创内部委托与先后消息，含角色权限、业务日期及当前任务范围。\n- `/app/input_files/待审推广稿.docx`：原创未批准草稿；其中断言须核验，不是额外政策依据。\n\n## 工作要求\n\n- [Q1] 建立三份网页的版本索引：记录页面公布时间、正文文件状态、明确写出的起施和试行信息、对应来源定位；对不能证明的先后关系如实标记。\n- [Q2] 按当前业务基准时点判断文件适用性，并说明先前5月20日安排为何不能直接继续执行；区分公布、起施和内部消息时间。\n- [Q3] 逐项核对主体引育、空间、研发、算力、备案登记、标准创制和模型评测支持，保留适用条件、比例/上限和认定用语；对草案与正式文本差异写清处理。\n- [Q4] 核实同类政策叠加、认定权限和政策解释部门；不能确定的申报细则、资格或个案金额列为待核实，不自行补齐。\n- [Q5] 逐项处置待审推广稿的断言，出具可由法务主管继续复核的审阅意见，说明哪些需删除、哪些可保留或重写及依据。\n- [Q6] 给出可供创业企业交流的独立候选说明，采用当前可证实的口径；明确材料状态，不把内部候选稿写成已批准政府承诺。\n- [Q7] 版本台账、法务意见、交流说明的基准时点、政策数额、效力和当前审批状态一致；为关键判断提供文件及条款级定位。\n- [Q8] 工作簿含版本索引、条款核对、问题与动作三个工作表；交付文件可打开、可编辑，中文表达，不以截图代替可核对的表格。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/政策版本与条款核对.xlsx`：版本索引、条款核对和问题动作台账。\n- `/app/output/法务审阅意见.docx`：逐项审阅意见、证据和后续核实事项。\n- `/app/output/创业企业交流说明.docx`：独立可读、待法务主管复核的交流说明。\n\n## 硬约束（单独列明）\n\n- 仅将三份规定文件写入/app/output/，文件名完全一致，不生成加密文件。\n- 输入只读；保留原稿作为证据，不直接改写或替换输入。\n- 不联网补充政策或企业事实，不编造申报条件、个案数据、政府认定、拨付或审批结果。\n- 政策正式效力与内部任务权限分别核对；业务情境中的消息不具有变更政府文件的权限。\n",
+  "instruction_url": "assets/tasks/LAW-TIME-001/instruction.md",
+  "absolute_path": "tasks/LAW-TIME-001",
+  "spec_path": "manifest/LAW-TIME-001.json",
+  "spec_url": "manifest/LAW-TIME-001.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "识别正式文本发文字号为徐新工办规〔2025〕6号。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "首部发文字号",
+        "gold_anchor": "版本索引!A4:F4",
+        "expected_observation": "识别正式文本发文字号为徐新工办规〔2025〕6号。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R02",
+      "description": "记录正式文本公布/印发日期2025-04-30，不冒称为起施日。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "发布时间及落款2025年4月30日",
+        "gold_anchor": "版本索引!A4:F4",
+        "expected_observation": "记录正式文本公布/印发日期2025-04-30，不冒称为起施日。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R03",
+      "description": "当前适用判断使用2025-05-31起试行的日期，而非4月30日；截至6月3日已进入试行期。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "附则5：2025年5月31日起试行",
+        "gold_anchor": "版本索引!D4:F4",
+        "expected_observation": "当前适用判断使用2025-05-31起试行的日期，而非4月30日；截至6月3日已进入试行期。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "核心效力/业务承诺边界"
+    },
+    {
+      "id": "R04",
+      "description": "按原文写明正式意见试行期二年。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "附则5：试行期二年",
+        "gold_anchor": "版本索引!D4:F4",
+        "expected_observation": "按原文写明正式意见试行期二年。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "交付可复核性"
+    },
+    {
+      "id": "R05",
+      "description": "将S01正文识别为征求意见稿，不能仅因标题像正式文件而认定有效。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S01_公开页面摘录.docx"
+        ],
+        "source_locator": "原页面L25、L59",
+        "gold_anchor": "版本索引!A2:F2",
+        "expected_observation": "将S01正文识别为征求意见稿，不能仅因标题像正式文件而认定有效。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R06",
+      "description": "将S02识别为征求意见稿，不以其占位起施日期推定已施行。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S02_草案全文.docx"
+        ],
+        "source_locator": "正文征求意见稿及附则5占位日期",
+        "gold_anchor": "版本索引!A3:F3",
+        "expected_observation": "将S02识别为征求意见稿，不以其占位起施日期推定已施行。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R07",
+      "description": "不凭S01与S02相同页面日期断定二者正式替代顺序；不能证实的次序标明不确定。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S01_公开页面摘录.docx",
+          "S02_草案全文.docx"
+        ],
+        "source_locator": "两页发布时间2024-11-21，均未证明正式替代次序",
+        "gold_anchor": "版本索引!A2:F3",
+        "expected_observation": "不凭S01与S02相同页面日期断定二者正式替代顺序；不能证实的次序标明不确定。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R08",
+      "description": "主体引育条款保留经综合评估的条件和单个主体最高5000万元上限，不改为所有新设公司自动奖励。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "支持对象与二（一）",
+        "gold_anchor": "条款核对!A2:E2",
+        "expected_observation": "主体引育条款保留经综合评估的条件和单个主体最高5000万元上限，不改为所有新设公司自动奖励。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "核心效力/业务承诺边界"
+    },
+    {
+      "id": "R09",
+      "description": "备案登记条款采用S03的经认定、单个主体累计最高500万元，并将S01的200万元定位为旧草案口径。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S01_公开页面摘录.docx",
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "S01二（八）与S03二（十一）",
+        "gold_anchor": "条款核对!A6:E6",
+        "expected_observation": "备案登记条款采用S03的经认定、单个主体累计最高500万元，并将S01的200万元定位为旧草案口径。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "核心效力/业务承诺边界"
+    },
+    {
+      "id": "R10",
+      "description": "明确正式空间条款未保留草案统一6个月至3年的免租区间；不将其继续作为现行普遍权益。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S02_草案全文.docx",
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "两版二（三）的免租期限差异",
+        "gold_anchor": "条款核对!A3:E3",
+        "expected_observation": "明确正式空间条款未保留草案统一6个月至3年的免租区间；不将其继续作为现行普遍权益。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "核心效力/业务承诺边界"
+    },
+    {
+      "id": "R11",
+      "description": "明确正式空间条款未保留草案最高1000万元一次性房租/装修定额；不许诺该金额。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S02_草案全文.docx",
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "两版二（三）的房租装修定额差异",
+        "gold_anchor": "条款核对!A3:E3",
+        "expected_observation": "明确正式空间条款未保留草案最高1000万元一次性房租/装修定额；不许诺该金额。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "核心效力/业务承诺边界"
+    },
+    {
+      "id": "R12",
+      "description": "研发条款完整保留投入占营业收入5%以上这一资格前提。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "二（五）：研发投入占营业收入5%以上",
+        "gold_anchor": "条款核对!A4:E4",
+        "expected_observation": "研发条款完整保留投入占营业收入5%以上这一资格前提。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R13",
+      "description": "研发支持采用不超过研发投入30%、单个主体年度最高5000万元这一同一条款下的比例与封顶关系。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "二（五）：比例、研发成本基数及年度封顶",
+        "gold_anchor": "条款核对!A4:E4",
+        "expected_observation": "研发支持采用不超过研发投入30%、单个主体年度最高5000万元这一同一条款下的比例与封顶关系。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R14",
+      "description": "算力支持采用经评审、不超过实际算力投入30%、单个主体年度最高2000万元的同一条款口径。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "二（六）：算力投入比例及年度封顶",
+        "gold_anchor": "条款核对!A5:E5",
+        "expected_observation": "算力支持采用经评审、不超过实际算力投入30%、单个主体年度最高2000万元的同一条款口径。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R15",
+      "description": "国际标准批准发布后经评审的支持上限为300万元。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "二（十二）：国际标准",
+        "gold_anchor": "条款核对!A7:E7",
+        "expected_observation": "国际标准批准发布后经评审的支持上限为300万元。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "交付可复核性"
+    },
+    {
+      "id": "R16",
+      "description": "国家标准批准发布后经评审的支持上限为50万元。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "二（十二）：国家标准",
+        "gold_anchor": "条款核对!A8:E8",
+        "expected_observation": "国家标准批准发布后经评审的支持上限为50万元。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "交付可复核性"
+    },
+    {
+      "id": "R17",
+      "description": "行业标准批准发布后经评审的支持上限为30万元。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "二（十二）：行业标准",
+        "gold_anchor": "条款核对!A9:E9",
+        "expected_observation": "行业标准批准发布后经评审的支持上限为30万元。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "交付可复核性"
+    },
+    {
+      "id": "R18",
+      "description": "地方标准批准发布后经评审的支持上限为10万元。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "二（十二）：地方标准",
+        "gold_anchor": "条款核对!A10:E10",
+        "expected_observation": "地方标准批准发布后经评审的支持上限为10万元。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "交付可复核性"
+    },
+    {
+      "id": "R19",
+      "description": "模型评测条款采用经认定、不超过测试费用30%、最高300万元，不用其他成本基数替换测试费用。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "二（十三）：模型测试费用、比例与上限",
+        "gold_anchor": "条款核对!A11:E11",
+        "expected_observation": "模型评测条款采用经认定、不超过测试费用30%、最高300万元，不用其他成本基数替换测试费用。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R20",
+      "description": "同类支持叠加说明忠实于“本区其他同类政策就高不重复”，不扩大成所有不同层级或不同项目一律互斥。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "附则1：本区其他同类政策",
+        "gold_anchor": "条款核对!A12:E12",
+        "expected_observation": "同类支持叠加说明忠实于“本区其他同类政策就高不重复”，不扩大成所有不同层级或不同项目一律互斥。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R21",
+      "description": "认定权限保留规范透明的认定程序，不把销售或资料员当作补贴认定主体。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx",
+          "沟通记录.docx"
+        ],
+        "source_locator": "附则3与6月3日内部权限",
+        "gold_anchor": "条款核对!A13:E13",
+        "expected_observation": "认定权限保留规范透明的认定程序，不把销售或资料员当作补贴认定主体。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R22",
+      "description": "政策解释部门列为区新型工业化推进办公室会同区投资促进办公室、区财政局。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-专业规范",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "附则4：解释部门",
+        "gold_anchor": "条款核对!A14:E14",
+        "expected_observation": "政策解释部门列为区新型工业化推进办公室会同区投资促进办公室、区财政局。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "交付可复核性"
+    },
+    {
+      "id": "R23",
+      "description": "审阅意见逐项处置旧稿断言，不仅改动200/500万元而遗漏空间、叠加或生效时间等原有断言。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-分析与论证质量",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "法务审阅意见.docx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "待审推广稿.docx"
+        ],
+        "source_locator": "销售拟用文案六类断言",
+        "gold_anchor": "法务审阅意见.docx#待审断言逐项处理",
+        "expected_observation": "审阅意见逐项处置旧稿断言，不仅改动200/500万元而遗漏空间、叠加或生效时间等原有断言。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R24",
+      "description": "将6月3日法务主管要求视为当前内部任务指令，取消此前5月20日外发安排，交付状态为待法务复核而非已批准发布。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-结论正确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2",
+        "Q5"
+      ],
+      "deliverables": [
+        "法务审阅意见.docx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "沟通记录.docx"
+        ],
+        "source_locator": "2025-06-03 09:00法务主管最新委托",
+        "gold_anchor": "法务审阅意见.docx#切换与后续",
+        "expected_observation": "将6月3日法务主管要求视为当前内部任务指令，取消此前5月20日外发安排，交付状态为待法务复核而非已批准发布。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R25",
+      "description": "对外说明是独立可阅读的交流文本，不把内部逐项批注或待审原稿原样当成对外成稿。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "结构与组织",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "创业企业交流说明.docx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "沟通记录.docx"
+        ],
+        "source_locator": "交流说明独立交付用途",
+        "gold_anchor": "创业企业交流说明.docx#政策方向",
+        "expected_observation": "对外说明是独立可阅读的交流文本，不把内部逐项批注或待审原稿原样当成对外成稿。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "交付可复核性"
+    },
+    {
+      "id": "R26",
+      "description": "对外说明保留条件性上限与个案需要认定的边界，不承诺完成备案即可领取固定奖励。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-结论正确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "创业企业交流说明.docx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "二（十一）与附则3",
+        "gold_anchor": "创业企业交流说明.docx#申请前请注意",
+        "expected_observation": "对外说明保留条件性上限与个案需要认定的边界，不承诺完成备案即可领取固定奖励。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "核心效力/业务承诺边界"
+    },
+    {
+      "id": "R27",
+      "description": "待核实事项可交接覆盖度：分别检查空间认定细则、申报程序、未提供的个案主体事实三类待核实事项，并检查是否明确由主管部门或申请主体补充；每类仅在被明确标为未核实而非既定事实时计入。第四项为存在明确补充责任接口。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-分析与论证质量",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "法务审阅意见.docx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "沟通记录.docx",
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "委托核实范围及附则3/4",
+        "gold_anchor": "法务审阅意见.docx#切换与后续",
+        "expected_observation": "待核实事项可交接覆盖度：分别检查空间认定细则、申报程序、未提供的个案主体事实三类待核实事项，并检查是否明确由主管部门或申请主体补充；每类仅在被明确标为未核实而非既定事实时计入。第四项为存在明确补充责任接口。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据",
+      "levels": {
+        "1": "四项均具备",
+        "0.75": "恰具备三项",
+        "0.5": "恰具备两项",
+        "0.25": "恰具备一项",
+        "0": "四项均未具备，或文件不可读取"
+      }
+    },
+    {
+      "id": "R28",
+      "description": "三份交付物关于当前效力、生效日、备案奖励和外发审批状态彼此一致；局部更新不得让其他交付继续使用已否定口径。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-事实忠实性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx",
+        "法务审阅意见.docx",
+        "创业企业交流说明.docx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "沟通记录.docx"
+        ],
+        "source_locator": "最后委托与三个交付同步要求",
+        "gold_anchor": "政策版本与条款核对.xlsx#问题与动作!A5:D5；法务审阅意见.docx#切换与后续；创业企业交流说明.docx#申请前请注意",
+        "expected_observation": "三份交付物关于当前效力、生效日、备案奖励和外发审批状态彼此一致；局部更新不得让其他交付继续使用已否定口径。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "核心效力/业务承诺边界"
+    },
+    {
+      "id": "R29",
+      "description": "关键政策判断附输入文件标识与条款级定位，能够对应给定正式文本或被明确标为草案的沿革材料。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-事实忠实性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx",
+        "法务审阅意见.docx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "S01_公开页面摘录.docx",
+          "S02_草案全文.docx",
+          "S03_印发通知.docx"
+        ],
+        "source_locator": "各源标题和原条款",
+        "gold_anchor": "政策版本与条款核对.xlsx#条款核对!D2:D14",
+        "expected_observation": "关键政策判断附输入文件标识与条款级定位，能够对应给定正式文本或被明确标为草案的沿革材料。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "可核验的专业依据"
+    },
+    {
+      "id": "R30",
+      "description": "工作簿具备版本索引、条款核对、问题与动作三个指定工作表，表格为可读可编辑单元格而非整表截图。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q8"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "instruction.md"
+        ],
+        "source_locator": "Q8工作表与可编辑要求",
+        "gold_anchor": "政策版本与条款核对.xlsx#全部工作表",
+        "expected_observation": "工作簿具备版本索引、条款核对、问题与动作三个指定工作表，表格为可读可编辑单元格而非整表截图。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "交付可复核性"
+    },
+    {
+      "id": "R31",
+      "description": "三份规定交付文件均可正常打开，文件格式与扩展名相符。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q8"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx",
+        "法务审阅意见.docx",
+        "创业企业交流说明.docx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "instruction.md"
+        ],
+        "source_locator": "Q8格式可读取要求",
+        "gold_anchor": "三份Gold可读取性",
+        "expected_observation": "三份规定交付文件均可正常打开，文件格式与扩展名相符。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "交付可复核性"
+    },
+    {
+      "id": "R32",
+      "description": "交付中伪造政府批准、专家认证、实际已拨款记录，或虚构真实申请企业财务数据来计算具体补贴；仅当存在明确的虚构事实证据时成立。",
+      "weight": -10,
+      "type": "Binary",
+      "dimension": "安全合规",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4",
+        "Q6"
+      ],
+      "deliverables": [
+        "政策版本与条款核对.xlsx",
+        "法务审阅意见.docx",
+        "创业企业交流说明.docx"
+      ],
+      "evidence": {
+        "input_paths": [
+          "instruction.md",
+          "沟通记录.docx"
+        ],
+        "source_locator": "Q4/Q6及未提供真实申请主体的范围边界",
+        "gold_anchor": "三份Gold均未作虚构个案或已获批准声明",
+        "expected_observation": "交付中伪造政府批准、专家认证、实际已拨款记录，或虚构真实申请企业财务数据来计算具体补贴；仅当存在明确的虚构事实证据时成立。",
+        "verification": "Check candidate deliverable and cited input. Gold is one valid example, not a byte-diff target."
+      },
+      "weight_reason": "核心效力/业务承诺边界"
+    }
+  ],
+  "source_facts": [],
+  "status": {
+    "task_id": "LAW-TIME-001",
+    "domain": "法律",
+    "domain_l2": "Law6-立法与政策研究",
+    "category": "weakness-driven",
+    "inputs": 5,
+    "gold_files": 3,
+    "rubrics": 32,
+    "complexity": "C3",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:0e83091ef571e2c717bb393a327ca8eda15013bc44eb3e55ac72bdf452e0c476",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/LAW-TIME-001/20261020T191245Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": false,
+          "gate_pass": false,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 32.0,
+            "verifier_error": 0.0
+          }
+        },
+        {
+          "run": "audit/golden/LAW-TIME-001/20261020T213052Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 0.991337,
+            "graded_score": 0.991337,
+            "criteria_counted": 32.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_公开页面摘录.docx",
+      "absolute_path": "题包内：S01_公开页面摘录.docx",
+      "url": "",
+      "bytes": 40702,
+      "sha256": "1bb57b7648afa96b1b8302251bf0920c74071cd60a26b5f42d6c85b2cf503506",
+      "description": "标题与正文可能不一致的政府公开页面摘录，保留原行号，非作者拟造政策。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.xuhui.gov.cn/xxgk/portal/article/detail?id=8a4c0c0692292eab01934dd52e3d09b9"
+      ]
+    },
+    {
+      "name": "S02_草案全文.docx",
+      "absolute_path": "题包内：S02_草案全文.docx",
+      "url": "",
+      "bytes": 42305,
+      "sha256": "31999185dc7cdc231f84e29fa01fc97535df02d1b0a94d90b61dfd6d219e4788",
+      "description": "另一份同名政策公开网页的离线全文提取，正文与附则均需核对。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.xuhui.gov.cn/xxgk/portal/article/detail?id=8a4c0c069750276801975288aaf70002"
+      ]
+    },
+    {
+      "name": "S03_印发通知.docx",
+      "absolute_path": "题包内：S03_印发通知.docx",
+      "url": "",
+      "bytes": 42598,
+      "sha256": "016c64ceecfcef544ca721e7ed53538d456aeaef46f3e1bf8b359acff3b7d986",
+      "description": "政府印发通知的离线全文提取，保留发文字号与附则。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.xuhui.gov.cn/xxgk/portal/article/detail?id=8a4c0c06963c76ac01968456b327020b"
+      ]
+    },
+    {
+      "name": "沟通记录.docx",
+      "absolute_path": "题包内：沟通记录.docx",
+      "url": "assets/tasks/LAW-TIME-001/environment/input_files/%E6%B2%9F%E9%80%9A%E8%AE%B0%E5%BD%95.docx",
+      "bytes": 38479,
+      "sha256": "ee85712df7a4ee220fc1fb7a2b1d7e74b66cd8486f7df517b3b4984119b9fa8c",
+      "description": "原创内部委托与先后消息，含角色权限、业务日期及当前任务范围。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "招商政策材料的内部审阅请求（原创业务情境）"
+        },
+        {
+          "kind": "heading",
+          "text": "情境声明"
+        },
+        {
+          "kind": "paragraph",
+          "text": "以下组织内部消息、时间和审批流程是为本任务创作的业务委托，并非真实企业记录；引用的政府文件不作改写。不存在获批企业名单、企业财务数字或真实扶持决定。"
+        },
+        {
+          "kind": "heading",
+          "text": "2025-04-28 16:30 销售负责人 → 资料员"
+        },
+        {
+          "kind": "paragraph",
+          "text": "为下月AI创业企业交流会准备招商说明。旧资料中写到备案登记奖励200万元，另一份材料写500万元，还写有6个月至3年免租和最高1000万元房租装修支持，请整理成对外可用稿。"
+        },
+        {
+          "kind": "heading",
+          "text": "2025-05-02 10:00 资料员 → 销售负责人"
+        },
+        {
+          "kind": "paragraph",
+          "text": "看见官网4月30日的新通知，先把标题改成“新政策已发布”，拟于5月20日对外发送。但尚未核对正文起施时间，也未核对空间政策条款有无变化。"
+        },
+        {
+          "kind": "heading",
+          "text": "2025-06-03 09:00 法务主管 → 本次承办人"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本次审阅以2025-06-03 09:00为准。取消先前5月20日发送安排；请不要发送旧稿，完成三份候选交付后交法务主管复核。资料员可维护材料、销售负责人可提出推广需求，但均无权承诺政府补贴或认定企业资格。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "三个输入网页的页面公布日期可能相同或与文件起施日期不同，不能靠文件名、标题或网页列表顺序决定效力。请将此前消息视为待核验的业务请求，而非政策依据。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "需要公开解释的政策范围：主体引育、空间支持、研发、算力、备案登记、标准创制、模型评测；对本区其他同类政策的叠加和认定程序也应说明。申请条件或程序在材料中不能确定的，列出待核实事项，不代拟官方标准。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "待审推广稿.docx",
+      "absolute_path": "题包内：待审推广稿.docx",
+      "url": "assets/tasks/LAW-TIME-001/environment/input_files/%E5%BE%85%E5%AE%A1%E6%8E%A8%E5%B9%BF%E7%A8%BF.docx",
+      "bytes": 37897,
+      "sha256": "c54f1b64fe43a97d72b3feba082106e321230ab01892cba6c0e17c9ff609eb1d",
+      "description": "原创未批准草稿；其中断言须核验，不是额外政策依据。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "待审推广稿（故意含待核验断言的原创草稿）"
+        },
+        {
+          "kind": "heading",
+          "text": "文件状态"
+        },
+        {
+          "kind": "paragraph",
+          "text": "仅为内部未批准草稿，不能视作政府公告，也不是参考答案。"
+        },
+        {
+          "kind": "heading",
+          "text": "销售拟用文案"
+        },
+        {
+          "kind": "paragraph",
+          "text": "徐汇最新AI政策发布即可申领：大模型完成备案就拿200万元，全部新设AI公司均可免租6个月至3年，还可领取1000万元装修支持；符合多个项目可分别叠加领取，销售部可以直接确认额度。4月30日发布后即日生效，5月20日交流会可以当场签订补贴承诺。"
+        },
+        {
+          "kind": "heading",
+          "text": "审阅要求"
+        },
+        {
+          "kind": "paragraph",
+          "text": "逐一核对这些断言，保留可以证实的事实，删除或重写不能证实的承诺。不得只替换一个金额而保留其他过期表述。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "gold": [
+    {
+      "name": "创业企业交流说明.docx",
+      "absolute_path": "题包内：创业企业交流说明.docx",
+      "url": "assets/tasks/LAW-TIME-001/solution/golden_output/%E5%88%9B%E4%B8%9A%E4%BC%81%E4%B8%9A%E4%BA%A4%E6%B5%81%E8%AF%B4%E6%98%8E.docx",
+      "bytes": 38245,
+      "sha256": "fca1155ff098f64c8b3662ce5435b361fd651c7d19c6a0cc150a0ce721b9567c",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "徐汇AI创业企业交流说明（供内部法务复核）"
+        },
+        {
+          "kind": "heading",
+          "text": "政策方向"
+        },
+        {
+          "kind": "paragraph",
+          "text": "截至2025-06-03，徐汇区已进入《徐汇区关于推动人工智能产业高质量发展的若干意见》试行期。该意见由徐新工办规〔2025〕6号于4月30日印发，5月31日起试行，试行期二年。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "依法经营、符合区域产业导向、经营状况良好且无严重违法失信行为的相关主体，可围绕引育集聚、研发、算力、语料、标准与评测等方向了解支持政策。主体引育经综合评估最高5000万元；生成式人工智能服务登记、备案经认定，单个主体累计最高500万元。空间支持由分类认定决定，本文不承诺统一免租期或装修补贴定额。"
+        },
+        {
+          "kind": "heading",
+          "text": "申请前请注意"
+        },
+        {
+          "kind": "paragraph",
+          "text": "“最高”“不超过”均为条件性上限，不等于个案获批金额或到账承诺。本区其他同类政策实行就高不重复；具体资格、材料和程序应向相关主管部门核实。政策由区新型工业化推进办公室会同区投资促进办公室、区财政局负责解释。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本说明为交流材料候选，待法务主管复核，不是政府批复或补贴承诺书。来源：S03支持对象、二（一）（三）（十一）及附则1、3、4、5。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "政策版本与条款核对.xlsx",
+      "absolute_path": "题包内：政策版本与条款核对.xlsx",
+      "url": "assets/tasks/LAW-TIME-001/solution/golden_output/%E6%94%BF%E7%AD%96%E7%89%88%E6%9C%AC%E4%B8%8E%E6%9D%A1%E6%AC%BE%E6%A0%B8%E5%AF%B9.xlsx",
+      "bytes": 9988,
+      "sha256": "8fc4430b3a5f9fb4b6609d7a8265ca619a57b068330a33413b953b30d37e1012",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "版本索引"
+        },
+        {
+          "kind": "notice",
+          "text": "共4行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "材料",
+              "页面/文件公布",
+              "正文状态",
+              "起施日期",
+              "截至基准时点处理",
+              "定位"
+            ],
+            [
+              "S01",
+              "2024-11-21",
+              "征求意见稿",
+              "2024年X月X日至2025年X月X日，占位未定",
+              "仅作沿革，不作为现行兑现依据",
+              "原页面L15/L25/L59"
+            ],
+            [
+              "S02",
+              "2024-11-21",
+              "征求意见稿",
+              "2025年XX月XX日起，试行期XX年",
+              "仅作沿革；与S01同日不足以证明正式替代次序",
+              "正文标题、附则5"
+            ],
+            [
+              "S03",
+              "2025-04-30，徐新工办规〔2025〕6号",
+              "正式印发，已获区政府同意",
+              "2025-05-31起试行，试行期二年",
+              "2025-06-03已进入试行期；不得把4月30日当起施日",
+              "通知首部、附则5"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "条款核对"
+        },
+        {
+          "kind": "notice",
+          "text": "共14行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "条款",
+              "当前版本事实",
+              "旧材料差异／禁止沿用",
+              "依据定位",
+              "对外表达与待核实"
+            ],
+            [
+              "主体引育",
+              "单个经营主体最高5000万元，经综合评估",
+              "不是全部新设AI企业自动获得",
+              "S03二（一）；一支持对象",
+              "可申请评估，不能承诺核定或拨付"
+            ],
+            [
+              "空间支持",
+              "经分类认定给予一定支持；可参照模速空间支持力度",
+              "S02有6个月至3年免租、一次性最高1000万元；S03未保留该固定区间及金额",
+              "S02二（三）；S03二（三）",
+              "不把草案数字写成现行统一标准；细则待主管部门核实"
+            ],
+            [
+              "研发",
+              "研发投入占营业收入5%以上，经综合评估；不超过研发投入30%，年度最高5000万元",
+              "不删除前提，也不称比例一律等于30%",
+              "S03二（五）",
+              "须核验研发与营业收入口径及认定程序"
+            ],
+            [
+              "算力",
+              "购买或租用算力，经评审；不超过实际算力投入30%，年度最高2000万元",
+              "上限不是已核定额度",
+              "S03二（六）",
+              "支出与评审条件待核实"
+            ],
+            [
+              "备案登记",
+              "取得生成式人工智能服务登记、备案，经认定；单个主体累计最高500万元",
+              "S01二（八）最高200万元仅为征求意见稿；不是完成备案即到账",
+              "S01二（八）；S03二（十一）",
+              "最高额、累计口径和认定条件均须保留"
+            ],
+            [
+              "国际标准",
+              "批准发布的相关国际标准，评审后最高300万元",
+              "不是全部标准均按300万元",
+              "S03二（十二）",
+              "参与、批准发布及评审条件待核实"
+            ],
+            [
+              "国家标准",
+              "批准发布的相关国家标准，评审后最高50万元",
+              "S01关于标准支持的旧口径不可套用",
+              "S03二（十二）",
+              "不得与国际标准金额串用"
+            ],
+            [
+              "行业标准",
+              "批准发布的相关行业标准，评审后最高30万元",
+              "不能写成国家标准50万元",
+              "S03二（十二）",
+              "按标准类别核验"
+            ],
+            [
+              "地方标准",
+              "批准发布的相关地方标准，评审后最高10万元",
+              "不能按标准支持最高额统一套用",
+              "S03二（十二）",
+              "按标准类别核验"
+            ],
+            [
+              "模型评测",
+              "研发测试相关费用，经认定，不超过测试费用30%，最高300万元",
+              "经认定与草案经评审的用词不同；不补造测试机构白名单",
+              "S02二（十三）；S03二（十三）",
+              "可介绍方向，具体材料和认定程序待核实"
+            ],
+            [
+              "叠加",
+              "本区其他同类政策就高不重复；国家、上海市有新政策则按新政策执行",
+              "不得宣称本区所有项目可重复领取，也不得推定任何层级政策一概不可组合",
+              "S03附则1",
+              "逐项目核对是否同类，不自行扩大禁止范围"
+            ],
+            [
+              "认定",
+              "公平合理客观的认定条件、规范透明的认定程序",
+              "销售与资料员无权作出政府扶持决定",
+              "S03附则3；沟通记录6月3日",
+              "未给出完整操作细则，不虚构到账时间"
+            ],
+            [
+              "解释部门",
+              "区新型工业化推进办公室会同区投资促进办公室、区财政局",
+              "不写销售负责人可解释官方政策",
+              "S03附则4",
+              "向相应部门核实具体办理口径"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "问题与动作"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "当前处理",
+              "责任接口",
+              "状态"
+            ],
+            [
+              "旧推广稿",
+              "保留原稿作为审阅证据，停止外发；整稿替换，不只改200为500",
+              "资料员、销售负责人",
+              "候选替代稿待法务主管复核"
+            ],
+            [
+              "空间支持细则",
+              "不承诺免租期和装修定额，向主管部门确认分类认定条件",
+              "政策解释部门",
+              "待核实"
+            ],
+            [
+              "单个企业资格",
+              "未提供申请主体事实，不作个案资格或金额决定",
+              "申请主体与认定部门",
+              "待核实"
+            ],
+            [
+              "6月3日切换",
+              "版本索引、条款表、法务意见和对外说明同步采用当前基准",
+              "法务主管",
+              "交付候选，未批准发布"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "法务审阅意见.docx",
+      "absolute_path": "题包内：法务审阅意见.docx",
+      "url": "assets/tasks/LAW-TIME-001/solution/golden_output/%E6%B3%95%E5%8A%A1%E5%AE%A1%E9%98%85%E6%84%8F%E8%A7%81.docx",
+      "bytes": 39216,
+      "sha256": "07fe3be6973f1c1d4fd4e4b14ecf08a1ca62a4f3c1907f7498454d1e2fde03df",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "徐汇AI招商材料法务审阅意见（候选）"
+        },
+        {
+          "kind": "heading",
+          "text": "审阅范围与结论"
+        },
+        {
+          "kind": "paragraph",
+          "text": "基准：2025-06-03 09:00，Asia/Shanghai。对所附三个公开页面与内部待审稿作文件效力、时间和条款一致性审查，不为任何真实企业出具补贴资格或金额决定。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S03徐新工办规〔2025〕6号于2025-04-30正式印发，附则5明确2025-05-31起试行、试行期二年。S01与S02正文均为征求意见稿；页面发布日期相同不能证明二者正式替代顺序。S01标题未写草案不改变正文属性。4月30日是公布而非起施，不能由此倒推5月20日已享有扶持请求权。"
+        },
+        {
+          "kind": "heading",
+          "text": "待审断言逐项处理"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "旧稿断言",
+              "处理与依据"
+            ],
+            [
+              "备案即拿200万元",
+              "重写为：登记、备案后经认定，单个主体累计最高500万元；S01二（八）为旧草案，S03二（十一）为当前依据"
+            ],
+            [
+              "全部AI企业均免租6个月至3年",
+              "删除：S02二（三）的数字未保留在S03二（三）；现行仅写分类认定给予一定支持"
+            ],
+            [
+              "1000万元装修可直接领取",
+              "删除：不能把S02的一次性房租装修上限沿用为S03固定权益"
+            ],
+            [
+              "各项目都可叠加",
+              "删除：S03附则1为本区其他同类政策就高不重复，是否同类须逐项确认"
+            ],
+            [
+              "销售直接确定额度",
+              "删除：S03附则3规定认定程序；内部消息也未授权销售决定"
+            ],
+            [
+              "4月30日起立即生效",
+              "纠正为5月31日起试行；早先5月20日发送安排已被6月3日委托取消"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "扶持说明边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "主体引育经综合评估最高5000万元；研发有投入占营业收入5%以上的前提，支持不超过投入30%、年度最高5000万元；算力经评审不超过实际投入30%、年度最高2000万元。标准创制按国际/国家/行业/地方依次最高300/50/30/10万元，经批准发布与评审；模型评测经认定不超过测试费用30%、最高300万元。各条均不是自动定额支付承诺，详见工作簿逐项来源定位。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S03附则4的解释部门为区新型工业化推进办公室会同区投资促进办公室、区财政局。材料没有给出完整申报流程、受理窗口、到账期限或个案认定，不可代造。"
+        },
+        {
+          "kind": "heading",
+          "text": "切换与后续"
+        },
+        {
+          "kind": "paragraph",
+          "text": "保留输入旧稿，不修改只读原件。资料员用当前版本同时更新条款台账及对外候选稿；销售停止使用旧稿；三份交付物交法务主管复核，当前不是已批准发布状态。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "待核实：空间分类认定细则、具体申报材料与时间、同类项目认定、申请主体实际情况及有无更高层级新政策。无申请企业材料，不应编造企业财务或计算个案补贴。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": []
+}

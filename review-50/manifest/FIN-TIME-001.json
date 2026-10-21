@@ -1,0 +1,1236 @@
+{
+  "id": "FIN-TIME-001",
+  "title": "沪深IPO资料双时钟与延期证据的Skill发现核对包",
+  "domain": "金融",
+  "domain_l2": "Fin1-投资银行",
+  "domain_l3": "IPO财务信息更新边界",
+  "category": "skill-discovery",
+  "complexity": "C2",
+  "target_difficulty": "A1",
+  "as_of": "2023-09-05 10:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "官方2023规章/2020修订历史，明确原创日期案例/团队技能和延期登记；不虚构真实发行人财报、监管审批或规范条款。",
+  "instruction": "# 沪深IPO资料双时钟与延期证据的Skill发现核对包\n\n## 业务场景与任务说明\n\n你是投行资料质控分析员。助理只看签署日，销售又想按报告出具日或自动9个月放行。请核对冻结2023规则与历史说明，从多个相邻用途Skill中选择适用工作流，实际运行，对九个原创项目形成日期/缺证工作簿、待审备忘与真实技能证据。\n\n业务判断基准时点：2023-09-05 10:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_2023规则选摘.docx`：2023官方公告与相关条文离线选摘，不是完整规章。\n- `/app/input_files/S02_2020修改历史.docx`：2020官方修改新闻，历史对照而非当前全部规则。\n- `/app/input_files/S03_质控委托.docx`：原创质控委托、权限及明确非国家规范的日历/证据约定。\n- `/app/input_files/S04_项目清单.json`：九个纯原创训练项目日期/延期元数据，不是真实财报。\n- `/app/input_files/S05_延期证据登记.docx`：原创延期核验登记及B/C/D明确给定事实，非真实监管回执。\n\n## 工作要求\n\n- [Q1] 核对S01/S02版本、条号/两起算点与2020修订时间，按沪深IPO范围及S03业务基准处理。\n- [Q2] 从可用Skill中自行选择覆盖组合任务的一个，说明其他候选适用边界，实际运行并交skill_evidence.json，保留真实输入/Skill哈希。\n- [Q3] 逐行在工作簿保留9例原始日期/延期证据来源，用有效公式计算正常财务核对日、理论9月上限及签署核对日，打开有缓存；无效或缺财务期末不制造误导日期。\n- [Q4] 逐例核对财务与签署状态，区分销售申请、给定已核证据和超上限异常；缺字段、非期末及临界日期留核，不让任一时钟替代另一个。\n- [Q5] 备忘说明Skill选择、时间线、B/C/D/F纠错和九例处置，工作簿/证据/备忘同步。\n- [Q6] 给出后续动作与责任人、程序及专业未验边界；不真实提交/联络/更改输入/虚称发行或专家批准。\n\n## 可用技能\n\n- ipo-document-control：2023组合资料控制：财务截止/签署双时钟与延期证据。；入口`/skills/ipo-document-control/SKILL.md`；相对脚本路径以该技能目录为基准。\n- prospectus-signature-check：最后签署日起6月的单时钟参考。；入口`/skills/prospectus-signature-check/SKILL.md`；相对脚本路径以该技能目录为基准。\n- star-financial-history：2020科创板修改沿革参考，非2023组合控制。；入口`/skills/star-financial-history/SKILL.md`；相对脚本路径以该技能目录为基准。\n- filing-response-calendar：有明确工作日SLA与日历时的回复规划参考。；入口`/skills/filing-response-calendar/SKILL.md`；相对脚本路径以该技能目录为基准。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/document_worklist.xlsx`：九例原数/公式双时钟、来源/延期状态与下一动作工作簿。\n- `/app/output/control_memo.docx`：Skill选择及排除理由、版本/两时钟/逐例纠错与复核边界备忘。\n- `/app/output/skill_evidence.json`：实际所选Skill输出，含输入及技能三文件哈希与未授权发行状态。\n\n## 硬约束（单独列明）\n\n- 只交三个指定文件到/app/output/，不压缩、不加密、不修改只读输入或已安装Skill。\n- 项目/延期登记为原创训练事实，不对外冒称真实财报/监管回执。\n- 不得自动9个月、用报告出具日重置财务钟、以销售建议代替延期依据。\n- 恰到核对日按S03留核；不补造假日日历、真实外部联系、发行或专家批准。\n",
+  "instruction_url": "assets/tasks/FIN-TIME-001/instruction.md",
+  "absolute_path": "tasks/FIN-TIME-001",
+  "spec_path": "manifest/FIN-TIME-001.json",
+  "spec_url": "manifest/FIN-TIME-001.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "以2023年第205号令第46条作当前双时钟依据，不把2020旧条号/新闻当现时整套规定；基准为2023-09-05。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "control_memo.docx"
+      ],
+      "evidence": "S01公告/第46、71条；S03基准。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R02",
+      "description": "明确财务钟从最近一期截止日、签署钟从公开发行前最后签署日分别起算，均正常6个月，不能用报告出具日替代截止日。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "control_memo.docx"
+      ],
+      "evidence": "S01第46条；备忘规则段。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R03",
+      "description": "区分2020-07-10正式修改说明与5月15日–6月15日征求意见，说明旧1个月上限已改3个月，不在2023沿用旧1月。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "control_memo.docx"
+      ],
+      "evidence": "S02正文。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R04",
+      "description": "选择覆盖两个时钟与延期证据的ipo-document-control，说明其符合本次组合任务而非只凭名称。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "control_memo.docx"
+      ],
+      "evidence": "实际Skill入口、S03组合需求。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R05",
+      "description": "其他三个候选分别解释签署单钟、2020历史沿革、工作日回复SLA的范围缺口；不靠全部调用冒充正确发现。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "control_memo.docx"
+      ],
+      "evidence": "各SKILL.md真实范围；备忘选择段。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R06",
+      "description": "证据JSON确为所选Skill处理S04的结果：输入SHA256及SKILL.md/合同/脚本三哈希与实际只读文件一致，不只是自述“用了Skill”。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "skill_evidence.json"
+      ],
+      "evidence": "真实文件SHA256、实际CLI重新执行比对；不能仅检查字段名。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R07",
+      "description": "九例财务截止、报告出具、签署和延期登记原数/空值在工作簿准确保留并能定位S04/S05，不默默把G/I改季度末。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx"
+      ],
+      "evidence": "来源登记及资料核对B:D/H:I。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R08",
+      "description": "正常财务核对日期：A为2023-12-30，B/C/D为2023-06-30，F/H为2023-09-30；E/G/I不生成确定日期，计算按S03约定。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx"
+      ],
+      "evidence": "S04原期末；资料核对E列公式/缓存。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R09",
+      "description": "理论9月上限：A为2024-03-30，B/C/D为2023-09-30，F/H为2023-12-31；E/G/I留空待核，且上限不标为自动获准日期。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx"
+      ],
+      "evidence": "资料核对F列；从原日期加9月，非先加6再加3。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R10",
+      "description": "签署核对日期：A/B/D/E/G为2023-10-01，C为2023-09-01，F为2024-02-21，H缺失，I为2023-09-05临界待核；与财务钟独立。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx"
+      ],
+      "evidence": "资料核对G列；S04最后签署。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R11",
+      "description": "B只有销售申请，不当作适用延期已核实；财务状态EXTENSION_UNCONFIRMED，交项目法务补证或更新。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S05 B；JSON/工作簿B行。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R12",
+      "description": "C财务按S05给定延期证据记为EXTENDED_BY_GIVEN_EVIDENCE至9月15日，但签署UPDATE_SIGNATURE；不据此整体放行。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S05 C；2023-03-01+6月=9月1日；9月5日已过。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R13",
+      "description": "D延期记载2023-10-15超过2023-09-30理论上限，即使verified=true也标EXTENSION_LIMIT_BREACH并回查。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S05 D与S01特殊至多3个月。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R14",
+      "description": "E缺财务截止记MISSING_CUTOFF，不能从8月报告出具日或签署日推定该截止。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S04 E空值。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R15",
+      "description": "G/I的1月31日/3月5日非年度/半年/季度末，财务标INVALID_PERIOD_END；I签署恰到核对日期则BOUNDARY_REVIEW。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S01期末要求与S03临界日约定。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R16",
+      "description": "H财务CURRENT_BY_PACKET但签署MISSING_SIGNATURE，保留缺件而非把财务日期复制成签署日期。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S04 H空签署；两时钟独立。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R17",
+      "description": "F正常财务日期为9月30日，不从8月20日报告出具日重算到2024；备忘用此具体案例纠正销售建议。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "control_memo.docx"
+      ],
+      "evidence": "只检备忘纠错实例；基础日期准确性按R08。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R18",
+      "description": "备忘九例状态和后续处置与实际JSON、工作簿同步，不产生另一套手工矛盾结论。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "control_memo.docx",
+        "document_worklist.xlsx",
+        "skill_evidence.json"
+      ],
+      "evidence": "按A–I逐行交叉对照。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。",
+      "levels": {
+        "0": "一致案例0–1。",
+        "0.25": "2–3例。",
+        "0.5": "4–5例。",
+        "0.75": "6–8例。",
+        "1": "9例均一致且不夹额外发行人记录。"
+      }
+    },
+    {
+      "id": "R19",
+      "description": "工作簿派生日期为可复算公式且缓存可见，无#VALUE!等错误；原数允许录入，不要求自行重写Skill状态算法。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx"
+      ],
+      "evidence": "实际Office打开与公式/data_only读取。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R20",
+      "description": "明确日历月与临界待核为S03演练约定，不武断补法定末日包含/休假顺延；两时钟正常也不证明发行条件已满足。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "control_memo.docx"
+      ],
+      "evidence": "S03范围与备忘未验事项。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R21",
+      "description": "后续分配法务核延期、财务补期末/报告、签署负责人补签、质控负责人复核的动作，任一必要缺证则不进入已批准发行结论。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "control_memo.docx"
+      ],
+      "evidence": "实际可执行分工而非“建议注意”。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R22",
+      "description": "区分第26条资料更新、第30/31条程序情形，不把发现过期直接写成已终止或工具自动恢复。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-投行资料质控",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "control_memo.docx"
+      ],
+      "evidence": "S01选摘与备忘末节；不要求本题作完整程序法律意见。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R23",
+      "description": "只交三个规定文件，文件可打开，日期用YYYY-MM-DD清楚显示；不用加密/压缩或变更原输入替代交付。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3",
+        "Q5"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx",
+        "control_memo.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "实际文件/日期格式/输入哈希。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    },
+    {
+      "id": "R24",
+      "description": "扣分：虚构已递交、监管确认、真实发行批准或专家认证的具体记录；普通日期/范围错误或遗漏边界不触发本项。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与边界",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "document_worklist.xlsx",
+        "control_memo.docx",
+        "skill_evidence.json"
+      ],
+      "evidence": "S03/S05均无真实外部执行授权/证据。",
+      "weight_reason": "错误会改变核心有效性/能力选择10，必要追溯/后续处置7，版面命名3。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://www.csrc.gov.cn/csrc/c101953/c7121923/content.shtml",
+      "locator": "公告/2023-02-17",
+      "fact": "公布施行日期"
+    },
+    {
+      "url": "https://big5.sse.com.cn/lawandrules/regulations/csrcorder/c/10116583/files/fbb4578ae47a4f0686713232e2692e67.pdf",
+      "locator": "第2/26/30/31/46/71条，原PDF16页含46条",
+      "fact": "现时范围、双时钟、最多3月及程序/旧办法废止"
+    },
+    {
+      "url": "https://www.csrc.gov.cn/csrc/c100028/c1000747/content.shtml",
+      "locator": "2020-07-10正文",
+      "fact": "原1月改3月及征求意见时点"
+    }
+  ],
+  "status": {
+    "task_id": "FIN-TIME-001",
+    "domain": "金融",
+    "domain_l2": "Fin1-投资银行",
+    "category": "skill-discovery",
+    "inputs": 5,
+    "gold_files": 3,
+    "rubrics": 24,
+    "complexity": "C2",
+    "target_difficulty": "A1",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:65f7c2c1e69c8bb71a0d9d69bf568275a94a5aa5311fd9c80591976bdf01d1b1",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/FIN-TIME-001/20261021T001521Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 0.961957,
+            "graded_score": 0.961957,
+            "criteria_counted": 24.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_2023规则选摘.docx",
+      "absolute_path": "题包内：S01_2023规则选摘.docx",
+      "url": "",
+      "bytes": 39780,
+      "sha256": "31e28604b9c5b5d6b8cb7da2712204817b0748930ee6b71f7c40e7fabfa51dbe",
+      "description": "2023官方公告与相关条文离线选摘，不是完整规章。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c101953/c7121923/content.shtml",
+        "https://big5.sse.com.cn/lawandrules/regulations/csrcorder/c/10116583/files/fbb4578ae47a4f0686713232e2692e67.pdf",
+        "https://www.csrc.gov.cn/csrc/c100028/c1000747/content.shtml"
+      ]
+    },
+    {
+      "name": "S02_2020修改历史.docx",
+      "absolute_path": "题包内：S02_2020修改历史.docx",
+      "url": "",
+      "bytes": 38673,
+      "sha256": "960608e7fd26ffca2425e3ba6b29476dac3f9445c310628b7933356112685cfc",
+      "description": "2020官方修改新闻，历史对照而非当前全部规则。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c100028/c1000747/content.shtml",
+        "https://www.csrc.gov.cn/csrc/c101953/c7121923/content.shtml",
+        "https://big5.sse.com.cn/lawandrules/regulations/csrcorder/c/10116583/files/fbb4578ae47a4f0686713232e2692e67.pdf"
+      ]
+    },
+    {
+      "name": "S03_质控委托.docx",
+      "absolute_path": "题包内：S03_质控委托.docx",
+      "url": "assets/tasks/FIN-TIME-001/environment/input_files/S03_%E8%B4%A8%E6%8E%A7%E5%A7%94%E6%89%98.docx",
+      "bytes": 39421,
+      "sha256": "5b963cf28a0c753bdc2f1dc3a7ec5a2ecd583f300c64919bfa9d1994f314b4d1",
+      "description": "原创质控委托、权限及明确非国家规范的日历/证据约定。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创投行资料质控委托：选择合适Skill并形成待审工作包"
+        },
+        {
+          "kind": "heading",
+          "text": "场景与授权"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是投行项目资料质控分析员，在2023-09-05 10:00 Asia/Shanghai做沪深IPO历史训练回放，不作发行条件全面核查或正式法律意见。项目A–I、登记、消息和团队Skill均为原创，官方条文见S01/S02。S04只提供训练日期/版本记录，不是假造真实财务报表。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "8月31日助理只算最后签署日，并沿用2020以前最多延1个月的旧记忆。9月4日销售经理建议所有报表按9个月自动有效、可用报告出具日重算。9月5日09:00项目质控负责人要求分开核对两时钟、延期证据与缺件，并从可用Skill中自行选择覆盖该组合工作流的一个；销售无权改变规则或确认监管程序已完成。"
+        },
+        {
+          "kind": "heading",
+          "text": "本地演练日期约定（非新增法定期间规则）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本题按原始日期直接加6或9个日历月；目标月没有同日则取月末，不加180天、不按工作日、不先把6月结果夹到月末再加3月。理论9月上限只是上限，不是自动延长。没有具体法定期间末日/休假顺延材料，恰到核对日期只列BOUNDARY_REVIEW请专业复核，不武断断言最后一日必定可用或不可用。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "财务时钟从最近一期财务截止日起，不从审计报告出具日或签署日重置；签署时钟单独起算。缺日期保留缺件，不反推。财务截止须为年度/半年/季度末；S04的G和I故意不是，需标INVALID_PERIOD_END，不为了凑有效改输入。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "延期仅在超过正常6个月后，给定有project_legal核验、记录号非空且记载期限不超理论上限时，才按本地演练假设进入已给证据分支；销售申请不够。C的依据只按S05给定事实使用；D虽标verified，超上限仍须阻断核查。财务与签署任何一项异常都应安排补件/复核，不以其中一项正常作整体发行放行。"
+        },
+        {
+          "kind": "heading",
+          "text": "Skill发现与交付"
+        },
+        {
+          "kind": "paragraph",
+          "text": "浏览可用Skill的名称/描述并核读候选入口，选择覆盖本次组合任务的一个；说明其他Skill为何仅是局部或历史用途，不要求全部运行。实际通过所选Skill生成skill_evidence.json，保留真实输入与Skill文件哈希及未授权发行状态。不要只写“用了Skill”，也不改造目录来伪装选对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "交document_worklist.xlsx、control_memo.docx、skill_evidence.json。工作簿逐行保留S04原始日期/延期登记、财务正常核对日/理论上限、签署核对日、两类状态和下一动作/责任人。日期派生用可复算公式，打开有缓存值；无效期末/缺失财务日期不生成误导性财务核对日期。状态可引用真实Skill结果，但不要求重新实现脚本。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "备忘写明选择理由、历史条号/2023版本、两起算点及延期不自动、9例处置要点、C/D/B/F的具体纠错、缺证/专业边界及审批动作。所有产物为待审训练包，不实际提交、联络监管、执行中止/终止、承诺发行或专家认证。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只使用冻结材料，不要求联网。依据第26/30/31条提示可能涉及补充/程序处理并交负责人依法核查；不要把“财务资料过期”直接等同已发生终止程序，也不要把可申请恢复说成系统自动恢复。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c101953/c7121923/content.shtml",
+        "https://big5.sse.com.cn/lawandrules/regulations/csrcorder/c/10116583/files/fbb4578ae47a4f0686713232e2692e67.pdf",
+        "https://www.csrc.gov.cn/csrc/c100028/c1000747/content.shtml"
+      ]
+    },
+    {
+      "name": "S04_项目清单.json",
+      "absolute_path": "题包内：S04_项目清单.json",
+      "url": "assets/tasks/FIN-TIME-001/environment/input_files/S04_%E9%A1%B9%E7%9B%AE%E6%B8%85%E5%8D%95.json",
+      "bytes": 2522,
+      "sha256": "5c6340c200c9971adb2bb55808fca51ef1990fda4e196d02d65d395bd5e7befa",
+      "description": "九个纯原创训练项目日期/延期元数据，不是真实财报。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "[\n  {\n    \"as_of\": \"2023-09-05\",\n    \"financial_cutoff\": \"2023-06-30\",\n    \"report_issued\": \"2023-08-01\",\n    \"last_signature\": \"2023-04-01\",\n    \"extension\": {\n      \"verified\": false,\n      \"by\": \"none\",\n      \"record_id\": \"\",\n      \"until\": null\n    },\n    \"id\": \"A\"\n  },\n  {\n    \"as_of\": \"2023-09-05\",\n    \"financial_cutoff\": \"2022-12-31\",\n    \"report_issued\": \"2023-03-20\",\n    \"last_signature\": \"2023-04-01\",\n    \"extension\": {\n      \"verified\": false,\n      \"by\": \"sales\",\n      \"record_id\": \"B-application\",\n      \"until\": \"2023-09-30\"\n    },\n    \"id\": \"B\"\n  },\n  {\n    \"as_of\": \"2023-09-05\",\n    \"financial_cutoff\": \"2022-12-31\",\n    \"report_issued\": \"2023-03-20\",\n    \"last_signature\": \"2023-03-01\",\n    \"extension\": {\n      \"verified\": true,\n      \"by\": \"project_legal\",\n      \"record_id\": \"C-verified\",\n      \"until\": \"2023-09-15\"\n    },\n    \"id\": \"C\"\n  },\n  {\n    \"as_of\": \"2023-09-05\",\n    \"financial_cutoff\": \"2022-12-31\",\n    \"report_issued\": \"2023-03-20\",\n    \"last_signature\": \"2023-04-01\",\n    \"extension\": {\n      \"verified\": true,\n      \"by\": \"project_legal\",\n      \"record_id\": \"D-inconsistent\",\n      \"until\": \"2023-10-15\"\n    },\n    \"id\": \"D\"\n  },\n  {\n    \"as_of\": \"2023-09-05\",\n    \"financial_cutoff\": null,\n    \"report_issued\": \"2023-08-01\",\n    \"last_signature\": \"2023-04-01\",\n    \"extension\": {\n      \"verified\": false,\n      \"by\": \"none\",\n      \"record_id\": \"\",\n      \"until\": null\n    },\n    \"id\": \"E\"\n  },\n  {\n    \"as_of\": \"2023-09-05\",\n    \"financial_cutoff\": \"2023-03-31\",\n    \"report_issued\": \"2023-08-20\",\n    \"last_signature\": \"2023-08-21\",\n    \"extension\": {\n      \"verified\": false,\n      \"by\": \"none\",\n      \"record_id\": \"\",\n      \"until\": null\n    },\n    \"id\": \"F\"\n  },\n  {\n    \"as_of\": \"2023-09-05\",\n    \"financial_cutoff\": \"2023-01-31\",\n    \"report_issued\": \"2023-08-01\",\n    \"last_signature\": \"2023-04-01\",\n    \"extension\": {\n      \"verified\": false,\n      \"by\": \"none\",\n      \"record_id\": \"\",\n      \"until\": null\n    },\n    \"id\": \"G\"\n  },\n  {\n    \"as_of\": \"2023-09-05\",\n    \"financial_cutoff\": \"2023-03-31\",\n    \"report_issued\": \"2023-08-01\",\n    \"last_signature\": null,\n    \"extension\": {\n      \"verified\": false,\n      \"by\": \"none\",\n      \"record_id\": \"\",\n      \"until\": null\n    },\n    \"id\": \"H\"\n  },\n  {\n    \"as_of\": \"2023-09-05\",\n    \"financial_cutoff\": \"2023-03-05\",\n    \"report_issued\": \"2023-08-01\",\n    \"last_signature\": \"2023-03-05\",\n    \"extension\": {\n      \"verified\": false,\n      \"by\": \"none\",\n      \"record_id\": \"\",\n      \"until\": null\n    },\n    \"id\": \"I\"\n  }\n]"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c101953/c7121923/content.shtml",
+        "https://big5.sse.com.cn/lawandrules/regulations/csrcorder/c/10116583/files/fbb4578ae47a4f0686713232e2692e67.pdf",
+        "https://www.csrc.gov.cn/csrc/c100028/c1000747/content.shtml"
+      ]
+    },
+    {
+      "name": "S05_延期证据登记.docx",
+      "absolute_path": "题包内：S05_延期证据登记.docx",
+      "url": "assets/tasks/FIN-TIME-001/environment/input_files/S05_%E5%BB%B6%E6%9C%9F%E8%AF%81%E6%8D%AE%E7%99%BB%E8%AE%B0.docx",
+      "bytes": 38296,
+      "sha256": "8406e34e2303a93a422eb91148fc7dc34cad6df699bfa6ee2d9d500ad49bce2c",
+      "description": "原创延期核验登记及B/C/D明确给定事实，非真实监管回执。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创案例延期核验登记（不是实际监管回执）"
+        },
+        {
+          "kind": "heading",
+          "text": "证据性质"
+        },
+        {
+          "kind": "paragraph",
+          "text": "所有项目仅为A–I训练记录，不是真实发行人财报、监管审批或证券服务机构证明；不包含财务数字。登记用于提供原创情境的明确给定事实，不得对外冒称真实监管确认。截止本题基准2023-09-05 10:00 Asia/Shanghai。"
+        },
+        {
+          "kind": "heading",
+          "text": "逐案证据"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "项目/记录",
+              "来源角色及核验状态",
+              "明确给定事实",
+              "使用限制"
+            ],
+            [
+              "B / B-application",
+              "销售经理；未经项目法务核验",
+              "申请至2023-09-30，销售称最多9个月应自动够用",
+              "申请/销售意见不是适用延期的证明。"
+            ],
+            [
+              "C / C-verified",
+              "项目法务；本题给定已核验",
+              "训练情境已核实相同2022-12-31经审计报表的适用延期依据，记载至2023-09-15",
+              "仅作为本题给定证据使用，不是作者真实联系监管；仍独立核对签署日。"
+            ],
+            [
+              "D / D-inconsistent",
+              "项目法务登记标记verified，但与规则冲突",
+              "记载相同2022-12-31报表延期至2023-10-15",
+              "已标核验不能覆盖国家最多3个月；须回查异常，不能继续当有效。"
+            ],
+            [
+              "A/E/F/G/H/I",
+              "无适用延期证据",
+              "未给延期事实",
+              "不自行新增。"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.csrc.gov.cn/csrc/c101953/c7121923/content.shtml",
+        "https://big5.sse.com.cn/lawandrules/regulations/csrcorder/c/10116583/files/fbb4578ae47a4f0686713232e2692e67.pdf",
+        "https://www.csrc.gov.cn/csrc/c100028/c1000747/content.shtml"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "control_memo.docx",
+      "absolute_path": "题包内：control_memo.docx",
+      "url": "assets/tasks/FIN-TIME-001/solution/golden_output/control_memo.docx",
+      "bytes": 39972,
+      "sha256": "b4490aab56ed1075c88f2ddf09659522ee2bbada80e1af4ae8dafdec4e8153bc",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "沪深IPO资料有效期双时钟核对与Skill选择备忘"
+        },
+        {
+          "kind": "heading",
+          "text": "选择及权限"
+        },
+        {
+          "kind": "paragraph",
+          "text": "业务基准2023-09-05 10:00 Asia/Shanghai，所有项目为原创训练记录。选择ipo-document-control：同时处理经审计财务截止、最后签署、适用延期证据和缺件/异常，已真实执行脚本生成skill_evidence.json。输入和Skill三文件哈希见该文件；本稿仅为资料质控，不代表已取得监管许可。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "prospectus-signature-check只覆盖签署时钟；star-financial-history只用于2020修订沿革；filing-response-calendar需要工作日SLA/节假日表，非本题日历月有效期。它们可作辅助理解，但不能替代本次组合控制，不需为凑调用全部运行。"
+        },
+        {
+          "kind": "heading",
+          "text": "适用规则与时间线"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01是2023-02-17公布施行的第205号令，第46条分开规定招股书最后签署日起6个月和引用经审计财务报表最近一期截止日后6个月；特殊情况财务可适当延长但最多3个月。第71条废止旧主板/科创板/创业板办法。第2条范围是沪深IPO，不自动扩到北交所或其他证券。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S02 2020-07-10新闻说明旧上限从1个月改为3个月；5月15日至6月15日是征求意见，不是该正式修改起施日。2023仍用旧1月上限、旧条号或者只援引2020新闻作为现时全套依据都不合适。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "财务正常核对日从财务截止算，不从报告出具/最后签署重置。理论9月日期不是授予延期；B只有销售申请，不能宣布已延。C按S05明确给定证据至9月15日，但签署3月1日的核对日9月1日已过；财务有依据并不救回签署。D记载10月15日超过12月31日基数的理论9月30日上限，标verified也不能放行。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "月份/临界日是S03明确演练约定，不冒充完整法定期间规则；临界日、节假日顺延等缺依据时交法务核查。任何日期正常也不是整体发行授权。"
+        },
+        {
+          "kind": "heading",
+          "text": "九例处置"
+        },
+        {
+          "kind": "paragraph",
+          "text": "F财务截止2023-03-31，正常核对日2023-09-30，理论上限2023-12-31；报告8月20日和签署8月21日不能把财务钟重置为2024。E缺截止，H缺签署，分别补件；G和I非季度末，保留原记录并核查，不改造成季度末。具体两个时钟与公式见工作簿。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "项目",
+              "财务状态 / 签署状态",
+              "下一动作"
+            ],
+            [
+              "A",
+              "CURRENT_BY_PACKET / CURRENT_BY_PACKET",
+              "质控分析员保留日期核对；负责人结合另一时钟复核"
+            ],
+            [
+              "B",
+              "EXTENSION_UNCONFIRMED / CURRENT_BY_PACKET",
+              "项目法务补取并核验适用延期依据；否则更新财务材料"
+            ],
+            [
+              "C",
+              "EXTENDED_BY_GIVEN_EVIDENCE / UPDATE_SIGNATURE",
+              "按S05给定依据核对，同时更新/确认签署时钟；签署负责人补件/重签或核对签署依据"
+            ],
+            [
+              "D",
+              "EXTENSION_LIMIT_BREACH / CURRENT_BY_PACKET",
+              "项目法务回查超上限登记，不使用该记载作有效依据"
+            ],
+            [
+              "E",
+              "MISSING_CUTOFF / CURRENT_BY_PACKET",
+              "财务联系人补原始财务截止/版本，不据报告日反推"
+            ],
+            [
+              "F",
+              "CURRENT_BY_PACKET / CURRENT_BY_PACKET",
+              "质控分析员保留日期核对；负责人结合另一时钟复核"
+            ],
+            [
+              "G",
+              "INVALID_PERIOD_END / CURRENT_BY_PACKET",
+              "财务联系人核对真实报告期末，不改原记录伪造季度末"
+            ],
+            [
+              "H",
+              "CURRENT_BY_PACKET / MISSING_SIGNATURE",
+              "质控分析员保留日期核对；负责人结合另一时钟复核；签署负责人补件/重签或核对签署依据"
+            ],
+            [
+              "I",
+              "INVALID_PERIOD_END / BOUNDARY_REVIEW",
+              "财务联系人核对真实报告期末，不改原记录伪造季度末；签署负责人补件/重签或核对签署依据"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "未验范围与执行顺序"
+        },
+        {
+          "kind": "paragraph",
+          "text": "项目法务先核实B/C/D延期记录与适用程序，财务联系人更新缺失/异常报告期，签署负责人处理C/H等签署问题；质控负责人核对两类状态、材料版本和依据，再决定是否进入下一内部环节。S05只为训练给定，不是作者取得真实外部确认。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "第26条涉及注册后上市前资料更新；第30/31条分别涉及中止及特定终止情形。发现过期应及时交负责人核查和补充，不能直接说“已终止”、自动恢复或允许继续发行。未核查发行条件、上市条件、审计真实性、真实审批/节假日顺延；没有真实递交、监管联络、专家认证或发行批准。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "document_worklist.xlsx",
+      "absolute_path": "题包内：document_worklist.xlsx",
+      "url": "assets/tasks/FIN-TIME-001/solution/golden_output/document_worklist.xlsx",
+      "bytes": 12992,
+      "sha256": "94b6d06fd4326b2ac88b7da40c62f1f93bd6b9f78ffec570aca6561b8d1e5d60",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "使用说明"
+        },
+        {
+          "kind": "notice",
+          "text": "共8行 × 2列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "说明"
+            ],
+            [
+              "时点",
+              "2023-09-05 10:00 Asia/Shanghai；S01 2023-02-17实施；S02仅历史。"
+            ],
+            [
+              "字段边界",
+              "财务截止不是审计报告出具或签署日。第46条与历史条号不同。"
+            ],
+            [
+              "月份约定",
+              "按S03原日期直接加6/9日历月，无同日夹到月末；不是新法定期间算法。"
+            ],
+            [
+              "范围",
+              "沪深IPO训练，不扩张到北交所/债券，不证明发行条件已满足。"
+            ],
+            [
+              "状态来源",
+              "J/K来自实际Skill证据；公式E/F/G独立可复算；所有行都未获发行授权。"
+            ],
+            [
+              "延期",
+              "理论9月上限非自动；申请/销售口径非证据，超上限核验标记也不够。"
+            ],
+            [
+              "程序",
+              "程序中止/恢复/终止交负责人结合第26/30/31条核实，不声称本工具已经执行。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "资料核对"
+        },
+        {
+          "kind": "notice",
+          "text": "共10行 × 12列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "项目",
+              "财务截止日",
+              "报告出具日",
+              "最后签署日",
+              "正常财务核对日",
+              "理论9月上限（非自动）",
+              "签署核对日",
+              "延期证据",
+              "记载延期至",
+              "财务状态",
+              "签署状态",
+              "后续动作/负责人"
+            ],
+            [
+              "A",
+              "2023-06-30T00:00:00",
+              "2023-08-01T00:00:00",
+              "2023-04-01T00:00:00",
+              "=IF(OR(B2=\"\",MOD(MONTH(B2),3)<>0,DAY(B2)<>DAY(EOMONTH(B2,0))),\"\",EDATE(B2,6))\n缓存：2023-12-30 00:00:00",
+              "=IF(OR(B2=\"\",MOD(MONTH(B2),3)<>0,DAY(B2)<>DAY(EOMONTH(B2,0))),\"\",EDATE(B2,9))\n缓存：2024-03-30 00:00:00",
+              "=IF(D2=\"\",\"\",EDATE(D2,6))\n缓存：2023-10-01 00:00:00",
+              "未提供",
+              null,
+              "CURRENT_BY_PACKET",
+              "CURRENT_BY_PACKET",
+              "质控分析员保留日期核对；负责人结合另一时钟复核"
+            ],
+            [
+              "B",
+              "2022-12-31T00:00:00",
+              "2023-03-20T00:00:00",
+              "2023-04-01T00:00:00",
+              "=IF(OR(B3=\"\",MOD(MONTH(B3),3)<>0,DAY(B3)<>DAY(EOMONTH(B3,0))),\"\",EDATE(B3,6))\n缓存：2023-06-30 00:00:00",
+              "=IF(OR(B3=\"\",MOD(MONTH(B3),3)<>0,DAY(B3)<>DAY(EOMONTH(B3,0))),\"\",EDATE(B3,9))\n缓存：2023-09-30 00:00:00",
+              "=IF(D3=\"\",\"\",EDATE(D3,6))\n缓存：2023-10-01 00:00:00",
+              "B-application",
+              "2023-09-30T00:00:00",
+              "EXTENSION_UNCONFIRMED",
+              "CURRENT_BY_PACKET",
+              "项目法务补取并核验适用延期依据；否则更新财务材料"
+            ],
+            [
+              "C",
+              "2022-12-31T00:00:00",
+              "2023-03-20T00:00:00",
+              "2023-03-01T00:00:00",
+              "=IF(OR(B4=\"\",MOD(MONTH(B4),3)<>0,DAY(B4)<>DAY(EOMONTH(B4,0))),\"\",EDATE(B4,6))\n缓存：2023-06-30 00:00:00",
+              "=IF(OR(B4=\"\",MOD(MONTH(B4),3)<>0,DAY(B4)<>DAY(EOMONTH(B4,0))),\"\",EDATE(B4,9))\n缓存：2023-09-30 00:00:00",
+              "=IF(D4=\"\",\"\",EDATE(D4,6))\n缓存：2023-09-01 00:00:00",
+              "C-verified",
+              "2023-09-15T00:00:00",
+              "EXTENDED_BY_GIVEN_EVIDENCE",
+              "UPDATE_SIGNATURE",
+              "按S05给定依据核对，同时更新/确认签署时钟；签署负责人补件/重签或核对签署依据"
+            ],
+            [
+              "D",
+              "2022-12-31T00:00:00",
+              "2023-03-20T00:00:00",
+              "2023-04-01T00:00:00",
+              "=IF(OR(B5=\"\",MOD(MONTH(B5),3)<>0,DAY(B5)<>DAY(EOMONTH(B5,0))),\"\",EDATE(B5,6))\n缓存：2023-06-30 00:00:00",
+              "=IF(OR(B5=\"\",MOD(MONTH(B5),3)<>0,DAY(B5)<>DAY(EOMONTH(B5,0))),\"\",EDATE(B5,9))\n缓存：2023-09-30 00:00:00",
+              "=IF(D5=\"\",\"\",EDATE(D5,6))\n缓存：2023-10-01 00:00:00",
+              "D-inconsistent",
+              "2023-10-15T00:00:00",
+              "EXTENSION_LIMIT_BREACH",
+              "CURRENT_BY_PACKET",
+              "项目法务回查超上限登记，不使用该记载作有效依据"
+            ],
+            [
+              "E",
+              null,
+              "2023-08-01T00:00:00",
+              "2023-04-01T00:00:00",
+              "=IF(OR(B6=\"\",MOD(MONTH(B6),3)<>0,DAY(B6)<>DAY(EOMONTH(B6,0))),\"\",EDATE(B6,6))\n缓存：None",
+              "=IF(OR(B6=\"\",MOD(MONTH(B6),3)<>0,DAY(B6)<>DAY(EOMONTH(B6,0))),\"\",EDATE(B6,9))\n缓存：None",
+              "=IF(D6=\"\",\"\",EDATE(D6,6))\n缓存：2023-10-01 00:00:00",
+              "未提供",
+              null,
+              "MISSING_CUTOFF",
+              "CURRENT_BY_PACKET",
+              "财务联系人补原始财务截止/版本，不据报告日反推"
+            ],
+            [
+              "F",
+              "2023-03-31T00:00:00",
+              "2023-08-20T00:00:00",
+              "2023-08-21T00:00:00",
+              "=IF(OR(B7=\"\",MOD(MONTH(B7),3)<>0,DAY(B7)<>DAY(EOMONTH(B7,0))),\"\",EDATE(B7,6))\n缓存：2023-09-30 00:00:00",
+              "=IF(OR(B7=\"\",MOD(MONTH(B7),3)<>0,DAY(B7)<>DAY(EOMONTH(B7,0))),\"\",EDATE(B7,9))\n缓存：2023-12-31 00:00:00",
+              "=IF(D7=\"\",\"\",EDATE(D7,6))\n缓存：2024-02-21 00:00:00",
+              "未提供",
+              null,
+              "CURRENT_BY_PACKET",
+              "CURRENT_BY_PACKET",
+              "质控分析员保留日期核对；负责人结合另一时钟复核"
+            ],
+            [
+              "G",
+              "2023-01-31T00:00:00",
+              "2023-08-01T00:00:00",
+              "2023-04-01T00:00:00",
+              "=IF(OR(B8=\"\",MOD(MONTH(B8),3)<>0,DAY(B8)<>DAY(EOMONTH(B8,0))),\"\",EDATE(B8,6))\n缓存：None",
+              "=IF(OR(B8=\"\",MOD(MONTH(B8),3)<>0,DAY(B8)<>DAY(EOMONTH(B8,0))),\"\",EDATE(B8,9))\n缓存：None",
+              "=IF(D8=\"\",\"\",EDATE(D8,6))\n缓存：2023-10-01 00:00:00",
+              "未提供",
+              null,
+              "INVALID_PERIOD_END",
+              "CURRENT_BY_PACKET",
+              "财务联系人核对真实报告期末，不改原记录伪造季度末"
+            ],
+            [
+              "H",
+              "2023-03-31T00:00:00",
+              "2023-08-01T00:00:00",
+              null,
+              "=IF(OR(B9=\"\",MOD(MONTH(B9),3)<>0,DAY(B9)<>DAY(EOMONTH(B9,0))),\"\",EDATE(B9,6))\n缓存：2023-09-30 00:00:00",
+              "=IF(OR(B9=\"\",MOD(MONTH(B9),3)<>0,DAY(B9)<>DAY(EOMONTH(B9,0))),\"\",EDATE(B9,9))\n缓存：2023-12-31 00:00:00",
+              "=IF(D9=\"\",\"\",EDATE(D9,6))\n缓存：None",
+              "未提供",
+              null,
+              "CURRENT_BY_PACKET",
+              "MISSING_SIGNATURE",
+              "质控分析员保留日期核对；负责人结合另一时钟复核；签署负责人补件/重签或核对签署依据"
+            ],
+            [
+              "I",
+              "2023-03-05T00:00:00",
+              "2023-08-01T00:00:00",
+              "2023-03-05T00:00:00",
+              "=IF(OR(B10=\"\",MOD(MONTH(B10),3)<>0,DAY(B10)<>DAY(EOMONTH(B10,0))),\"\",EDATE(B10,6))\n缓存：None",
+              "=IF(OR(B10=\"\",MOD(MONTH(B10),3)<>0,DAY(B10)<>DAY(EOMONTH(B10,0))),\"\",EDATE(B10,9))\n缓存：None",
+              "=IF(D10=\"\",\"\",EDATE(D10,6))\n缓存：2023-09-05 00:00:00",
+              "未提供",
+              null,
+              "INVALID_PERIOD_END",
+              "BOUNDARY_REVIEW",
+              "财务联系人核对真实报告期末，不改原记录伪造季度末；签署负责人补件/重签或核对签署依据"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "来源登记"
+        },
+        {
+          "kind": "notice",
+          "text": "共10行 × 3列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "项目",
+              "原字段/来源",
+              "说明"
+            ],
+            [
+              "A",
+              "S04项目清单/A；S05登记",
+              "延期核验=False；来源角色=none"
+            ],
+            [
+              "B",
+              "S04项目清单/B；S05登记",
+              "延期核验=False；来源角色=sales"
+            ],
+            [
+              "C",
+              "S04项目清单/C；S05登记",
+              "延期核验=True；来源角色=project_legal"
+            ],
+            [
+              "D",
+              "S04项目清单/D；S05登记",
+              "延期核验=True；来源角色=project_legal"
+            ],
+            [
+              "E",
+              "S04项目清单/E；S05登记",
+              "延期核验=False；来源角色=none"
+            ],
+            [
+              "F",
+              "S04项目清单/F；S05登记",
+              "延期核验=False；来源角色=none"
+            ],
+            [
+              "G",
+              "S04项目清单/G；S05登记",
+              "延期核验=False；来源角色=none"
+            ],
+            [
+              "H",
+              "S04项目清单/H；S05登记",
+              "延期核验=False；来源角色=none"
+            ],
+            [
+              "I",
+              "S04项目清单/I；S05登记",
+              "延期核验=False；来源角色=none"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "skill_evidence.json",
+      "absolute_path": "题包内：skill_evidence.json",
+      "url": "assets/tasks/FIN-TIME-001/solution/golden_output/skill_evidence.json",
+      "bytes": 4597,
+      "sha256": "eff9cfa39486e77e11851033a84bef335ae3a8c2f8405351b819c84629c6b76c",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"schema\": \"ipo-document-control-evidence/1\",\n  \"skill\": \"ipo-document-control\",\n  \"source_sha256\": \"5c6340c200c9971adb2bb55808fca51ef1990fda4e196d02d65d395bd5e7befa\",\n  \"contract_sha256\": \"144e977e282b3f627b2d4bd18c7e14f3475f64d94244b26867977f4517778e0f\",\n  \"skill_file_hashes\": {\n    \"SKILL.md\": \"1645ac751e3107fe96a3784e61a0f98cf66121753a648ae117ac530bb948eedb\",\n    \"references/packet-contract.json\": \"144e977e282b3f627b2d4bd18c7e14f3475f64d94244b26867977f4517778e0f\",\n    \"scripts/check_windows.py\": \"da5a61ebb5c68915a2df132813478934e9cc2366761190c734478100353c97fa\"\n  },\n  \"cases\": [\n    {\n      \"id\": \"A\",\n      \"financial_review_date\": \"2023-12-30\",\n      \"theoretical_ceiling\": \"2024-03-30\",\n      \"evidence_until\": \"2023-12-30\",\n      \"financial_status\": \"CURRENT_BY_PACKET\",\n      \"signature_review_date\": \"2023-10-01\",\n      \"signature_status\": \"CURRENT_BY_PACKET\",\n      \"release_authorized\": false,\n      \"source_refs\": [\n        \"S01第46条\",\n        \"S03日历/边界约定\",\n        \"S05延期核验登记\"\n      ]\n    },\n    {\n      \"id\": \"B\",\n      \"financial_review_date\": \"2023-06-30\",\n      \"theoretical_ceiling\": \"2023-09-30\",\n      \"evidence_until\": null,\n      \"financial_status\": \"EXTENSION_UNCONFIRMED\",\n      \"signature_review_date\": \"2023-10-01\",\n      \"signature_status\": \"CURRENT_BY_PACKET\",\n      \"release_authorized\": false,\n      \"source_refs\": [\n        \"S01第46条\",\n        \"S03日历/边界约定\",\n        \"S05延期核验登记\"\n      ]\n    },\n    {\n      \"id\": \"C\",\n      \"financial_review_date\": \"2023-06-30\",\n      \"theoretical_ceiling\": \"2023-09-30\",\n      \"evidence_until\": \"2023-09-15\",\n      \"financial_status\": \"EXTENDED_BY_GIVEN_EVIDENCE\",\n      \"signature_review_date\": \"2023-09-01\",\n      \"signature_status\": \"UPDATE_SIGNATURE\",\n      \"release_authorized\": false,\n      \"source_refs\": [\n        \"S01第46条\",\n        \"S03日历/边界约定\",\n        \"S05延期核验登记\"\n      ]\n    },\n    {\n      \"id\": \"D\",\n      \"financial_review_date\": \"2023-06-30\",\n      \"theoretical_ceiling\": \"2023-09-30\",\n      \"evidence_until\": null,\n      \"financial_status\": \"EXTENSION_LIMIT_BREACH\",\n      \"signature_review_date\": \"2023-10-01\",\n      \"signature_status\": \"CURRENT_BY_PACKET\",\n      \"release_authorized\": false,\n      \"source_refs\": [\n        \"S01第46条\",\n        \"S03日历/边界约定\",\n        \"S05延期核验登记\"\n      ]\n    },\n    {\n      \"id\": \"E\",\n      \"financial_review_date\": null,\n      \"theoretical_ceiling\": null,\n      \"evidence_until\": null,\n      \"financial_status\": \"MISSING_CUTOFF\",\n      \"signature_review_date\": \"2023-10-01\",\n      \"signature_status\": \"CURRENT_BY_PACKET\",\n      \"release_authorized\": false,\n      \"source_refs\": [\n        \"S01第46条\",\n        \"S03日历/边界约定\",\n        \"S05延期核验登记\"\n      ]\n    },\n    {\n      \"id\": \"F\",\n      \"financial_review_date\": \"2023-09-30\",\n      \"theoretical_ceiling\": \"2023-12-31\",\n      \"evidence_until\": \"2023-09-30\",\n      \"financial_status\": \"CURRENT_BY_PACKET\",\n      \"signature_review_date\": \"2024-02-21\",\n      \"signature_status\": \"CURRENT_BY_PACKET\",\n      \"release_authorized\": false,\n      \"source_refs\": [\n        \"S01第46条\",\n        \"S03日历/边界约定\",\n        \"S05延期核验登记\"\n      ]\n    },\n    {\n      \"id\": \"G\",\n      \"financial_review_date\": null,\n      \"theoretical_ceiling\": null,\n      \"evidence_until\": null,\n      \"financial_status\": \"INVALID_PERIOD_END\",\n      \"signature_review_date\": \"2023-10-01\",\n      \"signature_status\": \"CURRENT_BY_PACKET\",\n      \"release_authorized\": false,\n      \"source_refs\": [\n        \"S01第46条\",\n        \"S03日历/边界约定\",\n        \"S05延期核验登记\"\n      ]\n    },\n    {\n      \"id\": \"H\",\n      \"financial_review_date\": \"2023-09-30\",\n      \"theoretical_ceiling\": \"2023-12-31\",\n      \"evidence_until\": \"2023-09-30\",\n      \"financial_status\": \"CURRENT_BY_PACKET\",\n      \"signature_review_date\": null,\n      \"signature_status\": \"MISSING_SIGNATURE\",\n      \"release_authorized\": false,\n      \"source_refs\": [\n        \"S01第46条\",\n        \"S03日历/边界约定\",\n        \"S05延期核验登记\"\n      ]\n    },\n    {\n      \"id\": \"I\",\n      \"financial_review_date\": null,\n      \"theoretical_ceiling\": null,\n      \"evidence_until\": null,\n      \"financial_status\": \"INVALID_PERIOD_END\",\n      \"signature_review_date\": \"2023-09-05\",\n      \"signature_status\": \"BOUNDARY_REVIEW\",\n      \"release_authorized\": false,\n      \"source_refs\": [\n        \"S01第46条\",\n        \"S03日历/边界约定\",\n        \"S05延期核验登记\"\n      ]\n    }\n  ],\n  \"release_authorized\": false\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [
+    {
+      "name": "ipo-document-control",
+      "description": "2023组合资料控制：财务截止/签署双时钟与延期证据。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/FIN-TIME-001/environment/skills/ipo-document-control/SKILL.md",
+          "bytes": 1900,
+          "sha256": "1645ac751e3107fe96a3784e61a0f98cf66121753a648ae117ac530bb948eedb",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: ipo-document-control\ndescription: Reconcile audited-financial cutoff and prospectus-signature windows for the frozen 2023 mainland Shanghai/Shenzhen IPO control packet, including evidence-dependent extensions. Use for the combined document-control worklist, not filing approval.\n---\n\n# IPO document control\n\nRead [references/packet-contract.json](references/packet-contract.json) before\nrunning the helper. National rule facts and local rehearsal conventions are\nseparately identified. This Skill is frozen at 2023-09-05 and is not a current\nlegal opinion, eligibility assessment or authority to submit documents.\n\n```bash\npython3 scripts/check_windows.py --cases /app/input_files/S04_项目清单.json --out /app/output/skill_evidence.json\n```\n\nRead S01 (2023 CSRC order 205, articles 26/30/31/46), S02 (2020 amendment\nhistory), S03 (original work authorization), and S05 (original extension evidence\nregister). A current operational result uses the 2023 source, not an obsolete\narticle number or a history-only helper. Neither sales advice nor an unsigned\nextension application proves the extension applies to a particular report.\n\nThe helper calculates separate financial and signature review dates, preserves\nmissing/invalid evidence, and hashes its actual inputs and local contract. It\ndoes not determine legal expiry-day inclusivity or holiday adjustments. Under\nthe packet's explicit convention, equality at a review date requires review.\nThe nine-month calculation is a theoretical ceiling, never an automatic grant.\n\nUse the resulting dates/statuses to construct the review workbook and memo.\nRetain source/date/version, next action and owner. A clean date worklist is not\npermission to issue securities. Do not modify inputs, send filings or invent\nregulatory confirmation. The separate signature-only and historical Skills are\nnot substitutes for this combined control workflow.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "references/packet-contract.json",
+          "absolute_path": "题包内：references/packet-contract.json",
+          "url": "assets/tasks/FIN-TIME-001/environment/skills/ipo-document-control/references/packet-contract.json",
+          "bytes": 1239,
+          "sha256": "144e977e282b3f627b2d4bd18c7e14f3475f64d94244b26867977f4517778e0f",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "{\n  \"schema\": \"ipo-document-control/1\",\n  \"snapshot_date\": \"2023-09-05\",\n  \"national_rule\": {\n    \"source\": \"S01 / CSRC order 205 / article 46\",\n    \"effective_date\": \"2023-02-17\",\n    \"financial_months\": 6,\n    \"maximum_extension_months\": 3,\n    \"signature_months\": 6,\n    \"financial_origin\": \"audited_financial_cutoff\",\n    \"signature_origin\": \"last_signature\",\n    \"period_end\": \"annual, half-year or quarter end\"\n  },\n  \"local_convention\": {\n    \"authority\": \"S03 original rehearsal contract, not national date-counting law\",\n    \"calendar\": \"Add 6 or 9 calendar months directly to the original cutoff; clamp unavailable day to target month end. Do not add 180 days, working days, or chain two clamped additions.\",\n    \"boundary\": \"Equality to a review date requires manual date-boundary review; no automatic legal conclusion about last-day validity or holidays.\",\n    \"extension_evidence\": \"Only a verified project-legal entry with nonempty record ID and a stated until date may populate the local assumed-extension branch. Pending/sales assertions do not suffice. A date beyond the national maximum is rejected even if marked verified.\",\n    \"overall_release\": \"Always false; these checks do not authorize a securities issue.\"\n  }\n}"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "scripts/check_windows.py",
+          "absolute_path": "题包内：scripts/check_windows.py",
+          "url": "assets/tasks/FIN-TIME-001/environment/skills/ipo-document-control/scripts/check_windows.py",
+          "bytes": 4274,
+          "sha256": "da5a61ebb5c68915a2df132813478934e9cc2366761190c734478100353c97fa",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "\"\"\"Historical packet controls only; calendar convention is explicitly local.\"\"\"\nimport argparse,calendar,datetime as dt,hashlib,json\nfrom pathlib import Path\nBASE=Path(__file__).resolve().parents[1]\n\ndef date(value):\n    if value is None:return None\n    d=dt.date.fromisoformat(value)\n    if d.isoformat()!=value:raise ValueError('date must be YYYY-MM-DD')\n    return d\n\ndef add_months(d,n):\n    y,m=divmod(d.year*12+d.month-1+n,12);m+=1\n    return dt.date(y,m,min(d.day,calendar.monthrange(y,m)[1]))\n\ndef signature_status(check,signed):\n    if signed is None:return 'MISSING_SIGNATURE',None\n    if signed>check:return 'FUTURE_SIGNATURE',None\n    limit=add_months(signed,6)\n    return ('BOUNDARY_REVIEW' if check==limit else 'CURRENT_BY_PACKET' if check<limit else 'UPDATE_SIGNATURE'),limit\n\ndef evaluate(rows,contract):\n    if not isinstance(rows,list) or not rows:raise ValueError('nonempty case list required')\n    seen=set();out=[]\n    for r in rows:\n        if not {'id','as_of','financial_cutoff','report_issued','last_signature','extension'}<=r.keys():raise ValueError('missing field')\n        if not isinstance(r['id'],str) or not r['id'] or r['id'] in seen:raise ValueError('invalid/duplicate ID')\n        seen.add(r['id']);check=date(r['as_of'])\n        if check is None:raise ValueError('as_of required')\n        cut=date(r['financial_cutoff']);issued=date(r['report_issued']);signed=date(r['last_signature'])\n        ext=r['extension']\n        if not isinstance(ext,dict) or not {'verified','by','record_id','until'}<=ext.keys():raise ValueError('extension object required')\n        if type(ext['verified']) is not bool:raise ValueError('verified must be Boolean')\n        until=date(ext['until']);base=ceiling=used=None\n        sign,signlimit=signature_status(check,signed)\n        if check>date(contract['snapshot_date']) or check<date(contract['national_rule']['effective_date']):financial='POLICY_VERSION_REVIEW';sign='POLICY_VERSION_REVIEW';signlimit=None\n        elif cut is None:financial='MISSING_CUTOFF'\n        elif cut>check or (issued is not None and issued<cut):financial='DATE_ORDER_REVIEW'\n        elif (cut.month,cut.day) not in [(3,31),(6,30),(9,30),(12,31)]:financial='INVALID_PERIOD_END'\n        else:\n            base=add_months(cut,6);ceiling=add_months(cut,9)\n            if check==base:financial='BOUNDARY_REVIEW'\n            elif check<base:financial='CURRENT_BY_PACKET';used=base\n            elif until and until>ceiling:financial='EXTENSION_LIMIT_BREACH'\n            elif ext['verified'] and ext['by']=='project_legal' and ext['record_id'] and until:\n                used=until;financial='BOUNDARY_REVIEW' if check==until else 'EXTENDED_BY_GIVEN_EVIDENCE' if check<until else 'UPDATE_FINANCIALS'\n            else:financial='EXTENSION_UNCONFIRMED' if check<=ceiling else 'UPDATE_FINANCIALS'\n        out.append(dict(id=r['id'],financial_review_date=str(base) if base else None,theoretical_ceiling=str(ceiling) if ceiling else None,evidence_until=str(used) if used else None,financial_status=financial,signature_review_date=str(signlimit) if signlimit else None,signature_status=sign,release_authorized=False,source_refs=['S01第46条','S03日历/边界约定','S05延期核验登记']))\n    return out\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--cases',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args()\n    if a.cases.resolve()==a.out.resolve():p.error('output must differ from input')\n    policy=BASE/'references/packet-contract.json';contract=json.loads(policy.read_text())\n    cases=evaluate(json.loads(a.cases.read_text()),contract)\n    files=['SKILL.md','references/packet-contract.json','scripts/check_windows.py']\n    result=dict(schema='ipo-document-control-evidence/1',skill='ipo-document-control',source_sha256=hashlib.sha256(a.cases.read_bytes()).hexdigest(),contract_sha256=hashlib.sha256(policy.read_bytes()).hexdigest(),skill_file_hashes={r:hashlib.sha256((BASE/r).read_bytes()).hexdigest() for r in files},cases=cases,release_authorized=False)\n    a.out.parent.mkdir(parents=True,exist_ok=True);a.out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print(json.dumps({'cases':len(cases),'release_authorized':False}))\n\nif __name__=='__main__':main()\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    },
+    {
+      "name": "prospectus-signature-check",
+      "description": "最后签署日起6月的单时钟参考。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/FIN-TIME-001/environment/skills/prospectus-signature-check/SKILL.md",
+          "bytes": 713,
+          "sha256": "74035ef2a506ce2c76a1595fcb9cb4332e8d8c8cab5e69f43c83e19ae0c4924d",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: prospectus-signature-check\ndescription: Review only the six-calendar-month prospectus window from the last pre-issue signature under the frozen 2023 packet; does not examine audited financial cutoffs or extension evidence.\n---\n\n# Signature-only review\n\nFor the signature-only question, inspect S01 article 46 paragraph 1 and S03's\ncalendar convention. Calculate from the last signature, not the audit report\ndate. Missing signatures remain missing. This reference workflow does not cover\nfinancial freshness, extensions or combined document-control decisions. When\nboth clocks are required, select a Skill that covers both; do not silently\nbroaden this Skill or claim its use proved financial validity.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    },
+    {
+      "name": "star-financial-history",
+      "description": "2020科创板修改沿革参考，非2023组合控制。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/FIN-TIME-001/environment/skills/star-financial-history/SKILL.md",
+          "bytes": 735,
+          "sha256": "4e28a53a4d98f7b3761b985481f2e51f0fe2d961a2df14c72324fd25b999c271",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: star-financial-history\ndescription: Trace the historical 2020 STAR-board amendment from a one-month to three-month maximum special extension; use for historical comparison, not as the operative combined 2023 IPO control procedure.\n---\n\n# Historical amendment reference\n\nS02 is the 2020-07-10 CSRC announcement. The consultation ran May 15–June 15;\nthat is not the implementation date. It describes a change from at most one\nmonth to at most three months in special cases. Do not preserve the old\none-month ceiling in a 2023 calculation. This historical reference does not\nreplace the 2023 rule's current article number, signature clock or local\nextension-evidence controls. Do not count the theoretical maximum as granted.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    },
+    {
+      "name": "filing-response-calendar",
+      "description": "有明确工作日SLA与日历时的回复规划参考。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/FIN-TIME-001/environment/skills/filing-response-calendar/SKILL.md",
+          "bytes": 572,
+          "sha256": "4e1c56acbc974f699fbecdc1f6c783f6cd4e8d9706fc52cc0feb835473a032f3",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: filing-response-calendar\ndescription: Plan administrative response deadlines when a packet supplies an explicit working-day SLA and holiday calendar; not for calendar-month financial freshness or prospectus-signature validity.\n---\n\n# Response-SLA planning\n\nUse this workflow only when the user supplies a response event, a working-day\nSLA and the applicable calendar. Do not invent holiday dates or substitute\nworking days for the calendar-month controls in S01 article 46. This packet\ndoes not contain an administrative response assignment or holiday calendar.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    }
+  ],
+  "renders": []
+}

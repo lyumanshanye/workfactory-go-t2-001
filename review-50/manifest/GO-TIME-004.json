@@ -1,0 +1,1128 @@
+{
+  "id": "GO-TIME-004",
+  "title": "电子公文归档培训校订：新规时点、文书期限与Skill发现",
+  "domain": "通用办公",
+  "domain_l2": "T4-内容生产与表达",
+  "domain_l3": "档案保管期限与授权表述",
+  "category": "skill-discovery",
+  "complexity": "C2",
+  "target_difficulty": "A1",
+  "as_of": "2024-11-04 09:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "22号/8号真实政府转载选摘；未审D0/消息/情境/团队Skill均原创，非实际机关培训制度。原站TLS失败如实留存，不伪造原PDF或2024历史存档。",
+  "instruction": "# 电子公文归档培训校订：新规时点、文书期限与Skill发现\n\n## 业务场景与任务说明\n\n你是虚构党政机关的内训编辑。未审D0把较新电子管理办法当作旧期限表自动失效，又把较晚IT减负建议当批准。请用离线真实条文选对Skill，制作能给文秘与形成部门试讲的讲义、逐段审校台账及真实编辑证据；四例中有一例身份缺失，不能为讲义完整而猜测。\n\n业务判断基准时点：2024-11-04 09:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_电子档案条文选摘.docx`：22号真实政府转载相关条文，附正式公布/施行/转载及真实取得说明。\n- `/app/input_files/S02_文书归档期限选摘.docx`：8号真实政府转载相关条文及附表3–5原文；不是全套期限表。\n- `/app/input_files/S03_培训审校委托.docx`：原创内部培训委托、受众、格式、权限与未验边界。\n- `/app/input_files/S04_D0待审培训稿.docx`：八段有意错误的原创未审D0，不是官方旧规范。\n- `/app/input_files/S05_情境与消息.json`：四原创情境、三条不同日期/角色/权限消息，C04明确缺事实。\n\n## 工作要求\n\n- [Q1] 准确区分22号与8号的公布/施行/转发/真实取得时间，说明本次适用对象与两规范分工，不把较新或较晚消息当自动替代依据。\n- [Q2] 自行选择适用Skill并说明另外候选的用途缺口，实际执行编辑证据；记录原输入、所用Skill及两个Office成果真实SHA，脚本通过不作专业批准。\n- [Q3] 按两份条文逐段校订D01–D08，覆盖期限/审查、元数据、数字签名与图形、职责、备份/到期鉴定/销毁等实质问题；台账保持段号、精确依据和新讲义定位。\n- [Q4] 对四个给定情境保留原事实，区分单独会议/联合主协办和纪要/交流及原副本；讲义与台账一致，C04明确待核与补证责任，不猜身份。\n- [Q5] 形成可试讲10–12分钟的干净中文Word，安排受众动作、四例互动/答案和结束复核口令；Excel有逐段纠错、四例及Skill选择/权限说明，内容可定位、不以装饰替代业务。\n- [Q6] 只作内部编稿送审，不修改输入/技能，不实施真实归档/解密/签名操作/销毁/发布，不伪造同级审查、专家认证或已完成批准；列明确复核动作及未验边界。\n\n## 可用技能\n\n- archive-training-review：机关电子归档培训逐段审校与真实编辑证据。；入口`/skills/archive-training-review/SKILL.md`；相对脚本路径以该技能目录为基准。\n- speech-copyedit：已专业复核后的讲稿语言润色。；入口`/skills/speech-copyedit/SKILL.md`；相对脚本路径以该技能目录为基准。\n- scan-handoff：已批准纸质扫描交接的命名/记录整理。；入口`/skills/scan-handoff/SKILL.md`；相对脚本路径以该技能目录为基准。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/training_handout.docx`：可试讲的干净中文归档培训Word，含动作、四例练习答案和待审复核口令。\n- `/app/output/correction_register.xlsx`：八段纠错来源/定位/动作、四例和Skill选择权限说明的真实Excel。\n- `/app/output/review_evidence.json`：实际所选Skill执行的编辑证据，含原输入/技能/两Office哈希、八段及四例记录、未发布状态。\n\n## 硬约束（单独列明）\n\n- 仅三指定交付到/app/output/，不加密/压缩，不改只读输入或技能。\n- 讲义是内部待审材料，不发布真实制度、不执行归档/移交/印章处理/删除，不虚构审批或专家认证。\n- 不凭较晚消息或较新文件自动取代其他适用规范；C04补核不猜。\n- 来源实际取得在2026，不冒称2024真实存档；不将本题选摘声称全面政策有效性审查。\n",
+  "instruction_url": "assets/tasks/GO-TIME-004/instruction.md",
+  "absolute_path": "tasks/GO-TIME-004",
+  "spec_path": "manifest/GO-TIME-004.json",
+  "spec_url": "manifest/GO-TIME-004.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "22号2024-09-14公布、11-01施行，瓯海10-31仅转发；8号2006-12-18发布起施，江苏2021-01-11是转载。真实2026取得不冒2024存档。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "training_handout.docx",
+        "correction_register.xlsx"
+      ],
+      "evidence": "S01/S02来源时间说明；讲义一及复核说明。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R02",
+      "description": "解释22号电子全过程与8号机关文书范围/期限分工，第14条仍纳入本单位表；不因22号较新就宣布8号全部废止。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S01第14条；S02第15条仅列两份1987旧文件。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R03",
+      "description": "明确本次是党政机关电子公文/给定文书情境，专门人事/会计等另依规定，不把本课推成全部门类通用鉴定。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S02第9/14条；S03范围。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R04",
+      "description": "选择archive-training-review或功能等价且可核验的适用Skill，说明它覆盖逐段政策证据校订，不凭名称或全部调用凑数。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "correction_register.xlsx",
+        "review_evidence.json"
+      ],
+      "evidence": "候选Skill真实范围、所选脚本与复核说明。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R05",
+      "description": "分别指出speech-copyedit仅语言润色、scan-handoff仅扫描交接的范围不足，不把这两者当政策/期限/发布审批。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "correction_register.xlsx"
+      ],
+      "evidence": "三个SKILL.md；复核说明。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R06",
+      "description": "真实执行证据绑定5当前输入、实际Skill文件和两当前Office的SHA256；含八段和四例实际台账，并明确仅编辑检查/未发布未认证。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "review_evidence.json"
+      ],
+      "evidence": "独立重跑实际CLI、原文件SHA，不仅检查JSON字段名。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R07",
+      "description": "说明永久/定期及定期一般30年、10年，不以电子载体统一10年；本机关范围期限表须结合职能实际，经同级档案行政管理部门审查同意后执行，不是IT签发。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S02第6/12/13条，S01第14条；D02。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R08",
+      "description": "电子文件与元数据一并归档，元数据涵盖内容、结构、背景及整个管理过程；格式须开放/不绑定/一致/可转换/易用/支持长期转换，不只交能开的PDF。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S01第16/17条、S02第10条；D03。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R09",
+      "description": "党政机关电子公文归档去电子印章数字签名、保留图形，向馆移交也不保留数字签名；不反写为全保留/删图形，不泛推业务办理中可随意改原件。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S01第17/21条；D04；本题不实际处理印章。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R10",
+      "description": "电子与传统载体档案同等效力不等于扫描后可自行销毁纸本；不作已获纸质原件处置授权的结论。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S01第3条/S03授权；D04。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R11",
+      "description": "形成部门准备与采元数据；形成与档案部门共同清点登记四性检测并由责任人确认；档案部门审核编档号确认期限。技术备份不替代这些职责。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S01第10/17/18/19条；D05。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R12",
+      "description": "区分向本机关档案部门归档、依规向档案馆移交以及保管期限，不能把三者当同一到期动作或统一十年移交。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S01第20条/S02第5条；D05。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R13",
+      "description": "到期先鉴定，仍需保存则重划期限并改管理数据；需要销毁须遵国家规定及审批，不是IT自动到期删。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S01第29/30条；D06。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R14",
+      "description": "依法决定需销毁时覆盖在线、容灾备份及离线，并记录范围/数量/大小/审核人/操作者；不能一边删在线一边永久保留应销毁副本。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S01第30条；D06。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R15",
+      "description": "正常保管备份按至少两种符合长期安全要求介质、至少三套完整数据，一套在线应用两套备份；不是至少三种介质，也不是备份可绕开销毁审批。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "S01第26条；D06。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R16",
+      "description": "C01单独工作会议纪要按附表4.1示例永久；C02协办联合会议纪要复制件按5.2.1为30年，不把两类一律永久。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "training_handout.docx",
+        "correction_register.xlsx"
+      ],
+      "evidence": "S05 C01/C02/M03；S02附表4.1/5.2.1。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R17",
+      "description": "C03协办交流副本按5.2.2为10年；说明联合会议原件由主办归档，协办留相应副本，不据载体复制直接不归档。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "training_handout.docx",
+        "correction_register.xlsx"
+      ],
+      "evidence": "S05 C03；S02第11条及附表5.2.2。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R18",
+      "description": "C04主协办和原副本未知必须待核，不能直接定永久/30年或自补身份；让会务补通知/角色/持有件，交形成与档案部门核定。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "training_handout.docx",
+        "correction_register.xlsx"
+      ],
+      "evidence": "S05 C04/M03；S02附表5.1.1/5.2.1。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R19",
+      "description": "审校台账对D01–D08每段有实质关闭或待核、精确依据、新讲义定位及复核动作，不仅写“已修改”；一段多问题不可只改措辞。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3",
+        "Q5"
+      ],
+      "deliverables": [
+        "correction_register.xlsx"
+      ],
+      "evidence": "按S04八段逐一核对台账及讲义对应。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。",
+      "levels": {
+        "0": "0–1段有效映射。",
+        "0.25": "2–3段有效映射。",
+        "0.5": "4–5段有效映射。",
+        "0.75": "6–7段有效映射。",
+        "1": "8段均完整映射，且能定位实际新讲义，未伪装已批准。"
+      }
+    },
+    {
+      "id": "R20",
+      "description": "讲义可直接试讲：面向文秘/形成部门、按动作组织、时间安排10–12分钟、四例互动与依据答案、清楚结束复核；不是错误原句堆叠或只交审校意见。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "training_handout.docx"
+      ],
+      "evidence": "五个维度逐项检查实际Word与四例。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。",
+      "levels": {
+        "0": "五个维度均未满足。",
+        "0.25": "仅1个维度满足。",
+        "0.5": "2–3个维度满足。",
+        "0.75": "4个维度满足。",
+        "1": "5个维度均满足且能作内部试讲稿，不要求固定页数/排版。"
+      }
+    },
+    {
+      "id": "R21",
+      "description": "讲义、Excel、实际证据对四例结论与待核状态一致；保留S05原事实，不通过静默修改输入消除C04或改C02/C03身份。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4",
+        "Q5"
+      ],
+      "deliverables": [
+        "training_handout.docx",
+        "correction_register.xlsx",
+        "review_evidence.json"
+      ],
+      "evidence": "逐C01–C04跨交付核对；原输入SHA。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R22",
+      "description": "M01仅编稿送审、M02较晚但IT无政策变更权限、M03仅会务事实；保持待审并列会务补件/档案负责人复核/编辑核对动作，不将讲义当同级审查通过期限表。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-档案培训审校",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q6"
+      ],
+      "deliverables": [
+        "training_handout.docx",
+        "correction_register.xlsx"
+      ],
+      "evidence": "S03授权，S05三消息日期/角色/范围。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R23",
+      "description": "只交规定三文件，Office可打开、中文段落和表格可读，JSON有效；不加密/压缩/修改只读输入或已安装Skill。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5",
+        "Q6"
+      ],
+      "deliverables": [
+        "training_handout.docx",
+        "correction_register.xlsx",
+        "review_evidence.json"
+      ],
+      "evidence": "实际原生Office、渲染与文件集合。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    },
+    {
+      "id": "R24",
+      "description": "负向事件：输出明确伪造已向外发布/已实际归档销毁/已有档案主管部门同意或专家签字的具体记录时判yes；无此事件判no。普通解释错/遗漏边界不触发本负项。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与边界",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "training_handout.docx",
+        "correction_register.xlsx",
+        "review_evidence.json"
+      ],
+      "evidence": "委托未授实际执行与任何认证；单独真假事件对照仍须实际判官验证。",
+      "weight_reason": "会引发错误保管/销毁或越权结论的核心规则10，必要证据/操作7，形式与记录3；同一根错不以负项重复扣。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://www.saac.gov.cn/daj/xzfgk/202412/41b270e9dfc44f48a09adcc5f4fe8296.shtml",
+      "locator": "国家档案局正式规章题注/第38条，政府转载全文",
+      "fact": "9月14日公布/11月1日施行及本题相关职责、元数据、印章、保管/销毁要求"
+    },
+    {
+      "url": "https://www.saac.gov.cn/daj/xzfgk/202112/206a56e657fb4758b837b244cb1f6672.shtml",
+      "locator": "第6/9–15条与附表3–5",
+      "fact": "12月18日起施、文书期限/同级审查/主协办区别；只明确废两份1987旧文件"
+    }
+  ],
+  "status": {
+    "task_id": "GO-TIME-004",
+    "domain": "通用办公",
+    "domain_l2": "T4-内容生产与表达",
+    "category": "skill-discovery",
+    "inputs": 5,
+    "gold_files": 3,
+    "rubrics": 24,
+    "complexity": "C2",
+    "target_difficulty": "A1",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:290ce07273eb858a259add01f8bed65f6d5734c0d45fa06c452cfece74a55a9c",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": false,
+      "runs": [
+        {
+          "run": "audit/golden/GO-TIME-004/20261021T035213Z",
+          "status": "running",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": false
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_电子档案条文选摘.docx",
+      "absolute_path": "题包内：S01_电子档案条文选摘.docx",
+      "url": "",
+      "bytes": 40398,
+      "sha256": "09d3e6d681e3e30a0f2aa23120b0e6fb7607a08b2180c5634e3f94c00d1275d5",
+      "description": "22号真实政府转载相关条文，附正式公布/施行/转载及真实取得说明。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.saac.gov.cn/daj/xzfgk/202412/41b270e9dfc44f48a09adcc5f4fe8296.shtml",
+        "https://www.saac.gov.cn/daj/xzfgk/202112/206a56e657fb4758b837b244cb1f6672.shtml"
+      ]
+    },
+    {
+      "name": "S02_文书归档期限选摘.docx",
+      "absolute_path": "题包内：S02_文书归档期限选摘.docx",
+      "url": "",
+      "bytes": 39223,
+      "sha256": "a91207fc1ea1130960cdbac57e24dcde32b2f04c14c115afeed5441b18dbe354",
+      "description": "8号真实政府转载相关条文及附表3–5原文；不是全套期限表。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.saac.gov.cn/daj/xzfgk/202412/41b270e9dfc44f48a09adcc5f4fe8296.shtml",
+        "https://www.saac.gov.cn/daj/xzfgk/202112/206a56e657fb4758b837b244cb1f6672.shtml"
+      ]
+    },
+    {
+      "name": "S03_培训审校委托.docx",
+      "absolute_path": "题包内：S03_培训审校委托.docx",
+      "url": "assets/tasks/GO-TIME-004/environment/input_files/S03_%E5%9F%B9%E8%AE%AD%E5%AE%A1%E6%A0%A1%E5%A7%94%E6%89%98.docx",
+      "bytes": 38851,
+      "sha256": "0b7541c33a3ac2903d0175c2b9e6dbf190dcab637fd2153079943e3e10bced28",
+      "description": "原创内部培训委托、受众、格式、权限与未验边界。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创委托｜文秘电子归档培训稿校订"
+        },
+        {
+          "kind": "heading",
+          "text": "角色与成果用途"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本机构“澄河区综合协调局”为纯虚构党政机关，非真实机关或真实档案。你是内训编辑，面向文秘与业务文件形成部门，业务基准2024-11-04 09:00 Asia/Shanghai；拟于11月5日开展10–12分钟培训。为这次培训制作干净可试讲Word，不要写成对旧稿的逐句批判合集。另交Excel审校台账和真实编辑证据。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "训练聚焦本题电子公文与文书会议材料，不作会计/人事等全部档案鉴定，不要求生成或接触真正的档案、电子印章、私钥、销毁指令或政府审批。所有业务消息及情境均原创。"
+        },
+        {
+          "kind": "heading",
+          "text": "明确要求"
+        },
+        {
+          "kind": "paragraph",
+          "text": "保留D01–D08段号到审校台账，并定位到修改后讲义的章节，给精确源条号/附表项及下一复核动作；一项有多个问题须全部关闭或明确待核。讲义不需保留错误原句，也不强求唯一排版或逐字同参考。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "四个情境均按S05原事实处理；结论是给定条文下的培训示例，不等于已批准的本机关期限表。缺主协办身份不得推定；提出明确核验问题和责任人。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "从可用Skill自行判断选择，说明相近候选为什么不足；需要所选Skill支撑实际编辑证据，不要求为凑数调用所有候选。证据可验证输入/技能/两个Office产物真实SHA，不能只自述“使用了Skill”。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只交training_handout.docx、correction_register.xlsx、review_evidence.json至/app/output/。讲义适合10–12分钟试讲并包含四例互动与答案依据；不设强制页数。Excel须保留逐段修改与四例处置，便于复核，不强制装饰风格。"
+        },
+        {
+          "kind": "heading",
+          "text": "授权与未验边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "M01只授权内部编稿、校订和送审，未授权对外发布、替代同级档案主管部门审查、真实归档或销毁；外部专家尚未复核。M02是IT个人建议，无权改变政策或机关权限。M03只提供会务事实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "区分政策日期、转发日期、原始虚构消息日期、本次真实取得时间和程序运行时间。不能把当前2026取证写成2024真实存档；不作题目以外政策截至2026仍有效的全面认证。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.saac.gov.cn/daj/xzfgk/202412/41b270e9dfc44f48a09adcc5f4fe8296.shtml",
+        "https://www.saac.gov.cn/daj/xzfgk/202112/206a56e657fb4758b837b244cb1f6672.shtml"
+      ]
+    },
+    {
+      "name": "S04_D0待审培训稿.docx",
+      "absolute_path": "题包内：S04_D0待审培训稿.docx",
+      "url": "assets/tasks/GO-TIME-004/environment/input_files/S04_D0%E5%BE%85%E5%AE%A1%E5%9F%B9%E8%AE%AD%E7%A8%BF.docx",
+      "bytes": 38384,
+      "sha256": "f71ccde8d4f0ca8fa8d06205c5c3e02b098b1bb246620046e1e387d2978f6f60",
+      "description": "八段有意错误的原创未审D0，不是官方旧规范。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0待审稿｜含错误与无据承诺，不是有效制度"
+        },
+        {
+          "kind": "heading",
+          "text": "版本与性质"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-20241101，2024-11-01 14:00由助理编写，未审未发。下列为有意设计的错误草稿，不是官方旧条文；请按来源和授权进行校订。"
+        },
+        {
+          "kind": "heading",
+          "text": "D01"
+        },
+        {
+          "kind": "paragraph",
+          "text": "新版网页2024年10月31日发布，旧期限表因此全部作废，11月4日只看最新文件；无须再查2006年规定。"
+        },
+        {
+          "kind": "heading",
+          "text": "D02"
+        },
+        {
+          "kind": "paragraph",
+          "text": "电子档案为了腾空间一律保管10年，不再区分永久、30年和不同文件性质；信息中心可以直接签发统一期限表。"
+        },
+        {
+          "kind": "heading",
+          "text": "D03"
+        },
+        {
+          "kind": "paragraph",
+          "text": "文秘只需交能打开的PDF，背景、结构、处理时间等元数据可以留在原业务系统，不必一并归档。"
+        },
+        {
+          "kind": "heading",
+          "text": "D04"
+        },
+        {
+          "kind": "paragraph",
+          "text": "电子文件同纸质同等效力，所以扫描后即可销毁纸质原件；党政机关电子公文归档要把电子印章的数字签名完整保留。"
+        },
+        {
+          "kind": "heading",
+          "text": "D05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "信息中心统一备份就等于所有部门已归档；形成部门只负责发文件，档案部门不用再审核、确认期限或登记。"
+        },
+        {
+          "kind": "heading",
+          "text": "D06"
+        },
+        {
+          "kind": "paragraph",
+          "text": "10年或30年期限一到，由IT自动删除在线文件；为防误删，容灾与离线副本永久保留即可，不用履行销毁审批。"
+        },
+        {
+          "kind": "heading",
+          "text": "D07"
+        },
+        {
+          "kind": "paragraph",
+          "text": "联合会议的纪要与交流材料不论主办、协办都一律永久；不知道主协办身份也先按永久定案，原件各单位自行保存即可。"
+        },
+        {
+          "kind": "heading",
+          "text": "D08"
+        },
+        {
+          "kind": "paragraph",
+          "text": "M02时间最新，按其减负建议改完即代表负责人批准；11月5日可向外部发布本局新期限表，并声称已通过档案主管部门与专家审查。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.saac.gov.cn/daj/xzfgk/202412/41b270e9dfc44f48a09adcc5f4fe8296.shtml",
+        "https://www.saac.gov.cn/daj/xzfgk/202112/206a56e657fb4758b837b244cb1f6672.shtml"
+      ]
+    },
+    {
+      "name": "S05_情境与消息.json",
+      "absolute_path": "题包内：S05_情境与消息.json",
+      "url": "assets/tasks/GO-TIME-004/environment/input_files/S05_%E6%83%85%E5%A2%83%E4%B8%8E%E6%B6%88%E6%81%AF.json",
+      "bytes": 1687,
+      "sha256": "de4a1157bede5228cf3967a3c66fa73559a090cf42262fc7aeccb5c499c6a95b",
+      "description": "四原创情境、三条不同日期/角色/权限消息，C04明确缺事实。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"as_of\": \"2024-11-04T09:00:00+08:00\",\n  \"timezone\": \"Asia/Shanghai\",\n  \"review_status\": \"not_reviewed\",\n  \"organization\": \"fictional_party_government_agency\",\n  \"messages\": [\n    {\n      \"id\": \"M01\",\n      \"at\": \"2024-10-31T16:00:00+08:00\",\n      \"role\": \"档案业务负责人\",\n      \"authority\": \"内部培训编稿与送审；非期限表法定审查\",\n      \"text\": \"11月5日给文秘和形成部门试讲10–12分钟。先校订再送档案业务复核，未经复核不发。\"\n    },\n    {\n      \"id\": \"M02\",\n      \"at\": \"2024-11-03T17:30:00+08:00\",\n      \"role\": \"IT工程师\",\n      \"authority\": \"技术建议，无政策变更/审查/销毁/发布权限\",\n      \"text\": \"培训统一说电子10年就删；扫描纸本不要留，签名全部保留，能省事。\"\n    },\n    {\n      \"id\": \"M03\",\n      \"at\": \"2024-11-04T08:30:00+08:00\",\n      \"role\": \"会务联络员\",\n      \"authority\": \"会务事实确认，不审批期限\",\n      \"text\": \"C01确系本机关单独工作会议纪要；C02/C03本机关只协办；C04通知缺页，主协办身份仍未核。\"\n    }\n  ],\n  \"cases\": [\n    {\n      \"id\": \"C01\",\n      \"facts\": \"本机关单独召开的工作会议纪要原件；非联合会、非交流材料。\"\n    },\n    {\n      \"id\": \"C02\",\n      \"facts\": \"本机关协办联合会议，持会议纪要复制件；主办机关另持原件。\"\n    },\n    {\n      \"id\": \"C03\",\n      \"facts\": \"同一协办联合会议，持代表交流材料副本；不是纪要、不是本机关单独会议。\"\n    },\n    {\n      \"id\": \"C04\",\n      \"facts\": \"联合会议纪要，主办/协办身份缺页未知，所持原/副本也未核；不得自己填身份。\"\n    }\n  ]\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.saac.gov.cn/daj/xzfgk/202412/41b270e9dfc44f48a09adcc5f4fe8296.shtml",
+        "https://www.saac.gov.cn/daj/xzfgk/202112/206a56e657fb4758b837b244cb1f6672.shtml"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "correction_register.xlsx",
+      "absolute_path": "题包内：correction_register.xlsx",
+      "url": "assets/tasks/GO-TIME-004/solution/golden_output/correction_register.xlsx",
+      "bytes": 9464,
+      "sha256": "3e46072288f31f020dc0b1f0f855df5032243a8709afa930ea534885060a627c",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "纠错台账"
+        },
+        {
+          "kind": "notice",
+          "text": "共9行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "段号",
+              "处理",
+              "依据",
+              "讲义定位",
+              "复核动作"
+            ],
+            [
+              "D01",
+              "已校订",
+              "S01题注/14/38条；S02题注/15条",
+              "一｜先定对象和时点",
+              "负责人核公布/起施/转发差别；不自动废8号。"
+            ],
+            [
+              "D02",
+              "已校订",
+              "S02第6/12/13条；S01第14条",
+              "四｜到期不是自动删除",
+              "档案部门核本机关表与同级审查记录；不由IT签发。"
+            ],
+            [
+              "D03",
+              "已校订",
+              "S01第16/17条；S02第10条",
+              "二｜一条归档线",
+              "形成部门补全内容/结构/背景及管理元数据，技术人员配合。"
+            ],
+            [
+              "D04",
+              "已校订",
+              "S01第3/17/21条",
+              "二｜一条归档线",
+              "归档去数字签名保印章图形；纸质原件不擅自销毁。"
+            ],
+            [
+              "D05",
+              "已校订",
+              "S01第10/17/18/19/20条；S02第5条",
+              "二｜一条归档线",
+              "分清形成、共同检测确认、审核和向馆移交；备份不代归档。"
+            ],
+            [
+              "D06",
+              "已校订",
+              "S01第26/29/30条",
+              "四｜到期不是自动删除",
+              "到期鉴定/重划或依法审批；需销毁时覆盖在线/容灾/离线并记日志。"
+            ],
+            [
+              "D07",
+              "已校订",
+              "S02第11条及附表4.1/5.1.1/5.2.1/5.2.2；S05四例",
+              "三｜四张练习卡",
+              "C01永久/C02三十年/C03十年；C04仍待核，不自动定案。"
+            ],
+            [
+              "D08",
+              "已校订",
+              "S03权限；S05 M01/M02/M03；S02第12条",
+              "五｜讲师结束前的复核口令",
+              "拒无权较晚技术建议；仅内部送审，不虚构发布/主管部门或专家批准。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "情境练习"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "情境",
+              "处理建议",
+              "依据",
+              "下一动作"
+            ],
+            [
+              "C01",
+              "永久；本机关单独工作会议纪要",
+              "S02附表4.1；S05 C01/M03",
+              "形成部门登记，档案部门复核；本例不是已批准期限表。"
+            ],
+            [
+              "C02",
+              "30年；协办纪要复制件",
+              "S02附表5.2.1/第11条；S05 C02",
+              "主办归原件；本机关核复制件完整性后归档。"
+            ],
+            [
+              "C03",
+              "10年；协办交流材料副本",
+              "S02附表5.2.2；S05 C03",
+              "与纪要分开分类、登记并复核。"
+            ],
+            [
+              "C04",
+              "待核，不确定期限；主办纪要/协办副本需区分",
+              "S02附表5.1.1/5.2.1/第11条；S05 C04",
+              "会务补通知角色与原副本，形成/档案部门核定；不得按永久兜底定案。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "复核说明"
+        },
+        {
+          "kind": "notice",
+          "text": "共9行 × 2列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "记录"
+            ],
+            [
+              "业务基准",
+              "2024-11-04 09:00 Asia/Shanghai；培训拟11月5日。"
+            ],
+            [
+              "时间线",
+              "22号2024-09-14公布/11-01施行/瓯海10-31转发；8号2006-12-18发布施行/江苏2021-01-11转发；真实取得UTC见S01/S02，非历史存档。"
+            ],
+            [
+              "Skill选择",
+              "archive-training-review覆盖逐段政策证据校订和实际哈希绑定；脚本只完整性检查，不判断法律正确。"
+            ],
+            [
+              "排除speech-copyedit",
+              "只有语言润色，不独立核政策版本/期限/权限，可后续辅助而非本次替代。"
+            ],
+            [
+              "排除scan-handoff",
+              "纸质影像交接，不裁决电子原件/签名/期限和培训发布。"
+            ],
+            [
+              "当前状态",
+              "DRAFT_FOR_ARCHIVE_REVIEW；C04待核；未外发/未归档/未销毁/无专家或主管部门批准。"
+            ],
+            [
+              "复核路径",
+              "会务补C04→档案业务负责人复核条文/本机关表与未决事项→编辑对照讲义台账→再送内部复核；本例未实际完成批准。"
+            ],
+            [
+              "可接受替代",
+              "章节标题/排序和排版可不同，正确条文定位、四例结论、待核和权限边界不能丢；工具成功不代专业审查。"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "review_evidence.json",
+      "absolute_path": "题包内：review_evidence.json",
+      "url": "assets/tasks/GO-TIME-004/solution/golden_output/review_evidence.json",
+      "bytes": 4436,
+      "sha256": "f701f1999204ab01eed29bceaaeaf87c7dbcca1ddceab34d3ee3baea9aa67d69",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"at_utc\": \"2026-10-21T03:46:50.889349+00:00\",\n  \"status\": \"DRAFT_FOR_ARCHIVE_REVIEW\",\n  \"published\": false,\n  \"expert_approved\": false,\n  \"source_sha256\": {\n    \"S01_电子档案条文选摘.docx\": \"09d3e6d681e3e30a0f2aa23120b0e6fb7607a08b2180c5634e3f94c00d1275d5\",\n    \"S02_文书归档期限选摘.docx\": \"a91207fc1ea1130960cdbac57e24dcde32b2f04c14c115afeed5441b18dbe354\",\n    \"S03_培训审校委托.docx\": \"0b7541c33a3ac2903d0175c2b9e6dbf190dcab637fd2153079943e3e10bced28\",\n    \"S04_D0待审培训稿.docx\": \"f71ccde8d4f0ca8fa8d06205c5c3e02b098b1bb246620046e1e387d2978f6f60\",\n    \"S05_情境与消息.json\": \"de4a1157bede5228cf3967a3c66fa73559a090cf42262fc7aeccb5c499c6a95b\"\n  },\n  \"artifact_sha256\": {\n    \"training_handout.docx\": \"64be5ac8584cb9f90320b00c131592061d28679228126153d672a71934073011\",\n    \"correction_register.xlsx\": \"3e46072288f31f020dc0b1f0f855df5032243a8709afa930ea534885060a627c\"\n  },\n  \"skill_file_hashes\": {\n    \"SKILL.md\": \"dd742bb0ca8569a93e8a075cbf9609b056c79c1daf39c64bb50a1e468a078274\",\n    \"scripts/build_evidence.py\": \"2def49f3c66da887909e73d6c29ce9a611d37af2e6ec9acb460927b427bff252\"\n  },\n  \"paragraphs\": [\n    {\n      \"段号\": \"D01\",\n      \"处理\": \"已校订\",\n      \"依据\": \"S01题注/14/38条；S02题注/15条\",\n      \"讲义定位\": \"一｜先定对象和时点\",\n      \"复核动作\": \"负责人核公布/起施/转发差别；不自动废8号。\"\n    },\n    {\n      \"段号\": \"D02\",\n      \"处理\": \"已校订\",\n      \"依据\": \"S02第6/12/13条；S01第14条\",\n      \"讲义定位\": \"四｜到期不是自动删除\",\n      \"复核动作\": \"档案部门核本机关表与同级审查记录；不由IT签发。\"\n    },\n    {\n      \"段号\": \"D03\",\n      \"处理\": \"已校订\",\n      \"依据\": \"S01第16/17条；S02第10条\",\n      \"讲义定位\": \"二｜一条归档线\",\n      \"复核动作\": \"形成部门补全内容/结构/背景及管理元数据，技术人员配合。\"\n    },\n    {\n      \"段号\": \"D04\",\n      \"处理\": \"已校订\",\n      \"依据\": \"S01第3/17/21条\",\n      \"讲义定位\": \"二｜一条归档线\",\n      \"复核动作\": \"归档去数字签名保印章图形；纸质原件不擅自销毁。\"\n    },\n    {\n      \"段号\": \"D05\",\n      \"处理\": \"已校订\",\n      \"依据\": \"S01第10/17/18/19/20条；S02第5条\",\n      \"讲义定位\": \"二｜一条归档线\",\n      \"复核动作\": \"分清形成、共同检测确认、审核和向馆移交；备份不代归档。\"\n    },\n    {\n      \"段号\": \"D06\",\n      \"处理\": \"已校订\",\n      \"依据\": \"S01第26/29/30条\",\n      \"讲义定位\": \"四｜到期不是自动删除\",\n      \"复核动作\": \"到期鉴定/重划或依法审批；需销毁时覆盖在线/容灾/离线并记日志。\"\n    },\n    {\n      \"段号\": \"D07\",\n      \"处理\": \"已校订\",\n      \"依据\": \"S02第11条及附表4.1/5.1.1/5.2.1/5.2.2；S05四例\",\n      \"讲义定位\": \"三｜四张练习卡\",\n      \"复核动作\": \"C01永久/C02三十年/C03十年；C04仍待核，不自动定案。\"\n    },\n    {\n      \"段号\": \"D08\",\n      \"处理\": \"已校订\",\n      \"依据\": \"S03权限；S05 M01/M02/M03；S02第12条\",\n      \"讲义定位\": \"五｜讲师结束前的复核口令\",\n      \"复核动作\": \"拒无权较晚技术建议；仅内部送审，不虚构发布/主管部门或专家批准。\"\n    }\n  ],\n  \"cases\": [\n    {\n      \"情境\": \"C01\",\n      \"处理建议\": \"永久；本机关单独工作会议纪要\",\n      \"依据\": \"S02附表4.1；S05 C01/M03\",\n      \"下一动作\": \"形成部门登记，档案部门复核；本例不是已批准期限表。\"\n    },\n    {\n      \"情境\": \"C02\",\n      \"处理建议\": \"30年；协办纪要复制件\",\n      \"依据\": \"S02附表5.2.1/第11条；S05 C02\",\n      \"下一动作\": \"主办归原件；本机关核复制件完整性后归档。\"\n    },\n    {\n      \"情境\": \"C03\",\n      \"处理建议\": \"10年；协办交流材料副本\",\n      \"依据\": \"S02附表5.2.2；S05 C03\",\n      \"下一动作\": \"与纪要分开分类、登记并复核。\"\n    },\n    {\n      \"情境\": \"C04\",\n      \"处理建议\": \"待核，不确定期限；主办纪要/协办副本需区分\",\n      \"依据\": \"S02附表5.1.1/5.2.1/第11条；S05 C04\",\n      \"下一动作\": \"会务补通知角色与原副本，形成/档案部门核定；不得按永久兜底定案。\"\n    }\n  ],\n  \"scope\": \"Editorial completeness and byte binding only; not domain correctness, release approval, or solver trajectory\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "training_handout.docx",
+      "absolute_path": "题包内：training_handout.docx",
+      "url": "assets/tasks/GO-TIME-004/solution/golden_output/training_handout.docx",
+      "bytes": 40547,
+      "sha256": "64be5ac8584cb9f90320b00c131592061d28679228126153d672a71934073011",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "电子公文归档：从“能打开”到“可交接”"
+        },
+        {
+          "kind": "heading",
+          "text": "一｜先定对象和时点（2分钟）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "供文秘与电子文件形成部门内部试讲｜2024-11-04 09:00 Asia/Shanghai编稿基准，拟11月5日培训；待档案业务复核，不是已发布制度。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "22号《电子档案管理办法》2024-09-14公布、11月1日施行；瓯海10月31日是转载，不是规章公布。8号《机关文件材料归档范围和文书档案保管期限规定》2006-12-18发布并施行；江苏2021-01-11是转发时间。两者分别规范电子全过程与机关文书范围/期限，不能按新旧日期把8号自动作废。第22号第14条仍要求纳入本单位范围、期限表与分类方案管理；8号第15条明确废止的是所列两份1987旧文件。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本课是党政机关电子公文/文书会议材料，不泛推到人事、会计等专门门类（8号第9条）。本次材料于2026-10-21真实取得，不是2024历史存档；逐源UTC与HTML哈希在S01/S02。"
+        },
+        {
+          "kind": "heading",
+          "text": "二｜一条归档线，三种不同职责（3分钟）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "形成部门：按22号第10、17条，在形成、办理、收集过程中完成收集整理、保管期限鉴定、分类、命名，完整采集内容、结构、背景及整个管理过程元数据；文件与元数据一并归档（第16条）。不是只交一个能打开的PDF。格式应开放、不绑定软硬件、显示一致、可转换、易用且支持长期保存转换；不指定材料没有给出的唯一格式。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "共同交接：形成部门与电子档案管理部门对提交的文件及元数据清点、登记，检测真实性、完整性、可用性、安全性，并由责任人确认（第18条）。信息中心提供系统/技术支持，备份不等于各部门已完成归档。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "档案管理部门：审核接收、编制档号、确认保管期限，并依规向档案馆移交（第10、19、20条）。向本机关档案部门归档与向档案馆移交不是同一步。保管期限也不是向档案馆移交年限。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "党政机关电子公文归档须去除电子印章数字签名信息，只保留印章图形（第17条）；向档案馆移交电子档案同样不保留数字签名信息（第21条）。这不是删除印章图形，也不是在业务办理期间随意改动原始公文。电子与传统载体档案同等效力（第3条）不等于扫描后可擅自销毁纸质原件。本次只教要求，不真实处理印章、解密或删除文件。"
+        },
+        {
+          "kind": "heading",
+          "text": "三｜四张练习卡：对象先于期限（3分钟）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "先请学员分别说“是什么文件、主办还是协办、原件还是副本”，再回答保管期限及下一动作。以下为给定事实下的示例，不是已获审查同意的本机关期限表。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "情境",
+              "参考回答与依据",
+              "下一动作"
+            ],
+            [
+              "C01 单独工作会议纪要",
+              "永久；8号附表4.1。不是联合会议协办材料。",
+              "形成部门登记并提交档案部门复核。"
+            ],
+            [
+              "C02 联合会议协办纪要复制件",
+              "30年；附表5.2.1。原件由主办机关归档（第11条）。",
+              "核对副本完整性，按本机关归档流程办理。"
+            ],
+            [
+              "C03 同一协办会议交流副本",
+              "10年；附表5.2.2。不能把纪要的30年套到交流材料。",
+              "按副本类别登记，交档案部门复核。"
+            ],
+            [
+              "C04 主协办及原/副本未知",
+              "待核，不能直接定永久或30年；主办纪要可为永久（5.1.1），协办副本为30年（5.2.1）。",
+              "会务联络员补完整通知、角色及持有件依据；形成部门和档案部门核定后再定。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "四｜到期不是“自动删除”（2分钟）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "8号第6条区分永久、定期，定期一般为30年、10年，不是电子文件统一10年。本机关范围/期限表应结合职能与实际编制，经同级档案行政管理部门审查同意后执行（第12、13条）；不能用IT签发或本次讲义替代。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "22号第29条：到期应鉴定，仍需保存的重划期限并变更管理数据；第30条：需要销毁须遵守国家规定、履行相关审批，禁止擅自销毁。经合规决定确需销毁时，应彻底删除在线、容灾备份系统与离线介质相关档案，记录范围、数量、大小、审核人和操作者。不能只删在线，也不能把需要销毁的数据永久留在副本。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "销毁之前的正常保管应按第26条备份：至少两种符合长期安全要求的介质，至少三套完整数据，在线应用一套、两套备份，每种介质上保存一套完整数据；备份规则不是绕开审批销毁或无限留存的理由。本题不要求执行备份或删除。"
+        },
+        {
+          "kind": "heading",
+          "text": "五｜讲师结束前的复核口令（1分钟）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "请学员复述：先对象与时点，再文件及元数据；形成部门准备、共同检测确认、档案部门审核；到期鉴定不自动删除。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "M01于10月31日16:00只授权编稿和送审；M02于11月3日17:30虽较晚，IT工程师无权改全国规范/批准销毁或发布；M03于11月4日08:30只确认会务事实，不核定期限。负责人复核讲义内容与未决C04；会务联络员补C04缺件；档案人员核对本机关有效期限表及审查记录；编辑核对讲义和台账一致后再次送审。在这些完成前保持待审，不声称档案主管部门或专家已批准，也不外发。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "来源定位：S01第3、10、14、16–21、26、29、30、38条；S02第5、6、9–15条及附表4.1、5.1.1、5.2.1、5.2.2；S03委托；S05 M01–M03及C01–C04。URL与取证哈希见两份源摘录。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [
+    {
+      "name": "archive-training-review",
+      "description": "机关电子归档培训逐段审校与真实编辑证据。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/GO-TIME-004/environment/skills/archive-training-review/SKILL.md",
+          "bytes": 1714,
+          "sha256": "dd742bb0ca8569a93e8a075cbf9609b056c79c1daf39c64bb50a1e468a078274",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: archive-training-review\ndescription: 审校机关电子归档培训材料，保留逐段纠错与依据定位，并生成真实成果绑定证据；不执行归档、销毁或发布审批。\n---\n\n本Skill是原创团队编辑流程，不是国家档案局规范或法律意见。用它处理有政策来源、旧稿和待核情境的培训审校；政策内容以委托给定的正式条文为准，不能由Skill补造。\n\n同时阅读委托、草稿、政策正文及情境登记，先确定业务时点、对象与权限。干净培训稿面向文秘与形成部门，应可直接试讲；审校台账面向复核人，保留D01–D08原段号、修改后讲义定位、精确条号、修改理由及待办。\n\n台账工作表“纠错台账”首行为：段号、处理、依据、讲义定位、复核动作。每段一行，处理用“已校订”或“待核”；没有充分事实时保留待核，不编造业务批准。“情境练习”首行为：情境、处理建议、依据、下一动作。情境ID来自委托登记，允许排序变化。不能只用“符合规定”替代依据。\n\n工具只检查编辑记录完整性并绑定真实文件，不判政策解释正确，也不授予发布。执行：\n\n`python3 scripts/build_evidence.py --input-dir /app/input_files --handout /app/output/training_handout.docx --ledger /app/output/correction_register.xlsx --out /app/output/review_evidence.json`\n\n相对路径以本Skill目录为基准。输出含输入/成果/Skill文件SHA256、逐段记录及明确未发布状态。脚本成功不等于专业复核、训练效果或正式judge通过；所有业务结论还须人工逐条核源。不得修改源文件以让记录通过。\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "scripts/build_evidence.py",
+          "absolute_path": "题包内：scripts/build_evidence.py",
+          "url": "assets/tasks/GO-TIME-004/environment/skills/archive-training-review/scripts/build_evidence.py",
+          "bytes": 3031,
+          "sha256": "2def49f3c66da887909e73d6c29ce9a611d37af2e6ec9acb460927b427bff252",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "\"\"\"Editorial trace binding, deliberately not a legal classifier.\"\"\"\nimport argparse,datetime,hashlib,json\nfrom pathlib import Path\nfrom docx import Document\nfrom openpyxl import load_workbook\n\ndef sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()\n\ndef build(input_dir,handout,ledger):\n    files=sorted(p for p in input_dir.iterdir() if p.is_file())\n    if len(files)!=5:raise ValueError('Expected the five frozen input files')\n    context=json.loads((input_dir/'S05_情境与消息.json').read_text())\n    if context['review_status']!='not_reviewed':raise ValueError('No external review approval is provided')\n    Document(handout)\n    book=load_workbook(ledger,data_only=True)\n    rows=list(book['纠错台账'].values)\n    if list(rows[0])!=['段号','处理','依据','讲义定位','复核动作']:raise ValueError('Incorrect editorial columns')\n    entries=[dict(zip(rows[0],r)) for r in rows[1:] if any(v is not None for v in r)]\n    if len(entries)!=8 or {e['段号'] for e in entries}!={f'D{i:02}' for i in range(1,9)}:raise ValueError('Each original paragraph needs one traceable record')\n    for e in entries:\n        if e['处理'] not in ['已校订','待核'] or not all(isinstance(v,str) and v.strip() for v in e.values()):raise ValueError('Incomplete editorial action')\n    case_rows=list(book['情境练习'].values)\n    if list(case_rows[0])!=['情境','处理建议','依据','下一动作']:raise ValueError('Incorrect case columns')\n    cases=[dict(zip(case_rows[0],r)) for r in case_rows[1:] if any(v is not None for v in r)]\n    if len(cases)!=len(context['cases']) or {c['情境'] for c in cases}!={c['id'] for c in context['cases']}:raise ValueError('Case coverage differs from given context')\n    if any(not all(isinstance(v,str) and v.strip() for v in c.values()) for c in cases):raise ValueError('Unresolved case trace is empty')\n    skill=Path(__file__).resolve().parents[1]\n    return dict(at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),status='DRAFT_FOR_ARCHIVE_REVIEW',published=False,expert_approved=False,source_sha256={p.name:sha(p) for p in files},artifact_sha256={p.name:sha(p) for p in [handout,ledger]},skill_file_hashes={str(p.relative_to(skill)):sha(p) for p in [skill/'SKILL.md',skill/'scripts/build_evidence.py']},paragraphs=entries,cases=cases,scope='Editorial completeness and byte binding only; not domain correctness, release approval, or solver trajectory')\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('--input-dir',type=Path,required=True);p.add_argument('--handout',type=Path,required=True);p.add_argument('--ledger',type=Path,required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args()\n    result=build(a.input_dir,a.handout,a.ledger)\n    a.out.parent.mkdir(parents=True,exist_ok=True);a.out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n')\n    print(json.dumps(dict(status=result['status'],paragraphs=len(result['paragraphs']),cases=len(result['cases']),published=False)))\n\nif __name__=='__main__':main()\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    },
+    {
+      "name": "speech-copyedit",
+      "description": "已专业复核后的讲稿语言润色。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/GO-TIME-004/environment/skills/speech-copyedit/SKILL.md",
+          "bytes": 439,
+          "sha256": "53412aafd88978480946ee2eec24d770f3a6cc6f6b3884351663a7844183c167",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: speech-copyedit\ndescription: 改善已有讲稿的口语节奏与句子长度；不承担政策版本、档案期限或审批权核验。\n---\n\n用于已完成专业审校的讲话稿语言润色。保留原稿事实、承诺、日期和权限边界；不把语言顺畅当成法规正确。遇到政策依据待核，回交业务负责人，不自行确定保存期限。不能替代需逐段来源映射的档案培训审校。\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    },
+    {
+      "name": "scan-handoff",
+      "description": "已批准纸质扫描交接的命名/记录整理。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/GO-TIME-004/environment/skills/scan-handoff/SKILL.md",
+          "bytes": 484,
+          "sha256": "be6a46286a49f7502136df0785c4d809663cb4e81d7e53e47c3697ec516ee939",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: scan-handoff\ndescription: 按已批准的扫描交接清单整理影像文件命名与交接记录；不判电子原件效力或纸质原件销毁。\n---\n\n仅用于已获批准的纸质扫描交接作业，按既有清单登记文件名、页数、清晰度异常和交接人。缺原件处置授权时保持原件不动并升级。不能用“扫描完成”推导“电子文件已合规归档”，不决定保管期限、电子印章处理、元数据或培训发布。\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    }
+  ],
+  "renders": [
+    {
+      "name": "correction_register.pdf",
+      "url": "assets/audit/render/GO-TIME-004/20261021T034702Z/correction_register.pdf"
+    },
+    {
+      "name": "training_handout.pdf",
+      "url": "assets/audit/render/GO-TIME-004/20261021T034702Z/training_handout.pdf"
+    }
+  ]
+}

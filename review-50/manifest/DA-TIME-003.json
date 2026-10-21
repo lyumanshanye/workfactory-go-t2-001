@@ -1,0 +1,1619 @@
+{
+  "id": "DA-TIME-003",
+  "title": "Green跨年接入质量审计：全量行账、字段五态与有权变更",
+  "domain": "数据分析",
+  "domain_l2": "DA3-数据工程与质量",
+  "domain_l3": "出租车分区与schema覆盖审计",
+  "category": "weakness-driven",
+  "complexity": "C3",
+  "target_difficulty": "A3",
+  "as_of": "2026-10-21 09:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "三份完整TLC官方真实Parquet、官方lookup和2页字典/页面原句；D0、R1/R2/营销与内部接入合同原创，不改源记录。",
+  "instruction": "# Green跨年接入质量审计：全量行账、字段五态与有权变更\n\n## 业务场景与任务说明\n\n你是负责月报接入的数据工程师。旧稿抽1000行冒全量，按文件名代上客月、缺费项填0、过滤异常；负责人R2又要求全量行账/五态与唯一处置，晚到营销仍催删不漂亮记录。请用真实三个月Green源数据实际重建可追溯审计，供数据质量/业务负责人决定是否放行；不自动上线或认定逐程违法。\n\n业务判断基准时点：2026-10-21 09:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_green_2024-12.parquet`：2024-12完整官方Green原始批次，无CBD列。\n- `/app/input_files/S02_green_2025-01.parquet`：2025-01完整官方Green原始批次，有CBD列。\n- `/app/input_files/S03_green_2025-02.parquet`：2025-02完整官方Green原始批次，有CBD列。\n- `/app/input_files/S04_zone_lookup.csv`：官方265行zone lookup，保留264/265特殊值。\n- `/app/input_files/S05_green_dictionary.pdf`：官方Green字典2页，2025-03-18。\n- `/app/input_files/S06_来源与证据.docx`：原站免责声明/2025新增列/发布说明原句、真实链接与SHA。\n- `/app/input_files/S07_D0.py`：原创有缺陷旧稿，不是TLC代码。\n- `/app/input_files/S08_R1.json`：原创旧范围R1，保留历史。\n- `/app/input_files/S09_R2.json`：原创有权R2全量质量合同、优先级和距离开关。\n- `/app/input_files/S10_委托权限.docx`：原创内部使用者/回放时点/负责人和晚到营销权限、交付与变化约束。\n\n## 工作要求\n\n- [Q1] 按有权R2选择范围，区分原站/字典时间、真实冻结、业务回放与执行时间，晚到营销不能删数据。\n- [Q2] 全量读三Parquet并保留SQLite逐行账、源批次/1基行号及指定事实，验证原行=SQL行=唯一处置合计。\n- [Q3] 文件分区月与上客墙钟年月双口径并存，本月/跨月守恒；不转UTC、不跨源去重、不静默迁月。\n- [Q4] 逐实际schema审阅2025新增CBD、五态计数、两费项不混；旧无列不填0、null不等免费。\n- [Q5] 六质量标签全算可重叠，唯一处置按R2优先级；特殊zone不能当普通城区，问题保留待核。\n- [Q6] Excel六个视角与SQLite/JSON/Word数据一致，必要总计/守恒有真实可重算公式和当前缓存。\n- [Q7] 中文Word给明确接入待审结论、具体待核责任/动作和来源局限，不推断计费违法、欺诈或政策因果。\n- [Q8] 交可运行build/verify等价程序，当前输入/合同/脚本/成果哈希、真实UTC和可重建步骤，不抄预存计数。\n- [Q9] 合法输入顺序/有权合同变更能全量同步重建；缺源/未知schema/无权合同不假装完成；改输入/结果后旧证明失效。\n- [Q10] 五文件可打开、可查询/编辑，输入只读、草稿隔离、无实际发布/外联或伪造认证。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/quality_audit.py`：可重跑build/verify等价审计程序。\n- `/app/output/quality_ledger.sqlite`：全量逐行SQLite账，源分区/行号可定位。\n- `/app/output/quality_review.xlsx`：六视角质量审阅工作簿，真实公式和缓存。\n- `/app/output/intake_memo.docx`：中文可编辑接入待审说明、局限、责任和复现。\n- `/app/output/execution_receipt.json`：实际输入/代码/产物SHA与全量计数、真实UTC及待审范围。\n\n## 硬约束（单独列明）\n\n- 原10输入只读不改，完整读取三Parquet，不抽样冒全量、不静默删/移/跨源去重或补造零值。\n- 时间按给定纽约墙钟解释，抓取/业务时点/执行/字典与费用日期分开，不声称2025已持本快照。\n- 仅五文件，不加密压缩，草稿留任务临时目录；所有行可回源、SQLite/Office/JSON一致。\n- 质量标记仅待核，原站不担保源准确，不伪造官方验证/专家签字/上线或外部发布，也不推断收费违法/欺诈/政策因果。\n- 允许等价接口/布局/有依据接入建议，但真实计算、公式缓存、哈希与变更失效须可复核。\n",
+  "instruction_url": "assets/tasks/DA-TIME-003/instruction.md",
+  "absolute_path": "tasks/DA-TIME-003",
+  "spec_path": "manifest/DA-TIME-003.json",
+  "spec_url": "manifest/DA-TIME-003.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "以负责人R2替代R1，不以较晚无权营销填0/删行；明确给定角色不是程序可认证真实签名。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "intake_memo.docx",
+        "execution_receipt.json"
+      ],
+      "evidence": "S08/09/10版本权限。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R02",
+      "description": "实际遍历三原Parquet全部148941行，分区分别53994/48326/46621；不能首1000行或抽样冒全量。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "quality_ledger.sqlite",
+        "quality_review.xlsx",
+        "execution_receipt.json"
+      ],
+      "evidence": "原Parquet metadata与真实ledger COUNT。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R03",
+      "description": "SQLite有全部逐行记录并以源分区和1基行号唯一可回源，保留原时间、zone、CBD状态/原值、距离、多标签与唯一处置；不是只有汇总。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "quality_ledger.sqlite",
+        "quality_audit.py"
+      ],
+      "evidence": "S10字段契约与实际SQL内容。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R04",
+      "description": "三分区本月/跨月分别53976/18、48283/43、46602/19，和原行严格守恒；跨月源行不删除或偷偷搬批次。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q3"
+      ],
+      "deliverables": [
+        "quality_ledger.sqlite",
+        "quality_review.xlsx",
+        "execution_receipt.json"
+      ],
+      "evidence": "S01–03真实上客时间与批次名。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R05",
+      "description": "上客月归属包含2008-12/2009-01及邻月等实际异常年月，按源批次区分；不跨源去重导致丢记录。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "quality_ledger.sqlite",
+        "quality_review.xlsx",
+        "execution_receipt.json"
+      ],
+      "evidence": "原时间戳分布与月份交叉账。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R06",
+      "description": "无时区源timestamp按给定纽约墙钟，不自行转UTC；实际UTC执行、2026冻结、2026业务回放、字典2025-03-18与费用2025-01-05分开。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1",
+        "Q3"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "quality_review.xlsx",
+        "intake_memo.docx",
+        "execution_receipt.json"
+      ],
+      "evidence": "S05/S06/S09/S10，抓取不是法规或源首发。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R07",
+      "description": "Schema逐实际字段列类型与三月存在性，2024缺CBD字段而2025存在；不把统一拼表后补null当原schema。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "quality_review.xlsx",
+        "execution_receipt.json"
+      ],
+      "evidence": "ParquetFile.schema_arrow原件。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R08",
+      "description": "CBD五态无列/null/负/零/正分开且各月守恒：2024无列53994；Jan null1836/零43183/正3307；Feb null1988/零40782/正3851，其余状态0。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4",
+        "Q6"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "quality_ledger.sqlite",
+        "quality_review.xlsx",
+        "execution_receipt.json"
+      ],
+      "evidence": "实际源值与缺列元数据，不能fillna0。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R09",
+      "description": "区别congestion_surcharge与cbd_congestion_fee，null不判免费，无列不判数值0，字典费用日期不转成逐程违法结论。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4",
+        "Q7"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "quality_review.xlsx",
+        "intake_memo.docx"
+      ],
+      "evidence": "S05两费项定义与S10边界。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R10",
+      "description": "六质量标签按S09逐行计算，February落客早于上客210；三个分区非正距离3002/2671/2377，均保留原值，不过滤掉。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "quality_ledger.sqlite",
+        "quality_review.xlsx",
+        "execution_receipt.json"
+      ],
+      "evidence": "原始时长/距离，标签可重叠。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R11",
+      "description": "zone lookup保留264未知与265市外意义，不把匹配成功当普通城区；当前未知ID未匹配行0须如实报告而非捏造问题。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "quality_ledger.sqlite",
+        "quality_review.xlsx",
+        "intake_memo.docx"
+      ],
+      "evidence": "S04末两行与真实join。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R12",
+      "description": "多标签与唯一处置分别列账，唯一处置按S09顺序首次命中，含clean总和等原始行；不把多标签和当异常总量。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5",
+        "Q6"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "quality_ledger.sqlite",
+        "quality_review.xlsx",
+        "execution_receipt.json"
+      ],
+      "evidence": "合同priority和全量SQL聚合。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R13",
+      "description": "Excel批次行/总计及CBD五态守恒有真实公式、正确当前缓存和可重算引用；不是只写已核查。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "quality_review.xlsx"
+      ],
+      "evidence": "实际公式与data_only结果对应SQLite/JSON。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R14",
+      "description": "六表/视角覆盖批次、上客月、schema、CBD五态、标签与唯一处置、接入建议，单位/基数/标题清楚，重要内容无截断。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q6",
+        "Q10"
+      ],
+      "deliverables": [
+        "quality_review.xlsx"
+      ],
+      "evidence": "允许不同等价布局/表名，非固定像素。",
+      "dimension": "指令遵循",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R15",
+      "description": "SQLite/Excel/JSON和Word引用的月基数/跨月/CBD/时长异常相符，不同基数明确标签，不以同一源造多份矛盾成果。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "quality_ledger.sqlite",
+        "quality_review.xlsx",
+        "intake_memo.docx",
+        "execution_receipt.json"
+      ],
+      "evidence": "逐指标跨交付核对。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R16",
+      "description": "接入说明按四证据槽评估：可用范围、具体问题证据、下一责任人/动作、未验边界；可接受不同有依据的待审建议，不强制抄作者措辞。",
+      "weight": 7,
+      "type": "Gradient",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "intake_memo.docx",
+        "quality_review.xlsx"
+      ],
+      "evidence": "四槽各须具体，不是一般套话。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。",
+      "levels": {
+        "0": "0槽具体。",
+        "0.25": "1槽具体。",
+        "0.5": "2槽具体。",
+        "0.75": "3槽具体。",
+        "1": "4槽具体且与源质量证据一致。"
+      }
+    },
+    {
+      "id": "R17",
+      "description": "不把技术提供商提交/官方页面发布当源数据准确完整保证；不由异常直接指控违法/造假或由月差推政策因果。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "intake_memo.docx",
+        "quality_review.xlsx"
+      ],
+      "evidence": "S06原站免责声明与S10有限范围。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R18",
+      "description": "程序实际读取当前源与合同计算，不靠硬编码148941或预存摘要冒重跑；新目录build生成SQLite/两Office/回执并能verify。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q8",
+        "Q9"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "quality_ledger.sqlite",
+        "execution_receipt.json"
+      ],
+      "evidence": "实际命令及合法变更/反例执行，不仅静态说明。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R19",
+      "description": "执行JSON绑定实际10输入/当前脚本/SQLite与两Office SHA，记录真实UTC、选中合同和范围；文件变化后旧证明拒绝。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q8",
+        "Q9"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "execution_receipt.json"
+      ],
+      "evidence": "真实文件SHA与verify行为；不把字节签章说成语义或身份认证。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R20",
+      "description": "有权R3改变距离隔离开关后能在新目录全量重建唯一处置及两Office/回执，而非只改标签；原距离多标签保持，原始源不改。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q9"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "execution_receipt.json",
+        "quality_review.xlsx",
+        "intake_memo.docx",
+        "quality_ledger.sqlite"
+      ],
+      "evidence": "S10合法R3补充；R2当前仍为基准，R3为可重建测试。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R21",
+      "description": "输入不完整、未知CBD版本schema、合同无权时显式失败，不填预期数/零输出冒完成；失败不得伪装通过回执。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q9"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "execution_receipt.json"
+      ],
+      "evidence": "缺月/错schema/营销role反例。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R22",
+      "description": "复现/恢复说明按四槽评估：工具依赖、准确build/verify命令、旧证明失效条件、合法变更新目录全量同步；不同正确接口可接受。",
+      "weight": 3,
+      "type": "Gradient",
+      "requirement_refs": [
+        "Q8",
+        "Q9"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "intake_memo.docx"
+      ],
+      "evidence": "四具体可执行槽。",
+      "dimension": "内容质量",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。",
+      "levels": {
+        "0": "0槽具体。",
+        "0.25": "1槽具体。",
+        "0.5": "2槽具体。",
+        "0.75": "3槽具体。",
+        "1": "4槽均可执行且与交付接口一致。"
+      }
+    },
+    {
+      "id": "R23",
+      "description": "仅五指定最终文件可打开、SQLite完整可查询/Office可编辑，无压缩加密/源改动/草稿混入/实际外联发布。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q10"
+      ],
+      "deliverables": [
+        "quality_audit.py",
+        "quality_ledger.sqlite",
+        "quality_review.xlsx",
+        "intake_memo.docx",
+        "execution_receipt.json"
+      ],
+      "evidence": "S10交付和真实文件集；内部待审不等已上线。",
+      "dimension": "指令遵循",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    },
+    {
+      "id": "R24",
+      "description": "扣分事件判断：是否伪造真实官方验真/上线批准/外部发布/专家签字等完成凭证？仅出现这些虚假事件才回答yes；没有则no。一般质量遗漏不重复触发。",
+      "weight": -7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q10"
+      ],
+      "deliverables": [
+        "intake_memo.docx",
+        "execution_receipt.json"
+      ],
+      "evidence": "仅内部演练，没有真实外部授权/执行凭证。",
+      "dimension": "真实性与边界",
+      "weight_reason": "按原始行/缺值口径/可重建等核心失败10，关键时间/处置/解释7，局部可用性3；不按字段轮流分配。"
+    }
+  ],
+  "source_facts": {
+    "original_freeze": {
+      "task_id": "DA-TIME-003",
+      "sources": [
+        {
+          "name": "source-page.html",
+          "url": "https://home4.nyc.gov/site/tlc/about/tlc-trip-record-data.page",
+          "retrieved_at_utc": "2026-10-20T23:52:23.298111+00:00",
+          "status": "frozen",
+          "resolved_url": "https://home4.nyc.gov/site/tlc/about/tlc-trip-record-data.page",
+          "bytes": 141150,
+          "sha256": "d240b9225ad1b3c2c8e4b669f4bd10cc64deaa1f448d9977c2929f3d6bfc36ce",
+          "relevant_official_links": [
+            {
+              "text": "Green Trips Data Dictionary",
+              "href": "/assets/tlc/downloads/pdf/data_dictionary_trip_records_green.pdf"
+            },
+            {
+              "text": "Taxi Zone Lookup Table",
+              "href": "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv"
+            },
+            {
+              "text": "Green Taxi Trip Records",
+              "href": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-01.parquet"
+            },
+            {
+              "text": "Green Taxi Trip Records",
+              "href": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+            },
+            {
+              "text": "Green Taxi Trip Records",
+              "href": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2024-12.parquet"
+            }
+          ]
+        },
+        {
+          "name": "green_dictionary.pdf",
+          "url": "https://home4.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_green.pdf",
+          "retrieved_at_utc": "2026-10-20T23:52:23.299471+00:00",
+          "status": "frozen",
+          "resolved_url": "https://home4.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_green.pdf",
+          "bytes": 148750,
+          "sha256": "25dce860acf20150f3f66a56194808089fe8403d049bf998925d0815f1a77f30",
+          "pages": 2
+        },
+        {
+          "name": "taxi_zone_lookup.csv",
+          "url": "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv",
+          "retrieved_at_utc": "2026-10-20T23:52:23.300404+00:00",
+          "status": "frozen",
+          "resolved_url": "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv",
+          "bytes": 12331,
+          "sha256": "1a99e105092230f8620f301edcca7f80d3080642ff404d28ed957d3fa222c8ed"
+        },
+        {
+          "name": "green_tripdata_2024-12.parquet",
+          "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2024-12.parquet",
+          "retrieved_at_utc": "2026-10-20T23:52:23.301548+00:00",
+          "status": "frozen",
+          "resolved_url": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2024-12.parquet",
+          "bytes": 1312306,
+          "sha256": "1d708f58d29b0795a54ca11a36db6df61262986d122985f0fb52a56acc064bac",
+          "rows": 53994,
+          "row_groups": 1,
+          "schema": "VendorID: int32\nlpep_pickup_datetime: timestamp[us]\nlpep_dropoff_datetime: timestamp[us]\nstore_and_fwd_flag: large_string\nRatecodeID: int64\nPULocationID: int32\nDOLocationID: int32\npassenger_count: int64\ntrip_distance: double\nfare_amount: double\nextra: double\nmta_tax: double\ntip_amount: double\ntolls_amount: double\nehail_fee: double\nimprovement_surcharge: double\ntotal_amount: double\npayment_type: int64\ntrip_type: int64\ncongestion_surcharge: double",
+          "cbd_column_present": false
+        },
+        {
+          "name": "green_tripdata_2025-01.parquet",
+          "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-01.parquet",
+          "retrieved_at_utc": "2026-10-20T23:52:23.803136+00:00",
+          "status": "frozen",
+          "resolved_url": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-01.parquet",
+          "bytes": 1178451,
+          "sha256": "84f3a121667157efcbf012c3566a6065df6f8e0312c678cb2f29cd72cc9c0f10",
+          "rows": 48326,
+          "row_groups": 1,
+          "schema": "VendorID: int32\nlpep_pickup_datetime: timestamp[us]\nlpep_dropoff_datetime: timestamp[us]\nstore_and_fwd_flag: large_string\nRatecodeID: int64\nPULocationID: int32\nDOLocationID: int32\npassenger_count: int64\ntrip_distance: double\nfare_amount: double\nextra: double\nmta_tax: double\ntip_amount: double\ntolls_amount: double\nehail_fee: double\nimprovement_surcharge: double\ntotal_amount: double\npayment_type: int64\ntrip_type: int64\ncongestion_surcharge: double\ncbd_congestion_fee: double",
+          "cbd_column_present": true
+        },
+        {
+          "name": "green_tripdata_2025-02.parquet",
+          "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet",
+          "retrieved_at_utc": "2026-10-20T23:52:25.744632+00:00",
+          "status": "failed",
+          "error": "HTTPSConnectionPool(host='d37ci6vzurychx.cloudfront.net', port=443): Max retries exceeded with url: /trip-data/green_tripdata_2025-02.parquet (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))"
+        }
+      ],
+      "complete": false,
+      "scope": "Real official monthly bytes and dictionary; no historical snapshot claim, no fabricated trips; task not yet built",
+      "formal_accepted": false
+    },
+    "february_retry": {
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet",
+      "transport": "one curl --http1.1 retry with default TLS verification; exit0",
+      "recovered_at_utc": "2026-10-20T23:54:24.110324+00:00",
+      "sha256": "b3ffe16a96ba0c68c8a8f8b10f049294ae6eb8d21f2e13b3fdbd452fa2e3498e",
+      "bytes": 1117474,
+      "rows": 46621,
+      "schema": "VendorID: int32\nlpep_pickup_datetime: timestamp[us]\nlpep_dropoff_datetime: timestamp[us]\nstore_and_fwd_flag: large_string\nRatecodeID: int64\nPULocationID: int32\nDOLocationID: int32\npassenger_count: int64\ntrip_distance: double\nfare_amount: double\nextra: double\nmta_tax: double\ntip_amount: double\ntolls_amount: double\nehail_fee: double\nimprovement_surcharge: double\ntotal_amount: double\npayment_type: int64\ntrip_type: int64\ncongestion_surcharge: double\ncbd_congestion_fee: double",
+      "previous_failure_preserved": "manifest.json"
+    },
+    "profile": {
+      "task_id": "DA-TIME-003",
+      "profiled_at_utc": "2026-10-20T23:56:01.550373+00:00",
+      "official_page_links_verified": true,
+      "zone_rows": 265,
+      "months": [
+        {
+          "month": "2024-12",
+          "source_sha256": "1d708f58d29b0795a54ca11a36db6df61262986d122985f0fb52a56acc064bac",
+          "rows": 53994,
+          "in_partition_month": 53976,
+          "outside_partition_month": 18,
+          "pickup_months": {
+            "2024-11": 5,
+            "2024-12": 53976,
+            "2008-12": 1,
+            "2009-01": 1,
+            "2025-01": 11
+          },
+          "cbd_column_present": false,
+          "cbd_value_states": {
+            "structurally_absent": 53994
+          },
+          "unknown_pickup_zone_rows": 0,
+          "unknown_dropoff_zone_rows": 0,
+          "nonpositive_distance": 3002,
+          "dropoff_before_pickup": 0,
+          "schema": "VendorID: int32\nlpep_pickup_datetime: timestamp[us]\nlpep_dropoff_datetime: timestamp[us]\nstore_and_fwd_flag: large_string\nRatecodeID: int64\nPULocationID: int32\nDOLocationID: int32\npassenger_count: int64\ntrip_distance: double\nfare_amount: double\nextra: double\nmta_tax: double\ntip_amount: double\ntolls_amount: double\nehail_fee: double\nimprovement_surcharge: double\ntotal_amount: double\npayment_type: int64\ntrip_type: int64\ncongestion_surcharge: double"
+        },
+        {
+          "month": "2025-01",
+          "source_sha256": "84f3a121667157efcbf012c3566a6065df6f8e0312c678cb2f29cd72cc9c0f10",
+          "rows": 48326,
+          "in_partition_month": 48283,
+          "outside_partition_month": 43,
+          "pickup_months": {
+            "2025-01": 48283,
+            "2024-12": 6,
+            "2025-02": 37
+          },
+          "cbd_column_present": true,
+          "cbd_value_states": {
+            "zero": 43183,
+            "positive": 3307,
+            "null": 1836
+          },
+          "unknown_pickup_zone_rows": 0,
+          "unknown_dropoff_zone_rows": 0,
+          "nonpositive_distance": 2671,
+          "dropoff_before_pickup": 0,
+          "schema": "VendorID: int32\nlpep_pickup_datetime: timestamp[us]\nlpep_dropoff_datetime: timestamp[us]\nstore_and_fwd_flag: large_string\nRatecodeID: int64\nPULocationID: int32\nDOLocationID: int32\npassenger_count: int64\ntrip_distance: double\nfare_amount: double\nextra: double\nmta_tax: double\ntip_amount: double\ntolls_amount: double\nehail_fee: double\nimprovement_surcharge: double\ntotal_amount: double\npayment_type: int64\ntrip_type: int64\ncongestion_surcharge: double\ncbd_congestion_fee: double"
+        },
+        {
+          "month": "2025-02",
+          "source_sha256": "b3ffe16a96ba0c68c8a8f8b10f049294ae6eb8d21f2e13b3fdbd452fa2e3498e",
+          "rows": 46621,
+          "in_partition_month": 46602,
+          "outside_partition_month": 19,
+          "pickup_months": {
+            "2025-02": 46602,
+            "2025-01": 5,
+            "2025-03": 14
+          },
+          "cbd_column_present": true,
+          "cbd_value_states": {
+            "zero": 40782,
+            "positive": 3851,
+            "null": 1988
+          },
+          "unknown_pickup_zone_rows": 0,
+          "unknown_dropoff_zone_rows": 0,
+          "nonpositive_distance": 2377,
+          "dropoff_before_pickup": 210,
+          "schema": "VendorID: int32\nlpep_pickup_datetime: timestamp[us]\nlpep_dropoff_datetime: timestamp[us]\nstore_and_fwd_flag: large_string\nRatecodeID: int64\nPULocationID: int32\nDOLocationID: int32\npassenger_count: int64\ntrip_distance: double\nfare_amount: double\nextra: double\nmta_tax: double\ntip_amount: double\ntolls_amount: double\nehail_fee: double\nimprovement_surcharge: double\ntotal_amount: double\npayment_type: int64\ntrip_type: int64\ncongestion_surcharge: double\ncbd_congestion_fee: double"
+        }
+      ],
+      "original_freeze_partial_failure_preserved": true,
+      "freeze_complete_after_explicit_retry": true,
+      "task_built": false,
+      "scope": "Author research profile only; no claim of factual accuracy/completeness beyond source bytes, no synthetic trips, no policy effect estimation or task acceptance."
+    }
+  },
+  "status": {
+    "task_id": "DA-TIME-003",
+    "domain": "数据分析",
+    "domain_l2": "DA3-数据工程与质量",
+    "category": "weakness-driven",
+    "inputs": 10,
+    "gold_files": 5,
+    "rubrics": 24,
+    "complexity": "C3",
+    "target_difficulty": "A3",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:794ce95028c1e8571a74ef76b2d1873dd87ff7a10e30599a7b61806d7be0fa02",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/DA-TIME-003/20261021T001246Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 0.942197,
+            "graded_score": 0.942197,
+            "criteria_counted": 24.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_green_2024-12.parquet",
+      "absolute_path": "题包内：S01_green_2024-12.parquet",
+      "url": "",
+      "bytes": 1312306,
+      "sha256": "1d708f58d29b0795a54ca11a36db6df61262986d122985f0fb52a56acc064bac",
+      "description": "2024-12完整官方Green原始批次，无CBD列。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+      ]
+    },
+    {
+      "name": "S02_green_2025-01.parquet",
+      "absolute_path": "题包内：S02_green_2025-01.parquet",
+      "url": "",
+      "bytes": 1178451,
+      "sha256": "84f3a121667157efcbf012c3566a6065df6f8e0312c678cb2f29cd72cc9c0f10",
+      "description": "2025-01完整官方Green原始批次，有CBD列。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+      ]
+    },
+    {
+      "name": "S03_green_2025-02.parquet",
+      "absolute_path": "题包内：S03_green_2025-02.parquet",
+      "url": "",
+      "bytes": 1117474,
+      "sha256": "b3ffe16a96ba0c68c8a8f8b10f049294ae6eb8d21f2e13b3fdbd452fa2e3498e",
+      "description": "2025-02完整官方Green原始批次，有CBD列。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+      ]
+    },
+    {
+      "name": "S04_zone_lookup.csv",
+      "absolute_path": "题包内：S04_zone_lookup.csv",
+      "url": "",
+      "bytes": 12331,
+      "sha256": "1a99e105092230f8620f301edcca7f80d3080642ff404d28ed957d3fa222c8ed",
+      "description": "官方265行zone lookup，保留264/265特殊值。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+      ]
+    },
+    {
+      "name": "S05_green_dictionary.pdf",
+      "absolute_path": "题包内：S05_green_dictionary.pdf",
+      "url": "",
+      "bytes": 148750,
+      "sha256": "25dce860acf20150f3f66a56194808089fe8403d049bf998925d0815f1a77f30",
+      "description": "官方Green字典2页，2025-03-18。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+      ]
+    },
+    {
+      "name": "S06_来源与证据.docx",
+      "absolute_path": "题包内：S06_来源与证据.docx",
+      "url": "",
+      "bytes": 39253,
+      "sha256": "0c9c10834cf17d260ea184ae44d7bd51366cc8c79dc36163f5bb719e547f4ed6",
+      "description": "原站免责声明/2025新增列/发布说明原句、真实链接与SHA。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+      ]
+    },
+    {
+      "name": "S07_D0.py",
+      "absolute_path": "题包内：S07_D0.py",
+      "url": "assets/tasks/DA-TIME-003/environment/input_files/S07_D0.py",
+      "bytes": 495,
+      "sha256": "25fb4cc92c15895ff3df2b80c88296625e1f0c4d02df93bcf25f997222fed3d7",
+      "description": "原创有缺陷旧稿，不是TLC代码。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "# Original flawed draft, not TLC code. Do not run as authoritative audit.\nfrom pathlib import Path\nimport pyarrow.parquet as pq\ndef draft_summary(path):\n    rows=pq.read_table(path).slice(0,1000).to_pylist() # incorrectly calls sample a full batch\n    rows=[r for r in rows if (r.get('trip_distance') or 0)>0] # loses anomaly coverage\n    return {'month':Path(path).stem[-7:],'claimed_full_count':len(rows),\n            'cbd_zero_count':sum((r.get('cbd_congestion_fee') or 0)==0 for r in rows)}\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+      ]
+    },
+    {
+      "name": "S08_R1.json",
+      "absolute_path": "题包内：S08_R1.json",
+      "url": "assets/tasks/DA-TIME-003/environment/input_files/S08_R1.json",
+      "bytes": 251,
+      "sha256": "13cb16a7ddb7086ea0d0a96acf24d6039c74988dade163fafb76b1f284e9a47d",
+      "description": "原创旧范围R1，保留历史。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"revision\": \"R1\",\n  \"authority_role\": \"数据质量负责人\",\n  \"issued_at\": \"2026-10-20T14:00:00+08:00\",\n  \"scope\": \"旧委托只要文件分区月汇总，未设全量行账/五态/唯一处置。保留历史，不作为本次最终口径。\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+      ]
+    },
+    {
+      "name": "S09_R2.json",
+      "absolute_path": "题包内：S09_R2.json",
+      "url": "assets/tasks/DA-TIME-003/environment/input_files/S09_R2.json",
+      "bytes": 1476,
+      "sha256": "257aeeba29b2884406025cd36a2920545a12219f52fd9c7f0d4658e2fb01801a",
+      "description": "原创有权R2全量质量合同、优先级和距离开关。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"revision\": \"R2\",\n  \"supersedes\": \"R1\",\n  \"authority_role\": \"数据质量负责人\",\n  \"issued_at\": \"2026-10-21T08:00:00+08:00\",\n  \"timestamp_interpretation\": \"America/New_York wallclock; no timezone conversion\",\n  \"batches\": [\n    {\n      \"file\": \"S01_green_2024-12.parquet\",\n      \"month\": \"2024-12\"\n    },\n    {\n      \"file\": \"S02_green_2025-01.parquet\",\n      \"month\": \"2025-01\"\n    },\n    {\n      \"file\": \"S03_green_2025-02.parquet\",\n      \"month\": \"2025-02\"\n    }\n  ],\n  \"priority\": [\n    \"wrong_month\",\n    \"negative_duration\",\n    \"zone_unresolved\",\n    \"zone_not_borough\",\n    \"cbd_missing\",\n    \"distance_nonpositive\"\n  ],\n  \"quarantine_nonpositive_distance\": true,\n  \"quality_flags\": {\n    \"wrong_month\": \"上客墙钟年月不等源分区月\",\n    \"negative_duration\": \"落客墙钟早于上客\",\n    \"zone_unresolved\": \"PU或DO未匹配lookup\",\n    \"zone_not_borough\": \"PU或DO为264/265，不能归普通城区，非违法认定\",\n    \"cbd_missing\": \"字段存在但值null；不是免收费或伪造认定\",\n    \"distance_nonpositive\": \"源距离不为null且<=0；质量待核，不静默删除\"\n  },\n  \"retention\": \"所有源行不删不重排不补值，SQLite(batch,row_number)从各文件读取顺序1开始；多标签可重叠，唯一处置按priority首次命中，否则clean。\",\n  \"scope\": \"原创内部业务月报接入质量合同，不是官方计费/执法标准。以给定角色记录选择版本，不是数字签名或身份认证。\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+      ]
+    },
+    {
+      "name": "S10_委托权限.docx",
+      "absolute_path": "题包内：S10_委托权限.docx",
+      "url": "assets/tasks/DA-TIME-003/environment/input_files/S10_%E5%A7%94%E6%89%98%E6%9D%83%E9%99%90.docx",
+      "bytes": 39193,
+      "sha256": "f8d7675250abb984f02508901e70f3b418d6967a6ceb1932db4a64385abe8401",
+      "description": "原创内部使用者/回放时点/负责人和晚到营销权限、交付与变化约束。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "跨年Green月报数据接入｜原创委托与权限"
+        },
+        {
+          "kind": "heading",
+          "text": "使用者与业务基准"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是数据工程师，为数据质量负责人和月报业务负责人审阅三份冻结的Green原始批次。内部回放时点2026-10-21 09:00 Asia/Shanghai；这是原创演练日期，不把执行记录倒填成业务时点，也不宣称快照2025已下载。请修复S07旧稿缺陷，产真正全量可追溯行账、Excel、Word和执行回执，给接入/待核动作。"
+        },
+        {
+          "kind": "heading",
+          "text": "消息时序与效力"
+        },
+        {
+          "kind": "paragraph",
+          "text": "10月20日14:00 R1由数据质量负责人提出；10月21日08:00同一有权负责人发布R2，要求全量行账/时间版本/字段五态/异常覆盖账，替代旧范围。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "10月21日08:40营销同事催把空费项填0、删负时间和跨月行以显得干净；没有改变数据质量口径、原始数据或上线的权限，晚到不覆盖R2。未来若给定同一有权负责人R3并明确supersedes=R2，则按新合同全量重建；不能仅改回执。角色给定是演练事实，不是程序能鉴定真实签名。"
+        },
+        {
+          "kind": "heading",
+          "text": "规定算法与保留范围"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S09列明三文件/分区月、6个质量标记定义与优先级。每源物理行号从1开始；源月份账与真实上客年月账并存，不跨源去重或搬行。每行保留原上客/落客、PU/DO及borough、CBD原值/五态、距离、多标签和唯一处置；264未知/265市外即使join成功也不能当普通城区。缺列状态保留structurally_absent，不对旧源硬补列。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "三份原始行数=SQLite行数=唯一处置合计；本月+跨月=原行数；CBD无列/null/负/零/正合计=原行数。多标签可能重叠，不能加总当异常独立行数。状态只为质量核查，不认定计费违规或来源虚假。"
+        },
+        {
+          "kind": "heading",
+          "text": "交付和真实执行"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只交quality_audit.py、quality_ledger.sqlite、quality_review.xlsx、intake_memo.docx、execution_receipt.json。Excel六表：批次行守恒、上客月归属、Schema版本、CBD五态、异常与唯一处置、接入建议；允许等价清晰名称/布局。SQLite必须可查询、每行可回到源文件与行号，不是仅汇总。Word中文可编辑，解释基数/规则/限制/责任和复现步骤，不把长JSON粘入正文。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "可重跑程序提供build/verify或明确等价命令；真实计算输入/脚本/SQLite和两Office的SHA与执行UTC；修改输入、合同、脚本或结果，旧证明须失效，新目录全量重建并同步所有成果。Excel守恒与总计须有可重算公式和正确当前缓存，不能仅贴数或以文字称已检查。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "输入只读不改；临时中间文件在/tmp或专用工作目录，最终仅五文件，不压缩加密、不真实联络/上报/上线，不伪造审批/官方验证/专家签字。来源缺证时如实待核，不自行补收据、0值、时区、政策因果或违法结论。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2025-02.parquet"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "execution_receipt.json",
+      "absolute_path": "题包内：execution_receipt.json",
+      "url": "assets/tasks/DA-TIME-003/solution/golden_output/execution_receipt.json",
+      "bytes": 14925,
+      "sha256": "3db15f7524d0a2805e1a77b8795d0b01ef1d45a18bed59cc91f290c2ad786593",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"task_id\": \"DA-TIME-003\",\n  \"execution_at_utc\": \"2026-10-21T00:10:37.305232+00:00\",\n  \"input_sha256\": {\n    \"S01_green_2024-12.parquet\": \"1d708f58d29b0795a54ca11a36db6df61262986d122985f0fb52a56acc064bac\",\n    \"S02_green_2025-01.parquet\": \"84f3a121667157efcbf012c3566a6065df6f8e0312c678cb2f29cd72cc9c0f10\",\n    \"S03_green_2025-02.parquet\": \"b3ffe16a96ba0c68c8a8f8b10f049294ae6eb8d21f2e13b3fdbd452fa2e3498e\",\n    \"S04_zone_lookup.csv\": \"1a99e105092230f8620f301edcca7f80d3080642ff404d28ed957d3fa222c8ed\",\n    \"S05_green_dictionary.pdf\": \"25dce860acf20150f3f66a56194808089fe8403d049bf998925d0815f1a77f30\",\n    \"S06_来源与证据.docx\": \"0c9c10834cf17d260ea184ae44d7bd51366cc8c79dc36163f5bb719e547f4ed6\",\n    \"S07_D0.py\": \"25fb4cc92c15895ff3df2b80c88296625e1f0c4d02df93bcf25f997222fed3d7\",\n    \"S08_R1.json\": \"13cb16a7ddb7086ea0d0a96acf24d6039c74988dade163fafb76b1f284e9a47d\",\n    \"S09_R2.json\": \"257aeeba29b2884406025cd36a2920545a12219f52fd9c7f0d4658e2fb01801a\",\n    \"S10_委托权限.docx\": \"f8d7675250abb984f02508901e70f3b418d6967a6ceb1932db4a64385abe8401\"\n  },\n  \"script_sha256\": \"567ea00cc8febe754cd657daca4377d515af2a0dfcad045c79556b0d0d9d6550\",\n  \"contract_revision\": \"R2\",\n  \"contract_authority\": \"数据质量负责人\",\n  \"summary\": {\n    \"batches\": [\n      {\n        \"month\": \"2024-12\",\n        \"source_file\": \"S01_green_2024-12.parquet\",\n        \"source_sha256\": \"1d708f58d29b0795a54ca11a36db6df61262986d122985f0fb52a56acc064bac\",\n        \"rows\": 53994,\n        \"in_partition_month\": 53976,\n        \"outside_partition_month\": 18,\n        \"cbd_column_present\": false,\n        \"cbd_states\": {\n          \"structurally_absent\": 53994,\n          \"null\": 0,\n          \"negative\": 0,\n          \"zero\": 0,\n          \"positive\": 0\n        }\n      },\n      {\n        \"month\": \"2025-01\",\n        \"source_file\": \"S02_green_2025-01.parquet\",\n        \"source_sha256\": \"84f3a121667157efcbf012c3566a6065df6f8e0312c678cb2f29cd72cc9c0f10\",\n        \"rows\": 48326,\n        \"in_partition_month\": 48283,\n        \"outside_partition_month\": 43,\n        \"cbd_column_present\": true,\n        \"cbd_states\": {\n          \"structurally_absent\": 0,\n          \"null\": 1836,\n          \"negative\": 0,\n          \"zero\": 43183,\n          \"positive\": 3307\n        }\n      },\n      {\n        \"month\": \"2025-02\",\n        \"source_file\": \"S03_green_2025-02.parquet\",\n        \"source_sha256\": \"b3ffe16a96ba0c68c8a8f8b10f049294ae6eb8d21f2e13b3fdbd452fa2e3498e\",\n        \"rows\": 46621,\n        \"in_partition_month\": 46602,\n        \"outside_partition_month\": 19,\n        \"cbd_column_present\": true,\n        \"cbd_states\": {\n          \"structurally_absent\": 0,\n          \"null\": 1988,\n          \"negative\": 0,\n          \"zero\": 40782,\n          \"positive\": 3851\n        }\n      }\n    ],\n    \"total_rows\": 148941,\n    \"cross_month\": [\n      {\n        \"batch\": \"2024-12\",\n        \"pickup_month\": \"2008-12\",\n        \"rows\": 1\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"pickup_month\": \"2009-01\",\n        \"rows\": 1\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"pickup_month\": \"2024-11\",\n        \"rows\": 5\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"pickup_month\": \"2024-12\",\n        \"rows\": 53976\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"pickup_month\": \"2025-01\",\n        \"rows\": 11\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"pickup_month\": \"2024-12\",\n        \"rows\": 6\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"pickup_month\": \"2025-01\",\n        \"rows\": 48283\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"pickup_month\": \"2025-02\",\n        \"rows\": 37\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"pickup_month\": \"2025-01\",\n        \"rows\": 5\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"pickup_month\": \"2025-02\",\n        \"rows\": 46602\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"pickup_month\": \"2025-03\",\n        \"rows\": 14\n      }\n    ],\n    \"flags\": [\n      {\n        \"batch\": \"2024-12\",\n        \"flag\": \"cbd_missing\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"flag\": \"distance_nonpositive\",\n        \"rows\": 3002\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"flag\": \"negative_duration\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"flag\": \"wrong_month\",\n        \"rows\": 18\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"flag\": \"zone_not_borough\",\n        \"rows\": 736\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"flag\": \"zone_unresolved\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"flag\": \"cbd_missing\",\n        \"rows\": 1836\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"flag\": \"distance_nonpositive\",\n        \"rows\": 2671\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"flag\": \"negative_duration\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"flag\": \"wrong_month\",\n        \"rows\": 43\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"flag\": \"zone_not_borough\",\n        \"rows\": 630\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"flag\": \"zone_unresolved\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"flag\": \"cbd_missing\",\n        \"rows\": 1988\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"flag\": \"distance_nonpositive\",\n        \"rows\": 2377\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"flag\": \"negative_duration\",\n        \"rows\": 210\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"flag\": \"wrong_month\",\n        \"rows\": 19\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"flag\": \"zone_not_borough\",\n        \"rows\": 637\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"flag\": \"zone_unresolved\",\n        \"rows\": 0\n      }\n    ],\n    \"dispositions\": [\n      {\n        \"batch\": \"2024-12\",\n        \"reason\": \"wrong_month\",\n        \"rows\": 18\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"reason\": \"negative_duration\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"reason\": \"zone_unresolved\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"reason\": \"zone_not_borough\",\n        \"rows\": 736\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"reason\": \"cbd_missing\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"reason\": \"distance_nonpositive\",\n        \"rows\": 2635\n      },\n      {\n        \"batch\": \"2024-12\",\n        \"reason\": \"clean\",\n        \"rows\": 50605\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"reason\": \"wrong_month\",\n        \"rows\": 43\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"reason\": \"negative_duration\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"reason\": \"zone_unresolved\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"reason\": \"zone_not_borough\",\n        \"rows\": 629\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"reason\": \"cbd_missing\",\n        \"rows\": 1832\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"reason\": \"distance_nonpositive\",\n        \"rows\": 2286\n      },\n      {\n        \"batch\": \"2025-01\",\n        \"reason\": \"clean\",\n        \"rows\": 43536\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"reason\": \"wrong_month\",\n        \"rows\": 19\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"reason\": \"negative_duration\",\n        \"rows\": 210\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"reason\": \"zone_unresolved\",\n        \"rows\": 0\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"reason\": \"zone_not_borough\",\n        \"rows\": 637\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"reason\": \"cbd_missing\",\n        \"rows\": 1810\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"reason\": \"distance_nonpositive\",\n        \"rows\": 2052\n      },\n      {\n        \"batch\": \"2025-02\",\n        \"reason\": \"clean\",\n        \"rows\": 41893\n      }\n    ],\n    \"schema\": [\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"VendorID\",\n        \"type\": \"int32\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"lpep_pickup_datetime\",\n        \"type\": \"timestamp[us]\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"lpep_dropoff_datetime\",\n        \"type\": \"timestamp[us]\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"store_and_fwd_flag\",\n        \"type\": \"large_string\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"RatecodeID\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"PULocationID\",\n        \"type\": \"int32\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"DOLocationID\",\n        \"type\": \"int32\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"passenger_count\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"trip_distance\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"fare_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"extra\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"mta_tax\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"tip_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"tolls_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"ehail_fee\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"improvement_surcharge\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"total_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"payment_type\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"trip_type\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2024-12\",\n        \"field\": \"congestion_surcharge\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"VendorID\",\n        \"type\": \"int32\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"lpep_pickup_datetime\",\n        \"type\": \"timestamp[us]\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"lpep_dropoff_datetime\",\n        \"type\": \"timestamp[us]\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"store_and_fwd_flag\",\n        \"type\": \"large_string\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"RatecodeID\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"PULocationID\",\n        \"type\": \"int32\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"DOLocationID\",\n        \"type\": \"int32\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"passenger_count\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"trip_distance\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"fare_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"extra\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"mta_tax\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"tip_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"tolls_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"ehail_fee\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"improvement_surcharge\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"total_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"payment_type\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"trip_type\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"congestion_surcharge\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-01\",\n        \"field\": \"cbd_congestion_fee\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"VendorID\",\n        \"type\": \"int32\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"lpep_pickup_datetime\",\n        \"type\": \"timestamp[us]\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"lpep_dropoff_datetime\",\n        \"type\": \"timestamp[us]\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"store_and_fwd_flag\",\n        \"type\": \"large_string\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"RatecodeID\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"PULocationID\",\n        \"type\": \"int32\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"DOLocationID\",\n        \"type\": \"int32\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"passenger_count\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"trip_distance\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"fare_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"extra\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"mta_tax\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"tip_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"tolls_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"ehail_fee\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"improvement_surcharge\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"total_amount\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"payment_type\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"trip_type\",\n        \"type\": \"int64\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"congestion_surcharge\",\n        \"type\": \"double\"\n      },\n      {\n        \"month\": \"2025-02\",\n        \"field\": \"cbd_congestion_fee\",\n        \"type\": \"double\"\n      }\n    ]\n  },\n  \"output_sha256\": {\n    \"quality_ledger.sqlite\": \"0ac178c718c9821f2cf9cc21b256ed96a8336fe2d896b3a1e952f335d7dfaccb\",\n    \"quality_review.xlsx\": \"77d1345a0b90bb7dfdb71505c1754e09aea47bc780bbbaa02f88ce8362a5cf17\",\n    \"intake_memo.docx\": \"b84e0270979989ad419af4bf985bd8c8ad0c70ab48a306e6e3c675c2a4516c6c\"\n  },\n  \"release_status\": \"INTERNAL_REVIEW_REQUIRED\",\n  \"external_publish_performed\": false,\n  \"scope\": \"Actual full-row audit of supplied frozen batches, not source accuracy guarantee, fare enforcement, causal inference, expert approval or trusted attestation\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "intake_memo.docx",
+      "absolute_path": "题包内：intake_memo.docx",
+      "url": "assets/tasks/DA-TIME-003/solution/golden_output/intake_memo.docx",
+      "bytes": 39204,
+      "sha256": "b84e0270979989ad419af4bf985bd8c8ad0c70ab48a306e6e3c675c2a4516c6c",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "跨年Green数据接入｜质量待审"
+        },
+        {
+          "kind": "paragraph",
+          "text": "致数据质量负责人和月报业务负责人｜原创内部业务回放2026-10-21 09:00 Asia/Shanghai；不是TLC官方审批或历史抓取证明。执行时刻及冻结SHA见execution_receipt.json。"
+        },
+        {
+          "kind": "heading",
+          "text": "一、结论与可用范围"
+        },
+        {
+          "kind": "paragraph",
+          "text": "暂不自动放行业务月报；三份真实源共148941行全量保留到quality_ledger.sqlite。原始层可按哈希归档；业务层须先核异常/分母与版本口径，不删除异常、不补造金额或推断政策因果效应。TLC声明数据来自技术提供商，不担保准确性，作者也不能以校验通过替官方验真。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2024-12：53994行；上客本月53976、跨月18；落客早于上客0。CBD五态（无列/null/负/零/正）=53994/0/0/0/0。这些是源分区口径，不是重分月后的去重行程量。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2025-01：48326行；上客本月48283、跨月43；落客早于上客0。CBD五态（无列/null/负/零/正）=0/1836/0/43183/3307。这些是源分区口径，不是重分月后的去重行程量。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2025-02：46621行；上客本月46602、跨月19；落客早于上客210。CBD五态（无列/null/负/零/正）=0/1988/0/40782/3851。这些是源分区口径，不是重分月后的去重行程量。"
+        },
+        {
+          "kind": "heading",
+          "text": "二、版本、消息与时间"
+        },
+        {
+          "kind": "paragraph",
+          "text": "采用负责人的R2，保留R1历史，不采纳较晚营销删异常/填零建议。有权R2增加全量行账、schema五态及唯一处置；这属于原创内部合同，不是TLC官方质量标准。无时区时间戳按America/New_York当地墙钟，不作UTC转换。真实抓取2026，不能伪称此快照2025已存在。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "官方网页称2025起新增cbd_congestion_fee；字典2025-03-18说明费用从2025-01-05开始。旧文件无该列不等金额零，新文件null也不等免费；congestion_surcharge是另一费项，不能替代。只有字段与日期不足以逐程认定计费违法；不据前后月份差异声称政策有效。"
+        },
+        {
+          "kind": "heading",
+          "text": "三、行守恒与可追溯账"
+        },
+        {
+          "kind": "paragraph",
+          "text": "quality_ledger.sqlite以(batch,row_number)唯一保留每源每行，上客/落客墙钟、zone、CBD状态/原值、距离、全部质量标记和唯一处置。每批原行数=SQLite行数=唯一处置之和；本月+跨月=原行数。多标签同一行可重叠，标签合计不是异常总行数。优先级：wrong_month → negative_duration → zone_unresolved → zone_not_borough → cbd_missing → distance_nonpositive → clean；距离是否隔离为True，不改变原始距离/标记。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Schema版本页逐字段列实际类型/缺列；CBD五态页保留结构缺失、null、负、零、正且总数守恒。zone 264是Unknown，265是Outside of NYC，不是普通城区；即使能join也不能直接计入区级空间覆盖。原日期异常和非正距离只标记待核，不认定驾驶人、提供商违法或造假。"
+        },
+        {
+          "kind": "heading",
+          "text": "四、D0错误与后续动作"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0为原创有缺陷旧稿：只读1000行冒全量、文件名代上客月、缺列/null全填0、过滤非正距离。新版实际遍历三份全部行，分开两种月份，五态不补值，保留异常。无修改任何官方输入。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "工程师向数据质量负责人交带行号的隔离账和当前哈希；业务负责人确认区级报表分母、跨月归属和特殊zone处置；必要时联系来源提供方核实日期/缺值。待负责人核准再建下游业务视图，不从原始层删行。未做真实联系、官方确认、自动发布、模型能力测试或专家签字。"
+        },
+        {
+          "kind": "heading",
+          "text": "五、复现与失败恢复"
+        },
+        {
+          "kind": "paragraph",
+          "text": "依赖Python、pyarrow、openpyxl、python-docx、sqlite3及LibreOffice（真实重算公式缓存）。新建空输出目录并复制quality_audit.py，执行python quality_audit.py build --input-dir /app/input_files --output-dir 新目录；随后verify同参数。build拒不完整输入、无权合同与未知schema；verify核输入/当前脚本/SQLite/两Office哈希及行守恒。变更后旧回执失效，在新目录重建；哈希只是字节一致证明，不是可信签章或全部语义正确证明。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "来源：S01–S03官方链接的完整Parquet；S04官方zone表；S05官方2页字典；S06含原站免责声明/取证日期。S07–S10的旧稿、合同、权限和业务日期均原创演练，不代表市政数据生产指令。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "quality_audit.py",
+      "absolute_path": "题包内：quality_audit.py",
+      "url": "assets/tasks/DA-TIME-003/solution/golden_output/quality_audit.py",
+      "bytes": 20603,
+      "sha256": "567ea00cc8febe754cd657daca4377d515af2a0dfcad045c79556b0d0d9d6550",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "\"\"\"Source-grounded TLC batch audit. Internal quality controls, not fare enforcement.\"\"\"\nfrom pathlib import Path\nfrom collections import Counter\nimport argparse,csv,datetime,hashlib,json,math,sqlite3,subprocess,tempfile,shutil\nimport pyarrow.parquet as pq\nfrom openpyxl import Workbook,load_workbook\nfrom openpyxl.styles import Alignment,Font,PatternFill\nfrom openpyxl.utils import get_column_letter\nfrom docx import Document\nfrom docx.shared import Cm,Pt\n\nFILES=['S01_green_2024-12.parquet','S02_green_2025-01.parquet','S03_green_2025-02.parquet','S04_zone_lookup.csv','S05_green_dictionary.pdf','S06_来源与证据.docx','S07_D0.py','S08_R1.json','S09_R2.json','S10_委托权限.docx']\nOFFICE=['quality_review.xlsx','intake_memo.docx']\nOUTPUTS=['quality_audit.py','quality_ledger.sqlite',*OFFICE,'execution_receipt.json']\nFLAGS=['wrong_month','negative_duration','zone_unresolved','zone_not_borough','cbd_missing','distance_nonpositive']\nSTATES=['structurally_absent','null','negative','zero','positive']\nLABELS={'wrong_month':'上客月与源分区不一致','negative_duration':'落客早于上客','zone_unresolved':'zone未匹配','zone_not_borough':'264未知/265市外，不能归城区','cbd_missing':'2025字段存在但值为空','distance_nonpositive':'距离非正','clean':'未触发本合同质量标记'}\n\ndef sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()\n\ndef hashes(inp):\n    actual={p.name for p in inp.iterdir() if p.is_file()}\n    if actual!=set(FILES):raise ValueError('Input file set incomplete or unexpected')\n    return {name:sha(inp/name) for name in FILES}\n\ndef contract(inp):\n    r=json.loads((inp/'S09_R2.json').read_text())\n    if r.get('authority_role')!='数据质量负责人' or r.get('revision') not in ['R2','R3'] or r.get('supersedes') not in ['R1','R2']:raise ValueError('Unapproved contract role/revision')\n    if set(r.get('priority',[]))!=set(FLAGS) or len(r['priority'])!=len(FLAGS):raise ValueError('Priority must cover each flag exactly once')\n    if type(r.get('quarantine_nonpositive_distance')) is not bool:raise ValueError('Distance disposition switch must be explicit boolean')\n    if r.get('timestamp_interpretation')!='America/New_York wallclock; no timezone conversion':raise ValueError('Unsupported timezone contract')\n    if {b['month'] for b in r['batches']}!={'2024-12','2025-01','2025-02'} or len(r['batches'])!=3 or {b['file'] for b in r['batches']}!=set(FILES[:3]):raise ValueError('Three distinct batches required')\n    return r\n\ndef profile(inp,out,r):\n    lookup=list(csv.DictReader((inp/FILES[3]).open(encoding='utf-8')))\n    zones={int(x['LocationID']):x for x in lookup};assert len(zones)==len(lookup)\n    con=sqlite3.connect(out/'quality_ledger.sqlite')\n    con.executescript('CREATE TABLE trip_ledger(batch TEXT,row_number INTEGER,pickup_wallclock TEXT,pickup_month TEXT,dropoff_wallclock TEXT,pu INTEGER,do INTEGER,pu_borough TEXT,do_borough TEXT,cbd_state TEXT,cbd_amount REAL,distance REAL,flags_json TEXT,disposition TEXT,PRIMARY KEY(batch,row_number)); CREATE TABLE metadata(key TEXT PRIMARY KEY,value_json TEXT);')\n    batches=[];schema=[];cross=Counter();flag_counts=Counter();primary=Counter()\n    for b in sorted(r['batches'],key=lambda x:x['month']):\n        p=inp/b['file'];f=pq.ParquetFile(p);names=f.schema_arrow.names\n        required=['lpep_pickup_datetime','lpep_dropoff_datetime','PULocationID','DOLocationID','trip_distance']\n        if not set(required)<=set(names):raise ValueError('Missing operational columns')\n        if (b['month']>='2025-01')!=('cbd_congestion_fee' in names):raise ValueError('Unexpected versioned CBD schema')\n        for col in names:schema.append(dict(month=b['month'],field=col,type=str(f.schema_arrow.field(col).type)))\n        values=Counter();n=0;in_month=0\n        for block in f.iter_batches(batch_size=8192):\n            insert=[]\n            for row in block.to_pylist():\n                n+=1;pickup=row['lpep_pickup_datetime'];drop=row['lpep_dropoff_datetime']\n                if not isinstance(pickup,datetime.datetime) or not isinstance(drop,datetime.datetime) or pickup.tzinfo is not None or drop.tzinfo is not None:raise ValueError('Missing or timezone-aware timestamp requires explicit review')\n                month=pickup.strftime('%Y-%m');cross[(b['month'],month)]+=1;in_month+=int(month==b['month'])\n                raw=row.get('cbd_congestion_fee')\n                if 'cbd_congestion_fee' not in names:state='structurally_absent'\n                elif raw is None:state='null'\n                elif not math.isfinite(raw):raise ValueError('Nonfinite CBD requires review, not zero fill')\n                else:state='negative' if raw<0 else 'zero' if raw==0 else 'positive'\n                values[state]+=1;pu=row['PULocationID'];do=row['DOLocationID'];distance=row['trip_distance']\n                flags={'wrong_month':month!=b['month'],'negative_duration':drop<pickup,'zone_unresolved':pu not in zones or do not in zones,'zone_not_borough':pu in [264,265] or do in [264,265],'cbd_missing':state=='null','distance_nonpositive':distance is not None and distance<=0}\n                for k,v in flags.items():flag_counts[(b['month'],k)]+=int(v)\n                active=[k for k in r['priority'] if flags[k] and (k!='distance_nonpositive' or r['quarantine_nonpositive_distance'])]\n                disposition=active[0] if active else 'clean';primary[(b['month'],disposition)]+=1\n                insert.append((b['month'],n,pickup.isoformat(),month,drop.isoformat(),pu,do,zones.get(pu,{}).get('Borough'),zones.get(do,{}).get('Borough'),state,raw,distance,json.dumps(flags,sort_keys=True),disposition))\n            con.executemany('INSERT INTO trip_ledger VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)',insert)\n        assert n==f.metadata.num_rows\n        batches.append(dict(month=b['month'],source_file=b['file'],source_sha256=sha(p),rows=n,in_partition_month=in_month,outside_partition_month=n-in_month,cbd_column_present='cbd_congestion_fee' in names,cbd_states={s:values[s] for s in STATES}))\n    summary=dict(batches=batches,total_rows=sum(b['rows'] for b in batches),cross_month=[dict(batch=k[0],pickup_month=k[1],rows=v) for k,v in sorted(cross.items())],flags=[dict(batch=k[0],flag=k[1],rows=v) for k,v in sorted(flag_counts.items())],dispositions=[dict(batch=b['month'],reason=k,rows=primary[(b['month'],k)]) for b in batches for k in FLAGS+['clean']],schema=schema)\n    assert con.execute('SELECT COUNT(*) FROM trip_ledger').fetchone()[0]==summary['total_rows']\n    for k,v in [('input_sha256',hashes(inp)),('contract',r),('summary',summary)]:con.execute('INSERT INTO metadata VALUES(?,?)',(k,json.dumps(v,ensure_ascii=False,sort_keys=True)))\n    con.commit();assert con.execute('PRAGMA integrity_check').fetchone()[0]=='ok';con.close();return summary\n\ndef workbook(out,s,r):\n    w=Workbook();w.remove(w.active)\n    def sheet(name,rows,widths):\n        q=w.create_sheet(name)\n        for row in rows:q.append(row)\n        for c in q[1]:c.font=Font(name='Noto Sans CJK SC',bold=True,color='FFFFFF',size=10);c.fill=PatternFill('solid',fgColor='173C45')\n        for i,v in enumerate(widths,1):q.column_dimensions[get_column_letter(i)].width=v\n        for row in q:\n            q.row_dimensions[row[0].row].height=34 if row[0].row==1 else 29\n            for c in row:c.alignment=Alignment(wrap_text=True,vertical='center',horizontal='left' if isinstance(c.value,str) and not c.value.startswith('=') else 'center');c.font=Font(name='Noto Sans CJK SC',size=10,bold=c.row==1,color='FFFFFF' if c.row==1 else '173C45')\n        q.freeze_panes='A2';q.auto_filter.ref=q.dimensions;q.print_title_rows='1:1';q.sheet_properties.pageSetUpPr.fitToPage=True;q.page_setup.orientation='landscape';q.page_setup.paperSize=q.PAPERSIZE_A3;q.page_setup.fitToWidth=1;q.page_setup.fitToHeight=1\n        return q\n    rows=[['源分区月','原始行','上客本月','上客跨月','SQLite行','唯一处置计数','行守恒差','结论']]\n    for i,b in enumerate(s['batches'],2):rows.append([b['month'],b['rows'],b['in_partition_month'],b['outside_partition_month'],b['rows'],sum(v['rows'] for v in s['dispositions'] if v['batch']==b['month']),f'=B{i}-C{i}-D{i}',r['revision']+'：全量保留，待核问题见后页'])\n    rows.append(['合计','=SUM(B2:B4)','=SUM(C2:C4)','=SUM(D2:D4)','=SUM(E2:E4)','=SUM(F2:F4)','=SUM(G2:G4)','只证明所交三源处理覆盖，非官方完整性保证'])\n    q=sheet('批次行守恒',rows,[17,16,16,16,16,19,17,60]);q.row_dimensions[5].height=55\n    sheet('上客月归属',[['源分区月','真实上客月','行数','解释']]+[[x['batch'],x['pickup_month'],x['rows'],'原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件'] for x in s['cross_month']],[20,20,18,100])\n    fields=sorted({x['field'] for x in s['schema']});schema={(x['month'],x['field']):x['type'] for x in s['schema']}\n    def boundary(c):\n        if c=='cbd_congestion_fee':return '结构不存在≠null≠数值0；不同于congestion_surcharge'\n        if c in ['lpep_pickup_datetime','lpep_dropoff_datetime']:return '无时区时间戳按给定纽约墙钟；不作UTC转换'\n        if c in ['PULocationID','DOLocationID']:return '原zone ID；264未知/265市外不当普通城区'\n        if c=='congestion_surcharge':return 'NYS费项，不代填cbd_congestion_fee'\n        if c in ['tip_amount','total_amount']:return '按官方字典不含现金小费，不推断全部收入'\n        return '保留官方原字段与类型；本审阅不作逐程计费合法性判断'\n    sheet('Schema版本',[['字段','2024-12','2025-01','2025-02','使用边界']]+[[c,*[schema.get((m,c),'结构不存在') for m in ['2024-12','2025-01','2025-02']],boundary(c)] for c in fields],[34,23,23,23,74])\n    sheet('CBD五态',[['源分区月','无此字段','有列但null','负值','零值','正值','核算合计','与总行差']]+[[b['month'],*[b['cbd_states'][k] for k in STATES],f'=SUM(B{i}:F{i})',f'=G{i}-\\'批次行守恒\\'!B{i}'] for i,b in enumerate(s['batches'],2)],[20,19,19,19,19,19,20,20])\n    flags={(x['batch'],x['flag']):x['rows'] for x in s['flags']};primary={(x['batch'],x['reason']):x['rows'] for x in s['dispositions']}\n    sheet('异常与唯一处置',[['月','标记/处置原因','多标签行数','唯一处置行数','区别']]+[[b['month'],LABELS[k],flags.get((b['month'],k),None),primary.get((b['month'],k),0),'多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒'] for b in s['batches'] for k in FLAGS+['clean']],[18,39,22,24,85])\n    recommendations=[['问题/责任','已知事实和动作'],['接入决定','仅内部质量待审；原始层可按SHA归档，业务月报层暂不自动放行。数据质量负责人审阅隔离规则后批准，不能宣称TLC官方已验真。'],['全量覆盖','三分区共'+str(s['total_rows'])+'行全部入SQLite。行号从各源物理读取顺序1开始，(batch,row_number)唯一；不以抽样冒全量。'],['日期/版本','字典2025-03-18说明CBD对应2025-01-05起费用；不是原文件首次发布时间。业务回放2026-10-21 09:00 Asia/Shanghai，真实执行UTC另记。'],['未解决事项','源提供商可有误，TLC不担保准确性；264为未知、265为市外，join成功不等可归城区。落客早于上客等只提示补证，不推断违法/造假。'],['缺值和费项','2024无CBD列不造零；2025 null不认免费；congestion_surcharge与cbd_congestion_fee不同，不互相补值或并为同一政策。现金小费不在tip_amount/total中，不由字段推断总收入。'],['下一步','工程师交隔离账与复现命令，业务负责人确认分析分母，数据质量负责人审核；不得删除异常、补造金额、自动上线或宣称政策因果效应。'],['复现与边界','python quality_audit.py build --input-dir /app/input_files --output-dir 新空目录（先复制本脚本）；verify同参数。核输入/脚本/3成果SHA，合法变更新目录重建，不手改旧回执。']]\n    q=sheet('接入建议',recommendations,[27,150])\n    for row in range(2,9):q.row_dimensions[row].height=68\n    w.properties.creator='Work50';w.save(out/OFFICE[0]);w.close()\n    with tempfile.TemporaryDirectory(prefix='tlc-recalc-') as tmp:\n        t=Path(tmp);dest=t/'recalculated';dest.mkdir()\n        run=subprocess.run(['libreoffice','-env:UserInstallation='+(t/'profile').as_uri(),'--headless','--convert-to','xlsx','--outdir',str(dest),str((out/OFFICE[0]).resolve())],capture_output=True,text=True,timeout=120)\n        if run.returncode or not (dest/OFFICE[0]).exists():raise RuntimeError('Actual formula recalculation failed: '+run.stdout+run.stderr)\n        shutil.copy2(dest/OFFICE[0],out/OFFICE[0])\n    w=load_workbook(out/OFFICE[0],data_only=True)\n    assert w['批次行守恒']['B5'].value==s['total_rows']\n    assert all(w['批次行守恒'][f'G{i}'].value==0 for i in range(2,6))\n    assert all(w['CBD五态'][f'H{i}'].value==0 for i in range(2,5));w.close()\n\ndef memo(out,s,r):\n    d=Document();sec=d.sections[0];sec.top_margin=sec.bottom_margin=Cm(1.6);d.styles['Normal'].font.name='Noto Sans CJK SC';d.styles['Normal'].font.size=Pt(10)\n    d.core_properties.author='Work50';d.add_heading('跨年Green数据接入｜质量待审',0)\n    d.add_paragraph('致数据质量负责人和月报业务负责人｜原创内部业务回放2026-10-21 09:00 Asia/Shanghai；不是TLC官方审批或历史抓取证明。执行时刻及冻结SHA见execution_receipt.json。')\n    d.add_heading('一、结论与可用范围',1);d.add_paragraph('暂不自动放行业务月报；三份真实源共'+str(s['total_rows'])+'行全量保留到quality_ledger.sqlite。原始层可按哈希归档；业务层须先核异常/分母与版本口径，不删除异常、不补造金额或推断政策因果效应。TLC声明数据来自技术提供商，不担保准确性，作者也不能以校验通过替官方验真。')\n    for b in s['batches']:\n        f={x['flag']:x['rows'] for x in s['flags'] if x['batch']==b['month']}\n        d.add_paragraph(b['month']+'：'+str(b['rows'])+'行；上客本月'+str(b['in_partition_month'])+'、跨月'+str(b['outside_partition_month'])+'；落客早于上客'+str(f['negative_duration'])+'。CBD五态（无列/null/负/零/正）='+ '/'.join(str(b['cbd_states'][k]) for k in STATES)+'。这些是源分区口径，不是重分月后的去重行程量。')\n    d.add_heading('二、版本、消息与时间',1);d.add_paragraph('采用负责人的'+r['revision']+'，保留R1历史，不采纳较晚营销删异常/填零建议。有权R2增加全量行账、schema五态及唯一处置；这属于原创内部合同，不是TLC官方质量标准。无时区时间戳按America/New_York当地墙钟，不作UTC转换。真实抓取2026，不能伪称此快照2025已存在。')\n    d.add_paragraph('官方网页称2025起新增cbd_congestion_fee；字典2025-03-18说明费用从2025-01-05开始。旧文件无该列不等金额零，新文件null也不等免费；congestion_surcharge是另一费项，不能替代。只有字段与日期不足以逐程认定计费违法；不据前后月份差异声称政策有效。')\n    d.add_page_break();d.add_heading('三、行守恒与可追溯账',1)\n    d.add_paragraph('quality_ledger.sqlite以(batch,row_number)唯一保留每源每行，上客/落客墙钟、zone、CBD状态/原值、距离、全部质量标记和唯一处置。每批原行数=SQLite行数=唯一处置之和；本月+跨月=原行数。多标签同一行可重叠，标签合计不是异常总行数。优先级：'+' → '.join(r['priority'])+' → clean；距离是否隔离为'+str(r['quarantine_nonpositive_distance'])+'，不改变原始距离/标记。')\n    d.add_paragraph('Schema版本页逐字段列实际类型/缺列；CBD五态页保留结构缺失、null、负、零、正且总数守恒。zone 264是Unknown，265是Outside of NYC，不是普通城区；即使能join也不能直接计入区级空间覆盖。原日期异常和非正距离只标记待核，不认定驾驶人、提供商违法或造假。')\n    d.add_heading('四、D0错误与后续动作',1);d.add_paragraph('D0为原创有缺陷旧稿：只读1000行冒全量、文件名代上客月、缺列/null全填0、过滤非正距离。新版实际遍历三份全部行，分开两种月份，五态不补值，保留异常。无修改任何官方输入。')\n    d.add_paragraph('工程师向数据质量负责人交带行号的隔离账和当前哈希；业务负责人确认区级报表分母、跨月归属和特殊zone处置；必要时联系来源提供方核实日期/缺值。待负责人核准再建下游业务视图，不从原始层删行。未做真实联系、官方确认、自动发布、模型能力测试或专家签字。')\n    d.add_heading('五、复现与失败恢复',1);d.add_paragraph('依赖Python、pyarrow、openpyxl、python-docx、sqlite3及LibreOffice（真实重算公式缓存）。新建空输出目录并复制quality_audit.py，执行python quality_audit.py build --input-dir /app/input_files --output-dir 新目录；随后verify同参数。build拒不完整输入、无权合同与未知schema；verify核输入/当前脚本/SQLite/两Office哈希及行守恒。变更后旧回执失效，在新目录重建；哈希只是字节一致证明，不是可信签章或全部语义正确证明。')\n    d.add_paragraph('来源：S01–S03官方链接的完整Parquet；S04官方zone表；S05官方2页字典；S06含原站免责声明/取证日期。S07–S10的旧稿、合同、权限和业务日期均原创演练，不代表市政数据生产指令。')\n    d.save(out/OFFICE[1])\n\ndef build(inp,out):\n    before=hashes(inp);r=contract(inp);out.mkdir(parents=True,exist_ok=True)\n    if {p.name for p in out.iterdir()}!={'quality_audit.py'}:raise ValueError('Use fresh output directory containing only this script')\n    if sha(out/'quality_audit.py')!=sha(Path(__file__)):raise ValueError('Output script not this executed version')\n    s=profile(inp,out,r);workbook(out,s,r);memo(out,s,r)\n    assert before==hashes(inp)\n    result=dict(task_id='DA-TIME-003',execution_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),input_sha256=before,script_sha256=sha(Path(__file__)),contract_revision=r['revision'],contract_authority=r['authority_role'],summary=s,output_sha256={n:sha(out/n) for n in ['quality_ledger.sqlite',*OFFICE]},release_status='INTERNAL_REVIEW_REQUIRED',external_publish_performed=False,scope='Actual full-row audit of supplied frozen batches, not source accuracy guarantee, fare enforcement, causal inference, expert approval or trusted attestation')\n    (out/'execution_receipt.json').write_text(json.dumps(result,ensure_ascii=False,indent=2));return result\n\ndef verify(inp,out):\n    e=json.loads((out/'execution_receipt.json').read_text());assert set(p.name for p in out.iterdir())==set(OUTPUTS)\n    assert e['input_sha256']==hashes(inp);assert e['script_sha256']==sha(Path(__file__))==sha(out/'quality_audit.py')\n    assert e['contract_revision']==contract(inp)['revision'] and not e['external_publish_performed'] and e['release_status']=='INTERNAL_REVIEW_REQUIRED'\n    assert e['output_sha256']=={n:sha(out/n) for n in ['quality_ledger.sqlite',*OFFICE]}\n    c=sqlite3.connect('file:'+str((out/'quality_ledger.sqlite').resolve())+'?mode=ro',uri=True)\n    assert c.execute('PRAGMA integrity_check').fetchone()[0]=='ok'\n    assert json.loads(c.execute('SELECT value_json FROM metadata WHERE key=\"summary\"').fetchone()[0])==e['summary']\n    assert json.loads(c.execute('SELECT value_json FROM metadata WHERE key=\"input_sha256\"').fetchone()[0])==hashes(inp)\n    for b in e['summary']['batches']:\n        assert c.execute('SELECT COUNT(*) FROM trip_ledger WHERE batch=?',(b['month'],)).fetchone()[0]==b['rows']==pq.ParquetFile(inp/b['source_file']).metadata.num_rows\n        assert b['in_partition_month']+b['outside_partition_month']==b['rows']==sum(b['cbd_states'].values())\n    c.close();return dict(task_id='DA-TIME-003',verified=True,total_rows=e['summary']['total_rows'],release_status=e['release_status'])\n\ndef main():\n    p=argparse.ArgumentParser();p.add_argument('command',choices=['build','verify']);p.add_argument('--input-dir',type=Path,required=True);p.add_argument('--output-dir',type=Path,required=True);a=p.parse_args()\n    e=build(a.input_dir,a.output_dir) if a.command=='build' else verify(a.input_dir,a.output_dir)\n    print(json.dumps({k:v for k,v in e.items() if k not in ['summary','input_sha256','output_sha256']},ensure_ascii=False))\n\nif __name__=='__main__':main()\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "quality_ledger.sqlite",
+      "absolute_path": "题包内：quality_ledger.sqlite",
+      "url": "assets/tasks/DA-TIME-003/solution/golden_output/quality_ledger.sqlite",
+      "bytes": 45318144,
+      "sha256": "0ac178c718c9821f2cf9cc21b256ed96a8336fe2d896b3a1e952f335d7dfaccb",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "此类型或大小不做网页内解析，请下载实际文件查看。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "quality_review.xlsx",
+      "absolute_path": "题包内：quality_review.xlsx",
+      "url": "assets/tasks/DA-TIME-003/solution/golden_output/quality_review.xlsx",
+      "bytes": 19515,
+      "sha256": "77d1345a0b90bb7dfdb71505c1754e09aea47bc780bbbaa02f88ce8362a5cf17",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "批次行守恒"
+        },
+        {
+          "kind": "notice",
+          "text": "共5行 × 8列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "源分区月",
+              "原始行",
+              "上客本月",
+              "上客跨月",
+              "SQLite行",
+              "唯一处置计数",
+              "行守恒差",
+              "结论"
+            ],
+            [
+              "2024-12",
+              53994,
+              53976,
+              18,
+              53994,
+              53994,
+              "=B2-C2-D2\n缓存：0",
+              "R2：全量保留，待核问题见后页"
+            ],
+            [
+              "2025-01",
+              48326,
+              48283,
+              43,
+              48326,
+              48326,
+              "=B3-C3-D3\n缓存：0",
+              "R2：全量保留，待核问题见后页"
+            ],
+            [
+              "2025-02",
+              46621,
+              46602,
+              19,
+              46621,
+              46621,
+              "=B4-C4-D4\n缓存：0",
+              "R2：全量保留，待核问题见后页"
+            ],
+            [
+              "合计",
+              "=SUM(B2:B4)\n缓存：148941",
+              "=SUM(C2:C4)\n缓存：148861",
+              "=SUM(D2:D4)\n缓存：80",
+              "=SUM(E2:E4)\n缓存：148941",
+              "=SUM(F2:F4)\n缓存：148941",
+              "=SUM(G2:G4)\n缓存：0",
+              "只证明所交三源处理覆盖，非官方完整性保证"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "上客月归属"
+        },
+        {
+          "kind": "notice",
+          "text": "共12行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "源分区月",
+              "真实上客月",
+              "行数",
+              "解释"
+            ],
+            [
+              "2024-12",
+              "2008-12",
+              1,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ],
+            [
+              "2024-12",
+              "2009-01",
+              1,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ],
+            [
+              "2024-12",
+              "2024-11",
+              5,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ],
+            [
+              "2024-12",
+              "2024-12",
+              53976,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ],
+            [
+              "2024-12",
+              "2025-01",
+              11,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ],
+            [
+              "2025-01",
+              "2024-12",
+              6,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ],
+            [
+              "2025-01",
+              "2025-01",
+              48283,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ],
+            [
+              "2025-01",
+              "2025-02",
+              37,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ],
+            [
+              "2025-02",
+              "2025-01",
+              5,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ],
+            [
+              "2025-02",
+              "2025-02",
+              46602,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ],
+            [
+              "2025-02",
+              "2025-03",
+              14,
+              "原始墙钟未转UTC；不同批次相同月份不去重或自动移入另一源文件"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "Schema版本"
+        },
+        {
+          "kind": "notice",
+          "text": "共22行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "字段",
+              "2024-12",
+              "2025-01",
+              "2025-02",
+              "使用边界"
+            ],
+            [
+              "DOLocationID",
+              "int32",
+              "int32",
+              "int32",
+              "原zone ID；264未知/265市外不当普通城区"
+            ],
+            [
+              "PULocationID",
+              "int32",
+              "int32",
+              "int32",
+              "原zone ID；264未知/265市外不当普通城区"
+            ],
+            [
+              "RatecodeID",
+              "int64",
+              "int64",
+              "int64",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "VendorID",
+              "int32",
+              "int32",
+              "int32",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "cbd_congestion_fee",
+              "结构不存在",
+              "double",
+              "double",
+              "结构不存在≠null≠数值0；不同于congestion_surcharge"
+            ],
+            [
+              "congestion_surcharge",
+              "double",
+              "double",
+              "double",
+              "NYS费项，不代填cbd_congestion_fee"
+            ],
+            [
+              "ehail_fee",
+              "double",
+              "double",
+              "double",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "extra",
+              "double",
+              "double",
+              "double",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "fare_amount",
+              "double",
+              "double",
+              "double",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "improvement_surcharge",
+              "double",
+              "double",
+              "double",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "lpep_dropoff_datetime",
+              "timestamp[us]",
+              "timestamp[us]",
+              "timestamp[us]",
+              "无时区时间戳按给定纽约墙钟；不作UTC转换"
+            ],
+            [
+              "lpep_pickup_datetime",
+              "timestamp[us]",
+              "timestamp[us]",
+              "timestamp[us]",
+              "无时区时间戳按给定纽约墙钟；不作UTC转换"
+            ],
+            [
+              "mta_tax",
+              "double",
+              "double",
+              "double",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "passenger_count",
+              "int64",
+              "int64",
+              "int64",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "payment_type",
+              "int64",
+              "int64",
+              "int64",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "store_and_fwd_flag",
+              "large_string",
+              "large_string",
+              "large_string",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "tip_amount",
+              "double",
+              "double",
+              "double",
+              "按官方字典不含现金小费，不推断全部收入"
+            ],
+            [
+              "tolls_amount",
+              "double",
+              "double",
+              "double",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "total_amount",
+              "double",
+              "double",
+              "double",
+              "按官方字典不含现金小费，不推断全部收入"
+            ],
+            [
+              "trip_distance",
+              "double",
+              "double",
+              "double",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ],
+            [
+              "trip_type",
+              "int64",
+              "int64",
+              "int64",
+              "保留官方原字段与类型；本审阅不作逐程计费合法性判断"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "CBD五态"
+        },
+        {
+          "kind": "notice",
+          "text": "共4行 × 8列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "源分区月",
+              "无此字段",
+              "有列但null",
+              "负值",
+              "零值",
+              "正值",
+              "核算合计",
+              "与总行差"
+            ],
+            [
+              "2024-12",
+              53994,
+              0,
+              0,
+              0,
+              0,
+              "=SUM(B2:F2)\n缓存：53994",
+              "=G2-批次行守恒!B2\n缓存：0"
+            ],
+            [
+              "2025-01",
+              0,
+              1836,
+              0,
+              43183,
+              3307,
+              "=SUM(B3:F3)\n缓存：48326",
+              "=G3-批次行守恒!B3\n缓存：0"
+            ],
+            [
+              "2025-02",
+              0,
+              1988,
+              0,
+              40782,
+              3851,
+              "=SUM(B4:F4)\n缓存：46621",
+              "=G4-批次行守恒!B4\n缓存：0"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "异常与唯一处置"
+        },
+        {
+          "kind": "notice",
+          "text": "共22行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "月",
+              "标记/处置原因",
+              "多标签行数",
+              "唯一处置行数",
+              "区别"
+            ],
+            [
+              "2024-12",
+              "上客月与源分区不一致",
+              18,
+              18,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2024-12",
+              "落客早于上客",
+              0,
+              0,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2024-12",
+              "zone未匹配",
+              0,
+              0,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2024-12",
+              "264未知/265市外，不能归城区",
+              736,
+              736,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2024-12",
+              "2025字段存在但值为空",
+              0,
+              0,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2024-12",
+              "距离非正",
+              3002,
+              2635,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2024-12",
+              "未触发本合同质量标记",
+              null,
+              50605,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-01",
+              "上客月与源分区不一致",
+              43,
+              43,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-01",
+              "落客早于上客",
+              0,
+              0,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-01",
+              "zone未匹配",
+              0,
+              0,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-01",
+              "264未知/265市外，不能归城区",
+              630,
+              629,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-01",
+              "2025字段存在但值为空",
+              1836,
+              1832,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-01",
+              "距离非正",
+              2671,
+              2286,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-01",
+              "未触发本合同质量标记",
+              null,
+              43536,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-02",
+              "上客月与源分区不一致",
+              19,
+              19,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-02",
+              "落客早于上客",
+              210,
+              210,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-02",
+              "zone未匹配",
+              0,
+              0,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-02",
+              "264未知/265市外，不能归城区",
+              637,
+              637,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-02",
+              "2025字段存在但值为空",
+              1988,
+              1810,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-02",
+              "距离非正",
+              2377,
+              2052,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ],
+            [
+              "2025-02",
+              "未触发本合同质量标记",
+              null,
+              41893,
+              "多标签可重叠，不能相加当异常总量；唯一处置按合同优先级，含clean守恒"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "接入建议"
+        },
+        {
+          "kind": "notice",
+          "text": "共8行 × 2列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "问题/责任",
+              "已知事实和动作"
+            ],
+            [
+              "接入决定",
+              "仅内部质量待审；原始层可按SHA归档，业务月报层暂不自动放行。数据质量负责人审阅隔离规则后批准，不能宣称TLC官方已验真。"
+            ],
+            [
+              "全量覆盖",
+              "三分区共148941行全部入SQLite。行号从各源物理读取顺序1开始，(batch,row_number)唯一；不以抽样冒全量。"
+            ],
+            [
+              "日期/版本",
+              "字典2025-03-18说明CBD对应2025-01-05起费用；不是原文件首次发布时间。业务回放2026-10-21 09:00 Asia/Shanghai，真实执行UTC另记。"
+            ],
+            [
+              "未解决事项",
+              "源提供商可有误，TLC不担保准确性；264为未知、265为市外，join成功不等可归城区。落客早于上客等只提示补证，不推断违法/造假。"
+            ],
+            [
+              "缺值和费项",
+              "2024无CBD列不造零；2025 null不认免费；congestion_surcharge与cbd_congestion_fee不同，不互相补值或并为同一政策。现金小费不在tip_amount/total中，不由字段推断总收入。"
+            ],
+            [
+              "下一步",
+              "工程师交隔离账与复现命令，业务负责人确认分析分母，数据质量负责人审核；不得删除异常、补造金额、自动上线或宣称政策因果效应。"
+            ],
+            [
+              "复现与边界",
+              "python quality_audit.py build --input-dir /app/input_files --output-dir 新空目录（先复制本脚本）；verify同参数。核输入/脚本/3成果SHA，合法变更新目录重建，不手改旧回执。"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": [
+    {
+      "name": "intake_memo.pdf",
+      "url": "assets/audit/render/DA-TIME-003/20261021T001045Z/intake_memo.pdf"
+    },
+    {
+      "name": "quality_review.pdf",
+      "url": "assets/audit/render/DA-TIME-003/20261021T001045Z/quality_review.pdf"
+    }
+  ]
+}

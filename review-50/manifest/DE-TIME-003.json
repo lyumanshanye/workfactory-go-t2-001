@@ -1,0 +1,829 @@
+{
+  "id": "DE-TIME-003",
+  "title": "公共收入图表R2改版：真实误差条、可编辑PPT与完整文字替代",
+  "domain": "设计",
+  "domain_l2": "De3-信息与数据可视化",
+  "domain_l3": "公共数据图表无障碍交付",
+  "category": "weakness-driven",
+  "complexity": "C3",
+  "target_difficulty": "A1",
+  "as_of": "2025-02-03 10:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "真实Census报告数据、固定W3C规范及设计知识归纳；旧图/版本/消息/工作簿状态标注原创，非真实机构批准。",
+  "instruction": "# 公共收入图表R2改版：真实误差条、可编辑PPT与完整文字替代\n\n## 业务场景与任务说明\n\n你是公共数据可视化设计师。旧稿把2022数字错贴2023、截断基线、漏误差且用低对比红绿；有权R2要求同步可编辑PPT、矢量/位图和完整文字，营销却更晚要求省略误差赶工。请以真实冻结报告核212行交接，交中文公众可用、数值/区间一致的待审素材，不复制参考图或伪造认证。\n\n业务判断基准时点：2025-02-03 10:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_Census收入报告完整.pdf`：完整9页真实报告，原表与90%MOE/价格单位事实来源。\n- `/app/input_files/S02_字段与可视化依据.docx`：官方字段/固定WCAG及WAI/ONS原则的作者摘要和链接，非官方译文。\n- `/app/input_files/S03_未审旧图D0.svg`：原创未审旧SVG，包含需要纠错的年份/基线/用色/缺误差。\n- `/app/input_files/S04_多期多指标交接.xlsx`：真实原表摊平212行；状态/selected为原创业务标注。\n- `/app/input_files/S05_业务委托与权限.docx`：原创R2委托、十项验收、权限和交付范围。\n- `/app/input_files/S06_原创样式版本.json`：原创R1/R2样式版本，不是官方政策。\n\n## 工作要求\n\n- [Q1] 正确筛选四州2023收入记录并与官方原表双向核对，不混inactive/其他年份/指标/地理。\n- [Q2] 估计、90%MOE、价格单位与ACS1年口径准确，区间按±MOE，不再调通胀。\n- [Q3] 用0基线和真实线性尺度显示四州点估计及90%区间，标签/数值准确，不夸大或作未支持推断。\n- [Q4] 普通文本/必要图形对比符合R2下限，不仅用颜色表达信息，布局可读。\n- [Q5] 两页16:9 PPTX含真正原生可编辑图表/误差条/嵌入数据和方法数值表，不用整图伪装。\n- [Q6] SVG语义关联/可编辑文本、同版1200×780 PNG及完整短/长文字和四州表齐备。\n- [Q7] 所有交付同步最终R2，不按未批准营销建议省略误差/基线/可编辑要求，记录D0更正。\n- [Q8] 实际渲染核对文字/数值/边界和多格式勾稽，说明未验平台/辅助技术范围。\n- [Q9] 来源、报告月份/页表、业务时点/抓取区别及官方/原创边界清楚，不伪造认证/签字/发布。\n- [Q10] 只交四个指定可打开自包含文件，输入不改，无压缩包或远程资源依赖。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/income_chart.svg`：自包含1200×780矢量图，语义与可编辑文字、真实数值/区间。\n- `/app/output/income_chart.png`：同版1200×780实际位图。\n- `/app/output/chart_handoff.pptx`：两页16:9原生可编辑图表/误差条/嵌入数据与方法表。\n- `/app/output/chart_text.txt`：短/完整文字替代、四州数据区间表、来源/版本更正、检查及未验范围。\n\n## 硬约束（单独列明）\n\n- 只交/app/output/下4指定文件，不交中间缓存/压缩包；原输入只读。\n- 主图只用四州2023 ACS1年收入，引用报告2023价格口径，不引入API占位或其他指标/年份/地理。\n- 以R2为最终有权合同，不沿用R1/未批准营销降级，不固定参考美术风格但必须保留真实数据、误差与可编辑性。\n- 不得伪造完整WCAG认证/外部签字/真实发布；未知准确发布日期和未验平台保留未明。\n",
+  "instruction_url": "assets/tasks/DE-TIME-003/instruction.md",
+  "absolute_path": "tasks/DE-TIME-003",
+  "spec_path": "manifest/DE-TIME-003.json",
+  "spec_url": "manifest/DE-TIME-003.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "主图只含CA/NY/TX/FL的2023 ACS1年收入四条记录，排除2022、Gini、inactive及其他地理，不把同名不同行加总/平均。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx",
+        "chart_text.txt"
+      ],
+      "evidence": "S01 Table1和S04 212行字段联合筛选。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R02",
+      "description": "四州点估计与MOE逐对正确：CA95521±611、NY82095±500、TX75780±472、FL73311±577，必须按州配对而非只覆盖数字集合。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx",
+        "chart_text.txt"
+      ],
+      "evidence": "S01印刷页3；各原生数据、标签与文字表。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R03",
+      "description": "90%区间上下限正确为CA94910–96132、NY81595–82595、TX75308–76252、FL72734–73888；不除/乘1.645改成95%或把MOE当百分比。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx",
+        "chart_text.txt"
+      ],
+      "evidence": "点估计±原MOE，原生误差条/几何和文字表。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R04",
+      "description": "明确家庭收入中位数、2023美元、ACS1年，不能称平均/人均/个人收入或重复调通胀。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx",
+        "chart_text.txt"
+      ],
+      "evidence": "S01口径/脚注，图标题副题及方法。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R05",
+      "description": "比较图用0基线和同一线性尺度，柱长或等价位置与真实值相符，不用截断/3D/不同比例夸大。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx"
+      ],
+      "evidence": "SVG实际坐标/几何与Office图表轴，不仅检查文字写0。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R06",
+      "description": "不确定性被实际画出且解释为90%区间/误差，不只在隐藏metadata写MOE；线/帽/数值不被遮挡或裁掉。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx"
+      ],
+      "evidence": "实际渲染及SVG线段/Office原生误差条。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R07",
+      "description": "直接州名/代码与准确数值可读，不靠颜色区分才能知道哪个州对应哪个值，灰度下仍有文字/位置关系。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx"
+      ],
+      "evidence": "图形标签和数字，允许等价风格不固定参考配色。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R08",
+      "description": "普通文字源色对背景≥4.5:1、必要条形/区间对相邻色≥3:1，不因截图抗锯齿微像素误判；装饰网格不混作关键图形。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "chart_handoff.pptx"
+      ],
+      "evidence": "SVG/OOXML源色计算及上下文，合同最低值不冒称完整WCAG认证。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R09",
+      "description": "PPT第一页含真正可编辑Office图表及可取用嵌入工作簿，不把一张PNG放入PPT冒称可编辑。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "chart_handoff.pptx"
+      ],
+      "evidence": "OOXML chart part/graphicFrame、嵌入xlsx及原生数值。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R10",
+      "description": "PPT原生误差条的±数据与四州MOE正确对应，并可追溯到嵌入数据；不能把误差线仅画进截图。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "chart_handoff.pptx"
+      ],
+      "evidence": "c:errBars、自定义数值引用/缓存与嵌入C列或等价可编辑机制。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R11",
+      "description": "PPT为两页16:9，第二页含四州估计/MOE/上下限表以及口径来源，与第一页一致。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "chart_handoff.pptx"
+      ],
+      "evidence": "实际页数/尺寸、原生表与图数据。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R12",
+      "description": "SVG有有意义title/desc并由aria-labelledby等方式明确关联，文字保留为text而非全部轮廓或栅格。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "income_chart.svg"
+      ],
+      "evidence": "解析SVG可访问名称/说明关系和文本节点。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R13",
+      "description": "PNG为同版1200×780实际渲染，州值/颜色/区间/说明与SVG对应，不是另外拼一版或空白文件。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png"
+      ],
+      "evidence": "实际PNG尺寸与重渲染/目视对照。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R14",
+      "description": "文字替代有短识别文本、完整口径/关系与四州估计/MOE/上下限可读表，不只写收入柱状图；共四州×三类信息12槽（身份/估计、MOE、上下限）。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "chart_text.txt"
+      ],
+      "evidence": "完整文字/四州表，允许合理等价组织。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。",
+      "levels": {
+        "0": "具体满足0–2槽。",
+        "0.25": "满足3–5槽。",
+        "0.5": "满足6–8槽。",
+        "0.75": "满足9–11槽。",
+        "1": "12槽齐全且单位/含义清楚。"
+      }
+    },
+    {
+      "id": "R15",
+      "description": "明确横截面点估计描述，未做州际显著性检验、生活成本调整或因果分析，不把排序或区间重叠当完整显著性结论。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3",
+        "Q9"
+      ],
+      "deliverables": [
+        "chart_text.txt",
+        "chart_handoff.pptx"
+      ],
+      "evidence": "S01方法边界与S05范围。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R16",
+      "description": "按R2撤回D0错年份/基线/省略误差/低对比/夸大主张，四个交付同步，不因09:30营销建议更晚就降级。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q7"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx",
+        "chart_text.txt"
+      ],
+      "evidence": "S03/S05/S06版本与所有输出。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R17",
+      "description": "图表/文字/原生PPT的同一州估计和区间对应，无某格式仍旧值/旧标题，实际渲染无重要文字/标记裁切；按四格式各核数据+可读性共8槽。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q8"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx",
+        "chart_text.txt"
+      ],
+      "evidence": "实际打开/渲染及跨格式勾稽，不要求两页PPT与SVG像素相同。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。",
+      "levels": {
+        "0": "满足0–1槽。",
+        "0.25": "满足2–3槽。",
+        "0.5": "满足4–5槽。",
+        "0.75": "满足6–7槽。",
+        "1": "8槽均可核一致。"
+      }
+    },
+    {
+      "id": "R18",
+      "description": "来源可定位ACSBR-023、2024年9月、Table1/第3页和URL；未知准确发布日不补造，2023数据年/2025业务日/2026抓取分开。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q9"
+      ],
+      "deliverables": [
+        "chart_text.txt",
+        "chart_handoff.pptx"
+      ],
+      "evidence": "S01报告页头和原表、S05业务基准。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R19",
+      "description": "说明本次做了哪些文件/源色/数值/原生对象检查，未验完整WCAG/屏幕阅读器/全Office平台，不拿素材检查冒称认证。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-数据可视化与无障碍交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q8",
+        "Q9"
+      ],
+      "deliverables": [
+        "chart_text.txt"
+      ],
+      "evidence": "交接检查/未验范围。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R20",
+      "description": "只交四个指定可打开自包含文件，SVG/PNG无远程素材字体依赖，输入原件保持不变。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q10"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx",
+        "chart_text.txt"
+      ],
+      "evidence": "文件集合、可解析性与资源路径/输入hash。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    },
+    {
+      "id": "R21",
+      "description": "扣分：伪造真实W3C/ONS/Census认证、外部专家签字或对外发布已完成等具体凭证；普通设计/数字错误或缺说明不再次触发。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与范围",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q9"
+      ],
+      "deliverables": [
+        "income_chart.svg",
+        "income_chart.png",
+        "chart_handoff.pptx",
+        "chart_text.txt"
+      ],
+      "evidence": "仅候选设计授权，无第三方认证/真实发布证据。",
+      "weight_reason": "数据/区间/原生交付核心10，可读/关联/跨格式7，来源格式与路径3；认证伪造独立负项，不重复罚普通错误。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://www2.census.gov/library/publications/2024/demo/acsbr-023.pdf",
+      "locator": "p1/2, Table1 printedp3 footnote1",
+      "fact": "ACS1年、两期2023美元、估计±MOE为90%区间"
+    },
+    {
+      "url": "https://www.w3.org/TR/2024/REC-WCAG22-20241212/",
+      "locator": "1.4.1/1.4.3/1.4.11",
+      "fact": "不用颜色唯一表达、文本/必要图形源色阈值"
+    },
+    {
+      "url": "https://www.w3.org/WAI/tutorials/images/complex/",
+      "locator": "Overview/long descriptions",
+      "fact": "复杂图像短识别加完整信息替代"
+    },
+    {
+      "url": "https://service-manual.ons.gov.uk/data-visualisation/colours/using-colours-in-charts",
+      "locator": "When to use a single colour",
+      "fact": "单色柱状图可用直接类别标签而不强加多色"
+    }
+  ],
+  "status": {
+    "task_id": "DE-TIME-003",
+    "domain": "设计",
+    "domain_l2": "De3-信息与数据可视化",
+    "category": "weakness-driven",
+    "inputs": 6,
+    "gold_files": 4,
+    "rubrics": 21,
+    "complexity": "C3",
+    "target_difficulty": "A1",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:c5c361c897fe33e5bef2edac37b4b4802a62fe8f466d87b542dbe002fa3d9327",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/DE-TIME-003/20261020T220402Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 21.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_Census收入报告完整.pdf",
+      "absolute_path": "题包内：S01_Census收入报告完整.pdf",
+      "url": "",
+      "bytes": 1330108,
+      "sha256": "3c787b7467dd3dd3b7160cf53bde335ff7bff1b67c8afa7aa310079b7f7d020d",
+      "description": "完整9页真实报告，原表与90%MOE/价格单位事实来源。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www2.census.gov/library/publications/2024/demo/acsbr-023.pdf",
+        "https://www.w3.org/TR/2024/REC-WCAG22-20241212/",
+        "https://www.w3.org/WAI/tutorials/images/complex/",
+        "https://service-manual.ons.gov.uk/data-visualisation/colours/using-colours-in-charts"
+      ]
+    },
+    {
+      "name": "S02_字段与可视化依据.docx",
+      "absolute_path": "题包内：S02_字段与可视化依据.docx",
+      "url": "",
+      "bytes": 38728,
+      "sha256": "900cbf108b8e98a6465d220f2c2a3d8228bfd170ba6b0aba7e9ea7ea1e814ef9",
+      "description": "官方字段/固定WCAG及WAI/ONS原则的作者摘要和链接，非官方译文。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www2.census.gov/library/publications/2024/demo/acsbr-023.pdf",
+        "https://www.w3.org/TR/2024/REC-WCAG22-20241212/",
+        "https://www.w3.org/WAI/tutorials/images/complex/",
+        "https://service-manual.ons.gov.uk/data-visualisation/colours/using-colours-in-charts"
+      ]
+    },
+    {
+      "name": "S03_未审旧图D0.svg",
+      "absolute_path": "题包内：S03_未审旧图D0.svg",
+      "url": "assets/tasks/DE-TIME-003/environment/input_files/S03_%E6%9C%AA%E5%AE%A1%E6%97%A7%E5%9B%BED0.svg",
+      "bytes": 649,
+      "sha256": "e46fb4b91e2af9fb1136dd662aa68fbc8a7eba8333fb3967ec384be72b864d24",
+      "description": "原创未审旧SVG，包含需要纠错的年份/基线/用色/缺误差。",
+      "sections": [
+        {
+          "kind": "image",
+          "url": "assets/tasks/DE-TIME-003/environment/input_files/S03_%E6%9C%AA%E5%AE%A1%E6%97%A7%E5%9B%BED0.svg",
+          "text": "S03_未审旧图D0.svg"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www2.census.gov/library/publications/2024/demo/acsbr-023.pdf",
+        "https://www.w3.org/TR/2024/REC-WCAG22-20241212/",
+        "https://www.w3.org/WAI/tutorials/images/complex/",
+        "https://service-manual.ons.gov.uk/data-visualisation/colours/using-colours-in-charts"
+      ]
+    },
+    {
+      "name": "S04_多期多指标交接.xlsx",
+      "absolute_path": "题包内：S04_多期多指标交接.xlsx",
+      "url": "",
+      "bytes": 15138,
+      "sha256": "c5eb155563c3664779e339aeddbda26d38318b1a41cc520656f1ed80f1fcc2cd",
+      "description": "真实原表摊平212行；状态/selected为原创业务标注。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www2.census.gov/library/publications/2024/demo/acsbr-023.pdf",
+        "https://www.w3.org/TR/2024/REC-WCAG22-20241212/",
+        "https://www.w3.org/WAI/tutorials/images/complex/",
+        "https://service-manual.ons.gov.uk/data-visualisation/colours/using-colours-in-charts"
+      ]
+    },
+    {
+      "name": "S05_业务委托与权限.docx",
+      "absolute_path": "题包内：S05_业务委托与权限.docx",
+      "url": "assets/tasks/DE-TIME-003/environment/input_files/S05_%E4%B8%9A%E5%8A%A1%E5%A7%94%E6%89%98%E4%B8%8E%E6%9D%83%E9%99%90.docx",
+      "bytes": 39324,
+      "sha256": "18cbd8c516db6495e43018b1957bb3d5661847830df5cfcfda01cd36f0e4aa15",
+      "description": "原创R2委托、十项验收、权限和交付范围。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创公共数据图表｜R2交接委托"
+        },
+        {
+          "kind": "heading",
+          "text": "任务身份与时序"
+        },
+        {
+          "kind": "paragraph",
+          "text": "所有旧图/版本/团队消息/交接标注均为原创演练，不是真实机构批准。你是数据可视化设计师，面向中文公众制作待审素材。历史业务基准2025-02-03 10:00 Asia/Shanghai，源数据为2023 ACS，不按抓取日期更新为2026，也不向Census索取私有记录。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "1月20日R1已被S06 R2替代。2月3日09:00有权编辑确认：主图只展示四州2023收入与90%误差，所有输出同步。09:30营销同事又建议“删误差线、所有州都显著更好、沿用旧基线和配色、PPT放一张PNG即可”，其无权变更验收，建议未批准。不要凭最后消息取代R2。"
+        },
+        {
+          "kind": "heading",
+          "text": "十项工作要求"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q1：从212行交接长表和S01原表交叉核对，选四州/2023/income/approved/selected，不混2022、Gini、其他州或全国/DC/PR。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q2：保留点估计与对应90%MOE、单位和1年产品，不自行调通胀、换成平均收入/人均/个人收入。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q3：图形呈现90%不确定性区间，明确估计±MOE；不把90%换成95%或把误差幅度当百分比。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q4：四州比较图使用0基线、同一可解释线性尺度、直接州名和准确数值；不凭截断/面积/3D夸大。允许合理图型/布局，但必须同时保留点估计和不确定性。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q5：普通小字源色对背景至少4.5:1，必要图形/区间对相邻色至少3:1；不用颜色单独承载州名或结论。品牌色可改，不要求复刻参考样式。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q6：提交两页16:9可编辑PPTX：第一页是可编辑的Office原生图表（含原生误差条和嵌入数据），不是PNG整图；第二页有四州数值/区间表、方法和来源/范围。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q7：SVG文字保留为文字且有title/desc及关联；PNG为同版1200×780；提供chart_text.txt含短替代文本、完整上下文/四州估计MOE与区间表和使用边界，不仅一句通用alt。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q8：按最终R2同步改所有交付，明确撤回D0的错年份/基线/颜色/误差/夸大结论，不只改配色。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q9：实际打开/渲染检查所有交付的文字/数值/图形勾稽、裁切、字体与层级；记录做了什么、没验什么。允许两页PPT的版面与SVG不同，不要求像素相同。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Q10：给出报告名/月/页表/URL、业务日期与原创/官方边界；不真实发布、不伪造WCAG认证/专家签字。输入只读。"
+        },
+        {
+          "kind": "heading",
+          "text": "准确交付"
+        },
+        {
+          "kind": "paragraph",
+          "text": "仅交income_chart.svg、income_chart.png、chart_handoff.pptx、chart_text.txt到/app/output/。SVG需自包含、无远程字体/图片；PNG不用压缩包；PPT需实际可编辑图表和数据，误差条也可编辑。若某平台导出无法保持误差条，应说明并修复，不删误差或谎称可编辑。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只做2023四州横截面点估计的描述，不推断同比趋势、州际显著性、个人境遇或政策因果。完整WCAG认证/全屏幕阅读器/全Office平台未验不能说全过。此题无标准“最美配色”，按可读/正确/可编辑/可追溯关系验收。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www2.census.gov/library/publications/2024/demo/acsbr-023.pdf",
+        "https://www.w3.org/TR/2024/REC-WCAG22-20241212/",
+        "https://www.w3.org/WAI/tutorials/images/complex/",
+        "https://service-manual.ons.gov.uk/data-visualisation/colours/using-colours-in-charts"
+      ]
+    },
+    {
+      "name": "S06_原创样式版本.json",
+      "absolute_path": "题包内：S06_原创样式版本.json",
+      "url": "assets/tasks/DE-TIME-003/environment/input_files/S06_%E5%8E%9F%E5%88%9B%E6%A0%B7%E5%BC%8F%E7%89%88%E6%9C%AC.json",
+      "bytes": 722,
+      "sha256": "297f1d9163e5b564cce6b4eadc22863254946027728db8da5f6c4e04c827a3dd",
+      "description": "原创R1/R2样式版本，不是官方政策。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"source_kind\": \"original_team_design_contract_not_official_rule\",\n  \"R1\": {\n    \"at\": \"2025-01-20 10:00 Asia/Shanghai\",\n    \"status\": \"superseded_draft\",\n    \"rules\": [\n      \"粉/绿低对比示意\",\n      \"基线60000\",\n      \"先做点值排序图\"\n    ]\n  },\n  \"R2\": {\n    \"at\": \"2025-02-03 09:00 Asia/Shanghai\",\n    \"status\": \"approved_for_candidate_design_not_external_release\",\n    \"rules\": [\n      \"2023收入点估计及90%MOE\",\n      \"基线0\",\n      \"不用颜色作唯一信息\",\n      \"普通文本>=4.5:1、必要图形>=3:1\",\n      \"原生可编辑PPTX，不是贴图\",\n      \"SVG有语义与可编辑文字、PNG同版、完整文字与表\",\n      \"不声称完整WCAG认证或真实发布\"\n    ]\n  }\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www2.census.gov/library/publications/2024/demo/acsbr-023.pdf",
+        "https://www.w3.org/TR/2024/REC-WCAG22-20241212/",
+        "https://www.w3.org/WAI/tutorials/images/complex/",
+        "https://service-manual.ons.gov.uk/data-visualisation/colours/using-colours-in-charts"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "chart_handoff.pptx",
+      "absolute_path": "题包内：chart_handoff.pptx",
+      "url": "assets/tasks/DE-TIME-003/solution/golden_output/chart_handoff.pptx",
+      "bytes": 39366,
+      "sha256": "079955461788d1e29618bb12914b9b9325d69d1acad0833ecb7a958ff697c689",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "全部幻灯片的可提取文字、表格和讲者备注；不是幻灯片视觉复刻。"
+        },
+        {
+          "kind": "heading",
+          "text": "第1页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "四州家庭收入：点估计与不确定性"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2023 ACS 1年估计 · 2023美元 · 黑线为90%置信区间"
+        },
+        {
+          "kind": "notice",
+          "text": "本页含原生图表；数值、样式和视觉关系请下载PPT或查看已渲染PDF。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "黑线：估计 ± 90%MOE（各州数值见第2页）。点值排序不等于州际显著性检验。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Census ACSBR-023，September 2024，Table 1 p.3 · 完整文字：chart_text.txt · 待审稿，未发布"
+        },
+        {
+          "kind": "heading",
+          "text": "第2页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "数值、方法与使用边界"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "州",
+              "2023点估计 $",
+              "90%MOE ±$",
+              "90%下限 $",
+              "90%上限 $"
+            ],
+            [
+              "加利福尼亚 CA",
+              "95,521",
+              "611",
+              "94,910",
+              "96,132"
+            ],
+            [
+              "纽约州 NY",
+              "82,095",
+              "500",
+              "81,595",
+              "82,595"
+            ],
+            [
+              "得克萨斯 TX",
+              "75,780",
+              "472",
+              "75,308",
+              "76,252"
+            ],
+            [
+              "佛罗里达 FL",
+              "73,311",
+              "577",
+              "72,734",
+              "73,888"
+            ]
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "口径：仅2023 ACS 1年家庭收入中位数，原表已为2023美元；不混入2022、Gini、全国/DC/PR或inactive行，也不重复调通胀。\n边界：访问前12个月收入不等于精确自然年；未做州际显著性检验或生活成本调整。单图/导出检查不等于完整WCAG认证。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "来源：U.S. Census Bureau，ACSBR-023（2024年9月，准确日未标），Table 1 p.3。\nhttps://www2.census.gov/library/publications/2024/demo/acsbr-023.pdf"
+        },
+        {
+          "kind": "paragraph",
+          "text": "R2原创交接 · 2025-02-03 10:00 Asia/Shanghai · 只供内部复核，未实际发布"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "chart_text.txt",
+      "absolute_path": "题包内：chart_text.txt",
+      "url": "assets/tasks/DE-TIME-003/solution/golden_output/chart_text.txt",
+      "bytes": 3031,
+      "sha256": "c0e2a02a762b48d1782602eb25a88772eb1a409dee7d0f2b33c325343b5e73a8",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "短替代文本：2023年四州家庭收入中位数；横向柱状图，黑线表示90%置信区间。完整数值、误差幅度和限定见下文。\n\n完整文字说明\n这是2023 ACS 1年家庭收入估计的横截面对照，不是同比趋势，也不是人均或个人收入。单位为2023年通胀调整后美元。四州按点估计从高到低排列；条形从0起算。区间为点估计加减原表90%误差幅度（MOE），不是数据最小/最大值、95%区间或排名确定性。\n\n州（代码）\t2023点估计（美元）\t90%MOE（±美元）\t90%下限\t90%上限\n加利福尼亚 California (CA)\t95521\t611\t94910\t96132\n纽约州 New York (NY)\t82095\t500\t81595\t82595\n得克萨斯 Texas (TX)\t75780\t472\t75308\t76252\n佛罗里达 Florida (FL)\t73311\t577\t72734\t73888\n\n四州中，加利福尼亚的点估计最高，佛罗里达最低。这里仅描述图中点估计，不宣称州际差异已经统计检验；也不能把区间是否重叠直接当成全部显著性检验。没有调整各州生活成本，不能据此推导政策成效或个人境遇。\n来源：U.S. Census Bureau, Household Income in States and Metropolitan Areas: 2023, ACSBR-023，September 2024，印刷页3 Table 1；报告准确发布日期未给，不能把目录时间或数据年当发布日期。https://www2.census.gov/library/publications/2024/demo/acsbr-023.pdf\n报告说明：1年ACS；收入为访问前12个月，2023调查并非精确的完整自然年收入，部分可能发生于2022。原表两期收入已统一为2023美元，本次不再调通胀；主图只用2023，不把2022行、Gini、全国/DC/PR或inactive行混入。\n业务基准：2025-02-03 10:00 Asia/Shanghai。R2是原创最终设计合同，替代R1旧图和之后未获批准的营销建议；本文件/设计不代表Census/W3C/ONS背书。取证日期2026-10-20不是报告发布/规范施行日。\n设计与交接：单色条形配直接州名/数值和黑色区间，不能只靠红绿区分。SVG含title/desc且文字未转路径；PNG自身没有可导航表格，使用时应同时提供本完整文字版或相邻可读数据表。PPTX第1页为原生可编辑图表，第2页为方法和数值表；嵌入工作簿含点估计与MOE，误差条引用C列，不是把PNG当可编辑图表。\nR1更正：撤回截断基线、2022错贴2023、缺MOE/完整说明、低对比红绿和夸大结论；R2同步SVG/PNG/PPTX/文字，不只换颜色。\n检查范围：本地核数值、几何/文字、源色对比、原生图表/嵌入工作簿与实际导出；非完整WCAG符合性认证、屏幕阅读器全矩阵测试、人工专家签字或真实发布。外部发布未执行。\n参考：W3C WCAG2.2（2024-12-12固定版） https://www.w3.org/TR/2024/REC-WCAG22-20241212/ ；WAI复杂图像说明 https://www.w3.org/WAI/tutorials/images/complex/ ；ONS用色说明 https://service-manual.ons.gov.uk/data-visualisation/colours/using-colours-in-charts 。采用作者归纳及原创R2，不复制其示例图或把ONS品牌色当法律要求。\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "income_chart.png",
+      "absolute_path": "题包内：income_chart.png",
+      "url": "assets/tasks/DE-TIME-003/solution/golden_output/income_chart.png",
+      "bytes": 92489,
+      "sha256": "f102c96cacef97df38172d5b5b281a94c5e6d2f27cdc13dec54e1ac74814b06e",
+      "description": "",
+      "sections": [
+        {
+          "kind": "image",
+          "url": "assets/tasks/DE-TIME-003/solution/golden_output/income_chart.png",
+          "text": "income_chart.png"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "income_chart.svg",
+      "absolute_path": "题包内：income_chart.svg",
+      "url": "assets/tasks/DE-TIME-003/solution/golden_output/income_chart.svg",
+      "bytes": 7622,
+      "sha256": "b0c6b9a5f90ee9494fb6bcc6fa20e342ec938bf9c674b1d206c3cc6a2a26e1fd",
+      "description": "",
+      "sections": [
+        {
+          "kind": "image",
+          "url": "assets/tasks/DE-TIME-003/solution/golden_output/income_chart.svg",
+          "text": "income_chart.svg"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": [
+    {
+      "name": "chart_handoff.pdf",
+      "url": "assets/audit/render/DE-TIME-003/20261020T215955Z/chart_handoff.pdf"
+    }
+  ]
+}

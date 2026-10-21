@@ -1,0 +1,648 @@
+{
+  "task_id": "DA-TIME-003",
+  "execution_at_utc": "2026-10-21T00:10:37.305232+00:00",
+  "input_sha256": {
+    "S01_green_2024-12.parquet": "1d708f58d29b0795a54ca11a36db6df61262986d122985f0fb52a56acc064bac",
+    "S02_green_2025-01.parquet": "84f3a121667157efcbf012c3566a6065df6f8e0312c678cb2f29cd72cc9c0f10",
+    "S03_green_2025-02.parquet": "b3ffe16a96ba0c68c8a8f8b10f049294ae6eb8d21f2e13b3fdbd452fa2e3498e",
+    "S04_zone_lookup.csv": "1a99e105092230f8620f301edcca7f80d3080642ff404d28ed957d3fa222c8ed",
+    "S05_green_dictionary.pdf": "25dce860acf20150f3f66a56194808089fe8403d049bf998925d0815f1a77f30",
+    "S06_来源与证据.docx": "0c9c10834cf17d260ea184ae44d7bd51366cc8c79dc36163f5bb719e547f4ed6",
+    "S07_D0.py": "25fb4cc92c15895ff3df2b80c88296625e1f0c4d02df93bcf25f997222fed3d7",
+    "S08_R1.json": "13cb16a7ddb7086ea0d0a96acf24d6039c74988dade163fafb76b1f284e9a47d",
+    "S09_R2.json": "257aeeba29b2884406025cd36a2920545a12219f52fd9c7f0d4658e2fb01801a",
+    "S10_委托权限.docx": "f8d7675250abb984f02508901e70f3b418d6967a6ceb1932db4a64385abe8401"
+  },
+  "script_sha256": "567ea00cc8febe754cd657daca4377d515af2a0dfcad045c79556b0d0d9d6550",
+  "contract_revision": "R2",
+  "contract_authority": "数据质量负责人",
+  "summary": {
+    "batches": [
+      {
+        "month": "2024-12",
+        "source_file": "S01_green_2024-12.parquet",
+        "source_sha256": "1d708f58d29b0795a54ca11a36db6df61262986d122985f0fb52a56acc064bac",
+        "rows": 53994,
+        "in_partition_month": 53976,
+        "outside_partition_month": 18,
+        "cbd_column_present": false,
+        "cbd_states": {
+          "structurally_absent": 53994,
+          "null": 0,
+          "negative": 0,
+          "zero": 0,
+          "positive": 0
+        }
+      },
+      {
+        "month": "2025-01",
+        "source_file": "S02_green_2025-01.parquet",
+        "source_sha256": "84f3a121667157efcbf012c3566a6065df6f8e0312c678cb2f29cd72cc9c0f10",
+        "rows": 48326,
+        "in_partition_month": 48283,
+        "outside_partition_month": 43,
+        "cbd_column_present": true,
+        "cbd_states": {
+          "structurally_absent": 0,
+          "null": 1836,
+          "negative": 0,
+          "zero": 43183,
+          "positive": 3307
+        }
+      },
+      {
+        "month": "2025-02",
+        "source_file": "S03_green_2025-02.parquet",
+        "source_sha256": "b3ffe16a96ba0c68c8a8f8b10f049294ae6eb8d21f2e13b3fdbd452fa2e3498e",
+        "rows": 46621,
+        "in_partition_month": 46602,
+        "outside_partition_month": 19,
+        "cbd_column_present": true,
+        "cbd_states": {
+          "structurally_absent": 0,
+          "null": 1988,
+          "negative": 0,
+          "zero": 40782,
+          "positive": 3851
+        }
+      }
+    ],
+    "total_rows": 148941,
+    "cross_month": [
+      {
+        "batch": "2024-12",
+        "pickup_month": "2008-12",
+        "rows": 1
+      },
+      {
+        "batch": "2024-12",
+        "pickup_month": "2009-01",
+        "rows": 1
+      },
+      {
+        "batch": "2024-12",
+        "pickup_month": "2024-11",
+        "rows": 5
+      },
+      {
+        "batch": "2024-12",
+        "pickup_month": "2024-12",
+        "rows": 53976
+      },
+      {
+        "batch": "2024-12",
+        "pickup_month": "2025-01",
+        "rows": 11
+      },
+      {
+        "batch": "2025-01",
+        "pickup_month": "2024-12",
+        "rows": 6
+      },
+      {
+        "batch": "2025-01",
+        "pickup_month": "2025-01",
+        "rows": 48283
+      },
+      {
+        "batch": "2025-01",
+        "pickup_month": "2025-02",
+        "rows": 37
+      },
+      {
+        "batch": "2025-02",
+        "pickup_month": "2025-01",
+        "rows": 5
+      },
+      {
+        "batch": "2025-02",
+        "pickup_month": "2025-02",
+        "rows": 46602
+      },
+      {
+        "batch": "2025-02",
+        "pickup_month": "2025-03",
+        "rows": 14
+      }
+    ],
+    "flags": [
+      {
+        "batch": "2024-12",
+        "flag": "cbd_missing",
+        "rows": 0
+      },
+      {
+        "batch": "2024-12",
+        "flag": "distance_nonpositive",
+        "rows": 3002
+      },
+      {
+        "batch": "2024-12",
+        "flag": "negative_duration",
+        "rows": 0
+      },
+      {
+        "batch": "2024-12",
+        "flag": "wrong_month",
+        "rows": 18
+      },
+      {
+        "batch": "2024-12",
+        "flag": "zone_not_borough",
+        "rows": 736
+      },
+      {
+        "batch": "2024-12",
+        "flag": "zone_unresolved",
+        "rows": 0
+      },
+      {
+        "batch": "2025-01",
+        "flag": "cbd_missing",
+        "rows": 1836
+      },
+      {
+        "batch": "2025-01",
+        "flag": "distance_nonpositive",
+        "rows": 2671
+      },
+      {
+        "batch": "2025-01",
+        "flag": "negative_duration",
+        "rows": 0
+      },
+      {
+        "batch": "2025-01",
+        "flag": "wrong_month",
+        "rows": 43
+      },
+      {
+        "batch": "2025-01",
+        "flag": "zone_not_borough",
+        "rows": 630
+      },
+      {
+        "batch": "2025-01",
+        "flag": "zone_unresolved",
+        "rows": 0
+      },
+      {
+        "batch": "2025-02",
+        "flag": "cbd_missing",
+        "rows": 1988
+      },
+      {
+        "batch": "2025-02",
+        "flag": "distance_nonpositive",
+        "rows": 2377
+      },
+      {
+        "batch": "2025-02",
+        "flag": "negative_duration",
+        "rows": 210
+      },
+      {
+        "batch": "2025-02",
+        "flag": "wrong_month",
+        "rows": 19
+      },
+      {
+        "batch": "2025-02",
+        "flag": "zone_not_borough",
+        "rows": 637
+      },
+      {
+        "batch": "2025-02",
+        "flag": "zone_unresolved",
+        "rows": 0
+      }
+    ],
+    "dispositions": [
+      {
+        "batch": "2024-12",
+        "reason": "wrong_month",
+        "rows": 18
+      },
+      {
+        "batch": "2024-12",
+        "reason": "negative_duration",
+        "rows": 0
+      },
+      {
+        "batch": "2024-12",
+        "reason": "zone_unresolved",
+        "rows": 0
+      },
+      {
+        "batch": "2024-12",
+        "reason": "zone_not_borough",
+        "rows": 736
+      },
+      {
+        "batch": "2024-12",
+        "reason": "cbd_missing",
+        "rows": 0
+      },
+      {
+        "batch": "2024-12",
+        "reason": "distance_nonpositive",
+        "rows": 2635
+      },
+      {
+        "batch": "2024-12",
+        "reason": "clean",
+        "rows": 50605
+      },
+      {
+        "batch": "2025-01",
+        "reason": "wrong_month",
+        "rows": 43
+      },
+      {
+        "batch": "2025-01",
+        "reason": "negative_duration",
+        "rows": 0
+      },
+      {
+        "batch": "2025-01",
+        "reason": "zone_unresolved",
+        "rows": 0
+      },
+      {
+        "batch": "2025-01",
+        "reason": "zone_not_borough",
+        "rows": 629
+      },
+      {
+        "batch": "2025-01",
+        "reason": "cbd_missing",
+        "rows": 1832
+      },
+      {
+        "batch": "2025-01",
+        "reason": "distance_nonpositive",
+        "rows": 2286
+      },
+      {
+        "batch": "2025-01",
+        "reason": "clean",
+        "rows": 43536
+      },
+      {
+        "batch": "2025-02",
+        "reason": "wrong_month",
+        "rows": 19
+      },
+      {
+        "batch": "2025-02",
+        "reason": "negative_duration",
+        "rows": 210
+      },
+      {
+        "batch": "2025-02",
+        "reason": "zone_unresolved",
+        "rows": 0
+      },
+      {
+        "batch": "2025-02",
+        "reason": "zone_not_borough",
+        "rows": 637
+      },
+      {
+        "batch": "2025-02",
+        "reason": "cbd_missing",
+        "rows": 1810
+      },
+      {
+        "batch": "2025-02",
+        "reason": "distance_nonpositive",
+        "rows": 2052
+      },
+      {
+        "batch": "2025-02",
+        "reason": "clean",
+        "rows": 41893
+      }
+    ],
+    "schema": [
+      {
+        "month": "2024-12",
+        "field": "VendorID",
+        "type": "int32"
+      },
+      {
+        "month": "2024-12",
+        "field": "lpep_pickup_datetime",
+        "type": "timestamp[us]"
+      },
+      {
+        "month": "2024-12",
+        "field": "lpep_dropoff_datetime",
+        "type": "timestamp[us]"
+      },
+      {
+        "month": "2024-12",
+        "field": "store_and_fwd_flag",
+        "type": "large_string"
+      },
+      {
+        "month": "2024-12",
+        "field": "RatecodeID",
+        "type": "int64"
+      },
+      {
+        "month": "2024-12",
+        "field": "PULocationID",
+        "type": "int32"
+      },
+      {
+        "month": "2024-12",
+        "field": "DOLocationID",
+        "type": "int32"
+      },
+      {
+        "month": "2024-12",
+        "field": "passenger_count",
+        "type": "int64"
+      },
+      {
+        "month": "2024-12",
+        "field": "trip_distance",
+        "type": "double"
+      },
+      {
+        "month": "2024-12",
+        "field": "fare_amount",
+        "type": "double"
+      },
+      {
+        "month": "2024-12",
+        "field": "extra",
+        "type": "double"
+      },
+      {
+        "month": "2024-12",
+        "field": "mta_tax",
+        "type": "double"
+      },
+      {
+        "month": "2024-12",
+        "field": "tip_amount",
+        "type": "double"
+      },
+      {
+        "month": "2024-12",
+        "field": "tolls_amount",
+        "type": "double"
+      },
+      {
+        "month": "2024-12",
+        "field": "ehail_fee",
+        "type": "double"
+      },
+      {
+        "month": "2024-12",
+        "field": "improvement_surcharge",
+        "type": "double"
+      },
+      {
+        "month": "2024-12",
+        "field": "total_amount",
+        "type": "double"
+      },
+      {
+        "month": "2024-12",
+        "field": "payment_type",
+        "type": "int64"
+      },
+      {
+        "month": "2024-12",
+        "field": "trip_type",
+        "type": "int64"
+      },
+      {
+        "month": "2024-12",
+        "field": "congestion_surcharge",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "VendorID",
+        "type": "int32"
+      },
+      {
+        "month": "2025-01",
+        "field": "lpep_pickup_datetime",
+        "type": "timestamp[us]"
+      },
+      {
+        "month": "2025-01",
+        "field": "lpep_dropoff_datetime",
+        "type": "timestamp[us]"
+      },
+      {
+        "month": "2025-01",
+        "field": "store_and_fwd_flag",
+        "type": "large_string"
+      },
+      {
+        "month": "2025-01",
+        "field": "RatecodeID",
+        "type": "int64"
+      },
+      {
+        "month": "2025-01",
+        "field": "PULocationID",
+        "type": "int32"
+      },
+      {
+        "month": "2025-01",
+        "field": "DOLocationID",
+        "type": "int32"
+      },
+      {
+        "month": "2025-01",
+        "field": "passenger_count",
+        "type": "int64"
+      },
+      {
+        "month": "2025-01",
+        "field": "trip_distance",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "fare_amount",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "extra",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "mta_tax",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "tip_amount",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "tolls_amount",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "ehail_fee",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "improvement_surcharge",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "total_amount",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "payment_type",
+        "type": "int64"
+      },
+      {
+        "month": "2025-01",
+        "field": "trip_type",
+        "type": "int64"
+      },
+      {
+        "month": "2025-01",
+        "field": "congestion_surcharge",
+        "type": "double"
+      },
+      {
+        "month": "2025-01",
+        "field": "cbd_congestion_fee",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "VendorID",
+        "type": "int32"
+      },
+      {
+        "month": "2025-02",
+        "field": "lpep_pickup_datetime",
+        "type": "timestamp[us]"
+      },
+      {
+        "month": "2025-02",
+        "field": "lpep_dropoff_datetime",
+        "type": "timestamp[us]"
+      },
+      {
+        "month": "2025-02",
+        "field": "store_and_fwd_flag",
+        "type": "large_string"
+      },
+      {
+        "month": "2025-02",
+        "field": "RatecodeID",
+        "type": "int64"
+      },
+      {
+        "month": "2025-02",
+        "field": "PULocationID",
+        "type": "int32"
+      },
+      {
+        "month": "2025-02",
+        "field": "DOLocationID",
+        "type": "int32"
+      },
+      {
+        "month": "2025-02",
+        "field": "passenger_count",
+        "type": "int64"
+      },
+      {
+        "month": "2025-02",
+        "field": "trip_distance",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "fare_amount",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "extra",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "mta_tax",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "tip_amount",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "tolls_amount",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "ehail_fee",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "improvement_surcharge",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "total_amount",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "payment_type",
+        "type": "int64"
+      },
+      {
+        "month": "2025-02",
+        "field": "trip_type",
+        "type": "int64"
+      },
+      {
+        "month": "2025-02",
+        "field": "congestion_surcharge",
+        "type": "double"
+      },
+      {
+        "month": "2025-02",
+        "field": "cbd_congestion_fee",
+        "type": "double"
+      }
+    ]
+  },
+  "output_sha256": {
+    "quality_ledger.sqlite": "0ac178c718c9821f2cf9cc21b256ed96a8336fe2d896b3a1e952f335d7dfaccb",
+    "quality_review.xlsx": "77d1345a0b90bb7dfdb71505c1754e09aea47bc780bbbaa02f88ce8362a5cf17",
+    "intake_memo.docx": "b84e0270979989ad419af4bf985bd8c8ad0c70ab48a306e6e3c675c2a4516c6c"
+  },
+  "release_status": "INTERNAL_REVIEW_REQUIRED",
+  "external_publish_performed": false,
+  "scope": "Actual full-row audit of supplied frozen batches, not source accuracy guarantee, fare enforcement, causal inference, expert approval or trusted attestation"
+}

@@ -1,0 +1,40 @@
+{
+  "revision": "R2",
+  "supersedes": "R1",
+  "authority_role": "数据质量负责人",
+  "issued_at": "2026-10-21T08:00:00+08:00",
+  "timestamp_interpretation": "America/New_York wallclock; no timezone conversion",
+  "batches": [
+    {
+      "file": "S01_green_2024-12.parquet",
+      "month": "2024-12"
+    },
+    {
+      "file": "S02_green_2025-01.parquet",
+      "month": "2025-01"
+    },
+    {
+      "file": "S03_green_2025-02.parquet",
+      "month": "2025-02"
+    }
+  ],
+  "priority": [
+    "wrong_month",
+    "negative_duration",
+    "zone_unresolved",
+    "zone_not_borough",
+    "cbd_missing",
+    "distance_nonpositive"
+  ],
+  "quarantine_nonpositive_distance": true,
+  "quality_flags": {
+    "wrong_month": "上客墙钟年月不等源分区月",
+    "negative_duration": "落客墙钟早于上客",
+    "zone_unresolved": "PU或DO未匹配lookup",
+    "zone_not_borough": "PU或DO为264/265，不能归普通城区，非违法认定",
+    "cbd_missing": "字段存在但值null；不是免收费或伪造认定",
+    "distance_nonpositive": "源距离不为null且<=0；质量待核，不静默删除"
+  },
+  "retention": "所有源行不删不重排不补值，SQLite(batch,row_number)从各文件读取顺序1开始；多标签可重叠，唯一处置按priority首次命中，否则clean。",
+  "scope": "原创内部业务月报接入质量合同，不是官方计费/执法标准。以给定角色记录选择版本，不是数字签名或身份认证。"
+}

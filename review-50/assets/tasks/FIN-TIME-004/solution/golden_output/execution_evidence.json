@@ -1,0 +1,511 @@
+{
+  "task_id": "FIN-TIME-004",
+  "created_at_utc": "2026-10-21T02:29:24.612402+00:00",
+  "scope": "Actual local author execution, not Docker/solver trace, social-insurance verification, expert certification or actual payment.",
+  "input_sha256": {
+    "S01_全国扩围通知阅读器全文.docx": "17c992cedcbb5de367a9ee2de1c4be1a5839e74dbe4b2a04ef5e694eba12ac23",
+    "S02_税收公告全文.docx": "ee63e0c3be12b7d8c033df617a400108ea7faf9d101af8980ff8ccb43d44bc54",
+    "S03_2025领取通知阅读器全文.docx": "000670d88a2f45f8ccc3feda554bf1d125fe98f8f8a4930894ba3fb2ab6a96da",
+    "S04_真实Y类产品资料概要20240531.pdf": "4940e2cd2f3d71ee1e61b11d03aa005a494764bdaa5c234dcf7e6e3518b2c347",
+    "S05_家庭访谈冻结备份.xlsx": "29c53ae431b7ee680498921d5dd73927c12693b03b267add45275984a9c288da",
+    "S06_失业保险金领取流水.csv": "610cf0fe0d1d2c3093ca48403b66176af827821e62db0010ecb51d82e0749a04",
+    "S07_D0客服回复草稿.docx": "ac146b88ee24b3e677da7b9f4257f90d742fd5c6ce36f8d4a08fc68c7e0a5f58",
+    "S08_负责人委托与恢复指引.docx": "a228906bae24d550da5b6c694bb311478fe356199770bb404ba4198e0202a1ea",
+    "export_households.py": "23ae74d5c6d33c980d97363b9c9090f32fcced058ffe981a6ee3bab1ec7d6a9a",
+    "S10_授权备份登记.json": "81ca1323f875a57f287eeae29e876c9099ac6bc80a04723ae69fab01437054f0",
+    "S11_家庭沟通稿模板.docx": "49a9622b22ce108daf7550edfed7c5ce3c23833402ecc533f500fbbec38f6c8d"
+  },
+  "recovery": {
+    "register_version": "HOUSEHOLD-FREEZE-20250905-0900",
+    "actual_default_attempt": {
+      "started_at_utc": "2026-10-21T02:29:23.455426+00:00",
+      "completed_at_utc": "2026-10-21T02:29:24.047268+00:00",
+      "argv": [
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/.venv/bin/python",
+        "-B",
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/authoring_assets/FIN-TIME-004/input_stage_v2/export_households.py",
+        "--out",
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/authoring_runs/FIN-TIME-004/20261021T022923Z/households.json"
+      ],
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "{\"status\": \"BLOCKED_SOURCE_MISSING\", \"source\": \"/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/authoring_assets/FIN-TIME-004/input_stage_v2/S05_households_latest.xlsx\", \"hint\": \"No data exported. Check the approved recovery register; do not invent household records.\"}\n"
+    },
+    "approved_backup_sha256": "29c53ae431b7ee680498921d5dd73927c12693b03b267add45275984a9c288da",
+    "actual_recovery_attempt": {
+      "started_at_utc": "2026-10-21T02:29:24.048309+00:00",
+      "completed_at_utc": "2026-10-21T02:29:24.610203+00:00",
+      "argv": [
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/.venv/bin/python",
+        "-B",
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/authoring_assets/FIN-TIME-004/input_stage_v2/export_households.py",
+        "--source",
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/authoring_assets/FIN-TIME-004/input_stage_v2/S05_家庭访谈冻结备份.xlsx",
+        "--out",
+        "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/authoring_runs/FIN-TIME-004/20261021T022923Z/households.json"
+      ],
+      "returncode": 0,
+      "stdout": "{\"status\": \"EXPORTED_NOT_APPROVED\", \"executed_at_utc\": \"2026-10-21T02:29:24.539047+00:00\", \"source_name\": \"S05_家庭访谈冻结备份.xlsx\", \"source_sha256\": \"29c53ae431b7ee680498921d5dd73927c12693b03b267add45275984a9c288da\", \"case_count\": 12, \"scope\": \"Frozen fictional interview facts only; not policy conclusions, verified entitlements or payment approval.\"}\n",
+      "stderr": ""
+    }
+  },
+  "export": {
+    "status": "EXPORTED_NOT_APPROVED",
+    "executed_at_utc": "2026-10-21T02:29:24.539047+00:00",
+    "source_name": "S05_家庭访谈冻结备份.xlsx",
+    "source_sha256": "29c53ae431b7ee680498921d5dd73927c12693b03b267add45275984a9c288da",
+    "case_count": 12,
+    "records": [
+      {
+        "case_id": "F01",
+        "business_on": "2024-12-14",
+        "basic_insured": true,
+        "pilot_before_expansion": false,
+        "paid_this_year": 0,
+        "requested_contribution": 12000,
+        "outside_liquid_cash": 40000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 0,
+        "fund_value_snapshot": 0,
+        "lot_maturity_in_record": null,
+        "age_condition_evidence": "无",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": false,
+        "question": "今天可否新开户并追认今年1月已缴？",
+        "evidence_note": "该地区此前非先行地区为情境给定；无历史缴费凭证。"
+      },
+      {
+        "case_id": "F02",
+        "business_on": "2024-12-16",
+        "basic_insured": true,
+        "pilot_before_expansion": false,
+        "paid_this_year": 3000,
+        "requested_contribution": 10000,
+        "outside_liquid_cash": 20000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 3000,
+        "fund_value_snapshot": 0,
+        "lot_maturity_in_record": null,
+        "age_condition_evidence": "无",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": false,
+        "question": "想再缴10000并保证退税3600。",
+        "evidence_note": "3000为本年度实际缴费且已取得平台凭证；20000是本次追加前账户外流动现金。最低储备为家庭自己约定，非国家门槛。"
+      },
+      {
+        "case_id": "F03",
+        "business_on": "2024-12-16",
+        "basic_insured": false,
+        "pilot_before_expansion": false,
+        "paid_this_year": 0,
+        "requested_contribution": 12000,
+        "outside_liquid_cash": 50000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 0,
+        "fund_value_snapshot": 0,
+        "lot_maturity_in_record": null,
+        "age_condition_evidence": "无",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": false,
+        "question": "全国扩围后不参基本养老保险也能参加吗？",
+        "evidence_note": "未参加城镇职工或城乡居民基本养老保险；不存在其他参加依据。"
+      },
+      {
+        "case_id": "F04",
+        "business_on": "2025-08-25",
+        "basic_insured": true,
+        "pilot_before_expansion": true,
+        "paid_this_year": 0,
+        "requested_contribution": 0,
+        "outside_liquid_cash": 5000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 10000,
+        "fund_value_snapshot": 0,
+        "lot_maturity_in_record": null,
+        "age_condition_evidence": "无",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": false,
+        "question": "已累计领12个月失业保险，今天可按39号提款吗？",
+        "evidence_note": "仅失业情形；无完全丧失劳动能力、出国定居或年龄条件，无其他领取依据。"
+      },
+      {
+        "case_id": "F05",
+        "business_on": "2025-09-05",
+        "basic_insured": true,
+        "pilot_before_expansion": true,
+        "paid_this_year": 0,
+        "requested_contribution": 0,
+        "outside_liquid_cash": 5000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 10000,
+        "fund_value_snapshot": 0,
+        "lot_maturity_in_record": null,
+        "age_condition_evidence": "无",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": false,
+        "question": "失业后申请一次性领现金10000，净得多少？",
+        "evidence_note": "仅做条件初筛，未递交领取申请、未取得社保核实或平台变更；流水只作题给记录。"
+      },
+      {
+        "case_id": "F06",
+        "business_on": "2025-09-05",
+        "basic_insured": true,
+        "pilot_before_expansion": true,
+        "paid_this_year": 0,
+        "requested_contribution": 0,
+        "outside_liquid_cash": 5000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 10000,
+        "fund_value_snapshot": 0,
+        "lot_maturity_in_record": null,
+        "age_condition_evidence": "无",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": false,
+        "question": "流水总共12笔，是否能直接提款？",
+        "evidence_note": "仅失业情形；无其他领取依据。逐笔月份/时间见S06，不按历史总笔数判断。"
+      },
+      {
+        "case_id": "F07",
+        "business_on": "2025-09-05",
+        "basic_insured": true,
+        "pilot_before_expansion": true,
+        "paid_this_year": 0,
+        "requested_contribution": 0,
+        "outside_liquid_cash": 1000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 0,
+        "fund_value_snapshot": 6000,
+        "lot_maturity_in_record": "2026-03-10",
+        "age_condition_evidence": "无",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": false,
+        "question": "满足失业条件，基金赎回费为0，今天是否到账5820？",
+        "evidence_note": "仅持017363，业务登记给定每笔持有期到期日2026-03-10；没有提前赎回特别办理文件/机构确认。基金数值仅访谈快照，非可提现现金。"
+      },
+      {
+        "case_id": "F08",
+        "business_on": "2025-09-05",
+        "basic_insured": true,
+        "pilot_before_expansion": true,
+        "paid_this_year": 0,
+        "requested_contribution": 0,
+        "outside_liquid_cash": 10000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 10000,
+        "fund_value_snapshot": 0,
+        "lot_maturity_in_record": null,
+        "age_condition_evidence": "题给社保信息摘录支持已达到领取基本养老金年龄",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": false,
+        "question": "现金10000一次领，是否无税且顾问可以批准？",
+        "evidence_note": "年龄条件为题给摘录结论，不按出生年份推算；本次领取申请尚未核实。"
+      },
+      {
+        "case_id": "F09",
+        "business_on": "2025-09-05",
+        "basic_insured": true,
+        "pilot_before_expansion": true,
+        "paid_this_year": 0,
+        "requested_contribution": 0,
+        "outside_liquid_cash": 8000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 0,
+        "fund_value_snapshot": 8000,
+        "lot_maturity_in_record": "2025-08-01",
+        "age_condition_evidence": "无",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": false,
+        "question": "基金已满一年，想赎到银行卡用于买房。",
+        "evidence_note": "无任何法定领取情形；无退休、失能、出国定居、合格医药、失业或低保事实。赎回开放日/确认到账需销售机构核实。"
+      },
+      {
+        "case_id": "F10",
+        "business_on": "2025-09-05",
+        "basic_insured": true,
+        "pilot_before_expansion": true,
+        "paid_this_year": 0,
+        "requested_contribution": 0,
+        "outside_liquid_cash": 3000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 4000,
+        "fund_value_snapshot": 8000,
+        "lot_maturity_in_record": "2026-04-10",
+        "age_condition_evidence": "无",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": false,
+        "question": "失业符合，现金4000与基金8000都能马上提吗？",
+        "evidence_note": "基金仅017363，持有期到期日2026-04-10；无提前赎回特别文件。申请和机构核实均未完成。"
+      },
+      {
+        "case_id": "F11",
+        "business_on": "2025-09-05",
+        "basic_insured": true,
+        "pilot_before_expansion": true,
+        "paid_this_year": 0,
+        "requested_contribution": 0,
+        "outside_liquid_cash": 1000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 12000,
+        "fund_value_snapshot": 0,
+        "lot_maturity_in_record": null,
+        "age_condition_evidence": "无",
+        "current_dibao": true,
+        "recontributed_after_early_withdrawal": false,
+        "question": "正在领城乡低保，申请现金12000，一次性还是分次？",
+        "evidence_note": "当前低保为题给有效记录，仅作初筛，社保核实未完成；可说明法定领取方式供本人选择，不替本人决定。"
+      },
+      {
+        "case_id": "F12",
+        "business_on": "2025-09-05",
+        "basic_insured": true,
+        "pilot_before_expansion": true,
+        "paid_this_year": 500,
+        "requested_contribution": 0,
+        "outside_liquid_cash": 1000,
+        "family_reserve_floor": 18000,
+        "pension_cash": 9500,
+        "fund_value_snapshot": 0,
+        "lot_maturity_in_record": null,
+        "age_condition_evidence": "无",
+        "current_dibao": false,
+        "recontributed_after_early_withdrawal": true,
+        "question": "9月1日低保提前领过，9月3日又缴500，今天还能沿用旧领取状态吗？",
+        "evidence_note": "9月1日按当时有效低保事实办理过提前领取为题给情境；2025-09-02起不再领低保；9月3日重新缴费发生于旧提前领取之后；无其他当前领取情形。旧领取/返缴仅情境记录，非真实社保凭证。"
+      }
+    ],
+    "scope": "Frozen fictional interview facts only; not policy conclusions, verified entitlements or payment approval."
+  },
+  "unemployment_windows": [
+    {
+      "case_id": "F04",
+      "start_inclusive": "2023-08-25",
+      "end_exclusive": "2025-08-25",
+      "months": 12,
+      "included_ids": [
+        "F04-U01",
+        "F04-U02",
+        "F04-U03",
+        "F04-U04",
+        "F04-U05",
+        "F04-U06",
+        "F04-U07",
+        "F04-U08",
+        "F04-U09",
+        "F04-U10",
+        "F04-U11",
+        "F04-U12"
+      ],
+      "excluded_ids": []
+    },
+    {
+      "case_id": "F05",
+      "start_inclusive": "2023-09-05",
+      "end_exclusive": "2025-09-05",
+      "months": 12,
+      "included_ids": [
+        "F05-U01",
+        "F05-U02",
+        "F05-U03",
+        "F05-U04",
+        "F05-U05",
+        "F05-U06",
+        "F05-U07",
+        "F05-U08",
+        "F05-U09",
+        "F05-U10",
+        "F05-U11",
+        "F05-U12"
+      ],
+      "excluded_ids": []
+    },
+    {
+      "case_id": "F06",
+      "start_inclusive": "2023-09-05",
+      "end_exclusive": "2025-09-05",
+      "months": 11,
+      "included_ids": [
+        "F06-U02",
+        "F06-U03",
+        "F06-U04",
+        "F06-U05",
+        "F06-U06",
+        "F06-U07",
+        "F06-U08",
+        "F06-U09",
+        "F06-U10",
+        "F06-U11",
+        "F06-U12"
+      ],
+      "excluded_ids": [
+        "F06-U01"
+      ]
+    },
+    {
+      "case_id": "F07",
+      "start_inclusive": "2023-09-05",
+      "end_exclusive": "2025-09-05",
+      "months": 12,
+      "included_ids": [
+        "F07-U01",
+        "F07-U02",
+        "F07-U03",
+        "F07-U04",
+        "F07-U05",
+        "F07-U06",
+        "F07-U07",
+        "F07-U08",
+        "F07-U09",
+        "F07-U10",
+        "F07-U11",
+        "F07-U12"
+      ],
+      "excluded_ids": []
+    },
+    {
+      "case_id": "F10",
+      "start_inclusive": "2023-09-05",
+      "end_exclusive": "2025-09-05",
+      "months": 12,
+      "included_ids": [
+        "F10-U01",
+        "F10-U02",
+        "F10-U03",
+        "F10-U04",
+        "F10-U05",
+        "F10-U06",
+        "F10-U07",
+        "F10-U08",
+        "F10-U09",
+        "F10-U10",
+        "F10-U11",
+        "F10-U12"
+      ],
+      "excluded_ids": []
+    }
+  ],
+  "preliminary_decisions": [
+    {
+      "case_id": "F01",
+      "preliminary": "12月14日不能仅据全国扩围新开户；先准备12月15日后核实",
+      "product_cash_consequence": "无已缴事实，不追认1月缴费",
+      "next_action": "核实基本保险与开户条件后再按实际缴费取得凭证",
+      "source_locator": "S01一（一）；S02一/二；S05 F01"
+    },
+    {
+      "case_id": "F02",
+      "preliminary": "参加基础条件满足；建议追加最多2000或延后",
+      "product_cash_consequence": "年度剩余额度9000；家庭现金储备余量2000，不能照缴10000",
+      "next_action": "负责人复核现金需求，由家庭决定0–2000或暂缓；按实缴平台凭证办扣除",
+      "source_locator": "S01一（一）；S02一/二；S05 F02；S08"
+    },
+    {
+      "case_id": "F03",
+      "preliminary": "当前缺基本养老保险参加条件，不能仅据扩围入制度",
+      "product_cash_consequence": "不作缴费或退款承诺",
+      "next_action": "由家庭先向基本养老保险服务渠道核实自身参加情况",
+      "source_locator": "S01一（一）；S05 F03"
+    },
+    {
+      "case_id": "F04",
+      "preliminary": "8月25日不能把尚未施行39号当当前直接领取依据",
+      "product_cash_consequence": "窗口内12个月，但本通知9月1日才实施；不批准或演示已到账",
+      "next_action": "告知历史答复应待实施后按实际条件重新申请核实",
+      "source_locator": "S01四（一）；S03一（五）/七；S06 F04"
+    },
+    {
+      "case_id": "F05",
+      "preliminary": "两年窗口12个月，失业路径初筛满足，尚待社保核实",
+      "product_cash_consequence": "给定现金10000仅作附条件税300、净9700演示",
+      "next_action": "申请渠道/社保核实→平台状态→银行代扣→本人社保卡",
+      "source_locator": "S03一（五）/三；S02一/二；S06 F05"
+    },
+    {
+      "case_id": "F06",
+      "preliminary": "窗口内11个月，未达失业路径12个月；历史总12笔不能算",
+      "product_cash_consequence": "不给确定可领取/净到账额；无其他给定领取依据",
+      "next_action": "核查是否另有窗口内漏登领取月；没有就待达到条件",
+      "source_locator": "S03一（五）；S06 F06"
+    },
+    {
+      "case_id": "F07",
+      "preliminary": "失业路径初筛满足，但不等于产品立即可取",
+      "product_cash_consequence": "现金0；6000是基金快照且持有期未到，不演示5820到账",
+      "next_action": "产品运营核当前合同/特别提前办理安排/交易流程；再协调申请",
+      "source_locator": "S03一（五）/二；S04原PDF1/3/5页；S05 F07"
+    },
+    {
+      "case_id": "F08",
+      "preliminary": "给定年龄条件有摘录支持；当前领取申请仍待核",
+      "product_cash_consequence": "给定现金10000附条件税300、净9700，不是免税",
+      "next_action": "按社保核实/平台状态/银行代扣程序办理，不由顾问批准",
+      "source_locator": "S03一（一）/三；S02一/二；S05 F08"
+    },
+    {
+      "case_id": "F09",
+      "preliminary": "无任何给定账户领取情形，满持有期不自动取得对外领取资格",
+      "product_cash_consequence": "基金已满期可核交易开放/确认；赎回款不等于银行卡可用款",
+      "next_action": "先核基金正常赎回流程；住房资金需另评账户外合法流动性",
+      "source_locator": "S03一/二/三；S04原PDF1/3页；S05 F09"
+    },
+    {
+      "case_id": "F10",
+      "preliminary": "失业初筛满足；现金与锁定基金必须分开",
+      "product_cash_consequence": "现金4000附条件税120、净3880；基金8000不纳入当前演示",
+      "next_action": "先申请核实现金领取；产品运营另核未到期持仓安排",
+      "source_locator": "S03一（五）/二/三；S02一；S04原PDF1/3页；S05 F10"
+    },
+    {
+      "case_id": "F11",
+      "preliminary": "当前低保事实支持领取初筛，待社保核实",
+      "product_cash_consequence": "现金12000附条件税360、净11640；方式由本人选",
+      "next_action": "提供按月/分次/一次性及变更选择，按家庭需求确认后申请",
+      "source_locator": "S03一（六）/二/三；S02一；S05 F11"
+    },
+    {
+      "case_id": "F12",
+      "preliminary": "非年龄路径返缴后回到缴存状态，须重新达到领取条件；当前无依据",
+      "product_cash_consequence": "旧低保/旧领取状态不能沿用为本次批准",
+      "next_action": "社保接口核当前状态与资格；当前不递交虚假延续低保事实",
+      "source_locator": "S03四；S05 F12"
+    }
+  ],
+  "conditional_cash_examples": [
+    {
+      "case_id": "F05",
+      "gross": 10000,
+      "tax_rate": 0.03,
+      "tax": 300.0,
+      "net": 9700.0,
+      "condition": "Only if verified, account status updated and bank actually processes given cash; not an approved payment."
+    },
+    {
+      "case_id": "F08",
+      "gross": 10000,
+      "tax_rate": 0.03,
+      "tax": 300.0,
+      "net": 9700.0,
+      "condition": "Only if verified, account status updated and bank actually processes given cash; not an approved payment."
+    },
+    {
+      "case_id": "F10",
+      "gross": 4000,
+      "tax_rate": 0.03,
+      "tax": 120.0,
+      "net": 3880.0,
+      "condition": "Only if verified, account status updated and bank actually processes given cash; not an approved payment."
+    },
+    {
+      "case_id": "F11",
+      "gross": 12000,
+      "tax_rate": 0.03,
+      "tax": 360.0,
+      "net": 11640.0,
+      "condition": "Only if verified, account status updated and bank actually processes given cash; not an approved payment."
+    }
+  ],
+  "unresolved": [
+    "Product-specific cooling/cancellation and current sales/temporary documents must be confirmed; no universal seven-day promise.",
+    "Any specific early redemption arrangement and actual processing dates need provider confirmation.",
+    "All household claims remain interview facts, not verified government determinations; expert and formal model calibration pending."
+  ]
+}

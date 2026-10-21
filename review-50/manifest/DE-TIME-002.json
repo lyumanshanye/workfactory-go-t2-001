@@ -1,0 +1,903 @@
+{
+  "id": "DE-TIME-002",
+  "title": "按钮组件跨版本迁移：修订交互Skill与失败恢复原型",
+  "domain": "设计",
+  "domain_l2": "De2-交互与体验设计",
+  "domain_l3": "设计系统跨版本交互规范",
+  "category": "skill-generation-editing",
+  "complexity": "C3",
+  "target_difficulty": "A2",
+  "as_of": "2024-01-10 10:00",
+  "timezone": "Europe/London",
+  "source_note": "真实官方版本release/代码/MIT离线冻结，业务/合同/D0/版式/模拟原创；非官方服务或完整组件库，无后台认证。",
+  "instruction": "# 按钮组件跨版本迁移：修订交互Skill与失败恢复原型\n\n## 业务场景与任务说明\n\n你是交互设计师/组件库维护者。已批准5.0迁移，但D0仍靠旧禁用类、属性值真假和灰色链接，失败后锁死且虚称后台已验；晚到营销便笺又催保留。请用真实版本证据修订局部Skill和检查器，制作合同状态/可恢复模拟原型，并交实际执行证据与中文设计交接；不接真实后台、不冒称认证。\n\n业务判断基准时点：2024-01-10 10:00；时区：Europe/London。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_官方版本证据.docx`：准确4.6/5.0 release相关原文选摘和发布元数据，非今日指南。\n- `/app/input_files/S02_版本组件源代码.txt`：两版本真实模板/JS/SCSS全文及原URL/SHA，带MIT原文见S03。\n- `/app/input_files/S03_MIT许可证.txt`：真实MIT许可及Crown/GDS归属，不含标志/字体资产。\n- `/app/input_files/S04_状态合同.json`：原创团队8状态/动态/尺寸/范围合同，非官方通用规则。\n- `/app/input_files/S05_D0原型.html`：原创未批准D0原型，含假禁用link/错误断言/失败锁死。\n- `/app/input_files/S06_D0_SKILL.md`：原创待修D0 Skill入口，不是应照做的新规则。\n- `/app/input_files/S07_D0_audit.py`：原创待修D0恒弱检查器。\n- `/app/input_files/S08_团队委托.docx`：原创委托/版本批准/晚到无权便笺与真实交付合同。\n\n## 工作要求\n\n- [Q1] 按两版官方release/代码和批准权限确定5.0目标，区分发布、抓取、内部批准和晚到无权便笺；纠正D0。\n- [Q2] 制作可复用局部Skill和真实检查器，正确处理原生disabled属性存在性、旧类移除、导航/不可用语义，不写恒真或只扫描关键词。\n- [Q3] 按S04制作8个真实可编辑状态及自包含动态模拟原型；布局文字可读、键盘可操作，两尺寸和团队44×44约束可检验。\n- [Q4] 实现空输入门禁、忙碌/重复激活抑制、失败保留与重试、成功本机摘要、重置取消回调，不实际提交。\n- [Q5] 实际执行检查器，保存HTML/合同/脚本哈希、运行时间、浏览器版本及两尺寸逐项结果，缺依赖/失败如实报告。\n- [Q6] 交可读中文Word解释D0更正、状态/版本和权限、运行及复测、下一负责人和未验边界；五文件同步不改输入。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/button-migration/SKILL.md`：修订局部Skill入口。\n- `/app/output/button-migration/scripts/audit_states.py`：读取合同的实际检查器，失败非零，含真实浏览器回放。\n- `/app/output/prototype.html`：自包含8状态和可恢复本机动态模拟原型。\n- `/app/output/migration_handoff.docx`：中文可编辑迁移/设计/复测/范围交接。\n- `/app/output/checks.json`：当前文件真实执行的哈希/版本/逐项结果。\n\n## 硬约束（单独列明）\n\n- 所有业务/D0/合同为原创训练，官方事实仅来自冻结版本；较晚无权消息不能覆盖已批准目标。\n- 只交五个指定自包含可编辑文件到/app/output；不改输入、无压缩包、无全局Skill安装、无真实外联或提交。\n- 保持S04接口/状态合同以便复用，版式允许变化；教学disabled=false需解释，不作为生产建议。\n- 真实运行时间/浏览器/哈希如实保存；缺依赖/未测报未完成，不填pass，不伪造服务器测试/官方认证。\n",
+  "instruction_url": "assets/tasks/DE-TIME-002/instruction.md",
+  "absolute_path": "tasks/DE-TIME-002",
+  "spec_path": "manifest/DE-TIME-002.json",
+  "spec_url": "manifest/DE-TIME-002.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "明确本轮批准目标5.0.0，拒绝较晚无权营销便笺恢复旧禁用类/伪后台认证，不把最新消息自动当规则。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "button-migration/SKILL.md",
+        "migration_handoff.docx"
+      ],
+      "evidence": "S08批准与消息时间线。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R02",
+      "description": "准确区分4.6弃用/5.0移除旧禁用类与不支持禁用link，原型没有govuk-button--disabled类，Skill无相反实施指引。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1",
+        "Q2"
+      ],
+      "deliverables": [
+        "button-migration/SKILL.md",
+        "button-migration/scripts/audit_states.py",
+        "prototype.html"
+      ],
+      "evidence": "S01对应两版release；S02模板。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R03",
+      "description": "检查器对button/input按disabled属性存在性而非属性值真假判断；空串、disabled和false文字值均识别为禁用。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "button-migration/scripts/audit_states.py",
+        "checks.json"
+      ],
+      "evidence": "S01 Boolean attributes/S04；可实际改属性反测，不只查文案。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R04",
+      "description": "s-unavailable是无href/点击/可聚焦伪链接的静态说明，s-link保留#guide可用导航；不把灰色或aria-disabled当原生导航阻断。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q3"
+      ],
+      "deliverables": [
+        "prototype.html",
+        "button-migration/scripts/audit_states.py"
+      ],
+      "evidence": "S04两状态/S01 v5边界；DOM及键盘导航。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R05",
+      "description": "8个合同状态均有正确元素/标签和禁用语义，可编辑DOM而非整图截图；s-boolfalse明确为非推荐生产写法的教学探针。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "prototype.html"
+      ],
+      "evidence": "S04八条状态和教学探针解释，允许原创版式。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R06",
+      "description": "动态区空白输入不可启动，填有效名称才可开始，忙碌时立即显示文字反馈而非只变色。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "prototype.html",
+        "checks.json"
+      ],
+      "evidence": "S04初始/忙碌合同；真实DOM状态。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R07",
+      "description": "失败后资料保留，明确失败反馈且按钮恢复并可重试，不永久禁用或偷偷清空；检查器真实回放该路径。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q4"
+      ],
+      "deliverables": [
+        "prototype.html",
+        "button-migration/scripts/audit_states.py",
+        "checks.json"
+      ],
+      "evidence": "S04 failure；反测失败后锁死。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R08",
+      "description": "忙碌期间两次激活仅启动一次本机模拟且次数准确；恢复后允许新模拟，而非永久锁代替客户端重复抑制。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "prototype.html",
+        "button-migration/scripts/audit_states.py",
+        "checks.json"
+      ],
+      "evidence": "S04 busy/counter，实际两次DOM激活。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R09",
+      "description": "成功只生成包含当前材料名称的本机摘要，明确未提交，不称后台已受理；重置清空/归零并取消未完成回调。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "prototype.html",
+        "checks.json"
+      ],
+      "evidence": "S04 success/reset，真实操作。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R10",
+      "description": "键盘Enter启动与链接导航、Space重置可用；焦点可见且动态状态区域在反馈前已存在role=status，不全靠颜色。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3",
+        "Q4"
+      ],
+      "deliverables": [
+        "prototype.html",
+        "button-migration/scripts/audit_states.py",
+        "checks.json"
+      ],
+      "evidence": "S04 keyboard/initial；这里只验指定交互不等完整辅助技术认证。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R11",
+      "description": "实际1280×900与390×844均无横向溢出、文字/标签不裁切遮挡，可见交互元素满足团队44×44要求。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "prototype.html",
+        "checks.json"
+      ],
+      "evidence": "S04 geometry，实际浏览器几何与可视渲染；非官方通用像素规定。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R12",
+      "description": "离线自包含，无远程库/字体/实际提交或持久存储；禁JS有清楚限制且初始模拟不可执行。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q3",
+        "Q4"
+      ],
+      "deliverables": [
+        "prototype.html"
+      ],
+      "evidence": "S04 scope/no-javascript，检查实际资源/DOM/代码。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R13",
+      "description": "局部Skill有准确name/description、明确适用版本与合同、可运行相对命令和依赖说明，下一位设计师无需全局安装即可复用。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "button-migration/SKILL.md",
+        "button-migration/scripts/audit_states.py"
+      ],
+      "evidence": "S06/S07待修，S08局部可复用要求。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R14",
+      "description": "检查器读取合同逐项核状态而非固定输出pass，失败非零并输出具体项；同时真实浏览器回放，不用静态字符串检查冒充交互验证。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q2",
+        "Q5"
+      ],
+      "deliverables": [
+        "button-migration/scripts/audit_states.py",
+        "checks.json"
+      ],
+      "evidence": "S04 evidence；可给错旧类/错属性/坏恢复反测。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R15",
+      "description": "checks.json来自当前HTML/合同/脚本实际执行，三者SHA可复核，执行时间/浏览器版本真实、逐项结果齐；不是人工预填或历史时点伪运行。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "button-migration/scripts/audit_states.py",
+        "checks.json"
+      ],
+      "evidence": "S04 evidence；与当前交付/只读合同实字节比。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R16",
+      "description": "复测流程可执行：旧类、属性误读、失败恢复三种反例中，每种均说明具体怎么改/检查什么及失败后重跑；不要求把全部作者QA文件当最终交付。",
+      "weight": 7,
+      "type": "Gradient",
+      "requirement_refs": [
+        "Q2",
+        "Q6"
+      ],
+      "deliverables": [
+        "button-migration/SKILL.md",
+        "migration_handoff.docx"
+      ],
+      "evidence": "S08复测要求；三类具体反例/期望，不以只有“测试错误情况”通过。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。",
+      "levels": {
+        "0": "三类均无可执行说明。",
+        "0.25": "仅1类有具体变更或检查但不完整。",
+        "0.5": "1类完整，或2类部分可执行。",
+        "0.75": "2类完整，第三缺具体变更/检查或复测动作。",
+        "1": "3类均有具体变更和可观察失败依据，且说明修复后重跑并同步证据。"
+      }
+    },
+    {
+      "id": "R17",
+      "description": "Word交接把D0的旧类/属性值、假禁用link、失败清空锁死、虚假后台断言明确映射到当前修订与实现位置。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1",
+        "Q6"
+      ],
+      "deliverables": [
+        "migration_handoff.docx"
+      ],
+      "evidence": "S05–S07实际D0四组缺陷，不仅泛述新版更好。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R18",
+      "description": "说明两版本实际发布日期与2026抓取日分开，签名到期不当发布日期；来源URL/定位可查，团队业务/状态合同不冒充官方。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q1",
+        "Q6"
+      ],
+      "deliverables": [
+        "migration_handoff.docx",
+        "button-migration/SKILL.md"
+      ],
+      "evidence": "S01/S08和S02源文件头。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R19",
+      "description": "交接边界具体：后端幂等/真实提交、真人/辅助技术和完整WCAG尚未验证；给出后端/设计负责人下一动作，不拿本机pass替代。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "migration_handoff.docx",
+        "button-migration/SKILL.md",
+        "checks.json"
+      ],
+      "evidence": "S04 scope/S08；实际约束和责任接口。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R20",
+      "description": "交接可用性按四证据槽评定：定位D0更正、复现命令、实测与未测区分、后续角色动作；不依固定排版或逐字复刻。",
+      "weight": 3,
+      "type": "Gradient",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "migration_handoff.docx"
+      ],
+      "evidence": "检查四槽是否有具体内容且与代码相符。",
+      "dimension": "内容质量",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。",
+      "levels": {
+        "0": "0槽具体可用。",
+        "0.25": "1槽具体可用。",
+        "0.5": "2槽具体可用。",
+        "0.75": "3槽具体可用。",
+        "1": "4槽均具体可用。"
+      }
+    },
+    {
+      "id": "R21",
+      "description": "五个规定最终文件齐备可打开，Word中文可编辑，Skill/原型/JSON一致，不改只读输入、不加密压缩。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "button-migration/SKILL.md",
+        "button-migration/scripts/audit_states.py",
+        "prototype.html",
+        "migration_handoff.docx",
+        "checks.json"
+      ],
+      "evidence": "S08交付清单；路径/文件实际检查。",
+      "dimension": "指令遵循",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    },
+    {
+      "id": "R22",
+      "description": "扣分：伪造真实官方认证/上线审批/后台幂等已测试/申请已实际提交等具体完成断言；不因普通遗漏或一般交互错误重复扣分。",
+      "weight": -7,
+      "type": "Binary",
+      "requirement_refs": [
+        "Q5",
+        "Q6"
+      ],
+      "deliverables": [
+        "prototype.html",
+        "migration_handoff.docx",
+        "checks.json",
+        "button-migration/SKILL.md"
+      ],
+      "evidence": "本题只授权本机模拟，不存在真实后台/认证执行。",
+      "dimension": "真实性与边界",
+      "weight_reason": "实际可操作性/复用与错误影响：核心错误10，重要交互/证据7，局部记录与格式3；不是按列表轮流分配。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://github.com/alphagov/govuk-frontend/releases/tag/v4.6.0",
+      "filename": "v4.6.0-release.html",
+      "sha256": "765924069f1c4598c3de9f5760b089a785ed85d29bf5f5ce6475f85eb464ea49",
+      "published_at": "2023-04-20T13:45:33Z"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/template.njk",
+      "filename": "v4.6.0-template.njk",
+      "sha256": "ee15c8ede1dcff7cbb461f359362c8a687c7091eace8bbcf7aa0c336096ec7ff"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/button.mjs",
+      "filename": "v4.6.0-button.mjs",
+      "sha256": "2e1fff9cb05b86e4c237679bdf23e8b91392657d43cc797e8a38526ddd23a0a4"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/_index.scss",
+      "filename": "v4.6.0-_index.scss",
+      "sha256": "bb8caae8297a5cf52c886c6edc29526ae660d763c3a6752473a9cc246a2fea1b"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/LICENSE.txt",
+      "filename": "v4.6.0-LICENSE.txt",
+      "sha256": "c652f35b1f2e5b88eb49f1e8a935eec79b4761a81666ace576e1af723f4a9238"
+    },
+    {
+      "url": "https://github.com/alphagov/govuk-frontend/releases/tag/v5.0.0",
+      "filename": "v5.0.0-release.html",
+      "sha256": "04c7ae1ece870e72411aaac7290139d902ddb084c22839a8a0658d7177be898c",
+      "published_at": "2023-12-08T16:17:12Z"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/template.njk",
+      "filename": "v5.0.0-template.njk",
+      "sha256": "e1105f4f87a652f80b2d5fee6d78270e05292a922350bf8a4d4a7be8c8c81be3"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/button.mjs",
+      "filename": "v5.0.0-button.mjs",
+      "sha256": "36aaa689ff4779b290ff60e3cb2bfde9f1a5f7903b290f51836ff7c036398e3c"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/_index.scss",
+      "filename": "v5.0.0-_index.scss",
+      "sha256": "a85bf4b3c9a9664c60a4033d3bdbddca3d1552e08d5852dcc7d674c4877802ae"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/LICENSE.txt",
+      "filename": "v5.0.0-LICENSE.txt",
+      "sha256": "c652f35b1f2e5b88eb49f1e8a935eec79b4761a81666ace576e1af723f4a9238"
+    }
+  ],
+  "status": {
+    "task_id": "DE-TIME-002",
+    "domain": "设计",
+    "domain_l2": "De2-交互与体验设计",
+    "category": "skill-generation-editing",
+    "inputs": 8,
+    "gold_files": 5,
+    "rubrics": 22,
+    "complexity": "C3",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:20d77499d1e23da241d7e6d374f0b9bfeb25bfa835facd6ef81d4d1459e9bed2",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/DE-TIME-002/20261020T231308Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 0.953333,
+            "graded_score": 0.953333,
+            "criteria_counted": 22.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_官方版本证据.docx",
+      "absolute_path": "题包内：S01_官方版本证据.docx",
+      "url": "",
+      "bytes": 38441,
+      "sha256": "46b553db746f40b6652ef16c3275b941f7ea058e8adbfaa00df3e0b0cb7700cb",
+      "description": "准确4.6/5.0 release相关原文选摘和发布元数据，非今日指南。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v5.0.0",
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v4.6.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/LICENSE.txt",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "S02_版本组件源代码.txt",
+      "absolute_path": "题包内：S02_版本组件源代码.txt",
+      "url": "",
+      "bytes": 30481,
+      "sha256": "84155d21e7511f37d5e3fee6ea2dffe6b94af93ea3a23b73c25b932fe1674605",
+      "description": "两版本真实模板/JS/SCSS全文及原URL/SHA，带MIT原文见S03。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v5.0.0",
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v4.6.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/LICENSE.txt",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "S03_MIT许可证.txt",
+      "absolute_path": "题包内：S03_MIT许可证.txt",
+      "url": "",
+      "bytes": 1111,
+      "sha256": "c652f35b1f2e5b88eb49f1e8a935eec79b4761a81666ace576e1af723f4a9238",
+      "description": "真实MIT许可及Crown/GDS归属，不含标志/字体资产。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v5.0.0",
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v4.6.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/LICENSE.txt",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "S04_状态合同.json",
+      "absolute_path": "题包内：S04_状态合同.json",
+      "url": "assets/tasks/DE-TIME-002/environment/input_files/S04_%E7%8A%B6%E6%80%81%E5%90%88%E5%90%8C.json",
+      "bytes": 3179,
+      "sha256": "9e1d48d6b9e8aa014bdf509dd79e48260128cac6070e70ecce117a7c02e57870",
+      "description": "原创团队8状态/动态/尺寸/范围合同，非官方通用规则。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"target_version\": \"5.0.0\",\n  \"business_as_of\": \"2024-01-10T10:00:00+00:00\",\n  \"timezone\": \"Europe/London\",\n  \"nature\": \"原创团队冻结合同，不是官方通用验收标准；所有业务和示例资料虚构。\",\n  \"states\": [\n    {\n      \"id\": \"s-ready\",\n      \"tag\": \"button\",\n      \"disabled\": false,\n      \"label\": \"开始本机模拟\"\n    },\n    {\n      \"id\": \"s-empty\",\n      \"tag\": \"button\",\n      \"disabled\": true,\n      \"label\": \"暂不能继续\"\n    },\n    {\n      \"id\": \"s-disabled\",\n      \"tag\": \"input\",\n      \"disabled\": true,\n      \"label\": \"原生禁用输入\"\n    },\n    {\n      \"id\": \"s-boolfalse\",\n      \"tag\": \"input\",\n      \"disabled\": true,\n      \"label\": \"属性存在仍禁用\"\n    },\n    {\n      \"id\": \"s-busy\",\n      \"tag\": \"button\",\n      \"disabled\": true,\n      \"label\": \"处理中，请稍候\"\n    },\n    {\n      \"id\": \"s-complete\",\n      \"tag\": \"p\",\n      \"disabled\": false,\n      \"label\": \"已生成本机摘要，尚未提交\"\n    },\n    {\n      \"id\": \"s-link\",\n      \"tag\": \"a\",\n      \"disabled\": false,\n      \"label\": \"查看办理说明\",\n      \"href\": \"#guide\"\n    },\n    {\n      \"id\": \"s-unavailable\",\n      \"tag\": \"p\",\n      \"disabled\": false,\n      \"label\": \"预览暂不可用\"\n    }\n  ],\n  \"state_contract\": \"保留8个DOM id和标签，文字可补充；布局颜色可自定。原生disabled按存在性判断。s-boolfalse故意用disabled=\\\"false\\\"作为隔离教学探针，不建议生产如此编码；须显示解释。\",\n  \"live_demo\": {\n    \"ids\": [\n      \"live-form\",\n      \"subject\",\n      \"outcome\",\n      \"simulate\",\n      \"reset\",\n      \"live-status\",\n      \"attempts\",\n      \"summary\"\n    ],\n    \"input\": \"subject为示例材料名称，不输入真实个人信息；空白不可开始。\",\n    \"outcome_options\": [\n      \"failure\",\n      \"success\"\n    ],\n    \"initial\": \"simulate原生禁用，live-status在动作前已存在role=status。\",\n    \"busy\": \"启动后立即有处理中反馈且防重复模拟；450至1000ms内完成本机异步回放。\",\n    \"failure\": \"模拟失败文字，保留输入、按钮重新可用且提示重试，结果不称已提交。\",\n    \"success\": \"已生成本机摘要，含当前材料名称、未提交声明。允许再次模拟。\",\n    \"reset\": \"取消未完成计时器、清空输入和摘要、次数归零并重新禁用空表单。\",\n    \"counter\": \"attempts为真正启动次数；忙碌期间两次激活只增加1。\",\n    \"keyboard\": \"Enter启动与导航；Space可重置；焦点清晰，无键盘陷阱。\",\n    \"no_javascript\": \"给出可见未启用说明，初始按钮仍禁用，不误称无脚本也可执行。\"\n  },\n  \"geometry\": \"1280x900与390x844无横向溢出；可见按钮/输入/选择器/链接至少44x44 CSS像素，此为团队合同而非声称官方所有状态均此要求。\",\n  \"evidence\": \"只记录实际执行时间、浏览器版本、HTML/合同/脚本SHA、逐项结果；缺依赖报未运行，不捏造pass。\",\n  \"scope\": \"自包含离线原创原型，不加载官方完整组件库；不能用前端模拟证明服务器幂等、真实提交、全WCAG或辅助技术认证；不外联、不存Cookie/持久存储。\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v4.6.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/LICENSE.txt",
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v5.0.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "S05_D0原型.html",
+      "absolute_path": "题包内：S05_D0原型.html",
+      "url": "assets/tasks/DE-TIME-002/environment/input_files/S05_D0%E5%8E%9F%E5%9E%8B.html",
+      "bytes": 780,
+      "sha256": "75d169c3195f6b1ae205d0fea4962ed9f1001e9afb1ab5f6cf981cd8b4dd9588",
+      "description": "原创未批准D0原型，含假禁用link/错误断言/失败锁死。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "<!doctype html><html lang=\"zh-CN\"><meta charset=\"utf-8\"><title>D0未审稿</title><style>.govuk-button--disabled{opacity:.5}</style><h1>未批准旧稿</h1><p>原创错误示例，不是官方实现。</p><a id=\"s-unavailable\" class=\"govuk-button--disabled\" href=\"#submitted\">预览暂不可用</a><button id=\"s-empty\" disabled=\"\">暂不能继续</button><form><input id=\"subject\"><button id=\"simulate\">提交</button></form><p id=\"live-status\">后台幂等已验证</p><script>const b=document.querySelector('#simulate');b.onclick=e=>{e.preventDefault();b.disabled=true;document.querySelector('#subject').value='';document.querySelector('#live-status').textContent='失败';};const oldDisabled=Boolean(document.querySelector('#s-empty').getAttribute('disabled'));</script></html>"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v4.6.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/LICENSE.txt",
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v5.0.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "S06_D0_SKILL.md",
+      "absolute_path": "题包内：S06_D0_SKILL.md",
+      "url": "assets/tasks/DE-TIME-002/environment/input_files/S06_D0_SKILL.md",
+      "bytes": 403,
+      "sha256": "e858bf2429fe61b3f5e0f6ebed6c844b82957f4a67536a0f1737893e827b3032",
+      "description": "原创待修D0 Skill入口，不是应照做的新规则。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "---\nname: button-migration\ndescription: 检查旧版按钮迁移稿。\n---\n# D0｜未审错误Skill\n仅扫描是否出现govuk-button--disabled；有旧类就认为所有不可用入口安全。用Boolean(getAttribute('disabled'))检查禁用。失败后永久禁用最安全。网页写已验即可证明后台幂等。不需要实际浏览器。\n以上为待修缺陷，不是真实规范或授权。\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v4.6.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/LICENSE.txt",
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v5.0.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "S07_D0_audit.py",
+      "absolute_path": "题包内：S07_D0_audit.py",
+      "url": "assets/tasks/DE-TIME-002/environment/input_files/S07_D0_audit.py",
+      "bytes": 294,
+      "sha256": "a60d257e5f0f3956ab9c9941ff6cb547d9561dac96c1583e71493368377f48a9",
+      "description": "原创待修D0恒弱检查器。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "import argparse,json\nfrom pathlib import Path\np=argparse.ArgumentParser();p.add_argument('--html');p.add_argument('--out');a=p.parse_args()\ntext=Path(a.html).read_text()\nPath(a.out).write_text(json.dumps({'pass':'govuk-button--disabled' in text,'scope':'D0错误检查器，不构成认证'}))\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v4.6.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/LICENSE.txt",
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v5.0.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "S08_团队委托.docx",
+      "absolute_path": "题包内：S08_团队委托.docx",
+      "url": "assets/tasks/DE-TIME-002/environment/input_files/S08_%E5%9B%A2%E9%98%9F%E5%A7%94%E6%89%98.docx",
+      "bytes": 38958,
+      "sha256": "44edced408d761c73977738730aa69bc3d9eb931f369d8120c773bdc8f32e7e5",
+      "description": "原创委托/版本批准/晚到无权便笺与真实交付合同。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创团队委托｜组件迁移待审"
+        },
+        {
+          "kind": "heading",
+          "text": "角色、使用者与权限时间线"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是交互设计师兼组件库维护者，为设计负责人和实现工程师修订团队迁移Skill及原型。业务基准2024-01-10 10:00 Europe/London。2023-12-15设计负责人批准本轮以GOV.UK Frontend5.0.0规则审查。2024-01-09 16:00营销同事要求保留旧灰色a样式、失败就永久禁用并声称后台已验；没有版本/验收变更权限，不能以较晚覆盖批准目标。所有委托/角色/记录/示例素材为原创训练情境，非真实政府业务。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01/S02是准确版本的公开事实，S04是团队原创验收合同而不是官网规定。S05–S07为确有错误的原创D0，不是新的官方版本；请修订它们的可复用方法，而非原样执行。没有安装Skill依赖；最终局部Skill供下一位设计师使用，不改全局。"
+        },
+        {
+          "kind": "heading",
+          "text": "交付与操作合同"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只交五个明确文件：button-migration/SKILL.md、button-migration/scripts/audit_states.py、prototype.html、migration_handoff.docx、checks.json；目录不是压缩包。原型HTML必须自包含可编辑，不联网，不使用官方标志/专有字体，不从参考库抄题或组件。界面可原创设计，按S04保留八状态DOM id/标签及动态区id/选择值，方便后续合同回放。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "真实修订Skill触发/范围、版本规则、异常/复测说明及实际检查器。不要写一个恒真脚本、只匹配词或把人工填的pass称实际执行。检查器至少核8状态禁用/导航语义与旧类，再实际浏览器回放动态失败、重试、成功/忙碌抑制、键盘、尺寸和离线边界；依赖缺失应报未运行。镜像有Python Playwright和/usr/bin/chromium，可离线运行。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "输入题面只给合同不指定像素级排版；最终8卡+动态区满足文字标签与至少44×44/两个视口的团队要求。s-boolfalse用disabled=\"false\"是明示教学探针，原生仍禁用，需解释非推荐生产写法。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "交中文可编辑Word，说明D0→新处理、来源/版本/权限、八状态、失败恢复、运行方法、真实已测与未测范围、后续负责人。JSON保存当前文件哈希、真实执行时间和浏览器版本与逐项结果；运行日不是业务历史日期。输入保持只读，不加密/压缩，不伪造认证、审批、真实提交或服务器测试。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v4.6.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v4.6.0/LICENSE.txt",
+        "https://github.com/alphagov/govuk-frontend/releases/tag/v5.0.0",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/template.njk",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/button.mjs",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/packages/govuk-frontend/src/govuk/components/button/_index.scss",
+        "https://raw.githubusercontent.com/alphagov/govuk-frontend/v5.0.0/LICENSE.txt"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "button-migration/SKILL.md",
+      "absolute_path": "题包内：button-migration/SKILL.md",
+      "url": "assets/tasks/DE-TIME-002/solution/golden_output/button-migration/SKILL.md",
+      "bytes": 2580,
+      "sha256": "018573719fcd5094f5a0b510e2eeac3c9305aff43d9cf12a0491051688eaceb2",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "---\nname: button-migration\ndescription: 修订或复核团队按钮组件由GOV.UK Frontend 4.6迁至5.0的交互交付，检查冻结状态合同与本机模拟原型；不是通用网站生成或后台认证。\n---\n\n# 按钮迁移审查\n\n适用于冻结团队合同target_version=5.0.0。先核委托批准版本、观察时点与输入来源；晚到无权便笺不改变批准版本。不从今日在线指南倒推历史版本规则。此Skill只在项目目录使用，不改全局配置或部署服务。\n\n## 决策要点\n\n- 官方4.6已弃用、5.0移除govuk-button--disabled。原生button/input的disabled按属性是否存在判断，不按getAttribute返回值真假；空串和文字false都仍表示存在。\n- 原生禁用按钮与导航不是同一语义。v5不支持禁用link；不可操作的入口用静态说明，真正可导航的入口保留href和明确文字，不把灰色样式当阻断。\n- 本题状态合同来自原创团队，不是所有GOV.UK服务的通用标准。状态标签/说明、失败保留输入并可重试、忙碌时抑制重复模拟、键盘和窄屏均按合同复测。\n- 客户端双击抑制不是服务端幂等；本机成功反馈不是申请提交成功。不要伪称认证、后台已验或发布批准。\n\n## 执行与证据\n\n读取项目提供的S04_状态合同.json。原型可用不同样式，但保留合同DOM标识及操作语义，让此检查器能用于后续同类原型。\n\n```bash\npython3 button-migration/scripts/audit_states.py --html prototype.html --contract /app/input_files/S04_状态合同.json --out checks.json\n```\n\n依赖Python Playwright和Chromium；本题镜像提供/usr/bin/chromium。其他已安装浏览器可用--browser指定；传空串使用已安装Playwright Chromium，不自行联网下载。检查器包含属性存在性/元素语义和实际浏览器两尺寸回放。失败返回2并保存具体检查；缺依赖/异常应报告未完成，不填pass。\n\n按失败证据修复原型并重跑，核JSON的源/脚本哈希确为当前文件，再同步迁移文档。更换合同或页面ID须同步检查器，不能把检查全部删掉或写恒真。至少实际验证一个错用旧类、一个禁用属性误读和一个失败后无法重试的反例。\n\n输出只是本团队合同的测试证据，不是任意HTML安全扫描器、全WCAG或辅助技术认证。静态属性检查不能替代浏览器交互；两尺寸回放也不代表全部浏览器/设备。服务端、真人研究、辅助技术及上线审批另行交接，不实际联系用户或外发。\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "button-migration/scripts/audit_states.py",
+      "absolute_path": "题包内：button-migration/scripts/audit_states.py",
+      "url": "assets/tasks/DE-TIME-002/solution/golden_output/button-migration/scripts/audit_states.py",
+      "bytes": 9585,
+      "sha256": "75af44c846704ebfbb59e4f38af3a7e3e957ccad6614d5105faadae04d408ac8",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "\"\"\"Audit this team's frozen component contract, not generic WCAG certification.\"\"\"\nimport argparse\nimport datetime\nimport hashlib\nfrom html.parser import HTMLParser\nimport json\nfrom pathlib import Path\nfrom playwright.sync_api import sync_playwright\n\n\nclass Elements(HTMLParser):\n    def __init__(self):\n        super().__init__()\n        self.by_id = {}\n        self.duplicates = []\n        self.old_class = False\n\n    def handle_starttag(self, tag, attrs):\n        values = dict(attrs)\n        if 'govuk-button--disabled' in values.get('class', '').split():\n            self.old_class = True\n        if 'id' in values:\n            if values['id'] in self.by_id:\n                self.duplicates.append(values['id'])\n            self.by_id[values['id']] = {'tag': tag, 'attrs': values}\n\n\ndef audit(html, contract, executable='/usr/bin/chromium'):\n    html = Path(html).resolve()\n    contract = Path(contract).resolve()\n    config = json.loads(contract.read_text())\n    assert config['target_version'] == '5.0.0', 'Unsupported contract version; revise policy explicitly'\n    parser = Elements()\n    parser.feed(html.read_text())\n    checks = []\n\n    def record(name, passed, observed):\n        checks.append({'check': name, 'pass': bool(passed), 'observed': observed})\n\n    record('no_deprecated_disabled_class', not parser.old_class, parser.old_class)\n    record('unique_dom_ids', not parser.duplicates, parser.duplicates)\n    for case in config['states']:\n        element = parser.by_id.get(case['id'])\n        if element is None:\n            record('state:' + case['id'], False, 'missing')\n            continue\n        attrs = element['attrs']\n        # Boolean HTML attributes depend on presence, not value truthiness.\n        native_disabled = element['tag'] in ('button', 'input') and 'disabled' in attrs\n        okay = element['tag'] == case['tag'] and native_disabled == case['disabled']\n        if case['tag'] == 'a':\n            okay = okay and attrs.get('href') == case['href'] and 'disabled' not in attrs and attrs.get('aria-disabled') != 'true'\n        if case['tag'] == 'p':\n            okay = okay and not any(k in attrs for k in ('href', 'onclick', 'tabindex', 'role'))\n        record('state:' + case['id'], okay, {'tag': element['tag'], 'native_disabled': native_disabled})\n    browser_runs = []\n    with sync_playwright() as playwright:\n        options = {'headless': True, 'args': ['--no-sandbox']}\n        if executable:\n            options['executable_path'] = executable\n        browser = playwright.chromium.launch(**options)\n        browser_version = browser.version\n        for width, height in [(1280, 900), (390, 844)]:\n            context = browser.new_context(viewport={'width': width, 'height': height}, offline=True)\n            page = context.new_page()\n            errors, remote = [], []\n            page.on('pageerror', lambda e: errors.append(str(e)))\n            page.on('request', lambda req: remote.append(req.url) if req.url.startswith(('http:', 'https:')) else None)\n            row = {'viewport': [width, height], 'checks': []}\n\n            def test(name, action):\n                try:\n                    action()\n                    row['checks'].append({'check': name, 'pass': True})\n                except Exception as exc:\n                    row['checks'].append({'check': name, 'pass': False, 'error': str(exc)[:350]})\n\n            page.goto(html.as_uri())\n            page.set_default_timeout(2500)\n\n            def must(value):\n                if not value:\n                    raise AssertionError('Observed DOM behavior did not match contract')\n\n            def labels():\n                for c in config['states']:\n                    element = page.locator('[id=\"' + c['id'] + '\"]')\n                    text = element.input_value() if c['tag'] == 'input' else element.inner_text()\n                    must(c['label'] in text)\n                must(page.locator('#live-status').get_attribute('role') == 'status')\n                must(page.locator('#simulate').is_disabled())\n                must('服务器幂等未验' in page.locator('body').inner_text())\n\n            test('labels_initial_gate_and_scope', labels)\n\n            def failure_recovery():\n                page.locator('#subject').fill('示例材料')\n                page.locator('#outcome').select_option('failure')\n                page.locator('#simulate').focus()\n                page.keyboard.press('Enter')\n                must(page.locator('#simulate').is_disabled())\n                must('处理中' in page.locator('#live-status').inner_text())\n                page.locator('#live-status').filter(has_text='模拟失败').wait_for()\n                must(page.locator('#simulate').is_enabled())\n                must(page.locator('#subject').input_value() == '示例材料')\n                must('重试' in page.locator('#simulate').inner_text())\n\n            test('keyboard_failure_preserves_data_and_retries', failure_recovery)\n\n            def success_and_doubleclick():\n                before = int(page.locator('#attempts').inner_text())\n                page.locator('#outcome').select_option('success')\n                # Real DOM double activation; the second dispatch cannot start\n                # another operation while the first is busy.\n                page.locator('#simulate').evaluate('(e)=>{e.click();e.click();document.getElementById(\"live-form\").requestSubmit()}')\n                must(page.locator('#simulate').is_disabled())\n                page.locator('#live-status').filter(has_text='已生成本机摘要').wait_for()\n                must(int(page.locator('#attempts').inner_text()) == before + 1)\n                must('示例材料' in page.locator('#summary').inner_text())\n                must(page.locator('#simulate').is_enabled())\n\n            test('busy_guard_and_success_summary', success_and_doubleclick)\n\n            def keyboard_navigation():\n                page.locator('#s-link').focus()\n                page.keyboard.press('Enter')\n                must(page.url.endswith('#guide'))\n                must(page.locator('#s-empty').is_disabled())\n                must(page.locator('#s-boolfalse').is_disabled())\n                page.locator('#reset').focus()\n                page.keyboard.press('Space')\n                must(page.locator('#subject').input_value() == '')\n                must(page.locator('#simulate').is_disabled())\n                must(int(page.locator('#attempts').inner_text()) == 0)\n\n            test('navigation_and_space_reset', keyboard_navigation)\n\n            def reset_during_busy():\n                page.locator('#subject').fill('待取消示例')\n                page.locator('#outcome').select_option('success')\n                page.locator('#simulate').click()\n                must(page.locator('#simulate').is_disabled())\n                page.locator('#reset').click()\n                page.wait_for_timeout(1100)\n                must(page.locator('#summary').inner_text() == '')\n                must(page.locator('#subject').input_value() == '')\n                must(page.locator('#attempts').inner_text() == '0')\n                must('已生成' not in page.locator('#live-status').inner_text())\n\n            test('reset_cancels_inflight_callback', reset_during_busy)\n\n            def layout():\n                must(page.evaluate('document.documentElement.scrollWidth <= innerWidth'))\n                boxes = page.locator('button:visible, input:visible, select:visible, a:visible').evaluate_all('(els)=>els.map(e=>({w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height}))')\n                must(all(b['w'] >= 44 and b['h'] >= 44 for b in boxes))\n                must(not errors and not remote)\n                must(context.cookies() == [])\n\n            test('contract_geometry_and_offline_execution', layout)\n            row.update(errors=errors, remote_requests=remote)\n            browser_runs.append(row)\n            context.close()\n        browser.close()\n    passed = all(r['pass'] for r in checks) and all(t['pass'] for r in browser_runs for t in r['checks'])\n    return {'target_version': config['target_version'], 'timestamp_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),\n            'input_sha256': {str(p.name): hashlib.sha256(p.read_bytes()).hexdigest() for p in (html, contract)},\n            'checker_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),\n            'browser_version': browser_version, 'checks': checks, 'browser_runs': browser_runs, 'pass': passed,\n            'scope': 'Frozen team contract on this local prototype; not GOV.UK production equivalence, full WCAG/assistive-technology certification, server idempotency or deployment.',\n            'server_idempotency_verified': False, 'production_release': False}\n\n\ndef main():\n    parser = argparse.ArgumentParser()\n    parser.add_argument('--html', type=Path, required=True)\n    parser.add_argument('--contract', type=Path, required=True)\n    parser.add_argument('--out', type=Path, required=True)\n    parser.add_argument('--browser', default='/usr/bin/chromium', help='Empty string uses installed Playwright browser')\n    args = parser.parse_args()\n    result = audit(args.html, args.contract, args.browser)\n    args.out.parent.mkdir(parents=True, exist_ok=True)\n    args.out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\\n')\n    print(json.dumps({'pass': result['pass'], 'static_checks': len(result['checks']), 'browser_runs': len(result['browser_runs'])}))\n    raise SystemExit(0 if result['pass'] else 2)\n\n\nif __name__ == '__main__':\n    main()\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "checks.json",
+      "absolute_path": "题包内：checks.json",
+      "url": "assets/tasks/DE-TIME-002/solution/golden_output/checks.json",
+      "bytes": 3602,
+      "sha256": "a60ee850046bd4bfd55a77d1af3c93f9b8430f982b8a749dcd4ab6fcbbc45d8e",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"target_version\": \"5.0.0\",\n  \"timestamp_utc\": \"2026-10-20T23:05:04.595331+00:00\",\n  \"input_sha256\": {\n    \"prototype.html\": \"1042a971bc81eaa573cc5a1d9b50944fcdce6fb2568a6a853abbaea9544fd964\",\n    \"S04_状态合同.json\": \"9e1d48d6b9e8aa014bdf509dd79e48260128cac6070e70ecce117a7c02e57870\"\n  },\n  \"checker_sha256\": \"75af44c846704ebfbb59e4f38af3a7e3e957ccad6614d5105faadae04d408ac8\",\n  \"browser_version\": \"156.0.8078.4\",\n  \"checks\": [\n    {\n      \"check\": \"no_deprecated_disabled_class\",\n      \"pass\": true,\n      \"observed\": false\n    },\n    {\n      \"check\": \"unique_dom_ids\",\n      \"pass\": true,\n      \"observed\": []\n    },\n    {\n      \"check\": \"state:s-ready\",\n      \"pass\": true,\n      \"observed\": {\n        \"tag\": \"button\",\n        \"native_disabled\": false\n      }\n    },\n    {\n      \"check\": \"state:s-empty\",\n      \"pass\": true,\n      \"observed\": {\n        \"tag\": \"button\",\n        \"native_disabled\": true\n      }\n    },\n    {\n      \"check\": \"state:s-disabled\",\n      \"pass\": true,\n      \"observed\": {\n        \"tag\": \"input\",\n        \"native_disabled\": true\n      }\n    },\n    {\n      \"check\": \"state:s-boolfalse\",\n      \"pass\": true,\n      \"observed\": {\n        \"tag\": \"input\",\n        \"native_disabled\": true\n      }\n    },\n    {\n      \"check\": \"state:s-busy\",\n      \"pass\": true,\n      \"observed\": {\n        \"tag\": \"button\",\n        \"native_disabled\": true\n      }\n    },\n    {\n      \"check\": \"state:s-complete\",\n      \"pass\": true,\n      \"observed\": {\n        \"tag\": \"p\",\n        \"native_disabled\": false\n      }\n    },\n    {\n      \"check\": \"state:s-link\",\n      \"pass\": true,\n      \"observed\": {\n        \"tag\": \"a\",\n        \"native_disabled\": false\n      }\n    },\n    {\n      \"check\": \"state:s-unavailable\",\n      \"pass\": true,\n      \"observed\": {\n        \"tag\": \"p\",\n        \"native_disabled\": false\n      }\n    }\n  ],\n  \"browser_runs\": [\n    {\n      \"viewport\": [\n        1280,\n        900\n      ],\n      \"checks\": [\n        {\n          \"check\": \"labels_initial_gate_and_scope\",\n          \"pass\": true\n        },\n        {\n          \"check\": \"keyboard_failure_preserves_data_and_retries\",\n          \"pass\": true\n        },\n        {\n          \"check\": \"busy_guard_and_success_summary\",\n          \"pass\": true\n        },\n        {\n          \"check\": \"navigation_and_space_reset\",\n          \"pass\": true\n        },\n        {\n          \"check\": \"reset_cancels_inflight_callback\",\n          \"pass\": true\n        },\n        {\n          \"check\": \"contract_geometry_and_offline_execution\",\n          \"pass\": true\n        }\n      ],\n      \"errors\": [],\n      \"remote_requests\": []\n    },\n    {\n      \"viewport\": [\n        390,\n        844\n      ],\n      \"checks\": [\n        {\n          \"check\": \"labels_initial_gate_and_scope\",\n          \"pass\": true\n        },\n        {\n          \"check\": \"keyboard_failure_preserves_data_and_retries\",\n          \"pass\": true\n        },\n        {\n          \"check\": \"busy_guard_and_success_summary\",\n          \"pass\": true\n        },\n        {\n          \"check\": \"navigation_and_space_reset\",\n          \"pass\": true\n        },\n        {\n          \"check\": \"reset_cancels_inflight_callback\",\n          \"pass\": true\n        },\n        {\n          \"check\": \"contract_geometry_and_offline_execution\",\n          \"pass\": true\n        }\n      ],\n      \"errors\": [],\n      \"remote_requests\": []\n    }\n  ],\n  \"pass\": true,\n  \"scope\": \"Frozen team contract on this local prototype; not GOV.UK production equivalence, full WCAG/assistive-technology certification, server idempotency or deployment.\",\n  \"server_idempotency_verified\": false,\n  \"production_release\": false\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "migration_handoff.docx",
+      "absolute_path": "题包内：migration_handoff.docx",
+      "url": "assets/tasks/DE-TIME-002/solution/golden_output/migration_handoff.docx",
+      "bytes": 39452,
+      "sha256": "7307811adc19dd3df755822e9dccdb024ab6fbe0d476d40de52dbfb8c1dde203",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "按钮迁移交接｜待团队审阅"
+        },
+        {
+          "kind": "paragraph",
+          "text": "致交互设计负责人及实现工程师｜2024-01-10 10:00 Europe/London。目标5.0.0；本机原型和检查器，不是官方组件运行库、后台验证或上线批准。"
+        },
+        {
+          "kind": "heading",
+          "text": "1 / 时间、版本与批准权"
+        },
+        {
+          "kind": "paragraph",
+          "text": "官方v4.6.0发布于2023-04-20 13:45:33 UTC，已弃用旧禁用类；v5.0.0发布于2023-12-08 16:17:12 UTC，移除旧类，不再支持禁用link。团队2023-12-15批准2024-01-10审查目标5.0；2024-01-09营销更晚便笺无权撤销。源码抓取2026-10-20不是历史生效时间，release页另有2024-01-16签名密钥到期时间也不是组件发布日期。"
+        },
+        {
+          "kind": "heading",
+          "text": "2 / D0缺陷到新交付"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "D0问题",
+              "修订及检查位置"
+            ],
+            [
+              "只认旧类、用属性值真假判禁用",
+              "移除旧类；checker按button/input属性存在性。s-empty空串、s-disabled文字值、s-boolfalse教学探针均原生禁用。"
+            ],
+            [
+              "灰色a仍带href，被称“不能提交”",
+              "s-unavailable改静态p并说明未开放；s-link保留可用链接仅导航。动作与导航语义分开。"
+            ],
+            [
+              "失败后永久锁死，删去输入",
+              "live demo保留材料、文字提示失败并重新启用重试；reset显式清空，取消旧定时回调。"
+            ],
+            [
+              "双击/后台已验等虚假断言",
+              "忙碌期间立即门禁并计启动次数；成功仅本机摘要，服务器幂等未验，未发送/未提交。"
+            ],
+            [
+              "只有“通过”结论与红绿反馈",
+              "状态明确文字、预置role=status区域、实际检查JSON/源哈希；不只看颜色或作者pass字段。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "3 / 状态与可编辑交付"
+        },
+        {
+          "kind": "paragraph",
+          "text": "prototype.html内8个状态卡和一段动态回放均为可编辑DOM/样式/脚本，非截图。s-ready只跳转模拟区；s-empty缺资料、s-disabled原生input、s-boolfalse属性存在性探针、s-busy忙碌、s-complete仅本机完成、s-link说明导航、s-unavailable非交互说明。disabled=\"false\"仅测试旧实现误读，不是推荐生产布尔写法。"
+        },
+        {
+          "kind": "heading",
+          "text": "4 / 执行与可重复使用"
+        },
+        {
+          "kind": "paragraph",
+          "text": "在输出目录运行：python3 button-migration/scripts/audit_states.py --html prototype.html --contract /app/input_files/S04_状态合同.json --out checks.json。镜像内默认/usr/bin/chromium，其他已装浏览器可传--browser；空串用已装Playwright浏览器，不会联网安装。局部Skill不需要全局安装。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "检查器读取冻结合同，静态核8状态的元素/禁用语义、旧类/重复ID，再用真实浏览器在1280×900与390×844回放键盘失败、输入保留、成功、重复激活、导航和重置，核基础尺寸和无远程请求。JSON记录真正执行时间、浏览器和源/脚本哈希，非2024历史运行记录；检查失败返回2，异常/缺依赖不写成功。"
+        },
+        {
+          "kind": "heading",
+          "text": "5 / 反例、复测与下一责任人"
+        },
+        {
+          "kind": "paragraph",
+          "text": "设计师交出状态/说明，前端工程师按失败项修复并重跑，再由设计负责人审阅。至少复测旧类残留、空串属性被删、不可用入口改回可导航链接、失败后仍锁定、永远pass的检查器。须用实际坏HTML/坏checker执行，不把只写“应失败”当实测；独立QA保存反例文件与观测，不复制成正式合格证。后续改合同/HTML/脚本须重跑、更新checks.json并同步说明。"
+        },
+        {
+          "kind": "heading",
+          "text": "6 / 明确未验范围与来源"
+        },
+        {
+          "kind": "paragraph",
+          "text": "两尺寸DOM回放不证明屏幕阅读器真实播报、全WCAG、所有浏览器或真实用户研究。后端负责人另验幂等键/并发/重放与事务边界；无授权不接真实API、不发申请。无JavaScript只显示限制且初始不可模拟，完整无脚本生产流程待设计。只读输入不改；不存Cookie或持久存储。演示不是GOV.UK官方服务，未使用标志/Transport字体。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01官方release两节与Boolean attributes节、S02对应两版本模板/JS/SCSS、S03 MIT许可证、S04/S08原创团队合同与权限。公开源码许可随输入保留（2017 Crown Copyright/Government Digital Service）；此原型和检查代码原创，不复制参考库题目或组件库。来源URL见S01/S02；网页当前导航不是历史要求。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "prototype.html",
+      "absolute_path": "题包内：prototype.html",
+      "url": "assets/tasks/DE-TIME-002/solution/golden_output/prototype.html",
+      "bytes": 8488,
+      "sha256": "1042a971bc81eaa573cc5a1d9b50944fcdce6fb2568a6a853abbaea9544fd964",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "<!doctype html>\n<html lang=\"zh-CN\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>按钮迁移审阅台｜离线训练原型</title>\n<style>\n:root{font-family:system-ui,\"Noto Sans CJK SC\",sans-serif;color:#17333d;background:#eef3f5;line-height:1.65}*{box-sizing:border-box}body{margin:0}header,main,footer{max-width:1100px;margin:auto;padding:24px}header{padding-top:36px}h1{font-size:clamp(25px,4vw,38px);line-height:1.3}h2{font-size:23px;margin-top:0}.eyebrow{font-size:13px;letter-spacing:2px;font-weight:700}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card,.panel{padding:24px;background:white;border:1px solid #c9d7dc;border-radius:12px}.card h3{margin-top:0;font-size:18px}.card small{display:block;margin-top:12px;color:#435e68}.panel{margin:20px 0}.tag{color:#395b69;font-size:13px}button,input[type=button],a.action,select,input[type=text]{font:inherit;min-height:48px;max-width:100%;padding:10px 16px;border:2px solid #28596a;border-radius:5px}button,input[type=button]{background:#215b70;color:white;cursor:pointer}button:disabled,input:disabled{background:#dbe3e7;color:#3e5660;border-color:#a8bac1;cursor:not-allowed}a.action{display:inline-flex;align-items:center;color:#154f67}button.secondary{background:white;color:#17333d}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:4px solid #e6b328;outline-offset:3px}.blocked{padding:12px 0;border-top:2px solid #a8bac1;font-weight:600}label{display:block;font-weight:650;margin-top:14px}input[type=text],select{display:block;width:100%;margin:6px 0 14px;background:white;color:#17333d}.row{display:flex;gap:12px;flex-wrap:wrap}.notice{border-left:4px solid #d6a326;padding:12px 18px;background:#fff9e6}.status{min-height:58px;background:#edf5f6;padding:12px;border-radius:6px}#summary{white-space:pre-wrap;overflow-wrap:anywhere}footer{font-size:13px;color:#435e68}@media(max-width:650px){.grid{grid-template-columns:1fr}header,main,footer{padding:18px}.card,.panel{padding:18px}}\n</style></head><body>\n<header><div class=\"eyebrow\">COMPONENT REVIEW / 5.0.0</div><h1>按钮迁移审阅台</h1><p>2024-01-10 10:00 Europe/London · 原创团队训练案例</p><p class=\"notice\">仅本机模拟，不连接后台，不提交申请。服务器幂等未验。不是GOV.UK官方服务或无障碍认证。</p></header>\n<main><section aria-labelledby=\"states-title\"><h2 id=\"states-title\">01 / 交互状态与迁移探针</h2><p>灰色不是权限，属性存在才有原生禁用语义。不可用导航保留说明，不伪装成可点击入口。</p>\n<div class=\"grid\">\n<article class=\"card\"><p class=\"tag\">READY / 可操作样例</p><h3>资料已齐，允许开始模拟</h3><button id=\"s-ready\" type=\"button\" onclick=\"document.getElementById('live-title').scrollIntoView();document.getElementById('subject').focus()\">开始本机模拟</button><small>跳到下方交互区，不实际提交。</small></article>\n<article class=\"card\"><p class=\"tag\">BLOCKED / 空字符串属性</p><h3>缺资料，明确不能继续</h3><button id=\"s-empty\" type=\"button\" disabled=\"\" aria-describedby=\"empty-reason\">暂不能继续</button><small id=\"empty-reason\">请先补齐示例材料；不是靠按钮颜色判断。</small></article>\n<article class=\"card\"><p class=\"tag\">DISABLED INPUT / 旧值也有效</p><h3>原生输入按钮</h3><input id=\"s-disabled\" type=\"button\" disabled=\"disabled\" value=\"原生禁用输入\"><small>disabled属性存在，文字值不决定真假。</small></article>\n<article class=\"card\"><p class=\"tag\">MIGRATION PROBE / 非推荐生产写法</p><h3>文字false不代表可用</h3><input id=\"s-boolfalse\" type=\"button\" disabled=\"false\" value=\"属性存在仍禁用\"><small>故意保留此教学探针测试旧检查器；生产建议使用规范布尔写法。</small></article>\n<article class=\"card\"><p class=\"tag\">BUSY / 忙碌状态样例</p><h3>正在处理，应给文字反馈</h3><button id=\"s-busy\" type=\"button\" disabled>处理中，请稍候</button><small>下方动态区另有真实可恢复的忙碌状态，不会永久锁死。</small></article>\n<article class=\"card\"><p class=\"tag\">SUCCESS / 本机完成</p><h3>结果不能冒称后台受理</h3><p class=\"blocked\" id=\"s-complete\">已生成本机摘要，尚未提交</p><small>文字清楚说明完成的是本机动作。</small></article>\n<article class=\"card\"><p class=\"tag\">NAVIGATION / 可导航入口</p><h3>查看说明，不执行提交</h3><a class=\"action\" id=\"s-link\" href=\"#guide\">查看办理说明</a><small>保留原生链接和键盘Enter导航。</small></article>\n<article class=\"card\"><p class=\"tag\">UNAVAILABLE / 非交互说明</p><h3>预览功能尚未开放</h3><p class=\"blocked\" id=\"s-unavailable\">预览暂不可用，请等待开放通知</p><small>没有href、点击事件或可聚焦假链接。</small></article>\n</div></section>\n<section class=\"panel\" aria-labelledby=\"live-title\"><h2 id=\"live-title\">02 / 失败、重试与成功回放</h2><p>输入仅存在当前页面内存，刷新即清空；可选择下一次模拟结果。忙碌期间只启动一次模拟，失败保留资料并允许重试。</p>\n<noscript><p class=\"notice\">JavaScript未启用，模拟区不会执行；这不是生产无脚本提交流程，请由团队另行设计。</p></noscript>\n<form id=\"live-form\"><label for=\"subject\">示例材料名称</label><input id=\"subject\" type=\"text\" autocomplete=\"off\" placeholder=\"例如：示例材料（不要填真实个人资料）\">\n<label for=\"outcome\">下一次模拟结果</label><select id=\"outcome\"><option value=\"failure\">模拟失败，可重试</option><option value=\"success\">模拟成功，只生成本机摘要</option></select>\n<div class=\"row\"><button id=\"simulate\" type=\"submit\" disabled>生成本机摘要</button><button id=\"reset\" class=\"secondary\" type=\"button\">重置本机演示</button></div></form>\n<p id=\"live-status\" class=\"status\" role=\"status\" aria-live=\"polite\">请填写示例材料名称。</p><p>本机模拟启动次数：<strong id=\"attempts\">0</strong></p><div id=\"summary\" aria-label=\"本机摘要\"></div></section>\n<section class=\"panel\" id=\"guide\"><h2>03 / 交接边界</h2><p>批准目标为5.0.0，不接受晚到营销便笺恢复弃用类或禁用链接。此页是原创样式与模拟逻辑，不是完整官方组件运行库。客户端抑制重复动作不证明服务端幂等；后端、真人研究、辅助技术与上线审批须另验。</p></section>\n</main><footer>公开版本依据：GOV.UK Frontend v4.6.0 / v5.0.0；训练业务、版式和模拟代码原创。未使用Crown标志或Transport字体，未取得官方背书。</footer>\n<script>\n(()=>{'use strict';const form=document.getElementById('live-form'),subject=document.getElementById('subject'),button=document.getElementById('simulate'),status=document.getElementById('live-status'),summary=document.getElementById('summary'),attempts=document.getElementById('attempts'),outcome=document.getElementById('outcome');let busy=false,count=0,timer=null;\nsubject.addEventListener('input',()=>{button.disabled=busy||!subject.value.trim();if(!busy)status.textContent=subject.value.trim()?'资料已填，可开始本机模拟。':'请填写示例材料名称。'});\nform.addEventListener('submit',event=>{event.preventDefault();if(busy||!subject.value.trim())return;busy=true;button.disabled=true;button.textContent='处理中';status.textContent='处理中，请稍候；未连接后台。';const value=subject.value.trim(),result=outcome.value;count++;attempts.textContent=String(count);timer=setTimeout(()=>{busy=false;button.disabled=!subject.value.trim();if(result==='failure'){status.textContent='模拟失败：本机校验未完成。资料已保留，可以重试；未提交。';button.textContent='重试生成本机摘要';summary.textContent='';}else{status.textContent='已生成本机摘要，未向任何机构提交。';button.textContent='再次生成本机摘要';summary.textContent='本机摘要：'+value+'\\n这是模拟结果，不代表申请受理或后台记录。';}},450);});\ndocument.getElementById('reset').addEventListener('click',()=>{clearTimeout(timer);busy=false;count=0;HTMLFormElement.prototype.reset.call(form);button.disabled=true;button.textContent='生成本机摘要';status.textContent='请填写示例材料名称。';summary.textContent='';attempts.textContent='0';subject.focus();});\n})();\n</script></body></html>\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": []
+}

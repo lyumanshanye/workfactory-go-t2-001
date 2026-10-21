@@ -1,0 +1,125 @@
+{
+  "input_sha256": {
+    "S01_2016公报节选.pdf": "6132aa2f1bb8dd8e73c403778cf7f6d08b574fdf894c32cc94eba4bd6cefaef0",
+    "S02_2023公报节选.pdf": "e050a1cf681b3c2437619ba976e5b7c88120417e92a8944c4cccd570ab11029f",
+    "S03_官方解读第七问.docx": "8604e9faedd02ce93a5eedaaaf281e6314ff56b5332edb9dab9fdf2314964fd5",
+    "S04_教学案例R1.json": "4878f3bb8282140d6b948fcd4fd108580a2fa3afd2ffb05afb0d1ddfa7005bdd",
+    "S05_权限与消息.docx": "4f36c73fe47d6b358564d0b250c458a9841c8ff0b402bebd1ac7842adc9d5004",
+    "S06_R2补充.json": "4d153a96165ff6001254e13b658376cb85ed4d59eb410240913475f7c7746384",
+    "S07_D0培训稿.docx": "dc226bf73f68456f8881941c3648a3ba3605f614c1490d4b9f816d3f837d390b",
+    "S08_工作流合同.json": "fb914d89d157e3f8b0d13e6732b26ac93c7b909b27b778a7c39242c0f69f8295",
+    "S09_培训委托.docx": "a6c330ce4a9399949033d77c0c70d93213e3814457bc3e7333f4e2e4267ffb70",
+    "S10_来源登记.json": "20f456feaceff7a402b63c8700dab44156b7f78afdc498cb3cd85a7f3d4dc2fe"
+  },
+  "workflow_sha256": "30321ab4bb2ef9aa3ad3e48dc728d8e76848ccfdba865f7d9202d1b5fc0acfd7",
+  "output_sha256": {
+    "training_matrix.xlsx": "50a998eeffaded1fab47310122162529d62c6584bab08e06f267680165400a47",
+    "trainer_brief.pptx": "9b6527571d2f6f8edad92b679e361f42dcdc2c63d610dbae9d4b53290b9f94fa",
+    "facilitator_notes.docx": "86465ca9c913b675db1e2c4b17aebc8afab9780514ffd9f6c62b4d8deb96944f"
+  },
+  "stages": {
+    "S0": {
+      "dependencies": [],
+      "artifact": "S0.json",
+      "sha256": "024f003b38b33564fe2b79eeb2ee0803ff58d046bd6931c29b2f82fd7da0ac3b",
+      "completed_at_utc": "2026-10-20T23:34:22.599827+00:00"
+    },
+    "S1": {
+      "dependencies": [
+        "S0"
+      ],
+      "artifact": "S1.json",
+      "sha256": "e4979f7ad9e3359c43acfaf512a1f730a0b8b22988cae92c08b23a01b7aae6d1",
+      "completed_at_utc": "2026-10-20T23:34:22.641439+00:00"
+    },
+    "S2": {
+      "dependencies": [
+        "S0"
+      ],
+      "artifact": "S2.json",
+      "sha256": "118b1a7673273d7f7f76ae29a56b77dd0b5419a9df22b00f5b08c9d58e78fcc6",
+      "completed_at_utc": "2026-10-20T23:34:22.651295+00:00"
+    },
+    "S3": {
+      "dependencies": [
+        "S1",
+        "S2"
+      ],
+      "artifact": "S3.json",
+      "sha256": "282c7cef4e71b3eeec8e3bf0d59b0169ae488104a6c3a3fff3a8f126a36f1327",
+      "completed_at_utc": "2026-10-20T23:34:22.662059+00:00"
+    },
+    "S4": {
+      "dependencies": [
+        "S1"
+      ],
+      "artifact": "S4.json",
+      "sha256": "7d139a31f409a503c1054da4c21f6a4ca0dacac35e7becbdd58f0beedd79081d",
+      "completed_at_utc": "2026-10-20T23:34:22.677472+00:00"
+    },
+    "S5": {
+      "dependencies": [
+        "S3",
+        "S4"
+      ],
+      "artifact": "S5.json",
+      "sha256": "7639d82725875c720ba34fdfee4702240369a0d323d637323c0171d09638b5b4",
+      "completed_at_utc": "2026-10-20T23:34:24.736887+00:00"
+    },
+    "S6": {
+      "dependencies": [
+        "S3",
+        "S4"
+      ],
+      "artifact": "S6.json",
+      "sha256": "e0804f40e83d08079e8d2aa9c1ede57225d924e7ad0f6e04b48ead7a46f0d76d",
+      "completed_at_utc": "2026-10-20T23:34:24.889282+00:00"
+    },
+    "S7": {
+      "dependencies": [
+        "S3",
+        "S4"
+      ],
+      "artifact": "S7.json",
+      "sha256": "7fe8f9e290e47b566cfd2cd67a3de5b5e474e5be19dbb54de8986f213d94883e",
+      "completed_at_utc": "2026-10-20T23:34:25.020859+00:00"
+    },
+    "S8": {
+      "dependencies": [
+        "S5",
+        "S6",
+        "S7"
+      ],
+      "artifact": "S8.json",
+      "sha256": "9649ef21e634194264580c2b60a8e5dd7c11ea1b4f4ab1f5448ebd36550e2a19",
+      "completed_at_utc": "2026-10-20T23:34:25.094461+00:00"
+    },
+    "S9": {
+      "dependencies": [
+        "S8"
+      ],
+      "artifact": "S9.json",
+      "sha256": "39680d3d79156ac9131758bbbe9c65216632ef5875de594123e69d1e43ba0b90",
+      "completed_at_utc": "2026-10-20T23:34:25.110469+00:00"
+    }
+  },
+  "gate": "READY_FOR_INSTITUTIONAL_TRAINING_REVIEW",
+  "case_routes": {
+    "A": "RISK_INFO_HOLD",
+    "B": "EXEMPTION_CANDIDATE",
+    "C": "ANONYMITY_NOT_ESTABLISHED",
+    "D": "SIMPLE_CANDIDATE",
+    "E": "MEETING_REVIEW",
+    "F": "LOCAL_REVIEW_REQUIRED",
+    "G": "WRITTEN_DELEGATION",
+    "H": "DELEGATION_SCOPE_HOLD",
+    "I": "CONSENT_SUPPLEMENT",
+    "J": "REVIEW_NOT_EXEMPT",
+    "K": "LEGACY_COMMITTEE",
+    "L": "NEW_COMMITTEE"
+  },
+  "actual_execution_at_utc": "2026-10-20T23:34:25.112487+00:00",
+  "ethics_approval": false,
+  "system_upload_performed": false,
+  "scope": "Actual bounded training workflow execution, not independent domain-expert approval or a solver trajectory."
+}

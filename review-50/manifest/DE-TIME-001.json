@@ -1,0 +1,981 @@
+{
+  "id": "DE-TIME-001",
+  "title": "CityConnect无障碍升级：批准范围、标准版本与双步骤原型交接",
+  "domain": "设计",
+  "domain_l2": "DE1-信息与交互设计（拟议扩展）",
+  "domain_l3": "无障碍增量验收与交互原型",
+  "category": "weakness-driven",
+  "complexity": "C3",
+  "target_difficulty": "A2",
+  "as_of": "2024-03-15T09:00:00+08:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "固定2023-10-05 W3C Recommendation；内部情境与消息原创；不宣称全站审计或当地法律强制。",
+  "instruction": "# CityConnect无障碍升级：批准范围、标准版本与双步骤原型交接\n\n## 业务场景与任务说明\n\n你是CityConnect项目的无障碍体验设计师。开发正准备3月15日评审，但D0清单存在标准版本错误，较新的D1消息又要求未经批准的AAA发布阻断。请读取四份离线材料，确认基准时点的正式范围，修正可派工的增量验收表，并交付能操作的离线双步骤预约原型及交接意见。机构与业务记录均为任务构造；标准事实来自固定W3C原文。不得联网或假设真实生产网站已通过审计。\n\n业务判断基准时点：2024-03-15T09:00:00+08:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_WCAG22_20231005_原文摘录.docx`：固定2023-10-05 W3C Recommendation相关完整章节摘录，保留英文原文及锚点。\n- `/app/input_files/S02_项目授权与验收基线.docx`：原创项目委托与批准范围、设计约定和服务边界。\n- `/app/input_files/S03_时间线与范围变更消息.docx`：原创历史/建议/批准/补充消息及角色权限。\n- `/app/input_files/S04_D0待核验清单.json`：原创未批准错误草稿，须核验而非照抄。\n\n## 工作要求\n\n- [Q1] 核对S03的历史、批准、建议与补充消息，以基准时点的有效授权决定本轮范围；在交接意见说明标准发布日期不等于项目适用日或法律效力。\n- [Q2] 修正S04草稿，在工作簿列全九条新增和一条移除的编号、名称、级别、状态、B2范围、核心要求、例外与S01原文锚点；AAA单列后续，不强制阻断本轮。\n- [Q3] 制作单文件离线HTML原型：两步骤预约、同过程资料带入与可修改、单指针非拖拽排序、跨步骤同序帮助、固定底栏不完全遮挡键盘焦点、本机模拟无认知测试认证路径。\n- [Q4] 原型自定义按钮/输入遵守S02项目44×44 CSS px约定；清单准确区分标准24px与例外。不依赖远端资源，不连接真实认证或服务，不使用真实个人资料。\n- [Q5] 交接文档说明D0修订、版本范围与职责、原型边界；把批准范围和变更同步到三份交付，不能宣称全站认证或已发真实邮件。\n- [Q6] 工作簿另含可复现验收：两种视口（桌面1280×800、手机390×844）、Tab/Shift+Tab、排序及边界、资料往返保留、同序帮助、模拟认证与摘要更新；步骤和预期可供测试人员直接执行。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/WCAG22_Upgrade_Checklist.xlsx`：可派工增量准则与可复现验收工作簿。\n- `/app/output/WCAG22_Demo_Page.html`：单文件离线双步骤预约交互原型，含样式脚本。\n- `/app/output/范围决策与验收交接.docx`：版本范围决策、D0修订、职责及原型边界的开发交接意见。\n\n## 硬约束（单独列明）\n\n- 所有最终产物仅写到/app/output/，文件名严格按交付清单。\n- 原型只使用虚构资料与本机模拟；不得真实发信、预约、认证或声称生产完成。\n- 不采用未经批准D1扩大范围，不把AAA全部强制纳入B2；不得杜撰标准或法律效力。\n- HTML不得依赖外部资源；不得把资料发送至网络或写入持久存储；每次刷新回到初始状态。\n- 标准公开正文为英文，允许中文概述，但编号、级别、例外、范围须可回溯；不要求逐字复制参考答案。\n",
+  "instruction_url": "assets/tasks/DE-TIME-001/instruction.md",
+  "absolute_path": "tasks/DE-TIME-001",
+  "spec_path": "manifest/DE-TIME-001.json",
+  "spec_url": "manifest/DE-TIME-001.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "交接意见确定3月15日08:30产品负责人补充后的B2为有效范围，不因3月14日D1较新而扩大到AAA。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "范围决策与验收交接.docx"
+      ],
+      "evidence": "S03消息表末三行；Gold“基准、效力与时间”。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R02",
+      "description": "区分2023-10-05标准发布日期和本项目2024-03-01范围批准，不称W3C标准在本地自动具有法律强制性。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "范围决策与验收交接.docx"
+      ],
+      "evidence": "S01来源元数据、S02 B2；Gold首节。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R03",
+      "description": "工作簿收齐九个新增编号2.4.11/12/13、2.5.7/8、3.2.6、3.3.7/8/9，不以4.1.1替代任何新增项。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S01新增列表；增量准则A2:A10。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R04",
+      "description": "工作簿九新增的标准级别准确：AA/AAA/AAA/AA/AA/A/A/AA/AAA，对应编号顺序。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S01各条Level；增量准则C2:C10。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R05",
+      "description": "工作簿把4.1.1标记从2.2移除而非新增；不据此宣称2.1整体无效。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S01 #parsing及abstract；增量准则第11行。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R06",
+      "description": "范围列把三条AAA（2.4.12/13、3.3.9）作为后续评估，不作为B2本轮发布阻断；六条新增A/AA属于本轮。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S02 B2；增量准则E列。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R07",
+      "description": "2.4.11核心要求为焦点组件不完全被作者内容遮挡，不误写为AA要求全部可见；与2.4.12区分。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S01 #focus-not-obscured-minimum/enhanced；F2:F3。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R08",
+      "description": "2.4.13说明2px厚周长的面积及相同像素聚焦前后3:1对比，不能仅要求一个2px线宽或与邻色对比。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S01 #focus-appearance；F4。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R09",
+      "description": "2.5.7说明单指针无需拖拽即可完成同功能，并保留essential和未修改用户代理功能例外；不能只有键盘替代。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S01 #dragging-movements；F5:G5。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R10",
+      "description": "2.5.8写24×24 CSS px，完整且正确解释Spacing/Equivalent/Inline/User agent control/Essential五例外，Spacing不只是“按钮留点距离”。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S01 #target-size-minimum；F6:G6。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R11",
+      "description": "3.2.6按网页集合中相同页面变体的相对顺序解释，保留用户发起变化边界；不规定每页新增帮助或只固定坐标。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S01 #consistent-help；F7:G7。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R12",
+      "description": "3.3.7说明同一过程信息自动填入或可选择，保留必要、安全、已失效三个例外。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S01 #redundant-entry；F8:G8。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R13",
+      "description": "3.3.8列另一认证方法/辅助机制/对象识别/个人内容四条路径，并且3.3.9只保留前两者；不宣称标准全面禁止密码。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-专业准确性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S01两条accessible-authentication；F9:G10。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R14",
+      "description": "原型可用虚构称呼与邮箱走通第一步→本机模拟链接→第二步，且不要求记忆密码、解谜或转录验证码。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-交互功能",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "WCAG22_Demo_Page.html"
+      ],
+      "evidence": "S02原型委托；实际执行identity-form/auth。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R15",
+      "description": "第二步称呼/邮箱自动带入同过程上一步值；修改后返回并再次进入，修改值仍保留。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-交互功能",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "WCAG22_Demo_Page.html"
+      ],
+      "evidence": "S02；实际资料往返操作；不能仅靠autocomplete属性。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R16",
+      "description": "服务排序可通过单指针点击移动到另一位置，反向操作可还原；首末边界不丢失或重复项目。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-交互功能",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "WCAG22_Demo_Page.html"
+      ],
+      "evidence": "S02；对三项服务实际上移/下移/边界检查。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R17",
+      "description": "两步骤状态中帮助均位于主要任务内容之后、底部提示之前，展开可读帮助；DOM相对顺序一致。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-交互功能",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "WCAG22_Demo_Page.html"
+      ],
+      "evidence": "S02；两屏切换后检查aside与main/footer。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R18",
+      "description": "桌面和手机指定视口下连续Tab及Shift+Tab时，聚焦组件不被固定底栏完全遮挡，且可以离开所有控件。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-交互功能",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3",
+        "Q6"
+      ],
+      "deliverables": [
+        "WCAG22_Demo_Page.html"
+      ],
+      "evidence": "S02；浏览器实际逐焦点几何与键盘检查，不能仅检查outline样式。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R19",
+      "description": "两步骤可见的自定义按钮和输入实际边界尺寸≥44×44 CSS px，符合项目约定；工作簿未把44px错当AA标准阈值。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-交互功能",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "WCAG22_Demo_Page.html",
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S02项目设计约定；实际测量及F6。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R20",
+      "description": "摘要反映当前修改后资料与当前服务顺序，而不是固定示例文本。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-交互功能",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "WCAG22_Demo_Page.html"
+      ],
+      "evidence": "S02；改变字段和顺序后生成摘要。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R21",
+      "description": "HTML单文件在离线直接打开时主要交互可用，CSS/脚本无远端依赖，用户资料不向网络发送或持久化。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-交互功能",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "WCAG22_Demo_Page.html"
+      ],
+      "evidence": "S02；离线浏览器行为、网络与存储检查。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R22",
+      "description": "验收表对Q6明确列出的八类复现项给出可操作步骤与预期，而非填“检查可用”：两视口、双向Tab、排序与边界、资料往返、帮助、模拟认证、摘要更新、离线。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-可交接性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx"
+      ],
+      "evidence": "S02与Q6；可复现验收工作表T01–T09。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。",
+      "levels": {
+        "0": "八类均无可复现步骤与对应预期。",
+        "0.25": "满足1–2类。",
+        "0.5": "满足3–4类。",
+        "0.75": "满足5–7类。",
+        "1": "八类均满足；两视口和双向键盘均写清。"
+      }
+    },
+    {
+      "id": "R23",
+      "description": "交接文档说明具体D0更正项及前端、范围批准人、测试人员的后续动作，不把原型完成当生产接入完成。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-可交接性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "范围决策与验收交接.docx"
+      ],
+      "evidence": "S02职责/范围；Gold后两节。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R24",
+      "description": "三份交付的本次A/AA范围与AAA后续状态一致，均不将未实现AAA标记为本轮通过。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-跨产物一致性",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx",
+        "WCAG22_Demo_Page.html",
+        "范围决策与验收交接.docx"
+      ],
+      "evidence": "跨三份交付范围/声明核对。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R25",
+      "description": "仅交规定三个文件、Office能打开，HTML含中文lang和viewport；不靠截图或纯文字报告替代交互HTML。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3",
+        "Q4",
+        "Q5"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx",
+        "WCAG22_Demo_Page.html",
+        "范围决策与验收交接.docx"
+      ],
+      "evidence": "交付清单与真实文件。",
+      "weight_reason": "影响批准范围内的真实业务验收，不能由文件存在或关键词替代。"
+    },
+    {
+      "id": "R26",
+      "description": "扣分：任何交付伪称已发送真实邮件、真实预约成功、通过全站WCAG认证或已取得真实专家/测试签章。只在出现虚假完成断言时触发，不因演示边界说明缺失自动扣分。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与合规",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4",
+        "Q5"
+      ],
+      "deliverables": [
+        "WCAG22_Upgrade_Checklist.xlsx",
+        "WCAG22_Demo_Page.html",
+        "范围决策与验收交接.docx"
+      ],
+      "evidence": "S02禁止真实服务/认证断言；Gold明确模拟与未认证边界。",
+      "weight_reason": "独立的虚假完成声明风险；不与组件实现失败或清单错误重复处罚。"
+    }
+  ],
+  "source_facts": [],
+  "status": {
+    "task_id": "DE-TIME-001",
+    "domain": "设计",
+    "domain_l2": "DE1-信息与交互设计（拟议扩展）",
+    "category": "weakness-driven",
+    "inputs": 4,
+    "gold_files": 3,
+    "rubrics": 26,
+    "complexity": "C3",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:add9187ba61eb3ded3f2555eb10d5b1323bda09db2404d54fc3266ab037df10c",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/DE-TIME-001/20261021T014317Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 0.962162,
+            "graded_score": 0.962162,
+            "criteria_counted": 26.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_WCAG22_20231005_原文摘录.docx",
+      "absolute_path": "题包内：S01_WCAG22_20231005_原文摘录.docx",
+      "url": "",
+      "bytes": 41804,
+      "sha256": "065f47f8a6c6db6577a7c59823d86c2e47c2dd08e253b2399419e6d30b987d22",
+      "description": "固定2023-10-05 W3C Recommendation相关完整章节摘录，保留英文原文及锚点。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.w3.org/TR/2023/REC-WCAG22-20231005/"
+      ]
+    },
+    {
+      "name": "S02_项目授权与验收基线.docx",
+      "absolute_path": "题包内：S02_项目授权与验收基线.docx",
+      "url": "assets/tasks/DE-TIME-001/environment/input_files/S02_%E9%A1%B9%E7%9B%AE%E6%8E%88%E6%9D%83%E4%B8%8E%E9%AA%8C%E6%94%B6%E5%9F%BA%E7%BA%BF.docx",
+      "bytes": 38540,
+      "sha256": "dd1deefa7be1b96018fb1db46377825c178f80539ce5f374cb79d17512d8db76",
+      "description": "原创项目委托与批准范围、设计约定和服务边界。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创情境：CityConnect验收委托"
+        },
+        {
+          "kind": "heading",
+          "text": "任务构造声明"
+        },
+        {
+          "kind": "paragraph",
+          "text": "机构、人物、消息、版本编号均为本题原创，不是真实公共部门记录；WCAG条款本身只以S01为准。不得从本情境推导任何地区法律强制性。"
+        },
+        {
+          "kind": "heading",
+          "text": "2024-03-01 10:00 产品负责人批准的B2基线"
+        },
+        {
+          "kind": "paragraph",
+          "text": "我是本项目验收范围批准人。3月15日评审使用2023-10-05固定Recommendation的WCAG 2.2新增A/AA作为本次发布门槛。旧B1仅要求2.1 AA，保留为历史基线。AAA只列后续评估，不进入本次发布阻断条件。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本次交付是增量组件样例和开发验收依据，不是对现有生产网站做全站审计或签发认证。先检查九条新增及一条移除；同时保留现有2.1其他要求，不要宣称它们失效。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "请做一个无需服务器、可直接打开的单文件原型：两步骤预约、资料自动带入并可修改、服务排序可单击上移/下移、两个页面状态均可找到同序帮助、固定底栏不遮挡聚焦组件，以及无需记忆/转录的模拟认证路径。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本次演示所有自定义按钮和输入采用至少44×44 CSS px的项目设计约定，方便触控；这比2.5.8的24px最低尺寸更宽松，不能写成W3C的AA最低阈值。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "不使用真实身份资料；所有邮箱、认证与预约都只在本机模拟。页面须明确没有邮件发送或真实认证。真实接入另排安全评审。"
+        },
+        {
+          "kind": "heading",
+          "text": "交付用于什么决策"
+        },
+        {
+          "kind": "paragraph",
+          "text": "开发负责人将依据修订表逐项派工，评审人将按复现步骤实际点击和键盘测试；范围判断错误会使已批准的AA发布被AAA要求阻断，或把未完成原型误报为真实服务。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "S03_时间线与范围变更消息.docx",
+      "absolute_path": "题包内：S03_时间线与范围变更消息.docx",
+      "url": "assets/tasks/DE-TIME-001/environment/input_files/S03_%E6%97%B6%E9%97%B4%E7%BA%BF%E4%B8%8E%E8%8C%83%E5%9B%B4%E5%8F%98%E6%9B%B4%E6%B6%88%E6%81%AF.docx",
+      "bytes": 38258,
+      "sha256": "7a0939d3e625f8a6b75871333ef0b8c43f20c8936d516c49859f787b312b93c5",
+      "description": "原创历史/建议/批准/补充消息及角色权限。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创情境：项目版本与审批消息"
+        },
+        {
+          "kind": "heading",
+          "text": "声明"
+        },
+        {
+          "kind": "paragraph",
+          "text": "以下均为任务构造消息，所有时区Asia/Shanghai。文件更新时间不能代替审批权限。"
+        },
+        {
+          "kind": "heading",
+          "text": "按时间排序的消息"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "时点",
+              "发件角色/版本",
+              "正文/状态"
+            ],
+            [
+              "2023-09-18 16:00",
+              "开发负责人/B1",
+              "旧项目按2.1 AA验收；保留Parsing检查。此为历史基线。"
+            ],
+            [
+              "2024-02-20 11:00",
+              "产品经理/D0草稿",
+              "提交新增准则清单，未完成标准核对，等待评审；所列AAA、A/AA和移除项可能错误。"
+            ],
+            [
+              "2024-03-01 10:00",
+              "产品负责人/B2批准",
+              "批准本轮范围为固定2023-10-05版本的2.2新增A/AA；AAA只在后续路线图列出。项目触控约定44px不得改写为W3C门槛。"
+            ],
+            [
+              "2024-03-14 17:00",
+              "前端设计师/D1建议",
+              "建议下周把全部AAA都阻断上线，并在页面写“WCAG 2.2全面认证”；仅建议，未审批。"
+            ],
+            [
+              "2024-03-15 08:30",
+              "产品负责人/B2补充",
+              "不批准D1扩大范围与全面认证文案。评审版继续B2；修订表、原型与交接意见要全局一致。"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "S04_D0待核验清单.json",
+      "absolute_path": "题包内：S04_D0待核验清单.json",
+      "url": "assets/tasks/DE-TIME-001/environment/input_files/S04_D0%E5%BE%85%E6%A0%B8%E9%AA%8C%E6%B8%85%E5%8D%95.json",
+      "bytes": 910,
+      "sha256": "ee07fd8a42777c81c78661c1f3a6d3bb5d2d6837a255ad1b7d95e4803d6ec723",
+      "description": "原创未批准错误草稿，须核验而非照抄。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"criteria\": [\n    {\n      \"id\": \"2.4.11\",\n      \"name\": \"Focus Not Obscured (Minimum)\",\n      \"level\": \"AAA\",\n      \"status\": \"New\"\n    },\n    {\n      \"id\": \"2.5.8\",\n      \"name\": \"Target Size (Minimum)\",\n      \"level\": \"AA\",\n      \"status\": \"New\",\n      \"exceptions\": \"Spacing\"\n    },\n    {\n      \"id\": \"3.2.6\",\n      \"name\": \"Consistent Help\",\n      \"level\": \"AA\",\n      \"status\": \"New\"\n    },\n    {\n      \"id\": \"3.3.8\",\n      \"name\": \"Accessible Authentication (Minimum)\",\n      \"level\": \"A\",\n      \"status\": \"New\"\n    },\n    {\n      \"id\": \"4.1.1\",\n      \"name\": \"Parsing\",\n      \"level\": \"A\",\n      \"status\": \"New\"\n    }\n  ],\n  \"provenance\": \"原创任务扰动，不是真实机构记录。\",\n  \"version\": \"D0\",\n  \"authored_at\": \"2024-02-20T11:00:00+08:00\",\n  \"approval_status\": \"unapproved\",\n  \"acceptance_note\": \"历史草稿：误把4.1.1当新增、部分级别和例外不完整，请核对。\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "gold": [
+    {
+      "name": "WCAG22_Demo_Page.html",
+      "absolute_path": "题包内：WCAG22_Demo_Page.html",
+      "url": "assets/tasks/DE-TIME-001/solution/golden_output/WCAG22_Demo_Page.html",
+      "bytes": 8105,
+      "sha256": "63b72f504c1e394f766e0d9804aa34ab781c81c9acbf63a515c80baef635067d",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "<!doctype html>\n<html lang=\"zh-CN\">\n<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>城市服务预约 · 无障碍交互原型</title>\n<style>\n*{box-sizing:border-box}html{scroll-padding-bottom:130px}body{margin:0;background:#f3f6f7;color:#172c35;font:17px/1.65 system-ui,sans-serif;padding-bottom:130px}header,main,aside{max-width:900px;margin:auto;padding:24px}header{padding-bottom:0}.eyebrow{color:#365968;font-weight:700}h1{font-size:clamp(26px,5vw,38px);line-height:1.25}h2{line-height:1.35}section,aside{background:white;border:1px solid #b9cad0;border-radius:12px;margin-bottom:24px;padding:24px}aside{width:calc(100% - 48px)}button,input{font:inherit}button,a.action{min-width:44px;min-height:44px;padding:10px 16px;border:2px solid #245968;border-radius:7px;background:#fff;color:#163f4c;cursor:pointer}button.primary{background:#175668;color:#fff}button:disabled{opacity:.65;cursor:default}input{width:100%;max-width:440px;min-height:48px;border:2px solid #496874;border-radius:6px;padding:8px;display:block;margin:6px 0 18px}label{font-weight:600}:focus-visible{outline:3px solid #1437c4;outline-offset:3px}button,a,input,summary,h2{scroll-margin-block:24px 140px}.notice{padding:14px;border-left:5px solid #245968;background:#edf4f6}.steps{display:flex;gap:20px;padding:0;list-style:none}.steps [aria-current]{font-weight:800;border-bottom:3px solid}ol.requests{padding-left:30px}.requests li{margin-bottom:16px;padding:12px;background:#f2f6f7}.requests button{margin:5px 5px 0 0}.actions{display:flex;flex-wrap:wrap;gap:12px}.dock{position:fixed;bottom:0;left:0;right:0;background:#163f4c;color:white;padding:12px 24px;font-size:15px;z-index:2}#help-content{padding-top:12px}[hidden]{display:none!important}#live{min-height:2em;color:#163f4c;font-weight:600}small{display:block}a{color:#173fa0} @media(max-width:500px){header,main{padding:16px}aside{width:calc(100% - 32px)}section{padding:18px}.dock{padding:10px 16px}}\n</style>\n<header><p class=\"eyebrow\">CityConnect / 预约体验演示</p><h1>让服务预约，不再重复与费力</h1><p class=\"notice\">离线原型，不连接真实政务、邮箱或身份服务。认证和提交均为本机模拟，不发送邮件，不保存个人信息。请仅输入虚构资料。</p><ol class=\"steps\" aria-label=\"预约步骤\"><li id=\"step-label-1\" aria-current=\"step\">1. 资料与模拟认证</li><li id=\"step-label-2\">2. 服务顺序与确认</li></ol></header>\n<main id=\"main\">\n<section id=\"screen1\" aria-labelledby=\"title1\">\n<h2 id=\"title1\" tabindex=\"-1\">第一步：填写预约资料</h2>\n<form id=\"identity-form\"><label for=\"name\">称呼（示例资料）</label><input id=\"name\" name=\"name\" autocomplete=\"name\" required placeholder=\"例如：示例用户\"><label for=\"email\">邮箱（只在本机使用）</label><input id=\"email\" name=\"email\" type=\"email\" autocomplete=\"email\" required placeholder=\"demo@example.invalid\"><button class=\"primary\" type=\"submit\">生成本机模拟登录链接</button></form>\n<div id=\"inbox\" hidden><h3>本机模拟收件箱</h3><p>演示链接已在本机生成，未发送邮件。此流程不要求背诵密码或转录验证码。</p><button id=\"auth\">打开模拟链接并继续</button></div>\n</section>\n<section id=\"screen2\" aria-labelledby=\"title2\" hidden>\n<h2 id=\"title2\" tabindex=\"-1\">第二步：确认服务与资料</h2><p>资料来自同一预约过程的上一步。无需重复输入；需要时可以修改。</p>\n<label for=\"confirm-name\">预约称呼</label><input id=\"confirm-name\" autocomplete=\"name\" required><label for=\"confirm-email\">联系邮箱</label><input id=\"confirm-email\" type=\"email\" autocomplete=\"email\" required>\n<h3>调整服务顺序</h3><p>使用“上移”“下移”即可调整，无需按住鼠标拖动。</p>\n<ol id=\"requests\" class=\"requests\"><li data-id=\"A\"><span>创业咨询</span><div><button type=\"button\" data-move=\"-1\" aria-label=\"上移创业咨询\">上移</button><button type=\"button\" data-move=\"1\" aria-label=\"下移创业咨询\">下移</button></div></li><li data-id=\"B\"><span>材料预审</span><div><button type=\"button\" data-move=\"-1\" aria-label=\"上移材料预审\">上移</button><button type=\"button\" data-move=\"1\" aria-label=\"下移材料预审\">下移</button></div></li><li data-id=\"C\"><span>办理指引</span><div><button type=\"button\" data-move=\"-1\" aria-label=\"上移办理指引\">上移</button><button type=\"button\" data-move=\"1\" aria-label=\"下移办理指引\">下移</button></div></li></ol>\n<div class=\"actions\"><button id=\"back\" type=\"button\">返回第一步</button><button id=\"submit\" class=\"primary\" type=\"button\">生成本机预约摘要</button></div>\n<div id=\"summary\" hidden><h3>本机预约摘要</h3><p id=\"summary-text\"></p><p>未提交至任何服务系统。此原型不代表完成身份核验、预约或WCAG全站认证。</p></div>\n</section>\n<p id=\"live\" role=\"status\" aria-live=\"polite\"></p>\n</main>\n<aside aria-label=\"预约帮助\"><h2>预约帮助</h2><p>在两个步骤中，此入口都在主要任务内容之后、底部提示之前；并非仅靠固定屏幕坐标。</p><button id=\"help\" aria-expanded=\"false\" aria-controls=\"help-content\">展开操作帮助</button><div id=\"help-content\" hidden><p>资料只留在当前页面内存。生成本机模拟链接后，点击“打开模拟链接并继续”。第二步可调整顺序或返回修改。刷新页面会清空资料。遇到真实服务问题，应通过实际服务渠道联系工作人员。</p></div></aside>\n<footer class=\"dock\">离线交互样例 · 目标为新增A/AA准则的组件示范，不是全站符合性声明。</footer>\n<script>\nconst $=id=>document.getElementById(id), state={name:'',email:''};\nconst say=text=>{$('live').textContent=text};\nfunction show(n){$('screen1').hidden=n!==1;$('screen2').hidden=n!==2;for(let i=1;i<=2;i++){if(i===n)$('step-label-'+i).setAttribute('aria-current','step');else $('step-label-'+i).removeAttribute('aria-current')}$(n===1?'title1':'title2').focus()}\n$('identity-form').addEventListener('submit',e=>{e.preventDefault();state.name=$('name').value;state.email=$('email').value;$('inbox').hidden=false;$('auth').focus();say('本机模拟链接已生成；未发送邮件。')});\n$('auth').addEventListener('click',()=>{$('confirm-name').value=state.name;$('confirm-email').value=state.email;show(2);say('已进入本机模拟认证后的预约步骤，资料已自动带入。')});\n$('back').addEventListener('click',()=>{state.name=$('confirm-name').value;state.email=$('confirm-email').value;$('name').value=state.name;$('email').value=state.email;show(1);say('修改后的资料已保留。')});\n$('requests').addEventListener('click',e=>{const b=e.target.closest('button[data-move]');if(!b)return;const li=b.closest('li'),dir=Number(b.dataset.move),other=dir<0?li.previousElementSibling:li.nextElementSibling;if(!other){say('已在'+(dir<0?'首位':'末位')+'，顺序保持不变。');return}if(dir<0)li.before(other) /* swap below corrects upward order */;if(dir<0)other.before(li);else other.after(li);b.focus();say(li.querySelector('span').textContent+'已移至第'+([...li.parentNode.children].indexOf(li)+1)+'位。')});\n$('submit').addEventListener('click',()=>{for(const id of ['confirm-name','confirm-email'])if(!$(id).reportValidity())return;$('summary').hidden=false;const order=[...$('requests').children].map(li=>li.querySelector('span').textContent).join(' → ');$('summary-text').textContent=$('confirm-name').value+'；'+$('confirm-email').value+'；服务顺序：'+order;say('本机摘要已更新；没有实际预约提交。')});\n$('help').addEventListener('click',()=>{const opened=$('help').getAttribute('aria-expanded')==='true';$('help').setAttribute('aria-expanded',String(!opened));$('help-content').hidden=opened});\ndocument.addEventListener('focusin',e=>{requestAnimationFrame(()=>{const r=e.target.getBoundingClientRect(),top=document.querySelector('.dock').getBoundingClientRect().top;if(r.bottom>top-12||r.top<12)e.target.scrollIntoView({block:'center',behavior:'instant'})})});\n</script>\n</html>\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "WCAG22_Upgrade_Checklist.xlsx",
+      "absolute_path": "题包内：WCAG22_Upgrade_Checklist.xlsx",
+      "url": "assets/tasks/DE-TIME-001/solution/golden_output/WCAG22_Upgrade_Checklist.xlsx",
+      "bytes": 9970,
+      "sha256": "2c951a8d4abbda33ee6dad814c2b154d041fe3e4343e6c0ae407548dcf7e284c",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "增量准则"
+        },
+        {
+          "kind": "notice",
+          "text": "共11行 × 9列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "准则编号",
+              "英文名称",
+              "标准级别",
+              "2.2状态",
+              "B2发布范围",
+              "核心要求",
+              "例外或说明",
+              "固定原文定位",
+              "原型/验收定位"
+            ],
+            [
+              "2.4.11",
+              "Focus Not Obscured (Minimum)",
+              "AA",
+              "新增",
+              "本次新增门槛",
+              "获得键盘焦点的组件不得被作者创建的内容完全遮挡。",
+              "用户可移动内容只检查初始位置；用户打开的内容若可在不推进焦点下显露焦点组件，不算被作者内容隐藏。",
+              "S01 #focus-not-obscured-minimum",
+              "两步骤Tab，检查固定底栏"
+            ],
+            [
+              "2.4.12",
+              "Focus Not Obscured (Enhanced)",
+              "AAA",
+              "新增",
+              "后续评估，非发布阻断",
+              "获得键盘焦点的组件不得有任何部分被作者创建的内容遮挡。",
+              "本条正文未列例外；不要直接套用2.4.11的说明。",
+              "S01 #focus-not-obscured-enhanced",
+              "未在本次组件样例实现；不是已完成验收"
+            ],
+            [
+              "2.4.13",
+              "Focus Appearance",
+              "AAA",
+              "新增",
+              "后续评估，非发布阻断",
+              "可见焦点指示器的一部分面积至少相当于未聚焦组件或子组件2 CSS px厚周长；相同像素聚焦/未聚焦状态对比至少3:1。",
+              "指示器由用户代理决定且作者不能调整；或作者未修改指示器及其背景色。",
+              "S01 #focus-appearance",
+              "未在本次组件样例实现；不是已完成验收"
+            ],
+            [
+              "2.5.7",
+              "Dragging Movements",
+              "AA",
+              "新增",
+              "本次新增门槛",
+              "拖拽功能须也可用单指针、不拖拽实现；不是只有键盘替代就足够。",
+              "拖拽为必要功能，或由用户代理决定且作者未修改的功能除外；仅针对解释指针动作的网页内容。",
+              "S01 #dragging-movements",
+              "第二步服务上移/下移"
+            ],
+            [
+              "2.5.8",
+              "Target Size (Minimum)",
+              "AA",
+              "新增",
+              "本次新增门槛",
+              "指针目标至少24×24 CSS px，或满足正文例外；不能将44px或AAA作为本条门槛。",
+              "Spacing：小目标边界盒中心24px直径圆不与其他目标或其他小目标圆相交；Equivalent：同页面合格等效控件；Inline：句内或受非目标文字行高限制；User agent control：尺寸由用户代理决定且作者未改；Essential：特定呈现必要或法律要求。",
+              "S01 #target-size-minimum",
+              "两个步骤自定义按钮/输入≥44px（项目约定）"
+            ],
+            [
+              "3.2.6",
+              "Consistent Help",
+              "A",
+              "新增",
+              "本次新增门槛",
+              "网页集合中重复出现的帮助机制与其他页面内容的相对顺序相同；不要求每页必须新加帮助，也非只要求坐标固定。",
+              "用户主动改变除外。涵盖人工联系方式、人工联系机制、自助选项、全自动联系机制；同一页面变体比较。",
+              "S01 #consistent-help",
+              "两个步骤任务区之后的预约帮助"
+            ],
+            [
+              "3.3.7",
+              "Redundant Entry",
+              "A",
+              "新增",
+              "本次新增门槛",
+              "同一过程中已输入或提供给用户、又要求再次输入的信息，应自动填入或供选择。",
+              "重新输入为必要；保障内容安全；先前信息已失效。",
+              "S01 #redundant-entry",
+              "称呼/邮箱第二步自动带入，修改后返回保留"
+            ],
+            [
+              "3.3.8",
+              "Accessible Authentication (Minimum)",
+              "AA",
+              "新增",
+              "本次新增门槛",
+              "认证任何步骤不应要求认知功能测试，除非该步提供规定的至少一种支持。并非禁止密码登录。",
+              "Alternative：无需认知测试的另一认证方法；Mechanism：辅助完成认知测试；Object Recognition：识别对象；Personal Content：识别用户之前提供的非文本内容。密码管理器、复制粘贴是机制示例。",
+              "S01 #accessible-authentication-minimum",
+              "本机模拟链接，无密码/验证码转录"
+            ],
+            [
+              "3.3.9",
+              "Accessible Authentication (Enhanced)",
+              "AAA",
+              "新增",
+              "后续评估，非发布阻断",
+              "认证任何步骤不应要求认知功能测试，除非有无认知测试的另一认证方法或辅助机制。",
+              "仅Alternative或Mechanism；不像3.3.8那样允许单靠对象识别或个人非文本内容识别。",
+              "S01 #accessible-authentication-enhanced",
+              "未在本次组件样例实现；不是已完成验收"
+            ],
+            [
+              "4.1.1",
+              "Parsing",
+              "原2.1为A",
+              "移除",
+              "移除新增门槛，保留历史说明",
+              "从2.2移除；不能在2.2新增清单保留为必须通过的新增准则，也不等于2.1整体失效。",
+              "不适用：已移除。",
+              "S01 #parsing",
+              "不当作2.2新增要求"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "可复现验收"
+        },
+        {
+          "kind": "notice",
+          "text": "共10行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "编号",
+              "条件与步骤",
+              "预期结果",
+              "依据"
+            ],
+            [
+              "T01",
+              "打开HTML，虚构称呼和邮箱，提交第一步",
+              "显示本机模拟收件箱；未宣称发邮件",
+              "S02，3.3.8"
+            ],
+            [
+              "T02",
+              "点击打开模拟链接并继续",
+              "第二步两字段自动带入；焦点移到第二步标题",
+              "3.3.7"
+            ],
+            [
+              "T03",
+              "修改第二步称呼，返回第一步再进入第二步",
+              "修改值保留，不重复手输",
+              "3.3.7"
+            ],
+            [
+              "T04",
+              "第二步将材料预审上移，再下移；边界再上移",
+              "顺序改变且可逆；边界不破坏列表；触发按钮仍聚焦",
+              "2.5.7"
+            ],
+            [
+              "T05",
+              "两步骤均展开/收起预约帮助",
+              "帮助始终在任务内容之后、底栏之前，同序可用",
+              "3.2.6"
+            ],
+            [
+              "T06",
+              "1280×800和390×844下从页首连续Tab至末尾，再Shift+Tab",
+              "聚焦组件不被固定底栏完全遮挡；可离开所有控件，无焦点陷阱",
+              "2.4.11"
+            ],
+            [
+              "T07",
+              "测量可见自定义按钮/输入boundingClientRect",
+              "项目控件≥44×44 CSS px；清单仍写标准24×24及例外",
+              "S02，2.5.8"
+            ],
+            [
+              "T08",
+              "第二步改服务顺序后生成摘要",
+              "摘要反映当前字段/顺序；明确未真实提交",
+              "S02"
+            ],
+            [
+              "T09",
+              "离线打开，两步骤操作，刷新",
+              "无需网络依赖；刷新清空资料；不持久化个人数据",
+              "S02"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "范围决策与验收交接.docx",
+      "absolute_path": "题包内：范围决策与验收交接.docx",
+      "url": "assets/tasks/DE-TIME-001/solution/golden_output/%E8%8C%83%E5%9B%B4%E5%86%B3%E7%AD%96%E4%B8%8E%E9%AA%8C%E6%94%B6%E4%BA%A4%E6%8E%A5.docx",
+      "bytes": 38769,
+      "sha256": "61920abffd52df461efe571a32eb57f8bddae89c27826c0bc75d0561d7306ff7",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "增量无障碍交接与范围决策"
+        },
+        {
+          "kind": "heading",
+          "text": "基准、效力与时间"
+        },
+        {
+          "kind": "paragraph",
+          "text": "基准为2024-03-15 09:00 Asia/Shanghai。固定W3C版本发布于2023-10-05；这是标准发布日期，不是项目合同自动生效日或地方强制法规。B2由产品负责人3月1日批准，3月15日08:30补充继续有效；3月14日较新但未批准的D1不覆盖B2。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "B1是历史2.1 AA基线；本轮采用2.2新增A/AA，不表示2.1整体作废。4.1.1从2.2移除，不列本轮新增阻断。九新增中AAA三项仅作路线图评估，不能以“更新文件”或标准级别更高为由擅自扩大范围。"
+        },
+        {
+          "kind": "heading",
+          "text": "D0修改与全局联动"
+        },
+        {
+          "kind": "paragraph",
+          "text": "将2.4.11从AAA改AA；3.2.6从AA改A；3.3.8从A改AA；4.1.1从新增改移除；补齐2.4.12、2.4.13、2.5.7、3.3.7、3.3.9。完整十项见工作簿。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "清单明确2.4.11只要求不完全遮挡，不把2.4.12全部可见强制用于AA；2.5.8完整保留五例外；3.3.8允许辅助机制而非一刀切禁止密码。项目自定义控件44px是设计约定，标准最小尺寸仍是24px及例外。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "三份交付都维持增量组件/未认证边界；未采纳D1的“全面认证”文案。"
+        },
+        {
+          "kind": "heading",
+          "text": "原型实现与开发交接"
+        },
+        {
+          "kind": "paragraph",
+          "text": "HTML直接用浏览器打开。用虚构资料生成本机模拟链接、点击继续进入第二步；资料自动带入，可改后返回，服务排序支持单指针按钮，帮助保持相对顺序。CSS底部留白和滚动余量配合focusin滚动，避免固定底栏覆盖焦点。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "密码及验证码不是本原型路径，不表示真实认证只能用邮件。页面本机模拟收件箱和链接不发送邮件，不完成真实身份核验。真实服务接入前需安全评审与端到端认证测试。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "工作簿可复现验收表列操作与预期，不是已完成生产测试记录。样例不包含生产网站全页面、完整过程及所有既有准则审计，故不能对整站宣称符合或认证。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "设计师交付本原型与清单后，由前端实现真实组件及跨页面相对顺序；产品负责人审批范围，测试人员按T01–T09复现；涉及真实邮箱或预约服务的接入不在本次交付内。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": []
+}

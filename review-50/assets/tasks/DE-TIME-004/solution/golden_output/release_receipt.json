@@ -1,0 +1,968 @@
+{
+  "actual_completed_at_utc": "2026-10-21T03:11:37.151954+00:00",
+  "business_as_of": "2026-10-20T16:00:00+08:00",
+  "revision": "R2",
+  "authority_timeline": {
+    "timezone": "Asia/Shanghai",
+    "events": [
+      {
+        "version": "R1",
+        "date_local": "2026-10-13 10:00",
+        "role": "设计助理",
+        "scope": "未去重；旧稿未审批",
+        "status": "DRAFT"
+      },
+      {
+        "version": "R2",
+        "date_local": "2026-10-17 15:30",
+        "role": "内容负责人",
+        "scope": "采用去重；仅内部复核",
+        "status": "APPROVED_FOR_INTERNAL_REVIEW"
+      },
+      {
+        "version": "M-LATE",
+        "date_local": "2026-10-19 09:00",
+        "role": "商务联络",
+        "scope": "恢复原数字并声称已发布",
+        "status": "UNAUTHORIZED"
+      }
+    ],
+    "current_revision": "R2",
+    "current_approved_at_local": "2026-10-17 15:30",
+    "business_as_of_local": "2026-10-20 16:00",
+    "source_acquisition_statement": "这是微软真实专业资料的离线短摘录及作者中文解释，不是本虚构团队的审批规则。常规支持页抓取于2026-10-20/21，未知发布日期/起施日不补造；API页标示可用版本不等于某功能首次发布日期。业务修订R1/R2与软件文档版本分开，不宣称当前抓取就是2025或更早快照。",
+    "source_time_precision": "S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造",
+    "event_source": "S06_revision_register.csv；当前批准另核S05_approved_content.json；无权建议另核S09_late_message.md"
+  },
+  "input_sha256": {
+    "S01_project_brief.docx": "7c716ceb6995c7bf8c11e8ea914d7e50d0a922ec7149d8430f8998c6f0428c31",
+    "S02_D0_R1.pptx": "3d4a295669dc356f9688eedea1b75f14581d00919a2710622a2f494f64acb022",
+    "S03_monthly_metrics.csv": "af1f92e3e47f681157ce0f7d693fb617686b24c89d743b081153786b72a20fde",
+    "S04_data_dictionary.md": "7bd790c4639d4e5cc8067f6efdc6cb745efa0238fc94aa0d7c641b06cc97a947",
+    "S05_approved_content.json": "8856316afde9dde3078cae49a8504f694eb2ae4017553b8ef1c6213fc530bdb1",
+    "S06_revision_register.csv": "5739e8d8242cccaae3472d25c6001c76c114fd0e07de6c4314f349920f47a1ac",
+    "S07_brand_contract.json": "eb6977eee6fd5a50790f9b604f6039713031d3f5ecb9a1b6b0e99f4859fff96e",
+    "S08_roles.csv": "d2ef24bf7ae58d75001a37d5e7ab3ebaee065c2e3032a326a0e4ed134832b382",
+    "S09_late_message.md": "8e0aba11fbf7876aae77d609fa44df7e7da8e11403af90493ded534d02f98624",
+    "S10_workflow_nodes.csv": "53a4d891eab38d7e49b7050f3ad226612d7c954e20ebef1f7d8764da23c84ba2",
+    "S11_workflow_edges.csv": "57f9652b5b0d7b8458c87d420cf9b832de3ad7560993991fc5fc9b88d89ff194",
+    "S12_interface_illustration.svg": "408b80a73112eadf981a6ce5ca2547e91b0c618de544888dc096cc0a65a24c6e",
+    "S13_speaker_notes_R1.docx": "937c67b962b48a4d47917feb22b08ee52eb7d539f3be89cabbaefb0e91893305",
+    "S14_untrusted_baseline_check.json": "8d573607fb500fc28ee59aeea05a6c4437dd590b676c20d98320334f6c633531",
+    "S15_draft_workflow.py": "7533ab6a26b3229fa3b6ac33481e79dad26a672288f17f86ec69f07728a012ad",
+    "S16_official_source_packet.docx": "cdb2bd1d87edec7abd7c762744258798ccb463f1f12946833cecf324680c524b",
+    "S17_native_extension_excerpt.json": "eefa1dec9ad0a66ce5734ea9f13731c3c9d3d8f6307af66132c8f48857cbb789",
+    "S18_OpenXML_SDK_MIT_LICENSE.txt": "ed03ba352313a4ba7019d5bed4bd3218ac17f3e44442a3bb1aaff54dcca9a2bc",
+    "S19_dependency_contract.json": "024e57723157836b1c4653e8d6e118c2fbf01f307b6ecef57628fdf68413fe6f",
+    "S20_review_form.xlsx": "c14ce07d611e772914b6bb0edf297119bd3ea1302e9a8dac36552223cdb783f1"
+  },
+  "node_sha256": {
+    "N0_freeze": "95e54aab9afc2b5424b31d629e6de7e53288c5fef52df1a28c380b8417fe3531",
+    "N1_authority": "716d3d2b588da1c0b4e0ee2b2cfe0526a24c0a92f959d045a95d370acae61ea8",
+    "N2_metrics": "592ffdcaea62cef4f2f18c08fbbc981d9571dd9da2b522f50a5e65910aebddc7",
+    "N3_story": "5703b6d4235b9b1c8d4e360ef4a0230206c3e8fdb2de442dcebda66273ef866e",
+    "N4_deck": "7e08c16b06fd6f0b9947c899690f6118556e36178a2a90518d79d7c0bd3a1cb2",
+    "N5_structure": "98cfdc1ff62327ab1baa2d14670baa46a22612c733c0fee984ce15f62225e60c",
+    "N6_render": "acc8e0aa8efd7dcb485ab0449fcf4a0b3620a29075f9b799156c57c8f7b8f115",
+    "N7_handoff": "9cd81ace648e5a573fd1ce1fdbc1a3f9bfc33de887443d17f17d2a03d59b5593",
+    "N8_release": "f235e68d8f5ef7180418fd54cc37325b944b9917b7af0e3e82b44e22a7ebb486"
+  },
+  "node_records": {
+    "N0_freeze": {
+      "name": "N0_freeze",
+      "created_at_utc": "2026-10-21T03:11:29.144392+00:00",
+      "parents": {},
+      "payload": {
+        "input_sha256": {
+          "S01_project_brief.docx": "7c716ceb6995c7bf8c11e8ea914d7e50d0a922ec7149d8430f8998c6f0428c31",
+          "S02_D0_R1.pptx": "3d4a295669dc356f9688eedea1b75f14581d00919a2710622a2f494f64acb022",
+          "S03_monthly_metrics.csv": "af1f92e3e47f681157ce0f7d693fb617686b24c89d743b081153786b72a20fde",
+          "S04_data_dictionary.md": "7bd790c4639d4e5cc8067f6efdc6cb745efa0238fc94aa0d7c641b06cc97a947",
+          "S05_approved_content.json": "8856316afde9dde3078cae49a8504f694eb2ae4017553b8ef1c6213fc530bdb1",
+          "S06_revision_register.csv": "5739e8d8242cccaae3472d25c6001c76c114fd0e07de6c4314f349920f47a1ac",
+          "S07_brand_contract.json": "eb6977eee6fd5a50790f9b604f6039713031d3f5ecb9a1b6b0e99f4859fff96e",
+          "S08_roles.csv": "d2ef24bf7ae58d75001a37d5e7ab3ebaee065c2e3032a326a0e4ed134832b382",
+          "S09_late_message.md": "8e0aba11fbf7876aae77d609fa44df7e7da8e11403af90493ded534d02f98624",
+          "S10_workflow_nodes.csv": "53a4d891eab38d7e49b7050f3ad226612d7c954e20ebef1f7d8764da23c84ba2",
+          "S11_workflow_edges.csv": "57f9652b5b0d7b8458c87d420cf9b832de3ad7560993991fc5fc9b88d89ff194",
+          "S12_interface_illustration.svg": "408b80a73112eadf981a6ce5ca2547e91b0c618de544888dc096cc0a65a24c6e",
+          "S13_speaker_notes_R1.docx": "937c67b962b48a4d47917feb22b08ee52eb7d539f3be89cabbaefb0e91893305",
+          "S14_untrusted_baseline_check.json": "8d573607fb500fc28ee59aeea05a6c4437dd590b676c20d98320334f6c633531",
+          "S15_draft_workflow.py": "7533ab6a26b3229fa3b6ac33481e79dad26a672288f17f86ec69f07728a012ad",
+          "S16_official_source_packet.docx": "cdb2bd1d87edec7abd7c762744258798ccb463f1f12946833cecf324680c524b",
+          "S17_native_extension_excerpt.json": "eefa1dec9ad0a66ce5734ea9f13731c3c9d3d8f6307af66132c8f48857cbb789",
+          "S18_OpenXML_SDK_MIT_LICENSE.txt": "ed03ba352313a4ba7019d5bed4bd3218ac17f3e44442a3bb1aaff54dcca9a2bc",
+          "S19_dependency_contract.json": "024e57723157836b1c4653e8d6e118c2fbf01f307b6ecef57628fdf68413fe6f",
+          "S20_review_form.xlsx": "c14ce07d611e772914b6bb0edf297119bd3ea1302e9a8dac36552223cdb783f1"
+        },
+        "business_as_of": "2026-10-20T16:00:00+08:00",
+        "executor_sha256": "04e6f4d20799bb545ea51ac0eb6b1cce9c5fea9b4656b755f1b42e0b71a62fe5"
+      }
+    },
+    "N1_authority": {
+      "name": "N1_authority",
+      "created_at_utc": "2026-10-21T03:11:29.193889+00:00",
+      "parents": {
+        "N0_freeze": "95e54aab9afc2b5424b31d629e6de7e53288c5fef52df1a28c380b8417fe3531"
+      },
+      "payload": {
+        "version": "R2",
+        "approved_at_local": "2026-10-17 15:30",
+        "timezone": "Asia/Shanghai",
+        "authority_role": "内容负责人",
+        "approval_scope": "INTERNAL_REVIEW_ONLY",
+        "data_sha256": "af1f92e3e47f681157ce0f7d693fb617686b24c89d743b081153786b72a20fde",
+        "slides": [
+          {
+            "id": "S01",
+            "title": "服务站数字指引改版｜年度复盘",
+            "body": "2025年度原创虚构记录\n2026-10-20 内部设计复核\n没有真实服务成效或上线认证声明",
+            "notes": "讲解本页要点：2025年度原创虚构记录；2026-10-20 内部设计复核；没有真实服务成效或上线认证声明。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S02",
+            "title": "本次只请求内部复核",
+            "body": "目的：修复阅读顺序与版本传播\n保留可编辑图表、表格和流程\n外部发布、PowerPoint与真实读屏另验",
+            "notes": "讲解本页要点：目的：修复阅读顺序与版本传播；保留可编辑图表、表格和流程；外部发布、PowerPoint与真实读屏另验。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S03",
+            "title": "先分清受理、完成与重复",
+            "body": "原始受理{raw_received}，原始完成{raw_completed}\n重复完成{total_duplicate}同时从分子与分母剔除\n合格完成{total_completed} / 合格受理{total_received} = {rate_pct}%",
+            "notes": "讲解本页要点：原始受理{raw_received}，原始完成{raw_completed}；重复完成{total_duplicate}同时从分子与分母剔除；合格完成{total_completed} / 合格受理{total_received} = {rate_pct}%。提醒读者：当前只做内部复核。",
+            "source": "S03/S04/S05"
+          },
+          {
+            "id": "S04",
+            "title": "季度业务量｜同口径对照",
+            "body": "同一去重口径；只描述记录，不推断改版效果。",
+            "notes": "讲解本页要点：同一去重口径；只描述记录，不推断改版效果。。提醒读者：当前只做内部复核。",
+            "source": "S03/S04/S05"
+          },
+          {
+            "id": "S05",
+            "title": "完成率必须有分母",
+            "body": "全年按总完成/总受理：{rate_pct}%；不简单平均季度率。",
+            "notes": "讲解本页要点：全年按总完成/总受理：{rate_pct}%；不简单平均季度率。。提醒读者：当前只做内部复核。",
+            "source": "S03/S04/S05"
+          },
+          {
+            "id": "S06",
+            "title": "六步服务流程与人工接点",
+            "body": "按1→6阅读；第3步如有疑问，暂停并转人工核查。",
+            "notes": "讲解本页要点：按1→6阅读；第3步如有疑问，暂停并转人工核查。。提醒读者：当前只做内部复核。",
+            "source": "S10/S11"
+          },
+          {
+            "id": "S07",
+            "title": "疑问不是自动批准",
+            "body": "无有效审核证据：保留“待人工复核”\n材料补充：更新引用与受影响交付物\n不得把联络消息当有权批准",
+            "notes": "讲解本页要点：无有效审核证据：保留“待人工复核”；材料补充：更新引用与受影响交付物；不得把联络消息当有权批准。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S08",
+            "title": "角色权限与交接责任",
+            "body": "内容负责人：批准题内口径，不代表批准发布\n设计师：修复并留结构/视觉证据\n发布负责人：收到原生/读屏复核后再决定",
+            "notes": "讲解本页要点：内容负责人：批准题内口径，不代表批准发布；设计师：修复并留结构/视觉证据；发布负责人：收到原生/读屏复核后再决定。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S09",
+            "title": "示意界面：仅本机预览",
+            "body": "示意界面不是上线截图；预览不发送、不批准。",
+            "notes": "讲解本页要点：示意界面不是上线截图；预览不发送、不批准。。提醒读者：当前只做内部复核。",
+            "source": "S12"
+          },
+          {
+            "id": "S10",
+            "title": "风险与未完成验证",
+            "body": "源数据变化：新目录全量重建\n结构/几何检查不等于真实读屏\n待测结果不得填“已通过”",
+            "notes": "讲解本页要点：源数据变化：新目录全量重建；结构/几何检查不等于真实读屏；待测结果不得填“已通过”。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S11",
+            "title": "下一步：按责任逐项复核",
+            "body": "数据负责人：核对去重与冻结材料\n设计师：逐页检查遮挡、顺序与替代描述\n有权复核者：目标应用测试后决定下一步",
+            "notes": "讲解本页要点：数据负责人：核对去重与冻结材料；设计师：逐页检查遮挡、顺序与替代描述；有权复核者：目标应用测试后决定下一步。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S12",
+            "title": "来源、版本与发布边界",
+            "body": "微软官方资料：阅读顺序、alt与原生格式\n业务、角色、界面和服务记录均原创虚构\n当前为内部待审，不是无障碍认证或发布批准",
+            "notes": "讲解本页要点：微软官方资料：阅读顺序、alt与原生格式；业务、角色、界面和服务记录均原创虚构；当前为内部待审，不是无障碍认证或发布批准。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          }
+        ],
+        "nature": "原创虚构业务合同，不是真实机构授权或微软规定",
+        "authority_timeline": {
+          "timezone": "Asia/Shanghai",
+          "events": [
+            {
+              "version": "R1",
+              "date_local": "2026-10-13 10:00",
+              "role": "设计助理",
+              "scope": "未去重；旧稿未审批",
+              "status": "DRAFT"
+            },
+            {
+              "version": "R2",
+              "date_local": "2026-10-17 15:30",
+              "role": "内容负责人",
+              "scope": "采用去重；仅内部复核",
+              "status": "APPROVED_FOR_INTERNAL_REVIEW"
+            },
+            {
+              "version": "M-LATE",
+              "date_local": "2026-10-19 09:00",
+              "role": "商务联络",
+              "scope": "恢复原数字并声称已发布",
+              "status": "UNAUTHORIZED"
+            }
+          ],
+          "current_revision": "R2",
+          "current_approved_at_local": "2026-10-17 15:30",
+          "business_as_of_local": "2026-10-20 16:00",
+          "source_acquisition_statement": "这是微软真实专业资料的离线短摘录及作者中文解释，不是本虚构团队的审批规则。常规支持页抓取于2026-10-20/21，未知发布日期/起施日不补造；API页标示可用版本不等于某功能首次发布日期。业务修订R1/R2与软件文档版本分开，不宣称当前抓取就是2025或更早快照。",
+          "source_time_precision": "S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造",
+          "event_source": "S06_revision_register.csv；当前批准另核S05_approved_content.json；无权建议另核S09_late_message.md"
+        }
+      }
+    },
+    "N2_metrics": {
+      "name": "N2_metrics",
+      "created_at_utc": "2026-10-21T03:11:29.204151+00:00",
+      "parents": {
+        "N0_freeze": "95e54aab9afc2b5424b31d629e6de7e53288c5fef52df1a28c380b8417fe3531",
+        "N1_authority": "716d3d2b588da1c0b4e0ee2b2cfe0526a24c0a92f959d045a95d370acae61ea8"
+      },
+      "payload": {
+        "months": [
+          {
+            "month": 1,
+            "received": 100,
+            "completed": 90,
+            "duplicate_completed": 0,
+            "eligible": 100,
+            "eligible_completed": 90
+          },
+          {
+            "month": 2,
+            "received": 120,
+            "completed": 100,
+            "duplicate_completed": 5,
+            "eligible": 115,
+            "eligible_completed": 95
+          },
+          {
+            "month": 3,
+            "received": 80,
+            "completed": 70,
+            "duplicate_completed": 0,
+            "eligible": 80,
+            "eligible_completed": 70
+          },
+          {
+            "month": 4,
+            "received": 140,
+            "completed": 126,
+            "duplicate_completed": 10,
+            "eligible": 130,
+            "eligible_completed": 116
+          },
+          {
+            "month": 5,
+            "received": 130,
+            "completed": 110,
+            "duplicate_completed": 0,
+            "eligible": 130,
+            "eligible_completed": 110
+          },
+          {
+            "month": 6,
+            "received": 90,
+            "completed": 78,
+            "duplicate_completed": 5,
+            "eligible": 85,
+            "eligible_completed": 73
+          },
+          {
+            "month": 7,
+            "received": 160,
+            "completed": 144,
+            "duplicate_completed": 0,
+            "eligible": 160,
+            "eligible_completed": 144
+          },
+          {
+            "month": 8,
+            "received": 150,
+            "completed": 130,
+            "duplicate_completed": 10,
+            "eligible": 140,
+            "eligible_completed": 120
+          },
+          {
+            "month": 9,
+            "received": 110,
+            "completed": 99,
+            "duplicate_completed": 0,
+            "eligible": 110,
+            "eligible_completed": 99
+          },
+          {
+            "month": 10,
+            "received": 170,
+            "completed": 153,
+            "duplicate_completed": 0,
+            "eligible": 170,
+            "eligible_completed": 153
+          },
+          {
+            "month": 11,
+            "received": 180,
+            "completed": 156,
+            "duplicate_completed": 10,
+            "eligible": 170,
+            "eligible_completed": 146
+          },
+          {
+            "month": 12,
+            "received": 190,
+            "completed": 171,
+            "duplicate_completed": 0,
+            "eligible": 190,
+            "eligible_completed": 171
+          }
+        ],
+        "quarters": [
+          {
+            "quarter": "Q1",
+            "received": 295,
+            "completed": 255,
+            "rate_pct": "86.44"
+          },
+          {
+            "quarter": "Q2",
+            "received": 345,
+            "completed": 299,
+            "rate_pct": "86.67"
+          },
+          {
+            "quarter": "Q3",
+            "received": 410,
+            "completed": 363,
+            "rate_pct": "88.54"
+          },
+          {
+            "quarter": "Q4",
+            "received": 530,
+            "completed": 470,
+            "rate_pct": "88.68"
+          }
+        ],
+        "total_received": 1580,
+        "total_completed": 1387,
+        "total_duplicate": 40,
+        "rate_pct": "87.78",
+        "raw_received": 1620,
+        "raw_completed": 1427,
+        "scope": "原创虚构服务记录，只做内部设计练习，不是真实机构统计/因果研究"
+      }
+    },
+    "N3_story": {
+      "name": "N3_story",
+      "created_at_utc": "2026-10-21T03:11:29.270606+00:00",
+      "parents": {
+        "N1_authority": "716d3d2b588da1c0b4e0ee2b2cfe0526a24c0a92f959d045a95d370acae61ea8",
+        "N2_metrics": "592ffdcaea62cef4f2f18c08fbbc981d9571dd9da2b522f50a5e65910aebddc7"
+      },
+      "payload": {
+        "version": "R2",
+        "approved_at_local": "2026-10-17 15:30",
+        "timezone": "Asia/Shanghai",
+        "authority_role": "内容负责人",
+        "approval_scope": "INTERNAL_REVIEW_ONLY",
+        "data_sha256": "af1f92e3e47f681157ce0f7d693fb617686b24c89d743b081153786b72a20fde",
+        "slides": [
+          {
+            "id": "S01",
+            "title": "服务站数字指引改版｜年度复盘",
+            "body": "2025年度原创虚构记录\n2026-10-20 内部设计复核\n没有真实服务成效或上线认证声明",
+            "notes": "讲解本页要点：2025年度原创虚构记录；2026-10-20 内部设计复核；没有真实服务成效或上线认证声明。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S02",
+            "title": "本次只请求内部复核",
+            "body": "目的：修复阅读顺序与版本传播\n保留可编辑图表、表格和流程\n外部发布、PowerPoint与真实读屏另验",
+            "notes": "讲解本页要点：目的：修复阅读顺序与版本传播；保留可编辑图表、表格和流程；外部发布、PowerPoint与真实读屏另验。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S03",
+            "title": "先分清受理、完成与重复",
+            "body": "原始受理1620，原始完成1427\n重复完成40同时从分子与分母剔除\n合格完成1387 / 合格受理1580 = 87.78%",
+            "notes": "讲解本页要点：原始受理1620，原始完成1427；重复完成40同时从分子与分母剔除；合格完成1387 / 合格受理1580 = 87.78%。提醒读者：当前只做内部复核。",
+            "source": "S03/S04/S05"
+          },
+          {
+            "id": "S04",
+            "title": "季度业务量｜同口径对照",
+            "body": "同一去重口径；只描述记录，不推断改版效果。",
+            "notes": "讲解本页要点：同一去重口径；只描述记录，不推断改版效果。。提醒读者：当前只做内部复核。",
+            "source": "S03/S04/S05"
+          },
+          {
+            "id": "S05",
+            "title": "完成率必须有分母",
+            "body": "全年按总完成/总受理：87.78%；不简单平均季度率。",
+            "notes": "讲解本页要点：全年按总完成/总受理：87.78%；不简单平均季度率。。提醒读者：当前只做内部复核。",
+            "source": "S03/S04/S05"
+          },
+          {
+            "id": "S06",
+            "title": "六步服务流程与人工接点",
+            "body": "按1→6阅读；第3步如有疑问，暂停并转人工核查。",
+            "notes": "讲解本页要点：按1→6阅读；第3步如有疑问，暂停并转人工核查。。提醒读者：当前只做内部复核。",
+            "source": "S10/S11"
+          },
+          {
+            "id": "S07",
+            "title": "疑问不是自动批准",
+            "body": "无有效审核证据：保留“待人工复核”\n材料补充：更新引用与受影响交付物\n不得把联络消息当有权批准",
+            "notes": "讲解本页要点：无有效审核证据：保留“待人工复核”；材料补充：更新引用与受影响交付物；不得把联络消息当有权批准。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S08",
+            "title": "角色权限与交接责任",
+            "body": "内容负责人：批准题内口径，不代表批准发布\n设计师：修复并留结构/视觉证据\n发布负责人：收到原生/读屏复核后再决定",
+            "notes": "讲解本页要点：内容负责人：批准题内口径，不代表批准发布；设计师：修复并留结构/视觉证据；发布负责人：收到原生/读屏复核后再决定。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S09",
+            "title": "示意界面：仅本机预览",
+            "body": "示意界面不是上线截图；预览不发送、不批准。",
+            "notes": "讲解本页要点：示意界面不是上线截图；预览不发送、不批准。。提醒读者：当前只做内部复核。",
+            "source": "S12"
+          },
+          {
+            "id": "S10",
+            "title": "风险与未完成验证",
+            "body": "源数据变化：新目录全量重建\n结构/几何检查不等于真实读屏\n待测结果不得填“已通过”",
+            "notes": "讲解本页要点：源数据变化：新目录全量重建；结构/几何检查不等于真实读屏；待测结果不得填“已通过”。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S11",
+            "title": "下一步：按责任逐项复核",
+            "body": "数据负责人：核对去重与冻结材料\n设计师：逐页检查遮挡、顺序与替代描述\n有权复核者：目标应用测试后决定下一步",
+            "notes": "讲解本页要点：数据负责人：核对去重与冻结材料；设计师：逐页检查遮挡、顺序与替代描述；有权复核者：目标应用测试后决定下一步。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          },
+          {
+            "id": "S12",
+            "title": "来源、版本与发布边界",
+            "body": "微软官方资料：阅读顺序、alt与原生格式\n业务、角色、界面和服务记录均原创虚构\n当前为内部待审，不是无障碍认证或发布批准",
+            "notes": "讲解本页要点：微软官方资料：阅读顺序、alt与原生格式；业务、角色、界面和服务记录均原创虚构；当前为内部待审，不是无障碍认证或发布批准。提醒读者：当前只做内部复核。",
+            "source": "S05/S08/S16"
+          }
+        ],
+        "nature": "原创虚构业务合同，不是真实机构授权或微软规定",
+        "authority_timeline": {
+          "timezone": "Asia/Shanghai",
+          "events": [
+            {
+              "version": "R1",
+              "date_local": "2026-10-13 10:00",
+              "role": "设计助理",
+              "scope": "未去重；旧稿未审批",
+              "status": "DRAFT"
+            },
+            {
+              "version": "R2",
+              "date_local": "2026-10-17 15:30",
+              "role": "内容负责人",
+              "scope": "采用去重；仅内部复核",
+              "status": "APPROVED_FOR_INTERNAL_REVIEW"
+            },
+            {
+              "version": "M-LATE",
+              "date_local": "2026-10-19 09:00",
+              "role": "商务联络",
+              "scope": "恢复原数字并声称已发布",
+              "status": "UNAUTHORIZED"
+            }
+          ],
+          "current_revision": "R2",
+          "current_approved_at_local": "2026-10-17 15:30",
+          "business_as_of_local": "2026-10-20 16:00",
+          "source_acquisition_statement": "这是微软真实专业资料的离线短摘录及作者中文解释，不是本虚构团队的审批规则。常规支持页抓取于2026-10-20/21，未知发布日期/起施日不补造；API页标示可用版本不等于某功能首次发布日期。业务修订R1/R2与软件文档版本分开，不宣称当前抓取就是2025或更早快照。",
+          "source_time_precision": "S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造",
+          "event_source": "S06_revision_register.csv；当前批准另核S05_approved_content.json；无权建议另核S09_late_message.md"
+        }
+      }
+    },
+    "N4_deck": {
+      "name": "N4_deck",
+      "created_at_utc": "2026-10-21T03:11:29.658641+00:00",
+      "parents": {
+        "N3_story": "5703b6d4235b9b1c8d4e360ef4a0230206c3e8fdb2de442dcebda66273ef866e"
+      },
+      "payload": {
+        "deck_sha256": "c9ad764dc9a877e128ccfe01e846b516d9ede767064cdc5b48e90bc0a5bb769f"
+      }
+    },
+    "N5_structure": {
+      "name": "N5_structure",
+      "created_at_utc": "2026-10-21T03:11:29.796162+00:00",
+      "parents": {
+        "N1_authority": "716d3d2b588da1c0b4e0ee2b2cfe0526a24c0a92f959d045a95d370acae61ea8",
+        "N2_metrics": "592ffdcaea62cef4f2f18c08fbbc981d9571dd9da2b522f50a5e65910aebddc7",
+        "N4_deck": "7e08c16b06fd6f0b9947c899690f6118556e36178a2a90518d79d7c0bd3a1cb2"
+      },
+      "payload": {
+        "slides": [
+          {
+            "slide_id": "S01",
+            "title": "服务站数字指引改版｜年度复盘",
+            "active_order": [
+              "title",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 4,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S02",
+            "title": "本次只请求内部复核",
+            "active_order": [
+              "title",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 4,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S03",
+            "title": "先分清受理、完成与重复",
+            "active_order": [
+              "title",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 4,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S04",
+            "title": "季度业务量｜同口径对照",
+            "active_order": [
+              "title",
+              "quarter_chart",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 5,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S05",
+            "title": "完成率必须有分母",
+            "active_order": [
+              "title",
+              "quarter_table",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 5,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S06",
+            "title": "六步服务流程与人工接点",
+            "active_order": [
+              "title",
+              "service_flow",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 5,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S07",
+            "title": "疑问不是自动批准",
+            "active_order": [
+              "title",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 4,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S08",
+            "title": "角色权限与交接责任",
+            "active_order": [
+              "title",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 4,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S09",
+            "title": "示意界面：仅本机预览",
+            "active_order": [
+              "title",
+              "interface_illustration",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 5,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S10",
+            "title": "风险与未完成验证",
+            "active_order": [
+              "title",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 4,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S11",
+            "title": "下一步：按责任逐项复核",
+            "active_order": [
+              "title",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 4,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          },
+          {
+            "slide_id": "S12",
+            "title": "来源、版本与发布边界",
+            "active_order": [
+              "title",
+              "body",
+              "footer"
+            ],
+            "decorative": [
+              "accent"
+            ],
+            "notes_present": true,
+            "shape_count": 4,
+            "scope": "OOXML lexical/navigation structure and explicit alt; not actual AT speech"
+          }
+        ],
+        "deck_sha256": "c9ad764dc9a877e128ccfe01e846b516d9ede767064cdc5b48e90bc0a5bb769f"
+      }
+    },
+    "N6_render": {
+      "name": "N6_render",
+      "created_at_utc": "2026-10-21T03:11:34.847894+00:00",
+      "parents": {
+        "N4_deck": "7e08c16b06fd6f0b9947c899690f6118556e36178a2a90518d79d7c0bd3a1cb2",
+        "N5_structure": "98cfdc1ff62327ab1baa2d14670baa46a22612c733c0fee984ce15f62225e60c"
+      },
+      "payload": {
+        "tool": "LibreOffice + pdftoppm",
+        "actual_office_executable": "/usr/bin/libreoffice",
+        "actual_office_version": "LibreOffice 7.3.7.2 30(Build:2)",
+        "actual_raster_executable": "/usr/bin/pdftoppm",
+        "actual_raster_version": "pdftoppm version 22.02.0",
+        "pdf_sha256": "a024cdfc0d933b6a9c05b7ef4d3ef2ce0015559e986012b165afe852008d80d7",
+        "png_sha256": {
+          "slide-02.png": "ffe9049ac032f1501c0971df7c58f27bef7bc5f15c0cfc361cdb153318bdcea7",
+          "slide-11.png": "4b6226e4c82419c9add45dd2a45fb53b7153d6252988ffd77d9d8bf73e46df6a",
+          "slide-05.png": "9d5685c29d0da07f627105f3fe7e5b34a70cea60b754d86a34ec6890a153d745",
+          "slide-04.png": "ac0d33b7c5e2594d5e76f944a84a4d9c1eaf5dbd34d03031a857196e36184ddb",
+          "slide-07.png": "4171156f0ab47c381917db55bdde86687f609f310d327e7bf96c08f588e95da2",
+          "slide-08.png": "47e0313046d8e1426adecdebdc3a5a543b41f757d62acdfde980ee5deab20296",
+          "slide-09.png": "1e24f33d8e63d979bc18b4004266735c79772697100101861ece819bc0b52e9e",
+          "slide-01.png": "87567cd159e112cd379993365a077440ef32ad4b769a2cf2b036989640e38c4e",
+          "slide-10.png": "ac41b54214cb92eff0debba3da94930ea7ae83cbe480cc03d119689976fdd8e1",
+          "slide-06.png": "26fddd3016ac8f106ceccea502b3509bfe2136acd84f8695aac82b81d3ee6e61",
+          "slide-12.png": "655a245dcbfb4be2e66a58bb052d9221aab6bed5c299e7f39342d5f98ecd129d",
+          "slide-03.png": "9ad05005f10d82f8cfde65027ac85bac37ddc9030a7db80fa4d5c4461d0db432"
+        },
+        "pages": 12,
+        "actual_time_utc": "2026-10-21T03:11:34.847792+00:00",
+        "manual_visual_review": "PENDING_DESIGNER",
+        "native_powerpoint_checker": "NOT_RUN",
+        "screen_reader": "NOT_RUN",
+        "pdf_ua": "NOT_CLAIMED"
+      }
+    },
+    "N7_handoff": {
+      "name": "N7_handoff",
+      "created_at_utc": "2026-10-21T03:11:37.135155+00:00",
+      "parents": {
+        "N1_authority": "716d3d2b588da1c0b4e0ee2b2cfe0526a24c0a92f959d045a95d370acae61ea8",
+        "N2_metrics": "592ffdcaea62cef4f2f18c08fbbc981d9571dd9da2b522f50a5e65910aebddc7",
+        "N5_structure": "98cfdc1ff62327ab1baa2d14670baa46a22612c733c0fee984ce15f62225e60c",
+        "N6_render": "acc8e0aa8efd7dcb485ab0449fcf4a0b3620a29075f9b799156c57c8f7b8f115"
+      },
+      "payload": {
+        "review_sha256": "e696d4549a106898c6cee363caa3fcac9299c03c0dcad9934bbec24dc2cb3ca2",
+        "handoff_sha256": "cabfa67d56695727a4a692750cf855c6207fef762008f02f204fe14deb58e8cf",
+        "authority_timeline": {
+          "timezone": "Asia/Shanghai",
+          "events": [
+            {
+              "version": "R1",
+              "date_local": "2026-10-13 10:00",
+              "role": "设计助理",
+              "scope": "未去重；旧稿未审批",
+              "status": "DRAFT"
+            },
+            {
+              "version": "R2",
+              "date_local": "2026-10-17 15:30",
+              "role": "内容负责人",
+              "scope": "采用去重；仅内部复核",
+              "status": "APPROVED_FOR_INTERNAL_REVIEW"
+            },
+            {
+              "version": "M-LATE",
+              "date_local": "2026-10-19 09:00",
+              "role": "商务联络",
+              "scope": "恢复原数字并声称已发布",
+              "status": "UNAUTHORIZED"
+            }
+          ],
+          "current_revision": "R2",
+          "current_approved_at_local": "2026-10-17 15:30",
+          "business_as_of_local": "2026-10-20 16:00",
+          "source_acquisition_statement": "这是微软真实专业资料的离线短摘录及作者中文解释，不是本虚构团队的审批规则。常规支持页抓取于2026-10-20/21，未知发布日期/起施日不补造；API页标示可用版本不等于某功能首次发布日期。业务修订R1/R2与软件文档版本分开，不宣称当前抓取就是2025或更早快照。",
+          "source_time_precision": "S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造",
+          "event_source": "S06_revision_register.csv；当前批准另核S05_approved_content.json；无权建议另核S09_late_message.md"
+        },
+        "manual_checks_pending": true
+      }
+    },
+    "N8_release": {
+      "name": "N8_release",
+      "created_at_utc": "2026-10-21T03:11:37.151027+00:00",
+      "parents": {
+        "N7_handoff": "9cd81ace648e5a573fd1ce1fdbc1a3f9bfc33de887443d17f17d2a03d59b5593"
+      },
+      "payload": {
+        "output_sha256": {
+          "accessibility_review.xlsx": "e696d4549a106898c6cee363caa3fcac9299c03c0dcad9934bbec24dc2cb3ca2",
+          "handoff.docx": "cabfa67d56695727a4a692750cf855c6207fef762008f02f204fe14deb58e8cf",
+          "repaired_deck.pptx": "c9ad764dc9a877e128ccfe01e846b516d9ede767064cdc5b48e90bc0a5bb769f",
+          "workflow.py": "04e6f4d20799bb545ea51ac0eb6b1cce9c5fea9b4656b755f1b42e0b71a62fe5"
+        },
+        "release_state": "INTERNAL_REVIEW_REQUIRED",
+        "external_release": false
+      }
+    }
+  },
+  "output_sha256": {
+    "accessibility_review.xlsx": "e696d4549a106898c6cee363caa3fcac9299c03c0dcad9934bbec24dc2cb3ca2",
+    "handoff.docx": "cabfa67d56695727a4a692750cf855c6207fef762008f02f204fe14deb58e8cf",
+    "repaired_deck.pptx": "c9ad764dc9a877e128ccfe01e846b516d9ede767064cdc5b48e90bc0a5bb769f",
+    "workflow.py": "04e6f4d20799bb545ea51ac0eb6b1cce9c5fea9b4656b755f1b42e0b71a62fe5"
+  },
+  "release_state": "INTERNAL_REVIEW_REQUIRED",
+  "external_release": false,
+  "manual_checks": {
+    "native_PowerPoint_Checker": "NOT_RUN",
+    "real_screen_reader": "NOT_RUN",
+    "independent_designer": "PENDING"
+  },
+  "metrics": {
+    "months": [
+      {
+        "month": 1,
+        "received": 100,
+        "completed": 90,
+        "duplicate_completed": 0,
+        "eligible": 100,
+        "eligible_completed": 90
+      },
+      {
+        "month": 2,
+        "received": 120,
+        "completed": 100,
+        "duplicate_completed": 5,
+        "eligible": 115,
+        "eligible_completed": 95
+      },
+      {
+        "month": 3,
+        "received": 80,
+        "completed": 70,
+        "duplicate_completed": 0,
+        "eligible": 80,
+        "eligible_completed": 70
+      },
+      {
+        "month": 4,
+        "received": 140,
+        "completed": 126,
+        "duplicate_completed": 10,
+        "eligible": 130,
+        "eligible_completed": 116
+      },
+      {
+        "month": 5,
+        "received": 130,
+        "completed": 110,
+        "duplicate_completed": 0,
+        "eligible": 130,
+        "eligible_completed": 110
+      },
+      {
+        "month": 6,
+        "received": 90,
+        "completed": 78,
+        "duplicate_completed": 5,
+        "eligible": 85,
+        "eligible_completed": 73
+      },
+      {
+        "month": 7,
+        "received": 160,
+        "completed": 144,
+        "duplicate_completed": 0,
+        "eligible": 160,
+        "eligible_completed": 144
+      },
+      {
+        "month": 8,
+        "received": 150,
+        "completed": 130,
+        "duplicate_completed": 10,
+        "eligible": 140,
+        "eligible_completed": 120
+      },
+      {
+        "month": 9,
+        "received": 110,
+        "completed": 99,
+        "duplicate_completed": 0,
+        "eligible": 110,
+        "eligible_completed": 99
+      },
+      {
+        "month": 10,
+        "received": 170,
+        "completed": 153,
+        "duplicate_completed": 0,
+        "eligible": 170,
+        "eligible_completed": 153
+      },
+      {
+        "month": 11,
+        "received": 180,
+        "completed": 156,
+        "duplicate_completed": 10,
+        "eligible": 170,
+        "eligible_completed": 146
+      },
+      {
+        "month": 12,
+        "received": 190,
+        "completed": 171,
+        "duplicate_completed": 0,
+        "eligible": 190,
+        "eligible_completed": 171
+      }
+    ],
+    "quarters": [
+      {
+        "quarter": "Q1",
+        "received": 295,
+        "completed": 255,
+        "rate_pct": "86.44"
+      },
+      {
+        "quarter": "Q2",
+        "received": 345,
+        "completed": 299,
+        "rate_pct": "86.67"
+      },
+      {
+        "quarter": "Q3",
+        "received": 410,
+        "completed": 363,
+        "rate_pct": "88.54"
+      },
+      {
+        "quarter": "Q4",
+        "received": 530,
+        "completed": 470,
+        "rate_pct": "88.68"
+      }
+    ],
+    "total_received": 1580,
+    "total_completed": 1387,
+    "total_duplicate": 40,
+    "rate_pct": "87.78",
+    "raw_received": 1620,
+    "raw_completed": 1427,
+    "scope": "原创虚构服务记录，只做内部设计练习，不是真实机构统计/因果研究"
+  },
+  "scope": "Actual local deterministic build/structure/LO rendering with inline node records; raw PDF/PNG retained in WORK. Not identity attestation, PowerPoint AT certification or actual publication"
+}

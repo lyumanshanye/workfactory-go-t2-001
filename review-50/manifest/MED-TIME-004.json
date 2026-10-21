@@ -1,0 +1,1941 @@
+{
+  "id": "MED-TIME-004",
+  "title": "FDA多事件设备更正：逐台证据复核与新版风险通报",
+  "domain": "医疗",
+  "domain_l2": "Med4-医疗质量管理",
+  "domain_l3": "医疗器械召回责任与分级",
+  "category": "weakness-driven",
+  "complexity": "C3",
+  "target_difficulty": "A2",
+  "as_of": "2026-10-20 17:00",
+  "timezone": "America/New_York",
+  "source_note": "真实FDA当前通报/不同2024事件与4/5月实际邮件；医院/设备/维修/培训/接收记录及内部SOP原创虚构，不造官方专业规则。原完整产品xlsx/图未取得，范围限定为官方正文明确4组。",
+  "instruction": "# FDA多事件设备更正：逐台证据复核与新版风险通报\n\n## 业务场景与任务说明\n\n你是虚构美国院区中文质量团队分析助理。D0把2024版本例外和软件更新当全部安全，忽略五月雾化指导变化、身份/维修矛盾和已转出设备。请读冻结FDA资料，真实执行团队Skill并让结果改变14台处置，交有权负责人待审的工作簿、风险通报与具体待核草稿。\n\n业务判断基准时点：2026-10-20 17:00；时区：America/New_York。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_FDA当前更正通报全文.docx`：当前FDA完整通报阅读器正文含4型号/UDI、三问题、时间线\n- `/app/input_files/S02_FDA2024电源事件全文.docx`：FDA不同2024电源事件完整正文阅读器转录\n- `/app/input_files/S03_FDA四月邮件全文.docx`：FDA四月实际邮件正文转录与发送时间\n- `/app/input_files/S04_FDA五月更新邮件全文.docx`：FDA五月更新实际邮件正文转录，明确替换此前建议\n- `/app/input_files/S05_设备冻结清单.xlsx`：原创14台设备身份/保管范围，非真实医院记录\n- `/app/input_files/S06_受控维修证据.json`：原创同观察时点受控维修证据及较晚无权备注\n- `/app/input_files/S07_历史与培训登记.csv`：原创传感器历史/资料/培训登记，非真实证明\n- `/app/input_files/S08_转出设备沟通登记.xlsx`：原创3台转出接收方更新确认，非真实外部联系\n- `/app/input_files/S09_D0批量放行草稿.docx`：存在专业/权限错误的D0待改草稿，不是有效SOP\n- `/app/input_files/S10_质量负责人工作委托.docx`：负责人授权/任务/交付合同与专业边界\n- `/app/input_files/S11_来源与字段登记.docx`：源与字段/未取得原附件说明，不让solver联网猜事实\n\n## 工作要求\n\n- [REQ01] 复核14台含3台转出，型号/UDI保留前导零，匹配仅S01四组；不匹配不等于其他召回均排除。\n- [REQ02] 分开旧2024电源事件/2026三类问题，FDA通报/邮件/厂商追函/五月更新/真实取证日期，不以后法覆盖所有不同事件。\n- [REQ03] 完整读并真实执行已安装device-correction-review Skill，按团队SOP把每台state/gaps实际采用到工作簿/通报/待办；不是只提交调用记录。\n- [REQ04] D08型号/UDI不一致先HOLD_IDENTITY；D09同观察时点平级SVC-A/B软件矛盾保持HOLD_SERVICE_CONFLICT，提出精确核查，不以晚营销便笺择一。\n- [REQ05] D02旧电源问题版本例外不能豁免当前；D11软件和历史未知不猜，D14不同地区/型号版本适用需核，不按数字比较或擅自降级。\n- [REQ06] D03传感器沉积需服务闭环不能靠软件升级；D04最新补充说明未核不能自动齐备。\n- [REQ07] 按S04更新解释非气动雾化条件，D05被动AC-VC差异和D12成人双支可用测试边界，不永久一刀切禁用、不泛化无风险或编治疗设置。\n- [REQ08] 区分短暂性能影响/内部传感器沉积/阻塞报警时限三问题，不把“治疗完成预计恢复”扩至沉积；伤害报告按事件/日期边界而非汇总零风险。\n- [REQ09] D06/D07补新版通知及User Manual Addendum接收确认，D13已有题给确认保留跟踪；转出不从14台删除。\n- [REQ10] 工作簿逐台身份/采用证据/版本、状态/缺口/动作/责任接口、转出及源规则定位，5态/总数/转出缺口勾稽为可复算公式且打开有缓存。\n- [REQ11] 中文risk_notice.docx可供负责人审阅：具体状态范围、专业风险/新旧指导/需核事项；followup_drafts.docx为具体对象/证据/问题/责任/前提的未发送草稿。\n- [REQ12] skill_evidence.json为本次真实工具完整输出，含输入/Skill SHA、执行时点及14台结果；SHA不是签字。只到内部复核，不实际外发、动设备/患者参数或伪造专业审批/回复。\n\n## 可用技能\n\n- device-correction-review：本院区原创证据复核SOP与实际逐台gate；必须实际采用暂停/待办结果，不赋予临床权限。；入口`/skills/device-correction-review/SKILL.md`；相对脚本路径以该技能目录为基准。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/device_review.xlsx`：14台身份/维修证据、状态与缺口、动作/接口、转出、源规则及可重算统计工作簿。\n- `/app/output/risk_notice.docx`：质量负责人待审中文风险通报，真实事件/时间/指导差异、三风险、当前分流及边界。\n- `/app/output/followup_drafts.docx`：具体证据/责任/条件的待核与接收方更新草稿，未发送。\n- `/app/output/skill_evidence.json`：本次真实安装Skill执行完整输出，含14台结论/缺口、输入与Skill哈希和执行UTC。\n\n## 硬约束（单独列明）\n\n- 只交/app/output/device_review.xlsx、risk_notice.docx、followup_drafts.docx、skill_evidence.json四文件；中文，允许正确等价布局/公式/措辞。\n- 输入/Skill只读，不改SOP消除hold、不伪造官方附件/产品/维修/接收回执；无需联网。\n- 助理无临床放行、设备操作、患者参数调整、真实外发或官方/专家审批权限；给定虚构证据不当真实制造商证明。\n",
+  "instruction_url": "assets/tasks/MED-TIME-004/instruction.md",
+  "absolute_path": "tasks/MED-TIME-004",
+  "spec_path": "manifest/MED-TIME-004.json",
+  "spec_url": "manifest/MED-TIME-004.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "逐台覆盖D01–D14，含已转出的D06/D07/D13，不只给总体PASS或漏转出设备。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ01"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "skill_evidence.json"
+      ],
+      "dimension": "指令遵循",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R02",
+      "description": "型号/UDI-DI精确保留前导零，范围只S01四组；D10为本矩阵未匹配而不是全球无其他召回。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ01"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "risk_notice.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R03",
+      "description": "准确区分2024电源软件事件与2026更正，旧1.05.06.00例外不能使D02免除当前事项。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ02",
+        "REQ05"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "risk_notice.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R04",
+      "description": "FDA4月15通报、4月16 07:18 EDT邮件、厂商4月24追函、FDA5月28 10:52 EDT更新邮件不同层次明确；不把2026实际取证当起施或2025历史快照。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ02"
+      ],
+      "deliverables": [
+        "risk_notice.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R05",
+      "description": "本次真实Skill输出含14台/5态、执行UTC及当前输入/Skill SHA；不以手写摘要或固定PASS字符串代完整输出。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ03",
+        "REQ12"
+      ],
+      "deliverables": [
+        "skill_evidence.json"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R06",
+      "description": "D08型号DS2110X11B与给定UDI00606959052017冲突，按SOP HOLD_IDENTITY并请求实物/受控更正；不静默改值后批准。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ04"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "followup_drafts.docx",
+        "skill_evidence.json"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R07",
+      "description": "D09采用同2026-10-20 09:00 EDT平级SVC-D09-A/B两原证据，1.05.15.00/1.05.06.00矛盾保持HOLD_SERVICE_CONFLICT；09:40营销便笺不能消解。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ04"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "followup_drafts.docx",
+        "skill_evidence.json"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R08",
+      "description": "D11软件实证及历史unknown保持具体待核，不填最新版或默认无风险。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ05"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R09",
+      "description": "D14的1.06.15.00不按数字高直接认已完成，提出美国本型号/地区渠道适用核查，不指令自行降级。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ05"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R10",
+      "description": "D03虽软件1.05.15.00，给定沉积服务未闭环仍ACTION_PENDING；不把软件更新当内部流量传感器已修复。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ06"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "risk_notice.docx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R11",
+      "description": "D04最新User Manual Addendum未完成核验仍待办，要求文控补证而不是软件更新自动代替。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ06"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R12",
+      "description": "五月非气动雾化建议替换旧不使用建议，保留正确回路位置/指导的条件，不永久旧禁令或全面无风险。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ07"
+      ],
+      "deliverables": [
+        "risk_notice.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R13",
+      "description": "D05被动回路AC-VC非气动雾化的递送/监测差异转交呼吸治疗审阅，未以助理给新患者通气/报警参数代替。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ07"
+      ],
+      "deliverables": [
+        "risk_notice.docx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R14",
+      "description": "D12成人双支回路对非气动可用测试未显示影响仅该条件，不推成所有回路、模式均无风险；新版告知未确认仍待办。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ07"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "risk_notice.docx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R15",
+      "description": "明确短暂性能影响和内部传感器沉积是不同问题，不能把治疗后预计恢复推广为已沉积传感器不需处理。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ08"
+      ],
+      "deliverables": [
+        "risk_notice.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R16",
+      "description": "阻塞报警风险如实说明：部分情形未在两呼吸周期/5秒，某些模式可至4次呼吸，不说全部设备固定延迟或可任意关报警。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ08"
+      ],
+      "deliverables": [
+        "risk_notice.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R17",
+      "description": "2024该电源事件当时报告边界与2026此前3严重伤害/截至May27无额外报告分开，不汇成从未伤害或零风险。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ08"
+      ],
+      "deliverables": [
+        "risk_notice.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R18",
+      "description": "Class I严重程度不被误译成一律移除：本通知correction非product removal，助理不下全院停机/改参/自行维修指令；交有权专业人员处理。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ08",
+        "REQ12"
+      ],
+      "deliverables": [
+        "risk_notice.docx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R19",
+      "description": "D06仍需接收方最新通知及补充说明确认，转交草稿有具体接收接口/要确认的问题，未假称已收到。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ09"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R20",
+      "description": "D07旧四月回执不代替五月更新/最新补充说明确认，仍ACTION_PENDING且有补核问题。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ09"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R21",
+      "description": "D13保留给定最新确认并可交有权复核，未因转出删除，也未把登记写成真实临床批准。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ09"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R22",
+      "description": "5态与原清单一致：身份hold1/服务矛盾hold1/行动待办9/内部可交复核2/本矩阵外1；工作簿与真实Skill结果一致，不只日志写hold业务成果却PASS。",
+      "weight": 10,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ03",
+        "REQ10"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "risk_notice.docx",
+        "skill_evidence.json"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R23",
+      "description": "队列统计为可复算公式并有缓存：总14、五态差0、转出3、转出缺新版确认2；不把READY数当临床放行数。",
+      "weight": 3,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ10"
+      ],
+      "deliverables": [
+        "device_review.xlsx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R24",
+      "description": "工作簿保留采用原维修证据ID/观察版本和具体缺口→动作/责任接口，可追溯到S05–08及Skill SOP，而非只写待核。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ10"
+      ],
+      "deliverables": [
+        "device_review.xlsx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R25",
+      "description": "READY_FOR_AUTHORIZED_REVIEW仅本内部证据清单齐备待有权人复核，尤其D01/D13不被叫临床可用/最终批准；该SOP不被冒为FDA官方审批标准。",
+      "weight": 7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ03",
+        "REQ12"
+      ],
+      "deliverables": [
+        "risk_notice.docx",
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    },
+    {
+      "id": "R26",
+      "description": "通报面向质量负责人清晰可用，按四块独立评价组织：本批范围/结果、新旧来源、风险差异、责任交接；不在此重复事实数值评分。",
+      "weight": 7,
+      "type": "Gradient",
+      "requirement_refs": [
+        "REQ11"
+      ],
+      "deliverables": [
+        "risk_notice.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。",
+      "levels": {
+        "1": "四块均可清晰定位且有本批具体内容。",
+        "0.75": "恰三块清楚完整。",
+        "0.5": "恰两块完整。",
+        "0.25": "恰一块完整。",
+        "0": "无完整块或无可读通报。"
+      }
+    },
+    {
+      "id": "R27",
+      "description": "待核草稿按四类接口可执行：身份/维修、未知/地区版本、文控/临床指导、接收方更新；每类需具体对象、待核证据/问题、责任接口及未解决前状态。",
+      "weight": 7,
+      "type": "Gradient",
+      "requirement_refs": [
+        "REQ11"
+      ],
+      "deliverables": [
+        "followup_drafts.docx"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。",
+      "levels": {
+        "1": "四类均完整可执行。",
+        "0.75": "恰三类完整。",
+        "0.5": "恰两类完整。",
+        "0.25": "恰一类完整。",
+        "0": "均不完整或只有泛称请核查。"
+      }
+    },
+    {
+      "id": "R28",
+      "description": "只有交付出现伪造外发收悉/制造商确认回执/患者操作完成或专家签字的具体记录时为yes扣分；没有这种具体事件为no。题给虚构登记或未发送草稿不触发。",
+      "weight": -7,
+      "type": "Binary",
+      "requirement_refs": [
+        "REQ12"
+      ],
+      "deliverables": [
+        "device_review.xlsx",
+        "risk_notice.docx",
+        "followup_drafts.docx",
+        "skill_evidence.json"
+      ],
+      "dimension": "内容质量-专业准确性与可执行性",
+      "weight_reason": "身份/错误放行或证据忽略影响10，专业风险解释/动作7，覆盖与追溯辅助3；非按序号分配。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+      "locator": "Affected Product/What to Do/Reason/Timeline",
+      "fact": "四型号UDI、当前美国软件目标、三风险/转出文献和FDA更新日期"
+    },
+    {
+      "url": "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+      "locator": "Recalled Product/Reason/What to Do",
+      "fact": "2024电源问题版本例外仅该事件范围"
+    },
+    {
+      "url": "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+      "locator": "邮件正文及发送时间",
+      "fact": "FDA4月16实际静态邮件"
+    },
+    {
+      "url": "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10",
+      "locator": "正文/发送时间",
+      "fact": "五月替换旧建议、正确配置条件、3伤害及无额外报告边界"
+    }
+  ],
+  "status": {
+    "task_id": "MED-TIME-004",
+    "domain": "医疗",
+    "domain_l2": "Med4-医疗质量管理",
+    "category": "weakness-driven",
+    "inputs": 11,
+    "gold_files": 4,
+    "rubrics": 28,
+    "complexity": "C3",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:83bb540b9ac0d6143e7d79123e5c9de6c2bffc0d2486d4a6369242a8aae1b415",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/MED-TIME-004/20261021T030044Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 1.0,
+            "graded_score": 1.0,
+            "criteria_counted": 28.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_FDA当前更正通报全文.docx",
+      "absolute_path": "题包内：S01_FDA当前更正通报全文.docx",
+      "url": "",
+      "bytes": 41536,
+      "sha256": "9690861b00565c90318c558fc09fa25f163a48c0aa6bc37bdbcf4b4d9694e552",
+      "description": "当前FDA完整通报阅读器正文含4型号/UDI、三问题、时间线",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    },
+    {
+      "name": "S02_FDA2024电源事件全文.docx",
+      "absolute_path": "题包内：S02_FDA2024电源事件全文.docx",
+      "url": "",
+      "bytes": 40414,
+      "sha256": "c1b82e53de310fd6468685b60ae8344d791612d1cec4d66ab642b539f2a4c97e",
+      "description": "FDA不同2024电源事件完整正文阅读器转录",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    },
+    {
+      "name": "S03_FDA四月邮件全文.docx",
+      "absolute_path": "题包内：S03_FDA四月邮件全文.docx",
+      "url": "",
+      "bytes": 38931,
+      "sha256": "fcd908ddc99b0c04e3a65651c78286e0780211178fe99d71e5d8dde50286974e",
+      "description": "FDA四月实际邮件正文转录与发送时间",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    },
+    {
+      "name": "S04_FDA五月更新邮件全文.docx",
+      "absolute_path": "题包内：S04_FDA五月更新邮件全文.docx",
+      "url": "",
+      "bytes": 38869,
+      "sha256": "a926a227f0a1822187beb3281f30f7c226c3e8a75d100b3400a783d20a03cb74",
+      "description": "FDA五月更新实际邮件正文转录，明确替换此前建议",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    },
+    {
+      "name": "S05_设备冻结清单.xlsx",
+      "absolute_path": "题包内：S05_设备冻结清单.xlsx",
+      "url": "assets/tasks/MED-TIME-004/environment/input_files/S05_%E8%AE%BE%E5%A4%87%E5%86%BB%E7%BB%93%E6%B8%85%E5%8D%95.xlsx",
+      "bytes": 6259,
+      "sha256": "b2a4a9f17a2a3c87923e7b977cd3899aa998b546a829d6258dbd73b476402028",
+      "description": "原创14台设备身份/保管范围，非真实医院记录",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "设备"
+        },
+        {
+          "kind": "notice",
+          "text": "共15行 × 8列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "asset_id",
+              "model",
+              "udi_di",
+              "product_label",
+              "custody",
+              "location_or_recipient",
+              "register_version",
+              "given_use_context"
+            ],
+            [
+              "D01",
+              "DS2110X11B",
+              "00606959051942",
+              "Trilogy Evo",
+              "on_site",
+              "设备组1",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D02",
+              "DS2200X11B",
+              "00606959052017",
+              "Trilogy EV300",
+              "on_site",
+              "设备组2",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D03",
+              "DS2100X11B",
+              "00606959051997",
+              "Trilogy Evo O2",
+              "on_site",
+              "设备组3",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D04",
+              "DS2000X11B",
+              "00606959052000",
+              "Trilogy Evo Universal",
+              "on_site",
+              "设备组1",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D05",
+              "DS2110X11B",
+              "00606959051942",
+              "Trilogy Evo",
+              "on_site",
+              "设备组2",
+              "REG-R2",
+              "被动回路AC-VC、非气动雾化；仅上下文，不给调参任务"
+            ],
+            [
+              "D06",
+              "DS2200X11B",
+              "00606959052017",
+              "Trilogy EV300",
+              "transferred",
+              "合作接收机构接口6",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D07",
+              "DS2100X11B",
+              "00606959051997",
+              "Trilogy Evo O2",
+              "transferred",
+              "合作接收机构接口7",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D08",
+              "DS2110X11B",
+              "00606959052017",
+              "Trilogy Evo",
+              "on_site",
+              "设备组2",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D09",
+              "DS2110X11B",
+              "00606959051942",
+              "Trilogy Evo",
+              "on_site",
+              "设备组3",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D10",
+              "TR100-GIVEN-NONMATCH",
+              "题给非四组UDI",
+              "Trilogy 100",
+              "on_site",
+              "设备组1",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D11",
+              "DS2100X11B",
+              "00606959051997",
+              "Trilogy Evo O2",
+              "on_site",
+              "设备组2",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D12",
+              "DS2000X11B",
+              "00606959052000",
+              "Trilogy Evo Universal",
+              "on_site",
+              "设备组3",
+              "REG-R2",
+              "成人双支回路、非气动雾化；仅上下文"
+            ],
+            [
+              "D13",
+              "DS2110X11B",
+              "00606959051942",
+              "Trilogy Evo",
+              "transferred",
+              "合作接收机构接口13",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ],
+            [
+              "D14",
+              "DS2200X11B",
+              "00606959052017",
+              "Trilogy EV300",
+              "on_site",
+              "设备组2",
+              "REG-R2",
+              "不含真实患者、当前治疗参数或操作授权"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    },
+    {
+      "name": "S06_受控维修证据.json",
+      "absolute_path": "题包内：S06_受控维修证据.json",
+      "url": "assets/tasks/MED-TIME-004/environment/input_files/S06_%E5%8F%97%E6%8E%A7%E7%BB%B4%E4%BF%AE%E8%AF%81%E6%8D%AE.json",
+      "bytes": 4642,
+      "sha256": "43a193d59104ec59deb9aab463e83efced7b970b7813005e251b453c84c10a21",
+      "description": "原创同观察时点受控维修证据及较晚无权备注",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"as_of\": \"2026-10-20T09:00:00-04:00\",\n  \"scope\": \"原创情境完整冻结证据；仅内部核查事实，非真实维修/厂商凭证\",\n  \"records\": [\n    {\n      \"evidence_id\": \"SVC-D01-A\",\n      \"asset_id\": \"D01\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D02-A\",\n      \"asset_id\": \"D02\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.06.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D03-A\",\n      \"asset_id\": \"D03\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D04-A\",\n      \"asset_id\": \"D04\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D05-A\",\n      \"asset_id\": \"D05\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D06-A\",\n      \"asset_id\": \"D06\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D07-A\",\n      \"asset_id\": \"D07\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D08-A\",\n      \"asset_id\": \"D08\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D09-A\",\n      \"asset_id\": \"D09\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D09-B\",\n      \"asset_id\": \"D09\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.06.00\",\n      \"record_nature\": \"同观察时点平级原记录，未有受控更正，不是真实厂商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D10-A\",\n      \"asset_id\": \"D10\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D11-A\",\n      \"asset_id\": \"D11\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"UNKNOWN\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D12-A\",\n      \"asset_id\": \"D12\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D13-A\",\n      \"asset_id\": \"D13\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"SVC-D14-A\",\n      \"asset_id\": \"D14\",\n      \"authority\": \"primary\",\n      \"observed_at\": \"2026-10-20T09:00:00-04:00\",\n      \"installed_version\": \"1.06.15.00\",\n      \"record_nature\": \"原创训练内部核查记录，不是真实提供商证明\"\n    },\n    {\n      \"evidence_id\": \"NOTE-D09-LATE\",\n      \"asset_id\": \"D09\",\n      \"authority\": \"sales_note\",\n      \"observed_at\": \"2026-10-20T09:40:00-04:00\",\n      \"installed_version\": \"1.05.15.00\",\n      \"record_nature\": \"营销备注称可以忽略B，不是受控更正记录\"\n    }\n  ]\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    },
+    {
+      "name": "S07_历史与培训登记.csv",
+      "absolute_path": "题包内：S07_历史与培训登记.csv",
+      "url": "assets/tasks/MED-TIME-004/environment/input_files/S07_%E5%8E%86%E5%8F%B2%E4%B8%8E%E5%9F%B9%E8%AE%AD%E7%99%BB%E8%AE%B0.csv",
+      "bytes": 1938,
+      "sha256": "c4b4f2ee18f70bf17beda7c9a3d1ea47574021456ac3d165d375a3d156e9c1db",
+      "description": "原创传感器历史/资料/培训登记，非真实证明",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "共15行；全部展示。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "asset_id",
+              "sensor_history",
+              "sensor_service_resolved",
+              "current_addendum_checked",
+              "current_guidance_briefed",
+              "context_note"
+            ],
+            [
+              "D01",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D02",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D03",
+              "deposit_concern",
+              "no",
+              "yes",
+              "yes",
+              "D03给定有内部传感器沉积关注且未服务闭环；不得以软件替代"
+            ],
+            [
+              "D04",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "no",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D05",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "no",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D06",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D07",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D08",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D09",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D10",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D11",
+              "unknown",
+              "yes",
+              "yes",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D12",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "no",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D13",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ],
+            [
+              "D14",
+              "no_deposit_concern_in_given_record",
+              "yes",
+              "yes",
+              "yes",
+              "原创训练登记，不证明现实设备安全；yes仅本次内部证据字段"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    },
+    {
+      "name": "S08_转出设备沟通登记.xlsx",
+      "absolute_path": "题包内：S08_转出设备沟通登记.xlsx",
+      "url": "assets/tasks/MED-TIME-004/environment/input_files/S08_%E8%BD%AC%E5%87%BA%E8%AE%BE%E5%A4%87%E6%B2%9F%E9%80%9A%E7%99%BB%E8%AE%B0.xlsx",
+      "bytes": 5670,
+      "sha256": "b778aa442b7b9ccc7bc2f7525e40c5e8feab5e6594b4783d61f896ca008d2f98",
+      "description": "原创3台转出接收方更新确认，非真实外部联系",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "接收方沟通"
+        },
+        {
+          "kind": "notice",
+          "text": "共4行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "asset_id",
+              "recipient_role",
+              "transfer_on",
+              "latest_notice_and_addendum_ack",
+              "given_record"
+            ],
+            [
+              "D06",
+              "合作机构甲设备管理员",
+              "2026-05-10",
+              false,
+              "仅原转交记录；未收到最新通知及补充说明确认"
+            ],
+            [
+              "D07",
+              "合作机构乙呼吸治疗接口",
+              "2026-04-20",
+              false,
+              "有4月旧信息回执，但无5月更新及最新补充说明确认"
+            ],
+            [
+              "D13",
+              "合作机构丙设备管理员",
+              "2026-06-15",
+              true,
+              "题给内部登记已核本次最新通知/补充说明确认，非真实发送或外部证书"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    },
+    {
+      "name": "S09_D0批量放行草稿.docx",
+      "absolute_path": "题包内：S09_D0批量放行草稿.docx",
+      "url": "assets/tasks/MED-TIME-004/environment/input_files/S09_D0%E6%89%B9%E9%87%8F%E6%94%BE%E8%A1%8C%E8%8D%89%E7%A8%BF.docx",
+      "bytes": 38084,
+      "sha256": "284e77f5a09d0b83dc6a6e7a5b9dddae1ffa489e26671b98106e3221d9c46818",
+      "description": "存在专业/权限错误的D0待改草稿，不是有效SOP",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0设备批量放行｜待纠错草稿"
+        },
+        {
+          "kind": "heading",
+          "text": "09:40原稿，不是已批准通报"
+        },
+        {
+          "kind": "paragraph",
+          "text": "我们已经读过device-correction-review Skill，把调用截图归档就算完成。软件字符串看着新就统一PASS，D08/D09也可用较晚营销消息消除疑问。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D02是1.05.06.00，2024年FDA说排除这个软件版本，所以所有召回问题都已排除。D03已升级1.05.15.00，内部传感器沉积也无需再管；D14的1.06.15.00数值更大，直接当美国机型已经完成。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "旧建议一律禁止非气动雾化器，5月后仍永久照办；也可以反过来说成人双支回路试验无影响，所以全部非气动/全部回路都无风险。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Class I就是把所有设备立即撤离患者、全院统一改呼吸参数，不用临床评估。2024零伤亡加2026无额外伤亡可称从未严重伤害。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "转出的D06/D07/D13不在仓库不用跟踪接收方；当前设备都可以对外宣布已审批/完成纠正。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    },
+    {
+      "name": "S10_质量负责人工作委托.docx",
+      "absolute_path": "题包内：S10_质量负责人工作委托.docx",
+      "url": "assets/tasks/MED-TIME-004/environment/input_files/S10_%E8%B4%A8%E9%87%8F%E8%B4%9F%E8%B4%A3%E4%BA%BA%E5%B7%A5%E4%BD%9C%E5%A7%94%E6%89%98.docx",
+      "bytes": 39823,
+      "sha256": "4c35f5e9b81efc09db4e7fe30773c0ebcf10e7e44b5b41258dd31efe856c6675",
+      "description": "负责人授权/任务/交付合同与专业边界",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "质量负责人工作委托｜美国院区中文内部复核"
+        },
+        {
+          "kind": "heading",
+          "text": "业务角色、时点与依据"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是虚构美国院区中文质量管理团队的分析助理，业务基准2026-10-20 17:00 America/New_York。14设备/维修/培训/接收方记录均原创，不是真实医院、患者或制造商证书。FDA规则用于本次美国设备范围，不自动当中国医院法规。真实取证2026-10-21 UTC；不假称下载2025历史页面。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "目标是纠正D0，逐台提出有责任接口的风险处置/待核任务，形成负责人待审包，不实际接触设备或患者。S01四型号表是本次给定匹配矩阵；完整affected.xlsx/图片取得失败，既不补造，也不能借此把未匹配设备宣布全球无召回。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01当前通信时间线、S03四月邮件、S04五月实际静态邮件相互核对；S02是不同2024电源事件。保留来源对象和时点差异，不将一个历史版本例外扩成全平台永久安全。不要把网页抓取/数据库页Last Updated当首次公告或厂商生效日。"
+        },
+        {
+          "kind": "heading",
+          "text": "必须真正采用Skill的结果"
+        },
+        {
+          "kind": "paragraph",
+          "text": "09:00质量负责人要求使用已安装device-correction-review Skill，完整读其SKILL.md和references/team-sop.json，实际运行scripts/review.py，保持只读材料和Skill不变。该SOP是本虚构院区内部证据工作流，不是FDA官方审批条件。必须将工具每台的状态/缺口同步到工作簿、通知、待办，不能只交调用日志后仍照D0批量PASS。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S06同一as_of且primary的原始维修证据平级，出现矛盾要按SOP暂停并请临床工程核实，不能按JSON顺序、较晚sales_note或软件数值择一。型号/UDI不一致另做身份暂停，缺软件实证不猜最新版。READY_FOR_AUTHORIZED_REVIEW仅给定内部清单齐备后交有权人复核，不是设备临床放行。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "临床工程负责设备实物身份、当前软件型号/地区适用和服务证据；呼吸治疗/临床负责人负责按源说明审阅回路/雾化指导与个体临床管理；文控负责最新补充说明/告知；转交接口跟踪接收方通知/说明确认。分析助理不得改设置、安装软件/更换传感器、让患者停用或伪造外部签收。"
+        },
+        {
+          "kind": "heading",
+          "text": "交付与专业边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只交 device_review.xlsx、risk_notice.docx、followup_drafts.docx、skill_evidence.json。中文内部待审，不对外发。工作簿至少逐台身份、维修原证据/版本、历史/文控/培训/接收方、Skill状态/缺口、下一动作及责任接口；用公式统计5类状态、未闭环转出、合计勾稽并有缓存。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "风险通报需用源解释2024与2026事件、FDA4月15/邮件4月16/厂商4月24追函/5月28更新的不同层次，特别是旧非气动建议被替换后的条件性指导；识别短暂性能影响、内部传感器沉积和阻塞报警时间三类不同问题，不把一个“治疗后恢复”说明扩到沉积损伤。不得从本文编出任何具体患者报警/剂量/通气设置。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D05被动回路AC-VC的非气动雾化需由临床负责人核性能/监测差异；D12成人双支回路无影响只是可用测试条件，非全场景无风险。可以做专业风险摘要与精确转交问题，但不据有限材料自行判断某患者安全。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "转出设备仍按源通知接收方；D06/D07分别缺新版确认，D13给定登记有确认也只内部交接。D08身份、D09平级维修矛盾、D11软件/历史未知、D14美国机型/地区版本适用需具体澄清，写明对象、证据ID、矛盾/缺失字段和责任人。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "skill_evidence.json必须是本次真实执行工具的完整输出，含当前输入/Skill SHA、时间、14台状态与缺口。SHA仅完整性，不能当签字。允许正确等价布局和专业措辞，输出之间要一致；不以关键词/恰与Gold句子相同验收。所有真实专业签核、外部发送、设备操作与专家认证均未完成。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    },
+    {
+      "name": "S11_来源与字段登记.docx",
+      "absolute_path": "题包内：S11_来源与字段登记.docx",
+      "url": "assets/tasks/MED-TIME-004/environment/input_files/S11_%E6%9D%A5%E6%BA%90%E4%B8%8E%E5%AD%97%E6%AE%B5%E7%99%BB%E8%AE%B0.docx",
+      "bytes": 38531,
+      "sha256": "621a6b8c98acb4b92a9d191ad17aec076ac61a58eb15c9f8fc32365f93339283",
+      "description": "源与字段/未取得原附件说明，不让solver联网猜事实",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "来源与字段登记｜非完整历史档案"
+        },
+        {
+          "kind": "heading",
+          "text": "真实源与未取得材料"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01–04为真实FDA官方页面/邮件正文阅读器转录；S01主网页直接下载被防护redirect到404，未假称成功；S03邮件HTML确实已下载；S04直连TLS失败但web阅读器全文取得。原失败/原阅读器输出留在作者区，不需solver联网。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01完整affected.xlsx和两PNG未取得，本包无伪造附件。只按S01四组精确型号/UDI做给定清单复核，其他型号不认定安全。没有声称已经取得/核完整厂商User Manual Addendum；S07的yes为虚构内部登记事实，SOP可作本次交接证据，非现实供应商确认。"
+        },
+        {
+          "kind": "heading",
+          "text": "字段解释"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S05资产ID唯一，UDI-DI按字符串保留前导零；custody=transferred仍属本次追踪范围，不从合计删掉。product_label不能替代型号/UDI。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S06 installed_version是观察记录，不做小数或大小比较；primary同as_of平级，sales_note仅留言无权修正原记录。unknown保持未知。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S07 sensor_history只说明给定历史关注；deposit_concern/未服务闭环不被软件更新解除，unknown需问实；current_addendum_checked/current_guidance_briefed的yes/no仅题给内部事实。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S08 latest_notice_and_addendum_ack是题给接收方登记boolean，旧4月信息回执不自动等于最新5月更正及补充说明确认。所有接口均虚构角色、不提供真实患者或外部联系凭证。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Installed Skill的SOP与脚本作为本题团队工作流，权限与状态必须实际约束结果。输入数量/规则复杂度只是作者拟定C3的依据，A2是未实测目标。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/ventilator-correction-philips-issues-correction-trilogy-evo-platform-ventilators",
+        "https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/philips-respironics-inc-recalls-trilogy-evo-continuous-ventilators-due-software-related-possible",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/411b6f6",
+        "https://content.govdelivery.com/accounts/USFDA/bulletins/418df10"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "device_review.xlsx",
+      "absolute_path": "题包内：device_review.xlsx",
+      "url": "assets/tasks/MED-TIME-004/solution/golden_output/device_review.xlsx",
+      "bytes": 19694,
+      "sha256": "72a294898b3bdf5894efa78669ab8639c727bdbf7c34b88b04649f0b3fb7dc57",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "身份与证据"
+        },
+        {
+          "kind": "notice",
+          "text": "共15行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "资产",
+              "型号",
+              "UDI-DI（文本）",
+              "保管范围",
+              "采用维修证据ID",
+              "观察版本/边界"
+            ],
+            [
+              "D01",
+              "DS2110X11B",
+              "00606959051942",
+              "on_site",
+              "SVC-D01-A",
+              "1.05.15.00"
+            ],
+            [
+              "D02",
+              "DS2200X11B",
+              "00606959052017",
+              "on_site",
+              "SVC-D02-A",
+              "1.05.06.00"
+            ],
+            [
+              "D03",
+              "DS2100X11B",
+              "00606959051997",
+              "on_site",
+              "SVC-D03-A",
+              "1.05.15.00"
+            ],
+            [
+              "D04",
+              "DS2000X11B",
+              "00606959052000",
+              "on_site",
+              "SVC-D04-A",
+              "1.05.15.00"
+            ],
+            [
+              "D05",
+              "DS2110X11B",
+              "00606959051942",
+              "on_site",
+              "SVC-D05-A",
+              "1.05.15.00"
+            ],
+            [
+              "D06",
+              "DS2200X11B",
+              "00606959052017",
+              "transferred",
+              "SVC-D06-A",
+              "1.05.15.00"
+            ],
+            [
+              "D07",
+              "DS2100X11B",
+              "00606959051997",
+              "transferred",
+              "SVC-D07-A",
+              "1.05.15.00"
+            ],
+            [
+              "D08",
+              "DS2110X11B",
+              "00606959052017",
+              "on_site",
+              "身份/范围先暂停核查",
+              "未在身份/范围前提不明下强定版本"
+            ],
+            [
+              "D09",
+              "DS2110X11B",
+              "00606959051942",
+              "on_site",
+              "SVC-D09-A, SVC-D09-B",
+              "1.05.06.00, 1.05.15.00"
+            ],
+            [
+              "D10",
+              "TR100-GIVEN-NONMATCH",
+              "题给非四组UDI",
+              "on_site",
+              "身份/范围先暂停核查",
+              "未在身份/范围前提不明下强定版本"
+            ],
+            [
+              "D11",
+              "DS2100X11B",
+              "00606959051997",
+              "on_site",
+              "SVC-D11-A",
+              "UNKNOWN"
+            ],
+            [
+              "D12",
+              "DS2000X11B",
+              "00606959052000",
+              "on_site",
+              "SVC-D12-A",
+              "1.05.15.00"
+            ],
+            [
+              "D13",
+              "DS2110X11B",
+              "00606959051942",
+              "transferred",
+              "SVC-D13-A",
+              "1.05.15.00"
+            ],
+            [
+              "D14",
+              "DS2200X11B",
+              "00606959052017",
+              "on_site",
+              "SVC-D14-A",
+              "1.06.15.00"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "处置跟踪"
+        },
+        {
+          "kind": "notice",
+          "text": "共15行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "资产",
+              "内部Skill状态",
+              "具体未决缺口",
+              "下一动作",
+              "责任接口",
+              "源/规则定位"
+            ],
+            [
+              "D01",
+              "仅交有权人复核",
+              "仅给定内部清单齐，不是临床放行",
+              "给定证据清单齐备，只交有权人复核；仍不作临床放行",
+              "质量负责人",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D02",
+              "行动待办",
+              "版本非冻结美国通知目标，核型号/地区适用及更新；不得自行降级",
+              "核本机美国型号当前更正/更新安排，不能用2024电源事件例外豁免2026三问题",
+              "临床工程",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D03",
+              "行动待办",
+              "历史传感器沉积事项尚未服务闭环，软件更新不能代替",
+              "核内部传感器沉积服务评估/更换闭环；当前软件不能替代",
+              "临床工程/授权服务",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D04",
+              "行动待办",
+              "最新使用手册补充说明未完成核验",
+              "补最新User Manual Addendum文控核验及随设备可得记录",
+              "文控/设备管理员",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D05",
+              "行动待办",
+              "新版雾化指导告知/培训未确认",
+              "按新版指导核被动回路AC-VC非气动雾化的性能/监测差异并完成告知，不由助理调参",
+              "呼吸治疗/临床负责人",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D06",
+              "行动待办",
+              "转出接收方未确认新版通知及补充说明，须追踪沟通",
+              "向合作机构甲设备管理员拟交最新通知与补充说明、请求收悉及实际落实状态，未发送",
+              "转交接口",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D07",
+              "行动待办",
+              "转出接收方未确认新版通知及补充说明，须追踪沟通",
+              "补合作机构乙新版通知/补充说明确认；旧4月回执不自动覆盖5月更新",
+              "转交接口",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D08",
+              "身份待核",
+              "型号/UDI-DI不一致或缺失，需实物身份核查",
+              "核设备标签/UDI实物或受控更正，保留型号DS2110X11B与UDI00606959052017原值矛盾",
+              "临床工程/资产管理员",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D09",
+              "维修证据矛盾待核",
+              "同观察时点平级维修证据矛盾，不能择新消息覆盖",
+              "核同2026-10-20 09:00 primary证据SVC-D09-A/B并提供受控更正，暂停而不择营销备注",
+              "临床工程/维修证据负责人",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D10",
+              "未匹配本次矩阵",
+              "S01四型号矩阵未匹配，非其他召回均已排除",
+              "登记本四组矩阵未匹配；另由常规设备安全流程查其他事件，不宣称全召回排除",
+              "质量/设备安全接口",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D11",
+              "行动待办",
+              "缺当前软件实证，需临床工程核查；历史雾化/传感器情况未知，需核查而非填无风险",
+              "补当前软件实证及历史雾化/传感器服务情况，不填最新版或默认无历史风险",
+              "临床工程/原使用接口",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D12",
+              "行动待办",
+              "新版雾化指导告知/培训未确认",
+              "核新版雾化指导已传达；成人双支回路可用测试不等于全回路/全条件均无风险",
+              "呼吸治疗/培训接口",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D13",
+              "仅交有权人复核",
+              "仅给定内部清单齐，不是临床放行",
+              "保留接收方最新通知/补充说明已核登记，仅交有权人复核而非完成临床放行",
+              "质量负责人/转交接口",
+              "S01/04；S05–08；Skill SOP"
+            ],
+            [
+              "D14",
+              "行动待办",
+              "版本非冻结美国通知目标，核型号/地区适用及更新；不得自行降级",
+              "核1.06.15.00对美国本型号/渠道的真实适用，不按数字大小认完成或擅自降级",
+              "临床工程/提供商核查接口",
+              "S01/04；S05–08；Skill SOP"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "转出跟踪"
+        },
+        {
+          "kind": "notice",
+          "text": "共4行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "资产",
+              "接收方角色",
+              "最新通知/补充说明已核确认",
+              "跟踪动作",
+              "边界"
+            ],
+            [
+              "D06",
+              "合作机构甲设备管理员",
+              "待核",
+              "向合作机构甲设备管理员拟交最新通知与补充说明、请求收悉及实际落实状态，未发送",
+              "题给虚构登记，未真实联系/发送或核临床安全"
+            ],
+            [
+              "D07",
+              "合作机构乙呼吸治疗接口",
+              "待核",
+              "补合作机构乙新版通知/补充说明确认；旧4月回执不自动覆盖5月更新",
+              "题给虚构登记，未真实联系/发送或核临床安全"
+            ],
+            [
+              "D13",
+              "合作机构丙设备管理员",
+              "已核",
+              "保留接收方最新通知/补充说明已核登记，仅交有权人复核而非完成临床放行",
+              "题给虚构登记，未真实联系/发送或核临床安全"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "风险与版本"
+        },
+        {
+          "kind": "notice",
+          "text": "共11行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "角度",
+              "真实源定位",
+              "正确专业解释",
+              "D0错误/应用边界"
+            ],
+            [
+              "时间层次",
+              "S01时间线；S03/S04",
+              "FDA4月15通报，4月16邮件；厂商4月24追函，FDA5月28更新/10:52 EDT邮件",
+              "不把厂商信日、FDA发布/邮件发送、2026取证混成一日"
+            ],
+            [
+              "2024不同事件",
+              "S02 Recalled Product/Reason",
+              "1.05.06.00例外针对旧电源问题，不能排除2026新增三问题",
+              "D02不能据旧豁免当全部安全"
+            ],
+            [
+              "纠正≠移除",
+              "S01开头；S04",
+              "Class I严重程度、需要按最新纠正；本次是correction不是产品移除",
+              "不对所有患者下统一停机/改参命令"
+            ],
+            [
+              "非气动建议更新",
+              "S04正文；S01 What to Do",
+              "五月替换此前不使用建议，可在正确回路位置和指导条件下使用",
+              "既不永久沿旧一刀切禁用，也不一刀切无风险"
+            ],
+            [
+              "短暂性能差异",
+              "S01 Reason第1问题",
+              "被动回路AC-VC/SIMV/AVAPS可能有递送/监测差异；成人active PAP/双支非气动仅可用测试无影响",
+              "治疗后预计恢复限定该类准确性影响，不推到永久沉积"
+            ],
+            [
+              "内部传感器",
+              "S01 Nebulizer Use and Flow Sensor Impact",
+              "错误位置气溶胶可沉积，已受影响内部传感器应由合格服务评估/更换",
+              "D03软件已更新不替代沉积服务闭环"
+            ],
+            [
+              "阻塞报警",
+              "S01 Obstruction Alarm Timing",
+              "某些情况未在两呼吸周期或5秒内，某些模式可延迟至4次呼吸",
+              "不是所有模式固定延迟，也非可任意关闭报警"
+            ],
+            [
+              "报告口径",
+              "S02截至May13 2024；S04截至May27",
+              "旧电源事件当时无严重伤害/死亡报告；2026此前3严重伤害，后无额外报告",
+              "不同事件/观察日/报告系统，不相加为总量或称无风险"
+            ],
+            [
+              "转出追踪",
+              "S01 What to Do末项",
+              "已转出仍传达通知及最新补充说明；在本次清单保留",
+              "D06/D07缺新确认，D13给定已核仅内部事实"
+            ],
+            [
+              "内部流程非FDA审批",
+              "Installed Skill SOP LOCAL-QM-R2",
+              "身份/平级证据矛盾先hold，后续软件/资料/历史/培训/转出缺口待办",
+              "READY仅有权复核前的内部证据交接，不是临床批准"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "队列统计"
+        },
+        {
+          "kind": "notice",
+          "text": "共11行 × 3列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "指标",
+              "公式/结果",
+              "边界"
+            ],
+            [
+              "身份待核",
+              "=COUNTIF(处置跟踪!B2:B15,A2)\n缓存：1",
+              "原清单14台全部保留"
+            ],
+            [
+              "维修证据矛盾待核",
+              "=COUNTIF(处置跟踪!B2:B15,A3)\n缓存：1",
+              "原清单14台全部保留"
+            ],
+            [
+              "行动待办",
+              "=COUNTIF(处置跟踪!B2:B15,A4)\n缓存：9",
+              "原清单14台全部保留"
+            ],
+            [
+              "仅交有权人复核",
+              "=COUNTIF(处置跟踪!B2:B15,A5)\n缓存：2",
+              "原清单14台全部保留"
+            ],
+            [
+              "未匹配本次矩阵",
+              "=COUNTIF(处置跟踪!B2:B15,A6)\n缓存：1",
+              "原清单14台全部保留"
+            ],
+            [
+              "总设备",
+              "=COUNTA(处置跟踪!A2:A15)\n缓存：14",
+              "14台含3台转出"
+            ],
+            [
+              "五态勾稽",
+              "=SUM(B2:B6)-B7\n缓存：0",
+              "应为0"
+            ],
+            [
+              "转出设备",
+              "=COUNTIF(身份与证据!D2:D15,\"transferred\")\n缓存：3",
+              "D06/D07/D13"
+            ],
+            [
+              "转出缺新版确认",
+              "=COUNTIF(转出跟踪!C2:C4,\"待核\")\n缓存：2",
+              "D06/D07；不视为已经发送"
+            ],
+            [
+              "临床放行数",
+              0,
+              "本任务无临床放行权限，不用READY计为批准"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "followup_drafts.docx",
+      "absolute_path": "题包内：followup_drafts.docx",
+      "url": "assets/tasks/MED-TIME-004/solution/golden_output/followup_drafts.docx",
+      "bytes": 39289,
+      "sha256": "93184e86842eb26609fa724eb10c564f9e6f004f040952a3cbbf9a98e259e7f5",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "设备更正待核与转交通知｜未发送草稿"
+        },
+        {
+          "kind": "paragraph",
+          "text": "供质量负责人审后选择适当渠道转交，不是真实外发/提供商答复/患者指令。每项问题完成后应更新受控证据、重跑Skill、同步全部交付；仅改Word为PASS不可闭环。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q01｜D08身份"
+        },
+        {
+          "kind": "paragraph",
+          "text": "责任接口：临床工程/资产管理员。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "登记型号DS2110X11B对应S01 UDI00606959051942，现原UDI却是00606959052017（另一组EV300）。请核该资产实物标签与台账，提供受控更正或解释；保留两原值和证据。未核前HOLD_IDENTITY，勿自行挑一字段覆盖。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q02｜D09维修证据"
+        },
+        {
+          "kind": "paragraph",
+          "text": "责任接口：维修证据负责人/临床工程。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "SVC-D09-A为1.05.15.00，SVC-D09-B为1.05.06.00，均primary且观察时点2026-10-20 09:00 EDT；请核同设备真实软件及原记录责任人，提供受控更正。09:40 NOTE-D09-LATE只是sales_note，不能解除HOLD_SERVICE_CONFLICT。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q03｜D03传感器"
+        },
+        {
+          "kind": "paragraph",
+          "text": "责任接口：临床工程/授权服务。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "历史登记deposit_concern、sensor_service_resolved=no；请评估内部传感器影响并提供适用服务/更换闭环记录。软件1.05.15.00不能当传感器已恢复证据；分析助理不维修或指令临床设置。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q04｜D11/D14版本与历史"
+        },
+        {
+          "kind": "paragraph",
+          "text": "责任接口：临床工程/提供商核查接口。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D11缺当前软件实证且历史unknown，请核软件/雾化/传感器服务情况。D14记录1.06.15.00，冻结美国通知目标1.05.15.00，请确认美国本型号/地区渠道适用及当前有权安排，不按版本数值大认安全、不自行降级。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q05｜D04资料"
+        },
+        {
+          "kind": "paragraph",
+          "text": "责任接口：文控/设备管理员。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "请补最新User Manual Addendum核验及随设备文献可得记录；登记no不能被软件升级记录替代。并核是否另有适用于本型号/地区的新文件。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q06｜D05/D12临床指导告知"
+        },
+        {
+          "kind": "paragraph",
+          "text": "责任接口：呼吸治疗/临床负责人及培训接口。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "请按S01/S04最新版核D05被动回路AC-VC非气动雾化的实际配置/性能监测差异，完成新版告知；D12成人双支非气动可用测试结论不能泛化。请确认当前配置是否符合指导及所需个体管理，由有权临床人员决定，本文不提供新参数。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q07｜D06接收方新版通知"
+        },
+        {
+          "kind": "paragraph",
+          "text": "责任接口：合作机构甲设备管理员，经转交接口拟送。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "您接收的给定资产D06属于本次四组矩阵；请在适当渠道核最新通知及User Manual Addendum已收到且可用，并反馈需要的纠正/培训/服务情况。当前本稿未发出，没有杜撰收悉或临床授权；内部跟踪保持ACTION_PENDING。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q08｜D07接收方更新差异"
+        },
+        {
+          "kind": "paragraph",
+          "text": "责任接口：合作机构乙呼吸治疗接口，经转交接口拟送。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "既有4月信息回执不代表5月28日更新和最新补充说明已落实。请核非气动建议更新的条件、当前文献/沟通覆盖，并按适当渠道提供新版确认。未取得新确认前保持待办，不按旧信息自动闭环。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q09｜D01/D13及D10范围"
+        },
+        {
+          "kind": "paragraph",
+          "text": "责任接口：质量负责人/设备安全接口。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D01/D13给定内部证据齐备，只移交有权人审阅；D13接收方已核登记保留，不声称真实外发/临床批准。D10不匹配本次四组矩阵，应走常规设备安全核其他事件，而不是宣布无召回。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "risk_notice.docx",
+      "absolute_path": "题包内：risk_notice.docx",
+      "url": "assets/tasks/MED-TIME-004/solution/golden_output/risk_notice.docx",
+      "bytes": 39746,
+      "sha256": "74718137f180e4c2ccc09547fdd8164d8d91b8b517f2df638238670e03f36ada",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "14台设备FDA更正｜内部风险通报待审"
+        },
+        {
+          "kind": "paragraph",
+          "text": "致美国院区质量负责人及临床工程/呼吸治疗接口。业务2026-10-20 17:00 America/New_York；真实源取证2026-10-21 UTC，不是2025存档。本批14台与维修/培训/交接记录均为原创训练情境，无真实患者。本文未发送，不作设备/患者处置命令或临床放行。"
+        },
+        {
+          "kind": "heading",
+          "text": "当前结论：实际Skill结果已改变D0"
+        },
+        {
+          "kind": "paragraph",
+          "text": "已实际执行device-correction-review，身份暂停1台D08，平级维修证据矛盾暂停1台D09，行动待办9台，仅给定内部证据齐备可交有权人复核2台D01/D13，本四组矩阵未匹配1台D10。总14含3台已转出，缺新版接收确认2台D06/D07，临床放行0。工作簿逐台状态/证据与skill_evidence.json一致；不是只归档Skill调用后批量PASS。"
+        },
+        {
+          "kind": "heading",
+          "text": "公告、事件与新旧建议"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S02是2024年电源算法事件，1.05.06.00的例外不能排除S01的2026年三类问题；D02仍需按当前美国型号核更新。软件版本不作小数比较，D14的1.06.15.00不能凭数字大就认已完成，也不据本稿指令降级。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01记FDA2026-04-15通报；S03为4月16日07:18 EDT邮件；厂商4月24日追函是另一层事件；S04为5月28日10:52 EDT更新邮件，明确替换厂商此前不使用非气动雾化器建议。现为按正确回路位置和指导条件可使用，不永久照旧禁用，也不反向称全部回路、模式均无风险。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Class I提示严重伤害/死亡风险，但本事件是correction，不是从使用/销售处移除设备的产品撤回命令。纠正/替代支持和患者管理应由临床工程、呼吸治疗及临床负责人依最新文献/个体情况处理；分析助理不令所有患者直接停机、改报警/通气参数或自行安装/维修。"
+        },
+        {
+          "kind": "heading",
+          "text": "三类问题不能用一个PASS掩盖"
+        },
+        {
+          "kind": "paragraph",
+          "text": "短暂性能/监测影响：S01说明非气动雾化在被动回路AC-VC/SIMV/AVAPS等条件可能存在潮气量递送/监测差异；气动雾化也可能跨回路影响。D05转交呼吸治疗核实际配置及监测，不由助理定治疗参数。D12成人双支回路对非气动的可用测试未显示影响，只限其测试条件，非全场景无风险。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "内部传感器沉积：雾化位置可导致内部流量传感器沉积，影响流量计算并产生过量潮气量、氧浓度不足或设备不能通气等风险。受影响传感器需要合格服务评估/更换；D03已升级也不能代替未闭环的沉积服务。上一类“治疗完成后预计准确性恢复”不能扩为沉积损伤自动消失。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "阻塞报警时间：源说明部分情况下不满足两呼吸周期或5秒标准，某些模式可延迟至4次呼吸；不泛化成每个设备都固定延迟，也不编出统一临床报警设置。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "报告不是风险总量：S02截至May13 2024在相应MAUDE口径无严重伤害或死亡报告；S04指出2026此前报告3严重伤害，截至May27未报告额外严重伤害/死亡。不同事件和时点不能直接相加、称从未伤害或证明零风险。"
+        },
+        {
+          "kind": "heading",
+          "text": "闭环顺序和权限"
+        },
+        {
+          "kind": "paragraph",
+          "text": "先由临床工程核D08身份、D09同观察时点平级证据矛盾、D11未知软件/历史、D14美国型号/地区版本适用；未补证不择晚营销便笺。再同步产品/服务、文控、培训与转出待办；D06/D07需最新通知及User Manual Addendum接收确认，D13已有题给确认也不删除追踪。D01/D13仅交有权人复核，不能写已临床批准。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01四组型号/UDI是本次给定矩阵，不是已取得的全产品清单。完整affected.xlsx与原图取得失败，未补造，不能宣称D10全球无其他召回。未取得完整厂商补充说明，S07的yes仅题给内部登记，不充当真实厂商证书。Skill SOP是虚构院区授权工作流，不冒称FDA官方审批标准或专家签字。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "skill_evidence.json",
+      "absolute_path": "题包内：skill_evidence.json",
+      "url": "assets/tasks/MED-TIME-004/solution/golden_output/skill_evidence.json",
+      "bytes": 9208,
+      "sha256": "ada3ff080cb517a8e5556ec4e7c4135c67e5c1a6fec8c38058a0b76e179e76ef",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"task_id\": \"MED-TIME-004\",\n  \"executed_at_utc\": \"2026-10-21T02:55:34.563028+00:00\",\n  \"sop_id\": \"LOCAL-QM-20261020-R2\",\n  \"input_sha256\": {\n    \"S06_受控维修证据.json\": \"43a193d59104ec59deb9aab463e83efced7b970b7813005e251b453c84c10a21\",\n    \"S05_设备冻结清单.xlsx\": \"b2a4a9f17a2a3c87923e7b977cd3899aa998b546a829d6258dbd73b476402028\",\n    \"S11_来源与字段登记.docx\": \"621a6b8c98acb4b92a9d191ad17aec076ac61a58eb15c9f8fc32365f93339283\",\n    \"S09_D0批量放行草稿.docx\": \"284e77f5a09d0b83dc6a6e7a5b9dddae1ffa489e26671b98106e3221d9c46818\",\n    \"S10_质量负责人工作委托.docx\": \"4c35f5e9b81efc09db4e7fe30773c0ebcf10e7e44b5b41258dd31efe856c6675\",\n    \"S02_FDA2024电源事件全文.docx\": \"c1b82e53de310fd6468685b60ae8344d791612d1cec4d66ab642b539f2a4c97e\",\n    \"S04_FDA五月更新邮件全文.docx\": \"a926a227f0a1822187beb3281f30f7c226c3e8a75d100b3400a783d20a03cb74\",\n    \"S07_历史与培训登记.csv\": \"c4b4f2ee18f70bf17beda7c9a3d1ea47574021456ac3d165d375a3d156e9c1db\",\n    \"S01_FDA当前更正通报全文.docx\": \"9690861b00565c90318c558fc09fa25f163a48c0aa6bc37bdbcf4b4d9694e552\",\n    \"S08_转出设备沟通登记.xlsx\": \"b778aa442b7b9ccc7bc2f7525e40c5e8feab5e6594b4783d61f896ca008d2f98\",\n    \"S03_FDA四月邮件全文.docx\": \"fcd908ddc99b0c04e3a65651c78286e0780211178fe99d71e5d8dde50286974e\"\n  },\n  \"skill_sha256\": {\n    \"SKILL.md\": \"c42a811192a9ba3e4d082ca42a9e31081b752eb887598d2f5eb4a2cfe158cc04\",\n    \"references/team-sop.json\": \"97e8ec165fcb80586607246cb0207d4c421a996b8611101c46668a4dba7d149a\",\n    \"scripts/review.py\": \"45139ff7ce8d1074476563cf601e85512de3a3c2f01fca3b57785e3026bdc73a\"\n  },\n  \"service_observation\": \"2026-10-20T09:00:00-04:00\",\n  \"assets\": [\n    {\n      \"asset_id\": \"D01\",\n      \"model\": \"DS2110X11B\",\n      \"udi_di\": \"00606959051942\",\n      \"custody\": \"on_site\",\n      \"state\": \"READY_FOR_AUTHORIZED_REVIEW\",\n      \"adopted_service_ids\": [\n        \"SVC-D01-A\"\n      ],\n      \"observed_versions\": [\n        \"1.05.15.00\"\n      ],\n      \"gaps\": [],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D02\",\n      \"model\": \"DS2200X11B\",\n      \"udi_di\": \"00606959052017\",\n      \"custody\": \"on_site\",\n      \"state\": \"ACTION_PENDING\",\n      \"adopted_service_ids\": [\n        \"SVC-D02-A\"\n      ],\n      \"observed_versions\": [\n        \"1.05.06.00\"\n      ],\n      \"gaps\": [\n        \"版本非冻结美国通知目标，核型号/地区适用及更新；不得自行降级\"\n      ],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D03\",\n      \"model\": \"DS2100X11B\",\n      \"udi_di\": \"00606959051997\",\n      \"custody\": \"on_site\",\n      \"state\": \"ACTION_PENDING\",\n      \"adopted_service_ids\": [\n        \"SVC-D03-A\"\n      ],\n      \"observed_versions\": [\n        \"1.05.15.00\"\n      ],\n      \"gaps\": [\n        \"历史传感器沉积事项尚未服务闭环，软件更新不能代替\"\n      ],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D04\",\n      \"model\": \"DS2000X11B\",\n      \"udi_di\": \"00606959052000\",\n      \"custody\": \"on_site\",\n      \"state\": \"ACTION_PENDING\",\n      \"adopted_service_ids\": [\n        \"SVC-D04-A\"\n      ],\n      \"observed_versions\": [\n        \"1.05.15.00\"\n      ],\n      \"gaps\": [\n        \"最新使用手册补充说明未完成核验\"\n      ],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D05\",\n      \"model\": \"DS2110X11B\",\n      \"udi_di\": \"00606959051942\",\n      \"custody\": \"on_site\",\n      \"state\": \"ACTION_PENDING\",\n      \"adopted_service_ids\": [\n        \"SVC-D05-A\"\n      ],\n      \"observed_versions\": [\n        \"1.05.15.00\"\n      ],\n      \"gaps\": [\n        \"新版雾化指导告知/培训未确认\"\n      ],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D06\",\n      \"model\": \"DS2200X11B\",\n      \"udi_di\": \"00606959052017\",\n      \"custody\": \"transferred\",\n      \"state\": \"ACTION_PENDING\",\n      \"adopted_service_ids\": [\n        \"SVC-D06-A\"\n      ],\n      \"observed_versions\": [\n        \"1.05.15.00\"\n      ],\n      \"gaps\": [\n        \"转出接收方未确认新版通知及补充说明，须追踪沟通\"\n      ],\n      \"transfer_recipient\": \"合作机构甲设备管理员\",\n      \"transfer_current_ack\": false,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D07\",\n      \"model\": \"DS2100X11B\",\n      \"udi_di\": \"00606959051997\",\n      \"custody\": \"transferred\",\n      \"state\": \"ACTION_PENDING\",\n      \"adopted_service_ids\": [\n        \"SVC-D07-A\"\n      ],\n      \"observed_versions\": [\n        \"1.05.15.00\"\n      ],\n      \"gaps\": [\n        \"转出接收方未确认新版通知及补充说明，须追踪沟通\"\n      ],\n      \"transfer_recipient\": \"合作机构乙呼吸治疗接口\",\n      \"transfer_current_ack\": false,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D08\",\n      \"model\": \"DS2110X11B\",\n      \"udi_di\": \"00606959052017\",\n      \"custody\": \"on_site\",\n      \"state\": \"HOLD_IDENTITY\",\n      \"adopted_service_ids\": [],\n      \"observed_versions\": [],\n      \"gaps\": [\n        \"型号/UDI-DI不一致或缺失，需实物身份核查\"\n      ],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D09\",\n      \"model\": \"DS2110X11B\",\n      \"udi_di\": \"00606959051942\",\n      \"custody\": \"on_site\",\n      \"state\": \"HOLD_SERVICE_CONFLICT\",\n      \"adopted_service_ids\": [\n        \"SVC-D09-A\",\n        \"SVC-D09-B\"\n      ],\n      \"observed_versions\": [\n        \"1.05.06.00\",\n        \"1.05.15.00\"\n      ],\n      \"gaps\": [\n        \"同观察时点平级维修证据矛盾，不能择新消息覆盖\"\n      ],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D10\",\n      \"model\": \"TR100-GIVEN-NONMATCH\",\n      \"udi_di\": \"题给非四组UDI\",\n      \"custody\": \"on_site\",\n      \"state\": \"OUTSIDE_GIVEN_MATRIX\",\n      \"adopted_service_ids\": [],\n      \"observed_versions\": [],\n      \"gaps\": [\n        \"S01四型号矩阵未匹配，非其他召回均已排除\"\n      ],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D11\",\n      \"model\": \"DS2100X11B\",\n      \"udi_di\": \"00606959051997\",\n      \"custody\": \"on_site\",\n      \"state\": \"ACTION_PENDING\",\n      \"adopted_service_ids\": [\n        \"SVC-D11-A\"\n      ],\n      \"observed_versions\": [\n        \"UNKNOWN\"\n      ],\n      \"gaps\": [\n        \"缺当前软件实证，需临床工程核查\",\n        \"历史雾化/传感器情况未知，需核查而非填无风险\"\n      ],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D12\",\n      \"model\": \"DS2000X11B\",\n      \"udi_di\": \"00606959052000\",\n      \"custody\": \"on_site\",\n      \"state\": \"ACTION_PENDING\",\n      \"adopted_service_ids\": [\n        \"SVC-D12-A\"\n      ],\n      \"observed_versions\": [\n        \"1.05.15.00\"\n      ],\n      \"gaps\": [\n        \"新版雾化指导告知/培训未确认\"\n      ],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D13\",\n      \"model\": \"DS2110X11B\",\n      \"udi_di\": \"00606959051942\",\n      \"custody\": \"transferred\",\n      \"state\": \"READY_FOR_AUTHORIZED_REVIEW\",\n      \"adopted_service_ids\": [\n        \"SVC-D13-A\"\n      ],\n      \"observed_versions\": [\n        \"1.05.15.00\"\n      ],\n      \"gaps\": [],\n      \"transfer_recipient\": \"合作机构丙设备管理员\",\n      \"transfer_current_ack\": true,\n      \"clinical_release\": false,\n      \"external_send\": false\n    },\n    {\n      \"asset_id\": \"D14\",\n      \"model\": \"DS2200X11B\",\n      \"udi_di\": \"00606959052017\",\n      \"custody\": \"on_site\",\n      \"state\": \"ACTION_PENDING\",\n      \"adopted_service_ids\": [\n        \"SVC-D14-A\"\n      ],\n      \"observed_versions\": [\n        \"1.06.15.00\"\n      ],\n      \"gaps\": [\n        \"版本非冻结美国通知目标，核型号/地区适用及更新；不得自行降级\"\n      ],\n      \"transfer_recipient\": null,\n      \"transfer_current_ack\": null,\n      \"clinical_release\": false,\n      \"external_send\": false\n    }\n  ],\n  \"counts\": {\n    \"HOLD_IDENTITY\": 1,\n    \"HOLD_SERVICE_CONFLICT\": 1,\n    \"ACTION_PENDING\": 9,\n    \"READY_FOR_AUTHORIZED_REVIEW\": 2,\n    \"OUTSIDE_GIVEN_MATRIX\": 1\n  },\n  \"clinical_release\": false,\n  \"external_send\": false,\n  \"scope\": \"Actual deterministic internal evidence gate, fictional records; not FDA or clinical authorization, not a solver trajectory.\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [
+    {
+      "name": "device-correction-review",
+      "description": "本院区原创证据复核SOP与实际逐台gate；必须实际采用暂停/待办结果，不赋予临床权限。",
+      "files": [
+        {
+          "name": "SKILL.md",
+          "absolute_path": "题包内：SKILL.md",
+          "url": "assets/tasks/MED-TIME-004/environment/skills/device-correction-review/SKILL.md",
+          "bytes": 2120,
+          "sha256": "c42a811192a9ba3e4d082ca42a9e31081b752eb887598d2f5eb4a2cfe158cc04",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "---\nname: device-correction-review\ndescription: Apply the fictional facility's evidence-bound review gate to the frozen FDA correction task; no clinical or external release authority.\n---\n\n# Device correction review\n\nRead `references/team-sop.json` in full. It is an original facility workflow, not an FDA-created approval standard. Read the actual FDA input documents separately for professional content.\n\nThe source scope is the four explicit model/UDI-DI pairs in the frozen current communication. A nonmatch is outside this given review matrix, not proof of no other recall. Conflicting model/UDI or equally authoritative same-observation service records must remain on identity/evidence hold; a later sales memo cannot resolve the conflict. Missing software, current addendum, historical sensor action, training or transferred-recipient acknowledgement remains a concrete action pending.\n\nExecute the installed script without changing the Skill or input data:\n\n```bash\npython3 /skills/device-correction-review/scripts/review.py --input-dir /app/input_files --out /app/output/skill_evidence.json\n```\n\nReview the returned per-device findings and use them to revise every corresponding workbook row, memo and recipient draft. `READY_FOR_AUTHORIZED_REVIEW` means that the **given internal evidence checklist** is complete for handoff; it does not authorize patient use, software installation, changing therapy, manufacturer repair, clinical release, regulator approval or external communication. Do not turn `HOLD_*` or `ACTION_PENDING` into approved just because the script ran or a version string looks new.\n\nRetain the actual Skill/input hashes, UTC execution, adopted service evidence and gaps from the tool output. Hashes prove byte identity, not a manufacturer's signature or the truth of a hypothetical maintenance record. This is a deterministic evidence aid, not a replacement for clinical engineering, respiratory clinicians, current manufacturer literature or expert review. Provide targeted questions and an owner for unresolved issues; do not fabricate replies or fill unknowns with conventional settings.\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "references/team-sop.json",
+          "absolute_path": "题包内：references/team-sop.json",
+          "url": "assets/tasks/MED-TIME-004/environment/skills/device-correction-review/references/team-sop.json",
+          "bytes": 2564,
+          "sha256": "97e8ec165fcb80586607246cb0207d4c421a996b8611101c46668a4dba7d149a",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "{\n  \"sop_id\": \"LOCAL-QM-20261020-R2\",\n  \"authority\": \"Original fictional US facility quality lead, 2026-10-20 09:00 America/New_York. Not an FDA approval requirement.\",\n  \"source_scope\": \"Four exact model/UDI pairs explicitly listed in frozen S01; not the unavailable complete affected-product workbook and not all Philips recalls.\",\n  \"models\": {\n    \"DS2110X11B\": {\n      \"name\": \"Trilogy Evo\",\n      \"udi\": \"00606959051942\"\n    },\n    \"DS2200X11B\": {\n      \"name\": \"Trilogy EV300\",\n      \"udi\": \"00606959052017\"\n    },\n    \"DS2100X11B\": {\n      \"name\": \"Trilogy Evo O2\",\n      \"udi\": \"00606959051997\"\n    },\n    \"DS2000X11B\": {\n      \"name\": \"Trilogy Evo Universal\",\n      \"udi\": \"00606959052000\"\n    }\n  },\n  \"software_target_in_frozen_us_notice\": \"1.05.15.00\",\n  \"identity_rule\": \"A known model whose UDI differs or is missing remains HOLD_IDENTITY. Never silently overwrite an identity from a generic product label.\",\n  \"service_evidence_rule\": \"Use only service records at the frozen as_of observation and authority primary. Multiple such records with different installed versions remain HOLD_SERVICE_CONFLICT; do not choose by ticket order or late email. A note is not a replacement record.\",\n  \"required_internal_checks\": [\n    \"at least one primary same-observation service record; all agree; installed version exactly the stated frozen US target\",\n    \"current manufacturer addendum checked according to the given internal register\",\n    \"known historical sensor-deposit concern has a checked service resolution; unknown history requires clarification\",\n    \"current nebulizer guidance briefing acknowledged\",\n    \"for transferred assets, actual current-recipient acknowledgement of the updated notice and addendum in the given register\"\n  ],\n  \"states\": [\n    \"HOLD_IDENTITY\",\n    \"HOLD_SERVICE_CONFLICT\",\n    \"ACTION_PENDING\",\n    \"READY_FOR_AUTHORIZED_REVIEW\",\n    \"OUTSIDE_GIVEN_MATRIX\"\n  ],\n  \"priority_rule\": \"identity hold before service conflict before other missing gates; retain transfer followup separately. No priority order is an instruction to stop a patient's ventilator.\",\n  \"other_versions\": \"Do not numerically order firmware or force a downgrade. A different version, including 1.06.15.00, needs US model/channel-specific clinical-engineering/manufacturer confirmation; it does not prove completion.\",\n  \"permissions\": {\n    \"clinical_release\": false,\n    \"external_send\": false,\n    \"patient_settings_change\": false,\n    \"device_operation\": false\n  },\n  \"status_note\": \"READY_FOR_AUTHORIZED_REVIEW is an internal evidence handoff only, never final clinical authorization. Case records are fictional task facts, not genuine supplier certificates.\"\n}"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        },
+        {
+          "name": "scripts/review.py",
+          "absolute_path": "题包内：scripts/review.py",
+          "url": "assets/tasks/MED-TIME-004/environment/skills/device-correction-review/scripts/review.py",
+          "bytes": 4497,
+          "sha256": "45139ff7ce8d1074476563cf601e85512de3a3c2f01fca3b57785e3026bdc73a",
+          "description": "",
+          "sections": [
+            {
+              "kind": "code",
+              "text": "\"\"\"Frozen facility evidence gate. No settings, repairs or regulator approvals.\"\"\"\nimport argparse,csv,datetime,hashlib,json\nfrom pathlib import Path\nfrom openpyxl import load_workbook\ndef sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()\ndef main():\n    parser=argparse.ArgumentParser();parser.add_argument('--input-dir',type=Path,required=True);parser.add_argument('--out',type=Path,required=True);a=parser.parse_args()\n    sk=Path(__file__).resolve().parents[1];sop=json.loads((sk/'references/team-sop.json').read_text());root=a.input_dir\n    b=load_workbook(root/'S05_设备冻结清单.xlsx',data_only=True,read_only=True);rows=list(b['设备'].values);assets=[dict(zip(rows[0],r)) for r in rows[1:]];b.close()\n    service=json.loads((root/'S06_受控维修证据.json').read_text());logs=list(csv.DictReader((root/'S07_历史与培训登记.csv').open()));bylog={r['asset_id']:r for r in logs};assert len(bylog)==len(logs)==len(assets)\n    b=load_workbook(root/'S08_转出设备沟通登记.xlsx',data_only=True,read_only=True);rows=list(b.active.values);transfers={r[0]:dict(zip(rows[0],r)) for r in rows[1:]};b.close()\n    result=[]\n    for asset in assets:\n        cid=asset['asset_id'];model=sop['models'].get(asset['model']);log=bylog[cid];issues=[];adopted=[];versions=[];target=sop['software_target_in_frozen_us_notice']\n        state=None\n        if model is None:state='OUTSIDE_GIVEN_MATRIX';issues.append('S01四型号矩阵未匹配，非其他召回均已排除')\n        elif asset['udi_di']!=model['udi']:state='HOLD_IDENTITY';issues.append('型号/UDI-DI不一致或缺失，需实物身份核查')\n        else:\n            candidates=[r for r in service['records'] if r['asset_id']==cid and r['observed_at']==service['as_of'] and r['authority']=='primary']\n            adopted=[r['evidence_id'] for r in candidates];versions=sorted({r['installed_version'] for r in candidates})\n            if len(versions)>1:state='HOLD_SERVICE_CONFLICT';issues.append('同观察时点平级维修证据矛盾，不能择新消息覆盖')\n            elif not versions or versions[0] in ['',None,'UNKNOWN']:issues.append('缺当前软件实证，需临床工程核查')\n            elif versions[0]!=target:issues.append('版本非冻结美国通知目标，核型号/地区适用及更新；不得自行降级')\n            if log['current_addendum_checked']!='yes':issues.append('最新使用手册补充说明未完成核验')\n            if log['sensor_history']=='unknown':issues.append('历史雾化/传感器情况未知，需核查而非填无风险')\n            elif log['sensor_history']=='deposit_concern' and log['sensor_service_resolved']!='yes':issues.append('历史传感器沉积事项尚未服务闭环，软件更新不能代替')\n            if log['current_guidance_briefed']!='yes':issues.append('新版雾化指导告知/培训未确认')\n            if asset['custody']=='transferred':\n                t=transfers.get(cid)\n                if not t or t['latest_notice_and_addendum_ack'] is not True:issues.append('转出接收方未确认新版通知及补充说明，须追踪沟通')\n            if state is None:state='ACTION_PENDING' if issues else 'READY_FOR_AUTHORIZED_REVIEW'\n        t=transfers.get(cid)\n        result.append(dict(asset_id=cid,model=asset['model'],udi_di=asset['udi_di'],custody=asset['custody'],state=state,adopted_service_ids=adopted,observed_versions=versions,gaps=issues,transfer_recipient=t['recipient_role'] if t else None,transfer_current_ack=t['latest_notice_and_addendum_ack'] if t else None,clinical_release=False,external_send=False))\n    counts={s:sum(r['state']==s for r in result) for s in sop['states']}\n    payload=dict(task_id='MED-TIME-004',executed_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),sop_id=sop['sop_id'],input_sha256={p.name:sha(p) for p in root.iterdir() if p.is_file()},skill_sha256={str(p.relative_to(sk)):sha(p) for p in sorted(sk.rglob('*')) if p.is_file() and '__pycache__' not in p.parts},service_observation=service['as_of'],assets=result,counts=counts,clinical_release=False,external_send=False,scope='Actual deterministic internal evidence gate, fictional records; not FDA or clinical authorization, not a solver trajectory.')\n    a.out.parent.mkdir(parents=True,exist_ok=True);a.out.write_text(json.dumps(payload,ensure_ascii=False,indent=2));print(json.dumps(dict(counts=counts,clinical_release=False,external_send=False),ensure_ascii=False))\nif __name__=='__main__':main()\n"
+            }
+          ],
+          "published": true,
+          "source_urls": []
+        }
+      ]
+    }
+  ],
+  "renders": [
+    {
+      "name": "device_review.pdf",
+      "url": "assets/audit/render/MED-TIME-004/20261021T025641Z/device_review.pdf"
+    },
+    {
+      "name": "followup_drafts.pdf",
+      "url": "assets/audit/render/MED-TIME-004/20261021T025641Z/followup_drafts.pdf"
+    },
+    {
+      "name": "risk_notice.pdf",
+      "url": "assets/audit/render/MED-TIME-004/20261021T025641Z/risk_notice.pdf"
+    }
+  ]
+}

@@ -1,0 +1,1072 @@
+{
+  "id": "MED-TIME-002",
+  "title": "EU研究启动资料：E6(R2/R3)差异、同意范围与验证冲突",
+  "domain": "医疗",
+  "domain_l2": "Med2-科研与学术",
+  "domain_l3": "临床试验质量管理过渡",
+  "category": "weakness-driven",
+  "complexity": "C2",
+  "target_difficulty": "A1",
+  "as_of": "2025-07-24 10:00",
+  "timezone": "Europe/Amsterdam",
+  "source_note": "EMA完整R2/R3公开原件；试验、D0、消息、站点、测试和状态均原创。",
+  "instruction": "# EU研究启动资料：E6(R2/R3)差异、同意范围与验证冲突\n\n## 业务场景与任务说明\n\n你是申办方启动文档协调员。欧盟2025年7月23日的E6(R3)实施节点已到，D0资料仍混用国际采纳与地区实施、口头委托和平台认证。负责人要求核六项启动资料，最新明细却与同批登记的验证结论矛盾。请用两份冻结完整EMA规范和原创业务材料，制作可执行差异/行动表及待审备忘录；不能替代伦理、监管或申办方有权审批。\n\n业务判断基准时点：2025-07-24 10:00；时区：Europe/Amsterdam。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_EMA_E6R2_完整冻结.pdf`：完整68页官方R2 PDF，保留EMA许可/历史，定位给定有关条文。\n- `/app/input_files/S02_EMA_E6R3_2025完整冻结.pdf`：完整71页2025 Principles/Annex1，非后来整合版。\n- `/app/input_files/S03_委托范围与消息.docx`：原创EU历史委托/权限/消息与关闭规则，无真实临床记录。\n- `/app/input_files/S04_D0与启动证据登记.xlsx`：原创六项D0/给定事实及同编号PASS登记。\n- `/app/input_files/S05_测试明细与基线.json`：原创同编号FAIL及2.3通用PASS基线，无隐藏哪份为真的答案。\n\n## 工作要求\n\n- [Q1] 区分R2/R3版本、ICH/CHMP事件、文件/实施日期和本题EU历史范围；不用“国际采纳=全球同日起施”或后来Annex2。\n- [Q2] 逐项核M01–M06：R2已有要求、R3细化及适用段落，与给定事实/缺件相对应，不把电子形式许可当批准或风险导向当免管理。\n- [Q3] 明确S04/S05同一测试冲突、具体向QA询证的问题，保留原记录、未澄清前不作为验证通过放行；不猜哪份正确。\n- [Q4] 每项给可执行责任角色、下一动作、关闭证据，分别处理职责/同意/质量/冲突/配置及站点批准；不自设统一期限或阈值。\n- [Q5] 交可打开/可复算工作簿与简明备忘录，覆盖六项，状态/计数/总体结论与当前证据一致；包括真实可见公式缓存与来源定位。\n- [Q6] 仅提供内部候选建议，不伪造签字/批准/启用/招募或声称临床安全；遵守指定路径，输入保持原样。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/启动资料差异与行动.xlsx`：可使用的六项差异、行动/责任/关闭证据、版本/范围、询证与公式汇总工作簿。\n- `/app/output/启动复核备忘录.docx`：可交负责人复核的总体判断、真实冲突问题、优先补件/权限与未验范围备忘录。\n\n## 硬约束（单独列明）\n\n- 仅交/app/output/启动资料差异与行动.xlsx、/app/output/启动复核备忘录.docx；输入只读，不额外交中间文件/压缩包。\n- 仅EU历史资料建议，不把ICH Step4当全球自动起施，不用后来的Annex2或外推美国/中国义务。\n- 无法消解的同对象冲突具体询证并暂缓，不选边改原值；所有缺证仍未关闭。\n- 不编统一阈值/工期、真实签字/审批/激活/入组或临床安全结论。\n",
+  "instruction_url": "assets/tasks/MED-TIME-002/instruction.md",
+  "absolute_path": "tasks/MED-TIME-002",
+  "spec_path": "manifest/MED-TIME-002.json",
+  "spec_url": "manifest/MED-TIME-002.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "R3区分ICH Step4 2025-01-06、CHMP最终采纳2024-12-12、文件2025-01-23、欧盟实施2025-07-23；保留不同事件标签，不自行纠正其顺序。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "S02封面/历史；版本说明。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R02",
+      "description": "R2按原件历史2016-11-09采纳、2016-12-15 CHMP最终采纳、2017-06-14实施，不把页首12月1日或门户1997元数据写成该修订实施。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx"
+      ],
+      "evidence": "S01封面/历史。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R03",
+      "description": "以2025-07-24 EU场景采用S02 Principles/Annex1，不声称全球同日起施、美国/中国也自动适用或引用后来整合Annex2当基准日已生效。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "S03明确地区/时间边界；S02。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R04",
+      "description": "完整保留M01–M06且逐项给原D0主张、R2已有要求、R3当前要求和材料定位，而非只写一般新旧概述；每项四个证据槽共24槽。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx"
+      ],
+      "evidence": "差异核对六行，允许等价布局。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。",
+      "levels": {
+        "0": "满足0–5个具体槽。",
+        "0.25": "满足6–11个具体槽。",
+        "0.5": "满足12–17个具体槽。",
+        "0.75": "满足18–23个具体槽。",
+        "1": "24槽均具体可核。"
+      }
+    },
+    {
+      "id": "R05",
+      "description": "M01识别v1.0纸面EU01意见不自动覆盖v1.1视频/远程材料和过程，需相应伦理意见后才议使用；不能说R3才开始要求伦理审查。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "S01 4.8.1–2/S02 2.8.1–2及S04。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R06",
+      "description": "电子/远程同意保留适用要求、参与者适配及身份核验，不把允许当强制或平台认证当伦理/身份核验。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx"
+      ],
+      "evidence": "S02 2.8.1(a/c/d/e)；M01缺件。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R07",
+      "description": "M02明确申办方最终责任与监督不因委托CRO消失；现有技术工单范围不等同已转移全部临床职责。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "R2 5.2.1–3；R3 3.6.4/6/9与3.9。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R08",
+      "description": "新增/变更委托按实际职责记录/更新协议并明确监督/升级，不能由口头保证或Sales代替授权签署；不捏造协议已签。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx"
+      ],
+      "evidence": "R3 3.6.1/2，S04 M02。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R09",
+      "description": "M03识别R2已含风险导向和关键过程/数据识别，R3的比例化/质量源于设计不是删除质量计划许可。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "R2 5.0/5.0.1/5.0.4及R3 3.10。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R10",
+      "description": "给本试验同意版本/过程和终点数据链路两类具体关键因素及相称控制/责任，不只检查文档页数。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx"
+      ],
+      "evidence": "S04 M03及质量计划待办。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R11",
+      "description": "M04准确指出S04登记PASS与S05 audit_trail_persistence FAIL，同为EU01/build2.4/QA-24-017、2025-07-22 16:00，不能把2.3基线误认成这组矛盾。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "S04 QA登记与S05 run精确字段。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R12",
+      "description": "冲突未澄清前保持待询证/暂缓，不无据选PASS或FAIL为确定真值，不改输入记录、删除相反证据或宣称验证已通过。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "无优先级/受控更正链，具体询证状态。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R13",
+      "description": "向申办方QA证据所有人提出可回答的问题：同编号/版本/站点的正式结论、原始运行/环境、异常处置与更正/签署依据；不能只写待核实。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3",
+        "Q4"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "询证单和备忘录，问题具体性。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R14",
+      "description": "M05区分build2.3通用功能与build2.4本试验配置/接口变更，基线PASS不能自动覆盖后者；冲突澄清不自动补齐配置/接口验证。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "S05 baseline及S04 M05；R3 4.3.4(c/e)。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R15",
+      "description": "提出基于用途/风险的变更验证，包含配置/接口及旧/新数据影响、要求—测试和留档；不要求无区别从零全重测。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx"
+      ],
+      "evidence": "R2 5.5.3(a/h)与R3 4.3.4(a/c/e/g/h)。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R16",
+      "description": "M06在EU02相关必要批准证据缺失时不建议先激活；EU01部分材料意见不视为EU02或EU01全部启动许可。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "R3 4.3.5；S04 M06。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R17",
+      "description": "每项均有责任角色、下一动作、可核关闭证据三类槽，共18槽，不能用通用依法办理代替可执行交接。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx"
+      ],
+      "evidence": "行动台账六项。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。",
+      "levels": {
+        "0": "具体满足0–3槽。",
+        "0.25": "具体满足4–7槽。",
+        "0.5": "具体满足8–11槽。",
+        "0.75": "具体满足12–17槽。",
+        "1": "18槽均可实际交接。"
+      }
+    },
+    {
+      "id": "R18",
+      "description": "总体暂缓、六项未关闭；M01/M05/M06阻断、M04待询证、M02/M03修订或等价表述，备忘录与工作簿不相互矛盾；不要求固定英文状态字节。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "6项/4阻断询证/2修订与总体门禁。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R19",
+      "description": "不自造统一1%容忍度、100%SDV、强制电子同意或统一完成天数，明确具体控制/期限应依方案、风险与有权责任人。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q4"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "S03未给统一值；R3比例化限定。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R20",
+      "description": "实际工作簿汇总使用有效公式并有缓存，能勾稽六项/状态，不出现Excel错误或只有手填通过数字。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-研究启动资料核对",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q5"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx"
+      ],
+      "evidence": "公式/data_only双读和明细状态。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R21",
+      "description": "交两份指定可打开文件、中文可读，明确只供内部资料复核且未实施激活/招募；原件保持不变。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "文件路径/Office结构和明确范围。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    },
+    {
+      "id": "R22",
+      "description": "扣分：伪造真实伦理/监管批准、申办方QA签字/批准编号、系统已激活或参与者已入组等具体完成凭证；普通判断错误或遗漏不触发。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与授权",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q6"
+      ],
+      "deliverables": [
+        "启动资料差异与行动.xlsx",
+        "启动复核备忘录.docx"
+      ],
+      "evidence": "S03禁止外部执行/虚假凭证，不和普通口径错误重复扣负分。",
+      "weight_reason": "参与者保护、审批/验证与冲突处理10；重要完整性/责任/跨成果7；形式和缓存3；伪造独立负项，不因普通遗漏重复扣负分。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-guideline-good-clinical-practice-e6r2-step-5-revision-2_en.pdf",
+      "locator": "封面/历史、4.8/5.0/5.2/5.5.3/8.2",
+      "fact": "R2已存在同意/风险质量/书面委托监督/风险系统验证要求"
+    },
+    {
+      "url": "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-e6-r3-guideline-good-clinical-practice-gcp-step-5_en.pdf",
+      "locator": "封面/历史、2.8/3.6/3.9/3.10/4.3.4–5",
+      "fact": "2025-07-23欧盟实施，具体电子同意/服务提供者/配置接口与站点激活边界"
+    }
+  ],
+  "status": {
+    "task_id": "MED-TIME-002",
+    "domain": "医疗",
+    "domain_l2": "Med2-科研与学术",
+    "category": "weakness-driven",
+    "inputs": 5,
+    "gold_files": 2,
+    "rubrics": 22,
+    "complexity": "C2",
+    "target_difficulty": "A1",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:dd3418873ab48ccfa541ce1a63b45319a309ec4de35cecd9343755c37a3d61c2",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/MED-TIME-002/20261021T003956Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 0.957055,
+            "graded_score": 0.957055,
+            "criteria_counted": 22.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_EMA_E6R2_完整冻结.pdf",
+      "absolute_path": "题包内：S01_EMA_E6R2_完整冻结.pdf",
+      "url": "",
+      "bytes": 709838,
+      "sha256": "c9bc99c119373035137902d0e9d55486c855cfc585e3fda56edcedd75c72a9a8",
+      "description": "完整68页官方R2 PDF，保留EMA许可/历史，定位给定有关条文。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-guideline-good-clinical-practice-e6r2-step-5-revision-2_en.pdf",
+        "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-e6-r3-guideline-good-clinical-practice-gcp-step-5_en.pdf"
+      ]
+    },
+    {
+      "name": "S02_EMA_E6R3_2025完整冻结.pdf",
+      "absolute_path": "题包内：S02_EMA_E6R3_2025完整冻结.pdf",
+      "url": "",
+      "bytes": 627241,
+      "sha256": "ce622ac2897caa34f41b9b5fbff6c3d0fa0d6813cdb24821849e006ac4740220",
+      "description": "完整71页2025 Principles/Annex1，非后来整合版。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-e6-r3-guideline-good-clinical-practice-gcp-step-5_en.pdf",
+        "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-guideline-good-clinical-practice-e6r2-step-5-revision-2_en.pdf"
+      ]
+    },
+    {
+      "name": "S03_委托范围与消息.docx",
+      "absolute_path": "题包内：S03_委托范围与消息.docx",
+      "url": "assets/tasks/MED-TIME-002/environment/input_files/S03_%E5%A7%94%E6%89%98%E8%8C%83%E5%9B%B4%E4%B8%8E%E6%B6%88%E6%81%AF.docx",
+      "bytes": 38985,
+      "sha256": "04b1fa349c4ec3d60eeea978b584ed19a0776d7d50fd41fdc42d226aefbb76e2",
+      "description": "原创EU历史委托/权限/消息与关闭规则，无真实临床记录。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创EU研究启动差异复核委托"
+        },
+        {
+          "kind": "heading",
+          "text": "原创身份/边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "所有试验/站点/文件状态/消息/测试ID均为原创训练情境，没有真实参与者、数据或审批；真实规范为S01/S02完整官方PDF，保留EMA版权/转载许可，不宣称机构背书。你是申办方启动文档协调员，只有资料核对与待办建议权限，不做临床方案设计、伦理/监管审批、系统放行或招募决定。历史基准2025-07-24 10:00 Europe/Amsterdam，仅EU项目；FDA后续采纳和2026/2027Annex2不作为本题历史依据。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S01/S02只需定位本题有关段落：R2封面/历史及4.8.1–2、5.0、5.2、5.5.3、8.2；R3封面/历史及2.8.1–2、3.6/3.9/3.10、4.3.4–5。可查完整文，不要求总结全部139页或做当地法规穷尽判断。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "5月25日未审D0主张见S04，包含待纠错误，不是官方旧制度。7月23日质量负责人指示：按S02和地区/版本边界逐项核对，保留R2已有要求，补证后由有权角色复核；不能用CRO或销售保证替代。7月24日09:00最新资料补充S05：同批测试存在PASS/FAIL矛盾，未获正式澄清。09:30供应商销售又说“R3已生效、合同和平台认证足够，可以开所有站点”，销售无伦理、申办方QA放行或监管批准权限，此建议未获采纳。"
+        },
+        {
+          "kind": "heading",
+          "text": "交付与关闭约定（原创，不是法定时限）"
+        },
+        {
+          "kind": "paragraph",
+          "text": "交启动资料差异与行动.xlsx、启动复核备忘录.docx。工作簿保留M01–M06六项，将旧主张、R2已有、R3现行、原创证据/缺件、候选状态、责任角色/下一动作/关闭证据和来源条号对应；页头须可读，汇总用可复算公式并有缓存。可采用等价状态名和工作表设计，不按Gold字节判分。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "备忘录给总体候选结论、真实冲突询证问题、优先补证与复核顺序，六项及数字与工作簿一致。当前无权关闭上述缺证/冲突，不能宣称真实签字、审批、激活或招募。对于S04/S05同一对象矛盾，没有给优先版本规则，应向申办方QA证据所有人具体询证并保留待核，不自行选一份修正输入。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "可按给定证据标HOLD/CLARIFY_HOLD/REVISE或等价中文，不把修订项理解为已关闭。具体期限、合格阈值及完整地区/试验必要批准清单未给，留待有权责任人核实，不自设统一天数或通用阈值。所有输入只读；不用真实发送、签字、改系统或运行临床试验。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-guideline-good-clinical-practice-e6r2-step-5-revision-2_en.pdf",
+        "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-e6-r3-guideline-good-clinical-practice-gcp-step-5_en.pdf"
+      ]
+    },
+    {
+      "name": "S04_D0与启动证据登记.xlsx",
+      "absolute_path": "题包内：S04_D0与启动证据登记.xlsx",
+      "url": "assets/tasks/MED-TIME-002/environment/input_files/S04_D0%E4%B8%8E%E5%90%AF%E5%8A%A8%E8%AF%81%E6%8D%AE%E7%99%BB%E8%AE%B0.xlsx",
+      "bytes": 7258,
+      "sha256": "f4b616ee497eb0e86e976ee4f88617e8650887d185aa1cb3829eafa1f374f150",
+      "description": "原创六项D0/给定事实及同编号PASS登记。",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "D0与证据"
+        },
+        {
+          "kind": "notice",
+          "text": "共7行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "ID",
+              "主题",
+              "D0主张",
+              "截至基准的给定事实"
+            ],
+            [
+              "M01",
+              "同意材料与过程",
+              "R3允许电子形式，视频版v1.1无需重新伦理核准即可启用。",
+              "EU01仅给定ICF v1.0纸面材料/过程的有效伦理意见；v1.1增加视频及远程确认过程，无相应伦理意见/身份核验方案。"
+            ],
+            [
+              "M02",
+              "委托与监督",
+              "CRO接管所有责任，申办方不再监督；口头追加电子同意审核。",
+              "已给的委托只含账户开通和技术工单；未转移同意内容/伦理审查工作，未更新协议。"
+            ],
+            [
+              "M03",
+              "质量风险计划",
+              "R2没有风险导向质量管理；R3允许低风险项目删除质量计划。",
+              "D0拟仅保留总页数检查，未记录同意版本正确性或主要终点数据链路风险。"
+            ],
+            [
+              "M04",
+              "同一验证结论冲突",
+              "验证登记写PASS，故QA-24-017已通过；忽略同批明细FAIL。",
+              "S04登记和S05明细均针对EU01/build2.4/QA-24-017，2025-07-22 16:00，无优先级/更正链或授权签署足以消解矛盾。"
+            ],
+            [
+              "M05",
+              "版本与配置验证",
+              "build2.3供应商通用通过即可覆盖build2.4全部站点和新接口，不需留文档。",
+              "可用基线仅build2.3的标准功能；build2.4增加EU01终点接口和同意版本记录，配置/接口风险评估及验证证据未提供。M04还另有冲突。"
+            ],
+            [
+              "M06",
+              "站点必要批准与激活",
+              "EU01材料已审，所以未给必要批准的EU02也可先激活再补。",
+              "EU02相关必要伦理/监管批准证据未提供；同意材料的EU01意见不覆盖EU02全部必要批准。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "QA登记"
+        },
+        {
+          "kind": "notice",
+          "text": "共2行 × 8列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "record",
+              "site",
+              "build",
+              "run_id",
+              "at_local",
+              "status",
+              "controlled_signature",
+              "priority_or_correction_chain"
+            ],
+            [
+              "validation_register",
+              "EU01",
+              "2.4",
+              "QA-24-017",
+              "2025-07-22 16:00 Europe/Amsterdam",
+              "PASS",
+              "not_provided",
+              "not_provided"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-guideline-good-clinical-practice-e6r2-step-5-revision-2_en.pdf",
+        "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-e6-r3-guideline-good-clinical-practice-gcp-step-5_en.pdf"
+      ]
+    },
+    {
+      "name": "S05_测试明细与基线.json",
+      "absolute_path": "题包内：S05_测试明细与基线.json",
+      "url": "assets/tasks/MED-TIME-002/environment/input_files/S05_%E6%B5%8B%E8%AF%95%E6%98%8E%E7%BB%86%E4%B8%8E%E5%9F%BA%E7%BA%BF.json",
+      "bytes": 804,
+      "sha256": "3a6813d40aac99fae36ca44e285625fb703faf22af8bb14d4a0229d8d6dd0ce4",
+      "description": "原创同编号FAIL及2.3通用PASS基线，无隐藏哪份为真的答案。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"source_kind\": \"original_synthetic_test_excerpt_not_real_validation\",\n  \"as_of\": \"2025-07-24 09:00 Europe/Amsterdam\",\n  \"run\": {\n    \"site\": \"EU01\",\n    \"build\": \"2.4\",\n    \"run_id\": \"QA-24-017\",\n    \"at_local\": \"2025-07-22 16:00 Europe/Amsterdam\",\n    \"test\": \"audit_trail_persistence\",\n    \"observed_status\": \"FAIL\",\n    \"controlled_signature\": null,\n    \"priority_or_correction_chain\": null\n  },\n  \"baseline\": {\n    \"build\": \"2.3\",\n    \"scope\": \"generic standard functions only; no EU01 new endpoint interface or v2.4 consent-version configuration\",\n    \"observed_status\": \"PASS\"\n  },\n  \"note\": \"两份同编号/站点/build的矛盾是题内真实待澄清点，不提供哪个正确的隐藏答案；保留原记录，请QA证据所有人核原始明细、环境、受控结论及更正链。\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-guideline-good-clinical-practice-e6r2-step-5-revision-2_en.pdf",
+        "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-e6-r3-guideline-good-clinical-practice-gcp-step-5_en.pdf"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "启动复核备忘录.docx",
+      "absolute_path": "题包内：启动复核备忘录.docx",
+      "url": "assets/tasks/MED-TIME-002/solution/golden_output/%E5%90%AF%E5%8A%A8%E5%A4%8D%E6%A0%B8%E5%A4%87%E5%BF%98%E5%BD%95.docx",
+      "bytes": 39951,
+      "sha256": "906c4914794e2532b3b9825e64b9d9896e252246109ad6f6bee01cd14b55d98f",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "EU研究启动资料复核｜R2→R3"
+        },
+        {
+          "kind": "paragraph",
+          "text": "基准：2025-07-24 10:00 Europe/Amsterdam。原创训练案例；待有权负责人审阅，非伦理/监管批准或医疗建议。"
+        },
+        {
+          "kind": "heading",
+          "text": "结论：暂缓，不是“R3上线即获批”"
+        },
+        {
+          "kind": "paragraph",
+          "text": "六项全部保留：M01/M05/M06为HOLD，M04为CLARIFY_HOLD，M02/M03须REVISE；4项阻断/询证、2项修订。总体HOLD_FOR_EVIDENCE_AND_AUTHORIZED_REVIEW，external_release=false。未激活系统、招募/入组参与者、取得任何真实签字或发送通知。"
+        },
+        {
+          "kind": "heading",
+          "text": "版本、时间和变化不能混写"
+        },
+        {
+          "kind": "paragraph",
+          "text": "R2的ICH采纳为2016-11-09，CHMP最终采纳2016-12-15，欧盟起施2017-06-14。R3的ICH Step4为2025-01-06；EMA文件封面分别列CHMP最终采纳2024-12-12、文件日期2025-01-23、起施2025-07-23。保留不同事件标签，不以日期看似逆序就改原文；1月6日不是全球生效日。基准日的EU核对使用S02的Principles/Annex1，不外推美国/中国，不用后来整合版Annex2。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "R2已要求风险导向质量管理、CRO书面分工/申办方监督及计算机化系统风险验证，不能全标“R3新增”。R3对服务提供者、电子/远程同意、全生命周期配置/接口验证与站点系统激活给出进一步细化；电子或远程允许不等于强制，也不替代伦理和适用地区要求。"
+        },
+        {
+          "kind": "heading",
+          "text": "唯一不可自行消解的证据冲突"
+        },
+        {
+          "kind": "paragraph",
+          "text": "M04：S04登记PASS与S05审计轨迹明细FAIL，同为EU01/build2.4/QA-24-017、2025-07-22 16:00。未提供可判优先的受控签署/更正链，故既不断言系统确定通过，也不当成已查明系统必然失败。请申办方QA证据所有人说明正式受控结论、原始运行与环境、异常处置及更正链。澄清前不能作为已验证放行；原输入保留。"
+        },
+        {
+          "kind": "heading",
+          "text": "先补什么，由谁复核"
+        },
+        {
+          "kind": "paragraph",
+          "text": "M01 同意材料与过程｜研究者/伦理联络人：取得v1.1材料与过程相应伦理意见、身份核验及适配证据后再议启用；本题不授权绕用v1.0招募。 关闭证据：批准范围/版本、身份核验流程、研究者确认；不是平台上线截图。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "M02 委托与监督｜申办方项目负责人/合同岗：明确新增职责、机构/研究者权限与适用要求，必要时更新协议并制定监督/升级；不能把技术工单当已转移临床职责。 关闭证据：受控职责与协议、合格性/监督资料；不伪造签署。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "M03 质量风险计划｜申办方质量负责人/研究者：识别同意版本/有效过程、主要终点采集完整性两类关键因素，记录风险、控制、责任与升级；阈值须按方案/风险制定，不编统一1%或100%SDV。 关闭证据：修订质量风险计划及控制依据，保留为什么控制与风险相称。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "M04 同一验证结论冲突｜申办方QA证据所有人：询证同编号/版本/站点的正式受控结论及签署依据，核原始测试/异常处置与更正链；澄清前不作为已验证放行。 关闭证据：QA明确答复、原始运行/审计轨迹、异常处理和可追踪更正；不能只给营销口头保证。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "M05 版本与配置验证｜系统责任方/申办方验证负责人：核本试验用途、版本、配置和接口，评估变化对既有/新数据的影响并补相应验证/留档；M04澄清不替代本项补证。 关闭证据：风险评估、需求—测试追踪、本试验配置/接口验证与变更记录。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "M06 站点必要批准与激活｜申办方启动负责人/站点负责人：索取EU02全部相关必要批准与适用性核对，完成站点放行复核后再议激活；当前也不宣称EU01整体可启动。 关闭证据：EU02必要批准清单/对应版本及授权审核记录；本次只有候选建议。"
+        },
+        {
+          "kind": "heading",
+          "text": "本次没有证明什么"
+        },
+        {
+          "kind": "paragraph",
+          "text": "v1.0纸面同意的EU01意见不覆盖v1.1视频/远程过程，也不覆盖EU02全部必要批准。M04澄清不自动关闭M05配置/接口缺证。只有风险与用途相称的验证补证，不要求一律从零重测；不擅设1%容忍度、100%源数据核查、强制电子同意或统一完成天数。具体控制和期限由方案/风险及有权责任人确定。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "依据：S01 EMA E6(R2) §4.8.1–2/5.0/5.2/5.5.3/8.2；S02 EMA E6(R3) §2.8.1–2/3.6/3.9/3.10/4.3.4–5；S03委托与消息、S04登记、S05原始测试摘录。官方PDF保留EMA版权和转载许可；原创案例及本中文分析不由EMA/ICH背书。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "启动资料差异与行动.xlsx",
+      "absolute_path": "题包内：启动资料差异与行动.xlsx",
+      "url": "assets/tasks/MED-TIME-002/solution/golden_output/%E5%90%AF%E5%8A%A8%E8%B5%84%E6%96%99%E5%B7%AE%E5%BC%82%E4%B8%8E%E8%A1%8C%E5%8A%A8.xlsx",
+      "bytes": 19165,
+      "sha256": "a746ea1f0cfa559c4e2513913ed9fb050036078df505b00a2dd75a256fe6708a",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "看板"
+        },
+        {
+          "kind": "notice",
+          "text": "共7行 × 2列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "指标",
+              "结果"
+            ],
+            [
+              "覆盖核查项",
+              "=COUNTA(差异核对!A2:A7)\n缓存：6"
+            ],
+            [
+              "待修订",
+              "=COUNTIF(差异核对!G2:G7,\"REVISE\")\n缓存：2"
+            ],
+            [
+              "阻断/待询证",
+              "=COUNTIF(差异核对!G2:G7,\"HOLD\")+COUNTIF(差异核对!G2:G7,\"CLARIFY_HOLD\")\n缓存：4"
+            ],
+            [
+              "总体候选门禁",
+              "HOLD_FOR_EVIDENCE_AND_AUTHORIZED_REVIEW"
+            ],
+            [
+              "真实启用/入组",
+              "未执行；external_release=false"
+            ],
+            [
+              "基准",
+              "2025-07-24 10:00 Europe/Amsterdam；EU项目资料审核"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "差异核对"
+        },
+        {
+          "kind": "notice",
+          "text": "共7行 × 8列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "ID",
+              "主题",
+              "D0主张",
+              "R2已有要求",
+              "R3当前条文/变化",
+              "核对结论",
+              "候选状态",
+              "依据"
+            ],
+            [
+              "M01",
+              "同意材料与过程",
+              "R3允许电子形式，视频版v1.1无需重新伦理核准即可启用。",
+              "R2 4.8.1/4.8.2：开始前同意材料须获伦理意见；重要新信息修订先审后用。",
+              "R3 2.8.1(a/c/d/e)、2.8.2：纸/电子可用，适配人群与身份核验，修订需事先伦理意见。",
+              "保留既有保护并细化电子/远程过程；不是R3新创伦理审查或一律强制电子同意。",
+              "HOLD",
+              "S01 p24/4.8.1–2；S02 p18–19/2.8.1–2；S04 M01"
+            ],
+            [
+              "M02",
+              "委托与监督",
+              "CRO接管所有责任，申办方不再监督；口头追加电子同意审核。",
+              "R2 5.2.1–3：转移职能书面明确；数据质量/完整性最终责任仍在申办方，并监督转包。",
+              "R3 3.6.1/2/4/6/9、3.9：活动前记录协议、变更更新，最终责任与适度监督仍在申办方。",
+              "保留并扩展/细化服务提供者的责任和监督，不因CRO合同失去申办方职责。",
+              "REVISE",
+              "S01 p32/5.2.1–3；S02 p26–28/3.6/3.9；S04 M02"
+            ],
+            [
+              "M03",
+              "质量风险计划",
+              "R2没有风险导向质量管理；R3允许低风险项目删除质量计划。",
+              "R2 5.0/5.0.1/5.0.4已经要求风险导向、关键过程/数据识别及比例化控制。",
+              "R3 3.10/3.10.1进一步明确质量源于设计、关键质量因素与比例化风险管理。",
+              "不是新创风险管理，也不是低风险免质量；增加与实际用途相称的控制。",
+              "REVISE",
+              "S01 p30–31/5.0；S02 p28–29/3.10；S04 M03"
+            ],
+            [
+              "M04",
+              "同一验证结论冲突",
+              "验证登记写PASS，故QA-24-017已通过；忽略同批明细FAIL。",
+              "R2 5.5.3(a/c)：验证预期用途及审计轨迹，不能用单字段替代完整证据。",
+              "R3 4.3.4(b/g/h/i)：以要求/测试及保存文档证明适用性，未解决事项需说明与风险处置。",
+              "证据结论未澄清，不裁定系统确定合格或确定失败，不擅自修改任一输入。",
+              "CLARIFY_HOLD",
+              "S01 p33–34/5.5.3；S02 p46–47/4.3.4；S04 M04与S05 QA-24-017"
+            ],
+            [
+              "M05",
+              "版本与配置验证",
+              "build2.3供应商通用通过即可覆盖build2.4全部站点和新接口，不需留文档。",
+              "R2 5.5.3(a/h)已要求按预期用途风险验证和升级/迁移数据完整性。",
+              "R3 4.3.4(a/c/e/g/h)细化变更、配置、接口及第三方系统的适用性验证；不要求一律从零全部重测。",
+              "通用验证可作输入但不能自动覆盖本试验变更；风险决定需要补的范围。",
+              "HOLD",
+              "S01 p33–34/5.5.3；S02 p46–47/4.3.4；S04 M05/S05 baseline"
+            ],
+            [
+              "M06",
+              "站点必要批准与激活",
+              "EU01材料已审，所以未给必要批准的EU02也可先激活再补。",
+              "R2 4.8.1/8.2：启动前核对应伦理意见/必要启动记录，不能借其他站点文件代替。",
+              "R3 4.3.5：针对单站点的必要试验批准齐备后才能实施/发布/激活试验专用系统。",
+              "按站点和活动边界设置门禁，不把“已具备部分文件”当整体启动许可。",
+              "HOLD",
+              "S01 p24/4.8.1与§8.2；S02 p47/4.3.5；S04 M06"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "行动台账"
+        },
+        {
+          "kind": "notice",
+          "text": "共7行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "ID",
+              "状态",
+              "责任角色",
+              "下一动作",
+              "关闭证据",
+              "最早复核条件"
+            ],
+            [
+              "M01",
+              "HOLD",
+              "研究者/伦理联络人",
+              "取得v1.1材料与过程相应伦理意见、身份核验及适配证据后再议启用；本题不授权绕用v1.0招募。",
+              "批准范围/版本、身份核验流程、研究者确认；不是平台上线截图。",
+              "证据齐备且经有权人员复核；不预写日历截止或已完成"
+            ],
+            [
+              "M02",
+              "REVISE",
+              "申办方项目负责人/合同岗",
+              "明确新增职责、机构/研究者权限与适用要求，必要时更新协议并制定监督/升级；不能把技术工单当已转移临床职责。",
+              "受控职责与协议、合格性/监督资料；不伪造签署。",
+              "证据齐备且经有权人员复核；不预写日历截止或已完成"
+            ],
+            [
+              "M03",
+              "REVISE",
+              "申办方质量负责人/研究者",
+              "识别同意版本/有效过程、主要终点采集完整性两类关键因素，记录风险、控制、责任与升级；阈值须按方案/风险制定，不编统一1%或100%SDV。",
+              "修订质量风险计划及控制依据，保留为什么控制与风险相称。",
+              "证据齐备且经有权人员复核；不预写日历截止或已完成"
+            ],
+            [
+              "M04",
+              "CLARIFY_HOLD",
+              "申办方QA证据所有人",
+              "询证同编号/版本/站点的正式受控结论及签署依据，核原始测试/异常处置与更正链；澄清前不作为已验证放行。",
+              "QA明确答复、原始运行/审计轨迹、异常处理和可追踪更正；不能只给营销口头保证。",
+              "证据齐备且经有权人员复核；不预写日历截止或已完成"
+            ],
+            [
+              "M05",
+              "HOLD",
+              "系统责任方/申办方验证负责人",
+              "核本试验用途、版本、配置和接口，评估变化对既有/新数据的影响并补相应验证/留档；M04澄清不替代本项补证。",
+              "风险评估、需求—测试追踪、本试验配置/接口验证与变更记录。",
+              "证据齐备且经有权人员复核；不预写日历截止或已完成"
+            ],
+            [
+              "M06",
+              "HOLD",
+              "申办方启动负责人/站点负责人",
+              "索取EU02全部相关必要批准与适用性核对，完成站点放行复核后再议激活；当前也不宣称EU01整体可启动。",
+              "EU02必要批准清单/对应版本及授权审核记录；本次只有候选建议。",
+              "证据齐备且经有权人员复核；不预写日历截止或已完成"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "版本与范围"
+        },
+        {
+          "kind": "notice",
+          "text": "共9行 × 4列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "版本事项",
+              "文件/事件日期",
+              "生效或状态",
+              "定位/边界"
+            ],
+            [
+              "R2 ICH Step4",
+              "2016-11-09",
+              "国际采纳事件",
+              "S01历史；不混为欧盟实施日"
+            ],
+            [
+              "R2 CHMP最终采纳",
+              "2016-12-15",
+              "与页首2016-12-01标签分别记录",
+              "S01封面；不能用网页1997旧元数据当R2修订实施"
+            ],
+            [
+              "R2欧盟起施",
+              "2017-06-14",
+              "历史对照",
+              "S01封面"
+            ],
+            [
+              "R3 ICH Step4",
+              "2025-01-06",
+              "不是全球同日起施",
+              "S02历史页"
+            ],
+            [
+              "R3 CHMP最终采纳",
+              "2024-12-12",
+              "事件标签不改写成ICH采纳",
+              "S02封面"
+            ],
+            [
+              "R3文件日期",
+              "2025-01-23",
+              "不是起施日",
+              "S02封面"
+            ],
+            [
+              "R3欧盟起施",
+              "2025-07-23",
+              "本题EU历史基准2025-07-24已到",
+              "S02封面；只用Principles/Annex1，不混后来Annex2"
+            ],
+            [
+              "适用边界",
+              "本题为启动资料建议",
+              "不能推出任何站点/参与者已批准、已同意或可招募",
+              "必要当地要求与全部批准由有权角色核验；不外推美国/中国"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "询证单"
+        },
+        {
+          "kind": "notice",
+          "text": "共2行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "问题",
+              "冲突定位",
+              "向谁问",
+              "澄清前状态",
+              "要求回传"
+            ],
+            [
+              "同一测试为何PASS与FAIL？",
+              "EU01 / build2.4 / QA-24-017 / 2025-07-22 16:00；S04登记PASS vs S05 audit_trail_persistence FAIL",
+              "申办方QA证据所有人",
+              "CLARIFY_HOLD；不自行选边、不改输入",
+              "正式受控结论、签署依据、原始运行明细、异常处置/更正链；核对版本/站点/环境一致性"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": []
+}

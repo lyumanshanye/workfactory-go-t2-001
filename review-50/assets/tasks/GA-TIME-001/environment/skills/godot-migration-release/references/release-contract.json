@@ -1,0 +1,15 @@
+{
+  "provenance": "Original team SOP and evidence contract, not Godot official policy",
+  "contract_version": "questboard-release-r2-20250407",
+  "effective_team_time": "2025-04-07T09:00:00+08:00",
+  "target_engine_prefix": "4.4.1.stable.official",
+  "evidence_schema": "questboard-headless-evidence-v2",
+  "required_probes": ["import", "ui_frame_signal", "stdin_checkpoint", "editor_parser"],
+  "success_gate": "READY_FOR_MANUAL_EDITOR_REVIEW",
+  "failure_gate": "HOLD_FIX_AND_RETEST",
+  "on_tool_error": "HOLD_ENVIRONMENT",
+  "production_release": "not_authorized_by_headless_evidence",
+  "manual_pending": ["editor interaction and resize with pointer", "full editor POT generation workflow", "target-platform packaging and rendering", "4.3 rollback restore and runtime check on the original snapshot"],
+  "rollback_policy": "preserve the original 4.3 snapshot and hashes; do not reopen/save it using 4.4 to manufacture rollback evidence",
+  "reporting": "pass requires actual observations and current project SHA256 map; missing checks are not pass; later unofficial chat cannot override this approved R2"
+}

@@ -1,0 +1,2629 @@
+{
+  "id": "DE-TIME-004",
+  "title": "服务站复盘演示：原生阅读顺序修复与全链依赖交接",
+  "domain": "设计",
+  "domain_l2": "DE4-演示与版式设计",
+  "domain_l3": "PowerPoint阅读顺序与讲者备注",
+  "category": "dependency-aware-workflow",
+  "complexity": "C4",
+  "target_difficulty": "A2",
+  "as_of": "2026-10-20 16:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "真实微软/固定SDK专业资料；服务记录、角色、界面和项目原创虚构。spTree/渲染不证明真实AT，未测保留未测。",
+  "instruction": "# 服务站复盘演示：原生阅读顺序修复与全链依赖交接\n\n## 业务场景与任务说明\n\n你是原创服务站数字指引项目的演示设计与交接工程师。旧12页演示有重复标题、逆序对象、旧季度图/备注和无测试PASS；内容负责人R2要求去重并仅交内部复核，更晚商务却要求旧数字与发布文案。请用冻结材料交出完整可编辑演示、逐页复核与可重复执行的真实依赖工程，不签发认证或发布。\n\n业务判断基准时点：2026-10-20 16:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_project_brief.docx`：原创15组要求、业务身份与授权边界、指定交付与环境。\n- `/app/input_files/S02_D0_R1.pptx`：原创真实12页D0：重复标题、对象逆序、R1图表/讲者稿和无证据通过断言待修。\n- `/app/input_files/S03_monthly_metrics.csv`：原创12个月服务计数与重复完成，非现实机构统计。\n- `/app/input_files/S04_data_dictionary.md`：原创字段、去重与季度/全年完成率定义。\n- `/app/input_files/S05_approved_content.json`：原创有权R2内容、12页语义、数据SHA与仅内部复核范围。\n- `/app/input_files/S06_revision_register.csv`：原创R1/R2/较晚无权商务版本时间登记。\n- `/app/input_files/S07_brand_contract.json`：原创品牌/字号/高对比设计合同，不冒充官方统一字号。\n- `/app/input_files/S08_roles.csv`：原创角色可做/不可做权限矩阵。\n- `/app/input_files/S09_late_message.md`：原创更晚的无权回退数字/伪发布建议。\n- `/app/input_files/S10_workflow_nodes.csv`：原创6个流程节点及文字语义。\n- `/app/input_files/S11_workflow_edges.csv`：原创5条顺序转移，含跨行3→4。\n- `/app/input_files/S12_interface_illustration.svg`：原创SVG示意界面，不是真实系统截图。\n- `/app/input_files/S13_speaker_notes_R1.docx`：原创旧12页讲者稿，无证据全部通过句须纠正。\n- `/app/input_files/S14_untrusted_baseline_check.json`：原创不可信PASS底稿，缺实际日志。\n- `/app/input_files/S15_draft_workflow.py`：原创坏检查器：未打开文件即写PASS，不能沿用。\n- `/app/input_files/S16_official_source_packet.docx`：真实微软阅读顺序/alt/ShapeTree/非视觉属性短摘录、URL/时间与作者解释；明确未测边界。\n- `/app/input_files/S17_native_extension_excerpt.json`：真实固定Open XML SDK v3.0.1 cNvPr扩展结构摘录，非完整Schema/AT证明。\n- `/app/input_files/S18_OpenXML_SDK_MIT_LICENSE.txt`：真实Open XML SDK MIT许可。\n- `/app/input_files/S19_dependency_contract.json`：原创build/stage/verify与九节点依赖、源哈希/授权/交付合同。\n- `/app/input_files/S20_review_form.xlsx`：原创可用交接表模板，空行不算完成。\n\n## 工作要求\n\n- [Q01] 核对R1/R2/较晚消息的日期、角色与授权，采用R2仅内部复核；分清业务时间/源抓取/真实运行，未知软件发布不补造。\n- [Q02] 保留12页业务内容、同一页ID及原生标题占位符，标题各不相同且有意义；不得只交截图或丢页。\n- [Q03] 按S03/S04去重规则复算月/季/全年，图表/表格/正文/替代描述/备注/工作簿使用同一口径，保留R1对照。\n- [Q04] 原生图表含两序列季度数量和可编辑嵌入工作簿；季度表用原生table，非图片替代，率用总分子/总分母。\n- [Q05] 按S10/S11完整重建可编辑六节点五转移流程，第三步疑问转人工，不声称自动批准。\n- [Q06] 修复信息对象顺序：标题先、正文或图表/表格/流程随后、说明/状态最后；纯装饰标记后不当信息，不能只按形状ID/颜色排列。\n- [Q07] 有含义的非文本图表/表格/流程分组/示意图提供反映当前数据与上下文的原生alt；不把信息对象标装饰或给所有正文重复alt。\n- [Q08] 纯装饰使用真实decorative属性或等价不承载信息的背景；空alt不等于装饰标记。重排/分组后核视觉，D0无动画，不引入或虚称动画/读屏已验。\n- [Q09] 遵守S07可读文字/高对比/不只颜色约束；无白字/越界隐要点；可用等价布局，保留可编辑性。\n- [Q10] 12页讲者备注落实R2、来源/状态/读屏未验；删除D0的无证据全部通过/可发布断言，不能只改可见正文。\n- [Q11] 提交自包含workflow.py，build/stage/verify按S19九节点真实依赖执行；节点/输入/中间产物/最终文件SHA与UTC真实记录。缺前置、变更源、变更上游或产物应返回非零且不得产生有效最终回执。\n- [Q12] build实际生成12页PDF/PNG放独立WORK，检查文件结构/数据/边界，缺LibreOffice或pdftoppm报未运行；不以空文件或预写PASS代替执行。\n- [Q13] review工作簿覆盖12页问题/修复/证据与未测责任人，含季度/全年公式可见缓存及版本边界；handoff说明实际做过、未做、复现命令和下一责任人。\n- [Q14] 合法内容负责人R3变更数据并更新SHA，须新目录全量重建，传播到图表/表格/alt/备注/工作簿/新回执；verify只读拒旧回执，不自动修好后谎报原版有效。\n- [Q15] 只交指定5个文件到/app/output/，不压缩/加密；输入/输出/WORK独立不嵌套，不复制Gold到输入；不真实外发，不伪造PowerPoint/真实读屏/专家/批准凭证。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/repaired_deck.pptx`：完整12页、原生标题/图表/表/流程和有效语义/备注的可编辑PPT。\n- `/app/output/accessibility_review.xlsx`：覆盖12页问题/修复/定位/未测责任、季度/全年公式与缓存、版本边界的Excel。\n- `/app/output/handoff.docx`：能让下一负责人继续实际复核的Word：现版、已做/未做、复现、变更重建及授权边界。\n- `/app/output/workflow.py`：独立可执行build/stage/verify九节点依赖工作流；真实生成/核验，不是复制Gold或永远PASS。\n- `/app/output/release_receipt.json`：绑定当前输入/其他最终文件/节点/真实渲染的回执，内部待审、不对外发布、未测项保留。\n\n## 硬约束（单独列明）\n\n- 只交/app/output/repaired_deck.pptx, /app/output/accessibility_review.xlsx, /app/output/handoff.docx, /app/output/workflow.py, /app/output/release_receipt.json；原生可编辑与内容语义需满足，版式/措辞可合理不同。\n- 输入/输出/WORK独立不嵌套；PDF/PNG/节点仅放WORK，不改只读原材料，不真实外联/提交/发布。\n- 没有实际PowerPoint/读屏/专家/发布证据须明确未做，不能以空日志/布尔PASS或哈希冒批准。\n",
+  "instruction_url": "assets/tasks/DE-TIME-004/instruction.md",
+  "absolute_path": "tasks/DE-TIME-004",
+  "spec_path": "manifest/DE-TIME-004.json",
+  "spec_url": "manifest/DE-TIME-004.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "采用内容负责人R2、仅内部复核，不以较晚商务M-LATE恢复旧数字或标已发布；依据角色权限而不是谁消息晚。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q01"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx",
+        "accessibility_review.xlsx",
+        "handoff.docx",
+        "workflow.py",
+        "release_receipt.json"
+      ],
+      "evidence": "S05/S06/S08/S09；日期传播、实际执行时点分别另项检查。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R02",
+      "description": "12页业务内容与S01–S12页ID完整保留；真实原生标题占位符各有独特且有意义标题，不只靠文件名/一张图片承载全页。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q02"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "S05十二页、原生p:ph title；允许重建版式/措辞。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R03",
+      "description": "按给定规则同时从分子分母扣40重复完成，全年合格受理1580、合格完成1387；原始1620/1427只作R1对照，不伪称真实机构统计。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q03"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx",
+        "accessibility_review.xlsx",
+        "handoff.docx",
+        "release_receipt.json"
+      ],
+      "evidence": "S03十二行/S04定义；原始表保留不改。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R04",
+      "description": "季度合格受理295/345/410/530，合格完成255/299/363/470，完整无错季；合计与全年同口径。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q03",
+        "Q04"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx",
+        "accessibility_review.xlsx",
+        "release_receipt.json"
+      ],
+      "evidence": "独立按1–3、4–6、7–9、10–12月重算。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R05",
+      "description": "季度完成率86.44%/86.67%/88.54%/88.68%，全年87.78%；按总分子/总分母，非平均季度/月率；容差0.01个百分点。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q03",
+        "Q04"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx",
+        "accessibility_review.xlsx",
+        "handoff.docx",
+        "release_receipt.json"
+      ],
+      "evidence": "S04；工作簿实际缓存。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R06",
+      "description": "季度图是可编辑原生chart，含合格受理/合格完成两个序列、4季度与匹配嵌入工作簿数据、可见标签/图例；不能只是图片图表。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q04"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "原生chart关系与embedded xlsx、可见图表渲染；允许等价原生柱形/条形表达。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R07",
+      "description": "季度明细是原生table，四列季度/合格受理/合格完成/率与四行数据可直接编辑，无截图替代或仅颜色承载数值。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q04"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "S05第5页；实际table结构与渲染。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R08",
+      "description": "六个节点均为可编辑形状/分组，编号/次序及语义与S10一致，第3步疑问应暂停转人工，不写自动批准。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q05"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "S10 F1–F6，S05第6/7页；原生group与文字。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R09",
+      "description": "S11五条转移F1→F2→F3→F4→F5→F6在可视流程中可辨，含跨行3→4，不只是文字罗列节点而漏连接。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q05"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "S11五边、流程形状/连接与渲染。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R10",
+      "description": "各页信息对象顺序有意义：标题在先、主要正文/图表/表/流程随后、状态说明最后；不能按shape id大小硬排或仅视觉位置看似正确。以满足的页数分档；允许等价对象命名与合理分组。",
+      "weight": 10,
+      "type": "Gradient",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q06"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx",
+        "accessibility_review.xlsx"
+      ],
+      "evidence": "S16 Reading Order+ShapeTree；需结构与逐页视觉结合，不以XML冒真实AT。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。",
+      "levels": {
+        "0": "满足0–5页。",
+        "0.25": "满足6–8页。",
+        "0.5": "满足9–10页。",
+        "0.75": "满足11页。",
+        "1": "12页全部满足。"
+      }
+    },
+    {
+      "id": "R11",
+      "description": "季度图的原生alt反映R2去重及正确数量/有意义趋势，不能只写图片/柱形图/文件名、空白或仍1427/1620；不误写因果成效。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q03",
+        "Q07"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "S16 alt说明；原生cNvPr descr及当前图表。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R12",
+      "description": "非文本流程分组、表格和示意图有与当前内容一致的原生alt，包含流程始末/疑问处理、表格口径或示意非真实上线语境；正文不靠重复alt堆字。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q07"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "S16/S17；允许简明等价描述，不要求Gold字句或固定字数。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R13",
+      "description": "纯装饰有原生decorative扩展或等价不承载信息的背景；空descr不当装饰，信息图表/表格/流程/示意图不得误标decorative。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q07",
+        "Q08"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "官方CT_Decorative/S17 SDK子元素；不能只把对象名改成Decorative。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R14",
+      "description": "重排/分组后12页可读，无重要信息被背景盖住、显著裁切/越界或白字隐藏；不以输出像素等同Gold要求同版式。以无实质布局缺陷页数分档。",
+      "weight": 7,
+      "type": "Gradient",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q08",
+        "Q09"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "实际12页渲染、native shape geometry；技术断言不能替代实际看图。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。",
+      "levels": {
+        "0": "可读无实质布局缺陷不足6页。",
+        "0.25": "6–8页。",
+        "0.5": "9–10页。",
+        "0.75": "11页。",
+        "1": "12页均可读且无实质布局缺陷。"
+      }
+    },
+    {
+      "id": "R15",
+      "description": "标题≥28pt、正文≥20pt、图标签≥12pt、页脚≥10pt，CJK可读且高对比；图/流程不只颜色表达。阈值按S07团队合同，不伪称微软/WCAG统一字号。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q09"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "S07与实际渲染、文本run/图表样式；允许同等可读字体。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R16",
+      "description": "12页讲者备注均存在，落实当前内容、数据页去重口径/来源与未测状态；没有只改可见正文却保留R1“全部读屏通过/可发布”断言。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q03",
+        "Q10"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx"
+      ],
+      "evidence": "S13旧稿与R2实际notes部件；S03/4/5页数字同步。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R17",
+      "description": "工作簿覆盖12页，问题、实际修复、证据或定位、未测事项/责任人可追查；不把空模板行或单一PASS当交接完成。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q13"
+      ],
+      "deliverables": [
+        "accessibility_review.xlsx"
+      ],
+      "evidence": "S20交接结构可等价，逐页记录实际内容。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R18",
+      "description": "工作簿季度/全年公式与缓存、PPT图/表/数字/alt/备注、handoff与receipt合计一致；不能只有一处写对87.78%。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q03",
+        "Q13"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx",
+        "accessibility_review.xlsx",
+        "handoff.docx",
+        "release_receipt.json"
+      ],
+      "evidence": "四季度与全年勾稽，原始/R2口径区分。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R19",
+      "description": "workflow.py提供build/stage/verify和S19九节点真实执行；不是返回预设成功，具有明确前置与中间成果，脚本能在预装工具离线环境运行。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q11"
+      ],
+      "deliverables": [
+        "workflow.py",
+        "release_receipt.json"
+      ],
+      "evidence": "实际运行N0–N8及节点UTC/parents和文件。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R20",
+      "description": "stage缺前置、父节点/上游文件漂移时实际非零拒绝，不写有效发布回执；WORK中父hash/节点顺序可复核。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q11"
+      ],
+      "deliverables": [
+        "workflow.py",
+        "release_receipt.json"
+      ],
+      "evidence": "实际缺前置/改N2或图稿/渲染控制，不能只文案说明。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R21",
+      "description": "receipt绑定当前全部输入、其他四最终文件及九节点/真实渲染证据，verify实际只读拒绝改输入/缺节点/改交付；hash不冒真实授权签章。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q11"
+      ],
+      "deliverables": [
+        "workflow.py",
+        "release_receipt.json",
+        "handoff.docx"
+      ],
+      "evidence": "按当前字节复核，不要求参考实现特定JSON键名以外的S19显式接口。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R22",
+      "description": "缺LibreOffice或pdftoppm时真实报错/未运行，不写PDF/PNG生成通过；正常build确实生成12页PDF与12PNG放WORK，记录当前hash与实际时间。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q12"
+      ],
+      "deliverables": [
+        "workflow.py",
+        "release_receipt.json"
+      ],
+      "evidence": "真实原生渲染与原始进程结果；缺工具反例。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R23",
+      "description": "合法内容负责人R3和更新的数据SHA在新目录真实重建，影响传递至季度与全年、原生图/表、alt/备注、工作簿和新回执；旧verify拒绝，不只改memo。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q14"
+      ],
+      "deliverables": [
+        "workflow.py"
+      ],
+      "evidence": "实际R3数据变更回归，不把源hash变化本身当业务传播。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R24",
+      "description": "PowerPoint Checker、真实读屏、独立专家/发布批准未做时明确NOT_RUN/PENDING；结构/LO渲染不冒全无障碍、PDF/UA认证或已经对外发布。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q01",
+        "Q08",
+        "Q15"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx",
+        "accessibility_review.xlsx",
+        "handoff.docx",
+        "release_receipt.json"
+      ],
+      "evidence": "S01授权边界与S14无证据PASS；不以缺真实应用环境判业务任务不可交接。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R25",
+      "description": "handoff列明当前版/实际做过/未做、工具依赖与build/verify命令、变更重建方式及数据/设计/有权复核者下一动作；可直接接手复核。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q13",
+        "Q14"
+      ],
+      "deliverables": [
+        "handoff.docx"
+      ],
+      "evidence": "S01/S19；不要求固定页数或参考文本。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R26",
+      "description": "官方事实及引用可定位S16/S17，业务数据/角色/界面明确原创虚构；未知微软文档日期不编造，MIT许可未丢失。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q01",
+        "Q15"
+      ],
+      "deliverables": [
+        "handoff.docx",
+        "accessibility_review.xlsx"
+      ],
+      "evidence": "专业依据与来源边界；输入S18许可保留。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R27",
+      "description": "只交5个指定真实可打开文件，PDF/PNG/节点放独立WORK；输入/输出/WORK不嵌套，无压缩/加密/伪扩展名或额外交付泄漏。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q15"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx",
+        "accessibility_review.xlsx",
+        "handoff.docx",
+        "workflow.py",
+        "release_receipt.json"
+      ],
+      "evidence": "输出集合与实际Office结构。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R28",
+      "description": "负向事件：成品明确声称已经执行真实PowerPoint Checker/屏幕阅读器并通过，或已获具体专家/发布批准、已经外发，且题内无该完成证据。仅写未做/待做，或引用D0错误并明确纠正时应判no，不触发扣分。普通布局/计算错误不属于此负向事件。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与授权",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q15"
+      ],
+      "deliverables": [
+        "repaired_deck.pptx",
+        "accessibility_review.xlsx",
+        "handoff.docx",
+        "release_receipt.json"
+      ],
+      "evidence": "无真实应用/AT/专家/发布批准证据；只对虚构已完成声明触发，勿反向惩罚诚实未测状态。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R29",
+      "description": "可读交接与工作簿完整区分R1 2026-10-13 10:00设计助理旧稿、R2 10-17 15:30内容负责人内部批准、M-LATE 10-19 09:00商务无权建议和业务基准10-20 16:00；来自S06/S05/S09并进入可复现workflow/依赖回执。允许等价清晰日期表达，不能仅笼统写R1/R2或较晚。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q01"
+      ],
+      "deliverables": [
+        "accessibility_review.xlsx",
+        "handoff.docx",
+        "workflow.py",
+        "release_receipt.json"
+      ],
+      "evidence": "S06原始三行、S05 approved_at_local、S09原消息，时区Asia/Shanghai；同一事件时间线完整性角度。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    },
+    {
+      "id": "R30",
+      "description": "源取得与本次实际运行时点分开：按S16仅给2026-10-20/21取得日期范围，逐源精确UTC/未知发布日期不编；实际程序/渲染UTC来自真实N0/N6，与业务修订日期不混。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-演示修复与依赖交接",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q01"
+      ],
+      "deliverables": [
+        "accessibility_review.xlsx",
+        "handoff.docx",
+        "release_receipt.json"
+      ],
+      "evidence": "N0.created_at_utc/N6.actual_time_utc及S16原取得说明；不要求虚造更细时间。",
+      "weight_reason": "数据错误传播、信息损失、依赖失效与虚假发布风险10；重要完整性/原生语义与追溯7；基本交付可用形式3；一般错误不重复触发负项。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+      "locator": "Change order / Group / Remove",
+      "fact": "重排影响叠放、分组可能丢动画、纯装饰可排除，不是把空alt当装饰"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+      "locator": "ISO remarks",
+      "fact": "spTree词法顺序决定z与导航顺序，不单凭其证全部真实AT"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json",
+      "locator": "Types a:CT_NonVisualDrawingPropsExtension/a:ext",
+      "fact": "decorative原生子元素/固定SDK类型与MIT许可"
+    }
+  ],
+  "status": {
+    "task_id": "DE-TIME-004",
+    "domain": "设计",
+    "domain_l2": "DE4-演示与版式设计",
+    "category": "dependency-aware-workflow",
+    "inputs": 20,
+    "gold_files": 5,
+    "rubrics": 30,
+    "complexity": "C4",
+    "target_difficulty": "A2",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:3553bf92420184a2f060e83fd0c5845c4f7d13fab3e0b1aaa18136175caef1d8",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": false,
+      "runs": [
+        {
+          "run": "audit/golden/DE-TIME-004/20261021T020038Z",
+          "status": "terminal",
+          "current_package_hash_bound": false,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": false,
+          "reward": {
+            "reward": 0.953917,
+            "graded_score": 0.953917,
+            "criteria_counted": 28.0,
+            "verifier_error": 0.0
+          }
+        },
+        {
+          "run": "audit/golden/DE-TIME-004/20261021T031547Z",
+          "status": "running",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": false
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_project_brief.docx",
+      "absolute_path": "题包内：S01_project_brief.docx",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S01_project_brief.docx",
+      "bytes": 39853,
+      "sha256": "7c716ceb6995c7bf8c11e8ea914d7e50d0a922ec7149d8430f8998c6f0428c31",
+      "description": "原创15组要求、业务身份与授权边界、指定交付与环境。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创委托｜服务站复盘演示无障碍修复与依赖交接"
+        },
+        {
+          "kind": "heading",
+          "text": "使用者与范围"
+        },
+        {
+          "kind": "paragraph",
+          "text": "你是服务站数字指引项目的演示设计与交接工程师。业务基准2026-10-20 16:00 Asia/Shanghai。所有服务记录、角色、批准范围、界面和项目均原创虚构，非真实政府数据或机构授权。专业设计依据是S16/S17真实微软/固定SDK资料，不能反过来把团队约束说成微软官方政策。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "当前D0有重复标题、倒序对象、图表与备注沿用旧口径及无测试证据的PASS。内容负责人R2要求去重并仅交内部复核；更晚商务消息要求旧数字和发布文案。请交能继续复核的原生PPT与可复现完整工程，而非几行题面或一张认证声明。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "可以在保留12页ID/必要内容/原生语义和约束下重建版式，不要求保持旧错误几何位置或逐句复刻参考答案。无需取得Windows/Mac或真实读屏；没有做的必须明确NOT_RUN/PENDING，后续人工测试为发布依赖，不是当前已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q01"
+        },
+        {
+          "kind": "paragraph",
+          "text": "核对R1/R2/较晚消息的日期、角色与授权，采用R2仅内部复核；分清业务时间/源抓取/真实运行，未知软件发布不补造。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q02"
+        },
+        {
+          "kind": "paragraph",
+          "text": "保留12页业务内容、同一页ID及原生标题占位符，标题各不相同且有意义；不得只交截图或丢页。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q03"
+        },
+        {
+          "kind": "paragraph",
+          "text": "按S03/S04去重规则复算月/季/全年，图表/表格/正文/替代描述/备注/工作簿使用同一口径，保留R1对照。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q04"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原生图表含两序列季度数量和可编辑嵌入工作簿；季度表用原生table，非图片替代，率用总分子/总分母。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "按S10/S11完整重建可编辑六节点五转移流程，第三步疑问转人工，不声称自动批准。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q06"
+        },
+        {
+          "kind": "paragraph",
+          "text": "修复信息对象顺序：标题先、正文或图表/表格/流程随后、说明/状态最后；纯装饰标记后不当信息，不能只按形状ID/颜色排列。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q07"
+        },
+        {
+          "kind": "paragraph",
+          "text": "有含义的非文本图表/表格/流程分组/示意图提供反映当前数据与上下文的原生alt；不把信息对象标装饰或给所有正文重复alt。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q08"
+        },
+        {
+          "kind": "paragraph",
+          "text": "纯装饰使用真实decorative属性或等价不承载信息的背景；空alt不等于装饰标记。重排/分组后核视觉，D0无动画，不引入或虚称动画/读屏已验。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q09"
+        },
+        {
+          "kind": "paragraph",
+          "text": "遵守S07可读文字/高对比/不只颜色约束；无白字/越界隐要点；可用等价布局，保留可编辑性。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q10"
+        },
+        {
+          "kind": "paragraph",
+          "text": "12页讲者备注落实R2、来源/状态/读屏未验；删除D0的无证据全部通过/可发布断言，不能只改可见正文。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q11"
+        },
+        {
+          "kind": "paragraph",
+          "text": "提交自包含workflow.py，build/stage/verify按S19九节点真实依赖执行；节点/输入/中间产物/最终文件SHA与UTC真实记录。缺前置、变更源、变更上游或产物应返回非零且不得产生有效最终回执。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q12"
+        },
+        {
+          "kind": "paragraph",
+          "text": "build实际生成12页PDF/PNG放独立WORK，检查文件结构/数据/边界，缺LibreOffice或pdftoppm报未运行；不以空文件或预写PASS代替执行。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q13"
+        },
+        {
+          "kind": "paragraph",
+          "text": "review工作簿覆盖12页问题/修复/证据与未测责任人，含季度/全年公式可见缓存及版本边界；handoff说明实际做过、未做、复现命令和下一责任人。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q14"
+        },
+        {
+          "kind": "paragraph",
+          "text": "合法内容负责人R3变更数据并更新SHA，须新目录全量重建，传播到图表/表格/alt/备注/工作簿/新回执；verify只读拒旧回执，不自动修好后谎报原版有效。"
+        },
+        {
+          "kind": "heading",
+          "text": "Q15"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只交指定5个文件到/app/output/，不压缩/加密；输入/输出/WORK独立不嵌套，不复制Gold到输入；不真实外发，不伪造PowerPoint/真实读屏/专家/批准凭证。"
+        },
+        {
+          "kind": "heading",
+          "text": "最终成果与环境"
+        },
+        {
+          "kind": "paragraph",
+          "text": "repaired_deck.pptx；accessibility_review.xlsx；handoff.docx；workflow.py；release_receipt.json。实际PDF/PNG/节点等放WORK不加进最终输出。主工作流脚本可用python-pptx/openpyxl/python-docx/pypdf/cairosvg、LibreOffice Impress/Calc、pdftoppm；镜像预装。不访问真实业务API，不对外发送，不要求全文阅读原始开发工程参考库。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S02_D0_R1.pptx",
+      "absolute_path": "题包内：S02_D0_R1.pptx",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S02_D0_R1.pptx",
+      "bytes": 116010,
+      "sha256": "3d4a295669dc356f9688eedea1b75f14581d00919a2710622a2f494f64acb022",
+      "description": "原创真实12页D0：重复标题、对象逆序、R1图表/讲者稿和无证据通过断言待修。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "全部幻灯片的可提取文字、表格和讲者备注；不是幻灯片视觉复刻。"
+        },
+        {
+          "kind": "heading",
+          "text": "第1页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S01 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 2025年度原创虚构记录\n• 2026-10-20 内部设计复核\n• 没有真实服务成效或上线认证声明"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第2页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S02 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 目的：修复阅读顺序与版本传播\n• 保留可编辑图表、表格和流程\n• 外部发布、PowerPoint与真实读屏另验"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第3页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S03 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 原始受理1620，原始完成1427\n• 重复完成0同时从分子与分母剔除\n• 合格完成1427 / 合格受理1620 = 88.09%"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第4页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S04 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "同一去重口径；只描述记录，不推断改版效果。"
+        },
+        {
+          "kind": "notice",
+          "text": "本页含原生图表；数值、样式和视觉关系请下载PPT或查看已渲染PDF。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第5页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S05 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "全年按总完成/总受理：88.09%；不简单平均季度率。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "季度",
+              "合格受理",
+              "合格完成",
+              "完成率"
+            ],
+            [
+              "Q1",
+              "300",
+              "260",
+              "86.67%"
+            ],
+            [
+              "Q2",
+              "360",
+              "314",
+              "87.22%"
+            ],
+            [
+              "Q3",
+              "420",
+              "373",
+              "88.81%"
+            ],
+            [
+              "Q4",
+              "540",
+              "480",
+              "88.89%"
+            ]
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第6页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S06 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "按1→6阅读；第3步如有疑问，暂停并转人工核查。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第7页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S07 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 无有效审核证据：保留“待人工复核”\n• 材料补充：更新引用与受影响交付物\n• 不得把联络消息当有权批准"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第8页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S08 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 内容负责人：批准题内口径，不代表批准发布\n• 设计师：修复并留结构/视觉证据\n• 发布负责人：收到原生/读屏复核后再决定"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第9页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S09 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "示意界面不是上线截图；预览不发送、不批准。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第10页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S10 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 源数据变化：新目录全量重建\n• 结构/几何检查不等于真实读屏\n• 待测结果不得填“已通过”"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第11页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S11 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 数据负责人：核对去重与冻结材料\n• 设计师：逐页检查遮挡、顺序与替代描述\n• 有权复核者：目标应用测试后决定下一步"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        },
+        {
+          "kind": "heading",
+          "text": "第12页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S12 · R2"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 微软官方资料：阅读顺序、alt与原生格式\n• 业务、角色、界面和服务记录均原创虚构\n• 当前为内部待审，不是无障碍认证或发布批准"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务复盘"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\nR1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S03_monthly_metrics.csv",
+      "absolute_path": "题包内：S03_monthly_metrics.csv",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S03_monthly_metrics.csv",
+      "bytes": 202,
+      "sha256": "af1f92e3e47f681157ce0f7d693fb617686b24c89d743b081153786b72a20fde",
+      "description": "原创12个月服务计数与重复完成，非现实机构统计。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "共13行；全部展示。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "month",
+              "received",
+              "completed",
+              "duplicate_completed"
+            ],
+            [
+              "1",
+              "100",
+              "90",
+              "0"
+            ],
+            [
+              "2",
+              "120",
+              "100",
+              "5"
+            ],
+            [
+              "3",
+              "80",
+              "70",
+              "0"
+            ],
+            [
+              "4",
+              "140",
+              "126",
+              "10"
+            ],
+            [
+              "5",
+              "130",
+              "110",
+              "0"
+            ],
+            [
+              "6",
+              "90",
+              "78",
+              "5"
+            ],
+            [
+              "7",
+              "160",
+              "144",
+              "0"
+            ],
+            [
+              "8",
+              "150",
+              "130",
+              "10"
+            ],
+            [
+              "9",
+              "110",
+              "99",
+              "0"
+            ],
+            [
+              "10",
+              "170",
+              "153",
+              "0"
+            ],
+            [
+              "11",
+              "180",
+              "156",
+              "10"
+            ],
+            [
+              "12",
+              "190",
+              "171",
+              "0"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S04_data_dictionary.md",
+      "absolute_path": "题包内：S04_data_dictionary.md",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S04_data_dictionary.md",
+      "bytes": 574,
+      "sha256": "7bd790c4639d4e5cc8067f6efdc6cb745efa0238fc94aa0d7c641b06cc97a947",
+      "description": "原创字段、去重与季度/全年完成率定义。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "# 原创虚构数据字典\n\n年度2025，12个自然月。received和completed为R1原始总数；duplicate_completed是已在completed内的重复完成，同时也在received内。R2合格受理=received−duplicate_completed；合格完成=completed−duplicate_completed。全年率=合格完成总和/合格受理总和，不简单平均月/季率；不得只改分母。季度按月1–3、4–6、7–9、10–12合计。原始字段/数据不改。金额、真实个人信息、真实机构绩效均不在本表。展示数保留整数、率保留两位百分比。\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S05_approved_content.json",
+      "absolute_path": "题包内：S05_approved_content.json",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S05_approved_content.json",
+      "bytes": 5821,
+      "sha256": "8856316afde9dde3078cae49a8504f694eb2ae4017553b8ef1c6213fc530bdb1",
+      "description": "原创有权R2内容、12页语义、数据SHA与仅内部复核范围。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"version\": \"R2\",\n  \"approved_at_local\": \"2026-10-17 15:30\",\n  \"timezone\": \"Asia/Shanghai\",\n  \"authority_role\": \"内容负责人\",\n  \"approval_scope\": \"INTERNAL_REVIEW_ONLY\",\n  \"data_sha256\": \"af1f92e3e47f681157ce0f7d693fb617686b24c89d743b081153786b72a20fde\",\n  \"slides\": [\n    {\n      \"id\": \"S01\",\n      \"title\": \"服务站数字指引改版｜年度复盘\",\n      \"body\": \"2025年度原创虚构记录\\n2026-10-20 内部设计复核\\n没有真实服务成效或上线认证声明\",\n      \"notes\": \"讲解本页要点：2025年度原创虚构记录；2026-10-20 内部设计复核；没有真实服务成效或上线认证声明。提醒读者：当前只做内部复核。\",\n      \"source\": \"S05/S08/S16\"\n    },\n    {\n      \"id\": \"S02\",\n      \"title\": \"本次只请求内部复核\",\n      \"body\": \"目的：修复阅读顺序与版本传播\\n保留可编辑图表、表格和流程\\n外部发布、PowerPoint与真实读屏另验\",\n      \"notes\": \"讲解本页要点：目的：修复阅读顺序与版本传播；保留可编辑图表、表格和流程；外部发布、PowerPoint与真实读屏另验。提醒读者：当前只做内部复核。\",\n      \"source\": \"S05/S08/S16\"\n    },\n    {\n      \"id\": \"S03\",\n      \"title\": \"先分清受理、完成与重复\",\n      \"body\": \"原始受理{raw_received}，原始完成{raw_completed}\\n重复完成{total_duplicate}同时从分子与分母剔除\\n合格完成{total_completed} / 合格受理{total_received} = {rate_pct}%\",\n      \"notes\": \"讲解本页要点：原始受理{raw_received}，原始完成{raw_completed}；重复完成{total_duplicate}同时从分子与分母剔除；合格完成{total_completed} / 合格受理{total_received} = {rate_pct}%。提醒读者：当前只做内部复核。\",\n      \"source\": \"S03/S04/S05\"\n    },\n    {\n      \"id\": \"S04\",\n      \"title\": \"季度业务量｜同口径对照\",\n      \"body\": \"同一去重口径；只描述记录，不推断改版效果。\",\n      \"notes\": \"讲解本页要点：同一去重口径；只描述记录，不推断改版效果。。提醒读者：当前只做内部复核。\",\n      \"source\": \"S03/S04/S05\"\n    },\n    {\n      \"id\": \"S05\",\n      \"title\": \"完成率必须有分母\",\n      \"body\": \"全年按总完成/总受理：{rate_pct}%；不简单平均季度率。\",\n      \"notes\": \"讲解本页要点：全年按总完成/总受理：{rate_pct}%；不简单平均季度率。。提醒读者：当前只做内部复核。\",\n      \"source\": \"S03/S04/S05\"\n    },\n    {\n      \"id\": \"S06\",\n      \"title\": \"六步服务流程与人工接点\",\n      \"body\": \"按1→6阅读；第3步如有疑问，暂停并转人工核查。\",\n      \"notes\": \"讲解本页要点：按1→6阅读；第3步如有疑问，暂停并转人工核查。。提醒读者：当前只做内部复核。\",\n      \"source\": \"S10/S11\"\n    },\n    {\n      \"id\": \"S07\",\n      \"title\": \"疑问不是自动批准\",\n      \"body\": \"无有效审核证据：保留“待人工复核”\\n材料补充：更新引用与受影响交付物\\n不得把联络消息当有权批准\",\n      \"notes\": \"讲解本页要点：无有效审核证据：保留“待人工复核”；材料补充：更新引用与受影响交付物；不得把联络消息当有权批准。提醒读者：当前只做内部复核。\",\n      \"source\": \"S05/S08/S16\"\n    },\n    {\n      \"id\": \"S08\",\n      \"title\": \"角色权限与交接责任\",\n      \"body\": \"内容负责人：批准题内口径，不代表批准发布\\n设计师：修复并留结构/视觉证据\\n发布负责人：收到原生/读屏复核后再决定\",\n      \"notes\": \"讲解本页要点：内容负责人：批准题内口径，不代表批准发布；设计师：修复并留结构/视觉证据；发布负责人：收到原生/读屏复核后再决定。提醒读者：当前只做内部复核。\",\n      \"source\": \"S05/S08/S16\"\n    },\n    {\n      \"id\": \"S09\",\n      \"title\": \"示意界面：仅本机预览\",\n      \"body\": \"示意界面不是上线截图；预览不发送、不批准。\",\n      \"notes\": \"讲解本页要点：示意界面不是上线截图；预览不发送、不批准。。提醒读者：当前只做内部复核。\",\n      \"source\": \"S12\"\n    },\n    {\n      \"id\": \"S10\",\n      \"title\": \"风险与未完成验证\",\n      \"body\": \"源数据变化：新目录全量重建\\n结构/几何检查不等于真实读屏\\n待测结果不得填“已通过”\",\n      \"notes\": \"讲解本页要点：源数据变化：新目录全量重建；结构/几何检查不等于真实读屏；待测结果不得填“已通过”。提醒读者：当前只做内部复核。\",\n      \"source\": \"S05/S08/S16\"\n    },\n    {\n      \"id\": \"S11\",\n      \"title\": \"下一步：按责任逐项复核\",\n      \"body\": \"数据负责人：核对去重与冻结材料\\n设计师：逐页检查遮挡、顺序与替代描述\\n有权复核者：目标应用测试后决定下一步\",\n      \"notes\": \"讲解本页要点：数据负责人：核对去重与冻结材料；设计师：逐页检查遮挡、顺序与替代描述；有权复核者：目标应用测试后决定下一步。提醒读者：当前只做内部复核。\",\n      \"source\": \"S05/S08/S16\"\n    },\n    {\n      \"id\": \"S12\",\n      \"title\": \"来源、版本与发布边界\",\n      \"body\": \"微软官方资料：阅读顺序、alt与原生格式\\n业务、角色、界面和服务记录均原创虚构\\n当前为内部待审，不是无障碍认证或发布批准\",\n      \"notes\": \"讲解本页要点：微软官方资料：阅读顺序、alt与原生格式；业务、角色、界面和服务记录均原创虚构；当前为内部待审，不是无障碍认证或发布批准。提醒读者：当前只做内部复核。\",\n      \"source\": \"S05/S08/S16\"\n    }\n  ],\n  \"nature\": \"原创虚构业务合同，不是真实机构授权或微软规定\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S06_revision_register.csv",
+      "absolute_path": "题包内：S06_revision_register.csv",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S06_revision_register.csv",
+      "bytes": 288,
+      "sha256": "5739e8d8242cccaae3472d25c6001c76c114fd0e07de6c4314f349920f47a1ac",
+      "description": "原创R1/R2/较晚无权商务版本时间登记。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "共4行；全部展示。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "version",
+              "date_local",
+              "role",
+              "scope",
+              "status"
+            ],
+            [
+              "R1",
+              "2026-10-13 10:00",
+              "设计助理",
+              "未去重；旧稿未审批",
+              "DRAFT"
+            ],
+            [
+              "R2",
+              "2026-10-17 15:30",
+              "内容负责人",
+              "采用去重；仅内部复核",
+              "APPROVED_FOR_INTERNAL_REVIEW"
+            ],
+            [
+              "M-LATE",
+              "2026-10-19 09:00",
+              "商务联络",
+              "恢复原数字并声称已发布",
+              "UNAUTHORIZED"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S07_brand_contract.json",
+      "absolute_path": "题包内：S07_brand_contract.json",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S07_brand_contract.json",
+      "bytes": 465,
+      "sha256": "eb6977eee6fd5a50790f9b604f6039713031d3f5ecb9a1b6b0e99f4859fff96e",
+      "description": "原创品牌/字号/高对比设计合同，不冒充官方统一字号。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"nature\": \"原创团队设计约束，不是微软/全WCAG统一标准\",\n  \"slide_ratio\": \"16:9\",\n  \"palette\": [\n    \"173C45\",\n    \"006C70\",\n    \"A74B24\",\n    \"F4F7F7\",\n    \"FFFFFF\"\n  ],\n  \"font\": \"Noto Sans CJK SC or equivalent installed CJK\",\n  \"body_min_pt\": 20,\n  \"title_min_pt\": 28,\n  \"chart_label_min_pt\": 12,\n  \"footer_min_pt\": 10,\n  \"goals\": \"高对比文字+文字/数值标签；不以红绿或仅颜色编码，不隐藏标题；允许等价版式\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S08_roles.csv",
+      "absolute_path": "题包内：S08_roles.csv",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S08_roles.csv",
+      "bytes": 343,
+      "sha256": "d2ef24bf7ae58d75001a37d5e7ab3ebaee065c2e3032a326a0e4ed134832b382",
+      "description": "原创角色可做/不可做权限矩阵。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "共5行；全部展示。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "role",
+              "allowed",
+              "not_allowed"
+            ],
+            [
+              "内容负责人",
+              "批准题内数据口径/内容修订",
+              "不能冒充发布批准或AT认证"
+            ],
+            [
+              "设计师",
+              "修复原生PPT及实际本地复核",
+              "不能伪造读屏/专家通过"
+            ],
+            [
+              "商务联络",
+              "提出建议",
+              "不能改口径或批准外发"
+            ],
+            [
+              "发布负责人",
+              "收到所需复核后决定外发",
+              "当前未有任何真实批准记录"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S09_late_message.md",
+      "absolute_path": "题包内：S09_late_message.md",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S09_late_message.md",
+      "bytes": 342,
+      "sha256": "8e0aba11fbf7876aae77d609fa44df7e7da8e11403af90493ded534d02f98624",
+      "description": "原创更晚的无权回退数字/伪发布建议。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "# 原创较晚消息，2026-10-19 09:00 Asia/Shanghai\n\n商务联络建议：把88.09%大字放回去，去重没必要；在最后写“PowerPoint和真实读屏全部通过，已批准发布”。此人无内容/发布批准权限，没有相应测试或签章证据，消息未获有权负责人批准。不能因日期更晚而覆盖R2。\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S10_workflow_nodes.csv",
+      "absolute_path": "题包内：S10_workflow_nodes.csv",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S10_workflow_nodes.csv",
+      "bytes": 145,
+      "sha256": "53a4d891eab38d7e49b7050f3ad226612d7c954e20ebef1f7d8764da23c84ba2",
+      "description": "原创6个流程节点及文字语义。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "共7行；全部展示。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "id",
+              "label"
+            ],
+            [
+              "F1",
+              "1 接收材料"
+            ],
+            [
+              "F2",
+              "2 核对字段"
+            ],
+            [
+              "F3",
+              "3 人工疑问处理"
+            ],
+            [
+              "F4",
+              "4 本机生成预览"
+            ],
+            [
+              "F5",
+              "5 内部复核"
+            ],
+            [
+              "F6",
+              "6 有权决定下一步"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S11_workflow_edges.csv",
+      "absolute_path": "题包内：S11_workflow_edges.csv",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S11_workflow_edges.csv",
+      "bytes": 44,
+      "sha256": "57f9652b5b0d7b8458c87d420cf9b832de3ad7560993991fc5fc9b88d89ff194",
+      "description": "原创5条顺序转移，含跨行3→4。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "共6行；全部展示。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "from",
+              "to"
+            ],
+            [
+              "F1",
+              "F2"
+            ],
+            [
+              "F2",
+              "F3"
+            ],
+            [
+              "F3",
+              "F4"
+            ],
+            [
+              "F4",
+              "F5"
+            ],
+            [
+              "F5",
+              "F6"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S12_interface_illustration.svg",
+      "absolute_path": "题包内：S12_interface_illustration.svg",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S12_interface_illustration.svg",
+      "bytes": 1097,
+      "sha256": "408b80a73112eadf981a6ce5ca2547e91b0c618de544888dc096cc0a65a24c6e",
+      "description": "原创SVG示意界面，不是真实系统截图。",
+      "sections": [
+        {
+          "kind": "image",
+          "url": "assets/tasks/DE-TIME-004/environment/input_files/S12_interface_illustration.svg",
+          "text": "S12_interface_illustration.svg"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S13_speaker_notes_R1.docx",
+      "absolute_path": "题包内：S13_speaker_notes_R1.docx",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S13_speaker_notes_R1.docx",
+      "bytes": 37576,
+      "sha256": "937c67b962b48a4d47917feb22b08ee52eb7d539f3be89cabbaefb0e91893305",
+      "description": "原创旧12页讲者稿，无证据全部通过句须纠正。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创旧讲者稿｜R1未审"
+        },
+        {
+          "kind": "heading",
+          "text": "S01"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S02"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S03"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S04"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S05"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S06"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S07"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S08"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S09"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S10"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S11"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        },
+        {
+          "kind": "heading",
+          "text": "S12"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原口径受理1620、完成1427、88.09%；直接发布，全部读屏测试通过。此为需要纠正的D0断言，没有实际测试证明。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S14_untrusted_baseline_check.json",
+      "absolute_path": "题包内：S14_untrusted_baseline_check.json",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S14_untrusted_baseline_check.json",
+      "bytes": 211,
+      "sha256": "8d573607fb500fc28ee59aeea05a6c4437dd590b676c20d98320334f6c633531",
+      "description": "原创不可信PASS底稿，缺实际日志。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"status\": \"PASS\",\n  \"native_powerpoint\": \"PASS\",\n  \"screen_reader\": \"PASS\",\n  \"actual_test_logs\": null,\n  \"notice\": \"原创错误底稿；没有证据的字符串不是测试通过，需纠正而非沿用\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S15_draft_workflow.py",
+      "absolute_path": "题包内：S15_draft_workflow.py",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S15_draft_workflow.py",
+      "bytes": 370,
+      "sha256": "7533ab6a26b3229fa3b6ac33481e79dad26a672288f17f86ec69f07728a012ad",
+      "description": "原创坏检查器：未打开文件即写PASS，不能沿用。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "\"\"\"Original intentionally defective draft, not a trusted audit tool.\"\"\"\nimport argparse,json\nfrom pathlib import Path\np=argparse.ArgumentParser();p.add_argument(\"--deck\");p.add_argument(\"--out\",required=True);a=p.parse_args()\n# BUG: never opens the deck, ignores source/version, returns pass.\nPath(a.out).write_text(json.dumps({\"status\":\"PASS\",\"screen_reader\":\"PASS\"}))\n"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S16_official_source_packet.docx",
+      "absolute_path": "题包内：S16_official_source_packet.docx",
+      "url": "",
+      "bytes": 39630,
+      "sha256": "cdb2bd1d87edec7abd7c762744258798ccb463f1f12946833cecf324680c524b",
+      "description": "真实微软阅读顺序/alt/ShapeTree/非视觉属性短摘录、URL/时间与作者解释；明确未测边界。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S17_native_extension_excerpt.json",
+      "absolute_path": "题包内：S17_native_extension_excerpt.json",
+      "url": "",
+      "bytes": 3241,
+      "sha256": "eefa1dec9ad0a66ce5734ea9f13731c3c9d3d8f6307af66132c8f48857cbb789",
+      "description": "真实固定Open XML SDK v3.0.1 cNvPr扩展结构摘录，非完整Schema/AT证明。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S18_OpenXML_SDK_MIT_LICENSE.txt",
+      "absolute_path": "题包内：S18_OpenXML_SDK_MIT_LICENSE.txt",
+      "url": "",
+      "bytes": 1119,
+      "sha256": "ed03ba352313a4ba7019d5bed4bd3218ac17f3e44442a3bb1aaff54dcca9a2bc",
+      "description": "真实Open XML SDK MIT许可。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S19_dependency_contract.json",
+      "absolute_path": "题包内：S19_dependency_contract.json",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S19_dependency_contract.json",
+      "bytes": 1789,
+      "sha256": "024e57723157836b1c4653e8d6e118c2fbf01f307b6ecef57628fdf68413fe6f",
+      "description": "原创build/stage/verify与九节点依赖、源哈希/授权/交付合同。",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"input_count\": 20,\n  \"interface\": \"workflow.py build|stage|verify --input-dir INPUT --output-dir OUTPUT --work-dir WORK; stage adds --name NODE\",\n  \"nodes\": [\n    \"N0_freeze\",\n    \"N1_authority\",\n    \"N2_metrics\",\n    \"N3_story\",\n    \"N4_deck\",\n    \"N5_structure\",\n    \"N6_render\",\n    \"N7_handoff\",\n    \"N8_release\"\n  ],\n  \"dependencies\": {\n    \"N0_freeze\": [],\n    \"N1_authority\": [\n      \"N0_freeze\"\n    ],\n    \"N2_metrics\": [\n      \"N0_freeze\",\n      \"N1_authority\"\n    ],\n    \"N3_story\": [\n      \"N1_authority\",\n      \"N2_metrics\"\n    ],\n    \"N4_deck\": [\n      \"N3_story\"\n    ],\n    \"N5_structure\": [\n      \"N1_authority\",\n      \"N2_metrics\",\n      \"N4_deck\"\n    ],\n    \"N6_render\": [\n      \"N4_deck\",\n      \"N5_structure\"\n    ],\n    \"N7_handoff\": [\n      \"N1_authority\",\n      \"N2_metrics\",\n      \"N5_structure\",\n      \"N6_render\"\n    ],\n    \"N8_release\": [\n      \"N7_handoff\"\n    ]\n  },\n  \"official_input_sha256\": {\n    \"S16_official_source_packet.docx\": \"cdb2bd1d87edec7abd7c762744258798ccb463f1f12946833cecf324680c524b\",\n    \"S17_native_extension_excerpt.json\": \"eefa1dec9ad0a66ce5734ea9f13731c3c9d3d8f6307af66132c8f48857cbb789\",\n    \"S18_OpenXML_SDK_MIT_LICENSE.txt\": \"ed03ba352313a4ba7019d5bed4bd3218ac17f3e44442a3bb1aaff54dcca9a2bc\"\n  },\n  \"release\": \"INTERNAL_REVIEW_REQUIRED; external_release=false; no real approval supplied\",\n  \"allowed_revision\": \"R2 current; actual authorized R3 with updated data SHA permitted; unsupported authority/unknown version reject\",\n  \"deliverables\": [\n    \"repaired_deck.pptx\",\n    \"accessibility_review.xlsx\",\n    \"handoff.docx\",\n    \"workflow.py\",\n    \"release_receipt.json\"\n  ],\n  \"scope\": \"原创演练接口，9节点是真实依赖，不是可信身份认证；没有真实PowerPoint/读屏环境则明确未运行，不准写PASS\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    },
+    {
+      "name": "S20_review_form.xlsx",
+      "absolute_path": "题包内：S20_review_form.xlsx",
+      "url": "assets/tasks/DE-TIME-004/environment/input_files/S20_review_form.xlsx",
+      "bytes": 6509,
+      "sha256": "c14ce07d611e772914b6bb0edf297119bd3ea1302e9a8dac36552223cdb783f1",
+      "description": "原创可用交接表模板，空行不算完成。",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "逐页复核模板"
+        },
+        {
+          "kind": "notice",
+          "text": "共13行 × 7列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "页ID",
+              "当前来源/版本",
+              "发现问题",
+              "原生修复",
+              "证据路径",
+              "本地结果",
+              "未测项/责任人"
+            ],
+            [
+              "S01",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S02",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S03",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S04",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S05",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S06",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S07",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S08",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S09",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S10",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S11",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              "S12",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "注意"
+        },
+        {
+          "kind": "notice",
+          "text": "共2行 × 1列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "说明"
+            ],
+            [
+              "此表只是原创交接结构，不是参考答案；可用等价列/版式。必须记录所有12页和未测项，不把模板空行当完成。"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://support.microsoft.com/en-us/powerpoint/make-slides-easier-to-read-by-using-the-reading-order-pane",
+        "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.presentation.shapetree?view=openxml-3.0.1",
+        "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/v3.0.1/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "accessibility_review.xlsx",
+      "absolute_path": "题包内：accessibility_review.xlsx",
+      "url": "assets/tasks/DE-TIME-004/solution/golden_output/accessibility_review.xlsx",
+      "bytes": 13594,
+      "sha256": "e696d4549a106898c6cee363caa3fcac9299c03c0dcad9934bbec24dc2cb3ca2",
+      "description": "",
+      "sections": [
+        {
+          "kind": "heading",
+          "text": "逐页复核"
+        },
+        {
+          "kind": "notice",
+          "text": "共13行 × 6列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "页ID",
+              "标题",
+              "原D0问题与定位",
+              "实际修复/信息顺序",
+              "当前证据定位",
+              "验证状态与未测责任"
+            ],
+            [
+              "S01",
+              "服务站数字指引改版｜年度复盘",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注",
+              "标题 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[0]；N6_render.json；render/slide-01.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S02",
+              "本次只请求内部复核",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注",
+              "标题 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[1]；N6_render.json；render/slide-02.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S03",
+              "先分清受理、完成与重复",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注；正文旧计数/未去重",
+              "标题 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[2]；N6_render.json；render/slide-03.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S04",
+              "季度业务量｜同口径对照",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注；原生图沿用R1季度量且无alt",
+              "标题 → 季度原生图 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[3]；N6_render.json；render/slide-04.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S05",
+              "完成率必须有分母",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注；原生表沿用R1且无alt",
+              "标题 → 季度原生表 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[4]；N6_render.json；render/slide-05.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S06",
+              "六步服务流程与人工接点",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注；流程分组缺语义alt",
+              "标题 → 六步流程组 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[5]；N6_render.json；render/slide-06.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S07",
+              "疑问不是自动批准",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注",
+              "标题 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[6]；N6_render.json；render/slide-07.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S08",
+              "角色权限与交接责任",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注",
+              "标题 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[7]；N6_render.json；render/slide-08.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S09",
+              "示意界面：仅本机预览",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注；示意图缺上下文alt",
+              "标题 → 示意图 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[8]；N6_render.json；render/slide-09.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S10",
+              "风险与未完成验证",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注",
+              "标题 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[9]；N6_render.json；render/slide-10.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S11",
+              "下一步：按责任逐项复核",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注",
+              "标题 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[10]；N6_render.json；render/slide-11.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ],
+            [
+              "S12",
+              "来源、版本与发布边界",
+              "S02/S13：重复标题、逆序对象、旧未审通过备注",
+              "标题 → 正文 → 状态页脚；纯装饰accent已标记",
+              "N5_structure.json payload.slides[11]；N6_render.json；render/slide-12.png",
+              "已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "口径勾稽"
+        },
+        {
+          "kind": "notice",
+          "text": "共6行 × 5列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "季度",
+              "合格受理",
+              "合格完成",
+              "完成率公式",
+              "来源"
+            ],
+            [
+              "Q1",
+              295,
+              255,
+              "=C2/B2\n缓存：0.864406779661017",
+              "S03及S05 R2去重口径"
+            ],
+            [
+              "Q2",
+              345,
+              299,
+              "=C3/B3\n缓存：0.866666666666667",
+              "S03及S05 R2去重口径"
+            ],
+            [
+              "Q3",
+              410,
+              363,
+              "=C4/B4\n缓存：0.885365853658537",
+              "S03及S05 R2去重口径"
+            ],
+            [
+              "Q4",
+              530,
+              470,
+              "=C5/B5\n缓存：0.886792452830189",
+              "S03及S05 R2去重口径"
+            ],
+            [
+              "全年",
+              "=SUM(B2:B5)\n缓存：1580",
+              "=SUM(C2:C5)\n缓存：1387",
+              "=C6/B6\n缓存：0.877848101265823",
+              "按合计分子/合计分母，不平均季度率"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "版本与边界"
+        },
+        {
+          "kind": "notice",
+          "text": "共12行 × 3列；显示全部行。 单元格公式与缓存分别显示；原图表、条件格式和隐藏结构请查看原文件。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事项",
+              "判断",
+              "证据"
+            ],
+            [
+              "采用版本",
+              "R2；内容负责人仅批准内部复核",
+              "S05/S06/S08，较晚商务无权变更"
+            ],
+            [
+              "时间",
+              "业务2026-10-20 16:00上海；源抓取/程序运行UTC分别保存",
+              "不是微软功能引入日期或历史应用测试记录"
+            ],
+            [
+              "数据性质",
+              "所有服务记录与角色均原创虚构",
+              "不作真实机构统计/政策或因果推断"
+            ],
+            [
+              "权限",
+              "结构与LO渲染不能替代原生PowerPoint/真实读屏及发布批准",
+              "S16真实文档；本题授权边界"
+            ],
+            [
+              "汇总",
+              "1387/1580=87.78%；剔除重复40",
+              "S03原字段、S04字典、S05规则"
+            ],
+            [
+              "工作流",
+              "9个真实依赖节点；缺前置/被改产物拒绝旧回执",
+              "WORK中的节点/指标/渲染；不是可信电子签名"
+            ],
+            [
+              "事件 R1",
+              "2026-10-13 10:00 Asia/Shanghai｜设计助理｜未去重；旧稿未审批｜DRAFT",
+              "S06原始登记；R3等新批准另以S05为据，不按消息较晚决定权限"
+            ],
+            [
+              "事件 R2",
+              "2026-10-17 15:30 Asia/Shanghai｜内容负责人｜采用去重；仅内部复核｜APPROVED_FOR_INTERNAL_REVIEW",
+              "S06原始登记；R3等新批准另以S05为据，不按消息较晚决定权限"
+            ],
+            [
+              "事件 M-LATE",
+              "2026-10-19 09:00 Asia/Shanghai｜商务联络｜恢复原数字并声称已发布｜UNAUTHORIZED",
+              "S06原始登记；R3等新批准另以S05为据，不按消息较晚决定权限"
+            ],
+            [
+              "源取得日期",
+              "S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造",
+              "S16原来源说明；未知发布日期/精确取得UTC不补造"
+            ],
+            [
+              "本次实际运行",
+              "开始UTC 2026-10-21T03:11:29.144392+00:00\n实际渲染UTC 2026-10-21T03:11:34.847792+00:00",
+              "N0_freeze.created_at_utc/N6_render；不是业务批准或源取得时间"
+            ]
+          ]
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "handoff.docx",
+      "absolute_path": "题包内：handoff.docx",
+      "url": "assets/tasks/DE-TIME-004/solution/golden_output/handoff.docx",
+      "bytes": 39180,
+      "sha256": "cabfa67d56695727a4a692750cf855c6207fef762008f02f204fe14deb58e8cf",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "演示修复交接｜内部待审"
+        },
+        {
+          "kind": "heading",
+          "text": "结论与数据"
+        },
+        {
+          "kind": "paragraph",
+          "text": "采用R2。合格受理1580、合格完成1387、完成率87.78%，剔除重复完成记录40。原始1427/1620只作R1对照。指标文字、季度原生图表与表格、alt及讲者备注同源。全部业务为原创虚构，不是机构统计或因果效果。"
+        },
+        {
+          "kind": "heading",
+          "text": "原生修复与可编辑性"
+        },
+        {
+          "kind": "paragraph",
+          "text": "12页独特标题与真实标题占位符；信息对象按标题→正文/图表/表格/分组→状态页脚顺序，纯装饰条使用真实decorative扩展。季度图为原生chart及嵌入数据，季度表原生table，六步图为可编辑group；示意图有上下文alt，文字对象不重复堆alt。背景不盖正文，不用白字/移出画布隐藏重要标题。"
+        },
+        {
+          "kind": "heading",
+          "text": "权限与时间"
+        },
+        {
+          "kind": "paragraph",
+          "text": "R1草稿不再是当前口径；S05内容负责人仅有内部内容修订权限，S09更晚商务建议无权恢复原数字或把状态改为已发布。业务基准2026-10-20 16:00 Asia/Shanghai；真实网页抓取与运行UTC另存，未知官方发布日期不补造。角色和hash仅是题内材料/字节绑定，不是可认证的真实签章。"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "事件/依据",
+              "原日期（Asia/Shanghai）",
+              "角色、范围与采用处理"
+            ],
+            [
+              "R1｜S06",
+              "2026-10-13 10:00",
+              "设计助理；未去重；旧稿未审批；未审批旧稿"
+            ],
+            [
+              "R2｜S06",
+              "2026-10-17 15:30",
+              "内容负责人；采用去重；仅内部复核；仅内部复核批准"
+            ],
+            [
+              "M-LATE｜S06",
+              "2026-10-19 09:00",
+              "商务联络；恢复原数字并声称已发布；无权覆盖/外发"
+            ]
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "业务复核基准：2026-10-20 16:00 Asia/Shanghai；它不是任一文件签发/批准日。源取得：S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造。未知专业文档发布日期/起施日仍未知。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本次程序开始UTC：2026-10-21T03:11:29.144392+00:00；实际渲染UTC：2026-10-21T03:11:34.847792+00:00。这是作者真实执行时点，和上表原始修订事件、业务复核基准及S16来源取得分别记录，不伪装成历史现场测试。"
+        },
+        {
+          "kind": "heading",
+          "text": "实际做过与没有做过"
+        },
+        {
+          "kind": "paragraph",
+          "text": "实际执行OOXML结构、原生数据勾稽、LibreOffice的12页PDF与PNG导出，详细见WORK/render和release_receipt。没有执行Windows/Mac PowerPoint Accessibility Checker、真实屏幕阅读器、PDF/UA认证、真实用户研究或外部发布批准。不得把缺失测试填写通过。结构/几何检查不证明所有视觉排版和AT体验正确。"
+        },
+        {
+          "kind": "heading",
+          "text": "依赖与复现"
+        },
+        {
+          "kind": "paragraph",
+          "text": "workflow.py build --input-dir INPUT --output-dir NEW_OUTPUT --work-dir NEW_WORK；verify使用同参数只读检查。stage --name N0_freeze等按S19依赖执行，缺前置即失败，WORK/输入/输出必须分开且不嵌套。输出只保留指定5文件，PDF/PNG/节点放WORK，不把运行中间件冒最终交付。需python-pptx、openpyxl、python-docx、pypdf、cairosvg、LibreOffice Impress/Calc和pdftoppm。"
+        },
+        {
+          "kind": "heading",
+          "text": "变更与下一责任人"
+        },
+        {
+          "kind": "paragraph",
+          "text": "数据负责人核对去重字段与输入哈希，设计师查12页视觉/叠放/替代描述，使用目标PowerPoint和屏幕阅读器逐页验证再交有权负责人决定发布。合法R3更新须绑定新数据并新目录全量重建，图/表/alt/备注/工作簿与新回执一起更新；旧回执必须失效，不可只改文字。缺依赖/工具时报错不产发布通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "专业依据与局限"
+        },
+        {
+          "kind": "paragraph",
+          "text": "S16微软阅读顺序/alt/形状树/非视觉属性文档；S17固定Open XML SDK v3.0.1描述和S18 MIT许可。spTree词法顺序可证层叠与导航，不单凭它宣称所有PowerPoint版本的真实读屏结果；decorative来自官方类型/SDK子元素与实际PPT标记的结构对照。示意图原创，不加载外部资源，不含真实个人信息。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "release_receipt.json",
+      "absolute_path": "题包内：release_receipt.json",
+      "url": "assets/tasks/DE-TIME-004/solution/golden_output/release_receipt.json",
+      "bytes": 42938,
+      "sha256": "be16b595f163cc62c806b480cf2782ca5eef90dffe45efa0c68e7d0d7855eead",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "{\n  \"actual_completed_at_utc\": \"2026-10-21T03:11:37.151954+00:00\",\n  \"business_as_of\": \"2026-10-20T16:00:00+08:00\",\n  \"revision\": \"R2\",\n  \"authority_timeline\": {\n    \"timezone\": \"Asia/Shanghai\",\n    \"events\": [\n      {\n        \"version\": \"R1\",\n        \"date_local\": \"2026-10-13 10:00\",\n        \"role\": \"设计助理\",\n        \"scope\": \"未去重；旧稿未审批\",\n        \"status\": \"DRAFT\"\n      },\n      {\n        \"version\": \"R2\",\n        \"date_local\": \"2026-10-17 15:30\",\n        \"role\": \"内容负责人\",\n        \"scope\": \"采用去重；仅内部复核\",\n        \"status\": \"APPROVED_FOR_INTERNAL_REVIEW\"\n      },\n      {\n        \"version\": \"M-LATE\",\n        \"date_local\": \"2026-10-19 09:00\",\n        \"role\": \"商务联络\",\n        \"scope\": \"恢复原数字并声称已发布\",\n        \"status\": \"UNAUTHORIZED\"\n      }\n    ],\n    \"current_revision\": \"R2\",\n    \"current_approved_at_local\": \"2026-10-17 15:30\",\n    \"business_as_of_local\": \"2026-10-20 16:00\",\n    \"source_acquisition_statement\": \"这是微软真实专业资料的离线短摘录及作者中文解释，不是本虚构团队的审批规则。常规支持页抓取于2026-10-20/21，未知发布日期/起施日不补造；API页标示可用版本不等于某功能首次发布日期。业务修订R1/R2与软件文档版本分开，不宣称当前抓取就是2025或更早快照。\",\n    \"source_time_precision\": \"S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造\",\n    \"event_source\": \"S06_revision_register.csv；当前批准另核S05_approved_content.json；无权建议另核S09_late_message.md\"\n  },\n  \"input_sha256\": {\n    \"S01_project_brief.docx\": \"7c716ceb6995c7bf8c11e8ea914d7e50d0a922ec7149d8430f8998c6f0428c31\",\n    \"S02_D0_R1.pptx\": \"3d4a295669dc356f9688eedea1b75f14581d00919a2710622a2f494f64acb022\",\n    \"S03_monthly_metrics.csv\": \"af1f92e3e47f681157ce0f7d693fb617686b24c89d743b081153786b72a20fde\",\n    \"S04_data_dictionary.md\": \"7bd790c4639d4e5cc8067f6efdc6cb745efa0238fc94aa0d7c641b06cc97a947\",\n    \"S05_approved_content.json\": \"8856316afde9dde3078cae49a8504f694eb2ae4017553b8ef1c6213fc530bdb1\",\n    \"S06_revision_register.csv\": \"5739e8d8242cccaae3472d25c6001c76c114fd0e07de6c4314f349920f47a1ac\",\n    \"S07_brand_contract.json\": \"eb6977eee6fd5a50790f9b604f6039713031d3f5ecb9a1b6b0e99f4859fff96e\",\n    \"S08_roles.csv\": \"d2ef24bf7ae58d75001a37d5e7ab3ebaee065c2e3032a326a0e4ed134832b382\",\n    \"S09_late_message.md\": \"8e0aba11fbf7876aae77d609fa44df7e7da8e11403af90493ded534d02f98624\",\n    \"S10_workflow_nodes.csv\": \"53a4d891eab38d7e49b7050f3ad226612d7c954e20ebef1f7d8764da23c84ba2\",\n    \"S11_workflow_edges.csv\": \"57f9652b5b0d7b8458c87d420cf9b832de3ad7560993991fc5fc9b88d89ff194\",\n    \"S12_interface_illustration.svg\": \"408b80a73112eadf981a6ce5ca2547e91b0c618de544888dc096cc0a65a24c6e\",\n    \"S13_speaker_notes_R1.docx\": \"937c67b962b48a4d47917feb22b08ee52eb7d539f3be89cabbaefb0e91893305\",\n    \"S14_untrusted_baseline_check.json\": \"8d573607fb500fc28ee59aeea05a6c4437dd590b676c20d98320334f6c633531\",\n    \"S15_draft_workflow.py\": \"7533ab6a26b3229fa3b6ac33481e79dad26a672288f17f86ec69f07728a012ad\",\n    \"S16_official_source_packet.docx\": \"cdb2bd1d87edec7abd7c762744258798ccb463f1f12946833cecf324680c524b\",\n    \"S17_native_extension_excerpt.json\": \"eefa1dec9ad0a66ce5734ea9f13731c3c9d3d8f6307af66132c8f48857cbb789\",\n    \"S18_OpenXML_SDK_MIT_LICENSE.txt\": \"ed03ba352313a4ba7019d5bed4bd3218ac17f3e44442a3bb1aaff54dcca9a2bc\",\n    \"S19_dependency_contract.json\": \"024e57723157836b1c4653e8d6e118c2fbf01f307b6ecef57628fdf68413fe6f\",\n    \"S20_review_form.xlsx\": \"c14ce07d611e772914b6bb0edf297119bd3ea1302e9a8dac36552223cdb783f1\"\n  },\n  \"node_sha256\": {\n    \"N0_freeze\": \"95e54aab9afc2b5424b31d629e6de7e53288c5fef52df1a28c380b8417fe3531\",\n    \"N1_authority\": \"716d3d2b588da1c0b4e0ee2b2cfe0526a24c0a92f959d045a95d370acae61ea8\",\n    \"N2_metrics\": \"592ffdcaea62cef4f2f18c08fbbc981d9571dd9da2b522f50a5e65910aebddc7\",\n    \"N3_story\": \"5703b6d4235b9b1c8d4e360ef4a0230206c3e8fdb2de442dcebda66273ef866e\",\n    \"N4_deck\": \"7e08c16b06fd6f0b9947c899690f6118556e36178a2a90518d79d7c0bd3a1cb2\",\n    \"N5_structure\": \"98cfdc1ff62327ab1baa2d14670baa46a22612c733c0fee984ce15f62225e60c\",\n    \"N6_render\": \"acc8e0aa8efd7dcb485ab0449fcf4a0b3620a29075f9b799156c57c8f7b8f115\",\n    \"N7_handoff\": \"9cd81ace648e5a573fd1ce1fdbc1a3f9bfc33de887443d17f17d2a03d59b5593\",\n    \"N8_release\": \"f235e68d8f5ef7180418fd54cc37325b944b9917b7af0e3e82b44e22a7ebb486\"\n  },\n  \"node_records\": {\n    \"N0_freeze\": {\n      \"name\": \"N0_freeze\",\n      \"created_at_utc\": \"2026-10-21T03:11:29.144392+00:00\",\n      \"parents\": {},\n      \"payload\": {\n        \"input_sha256\": {\n          \"S01_project_brief.docx\": \"7c716ceb6995c7bf8c11e8ea914d7e50d0a922ec7149d8430f8998c6f0428c31\",\n          \"S02_D0_R1.pptx\": \"3d4a295669dc356f9688eedea1b75f14581d00919a2710622a2f494f64acb022\",\n          \"S03_monthly_metrics.csv\": \"af1f92e3e47f681157ce0f7d693fb617686b24c89d743b081153786b72a20fde\",\n          \"S04_data_dictionary.md\": \"7bd790c4639d4e5cc8067f6efdc6cb745efa0238fc94aa0d7c641b06cc97a947\",\n          \"S05_approved_content.json\": \"8856316afde9dde3078cae49a8504f694eb2ae4017553b8ef1c6213fc530bdb1\",\n          \"S06_revision_register.csv\": \"5739e8d8242cccaae3472d25c6001c76c114fd0e07de6c4314f349920f47a1ac\",\n          \"S07_brand_contract.json\": \"eb6977eee6fd5a50790f9b604f6039713031d3f5ecb9a1b6b0e99f4859fff96e\",\n          \"S08_roles.csv\": \"d2ef24bf7ae58d75001a37d5e7ab3ebaee065c2e3032a326a0e4ed134832b382\",\n          \"S09_late_message.md\": \"8e0aba11fbf7876aae77d609fa44df7e7da8e11403af90493ded534d02f98624\",\n          \"S10_workflow_nodes.csv\": \"53a4d891eab38d7e49b7050f3ad226612d7c954e20ebef1f7d8764da23c84ba2\",\n          \"S11_workflow_edges.csv\": \"57f9652b5b0d7b8458c87d420cf9b832de3ad7560993991fc5fc9b88d89ff194\",\n          \"S12_interface_illustration.svg\": \"408b80a73112eadf981a6ce5ca2547e91b0c618de544888dc096cc0a65a24c6e\",\n          \"S13_speaker_notes_R1.docx\": \"937c67b962b48a4d47917feb22b08ee52eb7d539f3be89cabbaefb0e91893305\",\n          \"S14_untrusted_baseline_check.json\": \"8d573607fb500fc28ee59aeea05a6c4437dd590b676c20d98320334f6c633531\",\n          \"S15_draft_workflow.py\": \"7533ab6a26b3229fa3b6ac33481e79dad26a672288f17f86ec69f07728a012ad\",\n          \"S16_official_source_packet.docx\": \"cdb2bd1d87edec7abd7c762744258798ccb463f1f12946833cecf324680c524b\",\n          \"S17_native_extension_excerpt.json\": \"eefa1dec9ad0a66ce5734ea9f13731c3c9d3d8f6307af66132c8f48857cbb789\",\n          \"S18_OpenXML_SDK_MIT_LICENSE.txt\": \"ed03ba352313a4ba7019d5bed4bd3218ac17f3e44442a3bb1aaff54dcca9a2bc\",\n          \"S19_dependency_contract.json\": \"024e57723157836b1c4653e8d6e118c2fbf01f307b6ecef57628fdf68413fe6f\",\n          \"S20_review_form.xlsx\": \"c14ce07d611e772914b6bb0edf297119bd3ea1302e9a8dac36552223cdb783f1\"\n        },\n        \"business_as_of\": \"2026-10-20T16:00:00+08:00\",\n        \"executor_sha256\": \"04e6f4d20799bb545ea51ac0eb6b1cce9c5fea9b4656b755f1b42e0b71a62fe5\"\n      }\n    },\n    \"N1_authority\": {\n      \"name\": \"N1_authority\",\n      \"created_at_utc\": \"2026-10-21T03:11:29.193889+00:00\",\n      \"parents\": {\n        \"N0_freeze\": \"95e54aab9afc2b5424b31d629e6de7e53288c5fef52df1a28c380b8417fe3531\"\n      },\n      \"payload\": {\n        \"version\": \"R2\",\n        \"approved_at_local\": \"2026-10-17 15:30\",\n        \"timezone\": \"Asia/Shanghai\",\n        \"authority_role\": \"内容负责人\",\n        \"approval_scope\": \"INTERNAL_REVIEW_ONLY\",\n        \"data_sha256\": \"af1f92e3e47f681157ce0f7d693fb617686b24c89d743b081153786b72a20fde\",\n        \"slides\": [\n          {\n            \"id\": \"S01\",\n            \"title\": \"服务站数字指引改版｜年度复盘\",\n            \"body\": \"2025年度原创虚构记录\\n2026-10-20 内部设计复核\\n没有真实服务成效或上线认证声明\",\n            \"notes\": \"讲解本页要点：2025年度原创虚构记录；2026-10-20 内部设计复核；没有真实服务成效或上线认证声明。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S02\",\n            \"title\": \"本次只请求内部复核\",\n            \"body\": \"目的：修复阅读顺序与版本传播\\n保留可编辑图表、表格和流程\\n外部发布、PowerPoint与真实读屏另验\",\n            \"notes\": \"讲解本页要点：目的：修复阅读顺序与版本传播；保留可编辑图表、表格和流程；外部发布、PowerPoint与真实读屏另验。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S03\",\n            \"title\": \"先分清受理、完成与重复\",\n            \"body\": \"原始受理{raw_received}，原始完成{raw_completed}\\n重复完成{total_duplicate}同时从分子与分母剔除\\n合格完成{total_completed} / 合格受理{total_received} = {rate_pct}%\",\n            \"notes\": \"讲解本页要点：原始受理{raw_received}，原始完成{raw_completed}；重复完成{total_duplicate}同时从分子与分母剔除；合格完成{total_completed} / 合格受理{total_received} = {rate_pct}%。提醒读者：当前只做内部复核。\",\n            \"source\": \"S03/S04/S05\"\n          },\n          {\n            \"id\": \"S04\",\n            \"title\": \"季度业务量｜同口径对照\",\n            \"body\": \"同一去重口径；只描述记录，不推断改版效果。\",\n            \"notes\": \"讲解本页要点：同一去重口径；只描述记录，不推断改版效果。。提醒读者：当前只做内部复核。\",\n            \"source\": \"S03/S04/S05\"\n          },\n          {\n            \"id\": \"S05\",\n            \"title\": \"完成率必须有分母\",\n            \"body\": \"全年按总完成/总受理：{rate_pct}%；不简单平均季度率。\",\n            \"notes\": \"讲解本页要点：全年按总完成/总受理：{rate_pct}%；不简单平均季度率。。提醒读者：当前只做内部复核。\",\n            \"source\": \"S03/S04/S05\"\n          },\n          {\n            \"id\": \"S06\",\n            \"title\": \"六步服务流程与人工接点\",\n            \"body\": \"按1→6阅读；第3步如有疑问，暂停并转人工核查。\",\n            \"notes\": \"讲解本页要点：按1→6阅读；第3步如有疑问，暂停并转人工核查。。提醒读者：当前只做内部复核。\",\n            \"source\": \"S10/S11\"\n          },\n          {\n            \"id\": \"S07\",\n            \"title\": \"疑问不是自动批准\",\n            \"body\": \"无有效审核证据：保留“待人工复核”\\n材料补充：更新引用与受影响交付物\\n不得把联络消息当有权批准\",\n            \"notes\": \"讲解本页要点：无有效审核证据：保留“待人工复核”；材料补充：更新引用与受影响交付物；不得把联络消息当有权批准。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S08\",\n            \"title\": \"角色权限与交接责任\",\n            \"body\": \"内容负责人：批准题内口径，不代表批准发布\\n设计师：修复并留结构/视觉证据\\n发布负责人：收到原生/读屏复核后再决定\",\n            \"notes\": \"讲解本页要点：内容负责人：批准题内口径，不代表批准发布；设计师：修复并留结构/视觉证据；发布负责人：收到原生/读屏复核后再决定。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S09\",\n            \"title\": \"示意界面：仅本机预览\",\n            \"body\": \"示意界面不是上线截图；预览不发送、不批准。\",\n            \"notes\": \"讲解本页要点：示意界面不是上线截图；预览不发送、不批准。。提醒读者：当前只做内部复核。\",\n            \"source\": \"S12\"\n          },\n          {\n            \"id\": \"S10\",\n            \"title\": \"风险与未完成验证\",\n            \"body\": \"源数据变化：新目录全量重建\\n结构/几何检查不等于真实读屏\\n待测结果不得填“已通过”\",\n            \"notes\": \"讲解本页要点：源数据变化：新目录全量重建；结构/几何检查不等于真实读屏；待测结果不得填“已通过”。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S11\",\n            \"title\": \"下一步：按责任逐项复核\",\n            \"body\": \"数据负责人：核对去重与冻结材料\\n设计师：逐页检查遮挡、顺序与替代描述\\n有权复核者：目标应用测试后决定下一步\",\n            \"notes\": \"讲解本页要点：数据负责人：核对去重与冻结材料；设计师：逐页检查遮挡、顺序与替代描述；有权复核者：目标应用测试后决定下一步。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S12\",\n            \"title\": \"来源、版本与发布边界\",\n            \"body\": \"微软官方资料：阅读顺序、alt与原生格式\\n业务、角色、界面和服务记录均原创虚构\\n当前为内部待审，不是无障碍认证或发布批准\",\n            \"notes\": \"讲解本页要点：微软官方资料：阅读顺序、alt与原生格式；业务、角色、界面和服务记录均原创虚构；当前为内部待审，不是无障碍认证或发布批准。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          }\n        ],\n        \"nature\": \"原创虚构业务合同，不是真实机构授权或微软规定\",\n        \"authority_timeline\": {\n          \"timezone\": \"Asia/Shanghai\",\n          \"events\": [\n            {\n              \"version\": \"R1\",\n              \"date_local\": \"2026-10-13 10:00\",\n              \"role\": \"设计助理\",\n              \"scope\": \"未去重；旧稿未审批\",\n              \"status\": \"DRAFT\"\n            },\n            {\n              \"version\": \"R2\",\n              \"date_local\": \"2026-10-17 15:30\",\n              \"role\": \"内容负责人\",\n              \"scope\": \"采用去重；仅内部复核\",\n              \"status\": \"APPROVED_FOR_INTERNAL_REVIEW\"\n            },\n            {\n              \"version\": \"M-LATE\",\n              \"date_local\": \"2026-10-19 09:00\",\n              \"role\": \"商务联络\",\n              \"scope\": \"恢复原数字并声称已发布\",\n              \"status\": \"UNAUTHORIZED\"\n            }\n          ],\n          \"current_revision\": \"R2\",\n          \"current_approved_at_local\": \"2026-10-17 15:30\",\n          \"business_as_of_local\": \"2026-10-20 16:00\",\n          \"source_acquisition_statement\": \"这是微软真实专业资料的离线短摘录及作者中文解释，不是本虚构团队的审批规则。常规支持页抓取于2026-10-20/21，未知发布日期/起施日不补造；API页标示可用版本不等于某功能首次发布日期。业务修订R1/R2与软件文档版本分开，不宣称当前抓取就是2025或更早快照。\",\n          \"source_time_precision\": \"S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造\",\n          \"event_source\": \"S06_revision_register.csv；当前批准另核S05_approved_content.json；无权建议另核S09_late_message.md\"\n        }\n      }\n    },\n    \"N2_metrics\": {\n      \"name\": \"N2_metrics\",\n      \"created_at_utc\": \"2026-10-21T03:11:29.204151+00:00\",\n      \"parents\": {\n        \"N0_freeze\": \"95e54aab9afc2b5424b31d629e6de7e53288c5fef52df1a28c380b8417fe3531\",\n        \"N1_authority\": \"716d3d2b588da1c0b4e0ee2b2cfe0526a24c0a92f959d045a95d370acae61ea8\"\n      },\n      \"payload\": {\n        \"months\": [\n          {\n            \"month\": 1,\n            \"received\": 100,\n            \"completed\": 90,\n            \"duplicate_completed\": 0,\n            \"eligible\": 100,\n            \"eligible_completed\": 90\n          },\n          {\n            \"month\": 2,\n            \"received\": 120,\n            \"completed\": 100,\n            \"duplicate_completed\": 5,\n            \"eligible\": 115,\n            \"eligible_completed\": 95\n          },\n          {\n            \"month\": 3,\n            \"received\": 80,\n            \"completed\": 70,\n            \"duplicate_completed\": 0,\n            \"eligible\": 80,\n            \"eligible_completed\": 70\n          },\n          {\n            \"month\": 4,\n            \"received\": 140,\n            \"completed\": 126,\n            \"duplicate_completed\": 10,\n            \"eligible\": 130,\n            \"eligible_completed\": 116\n          },\n          {\n            \"month\": 5,\n            \"received\": 130,\n            \"completed\": 110,\n            \"duplicate_completed\": 0,\n            \"eligible\": 130,\n            \"eligible_completed\": 110\n          },\n          {\n            \"month\": 6,\n            \"received\": 90,\n            \"completed\": 78,\n            \"duplicate_completed\": 5,\n            \"eligible\": 85,\n            \"eligible_completed\": 73\n          },\n          {\n            \"month\": 7,\n            \"received\": 160,\n            \"completed\": 144,\n            \"duplicate_completed\": 0,\n            \"eligible\": 160,\n            \"eligible_completed\": 144\n          },\n          {\n            \"month\": 8,\n            \"received\": 150,\n            \"completed\": 130,\n            \"duplicate_completed\": 10,\n            \"eligible\": 140,\n            \"eligible_completed\": 120\n          },\n          {\n            \"month\": 9,\n            \"received\": 110,\n            \"completed\": 99,\n            \"duplicate_completed\": 0,\n            \"eligible\": 110,\n            \"eligible_completed\": 99\n          },\n          {\n            \"month\": 10,\n            \"received\": 170,\n            \"completed\": 153,\n            \"duplicate_completed\": 0,\n            \"eligible\": 170,\n            \"eligible_completed\": 153\n          },\n          {\n            \"month\": 11,\n            \"received\": 180,\n            \"completed\": 156,\n            \"duplicate_completed\": 10,\n            \"eligible\": 170,\n            \"eligible_completed\": 146\n          },\n          {\n            \"month\": 12,\n            \"received\": 190,\n            \"completed\": 171,\n            \"duplicate_completed\": 0,\n            \"eligible\": 190,\n            \"eligible_completed\": 171\n          }\n        ],\n        \"quarters\": [\n          {\n            \"quarter\": \"Q1\",\n            \"received\": 295,\n            \"completed\": 255,\n            \"rate_pct\": \"86.44\"\n          },\n          {\n            \"quarter\": \"Q2\",\n            \"received\": 345,\n            \"completed\": 299,\n            \"rate_pct\": \"86.67\"\n          },\n          {\n            \"quarter\": \"Q3\",\n            \"received\": 410,\n            \"completed\": 363,\n            \"rate_pct\": \"88.54\"\n          },\n          {\n            \"quarter\": \"Q4\",\n            \"received\": 530,\n            \"completed\": 470,\n            \"rate_pct\": \"88.68\"\n          }\n        ],\n        \"total_received\": 1580,\n        \"total_completed\": 1387,\n        \"total_duplicate\": 40,\n        \"rate_pct\": \"87.78\",\n        \"raw_received\": 1620,\n        \"raw_completed\": 1427,\n        \"scope\": \"原创虚构服务记录，只做内部设计练习，不是真实机构统计/因果研究\"\n      }\n    },\n    \"N3_story\": {\n      \"name\": \"N3_story\",\n      \"created_at_utc\": \"2026-10-21T03:11:29.270606+00:00\",\n      \"parents\": {\n        \"N1_authority\": \"716d3d2b588da1c0b4e0ee2b2cfe0526a24c0a92f959d045a95d370acae61ea8\",\n        \"N2_metrics\": \"592ffdcaea62cef4f2f18c08fbbc981d9571dd9da2b522f50a5e65910aebddc7\"\n      },\n      \"payload\": {\n        \"version\": \"R2\",\n        \"approved_at_local\": \"2026-10-17 15:30\",\n        \"timezone\": \"Asia/Shanghai\",\n        \"authority_role\": \"内容负责人\",\n        \"approval_scope\": \"INTERNAL_REVIEW_ONLY\",\n        \"data_sha256\": \"af1f92e3e47f681157ce0f7d693fb617686b24c89d743b081153786b72a20fde\",\n        \"slides\": [\n          {\n            \"id\": \"S01\",\n            \"title\": \"服务站数字指引改版｜年度复盘\",\n            \"body\": \"2025年度原创虚构记录\\n2026-10-20 内部设计复核\\n没有真实服务成效或上线认证声明\",\n            \"notes\": \"讲解本页要点：2025年度原创虚构记录；2026-10-20 内部设计复核；没有真实服务成效或上线认证声明。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S02\",\n            \"title\": \"本次只请求内部复核\",\n            \"body\": \"目的：修复阅读顺序与版本传播\\n保留可编辑图表、表格和流程\\n外部发布、PowerPoint与真实读屏另验\",\n            \"notes\": \"讲解本页要点：目的：修复阅读顺序与版本传播；保留可编辑图表、表格和流程；外部发布、PowerPoint与真实读屏另验。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S03\",\n            \"title\": \"先分清受理、完成与重复\",\n            \"body\": \"原始受理1620，原始完成1427\\n重复完成40同时从分子与分母剔除\\n合格完成1387 / 合格受理1580 = 87.78%\",\n            \"notes\": \"讲解本页要点：原始受理1620，原始完成1427；重复完成40同时从分子与分母剔除；合格完成1387 / 合格受理1580 = 87.78%。提醒读者：当前只做内部复核。\",\n            \"source\": \"S03/S04/S05\"\n          },\n          {\n            \"id\": \"S04\",\n            \"title\": \"季度业务量｜同口径对照\",\n            \"body\": \"同一去重口径；只描述记录，不推断改版效果。\",\n            \"notes\": \"讲解本页要点：同一去重口径；只描述记录，不推断改版效果。。提醒读者：当前只做内部复核。\",\n            \"source\": \"S03/S04/S05\"\n          },\n          {\n            \"id\": \"S05\",\n            \"title\": \"完成率必须有分母\",\n            \"body\": \"全年按总完成/总受理：87.78%；不简单平均季度率。\",\n            \"notes\": \"讲解本页要点：全年按总完成/总受理：87.78%；不简单平均季度率。。提醒读者：当前只做内部复核。\",\n            \"source\": \"S03/S04/S05\"\n          },\n          {\n            \"id\": \"S06\",\n            \"title\": \"六步服务流程与人工接点\",\n            \"body\": \"按1→6阅读；第3步如有疑问，暂停并转人工核查。\",\n            \"notes\": \"讲解本页要点：按1→6阅读；第3步如有疑问，暂停并转人工核查。。提醒读者：当前只做内部复核。\",\n            \"source\": \"S10/S11\"\n          },\n          {\n            \"id\": \"S07\",\n            \"title\": \"疑问不是自动批准\",\n            \"body\": \"无有效审核证据：保留“待人工复核”\\n材料补充：更新引用与受影响交付物\\n不得把联络消息当有权批准\",\n            \"notes\": \"讲解本页要点：无有效审核证据：保留“待人工复核”；材料补充：更新引用与受影响交付物；不得把联络消息当有权批准。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S08\",\n            \"title\": \"角色权限与交接责任\",\n            \"body\": \"内容负责人：批准题内口径，不代表批准发布\\n设计师：修复并留结构/视觉证据\\n发布负责人：收到原生/读屏复核后再决定\",\n            \"notes\": \"讲解本页要点：内容负责人：批准题内口径，不代表批准发布；设计师：修复并留结构/视觉证据；发布负责人：收到原生/读屏复核后再决定。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S09\",\n            \"title\": \"示意界面：仅本机预览\",\n            \"body\": \"示意界面不是上线截图；预览不发送、不批准。\",\n            \"notes\": \"讲解本页要点：示意界面不是上线截图；预览不发送、不批准。。提醒读者：当前只做内部复核。\",\n            \"source\": \"S12\"\n          },\n          {\n            \"id\": \"S10\",\n            \"title\": \"风险与未完成验证\",\n            \"body\": \"源数据变化：新目录全量重建\\n结构/几何检查不等于真实读屏\\n待测结果不得填“已通过”\",\n            \"notes\": \"讲解本页要点：源数据变化：新目录全量重建；结构/几何检查不等于真实读屏；待测结果不得填“已通过”。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S11\",\n            \"title\": \"下一步：按责任逐项复核\",\n            \"body\": \"数据负责人：核对去重与冻结材料\\n设计师：逐页检查遮挡、顺序与替代描述\\n有权复核者：目标应用测试后决定下一步\",\n            \"notes\": \"讲解本页要点：数据负责人：核对去重与冻结材料；设计师：逐页检查遮挡、顺序与替代描述；有权复核者：目标应用测试后决定下一步。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          },\n          {\n            \"id\": \"S12\",\n            \"title\": \"来源、版本与发布边界\",\n            \"body\": \"微软官方资料：阅读顺序、alt与原生格式\\n业务、角色、界面和服务记录均原创虚构\\n当前为内部待审，不是无障碍认证或发布批准\",\n            \"notes\": \"讲解本页要点：微软官方资料：阅读顺序、alt与原生格式；业务、角色、界面和服务记录均原创虚构；当前为内部待审，不是无障碍认证或发布批准。提醒读者：当前只做内部复核。\",\n            \"source\": \"S05/S08/S16\"\n          }\n        ],\n        \"nature\": \"原创虚构业务合同，不是真实机构授权或微软规定\",\n        \"authority_timeline\": {\n          \"timezone\": \"Asia/Shanghai\",\n          \"events\": [\n            {\n              \"version\": \"R1\",\n              \"date_local\": \"2026-10-13 10:00\",\n              \"role\": \"设计助理\",\n              \"scope\": \"未去重；旧稿未审批\",\n              \"status\": \"DRAFT\"\n            },\n            {\n              \"version\": \"R2\",\n              \"date_local\": \"2026-10-17 15:30\",\n              \"role\": \"内容负责人\",\n              \"scope\": \"采用去重；仅内部复核\",\n              \"status\": \"APPROVED_FOR_INTERNAL_REVIEW\"\n            },\n            {\n              \"version\": \"M-LATE\",\n              \"date_local\": \"2026-10-19 09:00\",\n              \"role\": \"商务联络\",\n              \"scope\": \"恢复原数字并声称已发布\",\n              \"status\": \"UNAUTHORIZED\"\n            }\n          ],\n          \"current_revision\": \"R2\",\n          \"current_approved_at_local\": \"2026-10-17 15:30\",\n          \"business_as_of_local\": \"2026-10-20 16:00\",\n          \"source_acquisition_statement\": \"这是微软真实专业资料的离线短摘录及作者中文解释，不是本虚构团队的审批规则。常规支持页抓取于2026-10-20/21，未知发布日期/起施日不补造；API页标示可用版本不等于某功能首次发布日期。业务修订R1/R2与软件文档版本分开，不宣称当前抓取就是2025或更早快照。\",\n          \"source_time_precision\": \"S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造\",\n          \"event_source\": \"S06_revision_register.csv；当前批准另核S05_approved_content.json；无权建议另核S09_late_message.md\"\n        }\n      }\n    },\n    \"N4_deck\": {\n      \"name\": \"N4_deck\",\n      \"created_at_utc\": \"2026-10-21T03:11:29.658641+00:00\",\n      \"parents\": {\n        \"N3_story\": \"5703b6d4235b9b1c8d4e360ef4a0230206c3e8fdb2de442dcebda66273ef866e\"\n      },\n      \"payload\": {\n        \"deck_sha256\": \"c9ad764dc9a877e128ccfe01e846b516d9ede767064cdc5b48e90bc0a5bb769f\"\n      }\n    },\n    \"N5_structure\": {\n      \"name\": \"N5_structure\",\n      \"created_at_utc\": \"2026-10-21T03:11:29.796162+00:00\",\n      \"parents\": {\n        \"N1_authority\": \"716d3d2b588da1c0b4e0ee2b2cfe0526a24c0a92f959d045a95d370acae61ea8\",\n        \"N2_metrics\": \"592ffdcaea62cef4f2f18c08fbbc981d9571dd9da2b522f50a5e65910aebddc7\",\n        \"N4_deck\": \"7e08c16b06fd6f0b9947c899690f6118556e36178a2a90518d79d7c0bd3a1cb2\"\n      },\n      \"payload\": {\n        \"slides\": [\n          {\n            \"slide_id\": \"S01\",\n            \"title\": \"服务站数字指引改版｜年度复盘\",\n            \"active_order\": [\n              \"title\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 4,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S02\",\n            \"title\": \"本次只请求内部复核\",\n            \"active_order\": [\n              \"title\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 4,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S03\",\n            \"title\": \"先分清受理、完成与重复\",\n            \"active_order\": [\n              \"title\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 4,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S04\",\n            \"title\": \"季度业务量｜同口径对照\",\n            \"active_order\": [\n              \"title\",\n              \"quarter_chart\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 5,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S05\",\n            \"title\": \"完成率必须有分母\",\n            \"active_order\": [\n              \"title\",\n              \"quarter_table\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 5,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S06\",\n            \"title\": \"六步服务流程与人工接点\",\n            \"active_order\": [\n              \"title\",\n              \"service_flow\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 5,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S07\",\n            \"title\": \"疑问不是自动批准\",\n            \"active_order\": [\n              \"title\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 4,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S08\",\n            \"title\": \"角色权限与交接责任\",\n            \"active_order\": [\n              \"title\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 4,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S09\",\n            \"title\": \"示意界面：仅本机预览\",\n            \"active_order\": [\n              \"title\",\n              \"interface_illustration\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 5,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S10\",\n            \"title\": \"风险与未完成验证\",\n            \"active_order\": [\n              \"title\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 4,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S11\",\n            \"title\": \"下一步：按责任逐项复核\",\n            \"active_order\": [\n              \"title\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 4,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          },\n          {\n            \"slide_id\": \"S12\",\n            \"title\": \"来源、版本与发布边界\",\n            \"active_order\": [\n              \"title\",\n              \"body\",\n              \"footer\"\n            ],\n            \"decorative\": [\n              \"accent\"\n            ],\n            \"notes_present\": true,\n            \"shape_count\": 4,\n            \"scope\": \"OOXML lexical/navigation structure and explicit alt; not actual AT speech\"\n          }\n        ],\n        \"deck_sha256\": \"c9ad764dc9a877e128ccfe01e846b516d9ede767064cdc5b48e90bc0a5bb769f\"\n      }\n    },\n    \"N6_render\": {\n      \"name\": \"N6_render\",\n      \"created_at_utc\": \"2026-10-21T03:11:34.847894+00:00\",\n      \"parents\": {\n        \"N4_deck\": \"7e08c16b06fd6f0b9947c899690f6118556e36178a2a90518d79d7c0bd3a1cb2\",\n        \"N5_structure\": \"98cfdc1ff62327ab1baa2d14670baa46a22612c733c0fee984ce15f62225e60c\"\n      },\n      \"payload\": {\n        \"tool\": \"LibreOffice + pdftoppm\",\n        \"actual_office_executable\": \"/usr/bin/libreoffice\",\n        \"actual_office_version\": \"LibreOffice 7.3.7.2 30(Build:2)\",\n        \"actual_raster_executable\": \"/usr/bin/pdftoppm\",\n        \"actual_raster_version\": \"pdftoppm version 22.02.0\",\n        \"pdf_sha256\": \"a024cdfc0d933b6a9c05b7ef4d3ef2ce0015559e986012b165afe852008d80d7\",\n        \"png_sha256\": {\n          \"slide-02.png\": \"ffe9049ac032f1501c0971df7c58f27bef7bc5f15c0cfc361cdb153318bdcea7\",\n          \"slide-11.png\": \"4b6226e4c82419c9add45dd2a45fb53b7153d6252988ffd77d9d8bf73e46df6a\",\n          \"slide-05.png\": \"9d5685c29d0da07f627105f3fe7e5b34a70cea60b754d86a34ec6890a153d745\",\n          \"slide-04.png\": \"ac0d33b7c5e2594d5e76f944a84a4d9c1eaf5dbd34d03031a857196e36184ddb\",\n          \"slide-07.png\": \"4171156f0ab47c381917db55bdde86687f609f310d327e7bf96c08f588e95da2\",\n          \"slide-08.png\": \"47e0313046d8e1426adecdebdc3a5a543b41f757d62acdfde980ee5deab20296\",\n          \"slide-09.png\": \"1e24f33d8e63d979bc18b4004266735c79772697100101861ece819bc0b52e9e\",\n          \"slide-01.png\": \"87567cd159e112cd379993365a077440ef32ad4b769a2cf2b036989640e38c4e\",\n          \"slide-10.png\": \"ac41b54214cb92eff0debba3da94930ea7ae83cbe480cc03d119689976fdd8e1\",\n          \"slide-06.png\": \"26fddd3016ac8f106ceccea502b3509bfe2136acd84f8695aac82b81d3ee6e61\",\n          \"slide-12.png\": \"655a245dcbfb4be2e66a58bb052d9221aab6bed5c299e7f39342d5f98ecd129d\",\n          \"slide-03.png\": \"9ad05005f10d82f8cfde65027ac85bac37ddc9030a7db80fa4d5c4461d0db432\"\n        },\n        \"pages\": 12,\n        \"actual_time_utc\": \"2026-10-21T03:11:34.847792+00:00\",\n        \"manual_visual_review\": \"PENDING_DESIGNER\",\n        \"native_powerpoint_checker\": \"NOT_RUN\",\n        \"screen_reader\": \"NOT_RUN\",\n        \"pdf_ua\": \"NOT_CLAIMED\"\n      }\n    },\n    \"N7_handoff\": {\n      \"name\": \"N7_handoff\",\n      \"created_at_utc\": \"2026-10-21T03:11:37.135155+00:00\",\n      \"parents\": {\n        \"N1_authority\": \"716d3d2b588da1c0b4e0ee2b2cfe0526a24c0a92f959d045a95d370acae61ea8\",\n        \"N2_metrics\": \"592ffdcaea62cef4f2f18c08fbbc981d9571dd9da2b522f50a5e65910aebddc7\",\n        \"N5_structure\": \"98cfdc1ff62327ab1baa2d14670baa46a22612c733c0fee984ce15f62225e60c\",\n        \"N6_render\": \"acc8e0aa8efd7dcb485ab0449fcf4a0b3620a29075f9b799156c57c8f7b8f115\"\n      },\n      \"payload\": {\n        \"review_sha256\": \"e696d4549a106898c6cee363caa3fcac9299c03c0dcad9934bbec24dc2cb3ca2\",\n        \"handoff_sha256\": \"cabfa67d56695727a4a692750cf855c6207fef762008f02f204fe14deb58e8cf\",\n        \"authority_timeline\": {\n          \"timezone\": \"Asia/Shanghai\",\n          \"events\": [\n            {\n              \"version\": \"R1\",\n              \"date_local\": \"2026-10-13 10:00\",\n              \"role\": \"设计助理\",\n              \"scope\": \"未去重；旧稿未审批\",\n              \"status\": \"DRAFT\"\n            },\n            {\n              \"version\": \"R2\",\n              \"date_local\": \"2026-10-17 15:30\",\n              \"role\": \"内容负责人\",\n              \"scope\": \"采用去重；仅内部复核\",\n              \"status\": \"APPROVED_FOR_INTERNAL_REVIEW\"\n            },\n            {\n              \"version\": \"M-LATE\",\n              \"date_local\": \"2026-10-19 09:00\",\n              \"role\": \"商务联络\",\n              \"scope\": \"恢复原数字并声称已发布\",\n              \"status\": \"UNAUTHORIZED\"\n            }\n          ],\n          \"current_revision\": \"R2\",\n          \"current_approved_at_local\": \"2026-10-17 15:30\",\n          \"business_as_of_local\": \"2026-10-20 16:00\",\n          \"source_acquisition_statement\": \"这是微软真实专业资料的离线短摘录及作者中文解释，不是本虚构团队的审批规则。常规支持页抓取于2026-10-20/21，未知发布日期/起施日不补造；API页标示可用版本不等于某功能首次发布日期。业务修订R1/R2与软件文档版本分开，不宣称当前抓取就是2025或更早快照。\",\n          \"source_time_precision\": \"S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造\",\n          \"event_source\": \"S06_revision_register.csv；当前批准另核S05_approved_content.json；无权建议另核S09_late_message.md\"\n        },\n        \"manual_checks_pending\": true\n      }\n    },\n    \"N8_release\": {\n      \"name\": \"N8_release\",\n      \"created_at_utc\": \"2026-10-21T03:11:37.151027+00:00\",\n      \"parents\": {\n        \"N7_handoff\": \"9cd81ace648e5a573fd1ce1fdbc1a3f9bfc33de887443d17f17d2a03d59b5593\"\n      },\n      \"payload\": {\n        \"output_sha256\": {\n          \"accessibility_review.xlsx\": \"e696d4549a106898c6cee363caa3fcac9299c03c0dcad9934bbec24dc2cb3ca2\",\n          \"handoff.docx\": \"cabfa67d56695727a4a692750cf855c6207fef762008f02f204fe14deb58e8cf\",\n          \"repaired_deck.pptx\": \"c9ad764dc9a877e128ccfe01e846b516d9ede767064cdc5b48e90bc0a5bb769f\",\n          \"workflow.py\": \"04e6f4d20799bb545ea51ac0eb6b1cce9c5fea9b4656b755f1b42e0b71a62fe5\"\n        },\n        \"release_state\": \"INTERNAL_REVIEW_REQUIRED\",\n        \"external_release\": false\n      }\n    }\n  },\n  \"output_sha256\": {\n    \"accessibility_review.xlsx\": \"e696d4549a106898c6cee363caa3fcac9299c03c0dcad9934bbec24dc2cb3ca2\",\n    \"handoff.docx\": \"cabfa67d56695727a4a692750cf855c6207fef762008f02f204fe14deb58e8cf\",\n    \"repaired_deck.pptx\": \"c9ad764dc9a877e128ccfe01e846b516d9ede767064cdc5b48e90bc0a5bb769f\",\n    \"workflow.py\": \"04e6f4d20799bb545ea51ac0eb6b1cce9c5fea9b4656b755f1b42e0b71a62fe5\"\n  },\n  \"release_state\": \"INTERNAL_REVIEW_REQUIRED\",\n  \"external_release\": false,\n  \"manual_checks\": {\n    \"native_PowerPoint_Checker\": \"NOT_RUN\",\n    \"real_screen_reader\": \"NOT_RUN\",\n    \"independent_designer\": \"PENDING\"\n  },\n  \"metrics\": {\n    \"months\": [\n      {\n        \"month\": 1,\n        \"received\": 100,\n        \"completed\": 90,\n        \"duplicate_completed\": 0,\n        \"eligible\": 100,\n        \"eligible_completed\": 90\n      },\n      {\n        \"month\": 2,\n        \"received\": 120,\n        \"completed\": 100,\n        \"duplicate_completed\": 5,\n        \"eligible\": 115,\n        \"eligible_completed\": 95\n      },\n      {\n        \"month\": 3,\n        \"received\": 80,\n        \"completed\": 70,\n        \"duplicate_completed\": 0,\n        \"eligible\": 80,\n        \"eligible_completed\": 70\n      },\n      {\n        \"month\": 4,\n        \"received\": 140,\n        \"completed\": 126,\n        \"duplicate_completed\": 10,\n        \"eligible\": 130,\n        \"eligible_completed\": 116\n      },\n      {\n        \"month\": 5,\n        \"received\": 130,\n        \"completed\": 110,\n        \"duplicate_completed\": 0,\n        \"eligible\": 130,\n        \"eligible_completed\": 110\n      },\n      {\n        \"month\": 6,\n        \"received\": 90,\n        \"completed\": 78,\n        \"duplicate_completed\": 5,\n        \"eligible\": 85,\n        \"eligible_completed\": 73\n      },\n      {\n        \"month\": 7,\n        \"received\": 160,\n        \"completed\": 144,\n        \"duplicate_completed\": 0,\n        \"eligible\": 160,\n        \"eligible_completed\": 144\n      },\n      {\n        \"month\": 8,\n        \"received\": 150,\n        \"completed\": 130,\n        \"duplicate_completed\": 10,\n        \"eligible\": 140,\n        \"eligible_completed\": 120\n      },\n      {\n        \"month\": 9,\n        \"received\": 110,\n        \"completed\": 99,\n        \"duplicate_completed\": 0,\n        \"eligible\": 110,\n        \"eligible_completed\": 99\n      },\n      {\n        \"month\": 10,\n        \"received\": 170,\n        \"completed\": 153,\n        \"duplicate_completed\": 0,\n        \"eligible\": 170,\n        \"eligible_completed\": 153\n      },\n      {\n        \"month\": 11,\n        \"received\": 180,\n        \"completed\": 156,\n        \"duplicate_completed\": 10,\n        \"eligible\": 170,\n        \"eligible_completed\": 146\n      },\n      {\n        \"month\": 12,\n        \"received\": 190,\n        \"completed\": 171,\n        \"duplicate_completed\": 0,\n        \"eligible\": 190,\n        \"eligible_completed\": 171\n      }\n    ],\n    \"quarters\": [\n      {\n        \"quarter\": \"Q1\",\n        \"received\": 295,\n        \"completed\": 255,\n        \"rate_pct\": \"86.44\"\n      },\n      {\n        \"quarter\": \"Q2\",\n        \"received\": 345,\n        \"completed\": 299,\n        \"rate_pct\": \"86.67\"\n      },\n      {\n        \"quarter\": \"Q3\",\n        \"received\": 410,\n        \"completed\": 363,\n        \"rate_pct\": \"88.54\"\n      },\n      {\n        \"quarter\": \"Q4\",\n        \"received\": 530,\n        \"completed\": 470,\n        \"rate_pct\": \"88.68\"\n      }\n    ],\n    \"total_received\": 1580,\n    \"total_completed\": 1387,\n    \"total_duplicate\": 40,\n    \"rate_pct\": \"87.78\",\n    \"raw_received\": 1620,\n    \"raw_completed\": 1427,\n    \"scope\": \"原创虚构服务记录，只做内部设计练习，不是真实机构统计/因果研究\"\n  },\n  \"scope\": \"Actual local deterministic build/structure/LO rendering with inline node records; raw PDF/PNG retained in WORK. Not identity attestation, PowerPoint AT certification or actual publication\"\n}"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "repaired_deck.pptx",
+      "absolute_path": "题包内：repaired_deck.pptx",
+      "url": "assets/tasks/DE-TIME-004/solution/golden_output/repaired_deck.pptx",
+      "bytes": 124161,
+      "sha256": "c9ad764dc9a877e128ccfe01e846b516d9ede767064cdc5b48e90bc0a5bb769f",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "全部幻灯片的可提取文字、表格和讲者备注；不是幻灯片视觉复刻。"
+        },
+        {
+          "kind": "heading",
+          "text": "第1页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务站数字指引改版｜年度复盘"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 2025年度原创虚构记录\n• 2026-10-20 内部设计复核\n• 没有真实服务成效或上线认证声明"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S01 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：2025年度原创虚构记录；2026-10-20 内部设计复核；没有真实服务成效或上线认证声明。提醒读者：当前只做内部复核。\n来源：S05/S08/S16。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第2页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本次只请求内部复核"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 目的：修复阅读顺序与版本传播\n• 保留可编辑图表、表格和流程\n• 外部发布、PowerPoint与真实读屏另验"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S02 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：目的：修复阅读顺序与版本传播；保留可编辑图表、表格和流程；外部发布、PowerPoint与真实读屏另验。提醒读者：当前只做内部复核。\n来源：S05/S08/S16。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第3页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "先分清受理、完成与重复"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 原始受理1620，原始完成1427\n• 重复完成40同时从分子与分母剔除\n• 合格完成1387 / 合格受理1580 = 87.78%"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S03 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：原始受理1620，原始完成1427；重复完成40同时从分子与分母剔除；合格完成1387 / 合格受理1580 = 87.78%。提醒读者：当前只做内部复核。\n来源：S03/S04/S05。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第4页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "季度业务量｜同口径对照"
+        },
+        {
+          "kind": "notice",
+          "text": "本页含原生图表；数值、样式和视觉关系请下载PPT或查看已渲染PDF。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "同一去重口径；只描述记录，不推断改版效果。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S04 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：同一去重口径；只描述记录，不推断改版效果。。提醒读者：当前只做内部复核。\n来源：S03/S04/S05。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第5页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "完成率必须有分母"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "季度",
+              "合格受理",
+              "合格完成",
+              "完成率"
+            ],
+            [
+              "Q1",
+              "295",
+              "255",
+              "86.44%"
+            ],
+            [
+              "Q2",
+              "345",
+              "299",
+              "86.67%"
+            ],
+            [
+              "Q3",
+              "410",
+              "363",
+              "88.54%"
+            ],
+            [
+              "Q4",
+              "530",
+              "470",
+              "88.68%"
+            ]
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "text": "全年按总完成/总受理：87.78%；不简单平均季度率。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S05 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：全年按总完成/总受理：87.78%；不简单平均季度率。。提醒读者：当前只做内部复核。\n来源：S03/S04/S05。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第6页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "六步服务流程与人工接点"
+        },
+        {
+          "kind": "paragraph",
+          "text": "按1→6阅读；第3步如有疑问，暂停并转人工核查。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S06 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：按1→6阅读；第3步如有疑问，暂停并转人工核查。。提醒读者：当前只做内部复核。\n来源：S10/S11。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第7页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "疑问不是自动批准"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 无有效审核证据：保留“待人工复核”\n• 材料补充：更新引用与受影响交付物\n• 不得把联络消息当有权批准"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S07 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：无有效审核证据：保留“待人工复核”；材料补充：更新引用与受影响交付物；不得把联络消息当有权批准。提醒读者：当前只做内部复核。\n来源：S05/S08/S16。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第8页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "角色权限与交接责任"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 内容负责人：批准题内口径，不代表批准发布\n• 设计师：修复并留结构/视觉证据\n• 发布负责人：收到原生/读屏复核后再决定"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S08 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：内容负责人：批准题内口径，不代表批准发布；设计师：修复并留结构/视觉证据；发布负责人：收到原生/读屏复核后再决定。提醒读者：当前只做内部复核。\n来源：S05/S08/S16。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第9页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "示意界面：仅本机预览"
+        },
+        {
+          "kind": "paragraph",
+          "text": "示意界面不是上线截图；预览不发送、不批准。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S09 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：示意界面不是上线截图；预览不发送、不批准。。提醒读者：当前只做内部复核。\n来源：S12。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第10页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "风险与未完成验证"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 源数据变化：新目录全量重建\n• 结构/几何检查不等于真实读屏\n• 待测结果不得填“已通过”"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S10 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：源数据变化：新目录全量重建；结构/几何检查不等于真实读屏；待测结果不得填“已通过”。提醒读者：当前只做内部复核。\n来源：S05/S08/S16。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第11页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "下一步：按责任逐项复核"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 数据负责人：核对去重与冻结材料\n• 设计师：逐页检查遮挡、顺序与替代描述\n• 有权复核者：目标应用测试后决定下一步"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S11 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：数据负责人：核对去重与冻结材料；设计师：逐页检查遮挡、顺序与替代描述；有权复核者：目标应用测试后决定下一步。提醒读者：当前只做内部复核。\n来源：S05/S08/S16。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        },
+        {
+          "kind": "heading",
+          "text": "第12页"
+        },
+        {
+          "kind": "paragraph",
+          "text": "来源、版本与发布边界"
+        },
+        {
+          "kind": "paragraph",
+          "text": "• 微软官方资料：阅读顺序、alt与原生格式\n• 业务、角色、界面和服务记录均原创虚构\n• 当前为内部待审，不是无障碍认证或发布批准"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创虚构案例 · 内部待审 · S12 · R2"
+        },
+        {
+          "kind": "code",
+          "text": "讲者备注：\n讲解本页要点：微软官方资料：阅读顺序、alt与原生格式；业务、角色、界面和服务记录均原创虚构；当前为内部待审，不是无障碍认证或发布批准。提醒读者：当前只做内部复核。\n来源：S05/S08/S16。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    },
+    {
+      "name": "workflow.py",
+      "absolute_path": "题包内：workflow.py",
+      "url": "assets/tasks/DE-TIME-004/solution/golden_output/workflow.py",
+      "bytes": 36958,
+      "sha256": "04e6f4d20799bb545ea51ac0eb6b1cce9c5fea9b4656b755f1b42e0b71a62fe5",
+      "description": "",
+      "sections": [
+        {
+          "kind": "code",
+          "text": "\"\"\"Local, source-bound presentation remediation build and dependency verification.\n\nOriginal reference implementation. No real release, approval or AT certification.\n\"\"\"\nimport argparse,csv,datetime,hashlib,json,shutil,subprocess,sys,tempfile,zipfile,os\nfrom pathlib import Path\nfrom decimal import Decimal\nfrom pptx import Presentation\nfrom pptx.util import Inches,Pt\nfrom pptx.dml.color import RGBColor\nfrom pptx.enum.shapes import MSO_SHAPE,MSO_CONNECTOR\nfrom pptx.enum.chart import XL_CHART_TYPE,XL_LEGEND_POSITION,XL_LABEL_POSITION\nfrom pptx.chart.data import CategoryChartData\nfrom pptx.oxml.xmlchemy import OxmlElement\nfrom docx import Document\nfrom docx.shared import Cm\nfrom openpyxl import Workbook,load_workbook\nfrom openpyxl.styles import Font,PatternFill,Alignment\nfrom openpyxl.worksheet.pagebreak import Break\nfrom pypdf import PdfReader\nimport cairosvg\n\nNAMES=['N0_freeze','N1_authority','N2_metrics','N3_story','N4_deck','N5_structure','N6_render','N7_handoff','N8_release']\nPARENTS={NAMES[0]:[],NAMES[1]:[NAMES[0]],NAMES[2]:[NAMES[0],NAMES[1]],NAMES[3]:[NAMES[1],NAMES[2]],NAMES[4]:[NAMES[3]],NAMES[5]:[NAMES[1],NAMES[2],NAMES[4]],NAMES[6]:[NAMES[4],NAMES[5]],NAMES[7]:[NAMES[1],NAMES[2],NAMES[5],NAMES[6]],NAMES[8]:[NAMES[7]]}\nOUTPUTS=['repaired_deck.pptx','accessibility_review.xlsx','handoff.docx','workflow.py','release_receipt.json']\nDECOR='http://schemas.microsoft.com/office/drawing/2017/decorative'\nDECOR_URI='{C183D7F6-B498-43B3-948B-1728B52AA6E4}'\nOFFICE=os.environ.get('DE004_OFFICE_BINARY','libreoffice')\nPDFTOPPM=os.environ.get('DE004_PDFTOPPM_BINARY','pdftoppm')\nPNS='http://schemas.openxmlformats.org/presentationml/2006/main'\nANS='http://schemas.openxmlformats.org/drawingml/2006/main'\nNS={'p':PNS,'a':ANS,'adec':DECOR}\n\ndef sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()\ndef now():return datetime.datetime.now(datetime.timezone.utc).isoformat()\ndef read(p):return json.loads(Path(p).read_text())\ndef write(p,value):Path(p).write_text(json.dumps(value,ensure_ascii=False,indent=2))\ndef rows(p):\n    with Path(p).open(newline='') as f:return list(csv.DictReader(f))\ndef hashes(folder):return {str(p.relative_to(folder)):sha(p) for p in sorted(folder.rglob('*')) if p.is_file()}\ndef one(s):return s._element.xpath('.//p:cNvPr')[0]\ndef is_decorative(s):return bool(one(s).xpath('.//*[local-name()=\"decorative\" and (@val=\"1\" or @val=\"true\")]'))\ndef alt(s,text):one(s).set('descr',text)\ndef decorative(s):\n    c=one(s);exts=c.find('{'+ANS+'}extLst')\n    if exts is None:exts=OxmlElement('a:extLst');c.append(exts)\n    ext=OxmlElement('a:ext');ext.set('uri',DECOR_URI)\n    from lxml import etree\n    tag=etree.SubElement(ext,'{'+DECOR+'}decorative',nsmap={'adec':DECOR});tag.set('val','1');exts.append(ext)\n    c.attrib.pop('descr',None)\ndef color(hex):return RGBColor.from_string(hex)\ndef text_box(slide,name,text,left,top,width,height,size=22,bold=False,fill=None):\n    s=slide.shapes.add_textbox(Inches(left),Inches(top),Inches(width),Inches(height));s.name=name\n    tf=s.text_frame;tf.word_wrap=True;tf.clear();tf.margin_left=Inches(.08);tf.margin_top=Inches(.04)\n    for i,line in enumerate(text.split('\\n')):\n        p=tf.paragraphs[0] if i==0 else tf.add_paragraph();p.text=line;p.space_after=Pt(10)\n        for run in p.runs:run.font.name='Noto Sans CJK SC';run.font.size=Pt(size);run.font.bold=bold;run.font.color.rgb=color(fill or '173C45')\n    return s\ndef slide_start(prs,num,title,draft=False):\n    sl=prs.slides.add_slide(prs.slide_layouts[5]);sl.name=f'S{num:02}'\n    sl.background.fill.solid();sl.background.fill.fore_color.rgb=color('F4F7F7')\n    t=sl.shapes.title;t.name='title';t.left=Inches(.65);t.top=Inches(.45);t.width=Inches(12);t.height=Inches(.8)\n    t.text='服务复盘' if draft else title\n    for p in t.text_frame.paragraphs:\n        for r in p.runs:r.font.name='Noto Sans CJK SC';r.font.size=Pt(30);r.font.bold=True;r.font.color.rgb=color('173C45')\n    if not draft:\n        accent=sl.shapes.add_shape(MSO_SHAPE.RECTANGLE,Inches(.65),Inches(.22),Inches(.55),Inches(.06));accent.name='accent';accent.fill.solid();accent.fill.fore_color.rgb=color('006C70');accent.line.fill.background();decorative(accent)\n    return sl\n\ndef metric_table(root):\n    data=sorted(rows(root/'S03_monthly_metrics.csv'),key=lambda r:int(r['month']));result=[]\n    assert len(data)==12 and [int(r['month']) for r in data]==list(range(1,13)),'Need all 12 unique ordered months'\n    for r in data:\n        n,c,d=map(int,[r['received'],r['completed'],r['duplicate_completed']])\n        assert 0<=d<=c<=n\n        result.append(dict(month=int(r['month']),received=n,completed=c,duplicate_completed=d,eligible=n-d,eligible_completed=c-d))\n    q=[]\n    for i in range(4):\n        part=result[i*3:i*3+3];n=sum(r['eligible'] for r in part);c=sum(r['eligible_completed'] for r in part)\n        q.append(dict(quarter='Q'+str(i+1),received=n,completed=c,rate_pct=str((Decimal(c)/n*100).quantize(Decimal('.01')))))\n    n=sum(r['eligible'] for r in result);c=sum(r['eligible_completed'] for r in result)\n    return dict(months=result,quarters=q,total_received=n,total_completed=c,total_duplicate=sum(r['duplicate_completed'] for r in result),rate_pct=str((Decimal(c)/n*100).quantize(Decimal('.01'))),raw_received=sum(r['received'] for r in result),raw_completed=sum(r['completed'] for r in result),scope='原创虚构服务记录，只做内部设计练习，不是真实机构统计/因果研究')\n\ndef authority_context(root):\n    \"\"\"Record source event dates; never substitute acquisition/build time.\"\"\"\n    cfg=read(root/'S05_approved_content.json')\n    assert cfg['version'] in ['R2','R3'] and cfg['authority_role']=='内容负责人' and cfg['approval_scope']=='INTERNAL_REVIEW_ONLY'\n    register=rows(root/'S06_revision_register.csv');assert len({r['version'] for r in register})==len(register)\n    assert {'R1','R2','M-LATE'}<={r['version'] for r in register}\n    for r in register:datetime.datetime.strptime(r['date_local'],'%Y-%m-%d %H:%M')\n    approved=next((r for r in register if r['version']==cfg['version']),None)\n    if approved:assert approved['date_local']==cfg['approved_at_local'] and approved['role']==cfg['authority_role'],'Approval date/role conflicts with revision register'\n    else:\n        # Controlled R3 test updates S05 explicitly; it is not a historical S06 row.\n        register.append(dict(version=cfg['version'],date_local=cfg['approved_at_local'],role=cfg['authority_role'],scope='S05新增批准；仅内部复核',status='APPROVED_FOR_INTERNAL_REVIEW_FROM_S05'))\n    register.sort(key=lambda r:(r['date_local'],r['version']))\n    acquisition=next(p.text for p in Document(root/'S16_official_source_packet.docx').paragraphs if '抓取于' in p.text)\n    return dict(timezone='Asia/Shanghai',events=register,current_revision=cfg['version'],current_approved_at_local=cfg['approved_at_local'],business_as_of_local='2026-10-20 16:00',source_acquisition_statement=acquisition,source_time_precision='S16仅给2026-10-20/21日期范围；逐源精确UTC未知，不由当前运行时间补造',event_source='S06_revision_register.csv；当前批准另核S05_approved_content.json；无权建议另核S09_late_message.md')\n\ndef narrative(root,metrics):\n    cfg=read(root/'S05_approved_content.json');assert cfg['version'] in ['R2','R3'] and cfg['authority_role']=='内容负责人'\n    assert cfg['approval_scope']=='INTERNAL_REVIEW_ONLY' and cfg['data_sha256']==sha(root/'S03_monthly_metrics.csv')\n    assert len(cfg['slides'])==12 and [s['id'] for s in cfg['slides']]==[f'S{i:02}' for i in range(1,13)]\n    parameters={k:str(metrics[k]) for k in ['total_received','total_completed','total_duplicate','rate_pct','raw_received','raw_completed']}\n    for s in cfg['slides']:\n        s['body']=s['body'].format(**parameters);s['notes']=s['notes'].format(**parameters)\n    cfg['authority_timeline']=authority_context(root)\n    return cfg\n\ndef make_deck(root,plan,metrics,dest,draft=False):\n    prs=Presentation();prs.slide_width=Inches(13.333333);prs.slide_height=Inches(7.5)\n    for i,content in enumerate(plan['slides'],1):\n        sl=slide_start(prs,i,content['title'],draft)\n        if i==4:\n            cd=CategoryChartData();cd.categories=[r['quarter'] for r in metrics['quarters']]\n            cd.add_series('合格受理',[r['received'] for r in metrics['quarters']]);cd.add_series('合格完成',[r['completed'] for r in metrics['quarters']])\n            frame=sl.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED,Inches(.9),Inches(1.55),Inches(11.5),Inches(4.5),cd);frame.name='quarter_chart';ch=frame.chart\n            ch.has_legend=True;ch.legend.position=XL_LEGEND_POSITION.BOTTOM;ch.legend.include_in_layout=False;ch.legend.font.size=Pt(16)\n            ch.value_axis.maximum_scale=600;ch.value_axis.minimum_scale=0;ch.value_axis.tick_labels.font.size=Pt(14);ch.category_axis.tick_labels.font.size=Pt(18)\n            for series,hue in zip(ch.series,['006C70','A74B24']):series.format.fill.solid();series.format.fill.fore_color.rgb=color(hue);series.format.line.fill.background()\n            plot=ch.plots[0];plot.has_data_labels=True;plot.data_labels.position=XL_LABEL_POSITION.OUTSIDE_END;plot.data_labels.font.size=Pt(14)\n            alt(frame,plan['version']+'去重口径：'+ '；'.join(r['quarter']+'合格受理'+str(r['received'])+'、合格完成'+str(r['completed']) for r in metrics['quarters'])+'。合计'+str(metrics['total_completed'])+'/'+str(metrics['total_received'])+'，非真实机构统计。')\n            text_box(sl,'body',content['body'],.9,6.15,11.7,.5,20)\n        elif i==5:\n            frame=sl.shapes.add_table(5,4,Inches(.9),Inches(1.65),Inches(11.5),Inches(3.8));frame.name='quarter_table';table=frame.table\n            values=[['季度','合格受理','合格完成','完成率']]+[[r['quarter'],str(r['received']),str(r['completed']),r['rate_pct']+'%'] for r in metrics['quarters']]\n            for ri,row in enumerate(values):\n                for ci,val in enumerate(row):\n                    cell=table.cell(ri,ci);cell.text=val;cell.fill.solid();cell.fill.fore_color.rgb=color('173C45' if ri==0 else 'FFFFFF')\n                    for p in cell.text_frame.paragraphs:\n                        for run in p.runs:run.font.name='Noto Sans CJK SC';run.font.size=Pt(22);run.font.color.rgb=color('FFFFFF' if ri==0 else '173C45')\n            alt(frame,'季度明细表：每行按季度、合格受理、合格完成、完成率四列。全年按合计分子/合计分母为'+metrics['rate_pct']+'%，不是季度完成率的简单平均。')\n            text_box(sl,'body',content['body'],.9,5.8,11.5,.8,20)\n        elif i==6:\n            group=sl.shapes.add_group_shape();group.name='service_flow'\n            nodes=rows(root/'S10_workflow_nodes.csv');assert len(nodes)==6\n            for j,n in enumerate(nodes):\n                x=.9+(j%3)*4.1;y=1.8+(j//3)*2.05\n                box=group.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,Inches(x),Inches(y),Inches(3.35),Inches(1.1));box.name=n['id'];box.text=n['label'];box.fill.solid();box.fill.fore_color.rgb=color('FFFFFF');box.line.color.rgb=color('006C70')\n                for p in box.text_frame.paragraphs:\n                    for run in p.runs:run.font.name='Noto Sans CJK SC';run.font.size=Pt(21);run.font.color.rgb=color('173C45')\n            # Logical sequence is explicit in text and group alt, not color-only.\n            for edge in rows(root/'S11_workflow_edges.csv'):\n                j=int(edge['from'][1:])-1\n                if j!=2:\n                    x=4.35+(j%3)*4.1;y=2.1+(j//3)*2.05\n                    arrow=group.shapes.add_shape(MSO_SHAPE.CHEVRON,Inches(x),Inches(y),Inches(.45),Inches(.4));arrow.name=edge['from']+'_'+edge['to'];arrow.fill.solid();arrow.fill.fore_color.rgb=color('006C70');arrow.line.fill.background();decorative(arrow)\n                else:\n                    for k,(x1,y1,x2,y2) in enumerate([(10.77,2.9,10.77,3.35),(10.77,3.35,2.57,3.35),(2.57,3.35,2.57,3.65)]):\n                        line=group.shapes.add_connector(MSO_CONNECTOR.STRAIGHT,Inches(x1),Inches(y1),Inches(x2),Inches(y2));line.name='F3_F4_segment'+str(k);line.line.color.rgb=color('006C70');line.line.width=Pt(2);decorative(line)\n                    arrow=group.shapes.add_shape(MSO_SHAPE.DOWN_ARROW,Inches(2.4),Inches(3.54),Inches(.34),Inches(.28));arrow.name='F3_F4';arrow.fill.solid();arrow.fill.fore_color.rgb=color('006C70');arrow.line.fill.background();decorative(arrow)\n            alt(group,'原创服务流程，按编号1到6阅读：'+'→'.join(n['label'] for n in nodes)+'。第3步存在疑问须转人工，不得自动视为批准。')\n            text_box(sl,'body',content['body'],.9,6.15,11.5,.65,20)\n        elif i==9:\n            with tempfile.TemporaryDirectory(prefix='deck-illustration-') as tmp:\n                png=Path(tmp)/'illustration.png';svg=(root/'S12_interface_illustration.svg').read_text().replace('font-size=\"21\"','font-size=\"25\"').replace('font-size=\"24\"','font-size=\"25\"')\n                cairosvg.svg2png(bytestring=svg.encode(),write_to=str(png),output_width=1000,output_height=420)\n                image=sl.shapes.add_picture(str(png),Inches(.9),Inches(1.35),width=Inches(11.4));image.name='interface_illustration'\n            alt(image,'原创示意界面，不是上线截图：材料名称输入、仅本机预览按钮与待人工复核提示；尚未发送或批准。')\n            text_box(sl,'body',content['body'],.9,6.3,11.5,.55,20)\n        else:\n            lines=content['body'].split('\\n');body='\\n'.join('• '+s for s in lines)\n            text_box(sl,'body',body,.85,1.65,11.7,4.65,24 if len(lines)<=3 else 22)\n        text_box(sl,'footer',f'原创虚构案例 · 内部待审 · {content[\"id\"]} · {plan[\"version\"]}',.85,7.0,11.5,.28,11)\n        sl.notes_slide.notes_text_frame.text=content['notes']+f'\\n来源：{content[\"source\"]}。实际PowerPoint Checker、屏幕阅读器与外部发布审批未执行，不宣称已通过。'\n        if draft:\n            # Genuine old artifact defects: duplicate titles, stale notes,\n            # stale numbers and bad lexical order, not a polished Gold copy.\n            sl.notes_slide.notes_text_frame.text='R1：受理1620、完成1427；全部无障碍测试已通过，可直接发布。'\n            for sh in sl.shapes:\n                one(sh).attrib.pop('descr',None)\n            tree=sl.shapes._spTree;objects=list(tree)[2:]\n            for element in objects:tree.remove(element)\n            for element in reversed(objects):tree.append(element)\n        else:\n            # Keep title first among informative objects; decorative accent last.\n            tree=sl.shapes._spTree;objects=list(tree)[2:];decor=[e for e in objects if e.xpath('.//*[local-name()=\"decorative\" and (@val=\"1\" or @val=\"true\")]') and e.tag!='{'+PNS+'}grpSp']\n            for e in decor:tree.remove(e);tree.append(e)\n    prs.save(dest)\n\ndef inspect_deck(path,metrics):\n    prs=Presentation(path);assert len(prs.slides)==12\n    result=[];titles=[]\n    for i,sl in enumerate(prs.slides,1):\n        active=[s for s in sl.shapes if not is_decorative(s)];title=sl.shapes.title\n        assert title is not None and title.text.strip();titles.append(title.text.strip())\n        assert active[0].name=='title',f'S{i:02} title not first'\n        assert sl.name==f'S{i:02}' and len({s.shape_id for s in sl.shapes})==len(sl.shapes)\n        for s in sl.shapes:\n            assert 0<=s.left and 0<=s.top and s.left+s.width<=prs.slide_width+50 and s.top+s.height<=prs.slide_height+50,(i,s.name,'outside slide')\n            if s.shape_type==6 or s.shape_type==13 or s.has_chart or s.has_table:\n                assert len(one(s).get('descr',''))>25 and not is_decorative(s),(i,s.name,'informative object missing alt or decorative')\n        assert sl.has_notes_slide and '屏幕阅读器' in sl.notes_slide.notes_text_frame.text\n        assert '全部无障碍测试已通过' not in sl.notes_slide.notes_text_frame.text\n        result.append(dict(slide_id=sl.name,title=title.text,active_order=[s.name for s in active],decorative=[s.name for s in sl.shapes if is_decorative(s)],notes_present=True,shape_count=len(sl.shapes),scope='OOXML lexical/navigation structure and explicit alt; not actual AT speech'))\n    assert len(set(titles))==12\n    chart=next(s.chart for s in prs.slides[3].shapes if s.has_chart)\n    assert [int(x) for x in chart.series[0].values]==[r['received'] for r in metrics['quarters']]\n    assert [int(x) for x in chart.series[1].values]==[r['completed'] for r in metrics['quarters']]\n    alt_chart=one(next(s for s in prs.slides[3].shapes if s.has_chart)).get('descr','')\n    assert str(metrics['total_completed'])+'/'+str(metrics['total_received']) in alt_chart\n    table=next(s.table for s in prs.slides[4].shapes if s.has_table)\n    assert [[table.cell(i,j).text for j in range(4)] for i in range(1,5)]==[[r['quarter'],str(r['received']),str(r['completed']),r['rate_pct']+'%'] for r in metrics['quarters']]\n    return result\n\ndef office_render(deck,work):\n    render=work/'render';render.mkdir(exist_ok=False)\n    with tempfile.TemporaryDirectory(prefix='deck-remediation-lo-') as profile:\n        p=subprocess.run([OFFICE,'-env:UserInstallation='+Path(profile).as_uri(),'--headless','--convert-to','pdf','--outdir',str(render),str(deck)],capture_output=True,text=True,timeout=120)\n    assert p.returncode==0,p.stdout+p.stderr\n    pdf=render/'repaired_deck.pdf';assert len(PdfReader(pdf).pages)==12\n    p=subprocess.run([PDFTOPPM,'-scale-to','1280','-png',str(pdf),str(render/'slide')],capture_output=True,text=True,timeout=120);assert p.returncode==0,p.stderr\n    pngs=list(render.glob('slide-*.png'));assert len(pngs)==12\n    version=subprocess.run([OFFICE,'--version'],capture_output=True,text=True,timeout=30);assert version.returncode==0\n    raster_version=subprocess.run([PDFTOPPM,'-v'],capture_output=True,text=True,timeout=30);assert raster_version.returncode==0\n    return dict(tool='LibreOffice + pdftoppm',actual_office_executable=shutil.which(OFFICE),actual_office_version=version.stdout.strip(),actual_raster_executable=shutil.which(PDFTOPPM),actual_raster_version=(raster_version.stdout+raster_version.stderr).splitlines()[0],pdf_sha256=sha(pdf),png_sha256={p.name:sha(p) for p in pngs},pages=12,actual_time_utc=now(),manual_visual_review='PENDING_DESIGNER',native_powerpoint_checker='NOT_RUN',screen_reader='NOT_RUN',pdf_ua='NOT_CLAIMED')\n\ndef make_handoff(root,out,work,plan,metrics,audit,render):\n    wb=Workbook();s=wb.active;s.title='逐页复核';s.append(['页ID','标题','原D0问题与定位','实际修复/信息顺序','当前证据定位','验证状态与未测责任'])\n    vocabulary={'title':'标题','body':'正文','footer':'状态页脚','quarter_chart':'季度原生图','quarter_table':'季度原生表','service_flow':'六步流程组','interface_illustration':'示意图'}\n    special={'S03':'；正文旧计数/未去重','S04':'；原生图沿用R1季度量且无alt','S05':'；原生表沿用R1且无alt','S06':'；流程分组缺语义alt','S09':'；示意图缺上下文alt'}\n    for i,r in enumerate(audit):\n        problem='S02/S13：重复标题、逆序对象、旧未审通过备注'+special.get(r['slide_id'],'')\n        fix=' → '.join(vocabulary.get(n,n) for n in r['active_order'])+'；纯装饰'+','.join(r['decorative'])+'已标记'\n        evidence=f'N5_structure.json payload.slides[{i}]；N6_render.json；render/slide-{i+1:02}.png'\n        s.append([r['slide_id'],r['title'],problem,fix,evidence,'已做：OOXML/LO渲染。待设计师及有权复核者：目标PPT、真实读屏、逐页视觉。'])\n    s=wb.create_sheet('口径勾稽');s.append(['季度','合格受理','合格完成','完成率公式','来源'])\n    for i,r in enumerate(metrics['quarters'],2):s.append([r['quarter'],r['received'],r['completed'],f'=C{i}/B{i}','S03及S05 '+plan['version']+'去重口径'])\n    s.append(['全年','=SUM(B2:B5)','=SUM(C2:C5)','=C6/B6','按合计分子/合计分母，不平均季度率'])\n    for row in range(2,7):s[f'D{row}'].number_format='0.00%'\n    s=wb.create_sheet('版本与边界');s.append(['事项','判断','证据'])\n    for r in [['采用版本',plan['version']+'；内容负责人仅批准内部复核','S05/S06/S08，较晚商务无权变更'],['时间','业务2026-10-20 16:00上海；源抓取/程序运行UTC分别保存','不是微软功能引入日期或历史应用测试记录'],['数据性质','所有服务记录与角色均原创虚构','不作真实机构统计/政策或因果推断'],['权限','结构与LO渲染不能替代原生PowerPoint/真实读屏及发布批准','S16真实文档；本题授权边界'],['汇总',str(metrics['total_completed'])+'/'+str(metrics['total_received'])+'='+metrics['rate_pct']+'%；剔除重复'+str(metrics['total_duplicate']),'S03原字段、S04字典、S05规则'],['工作流','9个真实依赖节点；缺前置/被改产物拒绝旧回执','WORK中的节点/指标/渲染；不是可信电子签名']]:s.append(r)\n    timeline=authority_context(root);started=read(node_path(work,NAMES[0]))['created_at_utc']\n    for event in timeline['events']:s.append(['事件 '+event['version'],event['date_local']+' Asia/Shanghai｜'+event['role']+'｜'+event['scope']+'｜'+event['status'],'S06原始登记；R3等新批准另以S05为据，不按消息较晚决定权限'])\n    s.append(['源取得日期',timeline['source_time_precision'],'S16原来源说明；未知发布日期/精确取得UTC不补造'])\n    s.append(['本次实际运行','开始UTC '+started+'\\n实际渲染UTC '+render['actual_time_utc'],'N0_freeze.created_at_utc/N6_render；不是业务批准或源取得时间'])\n    for s in wb:\n        s.freeze_panes='A2';s.auto_filter.ref=s.dimensions;s.sheet_view.showGridLines=False\n        for c in s[1]:c.font=Font(bold=True,color='FFFFFF');c.fill=PatternFill('solid',fgColor='173C45')\n        widths=[9,28,48,40,36,42] if s.title=='逐页复核' else [20,35,35,25,48] if s.title=='口径勾稽' else [20,80,70]\n        for j,width in enumerate(widths,1):s.column_dimensions[__import__('openpyxl').utils.get_column_letter(j)].width=width\n        for row in s:\n            s.row_dimensions[row[0].row].height=72 if s.title=='逐页复核' else 52 if s.title=='版本与边界' else 32\n            for c in row:c.alignment=Alignment(vertical='center',wrap_text=True)\n        s.page_setup.orientation='landscape';s.page_setup.paperSize=s.PAPERSIZE_A3;s.page_setup.fitToWidth=1;s.page_setup.fitToHeight=1;s.sheet_properties.pageSetUpPr.fitToPage=True;s.print_title_rows='1:1'\n        if s.title=='逐页复核':s.page_setup.fitToHeight=0;s.row_breaks.append(Break(id=7))\n        if s.title=='口径勾稽':\n            for row in range(2,7):\n                for col in ['B','C','D']:s[f'{col}{row}'].alignment=Alignment(horizontal='center',vertical='center',wrap_text=True)\n    raw=work/'accessibility_review.xlsx';wb.save(raw)\n    with tempfile.TemporaryDirectory(prefix='deck-review-calc-') as profile:\n        p=subprocess.run([OFFICE,'-env:UserInstallation='+Path(profile).as_uri(),'--headless','--convert-to','xlsx','--outdir',str(out),str(raw)],capture_output=True,text=True,timeout=90)\n    assert p.returncode==0 and (out/'accessibility_review.xlsx').exists(),p.stdout+p.stderr\n    v=load_workbook(out/'accessibility_review.xlsx',data_only=True)['口径勾稽'];assert v['B6'].value==metrics['total_received'] and v['C6'].value==metrics['total_completed']\n    d=Document();sec=d.sections[0];sec.top_margin=sec.bottom_margin=Cm(1.8);d.styles['Normal'].font.name='Noto Sans CJK SC';d.styles['Normal'].font.size=Pt(10.5)\n    d.add_heading('演示修复交接｜内部待审',0)\n    sections=[('结论与数据',f'采用{plan[\"version\"]}。合格受理{metrics[\"total_received\"]}、合格完成{metrics[\"total_completed\"]}、完成率{metrics[\"rate_pct\"]}%，剔除重复完成记录{metrics[\"total_duplicate\"]}。原始{metrics[\"raw_completed\"]}/{metrics[\"raw_received\"]}只作R1对照。指标文字、季度原生图表与表格、alt及讲者备注同源。全部业务为原创虚构，不是机构统计或因果效果。'),('原生修复与可编辑性','12页独特标题与真实标题占位符；信息对象按标题→正文/图表/表格/分组→状态页脚顺序，纯装饰条使用真实decorative扩展。季度图为原生chart及嵌入数据，季度表原生table，六步图为可编辑group；示意图有上下文alt，文字对象不重复堆alt。背景不盖正文，不用白字/移出画布隐藏重要标题。'),('权限与时间','R1草稿不再是当前口径；S05内容负责人仅有内部内容修订权限，S09更晚商务建议无权恢复原数字或把状态改为已发布。业务基准2026-10-20 16:00 Asia/Shanghai；真实网页抓取与运行UTC另存，未知官方发布日期不补造。角色和hash仅是题内材料/字节绑定，不是可认证的真实签章。'),('实际做过与没有做过','实际执行OOXML结构、原生数据勾稽、LibreOffice的12页PDF与PNG导出，详细见WORK/render和release_receipt。没有执行Windows/Mac PowerPoint Accessibility Checker、真实屏幕阅读器、PDF/UA认证、真实用户研究或外部发布批准。不得把缺失测试填写通过。结构/几何检查不证明所有视觉排版和AT体验正确。'),('依赖与复现','workflow.py build --input-dir INPUT --output-dir NEW_OUTPUT --work-dir NEW_WORK；verify使用同参数只读检查。stage --name N0_freeze等按S19依赖执行，缺前置即失败，WORK/输入/输出必须分开且不嵌套。输出只保留指定5文件，PDF/PNG/节点放WORK，不把运行中间件冒最终交付。需python-pptx、openpyxl、python-docx、pypdf、cairosvg、LibreOffice Impress/Calc和pdftoppm。'),('变更与下一责任人','数据负责人核对去重字段与输入哈希，设计师查12页视觉/叠放/替代描述，使用目标PowerPoint和屏幕阅读器逐页验证再交有权负责人决定发布。合法R3更新须绑定新数据并新目录全量重建，图/表/alt/备注/工作簿与新回执一起更新；旧回执必须失效，不可只改文字。缺依赖/工具时报错不产发布通过。'),('专业依据与局限','S16微软阅读顺序/alt/形状树/非视觉属性文档；S17固定Open XML SDK v3.0.1描述和S18 MIT许可。spTree词法顺序可证层叠与导航，不单凭它宣称所有PowerPoint版本的真实读屏结果；decorative来自官方类型/SDK子元素与实际PPT标记的结构对照。示意图原创，不加载外部资源，不含真实个人信息。')]\n    for title,body in sections:\n        if title=='实际做过与没有做过':d.add_page_break()\n        d.add_heading(title,1);d.add_paragraph(body)\n        if title=='权限与时间':\n            table=d.add_table(rows=1,cols=3);table.style='Table Grid'\n            for cell,text in zip(table.rows[0].cells,['事件/依据','原日期（Asia/Shanghai）','角色、范围与采用处理']):cell.text=text\n            for event in timeline['events']:\n                labels={'DRAFT':'未审批旧稿','APPROVED_FOR_INTERNAL_REVIEW':'仅内部复核批准','APPROVED_FOR_INTERNAL_REVIEW_FROM_S05':'S05新增内部复核批准','UNAUTHORIZED':'无权覆盖/外发'}\n                cells=table.add_row().cells;cells[0].text=event['version']+'｜S06' if event['version'] in ['R1','R2','M-LATE'] else event['version']+'｜S05新增批准';cells[1].text=event['date_local'];cells[2].text=event['role']+'；'+event['scope']+'；'+labels.get(event['status'],event['status'])\n            d.add_paragraph('业务复核基准：'+timeline['business_as_of_local']+' Asia/Shanghai；它不是任一文件签发/批准日。源取得：'+timeline['source_time_precision']+'。未知专业文档发布日期/起施日仍未知。')\n            d.add_paragraph('本次程序开始UTC：'+started+'；实际渲染UTC：'+render['actual_time_utc']+'。这是作者真实执行时点，和上表原始修订事件、业务复核基准及S16来源取得分别记录，不伪装成历史现场测试。')\n    d.save(out/'handoff.docx')\n    return dict(review_sha256=sha(out/'accessibility_review.xlsx'),handoff_sha256=sha(out/'handoff.docx'),authority_timeline=timeline,manual_checks_pending=True)\n\ndef validate_inputs(root):\n    contract=read(root/'S19_dependency_contract.json')\n    for file,h in contract['official_input_sha256'].items():assert sha(root/file)==h,'Official source drift; manual re-freeze required: '+file\n    assert [r['id'] for r in rows(root/'S10_workflow_nodes.csv')]==['F1','F2','F3','F4','F5','F6']\n    edges=rows(root/'S11_workflow_edges.csv');assert [(e['from'],e['to']) for e in edges]==[('F1','F2'),('F2','F3'),('F3','F4'),('F4','F5'),('F5','F6')]\n    return contract\n\ndef node_path(work,name):return work/(name+'.json')\ndef dependencies(work,name):\n    result={}\n    for parent in PARENTS[name]:\n        p=node_path(work,parent);assert p.is_file(),'Missing dependency '+parent\n        result[parent]=sha(p)\n    return result\n\ndef verify_prefix(out,work,next_name):\n    index=NAMES.index(next_name)\n    for previous in NAMES[:index]:\n        node=read(node_path(work,previous))\n        assert node['name']==previous and node['parents']==dependencies(work,previous),'Prior dependency drift: '+previous\n    if index:\n        assert sha(out/'workflow.py')==read(node_path(work,NAMES[0]))['payload']['executor_sha256'],'Executor copy changed'\n    if index>4:\n        assert sha(out/'repaired_deck.pptx')==read(node_path(work,NAMES[4]))['payload']['deck_sha256'],'Deck changed after generation'\n    if index>6:\n        render=read(node_path(work,NAMES[6]))['payload']\n        assert sha(work/'render/repaired_deck.pdf')==render['pdf_sha256'],'Rendered PDF changed'\n        for file,h in render['png_sha256'].items():assert sha(work/'render'/file)==h,'Rendered PNG changed'\n    if index>7:\n        payload=read(node_path(work,NAMES[7]))['payload']\n        assert sha(out/'accessibility_review.xlsx')==payload['review_sha256']\n        assert sha(out/'handoff.docx')==payload['handoff_sha256']\n\ndef stage(root,out,work,name):\n    assert name in NAMES\n    assert not node_path(work,name).exists(),'Node already exists; use a fresh work directory'\n    parents=dependencies(work,name);verify_prefix(out,work,name);current=hashes(root)\n    if name!=NAMES[0]:assert read(node_path(work,NAMES[0]))['payload']['input_sha256']==current,'Frozen inputs changed; fresh rebuild required'\n    if name==NAMES[0]:\n        validate_inputs(root);payload=dict(input_sha256=current,business_as_of='2026-10-20T16:00:00+08:00',executor_sha256=sha(__file__))\n    elif name==NAMES[1]:\n        cfg=read(root/'S05_approved_content.json');assert cfg['authority_role']=='内容负责人' and cfg['approval_scope']=='INTERNAL_REVIEW_ONLY' and cfg['version'] in ['R2','R3'];assert cfg['data_sha256']==sha(root/'S03_monthly_metrics.csv');cfg['authority_timeline']=authority_context(root);payload=cfg\n    elif name==NAMES[2]:payload=metric_table(root)\n    elif name==NAMES[3]:payload=narrative(root,read(node_path(work,NAMES[2]))['payload'])\n    elif name==NAMES[4]:\n        make_deck(root,read(node_path(work,NAMES[3]))['payload'],read(node_path(work,NAMES[2]))['payload'],out/'repaired_deck.pptx');payload=dict(deck_sha256=sha(out/'repaired_deck.pptx'))\n    elif name==NAMES[5]:payload=dict(slides=inspect_deck(out/'repaired_deck.pptx',read(node_path(work,NAMES[2]))['payload']),deck_sha256=sha(out/'repaired_deck.pptx'))\n    elif name==NAMES[6]:\n        assert sha(out/'repaired_deck.pptx')==read(node_path(work,NAMES[5]))['payload']['deck_sha256'],'Deck changed after structure audit'\n        payload=office_render(out/'repaired_deck.pptx',work)\n    elif name==NAMES[7]:payload=make_handoff(root,out,work,read(node_path(work,NAMES[3]))['payload'],read(node_path(work,NAMES[2]))['payload'],read(node_path(work,NAMES[5]))['payload']['slides'],read(node_path(work,NAMES[6]))['payload'])\n    else:\n        assert {p.name for p in out.iterdir() if p.is_file()}==set(OUTPUTS)-{'release_receipt.json'}\n        payload=dict(output_sha256=hashes(out),release_state='INTERNAL_REVIEW_REQUIRED',external_release=False)\n    write(node_path(work,name),dict(name=name,created_at_utc=now(),parents=parents,payload=payload))\n    if name==NAMES[-1]:\n        write(out/'release_receipt.json',dict(actual_completed_at_utc=now(),business_as_of='2026-10-20T16:00:00+08:00',revision=read(node_path(work,NAMES[1]))['payload']['version'],authority_timeline=authority_context(root),input_sha256=current,node_sha256={n:sha(node_path(work,n)) for n in NAMES},node_records={n:read(node_path(work,n)) for n in NAMES},output_sha256=hashes(out),release_state='INTERNAL_REVIEW_REQUIRED',external_release=False,manual_checks={'native_PowerPoint_Checker':'NOT_RUN','real_screen_reader':'NOT_RUN','independent_designer':'PENDING'},metrics=read(node_path(work,NAMES[2]))['payload'],scope='Actual local deterministic build/structure/LO rendering with inline node records; raw PDF/PNG retained in WORK. Not identity attestation, PowerPoint AT certification or actual publication'))\n\ndef verify(root,out,work):\n    receipt=read(out/'release_receipt.json');assert receipt['input_sha256']==hashes(root)\n    assert receipt['output_sha256']=={p.name:sha(p) for p in out.iterdir() if p.is_file() and p.name!='release_receipt.json'}\n    assert {p.name for p in out.iterdir() if p.is_file()}==set(OUTPUTS)\n    for name in NAMES:\n        p=node_path(work,name);assert sha(p)==receipt['node_sha256'][name];node=read(p);assert node['name']==name and node['parents']==dependencies(work,name)\n        assert receipt['node_records'][name]==node\n        assert hashlib.sha256(json.dumps(node,ensure_ascii=False,indent=2).encode()).hexdigest()==receipt['node_sha256'][name]\n        for parent in PARENTS[name]:assert read(node_path(work,parent))['created_at_utc']<=node['created_at_utc']\n    assert read(node_path(work,NAMES[0]))['payload']['input_sha256']==hashes(root)\n    assert sha(out/'workflow.py')==read(node_path(work,NAMES[0]))['payload']['executor_sha256']\n    expected_timeline=authority_context(root)\n    assert receipt['authority_timeline']==expected_timeline,'Current source event timeline differs'\n    for node in [NAMES[1],NAMES[3],NAMES[7]]:assert read(node_path(work,node))['payload']['authority_timeline']==expected_timeline,'Timeline drift: '+node\n    assert not receipt['external_release'] and all(x in ['NOT_RUN','PENDING'] for x in receipt['manual_checks'].values())\n    m=metric_table(root);assert m==receipt['metrics'];inspect_deck(out/'repaired_deck.pptx',m)\n    v=load_workbook(out/'accessibility_review.xlsx',data_only=True)['口径勾稽'];assert v['B6'].value==m['total_received'] and v['C6'].value==m['total_completed']\n    render=read(node_path(work,NAMES[6]))['payload'];assert sha(work/'render/repaired_deck.pdf')==render['pdf_sha256']\n    for name,h in render['png_sha256'].items():assert sha(work/'render'/name)==h\n    assert read(node_path(work,NAMES[4]))['payload']['deck_sha256']==sha(out/'repaired_deck.pptx')\n    assert read(node_path(work,NAMES[7]))['payload']['review_sha256']==sha(out/'accessibility_review.xlsx')\n    assert read(node_path(work,NAMES[7]))['payload']['handoff_sha256']==sha(out/'handoff.docx')\n    return dict(status='CURRENT_LOCAL_BUILD_VERIFIED',metrics=m,external_release=False,actual_verified_at_utc=now())\n\ndef main():\n    parser=argparse.ArgumentParser();parser.add_argument('command',choices=['build','stage','verify']);parser.add_argument('--name',choices=NAMES);parser.add_argument('--input-dir',required=True);parser.add_argument('--output-dir',required=True);parser.add_argument('--work-dir',required=True);a=parser.parse_args()\n    root,out,work=[Path(x).resolve() for x in [a.input_dir,a.output_dir,a.work_dir]]\n    assert root.is_dir() and len({root,out,work})==3\n    for p in [root,out,work]:\n        for q in [root,out,work]:\n            if p!=q:assert p not in q.parents,'Input/output/work may not nest'\n    if a.command=='verify':print(json.dumps(verify(root,out,work),ensure_ascii=False));return\n    if a.command=='build':\n        assert not out.exists() or not any(out.iterdir());assert not work.exists() or not any(work.iterdir())\n        out.mkdir(parents=True,exist_ok=True);work.mkdir(parents=True,exist_ok=True);shutil.copy2(Path(__file__).resolve(),out/'workflow.py')\n        for name in NAMES:stage(root,out,work,name)\n        print(json.dumps(verify(root,out,work),ensure_ascii=False))\n    else:\n        assert a.name\n        out.mkdir(parents=True,exist_ok=True);work.mkdir(parents=True,exist_ok=True)\n        if a.name==NAMES[0] and not (out/'workflow.py').exists():shutil.copy2(Path(__file__).resolve(),out/'workflow.py')\n        stage(root,out,work,a.name);print(json.dumps(dict(completed=a.name,external_release=False)))\n\nif __name__=='__main__':\n    try:main()\n    except Exception as exc:print(type(exc).__name__+': '+str(exc),file=sys.stderr);raise SystemExit(2)\n"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": [
+    {
+      "name": "accessibility_review.pdf",
+      "url": "assets/audit/render/DE-TIME-004/20261021T031212Z/accessibility_review.pdf"
+    },
+    {
+      "name": "handoff.pdf",
+      "url": "assets/audit/render/DE-TIME-004/20261021T031212Z/handoff.pdf"
+    },
+    {
+      "name": "repaired_deck.pdf",
+      "url": "assets/audit/render/DE-TIME-004/20261021T031212Z/repaired_deck.pdf"
+    }
+  ]
+}

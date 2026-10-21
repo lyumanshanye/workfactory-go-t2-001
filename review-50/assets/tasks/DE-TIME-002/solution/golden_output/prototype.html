@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>按钮迁移审阅台｜离线训练原型</title>
+<style>
+:root{font-family:system-ui,"Noto Sans CJK SC",sans-serif;color:#17333d;background:#eef3f5;line-height:1.65}*{box-sizing:border-box}body{margin:0}header,main,footer{max-width:1100px;margin:auto;padding:24px}header{padding-top:36px}h1{font-size:clamp(25px,4vw,38px);line-height:1.3}h2{font-size:23px;margin-top:0}.eyebrow{font-size:13px;letter-spacing:2px;font-weight:700}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card,.panel{padding:24px;background:white;border:1px solid #c9d7dc;border-radius:12px}.card h3{margin-top:0;font-size:18px}.card small{display:block;margin-top:12px;color:#435e68}.panel{margin:20px 0}.tag{color:#395b69;font-size:13px}button,input[type=button],a.action,select,input[type=text]{font:inherit;min-height:48px;max-width:100%;padding:10px 16px;border:2px solid #28596a;border-radius:5px}button,input[type=button]{background:#215b70;color:white;cursor:pointer}button:disabled,input:disabled{background:#dbe3e7;color:#3e5660;border-color:#a8bac1;cursor:not-allowed}a.action{display:inline-flex;align-items:center;color:#154f67}button.secondary{background:white;color:#17333d}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:4px solid #e6b328;outline-offset:3px}.blocked{padding:12px 0;border-top:2px solid #a8bac1;font-weight:600}label{display:block;font-weight:650;margin-top:14px}input[type=text],select{display:block;width:100%;margin:6px 0 14px;background:white;color:#17333d}.row{display:flex;gap:12px;flex-wrap:wrap}.notice{border-left:4px solid #d6a326;padding:12px 18px;background:#fff9e6}.status{min-height:58px;background:#edf5f6;padding:12px;border-radius:6px}#summary{white-space:pre-wrap;overflow-wrap:anywhere}footer{font-size:13px;color:#435e68}@media(max-width:650px){.grid{grid-template-columns:1fr}header,main,footer{padding:18px}.card,.panel{padding:18px}}
+</style></head><body>
+<header><div class="eyebrow">COMPONENT REVIEW / 5.0.0</div><h1>按钮迁移审阅台</h1><p>2024-01-10 10:00 Europe/London · 原创团队训练案例</p><p class="notice">仅本机模拟，不连接后台，不提交申请。服务器幂等未验。不是GOV.UK官方服务或无障碍认证。</p></header>
+<main><section aria-labelledby="states-title"><h2 id="states-title">01 / 交互状态与迁移探针</h2><p>灰色不是权限，属性存在才有原生禁用语义。不可用导航保留说明，不伪装成可点击入口。</p>
+<div class="grid">
+<article class="card"><p class="tag">READY / 可操作样例</p><h3>资料已齐，允许开始模拟</h3><button id="s-ready" type="button" onclick="document.getElementById('live-title').scrollIntoView();document.getElementById('subject').focus()">开始本机模拟</button><small>跳到下方交互区，不实际提交。</small></article>
+<article class="card"><p class="tag">BLOCKED / 空字符串属性</p><h3>缺资料，明确不能继续</h3><button id="s-empty" type="button" disabled="" aria-describedby="empty-reason">暂不能继续</button><small id="empty-reason">请先补齐示例材料；不是靠按钮颜色判断。</small></article>
+<article class="card"><p class="tag">DISABLED INPUT / 旧值也有效</p><h3>原生输入按钮</h3><input id="s-disabled" type="button" disabled="disabled" value="原生禁用输入"><small>disabled属性存在，文字值不决定真假。</small></article>
+<article class="card"><p class="tag">MIGRATION PROBE / 非推荐生产写法</p><h3>文字false不代表可用</h3><input id="s-boolfalse" type="button" disabled="false" value="属性存在仍禁用"><small>故意保留此教学探针测试旧检查器；生产建议使用规范布尔写法。</small></article>
+<article class="card"><p class="tag">BUSY / 忙碌状态样例</p><h3>正在处理，应给文字反馈</h3><button id="s-busy" type="button" disabled>处理中，请稍候</button><small>下方动态区另有真实可恢复的忙碌状态，不会永久锁死。</small></article>
+<article class="card"><p class="tag">SUCCESS / 本机完成</p><h3>结果不能冒称后台受理</h3><p class="blocked" id="s-complete">已生成本机摘要，尚未提交</p><small>文字清楚说明完成的是本机动作。</small></article>
+<article class="card"><p class="tag">NAVIGATION / 可导航入口</p><h3>查看说明，不执行提交</h3><a class="action" id="s-link" href="#guide">查看办理说明</a><small>保留原生链接和键盘Enter导航。</small></article>
+<article class="card"><p class="tag">UNAVAILABLE / 非交互说明</p><h3>预览功能尚未开放</h3><p class="blocked" id="s-unavailable">预览暂不可用，请等待开放通知</p><small>没有href、点击事件或可聚焦假链接。</small></article>
+</div></section>
+<section class="panel" aria-labelledby="live-title"><h2 id="live-title">02 / 失败、重试与成功回放</h2><p>输入仅存在当前页面内存，刷新即清空；可选择下一次模拟结果。忙碌期间只启动一次模拟，失败保留资料并允许重试。</p>
+<noscript><p class="notice">JavaScript未启用，模拟区不会执行；这不是生产无脚本提交流程，请由团队另行设计。</p></noscript>
+<form id="live-form"><label for="subject">示例材料名称</label><input id="subject" type="text" autocomplete="off" placeholder="例如：示例材料（不要填真实个人资料）">
+<label for="outcome">下一次模拟结果</label><select id="outcome"><option value="failure">模拟失败，可重试</option><option value="success">模拟成功，只生成本机摘要</option></select>
+<div class="row"><button id="simulate" type="submit" disabled>生成本机摘要</button><button id="reset" class="secondary" type="button">重置本机演示</button></div></form>
+<p id="live-status" class="status" role="status" aria-live="polite">请填写示例材料名称。</p><p>本机模拟启动次数：<strong id="attempts">0</strong></p><div id="summary" aria-label="本机摘要"></div></section>
+<section class="panel" id="guide"><h2>03 / 交接边界</h2><p>批准目标为5.0.0，不接受晚到营销便笺恢复弃用类或禁用链接。此页是原创样式与模拟逻辑，不是完整官方组件运行库。客户端抑制重复动作不证明服务端幂等；后端、真人研究、辅助技术与上线审批须另验。</p></section>
+</main><footer>公开版本依据：GOV.UK Frontend v4.6.0 / v5.0.0；训练业务、版式和模拟代码原创。未使用Crown标志或Transport字体，未取得官方背书。</footer>
+<script>
+(()=>{'use strict';const form=document.getElementById('live-form'),subject=document.getElementById('subject'),button=document.getElementById('simulate'),status=document.getElementById('live-status'),summary=document.getElementById('summary'),attempts=document.getElementById('attempts'),outcome=document.getElementById('outcome');let busy=false,count=0,timer=null;
+subject.addEventListener('input',()=>{button.disabled=busy||!subject.value.trim();if(!busy)status.textContent=subject.value.trim()?'资料已填，可开始本机模拟。':'请填写示例材料名称。'});
+form.addEventListener('submit',event=>{event.preventDefault();if(busy||!subject.value.trim())return;busy=true;button.disabled=true;button.textContent='处理中';status.textContent='处理中，请稍候；未连接后台。';const value=subject.value.trim(),result=outcome.value;count++;attempts.textContent=String(count);timer=setTimeout(()=>{busy=false;button.disabled=!subject.value.trim();if(result==='failure'){status.textContent='模拟失败：本机校验未完成。资料已保留，可以重试；未提交。';button.textContent='重试生成本机摘要';summary.textContent='';}else{status.textContent='已生成本机摘要，未向任何机构提交。';button.textContent='再次生成本机摘要';summary.textContent='本机摘要：'+value+'\n这是模拟结果，不代表申请受理或后台记录。';}},450);});
+document.getElementById('reset').addEventListener('click',()=>{clearTimeout(timer);busy=false;count=0;HTMLFormElement.prototype.reset.call(form);button.disabled=true;button.textContent='生成本机摘要';status.textContent='请填写示例材料名称。';summary.textContent='';attempts.textContent='0';subject.focus();});
+})();
+</script></body></html>

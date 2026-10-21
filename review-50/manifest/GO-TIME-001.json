@@ -1,0 +1,497 @@
+{
+  "id": "GO-TIME-001",
+  "title": "2019信息公开新规：邮寄接件答复岗位口径卡",
+  "domain": "通用办公",
+  "domain_l2": "T1-信息获取与知识综合",
+  "domain_l3": "政府信息公开版本溯源",
+  "category": "weakness-driven",
+  "complexity": "C1",
+  "target_difficulty": "A1",
+  "as_of": "2019-05-20 10:00",
+  "timezone": "Asia/Shanghai",
+  "source_note": "官方新旧条例直接摘录；角色/消息/案例为原创，非真实申请或审批。",
+  "instruction": "# 2019信息公开新规：邮寄接件答复岗位口径卡\n\n## 业务场景与任务说明\n\n你是政府信息公开接件岗文书助理。新条例已施行，未批准D0卡还写旧15工作日；负责人补充了邮寄签收事实，但更晚的排班组长又建议从登记日自动延期。请仅用两份离线材料修订一张能交给接班人员的简明岗位口径卡，不制作大项目或真实签发答复。\n\n业务判断基准时点：2019-05-20 10:00；时区：Asia/Shanghai。检索/下载时间不是政策生效时间。\n\n## 可使用的源文件\n\n以下输入均位于只读目录`/app/input_files/`。无需联网补充事实；使用冻结材料完成交付。\n- `/app/input_files/S01_新旧公开条例岗位摘录.docx`：真实旧24/38及新31/33/56、令和日期元数据；非完整条例。\n- `/app/input_files/S02_岗位委托与旧卡.docx`：原创未审D0、负责人补充、无权较晚建议及唯一邮寄案例。\n\n## 工作要求\n\n- [Q1] 根据S01和S02形成能替换D0的简明岗位卡，区分新旧版及成文/发布/施行，说明范围与有效授权，不凭最后一条消息选版本。\n- [Q2] 说明接件与答复、确需延期的岗位动作、负责人同意及告知条件、工作日口径与例外证据边界；能当场答复须当场答复。\n- [Q3] 将A最新签收/登记事实落实为收到日、现行期限、当前延期状态及后续交接；只交指定Word，不算未获材料支持的具体截止日或伪造完成记录。\n\n## 交付物要求\n\n只将以下最终交付写入`/app/output/`。\n- `/app/output/申请答复岗位口径卡.docx`：可直接交接的简明中文Word岗位卡，包含D0更正、当前接件/答复/延期操作及A的收到日和未批准状态。\n\n## 硬约束（单独列明）\n\n- 只交/app/output/申请答复岗位口径卡.docx，中文简明可用；不要求固定页数或逐字匹配参考答案。\n- 只处理给定的新规后收到普通完整申请；不扩成全部条例、跨期溯及力或法律意见。\n- 不编具体截止日、已超期、已延期批准或已通知；输入签收日不可被内部登记日覆盖。\n",
+  "instruction_url": "assets/tasks/GO-TIME-001/instruction.md",
+  "absolute_path": "tasks/GO-TIME-001",
+  "spec_path": "manifest/GO-TIME-001.json",
+  "spec_url": "manifest/GO-TIME-001.json",
+  "rubrics": [
+    {
+      "id": "R01",
+      "description": "区分新版成文2019-04-03、网页所列发布2019-04-15和施行2019-05-15；不能把URL的5月22日当作施行。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "S01新令与元数据；卡片版本说明。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R02",
+      "description": "旧版15工作日/最多延长15工作日仅历史对照，本次5月15日后收到的普通申请用新版20工作日；不把原第24条当现行答复条款。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "S01旧24、新33/56；S02 D0-1。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R03",
+      "description": "明确能够当场答复的应当当场答复，不把20工作日写成可以一律等满20日才答复。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "新33第一款。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R04",
+      "description": "不能当场答复时自收到申请之日起20个工作日内答复；不改为自然日、登记日起或主动公开形成日起。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "新33第二款；岗位卡操作句。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R05",
+      "description": "确需延长须政府信息公开工作机构负责人同意，不能将经办员或普通排班组长当相同审批角色。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "新33与S02角色边界。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R06",
+      "description": "延期还须告知申请人，不能只有内部口头同意或台账备注就视为手续完整。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "新33第二款。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R07",
+      "description": "延长部分最长不超过20个工作日，非自动40天或普通申请固定加20；旧D0自动延期表述停用。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q2"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "S02 D0-2与新33。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R08",
+      "description": "说明征求第三方和其他机关意见所需时间不计入该答复期限，但本案无此事实不得虚记暂停。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q2"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "新33第三款及S02最新完整事实。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R09",
+      "description": "案例A明确2019-05-16为签收/收到日、2019-05-20仅内部登记；不因最后的组长建议把收到日起点改成登记日。",
+      "weight": 10,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "新31第二项与S02 09:00签收凭据。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R10",
+      "description": "案例A明确当前按新版20工作日、尚无有效延期同意及告知证据，不能记已延期；申请完整不自行写补正重起算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "S02 09:00、09:30与新33。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R11",
+      "description": "交接至少写明接件岗补录签收证据、承办岗办理/核算、确需延期报有权负责人并告知及留存记录三个衔接动作，不能只写依法办理。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "S02岗位职责和S01当前规则；卡片下一步。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R12",
+      "description": "不在缺工作日历及完整例外证据时编具体到期日或宣称超期；跨期旧申请明确交负责人核查，不断言一律重算。",
+      "weight": 7,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q3"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "S02明确范围和未提供材料。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R13",
+      "description": "保留可定位的S01版本/条号及S02 D0/最新消息索引，能够追查纠正内容，不要求逐字复制Gold或采用相同版式。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "内容质量-岗位规则与事实修订",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q1",
+        "Q3"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "正文边注/依据索引，允许等价引用。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R14",
+      "description": "只交指定可打开Word，岗位动作可阅读，标明待内部审核/非正式对外答复，不交用说明换扩展名的伪文档。",
+      "weight": 3,
+      "type": "Binary",
+      "dimension": "指令遵循",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "实际docx结构及文面。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    },
+    {
+      "id": "R15",
+      "description": "扣分：捏造具体负责人已批准延期、申请人已收到正式通知或真实政府签字/审批编号等完成凭证。普通期限/日期错误和遗漏说明不触发此负项。",
+      "weight": -7,
+      "type": "Binary",
+      "dimension": "真实性与授权",
+      "criterion_type": "Objective",
+      "criterion_necessity": "Explicit",
+      "requirement_refs": [
+        "Q3"
+      ],
+      "deliverables": [
+        "申请答复岗位口径卡.docx"
+      ],
+      "evidence": "S02明确没有批准/告知、仅待审草稿，不重复惩罚一般口径错误。",
+      "weight_reason": "收到日、适用期限及延期权限直接决定误承诺风险，权重10；关键限定/事实/操作7；可用形式/追溯3；虚假审批独立负项，不因同一口径错误重复扣负分。"
+    }
+  ],
+  "source_facts": [
+    {
+      "url": "https://www.ln.gov.cn/web/zwgkx/lnsrmzfgb/2007n/qk/2007n_djq/gwywj/0C64EC6A7CA8412FBA9E34E8C1E57038/index.shtml",
+      "locator": "旧24/38及第492号令",
+      "fact": "2008-05-01施行，不能当场答复15工作日、延长不超15工作日"
+    },
+    {
+      "url": "https://www.beijing.gov.cn/zhengce/zhengcefagui/201905/t20190522_61986.html",
+      "locator": "第711号令/31/33/56及页头",
+      "fact": "2019-05-15施行、邮寄签收日、不能当场20工作日及有条件延长"
+    }
+  ],
+  "status": {
+    "task_id": "GO-TIME-001",
+    "domain": "通用办公",
+    "domain_l2": "T1-信息获取与知识综合",
+    "category": "weakness-driven",
+    "inputs": 2,
+    "gold_files": 1,
+    "rubrics": 15,
+    "complexity": "C1",
+    "target_difficulty": "A1",
+    "measured_difficulty": null,
+    "formal_accepted": false,
+    "runtime_smoke_status": "pass",
+    "runtime_image_id": "sha256:3507427e2042f857c5ee28bb90f62d118d542a6c9fe7c6eb20a646a1923d6f65",
+    "actual_image_inputs_match_current": true,
+    "golden_judge": {
+      "current_hash_gate_pass": true,
+      "runs": [
+        {
+          "run": "audit/golden/GO-TIME-001/20261020T230848Z",
+          "status": "terminal",
+          "current_package_hash_bound": true,
+          "actual_image_inputs_match_current": true,
+          "gate_pass": true,
+          "reward": {
+            "reward": 0.931373,
+            "graded_score": 0.931373,
+            "criteria_counted": 15.0,
+            "verifier_error": 0.0
+          }
+        }
+      ],
+      "scope": "Gold verifier only, not formal acceptance, expert review or solver difficulty."
+    }
+  },
+  "inputs": [
+    {
+      "name": "S01_新旧公开条例岗位摘录.docx",
+      "absolute_path": "题包内：S01_新旧公开条例岗位摘录.docx",
+      "url": "",
+      "bytes": 38934,
+      "sha256": "aed3affdf9b84226bf85bdde1a49e21f6ffb65b1a5085755b6e26d2039929a5d",
+      "description": "真实旧24/38及新31/33/56、令和日期元数据；非完整条例。",
+      "sections": [],
+      "published": false,
+      "source_urls": [
+        "https://www.ln.gov.cn/web/zwgkx/lnsrmzfgb/2007n/qk/2007n_djq/gwywj/0C64EC6A7CA8412FBA9E34E8C1E57038/index.shtml",
+        "https://www.beijing.gov.cn/zhengce/zhengcefagui/201905/t20190522_61986.html"
+      ]
+    },
+    {
+      "name": "S02_岗位委托与旧卡.docx",
+      "absolute_path": "题包内：S02_岗位委托与旧卡.docx",
+      "url": "assets/tasks/GO-TIME-001/environment/input_files/S02_%E5%B2%97%E4%BD%8D%E5%A7%94%E6%89%98%E4%B8%8E%E6%97%A7%E5%8D%A1.docx",
+      "bytes": 38684,
+      "sha256": "a3f049683c2e4baf428e0d0760fca85634dd80d794c443b2a215c90fb7a72651",
+      "description": "原创未审D0、负责人补充、无权较晚建议及唯一邮寄案例。",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "原创岗位口径卡修订委托"
+        },
+        {
+          "kind": "heading",
+          "text": "身份、范围与三项委托"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本文件是原创演练，所有消息、角色和案例均虚构，不是实际政府工作制度或真实申请记录。你是某行政机关政府信息公开接件岗的文书助理，不拥有对外答复、延期审批或改法定期限权限。历史基准：2019-05-20 10:00 Asia/Shanghai。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "只需一份简短Word岗位卡：①写清新旧版本的适用范围，纠正旧卡；②用岗位可执行的动作说明普通申请收到、答复及确需延期口径；③将下面A的最新事实落实为收到日、现行期限单位、延期状态和交接动作。无需制作大项目、程序、工作簿或逐日计算器。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "范围只限已在2019-05-15后收到且给定完整的普通申请。跨期旧申请只提示转负责人核查，不要求推演溯及力；不扩展到其他条款的完整法律意见。未给全年工作日历、节假日/中止记录，不计算具体到期日或裁判超期。引用S01文件/版本/条号即可，无需上网或重新考证完整条例。"
+        },
+        {
+          "kind": "heading",
+          "text": "5月17日未批准D0旧卡"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-1：新文件4月3日签署，5月15日后收到申请仍按旧第二十四条15个工作日。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "D0-2：凡不能当场答复都从内部登记日计时，经办员可自动加20个工作日，不用另行报批或告知。"
+        },
+        {
+          "kind": "heading",
+          "text": "5月20日09:00工作机构负责人补充"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本案A已查到行政机关邮寄签收凭据：2019-05-16签收；内部登记录入为2019-05-20。申请完整、不能当场答复，无补正、第三方或其他机关征求意见事实。尚无政府信息公开工作机构负责人延期同意记录，也没有向申请人告知延期。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "请按S01修卡，以真实签收事实更新交接，不得借录入延迟改变收到日。卡片仅待内部审核，不签发答复或虚写审批已经完成。"
+        },
+        {
+          "kind": "heading",
+          "text": "5月20日09:30排班组长新建议"
+        },
+        {
+          "kind": "paragraph",
+          "text": "为省人手，还是从5月20日登记日按15个工作日起算，组长口头同意自动再加20。注意：排班组长只是人员排班角色，并非政府信息公开工作机构负责人，无延期审批权限。本建议未经该负责人批准，不构成改变S01的依据。"
+        }
+      ],
+      "published": true,
+      "source_urls": [
+        "https://www.ln.gov.cn/web/zwgkx/lnsrmzfgb/2007n/qk/2007n_djq/gwywj/0C64EC6A7CA8412FBA9E34E8C1E57038/index.shtml",
+        "https://www.beijing.gov.cn/zhengce/zhengcefagui/201905/t20190522_61986.html"
+      ]
+    }
+  ],
+  "gold": [
+    {
+      "name": "申请答复岗位口径卡.docx",
+      "absolute_path": "题包内：申请答复岗位口径卡.docx",
+      "url": "assets/tasks/GO-TIME-001/solution/golden_output/%E7%94%B3%E8%AF%B7%E7%AD%94%E5%A4%8D%E5%B2%97%E4%BD%8D%E5%8F%A3%E5%BE%84%E5%8D%A1.docx",
+      "bytes": 39075,
+      "sha256": "cd124adfb687927f9da8cd0e7089ac10d7ba5bc400296c84ad18f515226604ef",
+      "description": "",
+      "sections": [
+        {
+          "kind": "notice",
+          "text": "正文与表格完整提取；不等同于原生排版、页眉页脚或图像。请下载原文件核对。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "政府信息公开｜申请答复口径卡"
+        },
+        {
+          "kind": "paragraph",
+          "text": "2019-05-20 10:00（上海）修订待审稿 · 接件岗使用 · 不代替正式答复"
+        },
+        {
+          "kind": "heading",
+          "text": "1 先停用旧模板，再按新规则办理"
+        },
+        {
+          "kind": "paragraph",
+          "text": "第711号令成文2019-04-03；所用政府网页列发布日期2019-04-15，自2019-05-15施行（S01新令/第五十六条）。不能把成文或网页发布日期当起施日。旧第492号令成文2007-04-05，自2008-05-01施行，其第二十四条15个工作日及最多延长15个工作日仅在此作历史对照。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本卡只处理2019-05-15以后收到且本题给定完整的普通申请。此前收到的跨期存量另交负责人核查适用规则，不宣称一律重算或新法追溯。"
+        },
+        {
+          "kind": "heading",
+          "text": "2 当前接件岗怎么做"
+        },
+        {
+          "kind": "table",
+          "rows": [
+            [
+              "环节",
+              "执行口径与来源"
+            ],
+            [
+              "确认收到",
+              "签收邮件以行政机关签收之日为收到之日；不得改成内部补登记日（S01新第三十一条第二项）。"
+            ],
+            [
+              "办理答复",
+              "能够当场答复的应当当场答复；不能当场答复的，自收到申请之日起20个工作日内答复，不是20自然日，也不是主动公开时限（新第三十三条）。"
+            ],
+            [
+              "确需延期",
+              "由政府信息公开工作机构负责人同意，并告知申请人；延长期限最长不超过20个工作日。不是自动40天，不是普通经办员或排班组长自行批准（新第三十三条）。"
+            ],
+            [
+              "例外记录",
+              "征求第三方和其他机关意见所需时间不计入上述期限，应留真实记录；本案没有此类事实，不能虚写暂停或已征求（新第三十三条第三款）。"
+            ]
+          ]
+        },
+        {
+          "kind": "heading",
+          "text": "3 用本案校正旧口径并交接"
+        },
+        {
+          "kind": "paragraph",
+          "text": "案例A：以2019-05-16行政机关签收为收到日；2019-05-20只是内部登记，不推迟起点。不能当场答复，按新第三十三条20个工作日口径办理；材料完整，不触发补正重起算。5月17日D0的“登记后15工作日、经办员可自动再加20”两处错误均停用。5月20日09:30普通组长重提自动延期，无延期审批权限，不能因消息较晚就取代有效规则。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "下一步：接件岗补录5月16日签收凭据并更新台账；承办岗按工作日历核算、办理答复；确需延期报政府信息公开工作机构负责人同意并告知申请人，留存决定与告知记录。现无同意或告知证据，不记“已延期”；无完整工作日历，不承诺具体到期日或声称已超期。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "依据索引：S01「旧第二十四条/第三十八条；新令、第三十一条/第三十三条/第五十六条」。业务来源：S02 D0、5月20日09:00补充及09:30无权建议。S02全部为原创演练，不是真实申请、审批或签字。"
+        }
+      ],
+      "published": true,
+      "source_urls": []
+    }
+  ],
+  "skills": [],
+  "renders": []
+}
