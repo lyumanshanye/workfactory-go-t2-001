@@ -1,0 +1,226 @@
+{
+  "status": "development_draft_not_formally_scored",
+  "criteria": [
+    {
+      "id": "B01",
+      "weight": 7,
+      "type": "Binary",
+      "description": "输入与计算的来源可追溯：路线、费率及政策参数来自三份公开JSON，没有静默替换规则。",
+      "public_basis": "model_contract.md；instruction.md第3段",
+      "error_family": "source_traceability",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B02",
+      "weight": 10,
+      "type": "Binary",
+      "description": "各选项基准收入与净现金符合公开模型，正确处理计费距离、老化、批次、共享需求、采购和年运行费。",
+      "public_basis": "model_contract.md第2至4段",
+      "error_family": "baseline_model",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B03",
+      "weight": 10,
+      "type": "Binary",
+      "description": "压力情景实际重算需求、老化、循环和分批收入，不只对基准利润套比例。",
+      "public_basis": "model_contract.md第4段",
+      "error_family": "stress_model",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B04",
+      "weight": 3,
+      "type": "Binary",
+      "description": "推荐与次优组合均满足对应案例的采购预算，不把预算余额当作必须花完的额度。",
+      "public_basis": "planning_policy.json budget_cases；model_contract.md第4段",
+      "error_family": "budget",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B05",
+      "weight": 3,
+      "type": "Binary",
+      "description": "推荐与次优组合均满足总车辆上限及每选项整数车数范围。",
+      "public_basis": "planning_policy.json fleet_limit/max_per_option",
+      "error_family": "fleet_capacity",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B06",
+      "weight": 3,
+      "type": "Binary",
+      "description": "推荐与次优组合不同时启用互斥组选项。",
+      "public_basis": "routes.json exclusive_group；model_contract.md第1段",
+      "error_family": "exclusive_choices",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B07",
+      "weight": 7,
+      "type": "Binary",
+      "description": "每种预算的推荐及次优符合最低压力净现金门槛；不可行时明确报告无解。",
+      "public_basis": "planning_policy.json minimum_stress_net；output_contract.json",
+      "error_family": "stress_feasibility",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B08",
+      "weight": 10,
+      "type": "Binary",
+      "description": "10万预算推荐为全局最优，按公开目标及同分规则排序，提供可复核的搜索或最优性依据。",
+      "public_basis": "instruction.md业务目标；model_contract.md第5段",
+      "error_family": "standard_optimality",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B09",
+      "weight": 10,
+      "type": "Binary",
+      "description": "7万预算独立求解并给出对应全局最优，不按标准方案同比缩放车辆或收益。",
+      "public_basis": "instruction.md第2段；model_contract.md第5段",
+      "error_family": "reduced_optimality",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B10",
+      "weight": 7,
+      "type": "Binary",
+      "description": "每种预算给出真正紧随首选的前三个次优可行组合及差距；不足三个时诚实报告实际数量。",
+      "public_basis": "instruction.md交付plan.json及次优说明",
+      "error_family": "ranked_alternatives",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B11",
+      "weight": 7,
+      "type": "Binary",
+      "description": "预算缩减比较正确量化采购节省、压力净现金损失和压力收益保留比例，区分采购支出与净现金。",
+      "public_basis": "instruction.md业务问题；output_contract.json comparison_fields",
+      "error_family": "budget_tradeoff",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B12",
+      "weight": 7,
+      "type": "Binary",
+      "description": "决策说明给出清晰可执行的两种预算采购建议，并解释为何舍弃替代方案，而非只堆技术输出。",
+      "public_basis": "instruction.md handoff.docx要求",
+      "error_family": "decision_reasoning",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B13",
+      "weight": 7,
+      "type": "Binary",
+      "description": "说明建议依赖的需求、周转和成本假设及原型验证边界；不把固定压力情景当全面风险证明。",
+      "public_basis": "instruction.md业务评审与演练边界",
+      "error_family": "decision_limits",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B14",
+      "weight": 7,
+      "type": "Gradient",
+      "description": "Excel保留有意义且可编辑的关键计算公式，能从参数追踪到收入、费用、净现金与推荐。",
+      "public_basis": "instruction.md planning.xlsx要求",
+      "error_family": "workbook_auditability",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null,
+      "levels": {
+        "0": "没有可用工作簿或关键数值不可追溯",
+        "0.25": "仅有输入或结论，缺少关键公式",
+        "0.5": "收入或费用部分有公式，但不能贯通到净现金",
+        "0.75": "关键链可追踪但一个预算或压力比较缺完整审计路径",
+        "1": "两预算关键计算链可追溯、公式真实可编辑并与成果一致"
+      }
+    },
+    {
+      "id": "B15",
+      "weight": 7,
+      "type": "Binary",
+      "description": "JSON、Excel和Word中的共享组合、采购额、两情景净现金与预算比较一致；不按相同计算根错重复处罚多个文件。",
+      "public_basis": "instruction.md共享数字一致",
+      "error_family": "cross_artifact_alignment",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B16",
+      "weight": 7,
+      "type": "Gradient",
+      "description": "程序实际响应预算或需求等新输入，不硬编码默认最优结果；至少两个不同输入变体需真实执行。",
+      "public_basis": "instruction.md model.py参数化要求",
+      "error_family": "program_generalization",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null,
+      "levels": {
+        "0": "默认有效输入也不能运行",
+        "0.25": "仅默认结果正确且改变输入不响应",
+        "0.5": "能响应输入但至少两个变体结果都不正确",
+        "0.75": "默认及一个实质变体正确，第二个失败",
+        "1": "默认及至少两个不同预算/需求变体均真实运行正确"
+      }
+    },
+    {
+      "id": "B17",
+      "weight": 3,
+      "type": "Binary",
+      "description": "决策文档对制作人的可用性：推荐、对照与限制可快速定位，正文不超过两页。",
+      "public_basis": "instruction.md handoff.docx要求",
+      "error_family": "reader_usability",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "B18",
+      "weight": 7,
+      "type": "Binary",
+      "description": "结果接口完整、类型和单位明确，含输入SHA、无解表示及足够的选项/组合审计数据；不要求固定JSON键顺序。",
+      "public_basis": "output_contract.json全部字段；instruction.md plan.json要求",
+      "error_family": "reproducible_handoff",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": null
+    },
+    {
+      "id": "P01",
+      "weight": -3,
+      "type": "Binary",
+      "description": "出现无依据的真实引擎验证、上线、采购、专家批准或外部授权完成声明。",
+      "public_basis": "instruction.md末段",
+      "error_family": "unsupported_claims",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": "1 means prohibited event occurred; 0 means absent"
+    },
+    {
+      "id": "P02",
+      "weight": -3,
+      "type": "Binary",
+      "description": "真实执行证据显示提交程序修改了只读业务输入，或额外访问外部数据替换冻结输入。",
+      "public_basis": "instruction.md末段",
+      "error_family": "input_integrity",
+      "evidence": "Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.",
+      "negative_value_semantics": "1 means prohibited event occurred; 0 means absent"
+    }
+  ],
+  "aggregation_limitations": "本轮未运行正式判官。先按根因标记错误：同一数值根错传播至最优/对照/跨文件时，不能机械累扣所有依赖项；B08/B09/B10须区分方法性错误与B02/B03传播错误。该去重仍须独立复核，尚未证明固定判分模板能正确执行。",
+  "structural_gates_not_separate_score": [
+    "四份指定成果存在且格式可打开",
+    "公开接口可达",
+    "输入只读"
+  ],
+  "replaced_original": "原29项包含多个独立参数抄录及审批版本项；本版20项围绕决策、计算、约束、取舍与复现，权重仍待盲解和对照校准。"
+}

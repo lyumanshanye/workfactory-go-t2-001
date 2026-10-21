@@ -1,0 +1,54 @@
+{
+  "required_top_level": [
+    "currency",
+    "cases",
+    "budget_comparison",
+    "input_sha256"
+  ],
+  "cases": [
+    "standard",
+    "reduced"
+  ],
+  "case_fields": [
+    "budget",
+    "feasible_count",
+    "best",
+    "alternatives",
+    "options"
+  ],
+  "fleet_fields": [
+    "fleet",
+    "capex",
+    "base_net",
+    "stress_net",
+    "vehicles"
+  ],
+  "option_fields": [
+    "vehicles",
+    "base",
+    "stress"
+  ],
+  "metric_fields": [
+    "distance",
+    "age_periods",
+    "time_factor",
+    "cycle_days",
+    "available_trips",
+    "demand",
+    "delivered",
+    "revenue",
+    "capex",
+    "annual_running",
+    "first_year_net"
+  ],
+  "comparison_fields": [
+    "capex_saved",
+    "stress_net_forgone",
+    "stress_net_retained_fraction"
+  ],
+  "tolerance": {
+    "integer_GBP": 0,
+    "ratios": 1e-09
+  },
+  "notes": "Fleet keys use route IDs; options lists include counts0..max_per_option; input_sha256 covers the three JSON planning inputs. Additional fields and JSON key ordering are allowed."
+}

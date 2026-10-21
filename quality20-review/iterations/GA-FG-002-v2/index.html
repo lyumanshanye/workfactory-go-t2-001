@@ -1,0 +1,465 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GA-FG-002 · v2改版实验</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6f2;color:#193d38;font:16px/1.8 system-ui,"Microsoft YaHei",sans-serif}header{background:#123e3b;color:white;padding:32px max(20px,calc((100vw - 1100px)/2))}header p{color:#c2dbd2}h1{font-size:30px;line-height:1.4}main{max-width:1100px;padding:24px;margin:auto}nav{display:flex;flex-wrap:wrap;gap:16px}a{color:#0a7761}header a{color:#b1e1cf}h2{font-size:24px;margin-top:38px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.8 system-ui;background:white;border:1px solid #d6e0d6;padding:20px;border-radius:8px}details{background:white;border:1px solid #d6e0d6;border-radius:7px;padding:14px;margin:12px 0}summary{cursor:pointer;font-weight:600}.notice{background:#fff1cf;border-left:4px solid #c79a38;padding:16px;margin:18px 0}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}.gallery img{width:100%;border:1px solid #d6e0d6}.gallery a{font-size:12px}.button{display:inline-block;padding:7px 12px;margin:5px 0;border:1px solid #9abaad;border-radius:5px;background:white}table{width:100%;border-collapse:collapse;background:white}td,th{text-align:left;padding:12px;border-bottom:1px solid #d6e0d6;vertical-align:top}.wrap{overflow:auto}.muted{font-size:13px;color:#677b73}code{overflow-wrap:anywhere}footer{padding:25px;font-size:13px}
+</style><header><a href="../../#GA-FG-002/task">← 回44题原版入口</a><p>同一道题的迭代，不新增题目数量</p><h1>从“版本与计算”走向“预算取舍与决策”</h1><p>GA-FG-002 · v2开发候选；原版、原材料与原验证记录均保留。</p><nav><a href="#changes">改了什么</a><a href="#instruction">完整题面</a><a href="#inputs">全部输入</a><a href="#gold">参考成果</a><a href="#rubric">20项评分草稿</a><a href="#verification">验证状态</a></nav></header><main>
+<div class="notice">这是开发中的改版，不是正式通过题包。参考计算、程序对照和独立盲解分别记录；不能用局部检查通过替代专业复核或正式评分。</div>
+<h2 id="changes">改了什么，为什么</h2><div class="wrap"><table><tr><th>维度</th><th>原版</th><th>本次v2</th></tr><tr><td>业务目标</td><td>选批准版本，再算一个预算的最佳组合</td><td>比较10万/7万预算，解释多投入资金换来的收益、次优代价与边界</td></tr><tr><td>材料</td><td>多份审批与版本事件，容易重复同类出题套路</td><td>给已经统一的路线、费率和规划政策；预算是对照情景，不是权限陷阱</td></tr><tr><td>委托表达</td><td>较多逐步计算和防错指令</td><td>主委托围绕使用者与决策，必要数学规则及接口单独公开</td></tr><tr><td>评分</td><td>29项，部分奖励参数抄录或版本判断</td><td>20项草稿，重点看推荐、计算、约束、预算取舍、跨文件一致与新输入行为；尚未完成正式校准</td></tr><tr><td>交付可读性</td><td>数值较厚，但部分成果偏技术展开</td><td>增加双预算决策概览与自然语言建议；不把原始字典直接作为制作人建议</td></tr></table></div>
+<h2 id="instruction">完整新版题面</h2><pre># 运输原型的首年购车方案：预算缩减后，还值得怎么买？
+
+你是 Hexline 工作室的系统分析师。制作人准备评审运输经营原型的首年购车推荐，希望拿到一份能解释清楚、也能复跑的决策依据，而不只是车辆收益排行榜。
+
+财务准备了两种采购额度：10 万英镑，以及预算缩减后的 7 万英镑。请基于给定的六个运输选项，分别推荐一组可行车辆，并说明在运输变慢、需求下降的压力情景下，两种预算各能保留多少净现金。制作人尤其想知道：多投入的采购资金换来了什么，最优方案相较其他可行方案好在哪里，以及结论有哪些边界。
+
+`routes.json`、`cargo-rates.json` 和 `planning_policy.json` 是本轮已经统一的规划输入，没有需要你追溯的审批版本。`model_contract.md` 定义本项目的计费、需求、费用、约束和同分排序规则；这是原创的有限规划模型，不是完整游戏引擎。原 Wiki 材料只供机制背景核对，不能用当前网站或引擎行为替换本项目约定。
+
+请交付以下四份实际文件到 `/app/output/`：
+
+- `model.py`：接受 `--inputs INPUT_DIR --output OUTPUT_DIR`，从该目录的三个 JSON 重算 `plan.json`。预算、路线、需求或其他给定参数改变后，也应使用同一程序重算；不要求采用特定求解算法。
+- `plan.json`：包含两种预算的结果、各自至少前三个次优可行组合、各选项不同车数的基准/压力计算，以及预算缩减的量化比较。语义接口见 `output_contract.json`，允许额外解释字段；没有可行组合时明确报告，不伪造推荐。
+- `planning.xlsx`：供分析师审计，保留来源参数、可编辑计算公式、两情景结果和组合比较。应能看清哪些计算支撑了推荐，不能只把 JSON 贴进表格；表名和布局自行决定。
+- `handoff.docx`：面向制作人的中文决策说明，正文不超过两页。清楚交代两种预算下的推荐、关键收益与代价、次优取舍，以及继续评审所需的验证边界。无需重述整份技术模型。
+
+三个成果中的共享数字必须一致。这里的“次优”按公开模型的目标排序，而不是随意挑选对照组；若不足三种，则报告实际数量。允许任何满足公开约定的等价实现与表达。
+
+这是虚构工作室的离线设计演练：成本、路线和预算不是实际遥测或投资数据。输入只读，不联网换数据，不做真实采购，不声称已经运行或验证完整 OpenTTD 引擎，也不编造批准、测试或发布记录。
+</pre>
+<h2 id="inputs">全部公开输入</h2><p>模型所需数学规则和参数已经完整给出；Wiki是机制来源说明，不是额外作答依赖。没有把Gold或rubric放入盲解输入。</p><details><summary>cargo-rates.json</summary><a download href="input_files/cargo-rates.json">下载原文件</a><pre>{
+  &quot;Coal&quot;: {
+    &quot;base&quot;: 5916,
+    &quot;days1&quot;: 7,
+    &quot;days2&quot;: 255
+  },
+  &quot;Goods&quot;: {
+    &quot;base&quot;: 6144,
+    &quot;days1&quot;: 5,
+    &quot;days2&quot;: 28
+  },
+  &quot;Mail&quot;: {
+    &quot;base&quot;: 4550,
+    &quot;days1&quot;: 20,
+    &quot;days2&quot;: 90
+  },
+  &quot;Passengers&quot;: {
+    &quot;base&quot;: 3185,
+    &quot;days1&quot;: 0,
+    &quot;days2&quot;: 24
+  }
+}
+</pre></details><details><summary>model_contract.md</summary><a download href="input_files/model_contract.md">下载原文件</a><pre># 本项目的有限规划模型（不是完整引擎规范）
+
+所有金额均为英镑；一年由year_days个游戏日组成。车辆为整数0至max_per_option辆，合计不超过fleet_limit；同exclusive_group只能选一个运输选项。各选项的demand由本选项全部车辆共享，不因车辆增加而复制。
+
+每辆年循环数=floor(year_days/cycle_days)，完整循环每次可运capacity单位。总运量取需求与总运能的较小值，按capacity拆满批及末批。收入必须按每批向下取整后相加。
+
+计费距离为起终点坐标的曼哈顿距离；travelled_tiles是背景行程信息。时间t使用age_periods，单位为货物老化周期，1周期约2.5游戏日；station_wait_days不属于货物老化；cycle_days已包括等待、装卸及返程。f=max(31,255-max(0,t-days1)-max(0,t-days1-days2))，单批收入=floor(base*批量*计费距离*f/2^21)。days2是第一阈值之后的持续期。
+
+首年净现金=全年分批收入-车辆采购支出-完整年度运行费。压力情景把需求改为floor(原需求*stress_demand_percent/100)，老化周期增加stress_age_periods、循环天数增加stress_cycle_days，其余不变。两种预算分别约束采购支出，且压力净现金不低于minimum_stress_net。
+
+在所有可行组合中，先最大化压力净现金，再最大化基准净现金，再最小化采购额，最后按routes.json输入顺序的车辆向量字典序升序打破同分。对每种预算保留最优及紧随其后的前三个可行组合；无可行组合时best为null并给出零可行数。
+
+这份数学合同及路线/预算属于原创演练。机制背景复用旧题固定Wiki参考，但不承诺复刻当前引擎、逐位数值、极迟到衰减或真实玩家经济。无需外部搜索。预算案例之间是待比较的财务情景，不是审批优先级陷阱。
+</pre></details><details><summary>output_contract.json</summary><a download href="input_files/output_contract.json">下载原文件</a><pre>{
+  &quot;required_top_level&quot;: [
+    &quot;currency&quot;,
+    &quot;cases&quot;,
+    &quot;budget_comparison&quot;,
+    &quot;input_sha256&quot;
+  ],
+  &quot;cases&quot;: [
+    &quot;standard&quot;,
+    &quot;reduced&quot;
+  ],
+  &quot;case_fields&quot;: [
+    &quot;budget&quot;,
+    &quot;feasible_count&quot;,
+    &quot;best&quot;,
+    &quot;alternatives&quot;,
+    &quot;options&quot;
+  ],
+  &quot;fleet_fields&quot;: [
+    &quot;fleet&quot;,
+    &quot;capex&quot;,
+    &quot;base_net&quot;,
+    &quot;stress_net&quot;,
+    &quot;vehicles&quot;
+  ],
+  &quot;option_fields&quot;: [
+    &quot;vehicles&quot;,
+    &quot;base&quot;,
+    &quot;stress&quot;
+  ],
+  &quot;metric_fields&quot;: [
+    &quot;distance&quot;,
+    &quot;age_periods&quot;,
+    &quot;time_factor&quot;,
+    &quot;cycle_days&quot;,
+    &quot;available_trips&quot;,
+    &quot;demand&quot;,
+    &quot;delivered&quot;,
+    &quot;revenue&quot;,
+    &quot;capex&quot;,
+    &quot;annual_running&quot;,
+    &quot;first_year_net&quot;
+  ],
+  &quot;comparison_fields&quot;: [
+    &quot;capex_saved&quot;,
+    &quot;stress_net_forgone&quot;,
+    &quot;stress_net_retained_fraction&quot;
+  ],
+  &quot;tolerance&quot;: {
+    &quot;integer_GBP&quot;: 0,
+    &quot;ratios&quot;: 1e-09
+  },
+  &quot;notes&quot;: &quot;Fleet keys use route IDs; options lists include counts0..max_per_option; input_sha256 covers the three JSON planning inputs. Additional fields and JSON key ordering are allowed.&quot;
+}
+</pre></details><details><summary>planning_policy.json</summary><a download href="input_files/planning_policy.json">下载原文件</a><pre>{
+  &quot;year_days&quot;: 360,
+  &quot;fleet_limit&quot;: 4,
+  &quot;stress_demand_percent&quot;: 80,
+  &quot;stress_age_periods&quot;: 4,
+  &quot;stress_cycle_days&quot;: 10,
+  &quot;minimum_stress_net&quot;: 50000,
+  &quot;max_per_option&quot;: 3,
+  &quot;currency&quot;: &quot;GBP&quot;,
+  &quot;budget_cases&quot;: [
+    {
+      &quot;id&quot;: &quot;standard&quot;,
+      &quot;budget&quot;: 100000
+    },
+    {
+      &quot;id&quot;: &quot;reduced&quot;,
+      &quot;budget&quot;: 70000
+    }
+  ]
+}
+</pre></details><details><summary>routes.json</summary><a download href="input_files/routes.json">下载原文件</a><pre>[
+  {
+    &quot;id&quot;: &quot;C1&quot;,
+    &quot;cargo&quot;: &quot;Coal&quot;,
+    &quot;from&quot;: [
+      20,
+      20
+    ],
+    &quot;to&quot;: [
+      160,
+      80
+    ],
+    &quot;travelled_tiles&quot;: 280,
+    &quot;station_wait_days&quot;: 12,
+    &quot;age_periods&quot;: 28,
+    &quot;cycle_days&quot;: 90,
+    &quot;capacity&quot;: 120,
+    &quot;demand&quot;: 1200,
+    &quot;capex&quot;: 22000,
+    &quot;annual_running&quot;: 7000,
+    &quot;exclusive_group&quot;: &quot;coal&quot;
+  },
+  {
+    &quot;id&quot;: &quot;G1&quot;,
+    &quot;cargo&quot;: &quot;Goods&quot;,
+    &quot;from&quot;: [
+      40,
+      60
+    ],
+    &quot;to&quot;: [
+      240,
+      160
+    ],
+    &quot;travelled_tiles&quot;: 420,
+    &quot;station_wait_days&quot;: 4,
+    &quot;age_periods&quot;: 18,
+    &quot;cycle_days&quot;: 60,
+    &quot;capacity&quot;: 80,
+    &quot;demand&quot;: 1600,
+    &quot;capex&quot;: 28000,
+    &quot;annual_running&quot;: 10000,
+    &quot;exclusive_group&quot;: &quot;goods&quot;
+  },
+  {
+    &quot;id&quot;: &quot;G2&quot;,
+    &quot;cargo&quot;: &quot;Goods&quot;,
+    &quot;from&quot;: [
+      40,
+      60
+    ],
+    &quot;to&quot;: [
+      240,
+      160
+    ],
+    &quot;travelled_tiles&quot;: 340,
+    &quot;station_wait_days&quot;: 8,
+    &quot;age_periods&quot;: 8,
+    &quot;cycle_days&quot;: 40,
+    &quot;capacity&quot;: 50,
+    &quot;demand&quot;: 1600,
+    &quot;capex&quot;: 45000,
+    &quot;annual_running&quot;: 18000,
+    &quot;exclusive_group&quot;: &quot;goods&quot;
+  },
+  {
+    &quot;id&quot;: &quot;P1&quot;,
+    &quot;cargo&quot;: &quot;Passengers&quot;,
+    &quot;from&quot;: [
+      15,
+      15
+    ],
+    &quot;to&quot;: [
+      115,
+      75
+    ],
+    &quot;travelled_tiles&quot;: 240,
+    &quot;station_wait_days&quot;: 6,
+    &quot;age_periods&quot;: 12,
+    &quot;cycle_days&quot;: 48,
+    &quot;capacity&quot;: 100,
+    &quot;demand&quot;: 2050,
+    &quot;capex&quot;: 20000,
+    &quot;annual_running&quot;: 8000,
+    &quot;exclusive_group&quot;: &quot;passengers&quot;
+  },
+  {
+    &quot;id&quot;: &quot;P2&quot;,
+    &quot;cargo&quot;: &quot;Passengers&quot;,
+    &quot;from&quot;: [
+      15,
+      15
+    ],
+    &quot;to&quot;: [
+      115,
+      75
+    ],
+    &quot;travelled_tiles&quot;: 180,
+    &quot;station_wait_days&quot;: 4,
+    &quot;age_periods&quot;: 6,
+    &quot;cycle_days&quot;: 30,
+    &quot;capacity&quot;: 70,
+    &quot;demand&quot;: 2050,
+    &quot;capex&quot;: 30000,
+    &quot;annual_running&quot;: 12000,
+    &quot;exclusive_group&quot;: &quot;passengers&quot;
+  },
+  {
+    &quot;id&quot;: &quot;M1&quot;,
+    &quot;cargo&quot;: &quot;Mail&quot;,
+    &quot;from&quot;: [
+      80,
+      10
+    ],
+    &quot;to&quot;: [
+      200,
+      130
+    ],
+    &quot;travelled_tiles&quot;: 310,
+    &quot;station_wait_days&quot;: 12,
+    &quot;age_periods&quot;: 24,
+    &quot;cycle_days&quot;: 90,
+    &quot;capacity&quot;: 60,
+    &quot;demand&quot;: 677,
+    &quot;capex&quot;: 25000,
+    &quot;annual_running&quot;: 6000,
+    &quot;exclusive_group&quot;: &quot;mail&quot;
+  }
+]
+</pre></details>
+<h2 id="gold">真实参考成果</h2><p><a class="button" download href="gold/model.py">model.py</a> <a class="button" download href="gold/handoff.docx">handoff.docx</a> <a class="button" download href="gold/plan.json">plan.json</a> <a class="button" download href="gold/planning.xlsx">planning.xlsx</a> </p><div class="gallery"><a target="_blank" rel="noopener" href="render/planning-1.png"><img loading="lazy" src="render/planning-1.png" alt="planning.xlsx实际渲染"><span>planning.xlsx</span></a><a target="_blank" rel="noopener" href="render/planning-2.png"><img loading="lazy" src="render/planning-2.png" alt="planning.xlsx实际渲染"><span>planning.xlsx</span></a><a target="_blank" rel="noopener" href="render/planning-3.png"><img loading="lazy" src="render/planning-3.png" alt="planning.xlsx实际渲染"><span>planning.xlsx</span></a><a target="_blank" rel="noopener" href="render/planning-4.png"><img loading="lazy" src="render/planning-4.png" alt="planning.xlsx实际渲染"><span>planning.xlsx</span></a><a target="_blank" rel="noopener" href="render/planning-5.png"><img loading="lazy" src="render/planning-5.png" alt="planning.xlsx实际渲染"><span>planning.xlsx</span></a><a target="_blank" rel="noopener" href="render/handoff-1.png"><img loading="lazy" src="render/handoff-1.png" alt="handoff.docx实际渲染"><span>handoff.docx</span></a></div><p class="muted">实际渲染共6页。本次直接目视检查了决策概览与交接Word；不因此声称全部附表、输入或专业内容已独立批准。</p>
+<h2 id="rubric">全部20项评分草稿</h2><div class="notice">文件可打开等基础条件单列为结构检查，不额外奖励格式分。错误传播的重复扣分仍须判官实测，未声称已经解决。</div><details><summary>B01 · 权重 7 · 输入与计算的来源可追溯：路线、费率及政策参数来自三份公开JSON，没有静默替换规则。</summary><pre>{
+  &quot;id&quot;: &quot;B01&quot;,
+  &quot;weight&quot;: 7,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;输入与计算的来源可追溯：路线、费率及政策参数来自三份公开JSON，没有静默替换规则。&quot;,
+  &quot;public_basis&quot;: &quot;model_contract.md；instruction.md第3段&quot;,
+  &quot;error_family&quot;: &quot;source_traceability&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B02 · 权重 10 · 各选项基准收入与净现金符合公开模型，正确处理计费距离、老化、批次、共享需求、采购和年运行费。</summary><pre>{
+  &quot;id&quot;: &quot;B02&quot;,
+  &quot;weight&quot;: 10,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;各选项基准收入与净现金符合公开模型，正确处理计费距离、老化、批次、共享需求、采购和年运行费。&quot;,
+  &quot;public_basis&quot;: &quot;model_contract.md第2至4段&quot;,
+  &quot;error_family&quot;: &quot;baseline_model&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B03 · 权重 10 · 压力情景实际重算需求、老化、循环和分批收入，不只对基准利润套比例。</summary><pre>{
+  &quot;id&quot;: &quot;B03&quot;,
+  &quot;weight&quot;: 10,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;压力情景实际重算需求、老化、循环和分批收入，不只对基准利润套比例。&quot;,
+  &quot;public_basis&quot;: &quot;model_contract.md第4段&quot;,
+  &quot;error_family&quot;: &quot;stress_model&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B04 · 权重 3 · 推荐与次优组合均满足对应案例的采购预算，不把预算余额当作必须花完的额度。</summary><pre>{
+  &quot;id&quot;: &quot;B04&quot;,
+  &quot;weight&quot;: 3,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;推荐与次优组合均满足对应案例的采购预算，不把预算余额当作必须花完的额度。&quot;,
+  &quot;public_basis&quot;: &quot;planning_policy.json budget_cases；model_contract.md第4段&quot;,
+  &quot;error_family&quot;: &quot;budget&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B05 · 权重 3 · 推荐与次优组合均满足总车辆上限及每选项整数车数范围。</summary><pre>{
+  &quot;id&quot;: &quot;B05&quot;,
+  &quot;weight&quot;: 3,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;推荐与次优组合均满足总车辆上限及每选项整数车数范围。&quot;,
+  &quot;public_basis&quot;: &quot;planning_policy.json fleet_limit/max_per_option&quot;,
+  &quot;error_family&quot;: &quot;fleet_capacity&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B06 · 权重 3 · 推荐与次优组合不同时启用互斥组选项。</summary><pre>{
+  &quot;id&quot;: &quot;B06&quot;,
+  &quot;weight&quot;: 3,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;推荐与次优组合不同时启用互斥组选项。&quot;,
+  &quot;public_basis&quot;: &quot;routes.json exclusive_group；model_contract.md第1段&quot;,
+  &quot;error_family&quot;: &quot;exclusive_choices&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B07 · 权重 7 · 每种预算的推荐及次优符合最低压力净现金门槛；不可行时明确报告无解。</summary><pre>{
+  &quot;id&quot;: &quot;B07&quot;,
+  &quot;weight&quot;: 7,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;每种预算的推荐及次优符合最低压力净现金门槛；不可行时明确报告无解。&quot;,
+  &quot;public_basis&quot;: &quot;planning_policy.json minimum_stress_net；output_contract.json&quot;,
+  &quot;error_family&quot;: &quot;stress_feasibility&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B08 · 权重 10 · 10万预算推荐为全局最优，按公开目标及同分规则排序，提供可复核的搜索或最优性依据。</summary><pre>{
+  &quot;id&quot;: &quot;B08&quot;,
+  &quot;weight&quot;: 10,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;10万预算推荐为全局最优，按公开目标及同分规则排序，提供可复核的搜索或最优性依据。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md业务目标；model_contract.md第5段&quot;,
+  &quot;error_family&quot;: &quot;standard_optimality&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B09 · 权重 10 · 7万预算独立求解并给出对应全局最优，不按标准方案同比缩放车辆或收益。</summary><pre>{
+  &quot;id&quot;: &quot;B09&quot;,
+  &quot;weight&quot;: 10,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;7万预算独立求解并给出对应全局最优，不按标准方案同比缩放车辆或收益。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md第2段；model_contract.md第5段&quot;,
+  &quot;error_family&quot;: &quot;reduced_optimality&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B10 · 权重 7 · 每种预算给出真正紧随首选的前三个次优可行组合及差距；不足三个时诚实报告实际数量。</summary><pre>{
+  &quot;id&quot;: &quot;B10&quot;,
+  &quot;weight&quot;: 7,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;每种预算给出真正紧随首选的前三个次优可行组合及差距；不足三个时诚实报告实际数量。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md交付plan.json及次优说明&quot;,
+  &quot;error_family&quot;: &quot;ranked_alternatives&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B11 · 权重 7 · 预算缩减比较正确量化采购节省、压力净现金损失和压力收益保留比例，区分采购支出与净现金。</summary><pre>{
+  &quot;id&quot;: &quot;B11&quot;,
+  &quot;weight&quot;: 7,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;预算缩减比较正确量化采购节省、压力净现金损失和压力收益保留比例，区分采购支出与净现金。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md业务问题；output_contract.json comparison_fields&quot;,
+  &quot;error_family&quot;: &quot;budget_tradeoff&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B12 · 权重 7 · 决策说明给出清晰可执行的两种预算采购建议，并解释为何舍弃替代方案，而非只堆技术输出。</summary><pre>{
+  &quot;id&quot;: &quot;B12&quot;,
+  &quot;weight&quot;: 7,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;决策说明给出清晰可执行的两种预算采购建议，并解释为何舍弃替代方案，而非只堆技术输出。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md handoff.docx要求&quot;,
+  &quot;error_family&quot;: &quot;decision_reasoning&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B13 · 权重 7 · 说明建议依赖的需求、周转和成本假设及原型验证边界；不把固定压力情景当全面风险证明。</summary><pre>{
+  &quot;id&quot;: &quot;B13&quot;,
+  &quot;weight&quot;: 7,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;说明建议依赖的需求、周转和成本假设及原型验证边界；不把固定压力情景当全面风险证明。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md业务评审与演练边界&quot;,
+  &quot;error_family&quot;: &quot;decision_limits&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B14 · 权重 7 · Excel保留有意义且可编辑的关键计算公式，能从参数追踪到收入、费用、净现金与推荐。</summary><pre>{
+  &quot;id&quot;: &quot;B14&quot;,
+  &quot;weight&quot;: 7,
+  &quot;type&quot;: &quot;Gradient&quot;,
+  &quot;description&quot;: &quot;Excel保留有意义且可编辑的关键计算公式，能从参数追踪到收入、费用、净现金与推荐。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md planning.xlsx要求&quot;,
+  &quot;error_family&quot;: &quot;workbook_auditability&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null,
+  &quot;levels&quot;: {
+    &quot;0&quot;: &quot;没有可用工作簿或关键数值不可追溯&quot;,
+    &quot;0.25&quot;: &quot;仅有输入或结论，缺少关键公式&quot;,
+    &quot;0.5&quot;: &quot;收入或费用部分有公式，但不能贯通到净现金&quot;,
+    &quot;0.75&quot;: &quot;关键链可追踪但一个预算或压力比较缺完整审计路径&quot;,
+    &quot;1&quot;: &quot;两预算关键计算链可追溯、公式真实可编辑并与成果一致&quot;
+  }
+}</pre></details><details><summary>B15 · 权重 7 · JSON、Excel和Word中的共享组合、采购额、两情景净现金与预算比较一致；不按相同计算根错重复处罚多个文件。</summary><pre>{
+  &quot;id&quot;: &quot;B15&quot;,
+  &quot;weight&quot;: 7,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;JSON、Excel和Word中的共享组合、采购额、两情景净现金与预算比较一致；不按相同计算根错重复处罚多个文件。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md共享数字一致&quot;,
+  &quot;error_family&quot;: &quot;cross_artifact_alignment&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B16 · 权重 7 · 程序实际响应预算或需求等新输入，不硬编码默认最优结果；至少两个不同输入变体需真实执行。</summary><pre>{
+  &quot;id&quot;: &quot;B16&quot;,
+  &quot;weight&quot;: 7,
+  &quot;type&quot;: &quot;Gradient&quot;,
+  &quot;description&quot;: &quot;程序实际响应预算或需求等新输入，不硬编码默认最优结果；至少两个不同输入变体需真实执行。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md model.py参数化要求&quot;,
+  &quot;error_family&quot;: &quot;program_generalization&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null,
+  &quot;levels&quot;: {
+    &quot;0&quot;: &quot;默认有效输入也不能运行&quot;,
+    &quot;0.25&quot;: &quot;仅默认结果正确且改变输入不响应&quot;,
+    &quot;0.5&quot;: &quot;能响应输入但至少两个变体结果都不正确&quot;,
+    &quot;0.75&quot;: &quot;默认及一个实质变体正确，第二个失败&quot;,
+    &quot;1&quot;: &quot;默认及至少两个不同预算/需求变体均真实运行正确&quot;
+  }
+}</pre></details><details><summary>B17 · 权重 3 · 决策文档对制作人的可用性：推荐、对照与限制可快速定位，正文不超过两页。</summary><pre>{
+  &quot;id&quot;: &quot;B17&quot;,
+  &quot;weight&quot;: 3,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;决策文档对制作人的可用性：推荐、对照与限制可快速定位，正文不超过两页。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md handoff.docx要求&quot;,
+  &quot;error_family&quot;: &quot;reader_usability&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>B18 · 权重 7 · 结果接口完整、类型和单位明确，含输入SHA、无解表示及足够的选项/组合审计数据；不要求固定JSON键顺序。</summary><pre>{
+  &quot;id&quot;: &quot;B18&quot;,
+  &quot;weight&quot;: 7,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;结果接口完整、类型和单位明确，含输入SHA、无解表示及足够的选项/组合审计数据；不要求固定JSON键顺序。&quot;,
+  &quot;public_basis&quot;: &quot;output_contract.json全部字段；instruction.md plan.json要求&quot;,
+  &quot;error_family&quot;: &quot;reproducible_handoff&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: null
+}</pre></details><details><summary>P01 · 权重 -3 · 出现无依据的真实引擎验证、上线、采购、专家批准或外部授权完成声明。</summary><pre>{
+  &quot;id&quot;: &quot;P01&quot;,
+  &quot;weight&quot;: -3,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;出现无依据的真实引擎验证、上线、采购、专家批准或外部授权完成声明。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md末段&quot;,
+  &quot;error_family&quot;: &quot;unsupported_claims&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: &quot;1 means prohibited event occurred; 0 means absent&quot;
+}</pre></details><details><summary>P02 · 权重 -3 · 真实执行证据显示提交程序修改了只读业务输入，或额外访问外部数据替换冻结输入。</summary><pre>{
+  &quot;id&quot;: &quot;P02&quot;,
+  &quot;weight&quot;: -3,
+  &quot;type&quot;: &quot;Binary&quot;,
+  &quot;description&quot;: &quot;真实执行证据显示提交程序修改了只读业务输入，或额外访问外部数据替换冻结输入。&quot;,
+  &quot;public_basis&quot;: &quot;instruction.md末段&quot;,
+  &quot;error_family&quot;: &quot;input_integrity&quot;,
+  &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
+  &quot;negative_value_semantics&quot;: &quot;1 means prohibited event occurred; 0 means absent&quot;
+}</pre></details><pre>本轮未运行正式判官。先按根因标记错误：同一数值根错传播至最优/对照/跨文件时，不能机械累扣所有依赖项；B08/B09/B10须区分方法性错误与B02/B03传播错误。该去重仍须独立复核，尚未证明固定判分模板能正确执行。</pre>
+<h2 id="verification">哪些有证据，哪些还没有</h2><p>参考标准预算与原版结果一致；204项Office公式复算完成；5项本地回归测试完成；独立Decimal与递归枚举路径完成8组真实程序对照。</p><table><tr><th>真实对照执行</th><th>预期</th><th>实际</th></tr><tr><td>baseline</td><td>接受</td><td>接受</td></tr><tr><td>new_budgets</td><td>接受</td><td>接受</td></tr><tr><td>changed_demand</td><td>接受</td><td>接受</td></tr><tr><td>no_feasible_solution</td><td>接受</td><td>接受</td></tr><tr><td>equivalent_json_key_order</td><td>接受</td><td>接受</td></tr><tr><td>wrong_distance</td><td>拒绝</td><td>拒绝</td></tr><tr><td>missing_capex</td><td>拒绝</td><td>拒绝</td></tr><tr><td>late_annual_rounding</td><td>拒绝</td><td>拒绝</td></tr></table><h3>盲解状态快照</h3><pre>{
+  &quot;status&quot;: &quot;running&quot;,
+  &quot;started_at&quot;: &quot;2026-10-21T09:47:52.677579+00:00&quot;,
+  &quot;finished_at&quot;: null,
+  &quot;scope&quot;: &quot;只看公开题面与输入的独立Qwen上下文，不是三模型校准或正式评分。&quot;,
+  &quot;errors&quot;: null
+}</pre><p>尚未完成：独立领域/来源/权利复核、正式Gold及错误/等价答案评分、指定三模型难度校准。参考程序复算不是被测模型解题。</p><p><a download href="reference-verification.json">参考复算回执</a> · <a download href="behavior-verification.json">行为对照回执</a> · <a download href="rubrics.json">评分草稿JSON</a></p></main><footer>静态快照，不是实时监控。生成UTC：2026-10-21T09:53:46.769056+00:00</footer></html>
