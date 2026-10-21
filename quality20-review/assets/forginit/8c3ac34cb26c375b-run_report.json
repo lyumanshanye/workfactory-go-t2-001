@@ -1,0 +1,265 @@
+{
+  "additions": {
+    "00042": {
+      "duration_ms": 1250,
+      "event_name": "level_complete",
+      "session_id": "s1"
+    },
+    "42": {
+      "duration_ms": 1250,
+      "event_name": "level_complete",
+      "session_id": "s1"
+    },
+    "9007199254740992": {
+      "duration_ms": 1250,
+      "event_name": "level_complete",
+      "session_id": "s1"
+    },
+    "9007199254740993": {
+      "duration_ms": 1250,
+      "event_name": "level_complete",
+      "session_id": "s1"
+    },
+    "after-broken-line": {
+      "duration_ms": 1250,
+      "event_name": "level_complete",
+      "session_id": "s1"
+    },
+    "boundary": {
+      "duration_ms": 1250,
+      "event_name": "level_complete",
+      "session_id": "s1"
+    },
+    "comma": {
+      "duration_ms": 1250,
+      "event_name": "level_complete",
+      "session_id": "s1"
+    },
+    "legacy": {
+      "duration_ms": 1250,
+      "event_name": "level_complete",
+      "session_id": "s1"
+    },
+    "legacy-whole": {
+      "duration_ms": 1000,
+      "event_name": "level_complete",
+      "session_id": "s1"
+    },
+    "retry": {
+      "duration_ms": 1250,
+      "event_name": "level_complete",
+      "session_id": "s1"
+    }
+  },
+  "as_of": "2026-10-21T12:00:00Z",
+  "checkpoint_unchanged": true,
+  "counts": {
+    "accepted": 10,
+    "already_committed": 1,
+    "batch_conflict": 2,
+    "checkpoint_conflict": 1,
+    "duplicate": 1,
+    "invalid_duration": 4,
+    "invalid_event_id": 1,
+    "invalid_event_name": 1,
+    "invalid_json": 2,
+    "invalid_occurred_at": 1,
+    "invalid_root": 2,
+    "invalid_session_id": 1,
+    "next_batch": 1,
+    "received_before_occurrence": 1,
+    "schema_time_mismatch": 1
+  },
+  "decisions": [
+    {
+      "detail": "",
+      "event_id": "9007199254740992",
+      "line": 1,
+      "status": "accepted"
+    },
+    {
+      "detail": "",
+      "event_id": "9007199254740993",
+      "line": 2,
+      "status": "accepted"
+    },
+    {
+      "detail": "",
+      "event_id": "00042",
+      "line": 3,
+      "status": "accepted"
+    },
+    {
+      "detail": "",
+      "event_id": "42",
+      "line": 4,
+      "status": "accepted"
+    },
+    {
+      "detail": "",
+      "event_id": "",
+      "line": 5,
+      "status": "invalid_event_id"
+    },
+    {
+      "detail": "",
+      "event_id": "legacy",
+      "line": 6,
+      "status": "accepted"
+    },
+    {
+      "detail": "",
+      "event_id": "boundary",
+      "line": 7,
+      "status": "accepted"
+    },
+    {
+      "detail": "",
+      "event_id": "retry",
+      "line": 8,
+      "status": "accepted"
+    },
+    {
+      "detail": "",
+      "event_id": "retry",
+      "line": 9,
+      "status": "duplicate"
+    },
+    {
+      "detail": "",
+      "event_id": "conflict",
+      "line": 10,
+      "status": "batch_conflict"
+    },
+    {
+      "detail": "",
+      "event_id": "conflict",
+      "line": 11,
+      "status": "batch_conflict"
+    },
+    {
+      "detail": "",
+      "event_id": "committed",
+      "line": 12,
+      "status": "already_committed"
+    },
+    {
+      "detail": "",
+      "event_id": "historical-conflict",
+      "line": 13,
+      "status": "checkpoint_conflict"
+    },
+    {
+      "detail": "",
+      "event_id": "",
+      "line": 14,
+      "status": "invalid_root"
+    },
+    {
+      "detail": "",
+      "event_id": "",
+      "line": 15,
+      "status": "invalid_root"
+    },
+    {
+      "detail": "parser_line=0: Expected '}'",
+      "event_id": "",
+      "line": 16,
+      "status": "invalid_json"
+    },
+    {
+      "detail": "",
+      "event_id": "future",
+      "line": 17,
+      "status": "next_batch"
+    },
+    {
+      "detail": "",
+      "event_id": "negative",
+      "line": 18,
+      "status": "invalid_duration"
+    },
+    {
+      "detail": "",
+      "event_id": "fraction",
+      "line": 19,
+      "status": "invalid_duration"
+    },
+    {
+      "detail": "",
+      "event_id": "boolean",
+      "line": 20,
+      "status": "invalid_duration"
+    },
+    {
+      "detail": "",
+      "event_id": "bad-date",
+      "line": 21,
+      "status": "invalid_occurred_at"
+    },
+    {
+      "detail": "",
+      "event_id": "wrong-schema",
+      "line": 22,
+      "status": "schema_time_mismatch"
+    },
+    {
+      "detail": "",
+      "event_id": "comma",
+      "line": 23,
+      "status": "accepted"
+    },
+    {
+      "detail": "parser_line=0: ",
+      "event_id": "",
+      "line": 24,
+      "status": "invalid_json"
+    },
+    {
+      "detail": "",
+      "event_id": "time-reversed",
+      "line": 25,
+      "status": "received_before_occurrence"
+    },
+    {
+      "detail": "",
+      "event_id": "bad-session",
+      "line": 26,
+      "status": "invalid_session_id"
+    },
+    {
+      "detail": "",
+      "event_id": "old-fraction",
+      "line": 27,
+      "status": "invalid_duration"
+    },
+    {
+      "detail": "",
+      "event_id": "bad-name",
+      "line": 28,
+      "status": "invalid_event_name"
+    },
+    {
+      "detail": "",
+      "event_id": "legacy-whole",
+      "line": 29,
+      "status": "accepted"
+    },
+    {
+      "detail": "",
+      "event_id": "after-broken-line",
+      "line": 30,
+      "status": "accepted"
+    }
+  ],
+  "input_sha256": {
+    "approvals.json": "46cf00d0e73e73fb59c76d1e1c6628cf95f393a8fea798db18a11867d5db06b2",
+    "checkpoint.json": "20a12b97e7d8eff0bbf52cc54f57495eeb6cdf8991a34739c795a8eb4b6e8993",
+    "events.jsonl": "33ac9d32195819e1315d22d88223c55ce2f5921f992976854888b9882e1b7c43",
+    "policies.json": "249b85ac7d2c666b1cfc5b93ebea80d70448bef25ab5fb80c3505427a705ccfd"
+  },
+  "new_unique_events": 10,
+  "policy": "V2",
+  "publication_blocked": true,
+  "scope": "Original simulated telemetry acceptance exercise, not real player data."
+}
