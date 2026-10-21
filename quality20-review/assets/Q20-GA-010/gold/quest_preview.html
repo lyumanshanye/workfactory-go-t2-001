@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务链预览 - 任务系统重构</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #0f1117;
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.8em;
+    color: #7eb8ff;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 0.9em;
+    margin-bottom: 30px;
+  }
+  #quest-graph {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 30px auto;
+    background: #1a1d28;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #2a2d3a;
+  }
+  #quest-graph h2 {
+    color: #a0b4d0;
+    font-size: 1.1em;
+    margin-bottom: 15px;
+  }
+  #graph-svg {
+    width: 100%;
+    height: 340px;
+    display: block;
+  }
+  .graph-node rect {
+    rx: 8;
+    ry: 8;
+    stroke-width: 2;
+  }
+  .graph-node text {
+    font-size: 13px;
+    fill: #fff;
+    text-anchor: middle;
+    dominant-baseline: central;
+    font-weight: 600;
+  }
+  .graph-edge {
+    stroke: #5a6a8a;
+    stroke-width: 2;
+    fill: none;
+    marker-end: url(#arrowhead);
+  }
+  .quest-list {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 20px;
+  }
+  .quest-card {
+    background: #1a1d28;
+    border: 1px solid #2a2d3a;
+    border-radius: 12px;
+    padding: 18px;
+    transition: border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .quest-card:hover {
+    border-color: #4a7aff;
+  }
+  .quest-card .badge {
+    display: inline-block;
+    background: #4a7aff;
+    color: #fff;
+    font-size: 0.7em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .quest-card .quest-title {
+    font-size: 1.15em;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .section-label {
+    font-size: 0.75em;
+    color: #7a8aaa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    margin-top: 10px;
+  }
+  .dep-tags, .item-tags, .cond-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 4px;
+  }
+  .dep-tag {
+    background: #2a3355;
+    color: #8ab4f8;
+    font-size: 0.8em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #3a4a6a;
+  }
+  .dep-tag.none {
+    background: #1e2a1e;
+    color: #6abf6a;
+    border-color: #2e4a2e;
+  }
+  .item-tag {
+    background: #2e2215;
+    color: #f0c060;
+    font-size: 0.8em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #5a4a20;
+  }
+  .cond-tag {
+    background: #2a1a30;
+    color: #d08aef;
+    font-size: 0.8em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #4a2a5a;
+  }
+  .reward-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 3px;
+    font-size: 0.9em;
+  }
+  .reward-icon {
+    width: 20px;
+    text-align: center;
+  }
+  .reward-exp { color: #8af08a; }
+  .reward-gold { color: #f0d060; }
+  .reward-item-name { color: #e0a060; }
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #555;
+    font-size: 0.8em;
+  }
+  @media (max-width: 600px) {
+    .quest-list { grid-template-columns: 1fr; }
+    #graph-svg { height: 260px; }
+  }
+</style>
+</head>
+<body>
+<h1>📜 任务链预览</h1>
+<p class="subtitle">任务系统重构 · 数据校验预览 · 生成于 2026-11-15</p>
+
+<div id="quest-graph">
+  <h2>🔗 任务依赖关系图</h2>
+  <svg id="graph-svg" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#5a6a8a"/>
+      </marker>
+    </defs>
+  </svg>
+</div>
+
+<div class="quest-list" id="quest-list"></div>
+
+<p class="footer">Generated from quest_content.json · Schema: team_json_schema.json (draft-07)</p>
+
+<script>
+(function(){
+  var quests = [{"quest_id": "Q001", "display_name": "初醒之地", "dependencies": [], "unlock_conditions": {"level": 1, "required_items": []}, "rewards": {"experience": 100, "currency": 50, "loot": [{"item_id": "ITEM_IRON_SWORD", "quantity": 1}, {"item_id": "ITEM_HEALTH_POTION", "quantity": 3}]}}, {"quest_id": "Q002", "display_name": "森林深处的低语", "dependencies": ["Q001"], "unlock_conditions": {"level": 3, "required_items": ["ITEM_IRON_SWORD"]}, "rewards": {"experience": 250, "currency": 120, "loot": [{"item_id": "ITEM_ELVEN_BOW", "quantity": 1}, {"item_id": "ITEM_MANA_CRYSTAL", "quantity": 2}]}}, {"quest_id": "Q003", "display_name": "矿洞危机", "dependencies": ["Q001"], "unlock_conditions": {"level": 5, "required_items": ["ITEM_IRON_SWORD", "ITEM_HEALTH_POTION"]}, "rewards": {"experience": 400, "currency": 200, "loot": [{"item_id": "ITEM_MITHRIL_ORE", "quantity": 5}, {"item_id": "ITEM_ANCIENT_MAP", "quantity": 1}]}}, {"quest_id": "Q004", "display_name": "古塔之谜", "dependencies": ["Q002", "Q003"], "unlock_conditions": {"level": 8, "required_items": ["ITEM_ANCIENT_MAP"]}, "rewards": {"experience": 800, "currency": 500, "loot": [{"item_id": "ITEM_TOWER_KEY", "quantity": 1}, {"item_id": "ITEM_ENCHANTED_RING", "quantity": 1}]}}, {"quest_id": "Q005", "display_name": "商队护送", "dependencies": ["Q001"], "rewards": {"experience": 150, "currency": 300, "loot": [{"item_id": "ITEM_TRADE_PERMIT", "quantity": 1}, {"item_id": "ITEM_GOLD_COIN", "quantity": 1}]}}, {"quest_id": "Q006", "display_name": "暗影集会", "dependencies": ["Q004", "Q005"], "unlock_conditions": {"level": 12, "required_items": ["ITEM_TOWER_KEY", "ITEM_TRADE_PERMIT"]}, "rewards": {"experience": 1500, "currency": 800, "loot": [{"item_id": "ITEM_SHADOW_CLOAK", "quantity": 1}, {"item_id": "ITEM_LEGENDARY_GEM", "quantity": 1}]}}];
+
+  // ---- Render cards ----
+  var listEl = document.getElementById("quest-list");
+  quests.forEach(function(q) {
+    var card = document.createElement("div");
+    card.className = "quest-card";
+
+    var badge = '<span class="badge">' + escHtml(q.quest_id) + '</span>';
+    var title = '<div class="quest-title">' + escHtml(q.display_name) + '</div>';
+
+    // Dependencies
+    var deps = '<div class="section-label">前置依赖</div><div class="dep-tags">';
+    if (q.dependencies.length === 0) {
+      deps += '<span class="dep-tag none">无（起始任务）</span>';
+    } else {
+      q.dependencies.forEach(function(d) {
+        deps += '<span class="dep-tag">' + escHtml(d) + '</span>';
+      });
+    }
+    deps += '</div>';
+
+    // Unlock conditions
+    var conds = '';
+    if (q.unlock_conditions) {
+      conds += '<div class="section-label">解锁条件</div><div class="cond-tags">';
+      conds += '<span class="cond-tag">Lv.' + q.unlock_conditions.level + '+</span>';
+      q.unlock_conditions.required_items.forEach(function(it) {
+        conds += '<span class="cond-tag">需持有: ' + escHtml(it) + '</span>';
+      });
+      conds += '</div>';
+    }
+
+    // Rewards
+    var rews = '<div class="section-label">奖励</div>';
+    rews += '<div class="reward-row"><span class="reward-icon">⭐</span><span class="reward-exp">经验 +' + q.rewards.experience + '</span></div>';
+    rews += '<div class="reward-row"><span class="reward-icon">💰</span><span class="reward-gold">金币 +' + q.rewards.currency + '</span></div>';
+    if (q.rewards.loot.length > 0) {
+      rews += '<div class="section-label" style="margin-top:6px">掉落物品</div><div class="item-tags">';
+      q.rewards.loot.forEach(function(loot) {
+        rews += '<span class="item-tag">' + escHtml(loot.item_id) + ' ×' + loot.quantity + '</span>';
+      });
+      rews += '</div>';
+    }
+
+    card.innerHTML = badge + title + deps + conds + rews;
+    listEl.appendChild(card);
+  });
+
+  // ---- Render dependency graph (SVG) ----
+  var svg = document.getElementById("graph-svg");
+  var svgRect = svg.getBoundingClientRect();
+  var W = svgRect.width || 1060;
+  var H = svgRect.height || 340;
+
+  // Build layers via BFS (topological)
+  var questMap = {};
+  quests.forEach(function(q){ questMap[q.quest_id] = q; });
+
+  var inDeg = {};
+  quests.forEach(function(q){ inDeg[q.quest_id] = 0; });
+  quests.forEach(function(q){
+    q.dependencies.forEach(function(d){
+      // only count if d exists in questMap
+      if (questMap[d]) { /* ok */ }
+    });
+  });
+  // Calculate in-degree based on reverse: who depends on whom
+  var children = {};
+  quests.forEach(function(q){ children[q.quest_id] = []; });
+  quests.forEach(function(q){
+    q.dependencies.forEach(function(d){
+      if (children[d]) children[d].push(q.quest_id);
+    });
+  });
+
+  // BFS layer assignment
+  var layer = {};
+  var roots = quests.filter(function(q){ return q.dependencies.length === 0; }).map(function(q){ return q.quest_id; });
+  roots.forEach(function(r){ layer[r] = 0; });
+  var queue = roots.slice();
+  var visited = {};
+  roots.forEach(function(r){ visited[r] = true; });
+  var maxLayer = 0;
+  while (queue.length > 0) {
+    var cur = queue.shift();
+    children[cur].forEach(function(ch){
+      var nl = layer[cur] + 1;
+      if (layer[ch] === undefined || nl > layer[ch]) {
+        layer[ch] = nl;
+        if (nl > maxLayer) maxLayer = nl;
+      }
+      if (!visited[ch]) {
+        visited[ch] = true;
+        queue.push(ch);
+      }
+    });
+  }
+  // Ensure all assigned
+  quests.forEach(function(q){
+    if (layer[q.quest_id] === undefined) layer[q.quest_id] = 0;
+  });
+
+  // Group by layer
+  var layerGroups = {};
+  quests.forEach(function(q){
+    var l = layer[q.quest_id];
+    if (!layerGroups[l]) layerGroups[l] = [];
+    layerGroups[l].push(q.quest_id);
+  });
+
+  var padX = 80, padY = 50;
+  var layerCount = maxLayer + 1;
+  var layerSpacing = (W - 2 * padX) / Math.max(layerCount - 1, 1);
+  var nodeW = 130, nodeH = 40;
+
+  var positions = {};
+  for (var l = 0; l <= maxLayer; l++) {
+    var group = layerGroups[l] || [];
+    var totalH = group.length * nodeH + (group.length - 1) * 20;
+    var startY = (H - totalH) / 2;
+    group.forEach(function(qid, idx) {
+      positions[qid] = {
+        x: padX + l * layerSpacing,
+        y: startY + idx * (nodeH + 20) + nodeH / 2
+      };
+    });
+  }
+
+  // Draw edges
+  quests.forEach(function(q) {
+    q.dependencies.forEach(function(dep) {
+      if (!positions[dep] || !positions[q.quest_id]) return;
+      var from = positions[dep];
+      var to = positions[q.quest_id];
+      var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("class", "graph-edge");
+      line.setAttribute("x1", from.x + nodeW / 2);
+      line.setAttribute("y1", from.y);
+      line.setAttribute("x2", to.x - nodeW / 2 - 4);
+      line.setAttribute("y2", to.y);
+      svg.appendChild(line);
+    });
+  });
+
+  // Draw nodes
+  var colors = ["#2a6adf", "#3a8a5f", "#8a5a2a", "#7a3a8a", "#2a8a8a", "#8a6a2a"];
+  quests.forEach(function(q, i) {
+    var pos = positions[q.quest_id];
+    if (!pos) return;
+    var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("class", "graph-node");
+
+    var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", pos.x - nodeW / 2);
+    rect.setAttribute("y", pos.y - nodeH / 2);
+    rect.setAttribute("width", nodeW);
+    rect.setAttribute("height", nodeH);
+    rect.setAttribute("fill", colors[i % colors.length]);
+    rect.setAttribute("stroke", lighten(colors[i % colors.length], 40));
+    g.appendChild(rect);
+
+    var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", pos.x);
+    text.setAttribute("y", pos.y);
+    text.textContent = q.display_name.length > 8 ? q.display_name.substring(0, 8) + "…" : q.display_name;
+    g.appendChild(text);
+
+    svg.appendChild(g);
+  });
+
+  function escHtml(s) {
+    var d = document.createElement("div");
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+
+  function lighten(hex, amt) {
+    hex = hex.replace("#", "");
+    var r = Math.min(255, parseInt(hex.substring(0,2), 16) + amt);
+    var g = Math.min(255, parseInt(hex.substring(2,4), 16) + amt);
+    var b = Math.min(255, parseInt(hex.substring(4,6), 16) + amt);
+    return "#" + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "timezone": "America/New_York",
+  "dimensions": [
+    "pickup_month",
+    "borough"
+  ],
+  "metrics": {
+    "trip_count": {
+      "type": "count",
+      "column": "lpep_pickup_datetime"
+    },
+    "total_revenue": {
+      "type": "sum",
+      "column": "total_amount"
+    },
+    "cbd_fee_revenue": {
+      "type": "sum",
+      "column": "cbd_congestion_fee",
+      "default_if_missing": 0.0
+    }
+  },
+  "datetime_columns": [
+    "lpep_pickup_datetime"
+  ]
+}

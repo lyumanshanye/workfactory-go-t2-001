@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>线下设备借用自助终端</title>
+<style>
+/* ===== 基础重置与高对比 ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 18px; }
+body {
+  font-family: -apple-system, "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: #f0f4f8;
+  color: #1a202c;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 50px;
+}
+
+/* ===== 跳转链接 ===== */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 12px 24px;
+  background: #2b6cb0;
+  color: #fff;
+  z-index: 9999;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 0 0 8px 0;
+}
+.skip-link:focus {
+  left: 0;
+  outline: 4px solid #fbd38d;
+  outline-offset: 2px;
+}
+
+/* ===== 顶部栏 ===== */
+.top-bar {
+  background: #2b6cb0;
+  color: #fff;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.top-bar h1 { font-size: 1.5rem; font-weight: 700; }
+.help-btn {
+  background: #ed8936;
+  color: #1a202c;
+  border: 3px solid #fff;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  min-width: 140px;
+  min-height: 56px;
+  padding: 12px 24px;
+  cursor: pointer;
+  order: 2;
+}
+.help-btn:hover, .help-btn:focus {
+  background: #dd6b20;
+  outline: 4px solid #fbd38d;
+  outline-offset: 2px;
+}
+
+/* ===== 步骤指示器 ===== */
+.step-indicator {
+  background: #fff;
+  padding: 16px 32px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid #e2e8f0;
+  flex-shrink: 0;
+}
+.step-dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  background: #e2e8f0;
+  color: #718096;
+  border: 3px solid transparent;
+  transition: all 0.2s;
+}
+.step-dot.active {
+  background: #2b6cb0;
+  color: #fff;
+  border-color: #2b6cb0;
+}
+.step-dot.completed {
+  background: #38a169;
+  color: #fff;
+}
+.step-connector {
+  width: 40px;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+}
+.step-connector.completed { background: #38a169; }
+
+/* ===== 主内容区 ===== */
+.main-content {
+  flex: 1;
+  padding: 32px;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ===== 步骤面板 ===== */
+.step-panel {
+  display: none;
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  animation: fadeIn 0.3s ease;
+}
+.step-panel.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-panel h2 {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+  color: #2d3748;
+}
+.step-panel h2:focus {
+  outline: none;
+}
+.step-panel .step-desc {
+  color: #718096;
+  margin-bottom: 24px;
+  font-size: 1rem;
+}
+
+/* ===== 表单元素 ===== */
+fieldset {
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+legend {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2d3748;
+  padding: 0 12px;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+  color: #2d3748;
+}
+.form-hint {
+  display: block;
+  font-size: 0.9rem;
+  color: #718096;
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+input[type="text"],
+input[type="tel"],
+textarea,
+select,
+input[type="datetime-local"] {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 14px 16px;
+  border: 2px solid #cbd5e0;
+  border-radius: 10px;
+  background: #fff;
+  color: #1a202c;
+  min-height: 52px;
+  transition: border-color 0.2s;
+}
+input[type="text"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+select:focus,
+input[type="datetime-local"]:focus {
+  border-color: #2b6cb0;
+  outline: 3px solid #63b3ed;
+  outline-offset: 1px;
+}
+input[type="text"].error,
+input[type="tel"].error {
+  border-color: #e53e3e;
+}
+
+textarea { min-height: 120px; resize: vertical; }
+
+/* ===== 按钮 ===== */
+.btn {
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  min-height: 56px;
+  min-width: 140px;
+  padding: 14px 32px;
+  transition: all 0.2s;
+}
+.btn:focus {
+  outline: 4px solid #63b3ed;
+  outline-offset: 2px;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: #2b6cb0;
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) { background: #2c5282; }
+.btn-secondary {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+.btn-secondary:hover:not(:disabled) { background: #cbd5e0; }
+
+.btn-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+/* ===== 认证选项卡 ===== */
+.auth-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.auth-tab {
+  flex: 1;
+  min-height: 64px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: 3px solid #cbd5e0;
+  border-radius: 12px;
+  background: #f7fafc;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 16px;
+}
+.auth-tab:hover { border-color: #2b6cb0; }
+.auth-tab:focus {
+  outline: 4px solid #63b3ed;
+  outline-offset: 2px;
+}
+.auth-tab.active {
+  border-color: #2b6cb0;
+  background: #ebf8ff;
+  color: #2b6cb0;
+}
+
+.auth-panel { display: none; }
+.auth-panel.active { display: block; }
+
+/* ===== 设备卡片 ===== */
+.device-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.device-card {
+  border: 3px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 80px;
+}
+.device-card:hover:not(.unavailable) {
+  border-color: #2b6cb0;
+  background: #ebf8ff;
+}
+.device-card:focus:not(.unavailable) {
+  outline: 4px solid #63b3ed;
+  outline-offset: 2px;
+}
+.device-card.selected {
+  border-color: #2b6cb0;
+  background: #ebf8ff;
+  box-shadow: 0 0 0 2px #2b6cb0;
+}
+.device-card.unavailable {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f7fafc;
+}
+.device-icon {
+  width: 56px;
+  height: 56px;
+  background: #edf2f7;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+.device-info { flex: 1; }
+.device-name { font-size: 1.2rem; font-weight: 700; color: #2d3748; }
+.device-stock {
+  font-size: 0.95rem;
+  color: #38a169;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.device-stock.low { color: #dd6b20; }
+.device-stock.out { color: #e53e3e; }
+
+/* ===== 确认摘要 ===== */
+.summary-list {
+  list-style: none;
+  padding: 0;
+}
+.summary-list li {
+  padding: 16px 0;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.05rem;
+  gap: 16px;
+}
+.summary-list li:last-child { border-bottom: none; }
+.summary-label { font-weight: 600; color: #718096; flex-shrink: 0; }
+.summary-value { color: #2d3748; font-weight: 700; text-align: right; }
+
+/* ===== 错误/成功提示 ===== */
+.alert {
+  padding: 16px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  display: none;
+}
+.alert.show { display: block; }
+.alert-error {
+  background: #fff5f5;
+  color: #c53030;
+  border: 2px solid #feb2b2;
+}
+.alert-success {
+  background: #f0fff4;
+  color: #276749;
+  border: 2px solid #9ae6b4;
+}
+
+/* ===== 模态框 ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show {
+  display: flex;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 8px;
+  width: 48px;
+  height: 48px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close:focus {
+  outline: 4px solid #63b3ed;
+  outline-offset: 2px;
+}
+.modal-content h2 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  padding-right: 60px;
+}
+.modal-content p {
+  margin-bottom: 12px;
+  line-height: 1.7;
+}
+.modal-content a {
+  color: #2b6cb0;
+  font-weight: 600;
+}
+
+/* ===== 成功完成页 ===== */
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: #38a169;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #fff;
+  margin: 0 auto 24px;
+}
+
+/* ===== 底部状态栏 ===== */
+.status-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #2d3748;
+  color: #fff;
+  padding: 10px 32px;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  z-index: 500;
+}
+</style>
+</head>
+<body>
+
+<!-- 跳转链接 -->
+<a href="#main-content" class="skip-link">跳转到主要内容</a>
+
+<!-- 顶部栏：标题 + 帮助按钮 (3.2.6) -->
+<header class="top-bar">
+  <h1>📱 设备借用终端</h1>
+  <button class="help-btn" id="helpBtn" aria-label="获取帮助" aria-haspopup="dialog">
+    💡 获取帮助
+  </button>
+</header>
+
+<!-- 步骤指示器 -->
+<nav class="step-indicator" aria-label="借用流程步骤">
+  <div class="step-dot active" id="dot-1" aria-current="step">1</div>
+  <div class="step-connector" id="conn-1"></div>
+  <div class="step-dot" id="dot-2">2</div>
+  <div class="step-connector" id="conn-2"></div>
+  <div class="step-dot" id="dot-3">3</div>
+  <div class="step-connector" id="conn-3"></div>
+  <div class="step-dot" id="dot-4">4</div>
+</nav>
+
+<!-- 主内容区 -->
+<main class="main-content" id="main-content">
+
+  <!-- ═══════ 步骤 1: 身份验证 ═══════ -->
+  <section class="step-panel active" id="step-1" aria-labelledby="step1-title">
+    <h2 id="step1-title" tabindex="-1">第 1 步：身份验证</h2>
+    <p class="step-desc">请选择您的身份类型。无需记忆密码。</p>
+
+    <fieldset>
+      <legend>选择身份类型</legend>
+      <div class="auth-tabs" role="tablist" aria-label="身份类型选择">
+        <button class="auth-tab active" role="tab" id="tab-employee" aria-selected="true" aria-controls="panel-employee">
+          🪪 员工刷卡
+        </button>
+        <button class="auth-tab" role="tab" id="tab-visitor" aria-selected="false" aria-controls="panel-visitor">
+          📞 访客验证
+        </button>
+      </div>
+    </fieldset>
+
+    <!-- 员工刷卡面板 -->
+    <div class="auth-panel active" id="panel-employee" role="region" aria-labelledby="tab-employee">
+      <fieldset>
+        <legend>员工身份验证</legend>
+        <p class="form-hint" id="nfc-hint">请将员工卡靠近读卡区域，或点击下方按钮模拟刷卡。</p>
+        <div class="form-group">
+          <label for="emp-name">姓名（刷卡后自动填入，可修改）</label>
+          <input type="text" id="emp-name" aria-describedby="nfc-hint" placeholder="刷卡后自动填入姓名">
+        </div>
+        <div class="form-group">
+          <label for="emp-id">工号</label>
+          <input type="text" id="emp-id" placeholder="刷卡后自动填入工号">
+        </div>
+        <button class="btn btn-primary" id="btn-nfc-tap">
+          📡 模拟刷员工卡
+        </button>
+      </fieldset>
+    </div>
+
+    <!-- 访客验证面板 -->
+    <div class="auth-panel" id="panel-visitor" role="region" aria-labelledby="tab-visitor">
+      <fieldset>
+        <legend>访客身份验证</legend>
+        <div id="visitor-error" class="alert alert-error" role="alert" aria-live="assertive"></div>
+        <div class="form-group">
+          <label for="visitor-phone">手机号码</label>
+          <span class="form-hint" id="phone-hint">请输入 11 位中国大陆手机号</span>
+          <input type="tel" id="visitor-phone" aria-describedby="phone-hint" placeholder="例如：13800138000" autocomplete="tel">
+        </div>
+        <div class="form-group">
+          <label for="visitor-code">短信验证码</label>
+          <span class="form-hint" id="code-hint">请输入 6 位纯数字验证码（模拟：输入任意 6 位数字即可）</span>
+          <input type="text" id="visitor-code" aria-describedby="code-hint" placeholder="6 位数字" inputmode="numeric" maxlength="6" autocomplete="one-time-code">
+        </div>
+        <button class="btn btn-primary" id="btn-verify-visitor">
+          ✅ 验证身份
+        </button>
+      </fieldset>
+    </div>
+
+    <div id="auth-status" class="alert" role="status" aria-live="polite"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btn-to-step2" disabled aria-disabled="true">
+        下一步：选择设备 →
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══════ 步骤 2: 选择设备 ═══════ -->
+  <section class="step-panel" id="step-2" aria-labelledby="step2-title">
+    <h2 id="step2-title" tabindex="-1">第 2 步：选择设备</h2>
+    <p class="step-desc">请选择需要借用的设备。库存为 0 的设备将显示为不可选。</p>
+
+    <fieldset>
+      <legend>可用设备列表</legend>
+      <div class="device-grid" role="radiogroup" aria-label="设备选择">
+        <div class="device-card" tabindex="0" role="radio" aria-checked="false" data-device="ipad-pro" aria-label="iPad Pro，库存 2 台">
+          <div class="device-icon" aria-hidden="true">📱</div>
+          <div class="device-info">
+            <div class="device-name">iPad Pro 12.9"</div>
+            <div class="device-stock" id="stock-ipad-pro">库存：2 台</div>
+          </div>
+        </div>
+        <div class="device-card" tabindex="0" role="radio" aria-checked="false" data-device="vr-headset" aria-label="VR 头显，库存 2 台">
+          <div class="device-icon" aria-hidden="true">🥽</div>
+          <div class="device-info">
+            <div class="device-name">VR 头显 (Meta Quest 3)</div>
+            <div class="device-stock" id="stock-vr-headset">库存：2 台</div>
+          </div>
+        </div>
+        <div class="device-card" tabindex="0" role="radio" aria-checked="false" data-device="camera" aria-label="微单相机，库存 2 台">
+          <div class="device-icon" aria-hidden="true">📷</div>
+          <div class="device-info">
+            <div class="device-name">微单相机 (Sony A7IV)</div>
+            <div class="device-stock" id="stock-camera">库存：2 台</div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btn-back-step1">← 上一步</button>
+      <button class="btn btn-primary" id="btn-to-step3" disabled aria-disabled="true">
+        下一步：填写详情 →
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══════ 步骤 3: 借用详情 ═══════ -->
+  <section class="step-panel" id="step-3" aria-labelledby="step3-title">
+    <h2 id="step3-title" tabindex="-1">第 3 步：填写借用详情</h2>
+    <p class="step-desc">请填写借用用途和预计归还时间。您的联系信息已自动填入，无需重复输入。</p>
+
+    <div id="step3-error" class="alert alert-error" role="alert" aria-live="assertive"></div>
+
+    <fieldset>
+      <legend>借用信息</legend>
+      <div class="form-group">
+        <label for="borrow-name">借用人姓名（已自动填入，可修改）</label>
+        <span class="form-hint" id="name-hint">此信息从身份验证步骤自动获取，如有误可手动修改</span>
+        <input type="text" id="borrow-name" aria-describedby="name-hint">
+      </div>
+      <div class="form-group">
+        <label for="borrow-contact">联系方式（已自动填入，可修改）</label>
+        <span class="form-hint" id="contact-hint">员工显示工号，访客显示手机号</span>
+        <input type="text" id="borrow-contact" aria-describedby="contact-hint">
+      </div>
+      <div class="form-group">
+        <label for="borrow-purpose">借用用途</label>
+        <span class="form-hint" id="purpose-hint">请简要说明设备用途，例如：项目演示、用户体验测试等</span>
+        <textarea id="borrow-purpose" aria-describedby="purpose-hint" placeholder="请简要描述借用用途..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="borrow-return">预计归还时间</label>
+        <span class="form-hint" id="return-hint">请选择预计归还的日期和时间</span>
+        <input type="datetime-local" id="borrow-return" aria-describedby="return-hint">
+      </div>
+    </fieldset>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btn-back-step2">← 上一步</button>
+      <button class="btn btn-primary" id="btn-to-step4">
+        下一步：确认借用 →
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══════ 步骤 4: 确认借用 ═══════ -->
+  <section class="step-panel" id="step-4" aria-labelledby="step4-title">
+    <h2 id="step4-title" tabindex="-1">第 4 步：确认借用</h2>
+    <p class="step-desc">请核对以下信息，确认无误后提交借用申请。</p>
+
+    <fieldset>
+      <legend>借用信息确认</legend>
+      <dl class="summary-list" id="summary-list" style="margin:0;padding:0;">
+        <div style="padding:16px 0;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:16px;">
+          <dt style="font-weight:600;color:#718096;">借用人</dt>
+          <dd style="font-weight:700;color:#2d3748;margin:0;" id="sum-name">—</dd>
+        </div>
+        <div style="padding:16px 0;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:16px;">
+          <dt style="font-weight:600;color:#718096;">联系方式</dt>
+          <dd style="font-weight:700;color:#2d3748;margin:0;" id="sum-contact">—</dd>
+        </div>
+        <div style="padding:16px 0;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:16px;">
+          <dt style="font-weight:600;color:#718096;">身份类型</dt>
+          <dd style="font-weight:700;color:#2d3748;margin:0;" id="sum-identity">—</dd>
+        </div>
+        <div style="padding:16px 0;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:16px;">
+          <dt style="font-weight:600;color:#718096;">借用设备</dt>
+          <dd style="font-weight:700;color:#2d3748;margin:0;" id="sum-device">—</dd>
+        </div>
+        <div style="padding:16px 0;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:16px;">
+          <dt style="font-weight:600;color:#718096;">借用用途</dt>
+          <dd style="font-weight:700;color:#2d3748;margin:0;" id="sum-purpose">—</dd>
+        </div>
+        <div style="padding:16px 0;display:flex;justify-content:space-between;gap:16px;">
+          <dt style="font-weight:600;color:#718096;">预计归还时间</dt>
+          <dd style="font-weight:700;color:#2d3748;margin:0;" id="sum-return">—</dd>
+        </div>
+      </dl>
+    </fieldset>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btn-back-step3">← 上一步</button>
+      <button class="btn btn-primary" id="btn-confirm">
+        ✅ 确认借用
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══════ 完成页 ═══════ -->
+  <section class="step-panel" id="step-done" aria-labelledby="done-title">
+    <div class="success-icon" aria-hidden="true">✓</div>
+    <h2 id="done-title" tabindex="-1" style="text-align:center;">借用成功！</h2>
+    <p class="step-desc" style="text-align:center;">设备已登记借出，请按时归还。</p>
+    <div style="text-align:center; margin-top: 24px;">
+      <button class="btn btn-primary" id="btn-restart">
+        🔄 开始新的借用
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════ 帮助模态框 ═══════ -->
+<div class="modal-overlay" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+  <div class="modal-content">
+    <button class="modal-close" id="helpClose" aria-label="关闭帮助窗口">✕</button>
+    <h2 id="help-modal-title">💡 获取帮助</h2>
+    <p><strong>终端管理员联系方式：</strong></p>
+    <p>📞 电话：010-1234-5678（工作日 9:00-18:00）</p>
+    <p>📧 邮箱：kiosk-support@campus.example.com</p>
+    <p>📍 位置：大堂东侧 IT 服务台（A 栋 1 楼）</p>
+    <hr style="margin: 20px 0; border: none; border-top: 1px solid #e2e8f0;">
+    <p><strong>操作指引：</strong></p>
+    <p>1️⃣ <strong>员工借用</strong>：点击"员工刷卡"选项卡，将工牌靠近读卡区或点击"模拟刷员工卡"按钮。</p>
+    <p>2️⃣ <strong>访客借用</strong>：点击"访客验证"选项卡，输入手机号和 6 位短信验证码。</p>
+    <p>3️⃣ <strong>选择设备</strong>：从列表中选择需要借用的设备（灰色卡片表示已借完）。</p>
+    <p>4️⃣ <strong>填写详情</strong>：填写借用用途和预计归还时间。</p>
+    <p>5️⃣ <strong>确认提交</strong>：核对信息后点击"确认借用"。</p>
+    <hr style="margin: 20px 0; border: none; border-top: 1px solid #e2e8f0;">
+    <p><strong>常见问题：</strong></p>
+    <p>• 刷卡无反应？请确认工牌已贴近读卡区，或联系管理员。</p>
+    <p>• 验证码收不到？请检查手机号是否正确，或联系管理员手动验证。</p>
+    <p>• 设备故障？请在归还时告知管理员，借用期间请及时反馈。</p>
+  </div>
+</div>
+
+<!-- 底部状态栏 -->
+<div class="status-bar" role="status" aria-live="polite">
+  <span id="status-text">离线模式 · 所有数据仅存储在本终端</span>
+  <span id="status-time"></span>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ─── 设备库存状态 ───
+  var inventory = {
+    'ipad-pro':   { name: 'iPad Pro 12.9"',         stock: 2 },
+    'vr-headset': { name: 'VR 头显 (Meta Quest 3)', stock: 2 },
+    'camera':     { name: '微单相机 (Sony A7IV)',    stock: 2 }
+  };
+
+  // ─── 用户状态 ───
+  var userState = {
+    authenticated: false,
+    identityType: null,
+    name: '',
+    contact: '',
+    selectedDevice: null,
+    purpose: '',
+    returnTime: ''
+  };
+
+  // ─── 从 localStorage 恢复库存 ───
+  try {
+    var saved = localStorage.getItem('kiosk_inventory');
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      for (var key in parsed) {
+        if (inventory[key]) {
+          inventory[key].stock = parsed[key].stock;
+        }
+      }
+    }
+  } catch(e) {}
+
+  function saveInventory() {
+    try { localStorage.setItem('kiosk_inventory', JSON.stringify(inventory)); } catch(e) {}
+  }
+
+  // ─── DOM ───
+  var $ = function(id) { return document.getElementById(id); };
+  var currentStep = 1;
+
+  // ─── 步骤导航 ───
+  function goToStep(step) {
+    var panels = document.querySelectorAll('.step-panel');
+    for (var i = 0; i < panels.length; i++) {
+      panels[i].classList.remove('active');
+    }
+    var targetId = step === 5 ? 'step-done' : 'step-' + step;
+    $(targetId).classList.add('active');
+    currentStep = step;
+
+    for (var s = 1; s <= 4; s++) {
+      var dot = $('dot-' + s);
+      dot.classList.remove('active', 'completed');
+      dot.removeAttribute('aria-current');
+      if (s < step) dot.classList.add('completed');
+      else if (s === step) { dot.classList.add('active'); dot.setAttribute('aria-current', 'step'); }
+      if (s < 4) {
+        var conn = $('conn-' + s);
+        conn.classList.toggle('completed', s < step);
+      }
+    }
+
+    document.querySelector('.step-indicator').style.display = (step === 5) ? 'none' : 'flex';
+
+    var title = $(targetId).querySelector('h2');
+    if (title) title.focus();
+  }
+
+  // ─── 身份验证选项卡 ───
+  var tabs = document.querySelectorAll('.auth-tab');
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].addEventListener('click', function() {
+      var tabName = this.id === 'tab-employee' ? 'employee' : 'visitor';
+      for (var j = 0; j < tabs.length; j++) {
+        tabs[j].classList.remove('active');
+        tabs[j].setAttribute('aria-selected', 'false');
+      }
+      this.classList.add('active');
+      this.setAttribute('aria-selected', 'true');
+      var panels = document.querySelectorAll('.auth-panel');
+      for (var k = 0; k < panels.length; k++) panels[k].classList.remove('active');
+      $('panel-' + tabName).classList.add('active');
+      hideAlert('visitor-error');
+    });
+  }
+
+  // ─── 员工刷卡 ───
+  $('btn-nfc-tap').addEventListener('click', function() {
+    var mockNames = ['张明', '李华', '王芳', '陈伟', '刘洋'];
+    var mockIds = ['EMP-2024001', 'EMP-2024002', 'EMP-2024003', 'EMP-2024004', 'EMP-2024005'];
+    var idx = Math.floor(Math.random() * mockNames.length);
+    $('emp-name').value = mockNames[idx];
+    $('emp-id').value = mockIds[idx];
+    userState.authenticated = true;
+    userState.identityType = 'employee';
+    userState.name = mockNames[idx];
+    userState.contact = mockIds[idx];
+    showAlert('auth-status', 'success', '✅ 刷卡成功！欢迎您，' + mockNames[idx] + '。');
+    enableBtn('btn-to-step2');
+  });
+
+  // ─── 访客验证 ───
+  $('btn-verify-visitor').addEventListener('click', function() {
+    var phone = $('visitor-phone').value.trim();
+    var code = $('visitor-code').value.trim();
+
+    if (!phone || phone.length < 5) {
+      showAlert('visitor-error', 'error', '❌ 请输入有效的手机号码。');
+      $('visitor-phone').classList.add('error');
+      $('visitor-phone').focus();
+      return;
+    }
+    $('visitor-phone').classList.remove('error');
+
+    if (!/^\d{6}$/.test(code)) {
+      var msg = '❌ 验证码输入有误。';
+      if (code.length !== 6) {
+        msg += '请输入完整的 6 位数字验证码（当前输入了 ' + code.length + ' 位）。';
+      } else {
+        msg += '验证码必须为纯数字，请检查后重新输入。';
+      }
+      msg += ' 您的手机号已保留，无需重新输入。';
+      showAlert('visitor-error', 'error', msg);
+      $('visitor-code').classList.add('error');
+      $('visitor-code').focus();
+      return;
+    }
+
+    $('visitor-code').classList.remove('error');
+    hideAlert('visitor-error');
+    userState.authenticated = true;
+    userState.identityType = 'visitor';
+    userState.name = '访客';
+    userState.contact = phone;
+    showAlert('auth-status', 'success', '✅ 验证成功！手机号 ' + phone.substring(0,3) + '****' + phone.substring(7) + ' 已确认。');
+    enableBtn('btn-to-step2');
+  });
+
+  // ─── 步骤导航按钮 ───
+  $('btn-to-step2').addEventListener('click', function() {
+    if (!userState.authenticated) return;
+    updateDeviceUI();
+    goToStep(2);
+  });
+
+  $('btn-to-step3').addEventListener('click', function() {
+    if (!userState.selectedDevice) return;
+    $('borrow-name').value = userState.name;
+    $('borrow-contact').value = userState.contact;
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    $('borrow-return').min = now.toISOString().slice(0, 16);
+    goToStep(3);
+  });
+
+  $('btn-to-step4').addEventListener('click', function() {
+    var purpose = $('borrow-purpose').value.trim();
+    var returnTime = $('borrow-return').value;
+    if (!purpose) { showAlert('step3-error', 'error', '❌ 请填写借用用途。'); $('borrow-purpose').focus(); return; }
+    if (!returnTime) { showAlert('step3-error', 'error', '❌ 请选择预计归还时间。'); $('borrow-return').focus(); return; }
+    hideAlert('step3-error');
+    userState.name = $('borrow-name').value.trim();
+    userState.contact = $('borrow-contact').value.trim();
+    userState.purpose = purpose;
+    userState.returnTime = returnTime;
+    $('sum-name').textContent = userState.name;
+    $('sum-contact').textContent = userState.contact;
+    $('sum-identity').textContent = userState.identityType === 'employee' ? '员工（' + userState.contact + '）' : '访客（' + userState.contact + '）';
+    $('sum-device').textContent = inventory[userState.selectedDevice].name;
+    $('sum-purpose').textContent = userState.purpose;
+    var dt = new Date(returnTime);
+    $('sum-return').textContent = dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日 ' + String(dt.getHours()).padStart(2,'0') + ':' + String(dt.getMinutes()).padStart(2,'0');
+    goToStep(4);
+  });
+
+  $('btn-confirm').addEventListener('click', function() {
+    if (userState.selectedDevice && inventory[userState.selectedDevice].stock > 0) {
+      inventory[userState.selectedDevice].stock--;
+      saveInventory();
+    }
+    try {
+      var logs = JSON.parse(localStorage.getItem('kiosk_logs') || '[]');
+      logs.push({ time: new Date().toISOString(), user: userState.name, contact: userState.contact, device: userState.selectedDevice, purpose: userState.purpose, returnTime: userState.returnTime });
+      localStorage.setItem('kiosk_logs', JSON.stringify(logs));
+    } catch(e) {}
+    goToStep(5);
+  });
+
+  $('btn-back-step1').addEventListener('click', function() { goToStep(1); });
+  $('btn-back-step2').addEventListener('click', function() { goToStep(2); });
+  $('btn-back-step3').addEventListener('click', function() { goToStep(3); });
+
+  // ─── 重新开始 ───
+  $('btn-restart').addEventListener('click', function() {
+    userState = { authenticated: false, identityType: null, name: '', contact: '', selectedDevice: null, purpose: '', returnTime: '' };
+    $('emp-name').value = ''; $('emp-id').value = '';
+    $('visitor-phone').value = ''; $('visitor-code').value = '';
+    $('borrow-name').value = ''; $('borrow-contact').value = '';
+    $('borrow-purpose').value = ''; $('borrow-return').value = '';
+    hideAlert('auth-status'); hideAlert('visitor-error'); hideAlert('step3-error');
+    disableBtn('btn-to-step2'); disableBtn('btn-to-step3');
+    var cards = document.querySelectorAll('.device-card');
+    for (var i = 0; i < cards.length; i++) { cards[i].classList.remove('selected'); cards[i].setAttribute('aria-checked', 'false'); }
+    for (var j = 0; j < tabs.length; j++) { tabs[j].classList.remove('active'); tabs[j].setAttribute('aria-selected', 'false'); }
+    tabs[0].classList.add('active'); tabs[0].setAttribute('aria-selected', 'true');
+    var apanels = document.querySelectorAll('.auth-panel');
+    for (var k = 0; k < apanels.length; k++) apanels[k].classList.remove('active');
+    $('panel-employee').classList.add('active');
+    goToStep(1);
+  });
+
+  // ─── 设备选择 ───
+  function updateDeviceUI() {
+    var cards = document.querySelectorAll('.device-card');
+    for (var i = 0; i < cards.length; i++) {
+      var dk = cards[i].getAttribute('data-device');
+      var dev = inventory[dk];
+      var stEl = cards[i].querySelector('.device-stock');
+      if (dev.stock <= 0) {
+        cards[i].classList.add('unavailable');
+        cards[i].setAttribute('aria-disabled', 'true');
+        cards[i].setAttribute('tabindex', '-1');
+        cards[i].setAttribute('aria-label', dev.name + '，已借完');
+        stEl.textContent = '已借完';
+        stEl.className = 'device-stock out';
+      } else {
+        cards[i].classList.remove('unavailable');
+        cards[i].removeAttribute('aria-disabled');
+        cards[i].setAttribute('tabindex', '0');
+        cards[i].setAttribute('aria-label', dev.name + '，库存 ' + dev.stock + ' 台');
+        stEl.textContent = '库存：' + dev.stock + ' 台';
+        stEl.className = 'device-stock' + (dev.stock === 1 ? ' low' : '');
+      }
+    }
+  }
+
+  var deviceCards = document.querySelectorAll('.device-card');
+  for (var i = 0; i < deviceCards.length; i++) {
+    deviceCards[i].addEventListener('click', function() {
+      if (this.classList.contains('unavailable')) return;
+      selectDevice(this);
+    });
+    deviceCards[i].addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!this.classList.contains('unavailable')) selectDevice(this); }
+    });
+  }
+
+  function selectDevice(card) {
+    for (var i = 0; i < deviceCards.length; i++) {
+      deviceCards[i].classList.remove('selected');
+      deviceCards[i].setAttribute('aria-checked', 'false');
+    }
+    card.classList.add('selected');
+    card.setAttribute('aria-checked', 'true');
+    userState.selectedDevice = card.getAttribute('data-device');
+    enableBtn('btn-to-step3');
+  }
+
+  // ─── 帮助模态框（焦点陷阱） ───
+  var helpBtn = $('helpBtn');
+  var helpModal = $('helpModal');
+  var helpClose = $('helpClose');
+  var lastFocused = null;
+
+  function openHelp() {
+    lastFocused = document.activeElement;
+    helpModal.classList.add('show');
+    helpClose.focus();
+    document.addEventListener('keydown', trapFocus);
+    document.addEventListener('keydown', escClose);
+  }
+  function closeHelp() {
+    helpModal.classList.remove('show');
+    document.removeEventListener('keydown', trapFocus);
+    document.removeEventListener('keydown', escClose);
+    if (lastFocused) lastFocused.focus();
+  }
+  function trapFocus(e) {
+    if (e.key !== 'Tab') return;
+    var modal = helpModal.querySelector('.modal-content');
+    var focusable = modal.querySelectorAll('button, a[href], input, [tabindex]:not([tabindex="-1"])');
+    if (focusable.length === 0) return;
+    var first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }
+  function escClose(e) { if (e.key === 'Escape') closeHelp(); }
+
+  helpBtn.addEventListener('click', openHelp);
+  helpClose.addEventListener('click', closeHelp);
+  helpModal.addEventListener('click', function(e) { if (e.target === helpModal) closeHelp(); });
+
+  // ─── 工具函数 ───
+  function showAlert(id, type, msg) { var el = $(id); el.className = 'alert alert-' + type + ' show'; el.textContent = msg; }
+  function hideAlert(id) { var el = $(id); el.className = 'alert'; el.textContent = ''; }
+  function enableBtn(id) { var b = $(id); b.disabled = false; b.removeAttribute('aria-disabled'); }
+  function disableBtn(id) { var b = $(id); b.disabled = true; b.setAttribute('aria-disabled', 'true'); }
+
+  // ─── 底部时间 ───
+  function updateTime() {
+    var n = new Date();
+    $('status-time').textContent = n.getFullYear() + '-' + String(n.getMonth()+1).padStart(2,'0') + '-' + String(n.getDate()).padStart(2,'0') + ' ' + String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0') + ':' + String(n.getSeconds()).padStart(2,'0');
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
+
+  // ─── 初始化 ───
+  updateDeviceUI();
+})();
+</script>
+</body>
+</html>

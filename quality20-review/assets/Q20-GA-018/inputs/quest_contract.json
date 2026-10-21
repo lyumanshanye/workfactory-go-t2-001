@@ -1,0 +1,41 @@
+{
+  "states": {
+    "INIT": [
+      "ACCEPTED"
+    ],
+    "ACCEPTED": [
+      "IN_PROGRESS",
+      "FAILED"
+    ],
+    "IN_PROGRESS": [
+      "COMPLETED",
+      "FAILED"
+    ],
+    "COMPLETED": [],
+    "FAILED": [
+      "ACCEPTED"
+    ]
+  },
+  "transitions": {
+    "ACCEPT": {
+      "from": "INIT",
+      "to": "ACCEPTED"
+    },
+    "START": {
+      "from": "ACCEPTED",
+      "to": "IN_PROGRESS"
+    },
+    "SUBMIT": {
+      "from": "IN_PROGRESS",
+      "to": "COMPLETED"
+    },
+    "FAIL": {
+      "from": "ACCEPTED",
+      "to": "FAILED"
+    },
+    "RESTART": {
+      "from": "FAILED",
+      "to": "ACCEPTED"
+    }
+  }
+}

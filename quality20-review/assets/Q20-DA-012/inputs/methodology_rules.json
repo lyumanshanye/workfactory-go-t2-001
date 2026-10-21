@@ -1,0 +1,46 @@
+{
+  "rules": [
+    {
+      "id": "MR-01",
+      "topic": "现价与不变价定义",
+      "explanation": "CD (NY.GDP.MKTP.CD) 为现价美元，包含价格变动和汇率变动；KD (NY.GDP.MKTP.KD) 为2015年不变价美元，已剔除价格变动，仅反映实物量变化。",
+      "reference": "https://datahelpdesk.worldbank.org/knowledgebase/articles/114942-what-is-the-difference-between-current-and-constan",
+      "note": "作者归纳，非官方译文"
+    },
+    {
+      "id": "MR-02",
+      "topic": "禁止用CD计算实际增长率",
+      "explanation": "CD的同比变化同时包含实际产出变动和价格变动（及汇率变动），不能用于衡量实际经济增长。实际增长率必须使用KD或KD.ZG。",
+      "reference": "https://datahelpdesk.worldbank.org/knowledgebase/articles/114942-what-is-the-difference-between-current-and-constan",
+      "note": "作者归纳"
+    },
+    {
+      "id": "MR-03",
+      "topic": "禁止用CD/KD比率当作GDP平减指数",
+      "explanation": "CD和KD均为美元计价，其比率不等于国内GDP平减指数（后者应以本币计价计算）。直接用CD/KD比率解释为通胀是概念错误。",
+      "reference": "https://datahelpdesk.worldbank.org/knowledgebase/articles/114968-how-do-you-derive-your-constant-price-series-for-t",
+      "note": "作者归纳"
+    },
+    {
+      "id": "MR-04",
+      "topic": "lastupdated含义",
+      "explanation": "API返回的lastupdated字段是世界银行数据集整体更新时间，不是各国统计局实际首次发布该数据的日期。具体国家公布日期未提供。",
+      "reference": "S01 API metadata",
+      "note": "API事实"
+    },
+    {
+      "id": "MR-05",
+      "topic": "不提供历史vintage，禁止自行回填",
+      "explanation": "本数据产品仅提供同一次冻结的WDI快照，不提供历史版本对比。不得自行编造历史修订或用比例回填缺失年份。",
+      "reference": "https://datahelpdesk.worldbank.org/knowledgebase/articles/680284-why-do-countries-revise-their-national-accounts",
+      "note": "作者归纳"
+    },
+    {
+      "id": "MR-06",
+      "topic": "D0为无效污染稿",
+      "explanation": "D0是作者原创的污染数据稿，不是任何官方历史版本或WDI修订。不得将其视为有效数据或用于任何分析。",
+      "reference": "S03 口径与修订依据",
+      "note": "作者声明"
+    }
+  ]
+}

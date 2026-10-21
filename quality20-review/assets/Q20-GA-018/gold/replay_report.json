@@ -1,0 +1,61 @@
+{
+  "statistics": {
+    "total": 5,
+    "success": 3,
+    "duplicate": 1,
+    "violation": 1,
+    "parse_error": 0
+  },
+  "details": [
+    {
+      "event_id": "e1",
+      "logical_clock": 10,
+      "quest_id": "q1",
+      "event_type": "ACCEPT",
+      "status": "success",
+      "detail": "状态转移: INIT → ACCEPTED",
+      "state_before": "INIT",
+      "state_after": "ACCEPTED"
+    },
+    {
+      "event_id": "e3",
+      "logical_clock": 20,
+      "quest_id": "q1",
+      "event_type": "SUBMIT",
+      "status": "violation",
+      "detail": "状态不匹配: 当前=ACCEPTED, 需要=IN_PROGRESS (事件 SUBMIT)",
+      "state_before": "ACCEPTED",
+      "state_after": "ACCEPTED"
+    },
+    {
+      "event_id": "e2",
+      "logical_clock": 30,
+      "quest_id": "q1",
+      "event_type": "START",
+      "status": "success",
+      "detail": "状态转移: ACCEPTED → IN_PROGRESS",
+      "state_before": "ACCEPTED",
+      "state_after": "IN_PROGRESS"
+    },
+    {
+      "event_id": "e4",
+      "logical_clock": 40,
+      "quest_id": "q1",
+      "event_type": "START",
+      "status": "duplicate",
+      "detail": "指纹重复，跳过: 70043e85d35ef624...",
+      "state_before": "IN_PROGRESS",
+      "state_after": "IN_PROGRESS"
+    },
+    {
+      "event_id": "e5",
+      "logical_clock": 50,
+      "quest_id": "q1",
+      "event_type": "SUBMIT",
+      "status": "success",
+      "detail": "状态转移: IN_PROGRESS → COMPLETED",
+      "state_before": "IN_PROGRESS",
+      "state_after": "COMPLETED"
+    }
+  ]
+}

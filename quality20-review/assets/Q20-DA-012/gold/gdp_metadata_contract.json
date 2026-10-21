@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://internal.example.com/schemas/gdp-data-product/v1",
+  "title": "GDP数据产品元数据契约",
+  "description": "世界银行WDI GDP数据产品的标准JSON Schema契约，供下游系统自动化校验和解析使用。",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "数据产品的元信息头，包含数据来源、时间戳等追溯信息。",
+      "properties": {
+        "product_name": {
+          "type": "string",
+          "description": "数据产品名称。",
+          "const": "WDI GDP Data Product"
+        },
+        "data_source": {
+          "type": "string",
+          "description": "数据来源机构。",
+          "const": "World Bank - World Development Indicators"
+        },
+        "api_lastupdated": {
+          "type": "string",
+          "format": "date",
+          "description": "WDI API数据集的整体更新时间（lastupdated字段）。注意：此日期不是各国统计局实际首次发布数据的日期，而是世界银行数据集最后一次批量更新的日期。"
+        },
+        "retrieved_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "本次数据抓取的UTC时间戳。"
+        },
+        "schema_version": {
+          "type": "string",
+          "description": "本契约的版本号。",
+          "const": "1.0.0"
+        }
+      },
+      "required": [
+        "product_name",
+        "data_source",
+        "api_lastupdated",
+        "retrieved_at",
+        "schema_version"
+      ],
+      "additionalProperties": false
+    },
+    "records": {
+      "type": "array",
+      "description": "GDP观测数据记录数组。采用宽表结构：每个国家每年一条记录，包含三个GDP指标数值。",
+      "items": {
+        "type": "object",
+        "properties": {
+          "country_iso3": {
+            "type": "string",
+            "description": "国家标识符，采用ISO 3166-1 alpha-3标准（三位字母代码）。",
+            "enum": [
+              "USA",
+              "JPN",
+              "BRA",
+              "GBR",
+              "DEU",
+              "FRA",
+              "CHN",
+              "IND",
+              "CAN",
+              "AUS"
+            ]
+          },
+          "country_name": {
+            "type": "string",
+            "description": "国家英文名称。"
+          },
+          "year": {
+            "type": "string",
+            "description": "观测年份，格式为四位数YYYY字符串。",
+            "pattern": "^[0-9]{4}$"
+          },
+          "gdp_current_usd": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "GDP (current US$) — 指标代码NY.GDP.MKTP.CD。Gross domestic product measured at current prices in United States dollars. No adjustment has been made to account for price changes over time. The series reflects both real output changes and price/inflation changes as well as exchange rate movements. Unit: Current US$ (United States dollars, not adjusted for inflation). Source: World Bank WDI, based on country official statistics, OECD, and WB staff estimates."
+          },
+          "gdp_constant_2015_usd": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "GDP (constant 2015 US$) — 指标代码NY.GDP.MKTP.KD。Gross domestic product expressed in constant prices using 2015 as the reference/base year. The series has been adjusted to account for price changes over time, enabling cross-period volume comparisons. Unit: Constant 2015 US$ (United States dollars at 2015 prices). Source: World Bank WDI, based on country official statistics, OECD, and WB staff estimates."
+          },
+          "gdp_growth_annual_pct": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "GDP growth (annual %) — 指标代码NY.GDP.MKTP.KD.ZG。The percentage change over each previous year of the constant-price GDP series (base year 2015) in United States dollars. This is the official annual real GDP growth rate computed by World Bank from the constant-price series. Unit: Annual percent (%). Source: World Bank WDI, based on country official statistics, OECD, and WB staff estimates."
+          }
+        },
+        "required": [
+          "country_iso3",
+          "country_name",
+          "year",
+          "gdp_current_usd",
+          "gdp_constant_2015_usd",
+          "gdp_growth_annual_pct"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "metadata",
+    "records"
+  ],
+  "unevaluatedProperties": false
+}

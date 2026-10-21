@@ -1,0 +1,394 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "id": "identifiers",
+      "label": "所有员工、时段与窗口ID有效",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "id": "coverage",
+      "label": "6个时段×3个窗口完整覆盖且满足最低人数",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "id": "skills",
+      "label": "窗口技能白名单满足",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "id": "exactly_one_training",
+      "label": "10名员工各参加且仅参加1场培训",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "id": "capacity",
+      "label": "培训人数不超过真实容量",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "id": "training_time",
+      "label": "培训时段与教室匹配输入",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "id": "training_sessions",
+      "label": "三场培训各出现一次",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "id": "no_overlap",
+      "label": "同一员工同一时段不兼任",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "id": "daily_load",
+      "label": "每人每天至少1个、最多2个任务",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "id": "duplicates",
+      "label": "名单无重复员工",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "id": "counts",
+      "label": "冗余人数、容量字段与原数一致",
+      "passed": true,
+      "errors": []
+    }
+  ],
+  "controls": [
+    {
+      "kind": "equivalent_reordered",
+      "expected_pass": true,
+      "passed": true,
+      "checks": [
+        {
+          "id": "identifiers",
+          "label": "所有员工、时段与窗口ID有效",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "coverage",
+          "label": "6个时段×3个窗口完整覆盖且满足最低人数",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "skills",
+          "label": "窗口技能白名单满足",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "exactly_one_training",
+          "label": "10名员工各参加且仅参加1场培训",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "capacity",
+          "label": "培训人数不超过真实容量",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "training_time",
+          "label": "培训时段与教室匹配输入",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "training_sessions",
+          "label": "三场培训各出现一次",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "no_overlap",
+          "label": "同一员工同一时段不兼任",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "daily_load",
+          "label": "每人每天至少1个、最多2个任务",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "duplicates",
+          "label": "名单无重复员工",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "counts",
+          "label": "冗余人数、容量字段与原数一致",
+          "passed": true,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "kind": "wrong_window_skill",
+      "expected_pass": false,
+      "passed": false,
+      "checks": [
+        {
+          "id": "identifiers",
+          "label": "所有员工、时段与窗口ID有效",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "coverage",
+          "label": "6个时段×3个窗口完整覆盖且满足最低人数",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "skills",
+          "label": "窗口技能白名单满足",
+          "passed": false,
+          "errors": [
+            "('N1', 'C')"
+          ]
+        },
+        {
+          "id": "exactly_one_training",
+          "label": "10名员工各参加且仅参加1场培训",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "capacity",
+          "label": "培训人数不超过真实容量",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "training_time",
+          "label": "培训时段与教室匹配输入",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "training_sessions",
+          "label": "三场培训各出现一次",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "no_overlap",
+          "label": "同一员工同一时段不兼任",
+          "passed": false,
+          "errors": [
+            "('N1', 'D1_AM', ['window:C', 'window:I'])"
+          ]
+        },
+        {
+          "id": "daily_load",
+          "label": "每人每天至少1个、最多2个任务",
+          "passed": false,
+          "errors": [
+            "('N1', 1, 3)"
+          ]
+        },
+        {
+          "id": "duplicates",
+          "label": "名单无重复员工",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "counts",
+          "label": "冗余人数、容量字段与原数一致",
+          "passed": true,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "kind": "repeat_training",
+      "expected_pass": false,
+      "passed": false,
+      "checks": [
+        {
+          "id": "identifiers",
+          "label": "所有员工、时段与窗口ID有效",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "coverage",
+          "label": "6个时段×3个窗口完整覆盖且满足最低人数",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "skills",
+          "label": "窗口技能白名单满足",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "exactly_one_training",
+          "label": "10名员工各参加且仅参加1场培训",
+          "passed": false,
+          "errors": [
+            "('A1', 2)"
+          ]
+        },
+        {
+          "id": "capacity",
+          "label": "培训人数不超过真实容量",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "training_time",
+          "label": "培训时段与教室匹配输入",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "training_sessions",
+          "label": "三场培训各出现一次",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "no_overlap",
+          "label": "同一员工同一时段不兼任",
+          "passed": false,
+          "errors": [
+            "('A1', 'D2_PM', ['window:C', 'training:T2'])"
+          ]
+        },
+        {
+          "id": "daily_load",
+          "label": "每人每天至少1个、最多2个任务",
+          "passed": false,
+          "errors": [
+            "('A1', 2, 3)"
+          ]
+        },
+        {
+          "id": "duplicates",
+          "label": "名单无重复员工",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "counts",
+          "label": "冗余人数、容量字段与原数一致",
+          "passed": true,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "kind": "over_capacity",
+      "expected_pass": false,
+      "passed": false,
+      "checks": [
+        {
+          "id": "identifiers",
+          "label": "所有员工、时段与窗口ID有效",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "coverage",
+          "label": "6个时段×3个窗口完整覆盖且满足最低人数",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "skills",
+          "label": "窗口技能白名单满足",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "exactly_one_training",
+          "label": "10名员工各参加且仅参加1场培训",
+          "passed": false,
+          "errors": [
+            "('A5', 2)"
+          ]
+        },
+        {
+          "id": "capacity",
+          "label": "培训人数不超过真实容量",
+          "passed": false,
+          "errors": [
+            "T1"
+          ]
+        },
+        {
+          "id": "training_time",
+          "label": "培训时段与教室匹配输入",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "training_sessions",
+          "label": "三场培训各出现一次",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "no_overlap",
+          "label": "同一员工同一时段不兼任",
+          "passed": false,
+          "errors": [
+            "('A5', 'D1_PM', ['window:O', 'training:T1'])"
+          ]
+        },
+        {
+          "id": "daily_load",
+          "label": "每人每天至少1个、最多2个任务",
+          "passed": false,
+          "errors": [
+            "('A5', 1, 3)"
+          ]
+        },
+        {
+          "id": "duplicates",
+          "label": "名单无重复员工",
+          "passed": true,
+          "errors": []
+        },
+        {
+          "id": "counts",
+          "label": "冗余人数、容量字段与原数一致",
+          "passed": true,
+          "errors": []
+        }
+      ]
+    }
+  ],
+  "controls_pass": true,
+  "input_sha256": {
+    "window_requirements.json": "7a7b7d4482420ac49c7815c250776305c2ede44ec770cdd5286d76f8aaef1b48",
+    "time_slots.json": "fe7a7b141401e553c71943eb1662bf7d8b2f0f7c62bb63ad530e7008a9ac3df3",
+    "training_sessions.json": "92dddeefd89bd70d9a8dddde61fb60792abc099702bc37f6ab59b3c185219e1e",
+    "staff_roster.json": "88ef990329bb5f7ccb68ccc78c503c74c8ad1819bad96ff7fa3efd42a62ff5b3"
+  },
+  "gold_sha256": "ff3a482bab80447a867cd3a3b334f622f195b83b25d6ac89c9e199ba339761d7",
+  "scope": "独立编写的确定性业务约束复算；不是rubric总分、临床审核、专家验收或正式三模型评估。当前JSON格式用于核验已有Gold；其是否充分向solver公开另行审查。"
+}

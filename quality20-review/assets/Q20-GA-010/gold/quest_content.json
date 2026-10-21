@@ -1,0 +1,160 @@
+{
+  "quests": [
+    {
+      "quest_id": "Q001",
+      "display_name": "初醒之地",
+      "dependencies": [],
+      "unlock_conditions": {
+        "level": 1,
+        "required_items": []
+      },
+      "rewards": {
+        "experience": 100,
+        "currency": 50,
+        "loot": [
+          {
+            "item_id": "ITEM_IRON_SWORD",
+            "quantity": 1
+          },
+          {
+            "item_id": "ITEM_HEALTH_POTION",
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "quest_id": "Q002",
+      "display_name": "森林深处的低语",
+      "dependencies": [
+        "Q001"
+      ],
+      "unlock_conditions": {
+        "level": 3,
+        "required_items": [
+          "ITEM_IRON_SWORD"
+        ]
+      },
+      "rewards": {
+        "experience": 250,
+        "currency": 120,
+        "loot": [
+          {
+            "item_id": "ITEM_ELVEN_BOW",
+            "quantity": 1
+          },
+          {
+            "item_id": "ITEM_MANA_CRYSTAL",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "quest_id": "Q003",
+      "display_name": "矿洞危机",
+      "dependencies": [
+        "Q001"
+      ],
+      "unlock_conditions": {
+        "level": 5,
+        "required_items": [
+          "ITEM_IRON_SWORD",
+          "ITEM_HEALTH_POTION"
+        ]
+      },
+      "rewards": {
+        "experience": 400,
+        "currency": 200,
+        "loot": [
+          {
+            "item_id": "ITEM_MITHRIL_ORE",
+            "quantity": 5
+          },
+          {
+            "item_id": "ITEM_ANCIENT_MAP",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "quest_id": "Q004",
+      "display_name": "古塔之谜",
+      "dependencies": [
+        "Q002",
+        "Q003"
+      ],
+      "unlock_conditions": {
+        "level": 8,
+        "required_items": [
+          "ITEM_ANCIENT_MAP"
+        ]
+      },
+      "rewards": {
+        "experience": 800,
+        "currency": 500,
+        "loot": [
+          {
+            "item_id": "ITEM_TOWER_KEY",
+            "quantity": 1
+          },
+          {
+            "item_id": "ITEM_ENCHANTED_RING",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "quest_id": "Q005",
+      "display_name": "商队护送",
+      "dependencies": [
+        "Q001"
+      ],
+      "rewards": {
+        "experience": 150,
+        "currency": 300,
+        "loot": [
+          {
+            "item_id": "ITEM_TRADE_PERMIT",
+            "quantity": 1
+          },
+          {
+            "item_id": "ITEM_GOLD_COIN",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "quest_id": "Q006",
+      "display_name": "暗影集会",
+      "dependencies": [
+        "Q004",
+        "Q005"
+      ],
+      "unlock_conditions": {
+        "level": 12,
+        "required_items": [
+          "ITEM_TOWER_KEY",
+          "ITEM_TRADE_PERMIT"
+        ]
+      },
+      "rewards": {
+        "experience": 1500,
+        "currency": 800,
+        "loot": [
+          {
+            "item_id": "ITEM_SHADOW_CLOAK",
+            "quantity": 1
+          },
+          {
+            "item_id": "ITEM_LEGENDARY_GEM",
+            "quantity": 1
+          }
+        ]
+      }
+    }
+  ]
+}

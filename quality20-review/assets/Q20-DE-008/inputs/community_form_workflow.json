@@ -1,0 +1,114 @@
+{
+  "form_name": "星芒社区居家养老服务预约与信息采集表单",
+  "version": "0.3-draft",
+  "design_date": "2024-04-10",
+  "target_users": "60岁以上社区居民",
+  "steps": [
+    {
+      "step_id": 1,
+      "title": "身份验证",
+      "description": "用户输入密码进行身份认证",
+      "fields": [
+        {
+          "id": "password",
+          "label": "请输入密码",
+          "type": "password",
+          "requirements": "8位字符，须包含大小写字母、数字及特殊字符（!@#$）",
+          "auto_focus": true,
+          "submit_label": "登录"
+        }
+      ],
+      "session_rules": {
+        "idle_timeout_seconds": 300,
+        "action_on_timeout": "清空所有已输入数据并跳转至登录页",
+        "warning_before_timeout": "无"
+      },
+      "alternative_login": "无"
+    },
+    {
+      "step_id": 2,
+      "title": "基本信息",
+      "description": "采集老人的基本身份信息",
+      "fields": [
+        {
+          "id": "full_name",
+          "label": "姓名",
+          "type": "text",
+          "placeholder": "请输入姓名",
+          "required": true
+        },
+        {
+          "id": "id_card",
+          "label": "身份证号",
+          "type": "text",
+          "placeholder": "请输入18位身份证号",
+          "required": true
+        },
+        {
+          "id": "phone",
+          "label": "手机号",
+          "type": "tel",
+          "placeholder": "请输入手机号",
+          "required": true
+        }
+      ],
+      "validation": "提交时统一校验",
+      "error_display": "错误字段背景变红"
+    },
+    {
+      "step_id": 3,
+      "title": "服务选择",
+      "description": "选择并排序所需服务项目",
+      "fields": [
+        {
+          "id": "re_enter_name",
+          "label": "请再次输入姓名（身份确认）",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "re_enter_id",
+          "label": "请再次输入身份证号（身份确认）",
+          "type": "text",
+          "required": true
+        }
+      ],
+      "service_cards": {
+        "description": "以卡片形式展示可选服务（如助餐、助浴、助医、助洁等），用户通过长按并拖拽卡片来调整服务的优先级顺序",
+        "interaction": "long_press_drag",
+        "card_size": "280x160 CSS pixels",
+        "services": [
+          "助餐服务",
+          "助浴服务",
+          "助医服务",
+          "助洁服务",
+          "精神慰藉"
+        ]
+      }
+    },
+    {
+      "step_id": 4,
+      "title": "提交确认",
+      "description": "确认所有信息无误后提交",
+      "summary_view": "展示前序步骤填写的所有信息",
+      "submit_button": {
+        "type": "icon_only",
+        "icon": "check-circle",
+        "visual_size": "20x20 CSS pixels",
+        "shape": "circle",
+        "color": "--color-primary",
+        "label_visible_to_screen_reader": "无 aria-label 设置"
+      },
+      "focus_style": {
+        "type": "outline",
+        "width": "1px",
+        "style": "dashed",
+        "color": "--color-focus-outline",
+        "offset": "0px"
+      }
+    }
+  ],
+  "progress_indicator": "无",
+  "help_mechanism": "无统一帮助入口；仅在步骤2有一个文字链接'忘记密码？'",
+  "global_notes": "未进行无障碍审查；设计稿使用深色文字+浅色背景方案"
+}

@@ -1,0 +1,160 @@
+{
+  "quests": [
+    {
+      "id": "Q001",
+      "name": "初醒之地",
+      "prerequisites": [],
+      "conditions": {
+        "min_level": 1,
+        "has_item": []
+      },
+      "rewards": {
+        "exp": 100,
+        "gold": 50,
+        "items": [
+          {
+            "item_id": "ITEM_IRON_SWORD",
+            "count": 1
+          },
+          {
+            "item_id": "ITEM_HEALTH_POTION",
+            "count": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "Q002",
+      "name": "森林深处的低语",
+      "prerequisites": [
+        "Q001"
+      ],
+      "conditions": {
+        "min_level": 3,
+        "has_item": [
+          "ITEM_IRON_SWORD"
+        ]
+      },
+      "rewards": {
+        "exp": 250,
+        "gold": 120,
+        "items": [
+          {
+            "item_id": "ITEM_ELVEN_BOW",
+            "count": 1
+          },
+          {
+            "item_id": "ITEM_MANA_CRYSTAL",
+            "count": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "Q003",
+      "name": "矿洞危机",
+      "prerequisites": [
+        "Q001"
+      ],
+      "conditions": {
+        "min_level": 5,
+        "has_item": [
+          "ITEM_IRON_SWORD",
+          "ITEM_HEALTH_POTION"
+        ]
+      },
+      "rewards": {
+        "exp": 400,
+        "gold": 200,
+        "items": [
+          {
+            "item_id": "ITEM_MITHRIL_ORE",
+            "count": 5
+          },
+          {
+            "item_id": "ITEM_ANCIENT_MAP",
+            "count": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "Q004",
+      "name": "古塔之谜",
+      "prerequisites": [
+        "Q002",
+        "Q003"
+      ],
+      "conditions": {
+        "min_level": 8,
+        "has_item": [
+          "ITEM_ANCIENT_MAP"
+        ]
+      },
+      "rewards": {
+        "exp": 800,
+        "gold": 500,
+        "items": [
+          {
+            "item_id": "ITEM_TOWER_KEY",
+            "count": 1
+          },
+          {
+            "item_id": "ITEM_ENCHANTED_RING",
+            "count": -2
+          }
+        ]
+      }
+    },
+    {
+      "id": "Q005",
+      "name": "商队护送",
+      "prerequisites": [
+        "Q001"
+      ],
+      "rewards": {
+        "exp": 150,
+        "gold": 300,
+        "items": [
+          {
+            "item_id": "ITEM_TRADE_PERMIT",
+            "count": 1
+          },
+          {
+            "item_id": "ITEM_GOLD_COIN",
+            "count": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "Q006",
+      "name": "暗影集会",
+      "prerequisites": [
+        "Q004",
+        "Q005"
+      ],
+      "conditions": {
+        "min_level": 12,
+        "has_item": [
+          "ITEM_TOWER_KEY",
+          "ITEM_TRADE_PERMIT"
+        ]
+      },
+      "rewards": {
+        "exp": 1500,
+        "gold": 800,
+        "items": [
+          {
+            "item_id": "ITEM_SHADOW_CLOAK",
+            "count": 1
+          },
+          {
+            "item_id": "ITEM_LEGENDARY_GEM",
+            "count": 1
+          }
+        ]
+      }
+    }
+  ]
+}
