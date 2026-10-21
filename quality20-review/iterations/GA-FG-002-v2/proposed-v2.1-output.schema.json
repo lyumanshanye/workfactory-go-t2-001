@@ -1,0 +1,1860 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:workfactory:GA-FG-002:v2.1:plan",
+  "title": "下一版v2.1公开输出契约（尚未用于重新盲解）",
+  "type": "object",
+  "required": [
+    "currency",
+    "cases",
+    "budget_comparison",
+    "input_sha256"
+  ],
+  "properties": {
+    "currency": {
+      "const": "GBP"
+    },
+    "cases": {
+      "type": "object",
+      "required": [
+        "standard",
+        "reduced"
+      ],
+      "properties": {
+        "standard": {
+          "type": "object",
+          "required": [
+            "budget",
+            "feasible_count",
+            "best",
+            "alternatives",
+            "options"
+          ],
+          "properties": {
+            "budget": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "feasible_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "best": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "fleet",
+                    "capex",
+                    "base_net",
+                    "stress_net",
+                    "vehicles"
+                  ],
+                  "properties": {
+                    "fleet": {
+                      "type": "object",
+                      "description": "各路线的整数车辆数；可以省略0辆路线。只能使用输入路线ID。",
+                      "properties": {
+                        "C1": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "G1": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "G2": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "P1": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "P2": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "M1": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "capex": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "base_net": {
+                      "type": "integer"
+                    },
+                    "stress_net": {
+                      "type": "integer"
+                    },
+                    "vehicles": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "总车数，必须等于fleet所有车数之和；不是路线车数字典。"
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "alternatives": {
+              "type": "array",
+              "maxItems": 3,
+              "items": {
+                "type": "object",
+                "required": [
+                  "fleet",
+                  "capex",
+                  "base_net",
+                  "stress_net",
+                  "vehicles"
+                ],
+                "properties": {
+                  "fleet": {
+                    "type": "object",
+                    "description": "各路线的整数车辆数；可以省略0辆路线。只能使用输入路线ID。",
+                    "properties": {
+                      "C1": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "G1": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "G2": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "P1": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "P2": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "M1": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "capex": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "base_net": {
+                    "type": "integer"
+                  },
+                  "stress_net": {
+                    "type": "integer"
+                  },
+                  "vehicles": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "总车数，必须等于fleet所有车数之和；不是路线车数字典。"
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "options": {
+              "type": "object",
+              "required": [
+                "C1",
+                "G1",
+                "G2",
+                "P1",
+                "P2",
+                "M1"
+              ],
+              "properties": {
+                "C1": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "G1": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "G2": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "P1": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "P2": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "M1": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": true
+        },
+        "reduced": {
+          "type": "object",
+          "required": [
+            "budget",
+            "feasible_count",
+            "best",
+            "alternatives",
+            "options"
+          ],
+          "properties": {
+            "budget": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "feasible_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "best": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "fleet",
+                    "capex",
+                    "base_net",
+                    "stress_net",
+                    "vehicles"
+                  ],
+                  "properties": {
+                    "fleet": {
+                      "type": "object",
+                      "description": "各路线的整数车辆数；可以省略0辆路线。只能使用输入路线ID。",
+                      "properties": {
+                        "C1": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "G1": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "G2": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "P1": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "P2": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "M1": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "capex": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "base_net": {
+                      "type": "integer"
+                    },
+                    "stress_net": {
+                      "type": "integer"
+                    },
+                    "vehicles": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "总车数，必须等于fleet所有车数之和；不是路线车数字典。"
+                    }
+                  },
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "alternatives": {
+              "type": "array",
+              "maxItems": 3,
+              "items": {
+                "type": "object",
+                "required": [
+                  "fleet",
+                  "capex",
+                  "base_net",
+                  "stress_net",
+                  "vehicles"
+                ],
+                "properties": {
+                  "fleet": {
+                    "type": "object",
+                    "description": "各路线的整数车辆数；可以省略0辆路线。只能使用输入路线ID。",
+                    "properties": {
+                      "C1": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "G1": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "G2": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "P1": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "P2": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "M1": {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "capex": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "base_net": {
+                    "type": "integer"
+                  },
+                  "stress_net": {
+                    "type": "integer"
+                  },
+                  "vehicles": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "总车数，必须等于fleet所有车数之和；不是路线车数字典。"
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "options": {
+              "type": "object",
+              "required": [
+                "C1",
+                "G1",
+                "G2",
+                "P1",
+                "P2",
+                "M1"
+              ],
+              "properties": {
+                "C1": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "G1": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "G2": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "P1": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "P2": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                },
+                "M1": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "vehicles",
+                      "base",
+                      "stress"
+                    ],
+                    "properties": {
+                      "vehicles": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "base": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "stress": {
+                        "type": "object",
+                        "required": [
+                          "distance",
+                          "age_periods",
+                          "time_factor",
+                          "cycle_days",
+                          "available_trips",
+                          "demand",
+                          "delivered",
+                          "revenue",
+                          "capex",
+                          "annual_running",
+                          "first_year_net"
+                        ],
+                        "properties": {
+                          "distance": {
+                            "type": "integer"
+                          },
+                          "age_periods": {
+                            "type": "integer"
+                          },
+                          "time_factor": {
+                            "type": "integer"
+                          },
+                          "cycle_days": {
+                            "type": "integer"
+                          },
+                          "available_trips": {
+                            "type": "integer"
+                          },
+                          "demand": {
+                            "type": "integer"
+                          },
+                          "delivered": {
+                            "type": "integer"
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "capex": {
+                            "type": "integer"
+                          },
+                          "annual_running": {
+                            "type": "integer"
+                          },
+                          "first_year_net": {
+                            "type": "integer"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "budget_comparison": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "capex_saved",
+            "stress_net_forgone",
+            "stress_net_retained_fraction"
+          ],
+          "properties": {
+            "capex_saved": {
+              "type": "integer"
+            },
+            "stress_net_forgone": {
+              "type": "integer"
+            },
+            "stress_net_retained_fraction": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "input_sha256": {
+      "type": "object",
+      "required": [
+        "routes.json",
+        "cargo-rates.json",
+        "planning_policy.json"
+      ],
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$comment": "类型校验不能替代算术与约束验证；fleet求和、最优性和字段之间一致性由独立业务检查器检查。不得用此后补契约回判v2旧提交。"
+}

@@ -456,10 +456,32 @@
   &quot;evidence&quot;: &quot;Inspect actual deliverables and execution evidence; missing evidence is not fabricated approval.&quot;,
   &quot;negative_value_semantics&quot;: &quot;1 means prohibited event occurred; 0 means absent&quot;
 }</pre></details><pre>本轮未运行正式判官。先按根因标记错误：同一数值根错传播至最优/对照/跨文件时，不能机械累扣所有依赖项；B08/B09/B10须区分方法性错误与B02/B03传播错误。该去重仍须独立复核，尚未证明固定判分模板能正确执行。</pre>
-<h2 id="verification">哪些有证据，哪些还没有</h2><p>参考标准预算与原版结果一致；204项Office公式复算完成；5项本地回归测试完成；独立Decimal与递归枚举路径完成8组真实程序对照。</p><table><tr><th>真实对照执行</th><th>预期</th><th>实际</th></tr><tr><td>baseline</td><td>接受</td><td>接受</td></tr><tr><td>new_budgets</td><td>接受</td><td>接受</td></tr><tr><td>changed_demand</td><td>接受</td><td>接受</td></tr><tr><td>no_feasible_solution</td><td>接受</td><td>接受</td></tr><tr><td>equivalent_json_key_order</td><td>接受</td><td>接受</td></tr><tr><td>wrong_distance</td><td>拒绝</td><td>拒绝</td></tr><tr><td>missing_capex</td><td>拒绝</td><td>拒绝</td></tr><tr><td>late_annual_rounding</td><td>拒绝</td><td>拒绝</td></tr></table><h3>盲解状态快照</h3><pre>{
-  &quot;status&quot;: &quot;running&quot;,
+<h2 id="verification">哪些有证据，哪些还没有</h2><p>参考标准预算与原版结果一致；204项Office公式复算完成；6项本地回归测试完成；独立Decimal与递归枚举路径完成8组真实程序对照。</p><table><tr><th>真实对照执行</th><th>预期</th><th>实际</th></tr><tr><td>baseline</td><td>接受</td><td>接受</td></tr><tr><td>new_budgets</td><td>接受</td><td>接受</td></tr><tr><td>changed_demand</td><td>接受</td><td>接受</td></tr><tr><td>no_feasible_solution</td><td>接受</td><td>接受</td></tr><tr><td>equivalent_json_key_order</td><td>接受</td><td>接受</td></tr><tr><td>wrong_distance</td><td>拒绝</td><td>拒绝</td></tr><tr><td>missing_capex</td><td>拒绝</td><td>拒绝</td></tr><tr><td>late_annual_rounding</td><td>拒绝</td><td>拒绝</td></tr></table><h3>盲解实际发现：业务正确不等于接口完整</h3><div class="notice">Qwen已留下四份成果，但运行达到16步上限，状态为incomplete，不是自然完成。默认输入及两种新输入的推荐组合、收益、排名和可行数与独立计算一致；严格形状检查未过，原因是公开字段表没有定义vehicles的总量含义及options的容器结构。原严格失败回执保留，不把失败直接改成通过。</div><pre>{
+  &quot;business_core_pass&quot;: true,
+  &quot;cases&quot;: [
+    {
+      &quot;name&quot;: &quot;default&quot;,
+      &quot;business_decision_metrics_match&quot;: true
+    },
+    {
+      &quot;name&quot;: &quot;new_budgets&quot;,
+      &quot;business_decision_metrics_match&quot;: true
+    },
+    {
+      &quot;name&quot;: &quot;changed_demand&quot;,
+      &quot;business_decision_metrics_match&quot;: true
+    }
+  ],
+  &quot;submitted_business_metrics_match&quot;: true,
+  &quot;strict_reference_shape_pass&quot;: false,
+  &quot;interface_issue&quot;: &quot;vehicles在公开字段表中未声明类型和总车数含义；actor使用了与fleet相同的路线车数字典。options的容器结构也未明确，不能用参考实现的形状作为隐藏标准。&quot;,
+  &quot;actor_status&quot;: &quot;incomplete&quot;,
+  &quot;formal_accepted&quot;: false,
+  &quot;scope&quot;: &quot;诊断原回执，不修改候选提交、不重试模型、不更改原始严格检查记录；Office语义和正式评分仍未完成。&quot;
+}</pre><a class="button" download href="blind/model.py">Qwen实际提交 · model.py</a> <a class="button" download href="blind/handoff.docx">Qwen实际提交 · handoff.docx</a> <a class="button" download href="blind/plan.json">Qwen实际提交 · plan.json</a> <a class="button" download href="blind/planning.xlsx">Qwen实际提交 · planning.xlsx</a> <p><a download href="blind-business-review.json">业务与接口问题分开的诊断记录</a> · <a download href="blind-behavior.json">原严格失败回执</a> · <a download href="proposed-v2.1-output.schema.json">下一版公开Schema草案</a>（未倒用于旧盲解，尚未重测）</p><h3>盲解状态快照</h3><pre>{
+  &quot;status&quot;: &quot;incomplete&quot;,
   &quot;started_at&quot;: &quot;2026-10-21T09:47:52.677579+00:00&quot;,
-  &quot;finished_at&quot;: null,
+  &quot;finished_at&quot;: &quot;2026-10-21T09:56:51.300105+00:00&quot;,
   &quot;scope&quot;: &quot;只看公开题面与输入的独立Qwen上下文，不是三模型校准或正式评分。&quot;,
   &quot;errors&quot;: null
-}</pre><p>尚未完成：独立领域/来源/权利复核、正式Gold及错误/等价答案评分、指定三模型难度校准。参考程序复算不是被测模型解题。</p><p><a download href="reference-verification.json">参考复算回执</a> · <a download href="behavior-verification.json">行为对照回执</a> · <a download href="rubrics.json">评分草稿JSON</a></p></main><footer>静态快照，不是实时监控。生成UTC：2026-10-21T09:53:46.769056+00:00</footer></html>
+}</pre><p>尚未完成：独立领域/来源/权利复核、正式Gold及错误/等价答案评分、指定三模型难度校准。参考程序复算不是被测模型解题。</p><p><a download href="reference-verification.json">参考复算回执</a> · <a download href="behavior-verification.json">行为对照回执</a> · <a download href="rubrics.json">评分草稿JSON</a></p></main><footer>静态快照，不是实时监控。生成UTC：2026-10-21T10:03:10.933415+00:00</footer></html>
