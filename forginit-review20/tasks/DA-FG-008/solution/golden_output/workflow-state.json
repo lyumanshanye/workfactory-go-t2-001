@@ -1,0 +1,124 @@
+{
+  "receipts": {
+    "ingest": {
+      "configuration": "e40377c927ff5503221c269a2fd3ab61213bec81f75c89c71beb27d2e5b2e1d0",
+      "source_hashes": {
+        "GHCNd-product.html": "5a8ee43e9d13fb4130831ca8ef384c74efc41c928a4d406391f4ea25efaeaa4b",
+        "office_tools.py": "3c6249832774ade9a135645b37d7d4f5fc93cf39232f8c13a33a0a32714b71ce",
+        "readme.txt": "0e4e6f0e6947cf1add884c328a01760f31c56ef5fb86b85ed57dd5dc4c4aeaa6",
+        "station-daily.txt": "251dab181e134de8056c774635ebcfd5c0a75dee68bf52b2e96138f92536a011",
+        "stations.txt": "428eabc955883187935bce283766d5646e3ed7484b92eb0803874c0e8dd9b342",
+        "workflow.py": "767991183657cb64af6236e5e45f1b4936634c55f204aaeb3ccbc594e0a82778"
+      },
+      "artifacts": {
+        "daily.csv": "12240d6c5d7be7554436d91af0c7ba3ad2e2cee80b5ae0f3bd036d3bfd5cc181",
+        "analysis.py": "892e9a37eb0469d194914f4bc5b13d38ab967d2b180ca96fa2ac5a2efc405d3d"
+      },
+      "dependencies": {}
+    },
+    "quality": {
+      "configuration": "e40377c927ff5503221c269a2fd3ab61213bec81f75c89c71beb27d2e5b2e1d0",
+      "source_hashes": {
+        "GHCNd-product.html": "5a8ee43e9d13fb4130831ca8ef384c74efc41c928a4d406391f4ea25efaeaa4b",
+        "office_tools.py": "3c6249832774ade9a135645b37d7d4f5fc93cf39232f8c13a33a0a32714b71ce",
+        "readme.txt": "0e4e6f0e6947cf1add884c328a01760f31c56ef5fb86b85ed57dd5dc4c4aeaa6",
+        "station-daily.txt": "251dab181e134de8056c774635ebcfd5c0a75dee68bf52b2e96138f92536a011",
+        "stations.txt": "428eabc955883187935bce283766d5646e3ed7484b92eb0803874c0e8dd9b342",
+        "workflow.py": "767991183657cb64af6236e5e45f1b4936634c55f204aaeb3ccbc594e0a82778"
+      },
+      "artifacts": {
+        "quality.json": "3cd8f0ad6d5c167ab901076ac457202f43ae78aef8bd01896c3bcd4e8cd42465"
+      },
+      "dependencies": {
+        "ingest": "1cf3f9ae5f0f87caedc3e65dd544c69216500eb649e459282933cd301ba41f78"
+      }
+    },
+    "station": {
+      "configuration": "e40377c927ff5503221c269a2fd3ab61213bec81f75c89c71beb27d2e5b2e1d0",
+      "source_hashes": {
+        "GHCNd-product.html": "5a8ee43e9d13fb4130831ca8ef384c74efc41c928a4d406391f4ea25efaeaa4b",
+        "office_tools.py": "3c6249832774ade9a135645b37d7d4f5fc93cf39232f8c13a33a0a32714b71ce",
+        "readme.txt": "0e4e6f0e6947cf1add884c328a01760f31c56ef5fb86b85ed57dd5dc4c4aeaa6",
+        "station-daily.txt": "251dab181e134de8056c774635ebcfd5c0a75dee68bf52b2e96138f92536a011",
+        "stations.txt": "428eabc955883187935bce283766d5646e3ed7484b92eb0803874c0e8dd9b342",
+        "workflow.py": "767991183657cb64af6236e5e45f1b4936634c55f204aaeb3ccbc594e0a82778"
+      },
+      "artifacts": {
+        "station.json": "83898ab6541bfb1233a414e2fb71af1d423f273fbf5b4699fe118f0d65edb64f"
+      },
+      "dependencies": {
+        "ingest": "1cf3f9ae5f0f87caedc3e65dd544c69216500eb649e459282933cd301ba41f78"
+      }
+    },
+    "aggregate": {
+      "configuration": "e40377c927ff5503221c269a2fd3ab61213bec81f75c89c71beb27d2e5b2e1d0",
+      "source_hashes": {
+        "GHCNd-product.html": "5a8ee43e9d13fb4130831ca8ef384c74efc41c928a4d406391f4ea25efaeaa4b",
+        "office_tools.py": "3c6249832774ade9a135645b37d7d4f5fc93cf39232f8c13a33a0a32714b71ce",
+        "readme.txt": "0e4e6f0e6947cf1add884c328a01760f31c56ef5fb86b85ed57dd5dc4c4aeaa6",
+        "station-daily.txt": "251dab181e134de8056c774635ebcfd5c0a75dee68bf52b2e96138f92536a011",
+        "stations.txt": "428eabc955883187935bce283766d5646e3ed7484b92eb0803874c0e8dd9b342",
+        "workflow.py": "767991183657cb64af6236e5e45f1b4936634c55f204aaeb3ccbc594e0a82778"
+      },
+      "artifacts": {
+        "monthly.csv": "4a82f6ed100c599bbd637e394a64ccecbd01796b183dff04a4d15e6b5098bf55"
+      },
+      "dependencies": {
+        "quality": "b467775e6ec7bb26c9d1e3c910c96b6d23ae3a260b7485611fcce3b467b9d23a",
+        "station": "dd8f73b565829358140fc317e06dd368afad37f089b1e42bf929f7d1c2fe7503"
+      }
+    },
+    "finalize": {
+      "configuration": "e40377c927ff5503221c269a2fd3ab61213bec81f75c89c71beb27d2e5b2e1d0",
+      "source_hashes": {
+        "GHCNd-product.html": "5a8ee43e9d13fb4130831ca8ef384c74efc41c928a4d406391f4ea25efaeaa4b",
+        "office_tools.py": "3c6249832774ade9a135645b37d7d4f5fc93cf39232f8c13a33a0a32714b71ce",
+        "readme.txt": "0e4e6f0e6947cf1add884c328a01760f31c56ef5fb86b85ed57dd5dc4c4aeaa6",
+        "station-daily.txt": "251dab181e134de8056c774635ebcfd5c0a75dee68bf52b2e96138f92536a011",
+        "stations.txt": "428eabc955883187935bce283766d5646e3ed7484b92eb0803874c0e8dd9b342",
+        "workflow.py": "767991183657cb64af6236e5e45f1b4936634c55f204aaeb3ccbc594e0a82778"
+      },
+      "artifacts": {
+        "handoff.xlsx": "84855eeffcdadc4ecaaefe1aa21ea04866eb8c1f11d46fedc861dae48be0249c"
+      },
+      "dependencies": {
+        "aggregate": "fc04a41ee43ac12291f854af58660fdd1b835ebb3c705dea96f89791ed3146bf"
+      }
+    }
+  },
+  "events": [
+    {
+      "sequence": 1,
+      "stage": "ingest",
+      "receipt_sha256": "1cf3f9ae5f0f87caedc3e65dd544c69216500eb649e459282933cd301ba41f78"
+    },
+    {
+      "sequence": 2,
+      "stage": "quality",
+      "receipt_sha256": "b467775e6ec7bb26c9d1e3c910c96b6d23ae3a260b7485611fcce3b467b9d23a"
+    },
+    {
+      "sequence": 3,
+      "stage": "station",
+      "receipt_sha256": "dd8f73b565829358140fc317e06dd368afad37f089b1e42bf929f7d1c2fe7503"
+    },
+    {
+      "sequence": 4,
+      "stage": "aggregate",
+      "receipt_sha256": "fc04a41ee43ac12291f854af58660fdd1b835ebb3c705dea96f89791ed3146bf"
+    },
+    {
+      "sequence": 5,
+      "stage": "finalize",
+      "receipt_sha256": "13d44e673b2427d67ed0be927c05194b7bd49ec18b0a875cb070736a778cd3d1"
+    }
+  ],
+  "current": {
+    "ingest": true,
+    "quality": true,
+    "station": true,
+    "aggregate": true,
+    "finalize": true
+  },
+  "limitations": "Artifact/version dependency receipts only; not semantic correctness or unforgeable execution attestation. Native tool traces required for actual agent execution claims."
+}

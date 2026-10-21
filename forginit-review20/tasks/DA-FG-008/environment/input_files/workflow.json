@@ -1,0 +1,68 @@
+{
+  "policy": {
+    "version": "QC-2024.2",
+    "approved_at": "2026-10-20T16:00:00Z",
+    "station_id": "AG000060390",
+    "years": [
+      1989,
+      2024
+    ],
+    "elements": [
+      "TMAX",
+      "TMIN",
+      "PRCP",
+      "TAVG"
+    ],
+    "minimum_coverage": 0.9
+  },
+  "source_hashes": {
+    "GHCNd-product.html": "5a8ee43e9d13fb4130831ca8ef384c74efc41c928a4d406391f4ea25efaeaa4b",
+    "office_tools.py": "3c6249832774ade9a135645b37d7d4f5fc93cf39232f8c13a33a0a32714b71ce",
+    "readme.txt": "0e4e6f0e6947cf1add884c328a01760f31c56ef5fb86b85ed57dd5dc4c4aeaa6",
+    "station-daily.txt": "251dab181e134de8056c774635ebcfd5c0a75dee68bf52b2e96138f92536a011",
+    "stations.txt": "428eabc955883187935bce283766d5646e3ed7484b92eb0803874c0e8dd9b342",
+    "workflow.py": "767991183657cb64af6236e5e45f1b4936634c55f204aaeb3ccbc594e0a82778"
+  },
+  "stages": {
+    "ingest": {
+      "dependencies": [],
+      "artifacts": [
+        "daily.csv",
+        "analysis.py"
+      ]
+    },
+    "quality": {
+      "dependencies": [
+        "ingest"
+      ],
+      "artifacts": [
+        "quality.json"
+      ]
+    },
+    "station": {
+      "dependencies": [
+        "ingest"
+      ],
+      "artifacts": [
+        "station.json"
+      ]
+    },
+    "aggregate": {
+      "dependencies": [
+        "quality",
+        "station"
+      ],
+      "artifacts": [
+        "monthly.csv"
+      ]
+    },
+    "finalize": {
+      "dependencies": [
+        "aggregate"
+      ],
+      "artifacts": [
+        "handoff.xlsx"
+      ]
+    }
+  }
+}

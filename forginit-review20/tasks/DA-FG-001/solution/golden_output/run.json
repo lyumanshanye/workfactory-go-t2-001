@@ -1,0 +1,104 @@
+{
+  "cycle": "2017-2018",
+  "protocol": "BPX_J traditional measurements",
+  "weight": "WTMEC2YR",
+  "readings": [
+    "BPXSY1",
+    "BPXSY2",
+    "BPXSY3"
+  ],
+  "estimand": "crude mean systolic mmHg among adults aged20+ with >=1 positive reading in first3",
+  "variance": "Taylor linearization, with-replacement strata/PSU design; 95% t intervals",
+  "missing_policy": "no imputation or item-nonresponse adjustment; report observed-case domains",
+  "data_counts": {
+    "demographics": 9254,
+    "mec_positive_weight": 8704,
+    "strata": 15,
+    "nested_psus": 30
+  },
+  "source_sha256": {
+    "DEMO_J.xpt": "c0b46e0345ea19404928656277c8b0d10b0cca348a9b2fe4fc3c67e8b7ee73ec",
+    "BPX_J.xpt": "f98f1d9a4c18173e715c749b4294f6f1525140d5ad5751316bb17cc038fb3423"
+  },
+  "packages": {
+    "samplics": "0.6.1",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6",
+    "scipy": "1.18.1",
+    "pyreadstat": "1.3.6"
+  },
+  "rows": [
+    {
+      "domain": "all-20plus",
+      "n_observed": 4996,
+      "n_adult_domain": 5265,
+      "n_missing": 269,
+      "weight_sum": 228805534.77892902,
+      "mean_mmHg": 123.82887594892031,
+      "se_mmHg": 0.46869791661102583,
+      "lower95_mmHg": 122.82986998755493,
+      "upper95_mmHg": 124.8278819102857,
+      "design_df": 15
+    },
+    {
+      "domain": "male-20plus",
+      "n_observed": 2426,
+      "n_adult_domain": 2541,
+      "n_missing": 115,
+      "weight_sum": 110961638.67155176,
+      "mean_mmHg": 125.01609928752728,
+      "se_mmHg": 0.5332621350130633,
+      "lower95_mmHg": 123.87947795218945,
+      "upper95_mmHg": 126.15272062286512,
+      "design_df": 15
+    },
+    {
+      "domain": "female-20plus",
+      "n_observed": 2570,
+      "n_adult_domain": 2724,
+      "n_missing": 154,
+      "weight_sum": 117843896.10737726,
+      "mean_mmHg": 122.71098820528272,
+      "se_mmHg": 0.6284561317867521,
+      "lower95_mmHg": 121.3714656687816,
+      "upper95_mmHg": 124.05051074178384,
+      "design_df": 15
+    },
+    {
+      "domain": "age-20-39",
+      "n_observed": 1494,
+      "n_adult_domain": 1589,
+      "n_missing": 95,
+      "weight_sum": 81923558.65271893,
+      "mean_mmHg": 115.58597926235728,
+      "se_mmHg": 0.5195764442486501,
+      "lower95_mmHg": 114.47852828637994,
+      "upper95_mmHg": 116.69343023833463,
+      "design_df": 15
+    },
+    {
+      "domain": "age-40-59",
+      "n_observed": 1579,
+      "n_adult_domain": 1658,
+      "n_missing": 79,
+      "weight_sum": 79707202.06969199,
+      "mean_mmHg": 124.06392374200797,
+      "se_mmHg": 0.6576178482876547,
+      "lower95_mmHg": 122.66224447812326,
+      "upper95_mmHg": 125.46560300589269,
+      "design_df": 15
+    },
+    {
+      "domain": "age-60plus",
+      "n_observed": 1923,
+      "n_adult_domain": 2018,
+      "n_missing": 95,
+      "weight_sum": 67174774.0565181,
+      "mean_mmHg": 133.60267031520846,
+      "se_mmHg": 0.7732679307819014,
+      "lower95_mmHg": 131.95448873554741,
+      "upper95_mmHg": 135.2508518948695,
+      "design_df": 15
+    }
+  ]
+}

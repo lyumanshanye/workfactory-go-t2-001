@@ -1,0 +1,97 @@
+{
+  "task_id": "FIN-FG-005",
+  "audited_at": "2026-10-20T23:30:18.405684+00:00",
+  "run": "reviews/FIN-FG-005/numeric-challenges-32b3da83cd7a415daad525207079aee0",
+  "artifact_hashes": {
+    "tasks/FIN-FG-005/environment/input_files/SEC_companyfacts_70858.json": "55b10512d35eb17dd7147cf42da7fe30540f87529d02f86588b9283f1641393f",
+    "designs/FIN-FG-005/research/sources/source-61ea7edaf5b04c509ab7ece2e9e15b11/source.bin": "55b10512d35eb17dd7147cf42da7fe30540f87529d02f86588b9283f1641393f",
+    "tasks/FIN-FG-005/environment/input_files/SEC_submissions_70858.json": "b4f3198f712772363907d2b2c42ddd2bb2f50215893ce8941c1589144e809a95",
+    "designs/FIN-FG-005/research/sources/source-cf9c35960f204f188d8cc4cc758036c6/source.bin": "b4f3198f712772363907d2b2c42ddd2bb2f50215893ce8941c1589144e809a95",
+    "tasks/FIN-FG-005/environment/input_files/SEC_submissions_history_004.json": "a541096414d756ed597c22e473346a7f872e09556404a37251c04d168549b2c8",
+    "designs/FIN-FG-005/research/sources/source-307c8f8c79ca4c1987bc69a6074a4d36/source.bin": "a541096414d756ed597c22e473346a7f872e09556404a37251c04d168549b2c8",
+    "tasks/FIN-FG-005/environment/input_files/内部审阅记录.xlsx": "579c3478dc834f9eb315d355662e34196355cbf72a35100cb371ed45004e46df",
+    "mutations/FIN-FG-005/latest.json": "9aec5a23d77b0915c6c34457c2976c007eeb4996636774113e924f6d478a2aa2"
+  },
+  "results": [
+    {
+      "source_sha256": "bdf24b85d06f35379d4a3603df2e3803569434b42d1ff410ab2ab77d18532a62",
+      "recalculated_sha256": "c3d0254004d32cfcf582c1bf1fd623f927e45606c16699e5044697d4cc53ffcb",
+      "errors": [
+        "source:EXP:2024:usd",
+        "source:EXP:2024:million",
+        "bridge:D3",
+        "bridge:D10",
+        "bridge:D11",
+        "bridge:D12",
+        "bridge:F3",
+        "bridge:F10",
+        "bridge:F11",
+        "bridge:F12",
+        "bridge:F13"
+      ],
+      "challenge_id": "cash-as-expense",
+      "expected_failures": [
+        "source:EXP:2024:usd"
+      ],
+      "expectation_verified": true
+    },
+    {
+      "source_sha256": "315f1964dc9734a741d30cf3bac37daefc766b8a2dc2c34fada69fa11df601f2",
+      "recalculated_sha256": "cf5aae32895886e16f9e92b94f24ba165ac7f4498dd3bdc33b76f33d552b0a7d",
+      "errors": [
+        "source:INC:2024:start"
+      ],
+      "challenge_id": "quarter-as-year",
+      "expected_failures": [
+        "source:INC:2024:start"
+      ],
+      "expectation_verified": true
+    },
+    {
+      "source_sha256": "08960b6fc6d7439687c1c99897dc81136e8eb5e251efbb1a3362bb9e2a8c67f5",
+      "recalculated_sha256": "84b27c959352af9bc8dc2544d1b446ebf322835b0f70e654a0339a209002967a",
+      "errors": [
+        "bridge:F4",
+        "bridge:F10"
+      ],
+      "challenge_id": "wrong-nii-sign",
+      "expected_failures": [
+        "bridge:F4"
+      ],
+      "expectation_verified": true
+    },
+    {
+      "source_sha256": "c3942eaed22c9a378f7b139c859c46700673a6392f20186375e80b1574f20792",
+      "recalculated_sha256": "5a818df0973217cab266cc89a165edec9c5590af6b9136e0f428052e290d7b26",
+      "errors": [
+        "bridge:F13"
+      ],
+      "challenge_id": "wrong-percentage-denominator",
+      "expected_failures": [
+        "bridge:F13"
+      ],
+      "expectation_verified": true
+    },
+    {
+      "source_sha256": "86e4332221016ea66a0fb0cd2f87031d424eec1a350a43776852d56eaf90111a",
+      "recalculated_sha256": "40a1d3b18ef01b4dbe7abc50e247569117ae138db2edd0ec0a010035c88cd3d8",
+      "errors": [],
+      "challenge_id": "equivalent-sheet-order",
+      "expected_failures": [],
+      "expectation_verified": true
+    }
+  ],
+  "audit_code_sha256": "a5aab614f26eedd93201c7e101e5db6548b00afc3549d7a6214c65446f8b62b0",
+  "passed": true,
+  "not_exercised": [
+    "empty",
+    "fabricated-signoff",
+    "format-only",
+    "future-policy-now",
+    "nim-from-assets",
+    "publish-without-signoff"
+  ],
+  "formal_scores_verified": false,
+  "accepted": false,
+  "limitations": "Five actual Calc executions exercise four numeric/period errors and one sheet-order equivalent. Empty, format-only, NIM, policy, publication and fabrication semantics are not exercised or formally scored."
+}

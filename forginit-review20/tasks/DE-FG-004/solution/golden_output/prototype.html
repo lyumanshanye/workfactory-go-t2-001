@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>社区空间预约 | CivicLab</title>
+<style>
+:root { font-family: Arial, "Noto Sans CJK SC", sans-serif; color: #192f2c; background: #f4f7f6; font-size: 16px; }
+* { box-sizing: border-box; letter-spacing: 0; }
+[hidden] { display: none !important; }
+body { margin: 0; line-height: 1.6; }
+header { background: #fff; border-bottom: 1px solid #ccd5d3; padding: 16px 24px; }
+.brand { display: flex; align-items: center; gap: 10px; max-width: 760px; margin: auto; font-weight: 700; }
+.brand img { width: 28px; height: 28px; }
+.brand span:last-child { margin-left: auto; font-size: 14px; color: #526260; }
+main { max-width: 760px; margin: 32px auto 64px; padding: 0 24px; }
+h1 { font-size: 28px; line-height: 1.4; margin: 0 0 24px; }
+h2 { font-size: 22px; line-height: 1.4; margin: 24px 0 8px; }
+p { margin: 8px 0 20px; }
+nav ol { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); list-style: none; padding: 0; margin: 0 0 28px; border-bottom: 1px solid #ccd5d3; }
+nav li { padding: 10px 6px; color: #526260; font-size: 14px; }
+nav li[aria-current] { color: #174f47; font-weight: 700; border-bottom: 4px solid #174f47; }
+label { display: block; font-weight: 700; margin: 20px 0 6px; }
+input, textarea, select, button { font: inherit; }
+input:not([type=checkbox]), textarea { width: 100%; min-height: 46px; border: 2px solid #657874; border-radius: 3px; padding: 9px 11px; color: #192f2c; background: #fff; }
+input[type=checkbox] { width: 24px; height: 24px; margin: 0; flex: 0 0 24px; accent-color: #174f47; }
+.check { display: flex; gap: 12px; align-items: start; }
+textarea { min-height: 100px; resize: vertical; }
+.hint { color: #526260; font-size: 14px; margin: 0 0 6px; }
+.error { color: #9d2020; font-weight: 700; margin: 6px 0; }
+[aria-invalid=true] { border-color: #9d2020 !important; }
+.summary { border: 3px solid #9d2020; padding: 16px; margin: 20px 0; background: #fff; }
+.summary h2 { margin-top: 0; }
+.summary ul { margin-bottom: 0; padding-left: 24px; }
+a { color: #174f47; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.actions { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px; padding-top: 20px; border-top: 1px solid #ccd5d3; }
+button { min-height: 46px; padding: 10px 24px; border: 2px solid #174f47; border-radius: 3px; background: #174f47; color: #fff; font-weight: 700; cursor: pointer; }
+button.secondary { color: #174f47; background: #fff; }
+:focus-visible, .summary:focus, h2:focus { outline: 3px solid #101010; outline-offset: 3px; }
+:focus { scroll-margin: 20px; }
+.columns { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 24px; }
+dl { margin: 20px 0; }
+dl div { display: grid; grid-template-columns: 130px minmax(0,1fr); gap: 16px; padding: 14px 0; border-bottom: 1px solid #ccd5d3; }
+dt { color: #526260; } dd { margin: 0; overflow-wrap: anywhere; }
+.notice { border-left: 4px solid #8a5900; padding: 12px 16px; background: #fff3d8; margin: 20px 0; }
+.notice p { margin: 0; }
+.receipt { border-top: 5px solid #174f47; padding-top: 16px; }
+footer { border-top: 1px solid #ccd5d3; padding-top: 20px; margin-top: 32px; color: #526260; font-size: 14px; }
+@media (max-width: 520px) { header { padding: 14px 16px; } main { padding: 0 16px; margin-top: 24px; } h1 { font-size: 26px; } .columns { grid-template-columns: 1fr; gap: 0; } dl div { grid-template-columns: 90px minmax(0,1fr); gap: 12px; } button { flex: 1 1 120px; } }
+</style>
+</head>
+<body>
+<header><div class="brand"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAIAAAAn5KxJAAAAk0lEQVR4nO3ZsQmAMBBAUSPuoBtpp6NaOpJj2KYyOfgiB//VKT7HQQIp874OGYx/B/QylGYozVCaoTRDaVPPofu8Po1Yjq15Js1EDaV17WituU/1Qr8cju59mokaSjOUZijNUFqa0PAVGrr6wPdhmokaSvOZRzOUZijNUFqaUB8lNENpxb9QmKE0Q2mG0gylGUp7AKFvGhNElshzAAAAAElFTkSuQmCC"><span>CivicLab</span><span>内部预约演练</span></div></header>
+<main id="main">
+<h1>社区空间预约</h1>
+<nav aria-label="申请进度"><ol><li aria-current="step">1 联系信息</li><li>2 活动安排</li><li>3 核对申请</li></ol></nav>
+<section id="error-summary" class="summary" tabindex="-1" aria-labelledby="error-heading" hidden><h2 id="error-heading">请修改以下内容</h2><ul id="error-list"></ul></section>
+<form id="booking-form" novalidate>
+<section id="step-0" aria-labelledby="heading-0">
+<h2 id="heading-0" tabindex="-1">联系信息</h2>
+<p>请使用演练信息。标有“必填”的项目需要填写。</p>
+<label for="applicantName">联系人姓名（必填）</label><input id="applicantName" name="applicantName" autocomplete="name" maxlength="80" aria-describedby="applicantName-error"><p id="applicantName-error" class="error" hidden></p>
+<label for="email">电子邮箱（必填）</label><input id="email" name="email" type="email" autocomplete="email" maxlength="160" aria-describedby="email-error"><p id="email-error" class="error" hidden></p>
+<label class="check" for="communityGroup"><input id="communityGroup" type="checkbox" name="communityGroup"><span>代表已登记的非营利社区组织申请</span></label>
+<div id="organisation-field" hidden><label for="organisationName">登记组织名称（必填）</label><input id="organisationName" name="organisationName" maxlength="120" aria-describedby="organisationName-error"><p id="organisationName-error" class="error" hidden></p></div>
+<div class="actions"><button type="button" id="next-0">继续</button></div>
+</section>
+<section id="step-1" aria-labelledby="heading-1" hidden>
+<h2 id="heading-1" tabindex="-1">活动安排</h2>
+<label for="eventTitle">活动名称（必填）</label><input id="eventTitle" name="eventTitle" maxlength="120" aria-describedby="eventTitle-error"><p id="eventTitle-error" class="error" hidden></p>
+<div class="columns"><div><label for="eventDate">活动日期（必填）</label><p id="date-hint" class="hint">2026年11月1日至12月31日</p><input id="eventDate" name="eventDate" type="date" min="2026-11-01" max="2026-12-31" aria-describedby="date-hint eventDate-error"><p id="eventDate-error" class="error" hidden></p></div><div><label for="hours">使用小时数（必填）</label><p id="hours-hint" class="hint">1至4小时，按整小时预约</p><input id="hours" name="hours" type="number" min="1" max="4" step="1" inputmode="numeric" aria-describedby="hours-hint hours-error"><p id="hours-error" class="error" hidden></p></div></div>
+<label for="attendees">参加人数（必填）</label><p id="attendees-hint" class="hint">1至120人；超过80人需要额外安全审核。</p><input id="attendees" name="attendees" type="number" min="1" max="120" step="1" inputmode="numeric" aria-describedby="attendees-hint attendees-error"><p id="attendees-error" class="error" hidden></p>
+<label for="accessNeeds">无障碍安排（选填）</label><textarea id="accessNeeds" name="accessNeeds" maxlength="500" aria-describedby="access-hint"></textarea><p id="access-hint" class="hint">仅填写所需安排，不填写病历或证件信息。</p>
+<div class="actions"><button type="button" class="secondary" id="back-1">返回联系信息</button><button type="button" id="next-1">核对申请</button></div>
+</section>
+<section id="step-2" aria-labelledby="heading-2" hidden>
+<h2 id="heading-2" tabindex="-1">核对申请</h2>
+<dl id="review-details"></dl>
+<div class="notice"><p>费用为演练预估，预约尚未获批。提交后进入人工审核。</p></div>
+<div class="actions"><button type="button" class="secondary" id="back-2">返回活动安排</button><button type="submit" id="submit-booking">保存待审申请</button></div>
+</section>
+</form>
+<section id="receipt" class="receipt" aria-labelledby="receipt-heading" hidden><h2 id="receipt-heading" tabindex="-1">申请已保存，待人工审核</h2><p id="receipt-route" role="status"></p><p id="receipt-amount"></p><p>这是内部演练记录，不代表场地已预订，也未向外部机构发送申请。</p><button type="button" class="secondary" id="edit-booking">返回修改</button></section>
+<footer>虚构服务演练 · CivicLab 社区空间 · 不收集真实个人资料</footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const RULES = Object.freeze({ hourlyRate: 120, groupMultiplier: 0.7, safetyThreshold: 80, capacity: 120 });
+let currentStep = 0;
+const stepFields = [['applicantName','email','organisationName'],['eventTitle','eventDate','hours','attendees']];
+const value = id => $(id).value.trim();
+function clearErrors() {
+  $('error-summary').hidden = true;
+  $('error-list').replaceChildren();
+  document.querySelectorAll('[aria-invalid]').forEach(node => node.removeAttribute('aria-invalid'));
+  document.querySelectorAll('.error').forEach(node => { node.hidden = true; node.textContent = ''; });
+}
+function errorFor(id) {
+  if (id === 'organisationName' && !$('communityGroup').checked) return '';
+  const v = value(id);
+  const labels = {applicantName:'联系人姓名',email:'电子邮箱',organisationName:'登记组织名称',eventTitle:'活动名称',eventDate:'活动日期',hours:'使用小时数',attendees:'参加人数'};
+  if (!v) return '请填写' + labels[id] + '。';
+  if (id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return '请输入完整的电子邮箱，例如 name@example.org。';
+  if (id === 'eventDate' && (v < '2026-11-01' || v > '2026-12-31')) return '请选择2026年11月1日至12月31日的日期。';
+  if (id === 'hours' && (!Number.isInteger(Number(v)) || Number(v) < 1 || Number(v) > 4)) return '请输入1至4的整小时数。';
+  if (id === 'attendees' && (!Number.isInteger(Number(v)) || Number(v) < 1 || Number(v) > RULES.capacity)) return '请输入1至120的整数人数。';
+  return '';
+}
+function validate(step) {
+  clearErrors();
+  const errors = stepFields[step].map(id => [id,errorFor(id)]).filter(item => item[1]);
+  if (!errors.length) return true;
+  for (const [id,message] of errors) {
+    $(id).setAttribute('aria-invalid','true');
+    $(id + '-error').textContent = message; $(id + '-error').hidden = false;
+    const link = document.createElement('a'); link.href = '#' + id; link.textContent = message;
+    link.addEventListener('click', event => { event.preventDefault(); $(id).focus(); });
+    const item = document.createElement('li'); item.append(link); $('error-list').append(item);
+  }
+  $('error-summary').hidden = false; $('error-summary').focus();
+  return false;
+}
+function quote() { return Number(value('hours')) * RULES.hourlyRate * ($('communityGroup').checked ? RULES.groupMultiplier : 1); }
+function safetyRoute() { return Number(value('attendees')) > RULES.safetyThreshold ? '需额外安全审核' : '常规人工审核'; }
+function addDetail(label, text) {
+  const row = document.createElement('div'), term = document.createElement('dt'), detail = document.createElement('dd');
+  term.textContent = label; detail.textContent = text; row.append(term,detail); $('review-details').append(row);
+}
+function review() {
+  $('review-details').replaceChildren();
+  for (const [label,text] of [['联系人',value('applicantName')],['电子邮箱',value('email')],['组织',$('communityGroup').checked ? value('organisationName') : '个人申请'],['活动',value('eventTitle')],['日期',value('eventDate')],['小时数',value('hours')],['人数',value('attendees')],['无障碍安排',value('accessNeeds') || '未填写'],['预估费用',quote().toFixed(2) + '元'],['审核路径',safetyRoute()]]) addDetail(label,text);
+}
+function showStep(step) {
+  clearErrors(); currentStep = step;
+  $('booking-form').hidden = false; $('receipt').hidden = true;
+  for (let i = 0; i < 3; i++) {
+    $('step-' + i).hidden = i !== step;
+    const item = document.querySelectorAll('nav li')[i];
+    if (i === step) item.setAttribute('aria-current','step'); else item.removeAttribute('aria-current');
+  }
+  if (step === 2) review();
+  $('heading-' + step).focus();
+}
+$('communityGroup').addEventListener('change', () => {
+  clearErrors();
+  $('organisation-field').hidden = !$('communityGroup').checked;
+  if (!$('communityGroup').checked) { $('organisationName').removeAttribute('aria-invalid'); $('organisationName-error').hidden = true; }
+});
+$('next-0').addEventListener('click', () => { if (validate(0)) showStep(1); });
+$('next-1').addEventListener('click', () => { if (validate(1)) showStep(2); });
+$('back-1').addEventListener('click', () => showStep(0));
+$('back-2').addEventListener('click', () => showStep(1));
+$('booking-form').addEventListener('submit', event => {
+  event.preventDefault();
+  if (currentStep !== 2) { if (validate(currentStep)) showStep(currentStep + 1); return; }
+  for (let step = 0; step < 2; step++) {
+    const bad = stepFields[step].some(id => errorFor(id));
+    if (bad) { showStep(step); validate(step); return; }
+  }
+  clearErrors(); $('booking-form').hidden = true; $('receipt').hidden = false;
+  $('receipt-route').textContent = safetyRoute() + '；尚未批准。';
+  $('receipt-amount').textContent = '预估费用：' + quote().toFixed(2) + '元。';
+  $('receipt-heading').focus();
+});
+$('edit-booking').addEventListener('click', () => showStep(2));
+</script>
+</body>
+</html>

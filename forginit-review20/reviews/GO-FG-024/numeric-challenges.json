@@ -1,0 +1,90 @@
+{
+  "task_id": "GO-FG-024",
+  "checked_at": "2026-10-20T23:05:31.254221+00:00",
+  "run": "reviews/GO-FG-024/numeric-challenges-3a95ca243cae4a47adc4630ee742cfa8",
+  "passed": true,
+  "input_sha256": "80ec205a904dbd666029366066cfa59738492b0fd0e120659e1a72460dc79e28",
+  "manifest_sha256": "528fea6971dedcfea2c9b4cf4d0d8cc79ec5b3879bc253f9d84fa3273c8701c9",
+  "audit_code_sha256": "1222a9b5895f73d5e5ef62a9374392762ec0b77731015e122280072a643ee0d4",
+  "results": [
+    {
+      "challenge_id": "expedite_as_full_release",
+      "expected_failures": [
+        "Q04加急决定:queue_contains_date",
+        "Q04普通:queue_contains_date"
+      ],
+      "actual_failures": [
+        "Q04加急决定:queue_contains_date",
+        "Q04普通:queue_contains_date"
+      ],
+      "expectation_verified": true,
+      "source_sha256": "a169ab811d7d668e612bfd10015ce26428c4742f813554470f78a0044a5dd870",
+      "recalculated_sha256": "550c210fb96165daaf3595cf6d5f9e04f50ad60d6840f358757f1e07662790a0"
+    },
+    {
+      "challenge_id": "promise_as_receipt",
+      "expected_failures": [
+        "Q06收款后:queue_contains_date"
+      ],
+      "actual_failures": [
+        "Q06收款后:queue_contains_date"
+      ],
+      "expectation_verified": true,
+      "source_sha256": "7b5d81e61bb25ce9ffc330bef6de2ccb74e96c6f6f05618c279745b3bca189a9",
+      "recalculated_sha256": "689e63c34b7d2000768ff9846b789aeef95c45e7273c3b05efc84ab4c4d13d8a"
+    },
+    {
+      "challenge_id": "threshold_inclusive",
+      "expected_failures": [
+        "F01_wording_not_threshold_trigger"
+      ],
+      "actual_failures": [
+        "F01_wording_not_threshold_trigger"
+      ],
+      "expectation_verified": true,
+      "source_sha256": "b3889c3d586b8bf0503ed9b4632110ecf3e985022b0b18ba654b06e3fa53bcf8",
+      "recalculated_sha256": "24f8f4156080bb442383414b9c3458e1c64625b6549c273d2b4d5a0edf8f77be"
+    },
+    {
+      "challenge_id": "collect_equal_cost",
+      "expected_failures": [
+        "F03:G"
+      ],
+      "actual_failures": [
+        "F03:G"
+      ],
+      "expectation_verified": true,
+      "source_sha256": "7870ecfe0b2dfdfbba697d4a1cdcf700dfac922b989054e6720d75bf113247bf",
+      "recalculated_sha256": "7441515b8ac6d1197afe2791bd44c857671afb801e61d21c86044ac94a1df41a"
+    },
+    {
+      "challenge_id": "receipt_scope",
+      "expected_failures": [
+        "R02:decision"
+      ],
+      "actual_failures": [
+        "R02:decision"
+      ],
+      "expectation_verified": true,
+      "source_sha256": "b76b776364c52549d970465006a6b9676417a08d101c1ed2e915e530ccc5d384",
+      "recalculated_sha256": "d8090ca94ab5cb3fc64dd6271707c4d338e0ab9ff9810a0c7b94494cd74a6071"
+    },
+    {
+      "challenge_id": "equivalent_sheet_order",
+      "expected_failures": [],
+      "actual_failures": [],
+      "expectation_verified": true,
+      "source_sha256": "4c24bb3d947881aad39192bcd0e61db274ee90065793fbb1525aa49bd473ccd5",
+      "recalculated_sha256": "532dc18ecd4ced2d701d57bd1b0ca2547299ed92f7efeb00e1492db858fbf893"
+    }
+  ],
+  "not_exercised": [
+    "empty",
+    "fabricated_execution",
+    "format_only",
+    "litigation_routine"
+  ],
+  "formal_scores_verified": false,
+  "accepted": false,
+  "limitations": "Six actual Calc challenge executions exercise arithmetic and lexical coverage only. Equivalence is checked by ID/content rather than sheet order. Other professional errors, empty/format-only and execution fabrication are outside this audit. Does not establish formal judge sensitivity, legal correctness or task acceptance."
+}
