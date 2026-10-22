@@ -1,0 +1,129 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spirit_Nightgaunt.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/undead/Spirit_Nightgaunt.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Nightgaunt
+    name= _ &quot;Nightgaunt&quot;
+    race=undead
+    image=&quot;units/undead-spirit/nightgaunt.png&quot;
+    profile=portraits/undead/nightgaunt.webp
+    hitpoints=35
+    movement_type=undeadspirit
+    movement=7
+    experience=150
+    level=3
+    alignment=chaotic
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=71
+    usage=scout
+    description= _ &quot;The purpose of the masks that these creatures wear is unknown, as is the countenance that they obscure. These terrible forms are rarely seen by the living, and those who live to speak of them had no leisure to study their foe.&quot;
+    die_sound=wail-long.wav
+    [abilities]
+        {ABILITY_NIGHTSTALK}
+        {ABILITY_SKIRMISHER}
+    [/abilities]
+    [standing_anim]
+        start_time=0
+        ghost_start_time=0
+        ghost_alpha=0.8~0.3:1000,0.3~0.5:600,0.5~0.3:600,0.3~0.8:1000
+        alpha=0.6~0.0:1000,0.0~0.2:600,0.2~0.0:600,0.0~0.6:1000
+        [ghost_frame]
+            image=&quot;units/undead-spirit/nightgaunt-standing-s-[3~1,2,3~1,2].png:[450,350,500,300,450,350,500,300]&quot;
+            auto_vflip=no
+        [/ghost_frame]
+        [frame]
+            image=&quot;units/undead-spirit/nightgaunt-shadow.png:800&quot;
+        [/frame]
+    [/standing_anim]
+    [movement_anim]
+        start_time=0
+        alpha=0.5~0.0:1400,0.0~0.2:600,0.2~0.1:600,0.1~0.5:1400
+        [frame]
+            image=&quot;units/undead-spirit/nightgaunt-standing-s-[1~3,2,1~3,2].png:[500*8]&quot;
+        [/frame]
+    [/movement_anim]
+    [defend]
+        start_time=-126
+        [if]
+            hits=hit
+            offset=0.0~-0.05:126,-0.05~0.0:126
+            alpha=0.8~0.5:126,0.5~0.8:126
+
+            hit_sound_start_time=-25
+            [hit_sound_frame]
+                sound=wail-sml.wav
+            [/hit_sound_frame]
+        [/if]
+        [else]
+            hits=kill
+            offset=0.0~-0.05:126,-0.05~0.0:126
+            alpha=0.8~0.5:126,0.5~0.8:126
+        [/else]
+        [else]
+            hits=miss
+            offset=0.0~-0.1:126,-0.1~0.0:126
+            alpha=0.8~0.25:126,0.25~0.8:126
+        [/else]
+        # directional don&#x27;t exist yet, but one can dream...
+        # [if]
+        # direction=s,se,sw
+        [frame]
+            image=units/undead-spirit/nightgaunt-defend-[1,2,1].png:[1,250,1]
+        [/frame]
+        # [/if]
+        # [else]
+        #    direction=n,ne,nw
+        #    [frame]
+        #        image=units/undead-spirit/nightgaunt-defend-n-[1,2,1].png:[1,250,1]
+        #    [/frame]
+        # [/else]
+    [/defend]
+
+    # there are no animation frames yet, just go with the default
+#ifdef __UNUSED__
+    # wmlscope: start ignoring
+    [death]
+        start_time=0
+        [frame]
+            image=&quot;units/undead-spirit/nightgaunt-die-[1~5].png:200&quot;
+        [/frame]
+    [/death]
+    # wmlscope: stop ignoring
+#endif
+    [attack]
+        name=claws
+        description=_&quot;claws&quot;
+        type=blade
+        icon=attacks/claws-shadow.png
+        range=melee
+        damage=10
+        number=3
+        [specials]
+            {WEAPON_SPECIAL_BACKSTAB}
+        [/specials]
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=claws
+        [/filter_attack]
+        offset=0.0:300,0.0~1.0:225,1.0~0.0:225
+        alpha=0.4~0.8:525,0.8~0.2:225
+        start_time=-525
+        [if]
+            value_second=1,3
+            [frame]
+                image=&quot;units/undead-spirit/nightgaunt-attack-[1,2,3a,4a].png:[200*3,125]&quot;
+            [/frame]
+        [/if]
+        [else]
+            value_second=2
+            [frame]
+                image=&quot;units/undead-spirit/nightgaunt-attack-[1,2,3b,4b].png:[200*3,125]&quot;
+            [/frame]
+        [/else]
+        {SOUND:HIT_AND_MISS claws.ogg {SOUND_LIST:MISS} -100}
+        [frame]
+            image=&quot;units/undead-spirit/nightgaunt.png:25&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

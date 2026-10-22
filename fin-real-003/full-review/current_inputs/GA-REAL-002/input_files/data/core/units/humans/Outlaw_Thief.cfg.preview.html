@@ -1,0 +1,251 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Outlaw_Thief.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/humans/Outlaw_Thief.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Thief
+    name= _ &quot;Thief&quot;
+    race=human
+    gender=male,female
+    image=&quot;units/human-outlaws/thief.png&quot;
+    profile=portraits/humans/thief.webp
+    hitpoints=24
+    movement_type=elusivefoot
+    movement=6
+    experience=29
+    level=1
+    alignment=chaotic
+    advances_to=Rogue
+    cost=13
+    usage=fighter
+    description= _ &quot;For as long as anyone can remember, the members of the various ‘guilds’ of rat-catchers that spring up in any larger city have had a curious practice of bleaching their hair with lime till it becomes a pale shade of blue. It is a bold thing to do, as their profession often delves into less-than-legal enterprises. Thieves have many skills, and by necessity are both light on their feet, and good with knives. They happily employ less-than-honorable tactics in combat, seeing little merit in a ‘fair fight’.&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    [death]
+        start_time=0
+        [frame]
+            image=&quot;units/human-outlaws/thief-die-[1~7].png:100&quot;
+        [/frame]
+    [/death]
+    [defend]
+        hits=miss
+        start_time=-126
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:1&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief-defend-1-[1,2,1].png:[83*2,84]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:1&quot;
+        [/frame]
+    [/defend]
+    [defend]
+        hits=miss
+        start_time=-126
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:1&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief-defend-2-[1,2,1].png:[83*2,84]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:1&quot;
+        [/frame]
+    [/defend]
+    [defend]
+        hits=miss
+        start_time=-126
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:1&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief-defend-3-[1,2,1].png:[83*2,84]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:1&quot;
+        [/frame]
+    [/defend]
+    [defend]
+        hits=kill
+        start_time=-126
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:1&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief-defend.png:250&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:1&quot;
+        [/frame]
+    [/defend]
+    [defend]
+        hits=hit
+        start_time=-126
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:1&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief-defend.png:250&quot;
+            sound={SOUND_LIST:HUMAN_HIT}
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:1&quot;
+        [/frame]
+    [/defend]
+    [attack]
+        name=dagger
+        description=_&quot;dagger&quot;
+        icon=attacks/dagger-human.png
+        type=blade
+        range=melee
+        damage=4
+        number=3
+        [specials]
+            {WEAPON_SPECIAL_BACKSTAB}
+        [/specials]
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=dagger
+        [/filter_attack]
+        start_time=-150
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:50&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-outlaws/thief-attack.png:200&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS dagger-swish.wav {SOUND_LIST:MISS} -100}
+        [frame]
+            image=&quot;units/human-outlaws/thief.png:50&quot;
+        [/frame]
+    [/attack_anim]
+    [idle_anim]
+        {STANDARD_IDLE_FILTER}
+        start_time=0
+
+        #pulls a &quot;moneybag&quot; out of hammerspace
+        [frame]
+            image=&quot;units/human-outlaws/thief-idle-[1~7].png:[100*4,200,150,500]&quot;
+        [/frame]
+
+        #begin toss of pouch
+        [frame]
+            image=&quot;units/human-outlaws/thief-idle-[8~12,11~8].png:100&quot;
+        [/frame]
+
+        #catches it for a moment, and does a second toss
+        [frame]
+            duration=300
+            image=&quot;units/human-outlaws/thief-idle-[7~12,11~8].png:[300,100*9]&quot;
+        [/frame]
+
+        #catches it, and returns it to hammerspace
+        [frame]
+            image=&quot;units/human-outlaws/thief-idle-[7~1].png:[500,150,200,100*4]&quot;
+        [/frame]
+    [/idle_anim]
+
+    [female]
+        name= _ &quot;female^Thief&quot;
+        gender=female
+        image=&quot;units/human-outlaws/thief+female.png&quot;
+        profile=&quot;portraits/humans/thief+female.webp&quot;
+        die_sound={SOUND_LIST:HUMAN_FEMALE_DIE}
+        [death]
+            start_time=0
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-die-[1~7].png:100&quot;
+            [/frame]
+        [/death]
+        [defend]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:1&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-defend-1-[1,2,1].png:[83*2,84]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:1&quot;
+            [/frame]
+        [/defend]
+        [defend]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:1&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-defend-2-[1,2,1].png:[83*2,84]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:1&quot;
+            [/frame]
+        [/defend]
+        [defend]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:1&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-defend-3-[1,2,1].png:[83*2,84]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:1&quot;
+            [/frame]
+        [/defend]
+        [defend]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:1&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-defend.png:250&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:1&quot;
+            [/frame]
+        [/defend]
+        [defend]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:1&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-defend.png:250&quot;
+                sound={SOUND_LIST:HUMAN_FEMALE_HIT}
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:1&quot;
+            [/frame]
+        [/defend]
+        [attack_anim]
+            [filter_attack]
+                name=dagger
+            [/filter_attack]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:50&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-attack.png:200&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-outlaws/thief+female.png:50&quot;
+            [/frame]
+        [/attack_anim]
+        [idle_anim]
+            #pulls a &quot;moneybag&quot; out of hammerspace
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-idle-[1~7].png:[100*4,200,150,500]&quot;
+            [/frame]
+
+            #begin toss of pouch
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-idle-[8~12,11~8].png:100&quot;
+            [/frame]
+
+            #catches it for a moment, and does a second toss
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-idle-[7~12,11~8].png:[300,100*9]&quot;
+            [/frame]
+
+            #catches it, and returns it to hammerspace
+            [frame]
+                image=&quot;units/human-outlaws/thief+female-idle-[7~1].png:[500,150,200,100*4]&quot;
+            [/frame]
+        [/idle_anim]
+    [/female]
+[/unit_type]
+</pre></main></body></html>

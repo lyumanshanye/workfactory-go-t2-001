@@ -1,0 +1,220 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>tmxfileformat.py</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/tools/wesnoth/trackplacer3/tmxfileformat.py</h1><pre>#!/usr/bin/env python3
+# encoding: utf-8
+
+&quot;&quot;&quot;Module for Tiled (Tile Editor) .tmx files containing journey data.
+
+Uses Tiled&#x27;s Object Layers (not Tile Layers).  This allows additional journey
+markers to be added with the &quot;Insert Tile&quot; tool, and additional journeys to be
+added as new layers.
+&quot;&quot;&quot;
+
+from wesnoth.trackplacer3.datatypes import *
+
+import xml.etree.ElementTree as ET
+
+# Although this doesn&#x27;t show images, it needs to read their width and height
+import PIL.Image
+
+class ParseException(Exception):
+    &quot;&quot;&quot;There&#x27;s a lot of expectations about the .tmx file, this generally
+    means that one of those assumptions didn&#x27;t hold.
+    &quot;&quot;&quot;
+    def __init__(self, message, element=None):
+        self.message = message
+        self.element = element
+
+class _IdCounter:
+    &quot;&quot;&quot;It seems that .tmx has several independent sequences of ids, and can have the same id used for different purposes. However, they can all have gaps in the sequence, for simplicity this code has only one ID counter, and makes each id unique.&quot;&quot;&quot;
+    def __init__(self):
+        self.counter = 1
+
+    def peek(self):
+        &quot;&quot;&quot;Return the id that the next call to get() will return, without changing the id&quot;&quot;&quot;
+        return str(self.counter)
+
+    def get(self):
+        counter = self.counter
+        self.counter += 1
+        return str(counter)
+
+class _TmxTileset:
+    def read(tileset):
+        &quot;&quot;&quot;Returns a dict mapping tiles&#x27; gid attributes to actions.
+
+        Argument should be the ETree element for the tileset.&quot;&quot;&quot;
+        base_id = int(tileset.attrib[&quot;firstgid&quot;])
+        tileset_to_action = {}
+        for tile in tileset.findall(&quot;tile&quot;):
+            tile_id = base_id + int(tile.attrib[&quot;id&quot;])
+            image_source = tile.find(&quot;image&quot;).attrib[&quot;source&quot;]
+            action = None
+            # This matches by endswith, so that changes to the wesnoth_data_dir won&#x27;t
+            # cause unnecessary breakage of .tmx files.
+            for k in selected_icon_dictionary:
+                if image_source.endswith(selected_icon_dictionary[k]):
+                    action = k
+                    break
+            if action is None:
+                raise ParseException(&quot;unrecognised action in tileset&quot;)
+            tileset_to_action[str(tile_id)] = action
+        return tileset_to_action
+
+class TmxFileFormat(FileFormatHandler):
+    &quot;&quot;&quot;Translate a Journey to and from a Tiled (Tile Editor) TMX file.&quot;&quot;&quot;
+    def __init__(self, wesnoth_data_dir):
+        &quot;&quot;&quot;The data dir is the same as wesnoth&#x27;s --data-dir argument.
+
+        The data dir is only used for the journey marker images.
+        &quot;&quot;&quot;
+        self.wesnoth_data_dir = wesnoth_data_dir
+
+    def write(self, file_or_filename, journey, metadata=None):
+        id_counter = _IdCounter()
+
+        # Read the size of the background image
+        try:
+            with PIL.Image.open(journey.mapfile) as image:
+                background_width, background_height = image.size
+        except:
+            print(&quot;Can&#x27;t open background image, assuming 1024x768&quot;, journey.mapfile)
+            background_width, background_height = 1024, 768
+
+        tmxmap = ET.Element(&quot;map&quot;, attrib={
+            &quot;version&quot;: &quot;1.2&quot;,
+            &quot;orientation&quot;:&quot;orthogonal&quot;,
+            &quot;renderorder&quot;:&quot;right-down&quot;,
+            # There&#x27;s no problem if the width and height don&#x27;t exactly match the image, this
+            # just determines the size of the grid shown in the UI and used for tile layers.
+            # For track placement, tmx_trackplacer uses object layers instead of tile layers.
+            &quot;width&quot;: str(int(background_width / 32)),
+            &quot;height&quot;: str(int(background_height / 32)),
+            &quot;tilewidth&quot;:&quot;32&quot;,
+            &quot;tileheight&quot;:&quot;32&quot;,
+            &quot;infinite&quot;:&quot;0&quot;
+        })
+
+        # Wesnoth&#x27;s NEW_JOURNEY (etc) macros use the coordinates as the center of the image,
+        # Tiled uses them as the bottom-left corner of the image. This is a dictionary of
+        # [adjustment to x, adjustment to y] pairs, in the direction wesnoth -&gt; tmx.
+        # If any of these images can&#x27;t be found then there&#x27;s no point continuing.
+        image_offset = {}
+        for action in selected_icon_dictionary:
+            with PIL.Image.open(self.wesnoth_data_dir + &quot;/&quot; + selected_icon_dictionary[action]) as image:
+               image_offset[action] = [int (- image.size[0] / 2), int (image.size[1] / 2)]
+
+        # embed a tileset in the map, corresponding to the journey icons
+        action_to_tileset = {}
+        base_id = id_counter.get()
+        tileset = ET.SubElement(tmxmap, &quot;tileset&quot;, attrib={
+            &quot;firstgid&quot;:base_id,
+            &quot;name&quot;:&quot;wesnoth journey icons&quot;,
+            &quot;tilewidth&quot;:&quot;1&quot;,
+            &quot;tileheight&quot;:&quot;1&quot;,
+            &quot;tilecount&quot;:&quot;3&quot;
+        })
+        ET.SubElement(tileset, &quot;grid&quot;, attrib={&quot;orientation&quot;:&quot;orthogonal&quot;, &quot;width&quot;:&quot;1&quot;, &quot;height&quot;:&quot;1&quot;})
+        for i, action in enumerate(selected_icon_dictionary):
+            action_to_tileset[action] = {&quot;gid&quot;:str(int(base_id) + i)}
+            tile = ET.SubElement(tileset, &quot;tile&quot;, attrib={&quot;id&quot;:str(i)})
+            ET.SubElement(tile, &quot;image&quot;, attrib={
+                &quot;source&quot;:self.wesnoth_data_dir + &quot;/&quot; + selected_icon_dictionary[action]
+            })
+            # increment the id_counter
+            id_counter.get()
+
+        # background image
+        layer = ET.SubElement(tmxmap, &quot;imagelayer&quot;, attrib={&quot;id&quot;: &quot;1&quot;, &quot;name&quot;: &quot;background&quot;})
+        ET.SubElement(layer, &quot;image&quot;, attrib={&quot;source&quot;: journey.mapfile})
+
+        # journey tracks
+        for track in journey.tracks:
+            name = track.name
+            layer = ET.SubElement(tmxmap, &quot;objectgroup&quot;, attrib={&quot;id&quot;: id_counter.get(), &quot;name&quot;: name})
+            for point in track.waypoints:
+                if point.action not in action_to_tileset:
+                    raise KeyError(&quot;Unknown action: &quot; + point.action)
+                attrib = action_to_tileset[point.action]
+                attrib[&quot;id&quot;] = id_counter.get()
+                attrib[&quot;x&quot;] = str(point.x + image_offset[point.action][0])
+                attrib[&quot;y&quot;] = str(point.y + image_offset[point.action][1])
+                o = ET.SubElement(layer, &quot;object&quot;, attrib=attrib)
+
+        # The points in each journey need to be kept in the correct order, so that the animation
+        # shows movement in the correct direction. If we know which points are newly-added, then the
+        # logic in Track.insert_at_best_fit will handle them. With Tiled, ids are never reused, so
+        # we can use the id_counter to work out which points are newly added.
+        custom_properties = ET.SubElement(tmxmap, &quot;properties&quot;)
+        ET.SubElement(custom_properties, &quot;property&quot;, attrib={&quot;name&quot;:&quot;tmx_trackplacer_export_id&quot;, &quot;type&quot;:&quot;int&quot;, &quot;value&quot;:id_counter.get()})
+
+        # These need to be higher than all ids used elsewhere in the file, so add these after everything else&#x27;s id is assigned
+        tmxmap.set(&quot;nextlayerid&quot;, id_counter.get())
+        tmxmap.set(&quot;nextobjectid&quot;, id_counter.get())
+
+        tree = ET.ElementTree(tmxmap)
+        tree.write(file_or_filename, encoding=&quot;UTF-8&quot;, xml_declaration=True)
+
+    def read(self, fp):
+        if type(fp) == type(&quot;&quot;):
+            # if this raises IOError, let it pass to the caller
+            fp = open(fp, &quot;r&quot;)
+
+        tree = ET.parse(fp)
+        tmxmap = tree.getroot()
+
+        journey = Journey()
+
+        if tmxmap.attrib[&quot;orientation&quot;] != &quot;orthogonal&quot;:
+            raise ParseException(&quot;expected an orthogonal TMX map&quot;)
+
+        # parse the tileset
+        if len(tmxmap.findall(&quot;tileset&quot;)) != 1:
+            raise ParseException(&quot;expected exactly one tileset&quot;)
+        tileset_to_action = _TmxTileset.read(tmxmap.find(&quot;tileset&quot;))
+
+        # Wesnoth&#x27;s NEW_JOURNEY (etc) macros use the coordinates as the center of the image,
+        # Tiled uses them as the bottom-left corner of the image. This is a dictionary of
+        # [adjustment to x, adjustment to y] pairs, in the direction tmx -&gt; wesnoth.
+        # If any of these images can&#x27;t be found then there&#x27;s no point continuing.
+        image_offset = {}
+        for action in selected_icon_dictionary:
+            with PIL.Image.open(self.wesnoth_data_dir + &quot;/&quot; + selected_icon_dictionary[action]) as image:
+               image_offset[action] = [int (image.size[0] / 2), int (- image.size[1] / 2)]
+
+
+        # background image
+        if len(tmxmap.findall(&quot;imagelayer&quot;)) != 1 or tmxmap.find(&quot;imagelayer&quot;).attrib[&quot;name&quot;] != &quot;background&quot;:
+            raise ParseException(&quot;expected exactly one imagelayer&quot;)
+        if len(tmxmap.findall(&quot;imagelayer/image&quot;)) != 1:
+            raise ParseException(&quot;expected exactly one image in the imagelayer&quot;)
+        if tmxmap.find(&quot;imagelayer/image&quot;).attrib[&quot;source&quot;] is None:
+            raise ParseException(&quot;expected a background image&quot;)
+        journey.mapfile = tmxmap.find(&quot;imagelayer/image&quot;).attrib[&quot;source&quot;]
+
+        # metadata that was added in write(), to track which points have been added in Tiled
+        export_id_prop = tmxmap.find(&quot;properties/property[@name=&#x27;tmx_trackplacer_export_id&#x27;]&quot;)
+        if export_id_prop is not None:
+            export_id = int(export_id_prop.attrib[&quot;value&quot;])
+            def added_in_tiled(item):
+                return export_id &lt; int(item.attrib[&quot;id&quot;])
+        else:
+            def added_in_tiled(item):
+                return true
+
+        # journey tracks
+        for layer in tmxmap.findall(&quot;objectgroup&quot;):
+            track = Track(layer.attrib[&quot;name&quot;])
+            for point in layer.findall(&quot;object&quot;):
+                gid = point.attrib[&quot;gid&quot;]
+                if gid not in tileset_to_action:
+                    raise KeyError(&quot;Unknown action gid: &quot; + gid)
+                action = tileset_to_action[gid]
+                x = round(float(point.attrib[&quot;x&quot;])) + image_offset[action][0]
+                y = round(float(point.attrib[&quot;y&quot;])) + image_offset[action][1]
+                if added_in_tiled(point):
+                    track.insert_at_best_fit(Waypoint(action, x, y))
+                else:
+                    track.waypoints.append(Waypoint(action, x, y))
+            journey.tracks.append(track)
+
+        return (journey, None)
+</pre></main></body></html>

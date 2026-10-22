@@ -1,0 +1,96 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Siren.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/merfolk/Siren.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Mermaid Siren
+    name= _ &quot;Mermaid Siren&quot;
+    race=merman
+    gender=female
+    image=&quot;units/merfolk/siren.png&quot;
+    profile=portraits/merfolk/enchantress.webp
+    hitpoints=51
+    movement_type=swimmer
+    movement=7
+    experience=150
+    level=3
+    alignment=lawful
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=42
+    usage=mixed fighter
+    description= _ &quot;The faerie nature of the mermaids is strongest in the Sirens, whose connection to the currents of magic often causes them to be mistaken for naiads themselves. Though certainly far from the truth, the mistake is understandable, as true naiads are rarely seen even by mermaids. The manifestation of their magic is certainly very similar; the water about a siren can be commanded at whim, like an extension of herself.
+
+The myriad applications of this rarely occur to land dwellers, who simply regard it with wonder.&quot;
+    die_sound=mermaid-die.ogg
+    {DEFENSE_ANIM &quot;units/merfolk/siren-defend2.png&quot; &quot;units/merfolk/siren-defend1.png&quot; mermaid-hit.ogg }
+    [attack]
+        #note - this &quot;naia&quot; is deliberate, it is not a typo, it is not supposed to be &quot;naiad&quot;.
+        # wmllint: local spelling naia
+        name=naia touch
+        description=_&quot;naia touch&quot;
+        icon=attacks/touch-faerie.png
+        type=impact
+        range=melee
+        [specials]
+            {WEAPON_SPECIAL_MAGICAL}
+        [/specials]
+        damage=12
+        number=1
+    [/attack]
+    [attack]
+        name=water spray
+        description=_&quot;water spray&quot;
+        icon=attacks/waterspray.png
+        type=impact
+        range=ranged
+        [specials]
+            {WEAPON_SPECIAL_MAGICAL}
+        [/specials]
+        damage=15
+        number=3
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=water spray
+        [/filter_attack]
+        start_time=-420
+
+        missile_start_time=-165
+        [missile_frame]
+            duration=165
+            image=&quot;projectiles/water-spray.png&quot;
+            image_diagonal=&quot;projectiles/water-spray.png&quot;
+        [/missile_frame]
+        {MERMAID_WATER_BLAST_HALO}
+        {MERMAID_STAFF_FLARE 16 -12}
+
+        [frame]
+            image=&quot;units/merfolk/siren-magic-1.png:200&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/siren-magic-2.png:200&quot;
+            sound=water-blast.wav
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/siren-magic-1.png:120&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=naia touch
+        [/filter_attack]
+        start_time=-250
+        [frame]
+            image=&quot;units/merfolk/siren.png:50&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/siren.png:[100,200]&quot; ### attack-1,2
+        [/frame]
+        {SOUND:HIT_AND_MISS staff.ogg staff-miss.ogg -125}
+        [frame]
+            image=&quot;units/merfolk/siren.png:50&quot; ### magic-1
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/siren.png:50&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

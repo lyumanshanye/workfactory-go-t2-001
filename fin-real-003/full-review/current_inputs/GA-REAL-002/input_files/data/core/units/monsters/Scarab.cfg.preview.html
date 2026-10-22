@@ -1,0 +1,86 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Scarab.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Scarab.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Horned Scarab
+    name= _ &quot;Horned Scarab&quot;
+    race=monster
+    image=&quot;units/monsters/scarab/scarab.png&quot;
+    profile=&quot;portraits/monsters/scarab.webp&quot;
+    {DEFENSE_ANIM &quot;units/monsters/scarab/scarab-defend2.png&quot; &quot;units/monsters/scarab/scarab-defend1.png&quot; hiss.wav }
+    hitpoints=36
+    movement_type=gruefoot
+    movement=4
+    experience=50
+    level=1
+    alignment=neutral
+    advances_to=null
+    {AMLA_DEFAULT}
+    [abilities]
+        {ABILITY_BURROW}
+    [/abilities]
+    [special_note]
+        note= _ &quot;This unit can burrow under loose dirt, sand, or leaves, concealing itself if it does not change location.&quot;
+    [/special_note]
+    cost=11
+    usage=fighter
+    description= _ &quot;Horned Scarabs are large, rugged insects that can grow to be quite large, making them a threat when they decide to be aggressive. Their primary means of attack is the large, sharp horn growing from their head. Because of their large size, armor, and horn, they cannot fly.&quot;
+    die_sound=hiss-die.wav
+    undead_variation=bug
+    [movement_costs]
+        cave=1
+        sand=1
+    [/movement_costs]
+    [resistance]
+        fire=70
+        cold=120
+    [/resistance]
+    [defense]
+        castle=50
+        cave=50
+        sand=50
+        village=50
+    [/defense]
+    [attack]
+        name=bite
+        description= _&quot;bite&quot;
+        icon=attacks/fangs-bug.png
+        type=blade
+        range=melee
+        damage=8
+        number=2
+    [/attack]
+    [attack]
+        name=horn
+        description= _&quot;horn&quot;
+        icon=attacks/scarab-horn.png
+        type=pierce
+        range=melee
+        damage=14
+        number=1
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=bite
+        [/filter_attack]
+        start_time=-150
+        offset=0.0~0.6:150,0.6~0.0:200
+        [frame]
+            image=units/monsters/scarab/scarab.png:450
+        [/frame]
+        {SOUND:HIT_AND_MISS bite.ogg {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=horn
+        [/filter_attack]
+        start_time=-300
+        offset=0.0~-0.05:120,-0.05~0.6:180,0.6~0.0:220
+        [frame]
+            image=units/monsters/scarab/scarab-horn-[1,2].png:[130,170]
+        [/frame]
+        [frame]
+            image=units/monsters/scarab/scarab.png:220
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

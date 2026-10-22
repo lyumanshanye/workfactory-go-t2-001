@@ -1,0 +1,88 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wolf_Rider.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/goblins/Wolf_Rider.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Wolf Rider
+    name= _ &quot;Wolf Rider&quot;
+    race=wolf
+    image=&quot;units/goblins/wolf-rider.png&quot;
+    profile=&quot;portraits/goblins/wolf-rider.webp&quot;
+    [standing_anim]
+        start_time=-50
+        [frame]
+            image=&quot;units/goblins/wolf-rider.png:50&quot;
+        [/frame]
+    [/standing_anim]
+    [standing_anim]
+        start_time=-50
+        terrain_type=!,*^B*,Cme*^*,Kme*^*,Wwr*^*,Wwf*^*,!,Chs*^*,Chw*^*,Cm*^*,Km*^*,W*^*,S*^*,*^Vm
+        [frame]
+            image=&quot;units/goblins/wolf-rider-water.png:50&quot;
+        [/frame]
+    [/standing_anim]
+    hitpoints=32
+    movement_type=orcishfoot
+    movement=8
+    experience=34
+    level=1
+    alignment=chaotic
+    advances_to=Goblin Knight,Goblin Pillager
+    cost=17
+    usage=scout
+    description= _ &quot;No one is quite sure how the practice of taming and riding wolves came into being, but the advantages of it for a goblin are obvious. Goblins are much smaller and weaker than their orcish kin and are often sent to the most dangerous and unwanted parts of a fight. Any who manage to tame a mount have a much safer role in combat.
+
+Though few wolves could even stand with the weight of a true orc on their back, a goblin is quite within many wolves’ ability to carry swiftly. Unlike horses, these mounts have a rather easy time traversing the mountains, though water and woods will still slow them down.&quot;
+    die_sound={SOUND_LIST:WOLF_DIE}
+    [movement_anim]
+        start_time=-0
+        [frame]
+            image=&quot;units/goblins/wolf-rider-moving.png:150&quot;
+        [/frame]
+    [/movement_anim]
+    {DEFENSE_ANIM &quot;units/goblins/wolf-rider-defend-2.png&quot; &quot;units/goblins/wolf-rider-defend-1.png&quot; {SOUND_LIST:WOLF_HIT} }
+    [defense]
+        village=50
+    [/defense]
+    [attack]
+        name=fangs
+        description=_&quot;fangs&quot;
+        icon=attacks/fangs-animal.png
+        type=blade
+        range=melee
+        damage=5
+        number=3
+    [/attack]
+    [idle_anim]
+        {STANDARD_IDLE_FILTER}
+        start_time=0
+        [frame]
+            image=&quot;units/goblins/wolf-rider-idle-[1~5,4,3~5,4~1].png:100&quot;
+        [/frame]
+    [/idle_anim]
+    [death]
+        start_time=0
+        [frame]
+            image=&quot;units/goblins/wolf-rider-die-[1~4].png:200&quot;
+        [/frame]
+    [/death]
+    [attack_anim]
+        [filter_attack]
+            name=fangs
+        [/filter_attack]
+        offset=0.0~-0.1:100,-0.1~0.0:50,0.0~0.3:50,0.3~0.5:100,0.5~0.6:50,0.6~0.4:100,0.4~0.2:50,0.2~0.0:100
+        start_time=-350
+        [frame]
+            image=&quot;units/goblins/wolf-rider.png:100&quot;
+            sound={SOUND_LIST:WOLF_GROWL}
+        [/frame]
+        [frame]
+            image=&quot;units/goblins/wolf-rider-attack.png:200&quot;
+        [/frame]
+        {SOUND:HIT bite.ogg -100}
+        [frame]
+            image=&quot;units/goblins/wolf-rider-moving.png:250&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/goblins/wolf-rider.png:50&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

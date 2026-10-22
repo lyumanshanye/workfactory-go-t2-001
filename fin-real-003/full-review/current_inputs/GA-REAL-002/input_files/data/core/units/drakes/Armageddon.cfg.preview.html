@@ -1,0 +1,69 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Armageddon.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/drakes/Armageddon.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Armageddon Drake
+    name= _ &quot;Armageddon Drake&quot;
+    race=drake
+    gender=male,female
+    image=&quot;units/drakes/armageddon.png&quot;
+    profile=&quot;portraits/drakes/inferno.webp&quot;
+    hitpoints=98
+    movement_type=drakefly
+    movement=5
+    experience=200
+    level=4
+    alignment=lawful
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=118
+    usage=archer
+    # wmllint: local spelling Armageddon
+    description= _ &quot;Were it not for the armor they wear, certain drakes might be indistinguishable from true dragons, at least to the lesser races for whom dragons are but legend. The creatures known as ‘Armageddon Drakes’ are towering things, both immune to and possessed of a tremendous fire.&quot;
+    die_sound=drake-die.ogg
+
+    {DEFENSE_ANIM &quot;units/drakes/armageddon-defend-2.png&quot; &quot;units/drakes/armageddon-defend-1.png&quot; {SOUND_LIST:DRAKE_HIT} }
+    {DRAKE_STANDING_ANIM armageddon}
+    {DRAKE_MOVEMENT_ANIM armageddon}
+    {DRAKE_WEAPON_ANIM armageddon}
+    {DRAKE_FIRE_ANIM_S_DIAGONAL armageddon 35,40}
+    {DRAKE_FIRE_ANIM_N_DIAGONAL_CURRENT armageddon 35,-20}
+    {DRAKE_FIRE_ANIM_S armageddon 8,50}
+    {DRAKE_FIRE_ANIM_N_CURRENT armageddon 8,-50}
+    [resistance]
+        fire=0
+        cold=140
+    [/resistance]
+    [attack]
+        name=battle claws
+        description=_&quot;battle claws&quot;
+        icon=attacks/claws-drake.png
+        type=blade
+        range=melee
+        damage=15
+        number=2
+    [/attack]
+    [attack]
+        name=fire breath
+        description=_&quot;fire breath&quot;
+        icon=attacks/fire-breath-drake.png
+        type=fire
+        range=ranged
+        damage=12
+        number=6
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=battle claws
+        [/filter_attack]
+        offset=0.0~0.2,0.2~0.7,0.7~0.2,0.2~0.0
+        start_time=-300
+        [frame]
+            image=&quot;units/drakes/armageddon-melee-[1~6].png:100&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS claws.ogg {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+    [female]
+        name= _ &quot;female^Armageddon Drake&quot;
+        gender=female
+    [/female]
+[/unit_type]
+</pre></main></body></html>

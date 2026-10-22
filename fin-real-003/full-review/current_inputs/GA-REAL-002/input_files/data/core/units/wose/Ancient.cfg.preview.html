@@ -1,0 +1,53 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ancient.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/wose/Ancient.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Ancient Wose
+    name= _ &quot;Ancient Wose&quot;
+    race=wose
+    image=&quot;units/woses/wose-ancient.png&quot;
+    profile=&quot;portraits/woses/ancient-wose.png&quot;
+    hitpoints=80
+    movement_type=treefolk
+    movement=4
+    experience=150
+    level=3
+    alignment=lawful
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=50
+    description= _ &quot;There is a curious story of a farmer who had a great oak in his lawn, a tree which had stood when his father first broke the soil on that land, and under which his family had many memories. It was thus a shock to him, one morning, when he awoke to find nothing but a bare patch of earth where the tree once stood, as though it had been spirited away in the wee hours of the night.
+
+Such encounters are all that is known of what are presumably the most ancient of woses.&quot;
+    usage=fighter
+    die_sound=wose-die.ogg
+    [abilities]
+        {ABILITY_AMBUSH}
+        {ABILITY_REGENERATES}
+    [/abilities]
+    [death]
+        start_time=0
+        [frame]
+            image=&quot;units/woses/wose-ancient-die-fall-[1~15].png:100&quot;
+        [/frame]
+    [/death]
+    [attack]
+        name=crush
+        description=_&quot;crush&quot;
+        icon=attacks/crush-wose.png
+        type=impact
+        range=melee
+        damage=25
+        number=2
+    [/attack]
+    {DEFENSE_ANIM &quot;units/woses/wose-ancient-defend.png&quot; &quot;units/woses/wose-ancient.png&quot; wose-hit.ogg }
+    [attack_anim]
+        [filter_attack]
+            name=crush
+        [/filter_attack]
+        start_time=-500
+        {SOUND:HIT_AND_MISS wose-attack.ogg wose-miss.ogg -500}
+        [frame]
+            image=&quot;units/woses/wose-ancient-attack-[1,2,1].png:[400,200,100]&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

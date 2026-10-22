@@ -1,0 +1,77 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Skele_Death_Squire.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/undead/Skele_Death_Squire.cfg</h1><pre>#textdomain wesnoth-units
+
+[unit_type]
+    id=Death Squire
+    name= _ &quot;Death Squire&quot;
+    race=undead
+    image=&quot;units/undead-skeletal/deathsquire.png&quot;
+    {LEADING_ANIM &quot;units/undead-skeletal/deathsquire-leading.png&quot; &quot;units/undead-skeletal/deathsquire.png&quot; 12,-20}
+    hitpoints=44
+    movement_type=undeadfoot
+    [resistance]
+        blade=60
+        impact=120
+        pierce=40
+    [/resistance]
+    movement=5
+    experience=91
+    level=2
+    alignment=chaotic
+    advances_to=Death Knight
+    cost=39
+    [abilities]
+        {ABILITY_LEADERSHIP}
+        {ABILITY_SUBMERGE}
+    [/abilities]
+    usage=fighter
+    description= _ &quot;Sometimes the mightiest warriors and generals, cursed with hate and angst, came back to this world as Death Knights. Death Squires serve them whilst accruing enough unholy power to become Death Knights. In the process they pick up a good deal of the Knight’s power, including the ability to command underlings.&quot;
+    # expanded the DEFENSE_ANIM to use [if]/[else], just using hits=no with DEFENSE_ANIM_FILTERED does not work
+    [defend]
+        start_time=-126
+        [if]
+            hits=yes
+            [frame]
+                image=&quot;units/undead-skeletal/deathsquire-defend.png&quot;:1,&quot;units/undead-skeletal/deathsquire-defend2.png&quot;:250,&quot;units/undead-skeletal/deathsquire-defend.png&quot;:1
+            [/frame]
+            hit_sound_start_time=-25
+            [hit_sound_frame]
+                sound={SOUND_LIST:SKELETON_HIT}
+            [/hit_sound_frame]
+        [/if]
+        [else]
+            hits=no
+            [frame]
+                image=&quot;units/undead-skeletal/deathsquire-defend.png&quot;:1,&quot;units/undead-skeletal/deathsquire-defend.png&quot;:250,&quot;units/undead-skeletal/deathsquire-defend.png&quot;:1
+            [/frame]
+        [/else]
+    [/defend]
+    die_sound={SOUND_LIST:SKELETON_DIE}
+    [attack]
+        name=axe
+        description=_&quot;axe&quot;
+        type=blade
+        range=melee
+        damage=8
+        number=4
+        icon=&quot;attacks/axe-undead.png&quot;
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=axe
+        [/filter_attack]
+
+        start_time=-650
+        offset=0.0~-0.05:450,-0.05~0.65:200,0.65~0.0:350
+
+        [frame]
+            image=&quot;units/undead-skeletal/deathsquire-attack-[1~6].png:[150*4,200,175]&quot;
+        [/frame]
+        # this helps clean up out-of-hex artifacts, something that could be revisited
+        [frame]
+            image=&quot;units/undead-skeletal/deathsquire.png:25&quot;
+        [/frame]
+
+        {SOUND:HIT_AND_MISS axe.ogg {SOUND_LIST:MISS} -75}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

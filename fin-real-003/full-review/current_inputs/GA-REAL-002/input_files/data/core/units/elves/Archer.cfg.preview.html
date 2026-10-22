@@ -1,0 +1,126 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Archer.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/elves/Archer.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Elvish Archer
+    name= _ &quot;Elvish Archer&quot;
+    race=elf
+    gender=male,female
+    image=&quot;units/elves-wood/archer.png&quot;
+    small_profile=&quot;portraits/elves/archer.webp~CROP(0,40,360,360)&quot;
+    profile=&quot;portraits/elves/archer.webp&quot;
+    hitpoints=29
+    movement_type=woodland
+    movement=6
+    experience=44
+    level=1
+    alignment=neutral
+    advances_to=Elvish Ranger,Elvish Marksman
+    cost=17
+    usage=archer
+    description= _ &quot;As primarily foragers and hunters, most elves learn to become proficient archers from a young age. Besides being only a practical skill, archery is also a common pastime and many competitions are held in sport for the entertainment of spectators and participants alike. This ability is readily turned to battle in times of war, where many elves will wield bows as their weapons of choice. Though not as sturdy as their human or orc counterparts, Elvish archers are still effective combatants, especially when fighting from the safety of their forests.&quot;
+    die_sound={SOUND_LIST:ELF_HIT}
+    [attack]
+        name=sword
+        description=_&quot;sword&quot;
+        icon=attacks/sword-elven.png
+        type=blade
+        range=melee
+        damage=5
+        number=2
+    [/attack]
+    [attack]
+        name=bow
+        description=_&quot;bow&quot;
+        icon=attacks/bow-elven.png
+        type=pierce
+        range=ranged
+        damage=5
+        number=4
+    [/attack]
+    {DEFENSE_ANIM_RANGE &quot;units/elves-wood/archer-sword-defend.png&quot; &quot;units/elves-wood/archer-sword.png&quot; {SOUND_LIST:ELF_HIT} melee }
+    {DEFENSE_ANIM_RANGE &quot;units/elves-wood/archer-bow-defend.png&quot; &quot;units/elves-wood/archer-bow.png&quot; {SOUND_LIST:ELF_HIT} ranged }
+    [attack_anim]
+        [filter_attack]
+            name=bow
+        [/filter_attack]
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        start_time=-445
+        [frame]
+            image=&quot;units/elves-wood/archer-bow.png:65&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS bow.ogg bow-miss.ogg -380}
+        [frame]
+            image=&quot;units/elves-wood/archer-bow-attack[1~4].png:[75*2,100,130]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/archer-bow.png:65&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=sword
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;units/elves-wood/archer-sword.png:25&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/archer-sword-[1~4].png:[100,150,50*2]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -75}
+        [frame]
+            image=&quot;units/elves-wood/archer-sword.png:25&quot;
+        [/frame]
+    [/attack_anim]
+    [female]
+        name= _ &quot;female^Elvish Archer&quot;
+        gender=female
+        image=&quot;units/elves-wood/archer+female.png&quot;
+        # Need small_profile to explicitly override the male version
+        small_profile=&quot;portraits/elves/archer+female.webp&quot;
+        profile=&quot;portraits/elves/archer+female.webp&quot;
+        die_sound={SOUND_LIST:ELF_FEMALE_HIT}
+        {DEFENSE_ANIM_RANGE &quot;units/elves-wood/archer+female-sword-defend.png&quot; &quot;units/elves-wood/archer+female-sword.png&quot; {SOUND_LIST:ELF_FEMALE_HIT} melee }
+        {DEFENSE_ANIM_RANGE &quot;units/elves-wood/archer+female-bow-defend.png&quot; &quot;units/elves-wood/archer+female-bow.png&quot; {SOUND_LIST:ELF_FEMALE_HIT} ranged}
+        [attack_anim]
+            [filter_attack]
+                name=bow
+            [/filter_attack]
+            [frame]
+                image=&quot;units/elves-wood/archer+female-bow.png:65&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/elves-wood/archer+female-bow-attack[1~4].png:[75*2,100,130]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/elves-wood/archer+female-bow.png:65&quot;
+            [/frame]
+        [/attack_anim]
+        [attack_anim]
+            [filter_attack]
+                name=sword
+            [/filter_attack]
+            [frame]
+                image=&quot;units/elves-wood/archer+female-sword.png:25&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/elves-wood/archer+female-sword-[1~4].png:[100,150,50*2]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/elves-wood/archer+female-sword.png:25&quot;
+            [/frame]
+        [/attack_anim]
+    [/female]
+    [idle_anim]
+        {STANDARD_IDLE_FILTER}
+        start_time=0
+        [frame]
+            image=&quot;units/elves-wood/archer-idle-[1~6,3~6,3~6,2,1].png:100&quot;
+        [/frame]
+    [/idle_anim]
+[/unit_type]
+</pre></main></body></html>

@@ -1,0 +1,59 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Luminary.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/dunefolk/Luminary.cfg</h1><pre>#textdomain wesnoth-units
+
+#define PATH_TEMP
+units/dunefolk/herbalist/#enddef
+
+[unit_type]
+    id=Dune Luminary
+    name= _ &quot;Dune Luminary&quot;
+    race=dunefolk
+    image=&quot;{PATH_TEMP}luminary.png&quot;
+    profile=&quot;portraits/dunefolk/herbalist.webp&quot;
+    hitpoints=52
+    movement_type=dunefoot
+    [abilities]
+        {ABILITY_CURES}
+        {ABILITY_SELF_HEAL}
+    [/abilities]
+    movement=5
+    experience=150
+    level=3
+    alignment=liminal
+    {AMLA_DEFAULT}
+    cost=38
+    usage=healer
+    description= _ &quot;On the surface, it is not entirely clear what distinguishes a Luminary from other healers among the Dunefolk. Certainly, a Luminary may be marginally more knowledgeable, well-traveled, or skilled in combat compared to normal herbalists or apothecaries, but the difference is usually modest at best. Nevertheless, ‘Luminary’ is a formal title granted to the highest order of Dunefolk healers and bestows these men both the greatest esteem and the greatest envy.
+
+There is some speculation that a secret order exists among the Luminaries. These so called ‘Eminents’ hoard a great deal of forbidden knowledge and advise many Dunefolk leaders from the shadows. Such a thing has never been proven, but the fact remains that some Luminaries seem to hold much more influence than their abilities should afford.&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    {DEFENSE_ANIM &quot;{PATH_TEMP}luminary-defend2.png&quot; &quot;{PATH_TEMP}luminary-defend1.png&quot; {SOUND_LIST:HUMAN_HIT} }
+
+    [resistance]
+        blade=110
+        pierce=80
+    [/resistance]
+
+    [attack]
+        name=mace
+        description= _ &quot;mace&quot;
+        type=impact
+        range=melee
+        damage=9
+        number=4
+        icon=attacks/mace.png
+    [/attack]
+
+    [attack_anim]
+        [filter_attack]
+            name=mace
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;{PATH_TEMP}luminary.png:300&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}
+    [/attack_anim]
+[/unit_type]
+
+#undef PATH_TEMP
+</pre></main></body></html>

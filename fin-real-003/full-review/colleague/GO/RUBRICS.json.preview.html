@@ -1,0 +1,82 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RUBRICS.json</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>RUBRICS.json</h1><pre>{
+ &quot;rubrics&quot;: [
+  {
+   &quot;rubric&quot;: &quot;Does the travel_determination_register.csv get this right: per-traveler determinations under the policy&#x27;s conference travel tests?&quot;,
+   &quot;weight&quot;: 10,
+   &quot;criterion&quot;: [
+    &quot;Applies the twelve-month window day-precisely: denies PD26-004, whose prior externally hosted multi-day conference ended inside the window, and clears PD26-024, whose prior conference ended exactly on the boundary date and so falls outside it.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the conference_travel_budget_FY2026.xlsx get this right: per-traveler cost estimates on the per-diem basis?&quot;,
+   &quot;weight&quot;: 9,
+   &quot;criterion&quot;: [
+    &quot;The per-traveler estimates for the boundary travelers in PD26-003: lodging $906.00, M&amp;IE $598.00, total $1,504.00; PD26-012: lodging $647.00, M&amp;IE $396.00, total $1,043.00; PD26-001: lodging $716.00, M&amp;IE $414.00, total $1,130.00 match, each carrying the lodging cost, the M&amp;IE cost and the total; these are the travelers whose itineraries depart from the main block. (tolerance: within $5 of each entry&#x27;s lodging, M&amp;IE and total)&quot;,
+    &quot;The early arriver&#x27;s lodging is costed at $906.00 — the pre-conference nights at the earlier season window&#x27;s rate, the conference-week nights at the later window&#x27;s rate, both window end dates included. (tolerance: within $5)&quot;,
+    &quot;The client-visit traveler&#x27;s estimate totals $1,043.00: the unlisted town&#x27;s night and that day&#x27;s M&amp;IE at the standard CONUS rate from the extract&#x27;s standard line, the host-city nights at the host locality&#x27;s in-season rate. (tolerance: within $5)&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the conference_travel_budget_FY2026.xlsx get this right: m&amp;IE treatment, the total request and the cap test?&quot;,
+   &quot;weight&quot;: 9,
+   &quot;criterion&quot;: [
+    &quot;Total M&amp;IE across cleared travelers is $8,262.00 — the full applicable rate for each day between arrival and departure and the reduced travel-day fraction of the applicable rate on the departure and return days, counted in days, each day at that day&#x27;s locality rate. (tolerance: within 1% relative)&quot;,
+    &quot;The travel and lodging request totals $22,166.00 — the sum of cleared travelers&#x27; estimates, excluding every companion and guest add-on and the contracted-block gap — and is shown against the $75,000 cap with $52,834.00 of headroom. (tolerance: total within 1% relative; headroom within $100)&quot;,
+    &quot;Every cleared traveler&#x27;s M&amp;IE day count is one more than their lodging night count, and no traveler&#x27;s M&amp;IE is charged at full rate on their arrival or departure day.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the conference_travel_budget_FY2026.xlsx get this right: non-travel program items and the contracted-block exception line?&quot;,
+   &quot;weight&quot;: 7,
+   &quot;criterion&quot;: [
+    &quot;The companions&#x27; package is costed as a separate program line totalling $960.00 from the brief&#x27;s fee schedule, and no part of it enters any traveler&#x27;s estimate or the capped travel and lodging total.&quot;,
+    &quot;The contracted-block gap is carried as an exception line of $3,168.00 — the per-night gap $40.00 between the contracted rate and the host locality&#x27;s in-season lodging per diem, times the conference-block nights — not folded into traveler lodging costs.&quot;,
+    &quot;The workbook&#x27;s treatment keeps the block-rate exception line and the companions&#x27; package outside the travel and lodging request the cap tests, and presents both as decisions for the committee rather than traveler costs.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the travel_determination_register.csv get this right: reconciliation of nominations against the roster?&quot;,
+   &quot;weight&quot;: 8,
+   &quot;criterion&quot;: [
+    &quot;Reports the unmatched nomination in PD26-025 - Deepa Iyer - no roster record; identity unverified, cannot be cleared with its nomination ID, nominee and the reason it cannot be cleared — carried as an open item with a count, neither dropped nor cleared; omitting it fails the criterion.&quot;,
+    &quot;Resolves the two spellings to one employee: NEG-1010 appears once with both nominations noted, and PD26-025 is recorded as not cleared on the no-roster-record ground rather than force-matched to the similarly named employee.&quot;,
+    &quot;The register holds 27 traveler rows — the two duplicate nominations merged to one, the unmatched nomination still reported — so neither inflates nor shrinks the count of proposed travelers.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the conference_budget_memo.docx get this right: memo: the recommended figure, the determinations and the committee&#x27;s decisions?&quot;,
+   &quot;weight&quot;: 9,
+   &quot;criterion&quot;: [
+    &quot;Recommends the figure to submit, consistent with the workbook total, and defends it on the published per-diem footing Finance spot-checks: nightly seasonal rates for the host locality, the standard CONUS rate for the unlisted stop, and the seventy-five percent travel-day M&amp;IE treatment: $22,166.00.&quot;,
+    &quot;Flags as committee-only decisions the contracted conference-block rate sitting above the locality&#x27;s lodging per diem under the federal conference planning framework the policy adopts, and the clearance of the nomination that could not be reconciled to the roster: the block-rate gap and the unreconciled nomination are committee decisions; the per-diem ceiling on conference lodging rests on 41 CFR part 301-74.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the conference_budget_memo.docx get this right: memo: method transparency and limitations?&quot;,
+   &quot;weight&quot;: 6,
+   &quot;criterion&quot;: [
+    &quot;Explains the per-diem basis well enough for a Finance spot-check: which season windows cover which nights including the early arrival, why the unlisted town takes the standard rate, how travel-day M&amp;IE was reduced, and that per diem caps lodging so the contracted block rate is not the reimbursable figure.&quot;,
+    &quot;States the limitations that matter to the committee: the estimates rest on requested itineraries, the approvals and the probation exception are only as good as the approval file, and the figures move if the committee funds the block-rate gap or the companions&#x27; package.&quot;,
+    &quot;Explains the determinations&#x27; reasoning at the level the committee reads, so the pattern reads as policy applied rather than discretion: the twelve-month window measured day-precisely from the event&#x27;s first day, the boundary case that falls outside it, and the director exception honoured on the recorded approval.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the travel_determination_register.csv get this right: register completeness and the basis lines?&quot;,
+   &quot;weight&quot;: 5,
+   &quot;criterion&quot;: [
+    &quot;Every proposed traveler from the reconciled list appears exactly once — cleared and not cleared alike — each row carrying the determination, the estimated cost where the traveler is cleared, and a one-line basis: every reconciled traveler appears once, cleared rows carry the estimated cost, every row carries a one-line basis.&quot;,
+    &quot;Each not-cleared row&#x27;s one-line basis in PD26-004 (Graciela Castro): externally hosted conference of two or more days inside the twelve months preceding the event&#x27;s first day; PD26-006 (Alma Gomez): still serving the probationary period without a recorded director-level exception; PD26-010 (Nikhil Shah): written manager approval not on file at the time the application is submitted (pending); PD26-020 (Tuan Vu): written manager approval not on file at the time the application is submitted (verbal only); PD26-025 (Deepa Iyer): no roster record; identity unverified, cannot be cleared names the specific policy ground — written approval not on file, conference inside the twelve-month window, probation without a recorded exception, or no roster record — never a generic ineligible.&quot;,
+    &quot;The register&#x27;s handling of the two identity cases is defensible for a clearance tracker: the merged traveler&#x27;s single row notes both nominations so neither nominating manager&#x27;s submission disappears, and the unmatched nomination directs follow-up rather than a clearance decision.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the conference_travel_budget_FY2026.xlsx get this right: internal consistency of the model against the rate tables?&quot;,
+   &quot;weight&quot;: 4,
+   &quot;criterion&quot;: [
+    &quot;No lodging night in the workbook is costed above the applicable per-diem rate for its locality and season: every cleared traveler&#x27;s lodging sits at or below the FY2026 extract&#x27;s rate for that night, and the contracted block rate appears only on the exception line.&quot;,
+    &quot;The capped travel and lodging total is arithmetically consistent with the traveler lines: it equals the sum of the cleared travelers&#x27; estimates, and no companion add-on amount, guest cost or block-rate gap is included in any traveler&#x27;s line.&quot;,
+    &quot;The model ties every per-diem figure back to the published table so a Finance spot-check can trace it: each traveler line&#x27;s rates are traceable to an extract row for the locality and season applied, and the unlisted town&#x27;s night is identified as taking the standard line&#x27;s rate.&quot;
+   ]
+  }
+ ]
+}</pre></main></body></html>

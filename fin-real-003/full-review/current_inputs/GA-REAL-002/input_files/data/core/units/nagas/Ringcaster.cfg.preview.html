@@ -1,0 +1,108 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ringcaster.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/nagas/Ringcaster.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Naga Ringcaster
+    name= _ &quot;Naga Ringcaster&quot;
+    race=naga
+    gender=male,female
+    image=&quot;units/nagas/mixed/ringcaster.png&quot;
+    profile=&quot;portraits/nagas/naga-ringcaster.webp&quot;
+    hitpoints=41
+    movement_type=naga
+    movement=7
+    experience=62
+    level=2
+    alignment=neutral
+    advances_to=Naga Zephyr
+    cost=24
+    usage=mixed fighter
+    description= _ &quot;The chakram, a greater blade ring than the chakri, is the signature weapon of the southern Naga and their renowned Ringcasters. Well balanced chakrams are useful for throwing, but the rejected blades make a good fist-load weapon, similar to a sharp-bladed tekko or knuckleduster.&quot;
+    die_sound=naga-die.ogg
+    {DEFENSE_ANIM &quot;units/nagas/mixed/ringcaster-defend2.png&quot; &quot;units/nagas/mixed/ringcaster-defend1.png&quot; {SOUND_LIST:NAGA_HIT} }
+
+    [defense]
+        flat=60
+        sand=50
+        forest=50
+        hills=50
+        mountains=50
+        village=50
+        cave=50
+    [/defense]
+
+    [attack]
+        name=chakram_melee
+        description=_&quot;chakram&quot;
+        type=blade
+        range=melee
+        damage=5
+        number=4
+        icon=attacks/tekko.png
+    [/attack]
+    [attack]
+        name=chakram
+        description= _&quot;chakram&quot;
+        type=blade
+        range=ranged
+        damage=8
+        number=3
+        icon=attacks/chakram.png
+    [/attack]
+
+    [attack_anim]
+        [filter_attack]
+            name=chakram_melee
+        [/filter_attack]
+        start_time=-400
+        offset=0.0:200,0.0~0.6:200,0.6~0.0:300
+        [frame]
+            image=&quot;units/nagas/mixed/ringcaster-attack-[1~7].png:[80*7]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/nagas/mixed/ringcaster.png:140&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -150}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=chakram
+        [/filter_attack]
+        start_time=-560
+        missile_start_time=-150
+        [if]
+            hits=yes
+            [missile_frame]
+                duration=150
+                image=&quot;projectiles/chakram.png&quot;
+                image_diagonal=&quot;projectiles/chakram.png&quot;
+                offset=0~0.8
+            [/missile_frame]
+            [frame]
+                image=&quot;units/nagas/mixed/ringcaster-throw-[1~8].png:[80*8]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/nagas/mixed/ringcaster.png:60&quot;
+            [/frame]
+        [/if]
+        [else]
+            hits=no
+            [missile_frame]
+                duration=150
+                image=&quot;projectiles/chakram.png&quot;
+                image_diagonal=&quot;projectiles/chakram.png&quot;
+                offset=0~1.4
+            [/missile_frame]
+            [frame]
+                image=&quot;units/nagas/mixed/ringcaster-throw-[1~8].png:[80*8]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/nagas/mixed/ringcaster.png:60&quot;
+            [/frame]
+        [/else]
+        {SOUND:HIT_AND_MISS throwing-knife.ogg throw-[1~4].wav -100}
+    [/attack_anim]
+    [female]
+        name= _ &quot;Nagini Ringcaster&quot;
+        gender=female
+    [/female]
+[/unit_type]
+</pre></main></body></html>

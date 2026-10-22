@@ -1,0 +1,137 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>udisplay.hpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/udisplay.hpp</h1><pre>/*
+	Copyright (C) 2003 - 2024
+	by David White &lt;dave@whitevine.net&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+/**
+ *  @file
+ *  Display units performing various actions: moving, attacking, and dying.
+ */
+
+#pragma once
+
+#include &quot;fake_unit_ptr.hpp&quot;
+#include &quot;map/location.hpp&quot;
+#include &quot;units/animation.hpp&quot;
+
+class attack_type;
+class game_board;
+class game_display;
+class unit;
+
+/**
+ *  Contains a number of free functions which display units
+ *
+ *  performing various on-screen actions - moving, attacking, and dying.
+ */
+namespace unit_display
+{
+
+/**
+ * A class to encapsulate the steps of drawing a unit&#x27;s move.
+ * If control over how far the unit moves is not needed, move_unit() may
+ * be a more convenient interface.
+ */
+class unit_mover {
+public:
+	unit_mover(const unit_mover&amp;) = delete;
+	unit_mover&amp; operator=(const unit_mover&amp;) = delete;
+
+	explicit unit_mover(const std::vector&lt;map_location&gt;&amp; path, bool animate=true, bool force_scroll=false);
+	~unit_mover();
+
+	void start(unit_ptr u);
+	void proceed_to(unit_ptr u, std::size_t path_index, bool update=false, bool wait=true);
+	void wait_for_anims();
+	void finish(unit_ptr u, map_location::DIRECTION dir = map_location::NDIRECTIONS);
+
+private: // functions
+	void replace_temporary(unit_ptr u);
+	void update_shown_unit();
+
+private: // data
+	game_display * const disp_;
+	const bool can_draw_;
+	const bool animate_;
+	const bool force_scroll_;
+	unit_animator animator_;
+	/** The animation potential to wait until. INT_MIN for no wait; INT_MAX to wait for end. */
+	int wait_until_;
+	/** The unit to be (re-)shown after an animation finishes. */
+	unit_ptr shown_unit_;
+	const std::vector&lt;map_location&gt;&amp; path_;
+	std::size_t current_;
+	fake_unit_ptr temp_unit_ptr_;
+	bool was_hidden_;
+	bool is_enemy_;
+};
+
+
+/**
+ * Display a unit moving along a given path.
+ */
+void move_unit(const std::vector&lt;map_location&gt;&amp; path, unit_ptr u,
+	bool animate=true,
+	map_location::DIRECTION dir=map_location::NDIRECTIONS,
+	bool force_scroll=false);
+
+/**
+ * Play a pre-fight animation
+ * First unit is the attacker, second unit the defender
+ */
+void unit_draw_weapon( const map_location&amp; loc, unit&amp; u, const_attack_ptr attack=nullptr, const_attack_ptr secondary_attack=nullptr,const map_location&amp; defender_loc = map_location::null_location(), unit_ptr defender=unit_ptr());
+
+/**
+ * Play a post-fight animation
+ * Both unit can be set to null, only valid units will play their animation
+ */
+void unit_sheath_weapon( const map_location&amp; loc, unit_ptr u=unit_ptr(), const_attack_ptr attack=nullptr, const_attack_ptr secondary_attack=nullptr,const map_location&amp; defender_loc = map_location::null_location(), unit_ptr defender=unit_ptr());
+
+/**
+ * Show a unit fading out.
+ *
+ * Note: this only shows the effect, it doesn&#x27;t actually kill the unit.
+ */
+ void unit_die( const map_location&amp; loc, unit&amp; u,
+	const_attack_ptr attack=nullptr, const_attack_ptr secondary_attack=nullptr,
+	const map_location&amp; winner_loc=map_location::null_location(),
+	unit_ptr winner = unit_ptr());
+
+
+/**
+ *  Make the unit on tile &#x27;a&#x27; attack the unit on tile &#x27;b&#x27;.
+ *
+ *  The &#x27;damage&#x27; will be subtracted from the unit&#x27;s hitpoints,
+ *  and a die effect will be displayed if the unit dies.
+ *
+ *  @retval	true                  if the defending unit is dead, should be
+ *                                removed from the playing field.
+ */
+void unit_attack(display * disp, game_board &amp; board, //TODO: Would be nice if this could be purely a display function and defer damage dealing to its caller
+	const map_location&amp; a, const map_location&amp; b, int damage,
+	const attack_type&amp; attack, const_attack_ptr secondary_attack,
+	int swing, const std::string&amp; hit_text, int drain_amount, const std::string&amp; att_text, const std::vector&lt;std::string&gt;* extra_hit_sounds=nullptr,
+	bool attacking=true);
+
+
+void unit_recruited(const map_location&amp; loc,
+	const map_location&amp; leader_loc=map_location::null_location());
+
+/**
+ * This will use a poisoning anim if healing&lt;0.
+ */
+void unit_healing(unit &amp;healed, const std::vector&lt;unit *&gt; &amp;healers, int healing,
+                  const std::string &amp; extra_text=&quot;&quot;);
+
+}
+</pre></main></body></html>

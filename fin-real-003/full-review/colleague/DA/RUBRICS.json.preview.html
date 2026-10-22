@@ -1,0 +1,82 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RUBRICS.json</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>RUBRICS.json</h1><pre>{
+ &quot;rubrics&quot;: [
+  {
+   &quot;rubric&quot;: &quot;Does the county_aqi_cancellation_workbook.xlsx get this right: pima County daily and annual AQI extraction?&quot;,
+   &quot;weight&quot;: 8,
+   &quot;criterion&quot;: [
+    &quot;The cleaned daily AQI series contains 366 rows and 366 unique dates; every retained row has state code 04 and county code 019.&quot;,
+    &quot;The cleaned daily AQI sheet excludes every out-of-state row that shares Pima&#x27;s county code; the excluded state-county pairs are 06-019; 17-019; 18-019; 26-019; 29-019.&quot;,
+    &quot;The annual AQI summary for Pima County reports 366 days with AQI, 113 good days, 2 unhealthy days, 171 maximum AQI, and 56 median AQI.&quot;,
+    &quot;The annual summary is drawn from the single supplied EPA annual AQI row for Pima County in the planning year, and the summary labels the selected state, county, and year.&quot;,
+    &quot;The annual AQI summary also reports 10 Unhealthy for Sensitive Groups days and 87 for the annual summary upper-decile AQI value.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the county_aqi_cancellation_workbook.xlsx get this right: county-day cancellation list?&quot;,
+   &quot;weight&quot;: 7,
+   &quot;criterion&quot;: [
+    &quot;Lists every Pima County cancellation day in 2024-04-17: 122; 2024-05-18: 105; 2024-06-14: 115; 2024-06-15: 126; 2024-06-21: 169; 2024-06-22: 171; 2024-07-12: 115; 2024-07-23: 115; 2024-07-24: 119; 2024-07-26: 119; 2024-10-18: 103; each entry has the calendar date and the matching daily AQI value, and days with multiple school-site rows appear once; leaving one out fails.&quot;,
+    &quot;The cancellation day list contains exactly 11 county-day rows, equal to the number of distinct cancellation dates.&quot;,
+    &quot;The cancellation day list includes 11 cancellation dates with a non-missing daily AQI value.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the county_aqi_cancellation_workbook.xlsx get this right: cancellation days relative to the planned threshold?&quot;,
+   &quot;weight&quot;: 7,
+   &quot;criterion&quot;: [
+    &quot;Among the cancellation days listed, 9 have daily AQI below the planned threshold of 150 and 2 are at or above 150.&quot;,
+    &quot;Lists every cancellation day with daily AQI below 150 in 2024-04-17: 122; 2024-05-18: 105; 2024-06-14: 115; 2024-06-15: 126; 2024-07-12: 115; 2024-07-23: 115; 2024-07-24: 119; 2024-07-26: 119; 2024-10-18: 103, each with its date and daily AQI value; leaving one out fails.&quot;,
+    &quot;The minimum daily AQI among the cancellation days is 103 and the maximum is 171.&quot;,
+    &quot;The workbook presents every date on which at least one Pima County school cancelled outdoor activity, including dates with daily AQI below 150, and does not redefine cancellation days to only those at or above 150.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the aqi_asthma_model_workbook.xlsx get this right: primary model specification and main coefficients?&quot;,
+   &quot;weight&quot;: 10,
+   &quot;criterion&quot;: [
+    &quot;The primary model is a log-link Poisson or negative binomial regression with the log of the Pima County resident population estimate from the supplied Census file as an offset, and the workbook reports the overdispersion diagnostic used to choose between them.&quot;,
+    &quot;The primary model&#x27;s exponentiated cancellation-status coefficient is 1.76560 with 95% confidence interval (1.13052 to 2.75745), and whether the confidence interval excludes the null is yes. (tolerance: within 1% relative for point estimate and confidence limits; boolean must be true)&quot;,
+    &quot;The primary model reports the same-day AQI exposure coefficient and a 95% confidence interval; either per-1-unit or per-10-unit AQI reporting is acceptable.&quot;,
+    &quot;The primary model is described as using the asthma-specific emergency-department visit count as the outcome, not the broader respiratory or all-cause visit count, and the same outcome definition is used in the primary model and rate calculations.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the aqi_asthma_model_workbook.xlsx get this right: primary model lagged terms and diagnostics?&quot;,
+   &quot;weight&quot;: 8,
+   &quot;criterion&quot;: [
+    &quot;The primary model reports exponentiated rate ratios and 95% confidence intervals for both pre-specified AQI lag terms (previous-day and second-previous-day), with the AQI unit scale clearly labelled; leaving either term out fails.&quot;,
+    &quot;The model diagnostics report the fitted primary count model&#x27;s sample size, residual deviance, and residual degrees of freedom alongside the primary coefficient estimates.&quot;,
+    &quot;The workbook reports the overdispersion diagnostic and states whether the final primary model is Poisson or negative binomial; if negative binomial is used, the dispersion parameter is reported.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the aqi_asthma_model_workbook.xlsx get this right: primary model exposure definitions?&quot;,
+   &quot;weight&quot;: 6,
+   &quot;criterion&quot;: [
+    &quot;The primary model defines cancellation status using the planned daily AQI threshold named in the request, and the workbook labels that threshold clearly.&quot;,
+    &quot;Under the planned threshold, the primary model analytic dataset contains 2 cancellation days and 362 non-cancellation days.&quot;,
+    &quot;The primary model includes separate exposure terms for same-day, previous-day, and second-previous-day AQI, together with a cancellation-status indicator, and each term is estimated from the same analytic dataset.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the asthma_ed_visit_summary.xlsx get this right: asthma ED visit rates and denominators?&quot;,
+   &quot;weight&quot;: 8,
+   &quot;criterion&quot;: [
+    &quot;The summary reports an average daily asthma ED visit rate of 0.19 per 10,000 residents and an annual asthma ED visit rate of 69.91 per 10,000 residents. (tolerance: within 0.1 per 10,000 residents)&quot;,
+    &quot;The summary reports the annual asthma ED visit count 7345 and the Census county resident population denominator 1050599.&quot;,
+    &quot;The daily asthma ED visit rate sheet contains one rate for every calendar day in the analysis period; any missing date is listed in none.&quot;,
+    &quot;The summary labels every rate as asthma-specific ED visits and states that the denominator is the Pima County resident population, not monitored days or broader respiratory visits.&quot;
+   ]
+  },
+  {
+   &quot;rubric&quot;: &quot;Does the asthma_ed_visit_summary.xlsx get this right: assumptions and limitations?&quot;,
+   &quot;weight&quot;: 6,
+   &quot;criterion&quot;: [
+    &quot;The assumptions and limitations section states that the planning assumption that cancellations occurred only at AQI 150 or above was checked against the cancellation log and was not supported, and identifies the observed threshold at which cancellation days actually begin.&quot;,
+    &quot;The assumptions and limitations section identifies the supplied Census county population estimate as the denominator for all per-10,000-resident rates.&quot;,
+    &quot;The limitations section notes that the model estimates association, not causation, and identifies at least one plausible unmeasured confounder for the AQI-asthma ED relationship.&quot;,
+    &quot;The assumptions and limitations section states that all rates and model outcomes use the asthma-specific ED visit field, not broader respiratory or all-cause visits, and describes syndromic surveillance completeness.&quot;
+   ]
+  }
+ ]
+}</pre></main></body></html>

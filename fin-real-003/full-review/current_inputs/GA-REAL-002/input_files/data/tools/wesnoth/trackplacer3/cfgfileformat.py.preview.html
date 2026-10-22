@@ -1,0 +1,209 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>cfgfileformat.py</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/tools/wesnoth/trackplacer3/cfgfileformat.py</h1><pre>#!/usr/bin/env python3
+# encoding: utf-8
+&quot;&quot;&quot;Module for reading and writing .cfg files containing journey data.
+
+It will look for track information enclosed in special comments that look like
+this:
+
+    # trackplacer: tracks begin
+    # trackplacer: tracks end
+
+trackplacer will alter only what it finds inside these comments, except that it
+will also generate a file epilog for undefining local symbols.  The
+epilog will begin with this comment:
+
+    # trackplacer: epilog begins
+
+TODO: what to do about the epilog? It needs to come after the scenarios, otherwise
+the undefs happen before the scenarios can use the journey data.
+
+Special comments may appear in the track section, looking like this:
+
+    # trackplacer: &lt;property&gt;=&lt;value&gt;
+
+These set properties that trackplacer may use. At present there is
+only one such property: &quot;map&quot;, which records the name of the mapfile on
+which your track is laid.
+
+Original (python2 + pygtk) implementation by Eric S. Raymond for the Battle For Wesnoth project, October 2008
+&quot;&quot;&quot;
+
+import re
+
+from wesnoth.trackplacer3.datatypes import *
+
+class IOException(Exception):
+    &quot;&quot;&quot;Exception thrown while reading a track file.&quot;&quot;&quot;
+    def __init__(self, message, path, lineno=None):
+        self.message = message
+        self.path = path
+        self.lineno = lineno
+
+class CfgFileMetadata:
+    &quot;&quot;&quot;Trackplacer is intended to write .cfg files that may also contain other information.
+
+When it reads a file, in addition to the Journey it keeps some other information so that
+it can write back to the same file while preserving the other data in the .cfg.&quot;&quot;&quot;
+    def __init__(self):
+        self.properties = {}
+        self.before = self.after = &quot;&quot;
+
+class CfgFileFormat(FileFormatHandler):
+    &quot;&quot;&quot;Translate a Journey to/from a .cfg file, preserving non-trackplacer data.&quot;&quot;&quot;
+    def __init__(self):
+        pass
+
+    def read(self, fp):
+        if type(fp) == type(&quot;&quot;):
+            try:
+                fp = open(fp, &quot;r&quot;)
+            except IOError:
+                raise IOException(&quot;Cannot read file.&quot;, fp)
+        journey = Journey()
+        metadata = CfgFileMetadata()
+        selected_track = None
+        if not fp.name.endswith(&quot;.cfg&quot;):
+            raise IOException(&quot;Cannot read this filetype.&quot;, fp.name)
+        waypoint_re = re.compile(&quot;{NEW_(&quot; + &quot;|&quot;.join(icon_presentation_order) + &quot;)&quot; \
+                                 + &quot; +([0-9]+) +([0-9]+)}&quot;)
+        property_re = re.compile(&quot;# *trackplacer: ([^=]+)=(.*)&quot;)
+        define_re = re.compile(&quot;#define (.*)_STAGE[0-9]+(_END|_COMPLETE)?&quot;)
+        state = &quot;before&quot;
+        ignore = True # True when the most recent define_re match found an END or COMPLETE group, or before any track has been defined
+        for line in fp:
+            if line.startswith(&quot;# trackplacer: epilog begins&quot;):
+                break
+            # This is how we ignore stuff outside of track sections
+            if state == &quot;before&quot;:
+                if line.startswith(&quot;# trackplacer: tracks begin&quot;):
+                    state = &quot;tracks&quot; # And fall through...
+                else:
+                    metadata.before += line
+                    continue
+            elif state == &quot;after&quot;:
+                metadata.after += line
+                continue
+            elif line.startswith(&quot;# trackplacer: tracks end&quot;):
+                state = &quot;after&quot;
+                continue
+            # Which track are we appending to?
+            m = re.search(define_re, line)
+            if m:
+                selected_track = journey.findTrack(m.group(1))
+                if selected_track == None:
+                    selected_track = Track(m.group(1))
+                    journey.tracks.append(selected_track)
+                ignore = bool(m.group(2))
+                continue
+            # Is this a track marker?
+            m = re.search(waypoint_re, line)
+            if m and not ignore:
+                try:
+                    tag = m.group(1)
+                    x = int(m.group(2))
+                    y = int(m.group(3))
+                    selected_track.waypoints.append(Waypoint(tag, x, y))
+                    continue
+                except ValueError:
+                    raise IOException(&quot;Invalid coordinate field.&quot;, fp.name, i+1)
+            # \todo: Northern Rebirth has some tracks that start with an OLD_REST
+            # before any of the NEW_JOURNEY markers. Maybe add a special-case for
+            # that, that adds them if and only if len(selected_track.waypoints)==0
+
+            # Is it a property setting?
+            m = re.search(property_re, line)
+            if m:
+                metadata.properties[m.group(1)] = m.group(2)
+                continue
+        if &quot;map&quot; in metadata.properties:
+            journey.mapfile = metadata.properties[&#x27;map&#x27;]
+        else:
+            raise IOException(&quot;Missing map declaration.&quot;, fp.name)
+        fp.close()
+        return (journey, metadata)
+
+    def write(self, filename, journey, metadata=None):
+        if metadata is None:
+           metadata = CfgFileMetadata()
+
+        if not filename.endswith(&quot;.cfg&quot;):
+            raise IOException(&quot;File must have .cfg extension.&quot;, fp.name)
+
+        # If we&#x27;re writing to an existing file, preserve the non-trackplacer parts
+        # by ignoring the provided metadata and re-reading it from the file.
+        try:
+            ignored, metadata = self.read(filename)
+            print(&quot;Preserving non-trackplacer data from the destination file&quot;)
+        except:
+            pass
+
+        fp = open(filename, &quot;w&quot;)
+        fp.write(metadata.before)
+        fp.write(&quot;# trackplacer: tracks begin\n#\n&quot;)
+        fp.write(&quot;# Hand-hack this section strictly at your own risk.\n&quot;)
+        fp.write(&quot;#\n&quot;)
+        if not metadata.before and not metadata.after:
+            fp.write(&quot;#\n# wmllint: no translatables\n\n&quot;)
+        if journey.mapfile:
+            metadata.properties[&quot;map&quot;] = journey.mapfile
+        for (key, val) in list(metadata.properties.items()):
+            fp.write(&quot;# trackplacer: %s=%s\n&quot; % (key, val))
+        fp.write(&quot;#\n&quot;)
+        definitions = []
+        for track in journey.tracks:
+            if len(track.waypoints) == 0:
+                print(&quot;Warning: track {name} has no waypoints&quot;.format(name=track.name))
+                continue
+            name = track.name
+            endpoints = []
+            for i in range(0, len(track.waypoints)):
+                if track.waypoints[i].action in segmenters:
+                    endpoints.append(i)
+            if track.waypoints[-1].action not in segmenters:
+                endpoints.append(len(track.waypoints)-1)
+            outname = name.replace(&quot; &quot;, &quot;_&quot;).upper()
+            for (i, e) in enumerate(endpoints):
+                stagename = &quot;%s_STAGE%d&quot; % (outname, i+1,)
+                definitions.append(stagename)
+                fp.write(&quot;#define %s\n&quot; % stagename)
+                for j in range(0, e+1):
+                    age=&quot;OLD&quot;
+                    if i == 0 or j &gt; endpoints[i-1]:
+                        age = &quot;NEW&quot;
+                    waypoint = track.waypoints[j]
+                    marker = &quot;    {%s_%s %d %d}\n&quot; % (age, waypoint.action, waypoint.x, waypoint.y)
+                    fp.write(marker)
+                fp.write(&quot;#enddef\n\n&quot;)
+                endname = &quot;%s_END&quot; % stagename
+                fp.write(&quot;#define %s\n&quot; % endname)
+                definitions.append(endname)
+                for j in range(0, e+1):
+                    age=&quot;OLD&quot;
+                    if j == endpoints[i]:
+                        age = &quot;NEW&quot;
+                    waypoint = track.waypoints[j]
+                    marker = &quot;    {%s_%s %d %d}\n&quot; % (age, waypoint.action, waypoint.x, waypoint.y)
+                    fp.write(marker)
+                fp.write(&quot;#enddef\n\n&quot;)
+            completename = &quot;%s_COMPLETE&quot; % outname
+            fp.write(&quot;#define %s\n&quot; % completename)
+            definitions.append(completename)
+            for waypoint in track.waypoints:
+                marker = &quot;    {%s_%s %d %d}\n&quot; % (&quot;OLD&quot;, waypoint.action, waypoint.x, waypoint.y)
+                fp.write(marker)
+            fp.write(&quot;#enddef\n\n&quot;)
+        fp.write(&quot;# trackplacer: tracks end\n&quot;)
+        fp.write(metadata.after)
+
+        # \todo: what to do about the epilogue? It must wait until after the scenarios have used the journey data.
+        # fp.write (&quot;# trackplacer: epilog begins\n\n&quot;)
+        # for name in definitions:
+        #     if &quot;{&quot; + name + &quot;}&quot; not in metadata.after:
+        #         fp.write(&quot;#undef %s\n&quot; % name)
+        # fp.write (&quot;\n# trackplacer: epilog ends\n&quot;)
+
+        fp.close()
+
+if __name__ == &quot;__main__&quot;:
+    print(&quot;This isn&#x27;t intended to be run directly&quot;)
+</pre></main></body></html>

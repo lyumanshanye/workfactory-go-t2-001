@@ -1,0 +1,110 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Skirmisher.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/dunefolk/Skirmisher.cfg</h1><pre>#textdomain wesnoth-units
+
+#define PATH_TEMP
+units/dunefolk/skirmisher/#enddef
+
+[unit_type]
+    id=Dune Skirmisher
+    name= _ &quot;female^Dune Skirmisher&quot;
+    race=dunefolk
+    gender=female
+    image=&quot;{PATH_TEMP}skirmisher.png&quot;
+    hitpoints=29
+    movement_type=duneelusivefoot
+    movement=6
+    experience=36
+    level=1
+    alignment=lawful
+    advances_to=Dune Strider, Dune Falconer
+    cost=16
+    usage=fighter
+    description= _ &quot;Born and raised out on the open sands, skirmishers are accustomed to the harsh, arid desert heat and inhospitable terrain. Compared to even other Dunefolk, these nomads are unnaturally agile on the unstable dunes, allowing them to safeguard their herds and hunt the barrens with ease. When applied to battle, the same agility allows them to both slip through enemy lines and avoid all manner of attack. These skills make skirmishers effective saboteurs, capable of cutting off escape routes and supply lines, assassinating key units, or pincering an enemy formation into a disadvantageous position.&quot;
+    [abilities]
+        {ABILITY_SKIRMISHER}
+    [/abilities]
+    die_sound={SOUND_LIST:HUMAN_FEMALE_DIE}
+    {STANDING_ANIM_DIRECTIONAL &quot;{PATH_TEMP}skirmisher.png&quot; &quot;{PATH_TEMP}skirmisher-ne.png&quot;}
+    {DEFENSE_ANIM_DIRECTIONAL_FILTERED &quot;{PATH_TEMP}skirmisher-defend2.png&quot; &quot;{PATH_TEMP}skirmisher-defend1.png&quot; &quot;{PATH_TEMP}skirmisher-ne-defend2.png&quot; &quot;{PATH_TEMP}skirmisher-ne-defend1.png&quot; {SOUND_LIST:HUMAN_FEMALE_HIT} ()}
+    #    {DEFENSE_ANIM &quot;{PATH_TEMP}skirmisher-defend2.png&quot; &quot;{PATH_TEMP}skirmisher-defend1.png&quot; {SOUND_LIST:HUMAN_FEMALE_HIT} }
+
+    [attack]
+        name=spear
+        description= _ &quot;spear&quot;
+        type=pierce
+        range=melee
+        damage=4
+        number=4
+        icon=attacks/spear.png
+        [specials]
+            {WEAPON_SPECIAL_FIRSTSTRIKE}
+        [/specials]
+    [/attack]
+    [attack]
+        name=sling
+        description= _ &quot;sling&quot;
+        type=impact
+        range=ranged
+        damage=6
+        number=1
+        icon=attacks/sling.png
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+        [/filter_attack]
+        start_time=-250
+        [if]
+            direction=s,se,sw
+            [frame]
+                image=&quot;{PATH_TEMP}skirmisher.png:300&quot;
+            [/frame]
+        [/if]
+        [else]
+            direction=n,ne,nw
+            [frame]
+                image=&quot;{PATH_TEMP}skirmisher-ne.png:300&quot;
+            [/frame]
+        [/else]
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=sling
+        [/filter_attack]
+        start_time=-225
+        missile_start_time=-150
+        [if]
+            hits=yes
+            [missile_frame]
+                duration=150
+                image=&quot;projectiles/bolas-n.png&quot;
+                image_diagonal=&quot;projectiles/bolas-ne.png&quot;
+                offset=0~0.8
+            [/missile_frame]
+        [/if]
+        [else]
+            hits=no
+            [missile_frame]
+                duration=150
+                image=&quot;projectiles/bolas-n.png&quot;
+                image_diagonal=&quot;projectiles/bolas-ne.png&quot;
+            [/missile_frame]
+        [/else]
+        {SOUND:HIT_AND_MISS sling.ogg sling-miss.ogg -100}
+        [if]
+            direction=s,se,sw
+            [frame]
+                image=&quot;{PATH_TEMP}skirmisher.png:300&quot;
+            [/frame]
+        [/if]
+        [else]
+            direction=n,ne,nw
+            [frame]
+                image=&quot;{PATH_TEMP}skirmisher-ne.png:300&quot;
+            [/frame]
+        [/else]
+    [/attack_anim]
+[/unit_type]
+
+#undef PATH_TEMP
+</pre></main></body></html>

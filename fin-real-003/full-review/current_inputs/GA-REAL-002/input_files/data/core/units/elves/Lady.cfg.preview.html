@@ -1,0 +1,68 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lady.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/elves/Lady.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Elvish Lady
+    name= _ &quot;female^Elvish Lady&quot;
+    gender=female
+    race=elf
+    image=&quot;units/elves-wood/lady.png&quot;
+    small_profile=&quot;portraits/elves/lady.webp~CROP(0,20,380,380)&quot;
+    profile=&quot;portraits/elves/lady.webp&quot;
+    hitpoints=47
+    movement_type=woodland
+    movement=6
+    experience=150
+    level=3
+    alignment=neutral
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=53
+    usage=null
+    description= _ &quot;Usually strongly connected with the earthly aspect of Elven magic, noble ladies of the elvish enclaves are associated with wisdom and preservation. As those entrusted with maintaining many of the more venerated Elvish traditions, they play a large role in safeguarding the tranquility and natural wonder of their renowned forest sanctuaries. Unlike their counterparts in the lords, many of whom gain great individual insight through their use of arcane magic, most ladies spread their power throughout the societal orders that they guide, often at some cost to their own personal abilities. For this reason, they serve most often as diplomats and peacekeepers, holding high authority during times of amity and taking a lesser role in times of war.&quot;
+    die_sound={SOUND_LIST:ELF_FEMALE_HIT}
+    [abilities]
+        {ABILITY_CURES}
+    [/abilities]
+    [attack]
+        name=ensnare
+        description=_&quot;ensnare&quot;
+        type=impact
+        [specials]
+            {WEAPON_SPECIAL_SLOW}
+        [/specials]
+        damage=7
+        number=4
+        range=ranged
+        icon=attacks/entangle.png
+    [/attack]
+    {DEFENSE_ANIM_RANGE &quot;units/elves-wood/lady.png&quot; &quot;units/elves-wood/lady.png&quot; {SOUND_LIST:ELF_FEMALE_HIT} melee }
+    {DEFENSE_ANIM_ELVEN_RANGE &quot;units/elves-wood/lady.png&quot; &quot;units/elves-wood/lady.png&quot; {SOUND_LIST:ELF_FEMALE_HIT} ranged }
+    [healing_anim]
+        start_time=-200
+        [frame]
+            image=&quot;units/elves-wood/lady.png:55&quot;
+        [/frame]
+    [/healing_anim]
+    [attack_anim]
+        [filter_attack]
+            name=ensnare
+        [/filter_attack]
+        missile_start_time=-200
+        [missile_frame]
+            offset=1.0
+            duration=150
+            image=&quot;projectiles/entangle.png&quot;
+            image_diagonal=&quot;projectiles/entangle.png&quot;
+        [/missile_frame]
+        start_time=-450
+        [frame]
+            image=&quot;units/elves-wood/lady.png&quot;
+            halo=halo/elven/nature-halo[1~8].png:75
+            halo_x,halo_y=0,-12
+        [/frame]
+        attack_sound_start_time=-75
+        [attack_sound_frame]
+            sound=entangle.wav
+        [/attack_sound_frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

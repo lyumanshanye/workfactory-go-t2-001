@@ -1,0 +1,57 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>orb_status.hpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/orb_status.hpp</h1><pre>/*
+	Copyright (C) 2020 - 2024
+	by Steve Cotton &lt;steve@octalot.co.uk&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+#pragma once
+
+#include &lt;memory&gt;
+#include &lt;string&gt;
+
+/**
+ * Corresponds to the colored orbs displayed above units&#x27; hp-bar and xp-bar.
+ */
+enum class orb_status {
+	/** The unit still has full movement and all attacks available. */
+	unmoved,
+	/**
+	 * The unit can move but can&#x27;t attack, and wouldn&#x27;t be able to attack even
+	 * if it was moved to a hex adjacent to an enemy.
+	 */
+	disengaged,
+	/** All moves and possible attacks have been done. */
+	moved,
+	/** There are still moves and/or attacks possible, but the unit doesn&#x27;t fit in the &quot;unmoved&quot; status. */
+	partial,
+	/** Belongs to a friendly side */
+	allied,
+	/** Belongs to a non-friendly side; normally visualised by not displaying an orb. */
+	enemy
+};
+
+namespace orb_status_helper
+{
+/**
+ * Wrapper for the various preferences::show_..._orb() methods, using the
+ * enum instead of exposing a separate function for each preference.
+ */
+bool prefs_show_orb(orb_status os);
+
+/**
+ * Wrapper for the various preferences::unmoved_color(), moved_color(), etc
+ * methods, using the enum instead of exposing a separate function for each
+ * preference.
+ */
+std::string get_orb_color(orb_status os);
+} // namespace orb_status_helper
+</pre></main></body></html>

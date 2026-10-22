@@ -1,0 +1,89 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wayfarer.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/dunefolk/Wayfarer.cfg</h1><pre>#textdomain wesnoth-units
+
+#define PATH_TEMP
+units/dunefolk/rover/#enddef
+
+[unit_type]
+    id=Dune Wayfarer
+    name= _ &quot;Dune Wayfarer&quot;
+    race=dunefolk
+    image=&quot;{PATH_TEMP}wayfarer.png&quot;
+    hitpoints=62
+    movement_type=dunefoot
+    movement=6
+    experience=150
+    level=3
+    alignment=liminal
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=55
+    usage=mixed fighter
+    description= _ &quot;From the journal of Balah, the Dune Watcher:
+
+“... Today was the sixth day. Six days of pursuit through the desert without sleep, without rest... but I require neither. The Bloodeye Roc has pilfered too many of my herd for its ravenous feasting. I must be rid of it before the caravan starves. I have tracked it thus far, and no matter how far it flees, I shall follow.
+
+... blast it! The creature was only a couple hundred paces away, but the sun was in my eyes! I managed to land a few arrows on the irksome thing, but only enough to slow it. Still, it seems to be tiring faster than I. With any luck, I will catch it before it can reach the mountains.
+
+... Day eleven. I cornered the creature after it landed on the hillside, but there were three more that I was not accounting for. Rocs are ferocious creatures in close quarters. Fighting one is already no simple task, but four at once? I am lucky I brought my second axe, otherwise I would have sustained severe injury during that battle. As it is, I am waiting for the gauze to set on my leg before I return to slay the final two. Perhaps then I can finally find the time to eat and get some rest.
+
+... it comes as a surprise to even me that I traveled nearly halfway across the Northern Dunes in my twenty-one day expedition. It would take the caravan nearly three months to make that trip, but I do suppose the circumstances around my journey were somewhat extenuating. On the bright side, I was able to procure some salted roc meat along the way, which should make for a fine treat for the children. It will also be nice to see some of the other Wayfarers again. My tale might not be that impressive to them, but at least it is an improvement over my previous encounter with the wyvern...”&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    {DEFENSE_ANIM &quot;{PATH_TEMP}wayfarer-defend2.png&quot; &quot;{PATH_TEMP}wayfarer-defend1.png&quot; {SOUND_LIST:HUMAN_HIT} }
+
+    [resistance]
+        pierce=80
+    [/resistance]
+    [defense]
+        sand=50
+        forest=50
+    [/defense]
+
+    [attack]
+        name=axe
+        description= _ &quot;axe&quot;
+        type=blade
+        range=melee
+        damage=8
+        number=4
+        icon=attacks/axe.png
+    [/attack]
+    [attack]
+        name=composite bow
+        description= _ &quot;composite bow&quot;
+        type=pierce
+        range=ranged
+        damage=8
+        number=4
+        icon=attacks/bow-short-reinforced.png
+    [/attack]
+
+    [attack_anim]
+        [filter_attack]
+            name=axe
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;{PATH_TEMP}wayfarer.png:300&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS axe.ogg {SOUND_LIST:MISS} -50}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=composite bow
+        [/filter_attack]
+        start_time=-250
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        [frame]
+            image=&quot;{PATH_TEMP}wayfarer.png:300&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS bow-puny.ogg bow-puny-miss.ogg -225}
+    [/attack_anim]
+[/unit_type]
+
+#undef PATH_TEMP
+</pre></main></body></html>

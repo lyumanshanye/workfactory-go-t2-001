@@ -1,0 +1,75 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Boar_Piglet.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Boar_Piglet.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Piglet
+    # po: the child of a wild boar, rather than the child of a domesticated pig
+    name= _ &quot;Piglet&quot;
+    race=monster
+    image=&quot;units/monsters/boar/piglet.png&quot;
+    profile=portraits/monsters/piglet.webp
+    [standing_anim]
+        start_time=-50
+        [frame]
+            image=&quot;units/monsters/boar/piglet.png&quot;
+            duration=50
+        [/frame]
+    [/standing_anim]
+    [standing_anim]
+        start_time=-50
+        terrain_type=!,*^B*,Cme*^*,Kme*^*,Wwr*^*,Wwf*^*,!,Chs*^*,Chw*^*,Cm*^*,Km*^*,W*^*,S*^*,*^Vm
+        [frame]
+            image=&quot;units/monsters/boar/piglet-water.png&quot;
+            duration=50
+        [/frame]
+    [/standing_anim]
+    #    ellipse=&quot;misc/ellipse-nozoc&quot;
+    hitpoints=25
+    movement_type=rodentfoot
+    movement=5
+    experience=20
+    level=0
+    alignment=neutral
+    advances_to=Woodland Boar
+    undead_variation=boar
+    cost=10
+    usage=fighter
+    description=_ &quot;Young piglets are curious but just as ill-tempered as their parents, if a little less of a challenge in combat. But seldom is a piglet found that does not have a protective adult boar watching over them.&quot;
+    die_sound=tusker-die.ogg
+    [movement_anim]
+        start_time=0
+        y=0~3:37,3~-3:76,-3~0:37
+        [frame]
+            image=&quot;units/monsters/boar/piglet-moving[1,2].png:[75*2]&quot;
+        [/frame]
+    [/movement_anim]
+    {DEFENSE_ANIM &quot;units/monsters/boar/piglet-defend2.png&quot; &quot;units/monsters/boar/piglet-defend.png&quot; tusker-hit.ogg }
+    [defense]
+        village=50
+    [/defense]
+    [attack]
+        name=bite
+        description=_&quot;bite&quot;
+        icon=attacks/fangs-animal.png
+        type=blade
+        range=melee
+        damage=4
+        number=3
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=bite
+        [/filter_attack]
+        start_time=-250
+        offset=0.0~-0.05:80,-0.05~0.6:170,0.6~0.0:260
+        [frame]
+            image=&quot;units/monsters/boar/piglet-attack[1,2].png:[100,150]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/monsters/boar/piglet-moving2.png:150&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/monsters/boar/piglet.png:1&quot;
+        [/frame]
+        {SOUND:HIT bite-small.ogg -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

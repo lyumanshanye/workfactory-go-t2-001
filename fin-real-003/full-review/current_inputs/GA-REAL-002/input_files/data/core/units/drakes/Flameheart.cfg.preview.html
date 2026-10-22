@@ -1,0 +1,70 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flameheart.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/drakes/Flameheart.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Drake Flameheart
+    name= _ &quot;Drake Flameheart&quot;
+    race=drake
+    gender=male,female
+    image=&quot;units/drakes/flameheart.png&quot;
+    profile=&quot;portraits/drakes/flameheart.webp&quot;
+    hitpoints=72
+    movement_type=drakefly
+    movement=5
+    experience=150
+    level=3
+    alignment=lawful
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=66
+    usage=mixed fighter
+    description= _ &quot;Flamehearts lack the strength to defeat other high-ranking drakes in single combat, but prefer in any case to avoid confrontation within the tribe. Experience has taught any drake of this stature the extent of his authority: where he can push those he leads and when it is best to leave them to their own devices. Only occasionally will a Flameheart challenge his tribe’s leader for supremacy, and only if he is sure of the support of his fellow drakes.&quot;
+    die_sound=drake-die.ogg
+    {LEADING_ANIM &quot;units/drakes/flameheart-lead-2.png&quot; &quot;units/drakes/flameheart-lead-1.png&quot; 39,-29}
+    {DEFENSE_ANIM &quot;units/drakes/flameheart-defend-2.png&quot; &quot;units/drakes/flameheart-defend-1.png&quot; {SOUND_LIST:DRAKE_HIT} }
+    [resistance]
+        cold=140
+    [/resistance]
+    [abilities]
+        {ABILITY_LEADERSHIP}
+    [/abilities]
+    [attack]
+        name=war blade
+        description=_&quot;war blade&quot;
+        type=blade
+        range=melee
+        damage=11
+        number=3
+        icon=attacks/warblade-red.png
+    [/attack]
+    [attack]
+        name=fire breath
+        description=_&quot;fire breath&quot;
+        icon=attacks/fire-breath-drake.png
+        type=fire
+        range=ranged
+        damage=8
+        number=4
+    [/attack]
+    {DRAKE_STANDING_ANIM flameheart}
+    {DRAKE_MOVEMENT_ANIM flameheart}
+    {DRAKE_WEAPON_ANIM flameheart}
+    {DRAKE_FIRE_ANIM_S_DIAGONAL flameheart 35,40}
+    {DRAKE_FIRE_ANIM_N_DIAGONAL_CURRENT flameheart 35,-20}
+    {DRAKE_FIRE_ANIM_S flameheart 8,50}
+    {DRAKE_FIRE_ANIM_N_CURRENT flameheart 8,-50}
+    [attack_anim]
+        [filter_attack]
+            name=war blade
+        [/filter_attack]
+        offset=0.0~0.2,0.2~0.7,0.7~0.2,0.2~0.0
+        start_time=-300
+        [frame]
+            image=&quot;units/drakes/flameheart-melee-[1~6].png:100&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS claws.ogg {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+    [female]
+        name= _ &quot;female^Drake Flameheart&quot;
+        gender=female
+    [/female]
+[/unit_type]
+</pre></main></body></html>

@@ -1,0 +1,82 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hero.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/elves/Hero.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Elvish Hero
+    name= _ &quot;Elvish Hero&quot;
+    race=elf
+    image=&quot;units/elves-wood/hero.png&quot;
+    profile=&quot;portraits/elves/hero.webp&quot;
+    hitpoints=51
+    movement_type=woodland
+    movement=5
+    {LESS_NIMBLE_ELF}
+    experience=80
+    level=2
+    alignment=neutral
+    advances_to=Elvish Champion
+    cost=26
+    usage=fighter
+    description= _ &quot;Accomplished Elvish warriors are sometimes called ‘Sárcan’, roughly meaning ‘one who has sacrificed in defense’ or ‘one transfigured by experience’. Often translated to ‘Elvish Heroes’ in the human tongue, this name does indicate some level of prestige, but is not meant to glorify the position. Elvish Heroes are those who have survived numerous wars and outlived many of their friends who fell in prior battles. Often among the few lone survivors of the battlefield, these battle-hardened soldiers are privy to the numerous atrocities of war — orcs and humans burning and razing their homes in the forests, dwarves pillaging precious artifacts from the fallen, necromancers raising their own comrades to fight against them, or even their own kind slaughtering innocents without care or mercy. While the Elves realize the necessity of military strength and honor the ‘Sárcanet’ as heroes for their service, such a status is not one often sought after by the majority of Elvenkind.&quot;
+    die_sound={SOUND_LIST:ELF_HIT}
+    [attack]
+        name=sword
+        description=_&quot;sword&quot;
+        icon=attacks/sword-elven.png
+        type=blade
+        range=melee
+        damage=8
+        number=4
+    [/attack]
+    [attack]
+        name=bow
+        description=_&quot;bow&quot;
+        icon=attacks/bow-elven.png
+        type=pierce
+        range=ranged
+        damage=6
+        number=3
+    [/attack]
+    {DEFENSE_ANIM_RANGE &quot;units/elves-wood/hero-defend.png&quot; &quot;units/elves-wood/hero.png&quot; {SOUND_LIST:ELF_HIT} melee }
+    {DEFENSE_ANIM_RANGE &quot;units/elves-wood/hero-bow-defend.png&quot; &quot;units/elves-wood/hero-bow.png&quot; {SOUND_LIST:ELF_HIT} ranged }
+    [attack_anim]
+        [filter_attack]
+            name=bow
+        [/filter_attack]
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        start_time=-445
+        [frame]
+            image=&quot;units/elves-wood/hero-bow.png:65&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS bow.ogg bow-miss.ogg -380}
+        [frame]
+            image=&quot;units/elves-wood/hero-bow-attack[1~4].png:[75*2,100,130]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/hero-bow.png:65&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=sword
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;units/elves-wood/hero.png:25&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/hero-melee-[1~4].png:[65,35,150,45]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -75}
+        [frame]
+            image=&quot;units/elves-wood/hero-defend.png:60&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/hero.png:20&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

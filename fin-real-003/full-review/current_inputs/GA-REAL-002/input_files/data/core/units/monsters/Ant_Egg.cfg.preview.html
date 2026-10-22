@@ -1,0 +1,227 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ant_Egg.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Ant_Egg.cfg</h1><pre>#textdomain wesnoth-units
+
+#define ANT_EGG_TEXT
+    _ &quot;The giant ant eggs have a tough, leathery shell that takes a dedicated effort to break through. While this shell makes it difficult to know the status of the inhabitant from the outside, it does not obscure the outside world from the rapidly developing ant larva within. Any predator or foe who approaches an ant egg or breaches the shell of an adjacent brood member will spur that ant to hatch as a fully formed adult.&quot;
+#enddef
+
+[unit_type]
+    id=Giant Ant Egg
+    name= _ &quot;Giant Ant Egg&quot;
+    race=monster
+    image=&quot;units/monsters/ant/ant_egg.png&quot;
+    profile=&quot;portraits/monsters/ant-egg.webp&quot;
+    # It should just sit there, but default behaviour kicks in and hflips,
+    # so we make the base frame a blank
+    [standing_anim]
+        start_time=-50
+        [frame]
+            image=&quot;misc/blank-hex.png:50&quot;
+        [/frame]
+        [egg_frame]
+            image=&quot;units/monsters/ant/ant_egg.png:50&quot;
+            auto_vflip=no
+            auto_hflip=no
+        [/egg_frame]
+    [/standing_anim]
+    [defend]
+        start_time=-50
+        [frame]
+            image=&quot;misc/blank-hex.png:50&quot;
+        [/frame]
+        [egg_frame]
+            image=&quot;units/monsters/ant/ant_egg.png:50&quot;
+            auto_vflip=no
+            auto_hflip=no
+        [/egg_frame]
+    [/defend]
+    [death]
+        start_time=-150
+        egg_alpha=1~0:600
+        [frame]
+            image=&quot;misc/blank-hex.png:600&quot;
+        [/frame]
+        [egg_frame]
+            image=&quot;units/monsters/ant/ant_egg.png:600&quot;
+            auto_vflip=no
+            auto_hflip=no
+        [/egg_frame]
+    [/death]
+    [animation]
+        apply_to=hatching
+        start_time=-250
+        egg_x=0~-3:50,-3~3:100,3~-3:100,-3~3:100,3~-3:100,-3~0:50
+        [frame]
+            image=&quot;misc/blank-hex.png:500&quot;
+        [/frame]
+        [egg_frame]
+            image=&quot;units/monsters/ant/ant_egg.png:500&quot;
+            auto_vflip=no
+            auto_hflip=no
+        [/egg_frame]
+    [/animation]
+    hitpoints=32
+    movement_type=none
+    movement=0
+    experience=4
+    level=0
+    alignment=neutral
+    advances_to=Giant Ant
+    cost=4
+    usage=fighter
+    description= _ &quot;Giant Ants are common in almost any environment, and the eggs from which they emerge can often be found in caves or any sheltered environment. Most eggs come from one of the colony queens, but the workers transport them to any suitable location.
+
+&quot; + {ANT_EGG_TEXT}
+    die_sound=hiss-die.wav
+    undead_variation=ant
+    [resistance]
+        blade=100
+        pierce=100
+        impact=80
+        fire=120
+        cold=120
+        arcane=90
+    [/resistance]
+    # eggs hatch when enemy starts turn adjacent
+    [event]
+        first_time_only=no
+        id=ant_egg_hatch_turn
+        name=side turn
+        [store_unit]
+            [filter]
+                type=Giant Ant Egg, Fire Ant Egg
+                side=$side_number
+                [filter_adjacent]
+                    is_enemy=yes
+                [/filter_adjacent]
+            [/filter]
+            variable=egg_hatch
+            kill=no
+        [/store_unit]
+        [for]
+            array=egg_hatch
+            [do]
+                [animate_unit]
+                    flag=hatching
+                    [filter]
+                        id=$egg_hatch[$i].id
+                    [/filter]
+                [/animate_unit]
+                # value is chosen to give a non-trivial residual XP after advancement
+                [set_variable]
+                    name=egg_hatch[$i].experience
+                    value=12
+                [/set_variable]
+                [unstore_unit]
+                    variable=egg_hatch[$i]
+                    find_vacant=no
+                    advance=yes
+                [/unstore_unit]
+            [/do]
+        [/for]
+        {CLEAR_VARIABLE egg_hatch}
+    [/event]
+    # eggs hatch when adjacent egg of same team gets broken
+    [event]
+        first_time_only=no
+        id=ant_egg_hatch_die
+        name=die
+        [filter]
+            type=Giant Ant Egg, Fire Ant Egg
+        [/filter]
+        [store_unit]
+            [filter]
+                type=Giant Ant Egg, Fire Ant Egg
+                [filter_adjacent]
+                    id=$unit.id
+                    is_enemy=no
+                [/filter_adjacent]
+            [/filter]
+            variable=egg_hatch
+            kill=no
+        [/store_unit]
+        [for]
+            array=egg_hatch
+            [do]
+                [animate_unit]
+                    flag=hatching
+                    [filter]
+                        id=$egg_hatch[$i].id
+                    [/filter]
+                [/animate_unit]
+                # value is chosen to give a non-trivial residual XP after advancement
+                [set_variable]
+                    name=egg_hatch[$i].experience
+                    value=12
+                [/set_variable]
+                [unstore_unit]
+                    variable=egg_hatch[$i]
+                    find_vacant=no
+                    advance=yes
+                [/unstore_unit]
+            [/do]
+        [/for]
+        {CLEAR_VARIABLE egg_hatch}
+    [/event]
+[/unit_type]
+
+[unit_type]
+    id=Fire Ant Egg
+    name= _ &quot;Fire Ant Egg&quot;
+    [base_unit]
+        id=Giant Ant Egg
+    [/base_unit]
+    advances_to=Fire Ant
+    description= _ &quot;In large numbers, Fire Ants can be a real menace, and those threatening numbers start with their eggs. Most Fire Ant eggs come from one of the colony queens, but the workers transport them to any suitable location.
+
+&quot; + {ANT_EGG_TEXT}
+    [standing_anim]
+        start_time=-50
+        [frame]
+            image=&quot;misc/blank-hex.png:50&quot;
+        [/frame]
+        [egg_frame]
+            image=&quot;units/monsters/ant/ant_red-egg.png:50&quot;
+            auto_vflip=no
+            auto_hflip=no
+        [/egg_frame]
+    [/standing_anim]
+    [defend]
+        start_time=-50
+        [frame]
+            image=&quot;misc/blank-hex.png:50&quot;
+        [/frame]
+        [egg_frame]
+            image=&quot;units/monsters/ant/ant_red-egg.png:50&quot;
+            auto_vflip=no
+            auto_hflip=no
+        [/egg_frame]
+    [/defend]
+    [death]
+        start_time=-150
+        egg_alpha=1~0:600
+        [frame]
+            image=&quot;misc/blank-hex.png:600&quot;
+        [/frame]
+        [egg_frame]
+            image=&quot;units/monsters/ant/ant_red-egg.png:600&quot;
+            auto_vflip=no
+            auto_hflip=no
+        [/egg_frame]
+    [/death]
+    [animation]
+        apply_to=hatching
+        start_time=-250
+        egg_x=0~-3:50,-3~3:100,3~-3:100,-3~3:100,3~-3:100,-3~0:50
+        [frame]
+            image=&quot;misc/blank-hex.png:500&quot;
+        [/frame]
+        [egg_frame]
+            image=&quot;units/monsters/ant/ant_red-egg.png:500&quot;
+            auto_vflip=no
+            auto_hflip=no
+        [/egg_frame]
+    [/animation]
+[/unit_type]
+
+#undef ANT_EGG_TEXT
+</pre></main></body></html>

@@ -1,0 +1,229 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>frame_private.hpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/frame_private.hpp</h1><pre>/*
+	Copyright (C) 2006 - 2024
+	by Jeremy Rosen &lt;jeremy.rosen@enst-bretagne.fr&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+#pragma once
+
+#include &quot;lexical_cast.hpp&quot;
+#include &quot;serialization/string_utils.hpp&quot;
+
+#include &lt;vector&gt;
+
+namespace image { class locator; }
+
+template&lt;typename T, typename D&gt;
+class progressive_base
+{
+public:
+	using data_t = std::vector&lt;std::pair&lt;D, int&gt;&gt;;
+
+	progressive_base(const std::string&amp; input)
+		: data_()
+		, input_(input)
+	{}
+
+	virtual const T get_current_element(int current_time, T default_val) const = 0;
+
+	virtual bool does_not_change() const
+	{
+		return data_.size() &lt;= 1;
+	}
+
+	int duration() const
+	{
+		int total = 0;
+		for(const auto&amp; entry : data_) {
+			total += entry.second;
+		}
+
+		return total;
+	}
+
+	std::string get_original() const
+	{
+		return input_;
+	}
+
+	data_t&amp; data()
+	{
+		return data_;
+	}
+
+	const data_t&amp; data() const
+	{
+		return data_;
+	}
+
+	virtual ~progressive_base() {}
+
+private:
+	data_t data_;
+	std::string input_;
+};
+
+template&lt;typename T&gt;
+class progressive_pair : public progressive_base&lt;T, std::pair&lt;T, T&gt;&gt;
+{
+public:
+	progressive_pair(const std::string&amp; input = &quot;&quot;, int duration = 0)
+		: progressive_base&lt;T, std::pair&lt;T, T&gt;&gt;(input)
+	{
+		auto&amp; base_data = progressive_pair_base_type::data();
+
+		const int split_flag = utils::REMOVE_EMPTY; // useless to strip spaces
+
+		const std::vector&lt;std::string&gt; comma_split = utils::split(input, &#x27;,&#x27;, split_flag);
+		const int time_chunk = std::max&lt;int&gt;(1, duration / std::max&lt;int&gt;(comma_split.size(), 1));
+
+		for(const auto&amp; entry : comma_split) {
+			std::vector&lt;std::string&gt; colon_split = utils::split(entry, &#x27;:&#x27;, split_flag);
+			int time = 0;
+
+			try {
+				time = (colon_split.size() &gt; 1) ? std::stoi(colon_split[1]) : time_chunk;
+			} catch(const std::invalid_argument&amp;) {
+				//ERR_NG &lt;&lt; &quot;Invalid time in unit animation: &quot; &lt;&lt; colon_split[1];
+			}
+
+			try {
+				std::vector&lt;std::string&gt; range = utils::split(colon_split[0],&#x27;~&#x27;,split_flag);
+				T range0 = lexical_cast&lt;T&gt;(range[0]);
+				T range1 = (range.size() &gt; 1) ? lexical_cast&lt;T&gt;(range[1]) : range0;
+
+				base_data.push_back({{range0, range1}, time});
+			} catch(const bad_lexical_cast&amp;) {}
+		}
+	}
+
+	virtual const T get_current_element(int current_time, T default_val = T()) const override
+	{
+		const auto&amp; base_data = progressive_pair_base_type::data();
+		const int&amp; base_duration = progressive_pair_base_type::duration();
+
+		if(base_data.empty()) {
+			return default_val;
+		}
+
+		int time = 0;
+		unsigned int i = 0;
+		const int searched_time = std::clamp(current_time, 0, base_duration);
+
+		while(time &lt; searched_time &amp;&amp; i &lt; base_data.size()) {
+			time += base_data[i].second;
+			++i;
+		}
+
+		if(i != 0) {
+			i--;
+			time -= base_data[i].second;
+		}
+
+		const T first  = base_data[i].first.first;
+		const T second = base_data[i].first.second;
+
+		return T((
+			static_cast&lt;double&gt;(searched_time - time) /
+			static_cast&lt;double&gt;(base_data[i].second)
+		) * (second - first) + first);
+	}
+
+	bool does_not_change() const override
+	{
+		const auto&amp; base_data = progressive_pair_base_type::data();
+		return base_data.empty() || (base_data.size() == 1 &amp;&amp; base_data[0].first.first == base_data[0].first.second);
+	}
+
+private:
+	using progressive_pair_base_type = progressive_base&lt;T, std::pair&lt;T, T&gt;&gt;;
+};
+
+template&lt;typename T&gt;
+class progressive_single : public progressive_base&lt;T, T&gt;
+{
+public:
+	progressive_single(const std::string&amp; input = &quot;&quot;, int duration = 0)
+		: progressive_base&lt;T, T&gt;(input)
+	{
+		auto&amp; base_data = progressive_single_base_type::data();
+
+		const std::vector&lt;std::string&gt; first_pass = utils::square_parenthetical_split(input);
+		int time_chunk = std::max&lt;int&gt;(duration, 1);
+
+		if(duration &gt; 1 &amp;&amp; !first_pass.empty()) {
+			// If duration specified, divide evenly the time for items with unspecified times
+			int total_specified_time = 0;
+
+			for(const std::string&amp; fp_string : first_pass) {
+				std::vector&lt;std::string&gt; second_pass = utils::split(fp_string, &#x27;:&#x27;);
+				if(second_pass.size() &gt; 1) {
+					try {
+						total_specified_time += std::stoi(second_pass[1]);
+					} catch(const std::invalid_argument&amp;) {
+						//ERR_NG &lt;&lt; &quot;Invalid time in unit animation: &quot; &lt;&lt; second_pass[1];
+					}
+				}
+			}
+
+			time_chunk = std::max&lt;int&gt;((duration - total_specified_time) / first_pass.size(), 1);
+		}
+
+		for(const std::string&amp; fp_string : first_pass) {
+			std::vector&lt;std::string&gt; second_pass = utils::split(fp_string, &#x27;:&#x27;);
+			if(second_pass.size() &gt; 1) {
+				try {
+					base_data.push_back({std::move(second_pass[0]), std::stoi(second_pass[1])});
+				} catch(const std::invalid_argument&amp;) {
+					//ERR_NG &lt;&lt; &quot;Invalid time in unit animation: &quot; &lt;&lt; second_pass[1];
+				}
+			} else {
+				base_data.push_back({std::move(second_pass[0]) ,time_chunk});
+			}
+		}
+	}
+
+	virtual const T get_current_element(int current_time, T default_val = T()) const override
+	{
+		const auto&amp; base_data = progressive_single_base_type::data();
+
+		if(base_data.empty()) {
+			return default_val;
+		}
+
+		int time = 0;
+		unsigned int i = 0;
+
+		while(time &lt; current_time &amp;&amp; i &lt; base_data.size()) {
+			time += base_data[i].second;
+			++i;
+		}
+
+		// TODO: what is this for?
+		if(i) {
+			i--;
+		}
+
+		return base_data[i].first;
+	}
+
+private:
+	using progressive_single_base_type = progressive_base&lt;T, T&gt;;
+};
+
+// Common types used by the unit frame code.
+using progressive_int = progressive_pair&lt;int&gt;;
+using progressive_double = progressive_pair&lt;double&gt;;
+
+using progressive_string = progressive_single&lt;std::string&gt;;
+using progressive_image = progressive_single&lt;image::locator&gt;;
+</pre></main></body></html>

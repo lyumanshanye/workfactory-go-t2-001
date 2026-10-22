@@ -1,0 +1,85 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>scenario-utils.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/macros/scenario-utils.cfg</h1><pre>#textdomain wesnoth
+# Utility macros for scenario-objective control.
+
+# These macros don&#x27;t depend on any others.  Please don&#x27;t change this.
+# ! in comments is used in generating HTML documentation, ignore it otherwise.
+
+# Max number of turns in a scenario, mainly for use as a turn upper bound
+# in ai declarations for aggression, etc.
+#define FOREVER
+999 #enddef
+
+# The effectively infinite radius.
+#define INFINITY
+999 #enddef
+
+# Everywhere on the map.  For filters that would otherwise touch recall lists.
+#define EVERYWHERE
+x,y=1-infinity,1-infinity #enddef
+
+#define NO_MAP_DATA
+    # The display code in the game becomes confused if you give it a
+    # scenario with no map data (like, a text epilogue).  Use this
+    # macro to feed it dummy map data that won&#x27;t actually be used.
+    map_data=&quot;Gg, Gg, Gg, Gg
+Gg, 1 Gg, 2 Gg, Gg
+Gg, Gg, Gg, Gg
+&quot;
+#enddef
+
+#define AI_CANT_PLAY SIDES
+    # Displays a standard warning at the start of the first AI turn for each
+    # given side about the AI not knowing how to play this side properly. Use
+    # this to tag sides intended solely for human players in special multiplayer
+    # scenarios (ones with shops, custom right-click options and such).
+    #
+    # Example:
+    # ! {AI_CANT_PLAY 1,2,3,4}
+    [event]
+        name=ai turn
+        first_time_only=no
+        [filter_condition]
+            [have_unit]
+                side=$side_number
+
+                [and]
+                    side={SIDES}
+                [/and]
+            [/have_unit]
+
+            [variable]
+                name=side_$side_number|_ai_warning_displayed
+                not_equals=yes
+            [/variable]
+        [/filter_condition]
+
+        [message]
+            speaker=narrator
+            message= _ &quot;The computer player might not be able to play side $side_number properly in this scenario. Side $side_number is intended to be played by a human player.&quot;
+            image=wesnoth-icon.png
+        [/message]
+
+        [set_variable]
+            name=side_$side_number|_ai_warning_displayed
+            value=yes
+        [/set_variable]
+    [/event]
+#enddef
+
+#define CAMPAIGN_DIFFICULTY DEFINE IMAGE LABEL DESCRIPTION
+    # Define a difficulty level for a campaign
+    [difficulty]
+        define={DEFINE}
+        image={IMAGE}
+        label={LABEL}
+        description={DESCRIPTION}
+    [/difficulty]
+#enddef
+
+#define DEFAULT_DIFFICULTY
+    # Append to {CAMPAIGN_DIFFICULTY} to mark it as the default difficulty.
+    [+difficulty]
+        default=yes
+    [/difficulty]
+#enddef
+</pre></main></body></html>

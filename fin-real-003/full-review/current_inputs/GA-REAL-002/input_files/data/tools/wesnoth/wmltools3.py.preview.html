@@ -1,0 +1,1235 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>wmltools3.py</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/tools/wesnoth/wmltools3.py</h1><pre>#!/usr/bin/env python3
+
+&quot;&quot;&quot;
+wmltools.py -- Python routines for working with a Battle For Wesnoth WML tree
+
+&quot;&quot;&quot;
+
+from functools import total_ordering
+import collections, codecs
+import sys, os, re, sre_constants, hashlib, glob, gzip
+import string
+import enum
+
+map_extensions   = (&quot;map&quot;, &quot;mask&quot;)
+image_extensions = (&quot;png&quot;, &quot;jpg&quot;, &quot;jpeg&quot;, &quot;webp&quot;)
+sound_extensions = (&quot;ogg&quot;, &quot;wav&quot;)
+vc_directories = (&quot;.git&quot;, &quot;.svn&quot;)
+misc_files_extensions = (&quot;-bak&quot;, &quot;.DS_Store&quot;, &quot;Thumbs.db&quot;) # These files and extensions should be included in the `default_blacklist` in filesystem.hpp.
+l10n_directories = (&quot;l10n&quot;,)
+resource_extensions = map_extensions + image_extensions + sound_extensions
+image_reference = r&quot;[A-Za-z0-9{}.][A-Za-z0-9_/+{}.\-\[\]~\*,]*\.(png|jpe?g|webp)(?=(~.*)?)&quot;
+
+EQUALS = &#x27;=&#x27;
+QUOTE = &#x27;&quot;&#x27;
+OPEN_BRACE = &#x27;{&#x27;
+CLOSE_BRACE = &#x27;}&#x27;
+OPEN_PARENS = &#x27;(&#x27;
+CLOSE_PARENS = &#x27;)&#x27;
+
+class Substitution(object):
+    __slots__ = [&quot;sub&quot;, &quot;start&quot;, &quot;end&quot;]
+    def __init__(self, sub, start, end):
+        self.sub = sub
+        self.start = int(start)
+        self.end = int(end)
+    def __repr__(self):
+        return &quot;&lt;Class Substitution, sub={}, start={:d}, end={:d}&gt;&quot;.format(self.sub, self.start, self.end)
+
+def split_filenames(match):
+    filename_group = match.group(1)
+    if &#x27;,&#x27; not in filename_group:
+        yield filename_group
+    elif &#x27;[&#x27; not in filename_group:
+        yield from filename_group.split(&#x27;,&#x27;)
+    else:
+        bracket_depth = 0
+        start_ix = 0
+
+        for ix, ch in enumerate(filename_group):
+            if ch == &#x27;[&#x27;:
+                bracket_depth += 1
+            elif ch == &#x27;]&#x27;:
+                bracket_depth -= 1
+            elif ch == &#x27;,&#x27; and bracket_depth == 0:
+                yield filename_group[start_ix:ix]
+                start_ix = ix + 1
+        yield filename_group[start_ix:]
+
+def expand_square_braces(path):
+    &quot;&quot;&quot;Expands the square brackets notation to normal file names.
+Yields the expanded file names, or the original path itself
+if no expansion could be performed&quot;&quot;&quot;
+    if &quot;[&quot; not in path: # clearly, no expansion can be done in this case
+        yield path
+    else:
+        substitutions = [] # a matrix that will hold all the substitutions to be performed
+
+        for i, match in enumerate(re.finditer(r&quot;\[(.*?)\]&quot;, path)): # stop on the first closed square braces, to allow multiple substitutions
+            substitutions.append([]) # a new list which will host all the substitutions for the current expansion
+            for token in match.group(1).split(&quot;,&quot;):
+                match_mult = re.match(&quot;(.+)\*(\d+)&quot;, token) # repeat syntax, eg. [melee*3]
+                if match_mult:
+                    substitutions[i].extend([Substitution(match_mult.group(1), match.start(0), match.end(0))] *
+                                         int(match_mult.group(2)))
+                    continue
+                match_range = re.match(&quot;(\d+)~(\d+)&quot;, token) # range syntax, eg [1~4]
+                if match_range:
+                    before, after = int(match_range.group(1)), int(match_range.group(2))
+                    # does one of the limits have leading zeros? If so, detect the length of the numbers used
+                    if match_range.group(1).startswith(&quot;0&quot;) or match_range.group(2).startswith(&quot;0&quot;):
+                        leading_zeros = max(len(match_range.group(1)), len(match_range.group(2)))
+                    else:
+                        leading_zeros = 0
+                    incr = 1 if before &lt;= after else -1 # to allow iterating in reversed order, eg. [4~1]
+                    # previously this code used a mere casting to str
+                    # string formatting allows proper handling of leading zeros, if any
+                    fmt_string = &quot;{:0&quot; + str(leading_zeros) + &quot;d}&quot;
+                    substitutions[i].extend([Substitution(fmt_string.format(n), match.start(0), match.end(0)) for n in range(before, after + incr, incr)])
+                    continue
+                substitutions[i].append(Substitution(token, match.start(0), match.end(0))) # no operator found
+
+        # the purpose is to have all the subs &quot;increasing&quot; simultaneously
+        # in other words, if a string has two square braces blocks, like [1~3] and [melee*2,ranged]
+        # we want to expand them as (1,melee), (2,melee), (3,ranged)
+        # for this reason we need to transpose the matrix
+        substitutions = zip(*substitutions)
+
+        for sub_array in substitutions:
+            new_string = path
+            for sub in reversed(sub_array): # to avoid creating &quot;holes&quot; in the strings
+                new_string = new_string[:sub.start] + sub.sub + new_string[sub.end:] # these are the expanded strings
+            yield new_string
+
+def is_root(dirname):
+    &quot;Is the specified path the filesystem root?&quot;
+    return dirname == os.sep or (os.sep == &#x27;\\&#x27; and dirname.endswith(&#x27;:\\&#x27;))
+
+def pop_to_top(whoami):
+    &quot;Pop upward to the top-level directory.&quot;
+    upwards = os.getcwd().split(os.sep)
+    upwards.reverse()
+    for pathpart in upwards:
+        # Loose match because people have things like git trees.
+        if os.path.basename(pathpart).find(&quot;wesnoth&quot;) &gt; -1:
+            break
+        else:
+            os.chdir(&quot;..&quot;)
+    else:
+        print(whoami + &quot;: must be run from within a Battle &quot;
+                         &quot;for Wesnoth source tree.&quot;, file=sys.stderr)
+        sys.exit(1)
+
+def string_strip(value):
+    &quot;String-strip the value&quot;
+    if value.startswith(&#x27;&quot;&#x27;):
+        value = value[1:]
+        if value.endswith(&#x27;&quot;&#x27;):
+            value = value[:-1]
+    return value
+
+def attr_strip(value):
+    &quot;Strip away an (optional) translation mark and string quotes.&quot;
+    value = value.strip()
+    if value.startswith(&#x27;_&#x27;):
+        value = value[1:]
+    value = value.strip()
+    return string_strip(value)
+
+def comma_split(csstring, list=None, strip=&quot;r&quot;):
+    &quot;Split a comma-separated string, and append the entries to a list if specified.&quot;
+    vallist = [x.lstrip() for x in csstring.split(&quot;,&quot;) if x.lstrip()]
+    # strip=: utils::split will remove trailing whitespace from items in comma-
+    # separated lists but the wml-tags.lua split function only removes leading
+    # whitespace. So two flags are offered to change default behavior: one to
+    # lstrip() only, the other to warn about trailing whitespace.
+    if &#x27;w&#x27; in strip:
+        for item in vallist:
+            if re.search(&#x27;\s$&#x27;, item):
+                print(&#x27;Trailing whitespace may be problematic: &quot;%s&quot; in &quot;%s&quot;&#x27; % (item, csstring))
+    if &#x27;l&#x27; not in strip:
+        vallist = [x.rstrip() for x in vallist]
+    if list is not None:
+        list.extend(vallist)
+    else:
+        return vallist
+
+def parse_attribute(line):
+    &quot;Parse a WML key-value pair from a line.&quot;
+    where = line.find(&quot;=&quot;)
+    # Ignore lines with a # or &quot; before the first =. They&#x27;re likely line continuations that won&#x27;t be parsed correctly.
+    if &#x27;=&#x27; not in line or -1 &lt; line.find(&quot;#&quot;) &lt; where or -1 &lt; line.find(&quot;\&quot;&quot;) &lt; where:
+        return None
+    leader = line[:where]
+    after = line[where+1:]
+    if re.search(&quot;\s#&quot;, after):
+        where = len(re.split(&quot;\s+#&quot;, after)[0])
+        value = after[:where].lstrip()
+        comment = after[where:]
+    else:
+        value = after.strip()
+        comment = &quot;&quot;
+    # Return four fields: stripped key, part of line before value,
+    # value, trailing whitespace and comment.
+    return (leader.strip(), leader+&quot;=&quot;, string_strip(value), comment)
+
+class Forest:
+    &quot;Return an iterable directory forest object.&quot;
+    def __init__(self, dirpath, exclude=None):
+        &quot;Get the names of all files under dirpath, ignoring version-control directories.&quot;
+        self.forest = []
+        self.dirpath = dirpath
+        roots = [&quot;campaigns&quot;, &quot;add-ons&quot;]
+        for directory in dirpath:
+            subtree = []
+            rooted = False
+            if os.path.isdir(directory): # So we skip .cfgs in a UMC mirror
+                oldmain = os.path.join(os.path.dirname(directory), os.path.basename(directory) + &#x27;.cfg&#x27;)
+                if os.path.isfile(oldmain):
+                    subtree.append(oldmain)
+                base = os.path.basename(os.path.dirname(os.path.abspath(directory)))
+                if base in roots or base == &quot;core&quot;:
+                    rooted = True
+                for root, dirs, files in os.walk(directory):
+                    dirs.sort()
+                    dirlist = [x for x in dirs]
+                    # Split out individual campaigns/add-ons into their own subtrees
+                    if not rooted:
+                        if os.path.basename(root) == &quot;core&quot;:
+                            rooted = True
+                        elif os.path.basename(root) in roots:
+                            for subdir in dirlist:
+                                if subdir + &#x27;.cfg&#x27; in files:
+                                    files.remove(subdir + &#x27;.cfg&#x27;)
+                                dirs.remove(subdir)
+                                dirpath.append(os.path.join(root, subdir))
+                            rooted = True
+                        elif &quot;_info.cfg&quot; in files or &quot;info.cfg&quot; in files:
+                            rooted = True
+                            roots.append(os.path.basename(os.path.dirname(os.path.abspath(root))))
+                        else:
+                            stop = min(len(dirs), 5)
+                            count = 0
+                            for subdir in dirlist[:stop]:
+                                if os.path.isfile(os.path.join(root, subdir, &#x27;_info.cfg&#x27;)):
+                                    count += 1
+                                elif os.path.isfile(os.path.join(root, subdir, &#x27;info.cfg&#x27;)):
+                                    if os.path.isfile(os.path.join(root, subdir, &#x27;COPYING.txt&#x27;)):
+                                        count += 1
+                            if count &gt;= (stop // 2):
+                                roots.append(os.path.basename(root))
+                                for subdir in dirlist:
+                                    if subdir + &#x27;.cfg&#x27; in files:
+                                        files.remove(subdir + &#x27;.cfg&#x27;)
+                                    dirs.remove(subdir)
+                                    dirpath.append(os.path.join(root, subdir))
+                    subtree.extend([os.path.normpath(os.path.join(root, x)) for x in files])
+            # Always look at _main.cfg first
+            maincfgs = [elem for elem in subtree if elem.endswith(&quot;_main.cfg&quot;)]
+            rest = [elem for elem in subtree if not elem.endswith(&quot;_main.cfg&quot;)]
+            subtree = sorted(maincfgs) + sorted(rest)
+            self.forest.append(subtree)
+        for i in range(len(self.forest)):
+            # Ignore version-control subdirectories, Emacs tempfiles, and other files and extensions
+            for dirkind in vc_directories + l10n_directories:
+                self.forest[i] = [x for x in self.forest[i] if dirkind not in x]
+            self.forest[i] = [x for x in self.forest[i] if &#x27;.#&#x27; not in x]
+            self.forest[i] = [x for x in self.forest[i] if not os.path.isdir(x)]
+            if exclude:
+                self.forest[i] = [x for x in self.forest[i] if not re.search(exclude, x)]
+            for each in misc_files_extensions:
+                self.forest[i] = [x for x in self.forest[i] if not x.endswith(each)]
+        # Compute cliques (will be used later for visibility checks)
+        self.clique = {}
+        counter = 0
+        for tree in self.forest:
+            for filename in tree:
+                self.clique[filename] = counter
+            counter += 1
+    def parent(self, filename):
+        &quot;Return the directory root that caused this path to be included.&quot;
+        return self.dirpath[self.clique[filename]]
+    def neighbors(self, fn1, fn2):
+        &quot;Are two files from the same tree?&quot;
+        return self.clique[fn1] == self.clique[fn2]
+    def flatten(self):
+        &quot;Return a flattened list of all files in the forest.&quot;
+        allfiles = []
+        for tree in self.forest:
+            allfiles += tree
+        return allfiles
+
+    def __iter__(self):
+        &quot;Return a generator that walks through all files.&quot;
+        for (directory, tree) in zip(self.dirpath, self.forest):
+            for filename in tree:
+                yield (directory, filename)
+
+def iswml(filename):
+    &quot;Is the specified filename WML?&quot;
+    return filename.endswith(&quot;.cfg&quot;)
+
+def issave(filename):
+    &quot;Is the specified filename a WML save? (Detects compressed saves too.)&quot;
+    if isresource(filename):
+        return False
+    if filename.endswith(&quot;.gz&quot;):
+        with gzip.open(filename) as content:
+            firstline = content.readline()
+            if not isinstance(firstline, str):
+                # It&#x27;s a compressed binary file
+                return False
+    else:
+        try:
+            with codecs.open(filename, &quot;r&quot;, &quot;utf8&quot;) as content:
+                firstline = content.readline()
+        except UnicodeDecodeError:
+            # our saves are in UTF-8, so this file shouldn&#x27;t be one
+            return False
+    return firstline.startswith(&quot;label=&quot;)
+
+def isresource(filename):
+    &quot;Is the specified name a resource?&quot;
+    (root, ext) = os.path.splitext(filename)
+    return ext and ext[1:] in resource_extensions
+
+def parse_macroref(start, line):
+    def handle_argument(buffer):
+        nonlocal args
+        nonlocal optional_args
+
+        opt_arg = &quot;&quot;
+
+        arg = &quot;&quot;.join(buffer)
+        # arg may be empty, so arg[0] may be OOB.
+        if arg[0:1].isspace():
+            arg = arg[1:]
+
+        # is this an optional argument?
+        # argument names are usually made of uppercase letters, numbers and underscores
+        # if they&#x27;re optional, they&#x27;re followed by an equal sign
+        # stop matching on the first one, because the argument value might contain one too
+        if re.match(r&quot;^([A-Z0-9_]+?)=&quot;, arg):
+            opt_arg, arg = arg.split(&quot;=&quot;, 1)
+        if opt_arg:
+            optional_args[opt_arg] = arg
+            opt_arg = &quot;&quot;
+        else:
+            args.append(arg)
+        buffer.clear()
+        return True
+
+    buffer = []
+    args = []
+    optional_args = {}
+
+    depth = {
+        EQUALS: 0,
+        OPEN_BRACE: 0,
+        OPEN_PARENS: 0,
+        QUOTE: 0,
+    }
+    wrapper_stack = []
+    prev_added_arg = False
+
+    # close_token - Closes all active scopes, until the matching scope is found.
+    # This is useful, for example, in {MACRO OPT_NAME=VAL}
+    # In this example, close_token(&quot;}&quot;) will implicitly close the
+    # optional argument scope.
+    def close_token(token):
+        while len(wrapper_stack) &gt; 0:
+            last_token = wrapper_stack.pop()
+            depth[last_token] -= 1
+            if last_token == token:
+                break
+        else:
+            return False
+        return True
+
+    # close_if_token - Closes the current scope, if it matches the given token.
+    # Atomic version of close_token, which provides expressivity.
+    def close_if_token(token):
+        if wrapper_stack[-1] == token:
+            wrapper_stack.pop()
+            depth[token] -= 1
+            return True
+        return False
+
+    def open_token(token):
+        wrapper_stack.append(token)
+        depth[token] += 1
+
+    for i in range(start, len(line)):
+        added_arg = False
+        if depth[QUOTE] &gt; 0:
+            # If EOL, line[i+1] may be OOB, but slice is valid.
+            if line[i] == QUOTE and line[i+1:i+2] != QUOTE:
+                close_token(QUOTE)
+            buffer.append(line[i])
+        elif line[i] == QUOTE:
+            open_token(QUOTE)
+            buffer.append(line[i])
+        elif line[i] == OPEN_BRACE:
+            open_token(OPEN_BRACE)
+            buffer.append(line[i])
+        elif line[i] == CLOSE_BRACE:
+            if wrapper_stack[-1] != OPEN_PARENS:
+                close_token(OPEN_BRACE)
+            if depth[OPEN_BRACE] == 0:
+                # Flush at end
+                if not prev_added_arg and len(buffer) &gt; 0:
+                    added_arg = handle_argument(buffer)
+                break
+            else:
+                buffer.append(line[i])
+        elif line[i] == OPEN_PARENS:
+            if wrapper_stack[-1] == OPEN_PARENS or wrapper_stack[-2:] == [OPEN_PARENS, EQUALS]:
+                # Char in an argument
+                buffer.append(line[i])
+            else:
+                if wrapper_stack[-1] == EQUALS or (wrapper_stack[-1] == OPEN_BRACE and \
+                    not line[i-1].isspace()):
+                    close_if_token(EQUALS)
+                    if depth[OPEN_BRACE] == 1 and not prev_added_arg:
+                        added_arg = handle_argument(buffer)
+                open_token(OPEN_PARENS)
+                if depth[OPEN_BRACE] != 1:
+                    buffer.append(line[i])
+        elif line[i] == CLOSE_PARENS:
+            # Source has too many closing parens.
+            quit = not close_token(OPEN_PARENS)
+            if depth[OPEN_BRACE] != 1:
+                buffer.append(line[i])
+            elif not prev_added_arg or line[i-1] == OPEN_PARENS:
+                # {MACRO arg1()} has two arguments
+                added_arg = handle_argument(buffer)
+            if quit:
+                added_arg = handle_argument(buffer)
+                break
+        elif line[i] == EQUALS and re.match(r&#x27;^([A-Z0-9_]+?)&#x27;, line[i-1]):
+            open_token(EQUALS)
+            buffer.append(line[i])
+        elif line[i].isspace():
+            if line[i-1].isspace():
+                # Ignore consecutive spaces
+                continue
+            if not prev_added_arg and \
+             depth[OPEN_BRACE] == 1 and \
+             depth[OPEN_PARENS] == 0:
+                close_if_token(EQUALS)
+                added_arg = handle_argument(buffer)
+            buffer.append(line[i])
+        else:
+            buffer.append(line[i])
+
+        prev_added_arg = added_arg
+
+    args.pop(0)
+    return (args, optional_args, depth[OPEN_BRACE] &gt; 0)
+
+def formaltype(f):
+    # Deduce the expected type of the formal
+    if f.startswith(&quot;_&quot;):
+        f = f[1:]
+    if f == &quot;SIDE&quot; or f.endswith(&quot;_SIDE&quot;) or re.match(&quot;SIDE[0-9]&quot;, f):
+        ftype = &quot;side&quot;
+    elif f in (&quot;SIDE&quot;, &quot;X&quot;, &quot;Y&quot;, &quot;RED&quot;, &quot;GREEN&quot;, &quot;BLUE&quot;, &quot;TURN&quot;, &quot;PROB&quot;, &quot;LAYER&quot;, &quot;TIME&quot;, &quot;DURATION&quot;) or f.endswith(&quot;NUMBER&quot;) or f.endswith(&quot;AMOUNT&quot;) or f.endswith(&quot;COST&quot;) or f.endswith(&quot;RADIUS&quot;) or f.endswith(&quot;_X&quot;) or f.endswith(&quot;_Y&quot;) or f.endswith(&quot;_INCREMENT&quot;) or f.endswith(&quot;_FACTOR&quot;) or f.endswith(&quot;_TIME&quot;) or f.endswith(&quot;_SIZE&quot;):
+        ftype = &quot;numeric&quot;
+    elif f.endswith(&quot;PERCENTAGE&quot;):
+        ftype = &quot;percentage&quot;
+    elif f in (&quot;POSITION&quot;,) or f.endswith(&quot;_POSITION&quot;) or f == &quot;BASE&quot;:
+        ftype = &quot;position&quot;
+    elif f.endswith(&quot;_SPAN&quot;):
+        ftype = &quot;span&quot;
+    elif f == &quot;SIDES&quot; or f.endswith(&quot;_SIDES&quot;):
+        ftype = &quot;alliance&quot;
+    elif f in (&quot;RANGE&quot;,):
+        ftype = &quot;range&quot;
+    elif f in (&quot;ALIGN&quot;,):
+        ftype = &quot;alignment&quot;
+    elif f in (&quot;TYPES&quot;):
+        ftype = &quot;types&quot;
+    elif f.startswith(&quot;ADJACENT&quot;) or f.startswith(&quot;TERRAINLIST&quot;) or f == &quot;RESTRICTING&quot;:
+        ftype = &quot;terrain_pattern&quot;
+    elif f.startswith(&quot;TERRAIN&quot;) or f.endswith(&quot;TERRAIN&quot;):
+        ftype = &quot;terrain_code&quot;
+    elif f in (&quot;NAME&quot;, &quot;NAMESPACE&quot;, &quot;VAR&quot;, &quot;IMAGESTEM&quot;, &quot;ID&quot;, &quot;FLAG&quot;, &quot;BUILDER&quot;) or f.endswith(&quot;_NAME&quot;) or f.endswith(&quot;_ID&quot;) or f.endswith(&quot;_VAR&quot;) or f.endswith(&quot;_OVERLAY&quot;):
+        ftype = &quot;name&quot;
+    elif f in (&quot;ID_STRING&quot;, &quot;NAME_STRING&quot;, &quot;DESCRIPTION&quot;, &quot;IPF&quot;):
+        ftype = &quot;optional_string&quot;
+    elif f in (&quot;STRING&quot;, &quot;TYPE&quot;, &quot;TEXT&quot;) or f.endswith(&quot;_STRING&quot;) or f.endswith(&quot;_TYPE&quot;) or f.endswith(&quot;_TEXT&quot;):
+        ftype = &quot;string&quot;
+    elif f.endswith(&quot;IMAGE&quot;) or f == &quot;PROFILE&quot;:
+        ftype = &quot;image&quot;
+    elif f.endswith(&quot;MUSIC&quot;,) or f.endswith(&quot;SOUND&quot;):
+        ftype = &quot;sound&quot;
+    elif f.endswith(&quot;FILTER&quot;,):
+        ftype = &quot;filter&quot;
+    elif f == &quot;WML&quot; or f.endswith(&quot;_WML&quot;):
+        ftype = &quot;wml&quot;
+    elif f in (&quot;AFFIX&quot;, &quot;POSTFIX&quot;, &quot;ROTATION&quot;) or f.endswith(&quot;AFFIX&quot;):
+        ftype = &quot;affix&quot;
+    # The regexp case avoids complaints about some wacky terrain macros.
+    elif f.endswith(&quot;VALUE&quot;) or re.match(&quot;[ARS][0-9]&quot;, f):
+        ftype = &quot;any&quot;
+    else:
+        ftype = None
+    return ftype
+
+def actualtype(a):
+    if a is None:
+        return None
+    # Deduce the type of the actual
+    if a.isdigit() or a.startswith(&quot;-&quot;) and a[1:].isdigit():
+        atype = &quot;numeric&quot;
+    elif re.match(r&quot;0\.[0-9]+\Z&quot;, a):
+        atype = &quot;percentage&quot;
+    elif re.match(r&quot;-?[0-9]+,-?[0-9]+\Z&quot;, a):
+        atype = &quot;position&quot;
+    elif re.match(r&quot;([0-9]+\-[0-9]+,?|[0-9]+,?)+\Z&quot;, a):
+        atype = &quot;span&quot;
+    elif a in (&quot;melee&quot;, &quot;ranged&quot;):
+        atype = &quot;range&quot;
+    elif a in (&quot;lawful&quot;, &quot;neutral&quot;, &quot;chaotic&quot;, &quot;liminal&quot;):
+        atype = &quot;alignment&quot;
+    elif a.startswith(&quot;{&quot;) or a.endswith(&quot;}&quot;) or a.startswith(&quot;$&quot;):
+        atype = None # Can&#x27;t tell -- it&#x27;s a macro expansion
+    elif re.match(image_reference, a) or a == &quot;unit_image&quot;:
+        atype = &quot;image&quot;
+    elif re.match(r&quot;(\*|[A-Z][a-z]+)\^([A-Z][a-z\\|/]+\Z)?&quot;, a):
+        atype = &quot;terrain_code&quot;
+    elif a.endswith(&quot;.wav&quot;) or a.endswith(&quot;.ogg&quot;):
+        atype = &quot;sound&quot;
+    elif a.startswith(&#x27;&quot;&#x27;) and a.endswith(&#x27;&quot;&#x27;) or (a.startswith(&quot;_&quot;) and a[1] not in string.ascii_lowercase):
+        atype = &quot;stringliteral&quot;
+    elif &quot;=&quot; in a:
+        atype = &quot;filter&quot;
+    elif re.match(r&quot;[A-Z][a-z][a-z]?\Z&quot;, a):
+        atype = &quot;shortname&quot;
+    elif a == &quot;&quot;:
+        atype = &quot;empty&quot;
+    elif not &#x27; &#x27; in a:
+        atype = &quot;name&quot;
+    else:
+        atype = &quot;string&quot;
+    return atype
+
+def argmatch(formals, optional_formals, actuals, optional_actuals):
+    if optional_formals:
+        for key in optional_actuals.keys():
+            if key not in optional_formals:
+                return False
+    if len(formals) != len(actuals):
+        return False
+    opt_formals, opt_actuals = [], []
+    for key, value in optional_actuals.items():
+        opt_formals.append(key)
+        opt_actuals.append(value)
+    for (f, a) in zip(formals + opt_formals, actuals + opt_actuals):
+        # Here&#x27;s the compatibility logic.  First, we catch the situations
+        # in which a more restricted actual type matches a more general
+        # formal one.  Then we have a fallback rule checking for type
+        # equality or wildcarding.
+        ftype = formaltype(f)
+        atype = actualtype(a)
+        if ftype == &quot;any&quot;:
+            pass
+        elif (atype == &quot;numeric&quot; or a == &quot;global&quot;) and ftype == &quot;side&quot;:
+            pass
+        elif atype in (&quot;filter&quot;, &quot;empty&quot;) and ftype == &quot;wml&quot;:
+            pass
+        elif atype in (&quot;numeric&quot;, &quot;position&quot;) and ftype == &quot;span&quot;:
+            pass
+        elif atype in (&quot;shortname&quot;, &quot;name&quot;, &quot;empty&quot;, &quot;stringliteral&quot;) and ftype == &quot;affix&quot;:
+            pass
+        elif atype in (&quot;shortname&quot;, &quot;name&quot;, &quot;stringliteral&quot;) and ftype == &quot;string&quot;:
+            pass
+        elif atype in (&quot;shortname&quot;, &quot;name&quot;, &quot;string&quot;, &quot;stringliteral&quot;, &quot;empty&quot;) and ftype == &quot;optional_string&quot;:
+            pass
+        elif atype in (&quot;shortname&quot;,) and ftype == &quot;terrain_code&quot;:
+            pass
+        elif atype in (&quot;numeric&quot;, &quot;position&quot;, &quot;span&quot;, &quot;empty&quot;) and ftype == &quot;alliance&quot;:
+            pass
+        elif atype in (&quot;terrain_code&quot;, &quot;shortname&quot;, &quot;name&quot;) and ftype == &quot;terrain_pattern&quot;:
+            pass
+        elif atype in (&quot;string&quot;, &quot;shortname&quot;, &quot;name&quot;) and ftype == &quot;types&quot;:
+            pass
+        elif atype in (&quot;numeric&quot;, &quot;percentage&quot;) and ftype == &quot;percentage&quot;:
+            pass
+        elif atype == &quot;range&quot; and ftype == &quot;name&quot;:
+            pass
+        elif atype != ftype and ftype is not None and atype is not None:
+            return False
+    return True
+
+# the total_ordering decorator from functools allows to define only two comparison
+# methods, and Python generates the remaining methods
+# it comes with a speed penalty, but the alternative is defining six methods by hand...
+@total_ordering
+class Reference:
+    &quot;Describes a location by file and line.&quot;
+    def __init__(self, namespace, filename, lineno=None, lineno_end=None, docstring=None, args=None,
+                 optional_args=None, deprecated=False, deprecation_level=0, removal_version=None):
+        self.namespace = namespace
+        self.filename = filename
+        self.lineno = lineno
+        self.lineno_end = lineno_end
+        self.docstring = docstring
+        self.args = args
+        self._raw_optional_args = optional_args
+        self.optional_args = {}
+        self.body = []
+        self.deprecated = deprecated
+        self.deprecation_level = deprecation_level
+        self.removal_version = removal_version
+        self.references = collections.defaultdict(list)
+        self.undef = None
+
+    def append(self, fn, n, args=None, optional_args=None):
+        self.references[fn].append((n, args, optional_args))
+
+    def dump_references(self):
+        &quot;Dump all known references to this definition.&quot;
+        for (file, refs) in self.references.items():
+            print(&quot;    %s: %s&quot; % (file, repr([x[0] for x in refs])[1:-1]))
+
+    def __eq__(self, other):
+        return self.filename == other.filename and self.lineno == other.lineno
+
+    def __gt__(self, other):
+        # Major sort by file, minor by line number.  This presumes that the
+        # files correspond to coherent topics and gives us control of the
+        # sequence.
+        if self.filename == other.filename:
+            return self.lineno &gt; other.lineno
+        else:
+            return self.filename &gt; other.filename
+
+    def mismatches(self):
+        copy = Reference(self.namespace, self.filename, self.lineno, self.lineno_end, self.docstring, self.args, self._raw_optional_args)
+        copy.undef = self.undef
+        for filename in self.references:
+            mis = [(ln,a,oa) for (ln,a,oa) in self.references[filename] if a is not None and not argmatch(self.args, self.optional_args, a, oa)]
+            if mis:
+                copy.references[filename] = mis
+        return copy
+    def __str__(self):
+        if self.lineno:
+            return &#x27;&quot;%s&quot;, line %d&#x27; % (self.filename, self.lineno)
+        else:
+            return self.filename
+    __repr__ = __str__
+
+class States(enum.Enum):
+    OUTSIDE = enum.auto()
+    MACRO_HEADER = enum.auto()
+    EXTERNAL_DOCSTRING = enum.auto()
+    MACRO_OPTIONAL_ARGUMENT = enum.auto()
+    MACRO_BODY = enum.auto()
+
+class CrossRef:
+    macro_reference = re.compile(r&quot;\{([A-Z_][A-Za-z0-9_:]*)(?!\.)\b&quot;)
+    file_reference = re.compile(r&quot;([A-Za-z0-9{}.][A-Za-z0-9_/+{}.@\-\[\],~\*]*?\.(&quot; + &quot;|&quot;.join(resource_extensions) + &quot;))((~[A-Z]+\(.*\))*)(:([0-9]+|\[[0-9,*~]*\]))?&quot;)
+    tag_parse = re.compile(&quot;\s*([a-z_]+)\s*=(.*)&quot;)
+    def mark_matching_resources(self, pattern, fn, n):
+        &quot;Mark all definitions matching a specified pattern with a reference.&quot;
+        pattern = pattern.replace(&quot;+&quot;, r&quot;\+&quot;)
+        pattern = os.sep + pattern + &quot;$&quot;
+        if os.sep == &quot;\\&quot;:
+            pattern = pattern.replace(&quot;\\&quot;, &quot;\\\\&quot;)
+        try:
+            pattern = re.compile(pattern)
+        except sre_constants.error:
+            print(&quot;wmlscope: confused by %s&quot; % pattern, file=sys.stderr)
+            return None
+        key = None
+        for trial in self.fileref:
+            if pattern.search(trial) and self.visible_from(trial, fn, n):
+                key = trial
+                self.fileref[key].append(fn, n)
+        return key
+    def visible_from(self, defn, fn, n):
+        &quot;Is specified definition visible from the specified file and line?&quot;
+        if isinstance(defn, str):
+            defn = self.fileref[defn]
+        if defn.undef is not None:
+            # Local macros are only visible in the file where they were defined
+            return defn.filename == fn and n &gt;= defn.lineno and n &lt;= defn.undef
+        if self.exports(defn.namespace):
+            # Macros and resources in subtrees with export=yes are global
+            return True
+        elif defn.filename != fn and not self.filelist.neighbors(defn.filename, fn):
+            # Otherwise, must be in the same subtree.
+            return False
+        else:
+            # If the two files are in the same subtree, assume visibility.
+            # This doesn&#x27;t match the actual preprocessor semantics.
+            # It means any macro without an undef is visible anywhere in the
+            # same argument directory.
+            #
+            # We can&#x27;t do better than this without a lot of hairy graph-
+            # coloring logic to simulate include path interpretation.
+            # If that logic ever gets built, it will go here.
+            return True
+    def scan_for_definitions(self, namespace, filename):
+        ignoreflag = False
+        conditionalsflag = False
+        temp_docstrings = {}
+        current_docstring = None
+        try:
+            with codecs.open(filename, &quot;r&quot;, &quot;utf8&quot;) as dfp:
+                state = States.OUTSIDE
+                latch_unit = in_base_unit = in_theme = False
+                for (n, line) in enumerate(dfp):
+                    if self.warnlevel &gt; 1:
+                        print(repr(line)[1:-1])
+                    if line.strip().startswith(&quot;#textdomain&quot;):
+                        continue
+                    m = re.search(&quot;# *wmlscope: warnlevel ([0-9]*)&quot;, line)
+                    if m:
+                        self.warnlevel = int(m.group(1))
+                        print(&#x27;&quot;%s&quot;, line %d: warnlevel set to %d (definition-gathering pass)&#x27; \
+                             % (filename, n+1, self.warnlevel))
+                        continue
+                    m = re.search(&quot;# *wmlscope: set *([^=]*)=(.*)&quot;, line)
+                    if m:
+                        prop = m.group(1).strip()
+                        value = m.group(2).strip()
+                        if namespace not in self.properties:
+                            self.properties[namespace] = {}
+                        self.properties[namespace][prop] = value
+                    m = re.search(&quot;# *wmlscope: prune (.*)&quot;, line)
+                    if m:
+                        name = m.group(1)
+                        if self.warnlevel &gt;= 2:
+                            print(&#x27;&quot;%s&quot;, line %d: pruning definitions of %s&#x27; \
+                                  % (filename, n+1, name ))
+                        if name not in self.xref:
+                            print(&quot;wmlscope: can&#x27;t prune undefined macro %s&quot; % name, file=sys.stderr)
+                        else:
+                            self.xref[name] = self.xref[name][:1]
+                        continue
+                    if &quot;# wmlscope: start conditionals&quot; in line:
+                        if self.warnlevel &gt; 1:
+                            print(&#x27;&quot;%s&quot;, line %d: starting conditionals&#x27; \
+                                  % (filename, n+1))
+                        conditionalsflag = True
+                    elif &quot;# wmlscope: stop conditionals&quot; in line:
+                        if self.warnlevel &gt; 1:
+                            print(&#x27;&quot;%s&quot;, line %d: stopping conditionals&#x27; \
+                                  % (filename, n+1))
+                        conditionalsflag = False
+                    if &quot;# wmlscope: start ignoring&quot; in line:
+                        if self.warnlevel &gt; 1:
+                            print(&#x27;&quot;%s&quot;, line %d: starting ignoring (definition pass)&#x27; \
+                                  % (filename, n+1))
+                        ignoreflag = True
+                    elif &quot;# wmlscope: stop ignoring&quot; in line:
+                        if self.warnlevel &gt; 1:
+                            print(&#x27;&quot;%s&quot;, line %d: stopping ignoring (definition pass)&#x27; \
+                                  % (filename, n+1))
+                        ignoreflag = False
+                    elif ignoreflag:
+                        continue
+                    if line.strip().startswith(&quot;#define&quot;):
+                        tokens = line.split()
+                        if len(tokens) &lt; 2:
+                            print(&#x27;&quot;%s&quot;, line %d: malformed #define&#x27; \
+                                  % (filename, n+1), file=sys.stderr)
+                        else:
+                            name = tokens[1]
+                            here = Reference(namespace, filename, n+1, line, None, args=tokens[2:], optional_args=[])
+                            here.hash = hashlib.md5()
+                            here.docstring = line.lstrip()[8:] # Strip off #define_
+                            current_docstring = None
+                            if name in temp_docstrings:
+                                here.docstring += temp_docstrings[name]
+                                del temp_docstrings[name]
+                            state = States.MACRO_HEADER
+                        continue
+                    if state in (States.OUTSIDE, States.EXTERNAL_DOCSTRING):
+                        # allow starting new docstrings even one after another
+                        m = re.match(r&quot;\s*# wmlscope: docstring (\w+)&quot;, line)
+                        if m:
+                            current_docstring = m.group(1)
+                            # what if someone tries to define a docstring twice for the same macro?
+                            # In this case, warn and overwrite the old one
+                            if current_docstring in temp_docstrings:
+                                print(&quot;Redefining a docstring for macro {} at {}, line {}&quot;.format(m.group(1),
+                                                                                                  filename,
+                                                                                                  n+1),
+                                      file=sys.stderr)
+                            temp_docstrings[current_docstring] = &quot;&quot;
+                            state = States.EXTERNAL_DOCSTRING
+                            continue
+                    if state == States.EXTERNAL_DOCSTRING:
+                        # stop collecting the docstring on the first non-comment line (even if it&#x27;s empty)
+                        # if the line starts with a #define or another docstring directive
+                        # it&#x27;ll be handled in the blocks above
+                        if line.lstrip().startswith(&quot;#&quot;):
+                            temp_docstrings[current_docstring] += line.lstrip()[1:]
+                        else:
+                            current_docstring = None
+                            state = States.OUTSIDE
+                    elif state != States.OUTSIDE and line.strip().endswith(&quot;#enddef&quot;):
+                        end_def_index = line.index(&quot;#enddef&quot;)
+                        here.body.append(line[0:end_def_index])
+                        here.hash.update(line.encode(&quot;utf8&quot;))
+                        here.hash = here.hash.digest()
+                        if name in self.xref:
+                            for defn in self.xref[name]:
+                                if not self.visible_from(defn, filename, n+1):
+                                    continue
+                                elif conditionalsflag:
+                                    continue
+                                elif defn.hash != here.hash:
+                                    print(&quot;%s: overrides different %s definition at %s&quot; \
+                                            % (here, name, defn), file=sys.stderr)
+                                elif self.warnlevel &gt; 0:
+                                    print(&quot;%s: duplicates %s definition at %s&quot; \
+                                            % (here, name, defn), file=sys.stderr)
+                        if name not in self.xref:
+                            self.xref[name] = []
+
+                        here.lineno_end = n+1
+                        self.xref[name].append(here)
+                        state = States.OUTSIDE
+                    elif state == States.MACRO_HEADER and line.strip():
+                        if line.strip().startswith(&quot;#arg&quot;):
+                            state = States.MACRO_OPTIONAL_ARGUMENT
+                            here._raw_optional_args.append([line.strip().split()[1],&quot;&quot;])
+                        elif line.strip()[0] != &quot;#&quot;:
+                            state = States.MACRO_BODY
+                    elif state == States.MACRO_OPTIONAL_ARGUMENT and not &quot;#endarg&quot; in line:
+                        here._raw_optional_args[-1][1] += line
+                    elif state == States.MACRO_OPTIONAL_ARGUMENT:
+                        end_arg_index = line.index(&quot;#endarg&quot;)
+                        here._raw_optional_args[-1][1] += line[0:end_arg_index]
+                        here.optional_args = dict(here._raw_optional_args)
+                        state = States.MACRO_HEADER
+                        continue
+                    if state == States.MACRO_HEADER:
+                        # Ignore macro header commends that are pragmas
+                        if (&quot;wmlscope&quot; in line) or (&quot;wmllint:&quot; in line):
+                            continue
+                        # handle deprecated macros
+                        if &quot;deprecated&quot; in line:
+                            # There are four levels of macro deprecation (1, 2, 3 and 4)
+                            # Sometimes they have a version number in which they&#x27;re
+                            # scheduled for removal and sometimes they don&#x27;t have it
+                            # This regex seems to match every deprecated macro in mainline
+                            # in version 1.15.6
+                            m = re.match(r&quot;\s*#\s?deprecated\s(1|2|3|4)\s?([0-9.]*)\s?(.*)&quot;, line)
+                            if m:
+                                here.deprecated = True
+                                # leave them as strings: they&#x27;ll be used for HTML output
+                                here.deprecation_level = m.group(1)
+                                here.removal_version = m.group(2)
+                                here.docstring += m.group(3)
+                            else:
+                                print(&quot;Deprecation line not matched found in {}, line {}&quot;.format(filename, n+1), file=sys.stderr)
+                        else:
+                            here.docstring += line.lstrip()[1:]
+                    if state == States.MACRO_BODY:
+                        here.body.append(line)
+                    if state in (States.MACRO_HEADER, States.MACRO_OPTIONAL_ARGUMENT, States.MACRO_BODY):
+                        here.hash.update(line.encode(&quot;utf8&quot;))
+                    elif line.strip().startswith(&quot;#undef&quot;):
+                        tokens = line.split()
+                        name = tokens[1]
+                        if name in self.xref and self.xref[name]:
+                            self.xref[name][-1].undef = n+1
+                        else:
+                            print(&quot;%s: unbalanced #undef on %s&quot; \
+                                  % (Reference(namespace, filename, n+1), name))
+                    if state == States.OUTSIDE:
+                        if &#x27;[unit_type]&#x27; in line:
+                            latch_unit = True
+                        elif &#x27;[/unit_type]&#x27; in line:
+                            latch_unit = False
+                        elif &#x27;[base_unit]&#x27; in line:
+                            in_base_unit = True
+                        elif &#x27;[/base_unit]&#x27; in line:
+                            in_base_unit = False
+                        elif &#x27;[theme]&#x27; in line:
+                            in_theme = True
+                        elif &#x27;[/theme]&#x27; in line:
+                            in_theme = False
+                        elif latch_unit and not in_base_unit and not in_theme and &quot;id&quot; in line:
+                            m = CrossRef.tag_parse.search(line)
+                            if m and m.group(1) == &quot;id&quot;:
+                                uid = m.group(2)
+                                if uid not in self.unit_ids:
+                                    self.unit_ids[uid] = []
+                                self.unit_ids[uid].append(Reference(namespace, filename, n+1))
+                                latch_unit= False
+            # handling of the file is over, but there are some external docstring still around
+            # this happens if someone defined an external docstring *after* the macro it refers to
+            # or to a macro which isn&#x27;t even in the file
+            # warn if that&#x27;s the case
+            if temp_docstrings: # non-empty dictionaries cast as True
+                print(&quot;Docstrings defined after their macros or referring to a missing \
+    macro found in {}: {}&quot;.format(filename,
+                                  &quot;, &quot;.join(temp_docstrings.keys())),
+                      file=sys.stderr)
+        except UnicodeDecodeError as e:
+            print(&#x27;wmlscope: &quot;{}&quot; is not a valid UTF-8 file&#x27;.format(filename), file=sys.stderr)
+
+    def __init__(self, dirpath=[], filelist=None, exclude=&quot;&quot;, warnlevel=0, progress=False):
+        &quot;Build cross-reference object from the specified filelist.&quot;
+        if filelist is None:
+            self.filelist = Forest(dirpath, exclude)
+            self.dirpath = [x for x in dirpath if not re.search(exclude, x)]
+        else:
+            # All specified files share the same namespace
+            self.filelist = [(&quot;src&quot;, filename) for filename in filelist]
+            self.dirpath = [&quot;src&quot;]
+            
+        self.warnlevel = warnlevel
+        self.xref = {}
+        self.fileref = {}
+        self.noxref = False
+        self.properties = {}
+        self.unit_ids = {}
+        all_in = []
+        if self.warnlevel &gt;=2 or progress:
+            print(&quot;*** Beginning definition-gathering pass...&quot;)
+        for (namespace, filename) in self.filelist:
+            all_in.append((namespace, filename))
+            if self.warnlevel &gt; 1:
+                print(filename + &quot;:&quot;)
+            if progress:
+                print(filename)
+            if isresource(filename):
+                self.fileref[filename] = Reference(namespace, filename)
+            elif iswml(filename):
+                # It&#x27;s a WML file, scan for macro definitions
+                self.scan_for_definitions(namespace, filename)
+            elif filename.endswith(&quot;.def&quot;):
+                # It&#x27;s a list of names to be considered defined
+                self.noxref = True
+                with codecs.open(filename, &quot;r&quot;, &quot;utf8&quot;) as dfp:
+                    for line in dfp:
+                        self.xref[line.strip()] = True
+        # Next, decorate definitions with all references from the filelist.
+        self.unresolved = []
+        self.missing = []
+        self.deprecated = []
+        formals = []
+        optional_formals = []
+        state = States.OUTSIDE
+        if self.warnlevel &gt;=2 or progress:
+            print(&quot;*** Beginning reference-gathering pass...&quot;)
+        for (ns, fn) in all_in:
+            if progress:
+                print(fn)
+            if iswml(fn):
+                try:
+                    with codecs.open(fn, &quot;r&quot;, &quot;utf8&quot;) as rfp:
+                        attack_name = None
+                        have_icon = False
+                        beneath = 0
+                        ignoreflag = False
+                        in_macro_definition = False
+                        for (n, line) in enumerate(rfp):
+                            if line.strip().startswith(&quot;#define&quot;):
+                                formals = line.strip().split()[2:]
+                                in_macro_definition = True
+                            elif line.startswith(&quot;#enddef&quot;):
+                                formals = []
+                                optional_formals = []
+                                in_macro_definition = False
+                            elif in_macro_definition and line.startswith(&quot;#arg&quot;):
+                                optional_formals.append(line.strip().split()[1])
+                            comment = &quot;&quot;
+                            if &#x27;#&#x27; in line:
+                                if &quot;# wmlscope: start ignoring&quot; in line:
+                                    if self.warnlevel &gt; 1:
+                                        print(&#x27;&quot;%s&quot;, line %d: starting ignoring (reference pass)&#x27; \
+                                              % (fn, n+1))
+                                    ignoreflag = True
+                                elif &quot;# wmlscope: stop ignoring&quot; in line:
+                                    if self.warnlevel &gt; 1:
+                                        print(&#x27;&quot;%s&quot;, line %d: stopping ignoring (reference pass)&#x27; \
+                                              % (fn, n+1))
+                                    ignoreflag = False
+                                m = re.search(&quot;# *wmlscope: self.warnlevel ([0-9]*)&quot;, line)
+                                if m:
+                                    self.warnlevel = int(m.group(1))
+                                    print(&#x27;&quot;%s&quot;, line %d: self.warnlevel set to %d (reference-gathering pass)&#x27; \
+                                         % (fn, n+1, self.warnlevel))
+                                    continue
+                                fields = line.split(&#x27;#&#x27;)
+                                line = fields[0]
+                                if len(fields) &gt; 1:
+                                    comment = fields[1]
+                            if ignoreflag or not line:
+                                continue
+                            # Find references to macros
+                            for match in re.finditer(CrossRef.macro_reference, line):
+                                name = match.group(1)
+                                candidates = []
+                                if self.warnlevel &gt;=2:
+                                    print(&#x27;&quot;%s&quot;, line %d: seeking definition of %s&#x27; \
+                                          % (fn, n+1, name))
+                                if name in formals or name in optional_formals:
+                                    continue
+                                elif name in self.xref:
+                                    # Count the number of actual arguments.
+                                    # Set args to None if the call doesn&#x27;t
+                                    # close on this line
+                                    (args, optional_args, is_unfinished) = parse_macroref(match.start(0), line)
+                                    if is_unfinished:
+                                        args = None
+                                        optional_args = None
+                                    #if args:
+                                    #    print(&#x27;&quot;%s&quot;, line %d: args of %s is %s&#x27; \
+                                    #          % (fn, n+1, name, args))
+                                    # Figure out which macros might resolve this
+                                    for defn in self.xref[name]:
+                                        if self.visible_from(defn, fn, n+1):
+                                            defn.append(fn, n+1, args, optional_args)
+                                            candidates.append(str(defn))
+                                            if defn.deprecated:
+                                                self.deprecated.append((name,Reference(ns,fn,n+1)))
+                                    if len(candidates) &gt; 1:
+                                        print(&quot;%s: more than one definition of %s is visible here (%s).&quot; % (Reference(ns, fn, n), name, &quot;; &quot;.join(candidates)))
+                                if len(candidates) == 0:
+                                    self.unresolved.append((name,Reference(ns,fn,n+1)))
+                            # Don&#x27;t be fooled by HTML image references in help strings.
+                            if &quot;&lt;img&gt;&quot; in line:
+                                continue
+                            # Find references to resource files
+                            for match in re.finditer(CrossRef.file_reference, line):
+                                for pattern in split_filenames(match):
+                                    for name in expand_square_braces(pattern):
+                                        # Catches maps that look like macro names.
+                                        if (name.endswith(&quot;.map&quot;) or name.endswith(&quot;.mask&quot;)):
+                                            if name.startswith(&quot;{~&quot;):
+                                                name = name[2:]
+                                            elif name.startswith(&quot;{&quot;):
+                                                name = name[1:]
+                                        if os.sep == &quot;\\&quot;:
+                                            name = name.replace(&quot;/&quot;, &quot;\\&quot;)
+                                        key = None
+                                        # If name is already in our resource list, it&#x27;s easy.
+                                        if name in self.fileref and self.visible_from(name, fn, n):
+                                            self.fileref[name].append(fn, n+1)
+                                            continue
+                                        # If the name contains substitutable parts, count
+                                        # it as a reference to everything the substitutions
+                                        # could potentially match.
+                                        elif &#x27;{&#x27; in name or &#x27;@&#x27; in name:
+                                            pattern = re.sub(r&quot;(\{[^}]*\}|@R[0-5]|@V)&quot;, &#x27;.*&#x27;, name)
+                                            key = self.mark_matching_resources(pattern, fn,n+1)
+                                            if key:
+                                                self.fileref[key].append(fn, n+1)
+                                        else:
+                                            candidates = []
+                                            for trial in self.fileref:
+                                                if trial.endswith(os.sep + name) and self.visible_from(trial, fn, n):
+                                                    key = trial
+                                                    self.fileref[trial].append(fn, n+1)
+                                                    candidates.append(trial)
+                                            if len(candidates) &gt; 1:
+                                                print(&quot;%s: more than one resource matching %s is visible here (%s).&quot; % (Reference(ns,fn, n), name, &quot;, &quot;.join(candidates)))
+                                        if not key:
+                                            self.missing.append((name, Reference(ns,fn,n+1)))
+                            # Notice implicit references through attacks
+                            if state == States.OUTSIDE:
+                                if &quot;[attack]&quot; in line:
+                                    beneath = 0
+                                    attack_name = default_icon = None
+                                    have_icon = False
+                                elif &quot;name=&quot; in line and not &quot;no-icon&quot; in comment:
+                                    attack_name = line[line.find(&quot;name=&quot;)+5:].strip()
+                                    default_icon = os.path.join(&quot;attacks&quot;, attack_name  + &quot;.png&quot;)
+                                elif &quot;icon=&quot; in line and beneath == 0:
+                                    have_icon = True
+                                elif &quot;[/attack]&quot; in line:
+                                    if attack_name and not have_icon:
+                                        candidates = []
+                                        key = None
+                                        for trial in self.fileref:
+                                            if trial.endswith(os.sep + default_icon) and self.visible_from(trial, fn, n):
+                                                key = trial
+                                                self.fileref[trial].append(fn, n+1)
+                                                candidates.append(trial)
+                                        if len(candidates) &gt; 1:
+                                            print(&quot;%s: more than one definition of %s is visible here (%s).&quot; % (Reference(ns,fn, n), name, &quot;, &quot;.join(candidates)))
+                                    if not key:
+                                        self.missing.append((default_icon, Reference(ns,fn,n+1)))
+                                elif line.strip().startswith(&quot;[/&quot;):
+                                    beneath -= 1
+                                elif line.strip().startswith(&quot;[&quot;):
+                                    beneath += 1
+                except UnicodeDecodeError as e:
+                    pass # to not have the invalid UTF-8 file warning printed twice
+        # Check whether each namespace has a defined export property
+        if self.warnlevel &gt;= 1:
+            for namespace in self.dirpath:
+                if namespace not in self.properties or &quot;export&quot; not in self.properties[namespace]:
+                    print(&quot;warning: %s has no export property&quot; % namespace)
+    def exports(self, namespace):
+        return namespace in self.properties and self.properties[namespace].get(&quot;export&quot;) == &quot;yes&quot;
+    def subtract(self, filelist):
+
+        &quot;Transplant file references in files from filelist to a new CrossRef.&quot;
+        smallref = CrossRef()
+        for filename in self.fileref:
+            for (referrer, referlines) in self.fileref[filename].references.items():
+                if referrer in filelist:
+                    if filename not in smallref.fileref:
+                        smallref.fileref[filename] = Reference(None, filename)
+                    smallref.fileref[filename].references[referrer] = referlines
+                    del self.fileref[filename].references[referrer]
+        return smallref
+    def refcount(self, name):
+        &quot;Return a reference count for the specified resource.&quot;
+        try:
+            return len(self.fileref[name].references)
+        except KeyError:
+            return 0
+
+#
+# String translations from po files.  The advantage of this code is that it
+# does not require the gettext binary message catalogs to have been compiled.
+# The disadvantage is that it eats lots of core!
+#
+
+
+class TranslationError(Exception):
+    def __init__(self, textdomain, isocode):
+        self.isocode = isocode
+        self.textdomain = textdomain
+    def __str__(self):
+        return &quot;No translations found for %s/%s.\n&quot; % (
+            self.textdomain, self.isocode)
+
+class Translation(dict):
+    &quot;Parses a po file to create a translation dictionary.&quot;
+    def __init__(self, textdomain, isocode, topdir=&quot;&quot;):
+        self.textdomain = textdomain
+        self.isocode = isocode
+        self.gettext = {}
+        if self.isocode != &quot;C&quot;:
+            isocode2 = isocode[:isocode.rfind(&quot;_&quot;)]
+            for code in [isocode, isocode2]:
+                fn = &quot;po/%s/%s.po&quot; % (textdomain, code)
+                if topdir: fn = os.path.join(topdir, fn)
+                try:
+                    f = file(fn)
+                    break
+                except IOError:
+                    pass
+            else:
+                raise TranslationError(textdomain, self.isocode)
+
+            expect = False
+            fuzzy = &quot;#, fuzzy\n&quot;
+            gettext = f.read().decode(&quot;utf8&quot;)
+            matches = re.compile(&quot;&quot;&quot;(msgid|msgstr)((\s*&quot;.*?&quot;)+)&quot;&quot;&quot;).finditer(gettext)
+            msgid = &quot;&quot;
+            for match in matches:
+                text = &quot;&quot;.join(re.compile(&#x27;&quot;(.*?)&quot;&#x27;).findall(match.group(2)))
+                if match.group(1) == &quot;msgid&quot;:
+                    msgid = text.replace(&quot;\\n&quot;, &quot;\n&quot;)
+                    expect = gettext[match.start(1) - len(fuzzy):match.start(1)] != fuzzy
+                elif expect:
+                    self.gettext[msgid] = text.replace(&quot;\\n&quot;, &quot;\n&quot;)
+    def get(self, key, dflt):
+        if self.isocode == &quot;C&quot;:
+            if key:
+                return key[key.find(&quot;^&quot;) + 1:]
+            return &quot;?&quot;
+        else:
+            t = self.gettext.get(key, dflt)
+            if not t:
+                if key:
+                    return key[key.find(&quot;^&quot;) + 1:]
+                return &quot;?&quot;
+            return t
+    def __getitem__(self, key):
+        if self.isocode == &quot;C&quot;:
+            return key
+        else:
+            return self.gettext[key]
+    def __contains__(self, key):
+        if self.isocode == &quot;C&quot;:
+            return True
+        else:
+            return key in self.gettext
+
+class Translations:
+    &quot;Wraps around Translation to support multiple languages and domains.&quot;
+    def __init__(self, topdir = &quot;&quot;):
+        self.translations = {}
+        self.topdir = topdir
+    def get(self, textdomain, isocode, key, default):
+        t = (textdomain, isocode)
+        if not t in self.translations:
+            try:
+                self.translations[t] = Translation(textdomain, isocode, self.topdir)
+            except TranslationError as e:
+                print(str(e), file=sys.stderr)
+                self.translations[t] = Translation(textdomain, &quot;C&quot;, self.topdir)
+        result = self.translations[t].get(key, default)
+        return result
+
+## Namespace management
+#
+# This is the only part of the code that actually knows about the
+# shape of the data tree.
+
+def scopelist():
+    &quot;Return a list of (separate) package scopes, core first.&quot;
+    return [&quot;data/core&quot;] + glob.glob(&quot;data/campaigns/*&quot;)
+
+def is_namespace(name):
+    &quot;Is the name either a valid campaign name or core?&quot;
+    return name in map(os.path.basename, scopelist())
+
+def namespace_directory(name):
+    &quot;Go from namespace to directory.&quot;
+    if name == &quot;core&quot;:
+        return &quot;data/core/&quot;
+    else:
+        return &quot;data/campaigns/&quot; + name + &quot;/&quot;
+
+def directory_namespace(path):
+    &quot;Go from directory to namespace.&quot;
+    if path.startswith(&quot;data/core/&quot;):
+        return &quot;core&quot;
+    elif path.startswith(&quot;data/campaigns/&quot;):
+        return path.split(&quot;/&quot;)[2]
+    else:
+        return None
+
+def namespace_member(path, namespace):
+    &quot;Is a path in a specified namespace?&quot;
+    ns = directory_namespace(path)
+    return ns is not None and ns == namespace
+
+def resolve_unit_cfg(namespace, utype, resource=None):
+    &quot;Get the location of a specified unit in a specified scope.&quot;
+    if resource:
+        resource = os.path.join(utype, resource)
+    else:
+        resource = utype
+    loc = namespace_directory(namespace) + &quot;units/&quot; + resource
+    if not loc.endswith(&quot;.cfg&quot;):
+        loc += &quot;.cfg&quot;
+    return loc
+
+def resolve_unit_image(namespace, subdir, resource):
+    &quot;Construct a plausible location for given resource in specified namespace.&quot;
+    return os.path.join(namespace_directory(namespace), &quot;images/units&quot;, subdir, resource)
+
+# And this is for code that does syntax transformation
+baseindent = &quot;    &quot;
+
+# a constant to detect version control directories
+vcdir = &quot;.git&quot;
+
+# wmltools.py ends here
+</pre></main></body></html>

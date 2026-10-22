@@ -1,0 +1,92 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Priestess.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/merfolk/Priestess.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Mermaid Priestess
+    name= _ &quot;female^Mermaid Priestess&quot;
+    race=merman
+    gender=female
+    image=&quot;units/merfolk/priestess.png&quot;
+    profile=portraits/merfolk/priestess.webp
+    hitpoints=35
+    [resistance]
+        arcane=80
+    [/resistance]
+    movement_type=swimmer
+    movement=6
+    experience=61
+    level=2
+    alignment=lawful
+    advances_to=Mermaid Diviner
+    cost=31
+    usage=healer
+    description= _ &quot;Among merfolk, mysticism is generally left to the mermaids, who are more inclined to it. It is they who dedicate themselves to the ideal of bringing peace and life to the world, and to the arts which make that possible. Their piety also grants them certain powers, allowing them to guard their people against magical or unnatural things.&quot;
+    die_sound=mermaid-die.ogg
+    {DEFENSE_ANIM &quot;units/merfolk/priestess-defend2.png&quot; &quot;units/merfolk/priestess-defend1.png&quot; mermaid-hit.ogg }
+    [abilities]
+        {ABILITY_CURES}
+    [/abilities]
+    [healing_anim]
+        start_time=-525
+        [frame]
+            image=&quot;units/merfolk/priestess.png:150&quot; ### magic-1
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/priestess.png&quot; ### magic-3
+            halo=halo/holy/halo[6,1~6].png:75
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/priestess.png:150&quot; ### magic-2
+        [/frame]
+    [/healing_anim]
+    [attack]
+        name=staff
+        description=_&quot;staff&quot;
+        icon=attacks/staff-magic.png
+        type=impact
+        range=melee
+        damage=5
+        number=3
+    [/attack]
+    [attack]
+        name=lightbeam
+        description=_&quot;lightbeam&quot;	# wmllint: no spellcheck (until name-&gt;id)
+        type=arcane
+        range=ranged
+        [specials]
+            {WEAPON_SPECIAL_MAGICAL}
+        [/specials]
+        damage=6
+        number=4
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=lightbeam
+        [/filter_attack]
+        {MISSILE_FRAME_LIGHT_BEAM}
+
+        start_time=-250
+        [frame]
+            image=&quot;units/merfolk/priestess.png:75&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:HOLY} {SOUND_LIST:HOLY_MISS} -175}
+        [frame]
+            image=&quot;units/merfolk/priestess.png:175&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=staff
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;units/merfolk/priestess.png:50&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS staff.ogg staff-miss.ogg -125}
+        [frame]
+            image=&quot;units/merfolk/priestess.png:250&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/priestess.png:75&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

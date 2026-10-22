@@ -1,0 +1,204 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Loyalist_Spearman.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/humans/Loyalist_Spearman.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Spearman
+    name= _ &quot;Spearman&quot;
+    # wmllint: general spelling spearmen
+    race=human
+    image=&quot;units/human-loyalists/spearman.png&quot;
+    profile=&quot;portraits/humans/spearman.webp&quot;
+    hitpoints=36
+    movement_type=smallfoot
+    movement=5
+    experience=42
+    level=1
+    alignment=lawful
+    advances_to=Swordsman,Pikeman,Javelineer
+    cost=14
+    usage=fighter
+    description= _ &quot;Swords are, for many, an expensive luxury, and one which peasants can ill afford. Spears are much easier to make and will do well even without a spearhead, though most can afford one. Clad in leather armor, and often armed with a shield and a few javelins, spearmen are the staple of most armies, often thrown into the front lines with only the most basic training.&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    [standing_anim]
+        start_time=0
+        [if]
+            direction=s,se,sw
+            [frame]
+                image=&quot;units/human-loyalists/spearman-stand-s-[1~7,6,7~2].png:200&quot;
+            [/frame]
+        [/if]
+        [else]
+            direction=n,ne,nw
+            [frame]
+                image=&quot;units/human-loyalists/spearman-stand-n-[1~5,4,5,4,5~2].png:200&quot;
+            [/frame]
+        [/else]
+    [/standing_anim]
+    [standing_anim]
+        start_time=0
+        {WOUNDED_UNIT ()}
+        [if]
+            direction=s,se,sw
+            [frame]
+                image=&quot;units/human-loyalists/spearman.png:400&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-loyalists/spearman-bob-s-[1~3,2,1].png:[150*2,600,250*2]&quot;
+            [/frame]
+        [/if]
+        [else]
+            direction=n,ne,nw
+            [frame]
+                image=&quot;units/human-loyalists/spearman-n.png:400&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/human-loyalists/spearman-bob-n-[1~3,2~1].png:[150*2,400,150*2]&quot;
+            [/frame]
+        [/else]
+    [/standing_anim]
+    [idle_anim]
+        {STANDARD_IDLE_FILTER}
+        direction=s,se,sw
+        [frame]
+            image=&quot;units/human-loyalists/spearman-idle[1~4,3,2].png:[100*3,400,100*2]&quot;
+        [/frame]
+    [/idle_anim]
+    #    [idle_anim]
+    #        {STANDARD_IDLE_FILTER}
+    #        direction=s,se,sw
+    #        [frame]
+    #            image=&quot;units/human-loyalists/spearman-idle2-[1~6].png:[100*4,400,100]&quot;
+    #        [/frame]
+    #    [/idle_anim]
+    [death]
+        start_time=0
+        [frame]
+            image=&quot;units/human-loyalists/spearman-death[1~4].png:125&quot;
+        [/frame]
+    [/death]
+    {DEFENSE_ANIM_FILTERED &quot;units/human-loyalists/spearman-defend-2.png&quot; &quot;units/human-loyalists/spearman-defend.png&quot; {SOUND_LIST:HUMAN_HIT} (
+        direction=s,se,sw
+    )}
+    {DEFENSE_ANIM_FILTERED &quot;units/human-loyalists/spearman-defend-n-2.png&quot; &quot;units/human-loyalists/spearman-defend-n.png&quot; {SOUND_LIST:HUMAN_HIT} (
+        direction=n,ne,nw
+    )}
+    [attack]
+        name=spear
+        description=_&quot;spear&quot;
+        type=pierce
+        range=melee
+        damage=7
+        number=3
+        icon=attacks/spear.png
+        [specials]
+            {WEAPON_SPECIAL_FIRSTSTRIKE}
+        [/specials]
+    [/attack]
+    [attack]
+        name=javelin
+        description=_&quot;javelin&quot;
+        icon=attacks/javelin-human.png
+        type=pierce
+        range=ranged
+        damage=6
+        number=1
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=javelin
+        [/filter_attack]
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/spear-n.png&quot;
+            image_diagonal=&quot;projectiles/spear-ne.png&quot;
+        [/missile_frame]
+        start_time=-250
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-ranged1.png:100&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-ranged2.png:50&quot;
+            sound={SOUND_LIST:THROW}
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-[ranged2,ranged3].png:[50,100]&quot;
+        [/frame]
+        {SOUND:HIT spear.ogg 0}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+        [/filter_attack]
+        start_time=-325
+        direction=s
+        offset=&quot;0:180,0~0.5:145,0.5~0:200&quot;
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-se-1.png:100&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-s-[2,3].png:[100,75]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-s-3.png~BLIT(units/human-loyalists/spearman-swoosh-s.png):50&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-s-[3,2].png:[50,150]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+        [/filter_attack]
+        direction=n
+        start_time=-228
+        offset=&quot;0~0.4,0.4~0&quot;
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-n-[1~12].png:32&quot;
+        [/frame]
+
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -64}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+        [/filter_attack]
+        start_time=-325
+        direction=ne,nw
+        offset=&quot;0~-0.08:180,-0.08~0.5:145,0.5~0:200&quot;
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-n-1.png:80&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-ne-[1,2].png:[80,75]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-ne-3.png~BLIT(units/human-loyalists/spearman-swoosh-ne.png):90&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-ne-[2,1].png:[70,130]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+        [/filter_attack]
+        start_time=-325
+        direction=se,sw
+        offset=&quot;0:180,0~0.5:145,0.5~0:200&quot;
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-se-[1,2,3].png:[100,100,75]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-se-3.png~BLIT(units/human-loyalists/spearman-swoosh-se.png):50&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman-attack-se-[2,1].png:[120,80]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/spearman.png:1&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

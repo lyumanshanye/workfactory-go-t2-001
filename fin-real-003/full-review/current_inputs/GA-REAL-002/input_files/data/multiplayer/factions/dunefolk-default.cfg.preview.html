@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>dunefolk-default.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/multiplayer/factions/dunefolk-default.cfg</h1><pre>#textdomain wesnoth-multiplayer
+[multiplayer_side]
+    id=Dunefolk
+    name= _&quot;Dunefolk&quot;
+    image=&quot;units/dunefolk/rover/explorer.png&quot;
+    type=random
+    leader=Dune Explorer,Dune Swordsman,Dune Spearguard,Dune Scorcher,Dune Apothecary
+    random_leader=Dune Explorer,Dune Swordsman,Dune Spearguard,Dune Scorcher,Dune Apothecary
+    recruit=Dune Rover,Dune Soldier,Dune Skirmisher,Dune Rider,Dune Herbalist,Dune Burner,Naga Dirkfang
+    terrain_liked=Ss, Hh, Ha, Ww
+    # wmllint: markcheck off
+    description=&quot;&lt;img&gt;src=&#x27;portraits/dunefolk/herbalist.webp~BG()&#x27; align=&#x27;middle&#x27;&lt;/img&gt;
+
+&quot;+_&quot;The &lt;bold&gt;text=&#x27;Dunefolk&#x27;&lt;/bold&gt; are a faction of humans from the deserts and hills of the southern lands. The Dunefolk specialize in using terrain features to coordinate attacks at dawn or dusk. Their ranks boast lawful and liminal units, healers, high-accuracy melee fighters, and fearsome horse-mounted archers. While Dunefolk units tend to be more expensive than those of the Loyalist faction, they make up for this with high mobility — especially on hilly terrains.&quot;
+    # wmllint: markcheck on
+    [ai]
+        recruitment_pattern=fighter,fighter,mixed fighter,mixed fighter,archer,healer,scout
+    [/ai]
+[/multiplayer_side]
+</pre></main></body></html>

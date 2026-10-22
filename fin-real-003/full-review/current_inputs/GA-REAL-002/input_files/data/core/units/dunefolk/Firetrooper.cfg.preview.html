@@ -1,0 +1,201 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Firetrooper.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/dunefolk/Firetrooper.cfg</h1><pre>#textdomain wesnoth-units
+
+#define PATH_TEMP
+units/dunefolk/burner/#enddef
+
+[unit_type]
+    id=Dune Firetrooper
+    name= _ &quot;Dune Firetrooper&quot;
+    race=dunefolk
+    gender=male,female
+    image=&quot;{PATH_TEMP}firetrooper.png&quot;
+    hitpoints=57
+    movement_type=dunefoot
+    movement=5
+    experience=150
+    level=3
+    alignment=lawful
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=41
+    usage=mixed fighter
+    description= _ &quot;By refining Sanbaar sap through a very specific distillation process, it becomes possible to produce exceedingly flammable naphtha, which burns even more violently than the sap it was derived from. Of course, such a substance is extremely dangerous due to its highly combustible nature. Most shy away from its use since the potential for self injury is very high, but a few daring souls take up flamethrowers fueled by pure naphtha as their weapons of choice. The resulting destruction is more than enough to justify the use of such a hazardous chemical.&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    [standing_anim]
+        start_time=0
+        flame_start_time=0
+        glow_start_time=0
+
+        [if]
+            direction=n,ne,se
+            [frame]
+                image=&quot;{PATH_TEMP}firetrooper.png:480&quot;
+                auto_hflip=no
+                auto_vflip=no
+                primary=yes
+            [/frame]
+            [flame_frame]
+                image=&quot;{PATH_TEMP}firetrooper_flame[1~12].png:40*12&quot;
+                layer=45
+                auto_hflip=no
+                auto_vflip=no
+                primary=no
+            [/flame_frame]
+            [glow_frame]
+                image=&quot;{PATH_TEMP}firetrooper_glow.png:480&quot;
+                layer=46
+                auto_hflip=no
+                auto_vflip=no
+                primary=no
+            [/glow_frame]
+        [/if]
+        [else]
+            direction=s,sw,nw
+            [frame]
+                image=&quot;{PATH_TEMP}firetrooper.png~FL(horiz):480&quot;
+                auto_hflip=no
+                auto_vflip=no
+                primary=yes
+            [/frame]
+            [flame_frame]
+                image=&quot;{PATH_TEMP}firetrooper_flame[1~12].png~FL(horiz):40*12&quot;
+                layer=45
+                auto_hflip=no
+                auto_vflip=no
+                primary=no
+            [/flame_frame]
+            [glow_frame]
+                image=&quot;{PATH_TEMP}firetrooper_glow.png~FL(horiz):480&quot;
+                layer=46
+                auto_hflip=no
+                auto_vflip=no
+                primary=no
+            [/glow_frame]
+        [/else]
+    [/standing_anim]
+
+    {DEFENSE_ANIM &quot;{PATH_TEMP}firetrooper.png&quot; &quot;{PATH_TEMP}firetrooper.png&quot; {SOUND_LIST:HUMAN_HIT} }
+
+    [resistance]
+        cold=70
+        blade=110
+    [/resistance]
+
+    [attack]
+        name=dagger
+        description= _ &quot;dagger&quot;
+        type=blade
+        range=melee
+        damage=9
+        number=3
+        icon=attacks/dagger-curved.png
+    [/attack]
+    [attack]
+        name=flamethrower
+        description= _ &quot;flamethrower&quot;
+        type=fire
+        range=ranged
+        damage=9
+        number=4
+        icon=attacks/fire-blast.png
+    [/attack]
+
+    [attack_anim]
+        [filter_attack]
+            name=dagger
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;{PATH_TEMP}firetrooper.png:300&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS dagger-swish.wav dagger-swish.wav -150}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=flamethrower
+        [/filter_attack]
+        start_time=-225
+        missile_start_time=-150
+        [if]
+            hits=yes
+            [missile_frame]
+                duration=150
+                image=&quot;projectiles/missile-fire-n.png&quot;
+                image_diagonal=&quot;projectiles/missile-fire-ne.png&quot;
+                offset=0~0.8
+            [/missile_frame]
+            {FIRE_BURST_SMALL}
+            [frame]
+                image=&quot;{PATH_TEMP}firetrooper.png:300&quot;
+                sound=bow-puny-fire.ogg
+            [/frame]
+        [/if]
+        [else]
+            hits=no
+            [missile_frame]
+                duration=150
+                image=&quot;projectiles/missile-fire-n.png&quot;
+                image_diagonal=&quot;projectiles/missile-fire-ne.png&quot;
+            [/missile_frame]
+            [frame]
+                image=&quot;{PATH_TEMP}firetrooper.png:300&quot;
+                sound=bow-puny-fire-miss.ogg
+            [/frame]
+        [/else]
+    [/attack_anim]
+
+    # the &#x27;+female&#x27; sprite images may not be needed, really.
+    [female]
+        name= _ &quot;female^Dune Firetrooper&quot;
+        gender=female
+        image=&quot;{PATH_TEMP}firetrooper+female.png&quot;
+        die_sound={SOUND_LIST:HUMAN_FEMALE_DIE}
+        {DEFENSE_ANIM &quot;{PATH_TEMP}firetrooper+female.png&quot; &quot;{PATH_TEMP}firetrooper+female.png&quot; {SOUND_LIST:HUMAN_FEMALE_HIT} }
+        [attack_anim]
+            [filter_attack]
+                name=dagger
+            [/filter_attack]
+            start_time=-200
+            [frame]
+                image=&quot;{PATH_TEMP}firetrooper+female.png:300&quot;
+            [/frame]
+            {SOUND:HIT_AND_MISS dagger-swish.wav dagger-swish.wav -150}
+        [/attack_anim]
+        [attack_anim]
+            [filter_attack]
+                name=flamethrower
+            [/filter_attack]
+            start_time=-225
+            missile_start_time=-150
+            [if]
+                hits=yes
+                [missile_frame]
+                    duration=150
+                    image=&quot;projectiles/missile-fire-n.png&quot;
+                    image_diagonal=&quot;projectiles/missile-fire-ne.png&quot;
+                    offset=0~0.8
+                [/missile_frame]
+                {FIRE_BURST_SMALL}
+                [frame]
+                    image=&quot;{PATH_TEMP}firetrooper+female.png:300&quot;
+                    sound=bow-puny-fire.ogg
+                [/frame]
+            [/if]
+            [else]
+                hits=no
+                [missile_frame]
+                    duration=150
+                    image=&quot;projectiles/missile-fire-n.png&quot;
+                    image_diagonal=&quot;projectiles/missile-fire-ne.png&quot;
+                [/missile_frame]
+                [frame]
+                    image=&quot;{PATH_TEMP}firetrooper+female.png:300&quot;
+                    sound=bow-puny-fire-miss.ogg
+                [/frame]
+            [/else]
+        [/attack_anim]
+    [/female]
+[/unit_type]
+
+#undef PATH_TEMP
+</pre></main></body></html>

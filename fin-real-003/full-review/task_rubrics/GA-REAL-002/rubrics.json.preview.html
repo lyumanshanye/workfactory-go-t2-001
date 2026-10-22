@@ -1,0 +1,249 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>rubrics.json</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>rubrics.json</h1><pre>[
+  {
+    &quot;id&quot;: &quot;GA001&quot;,
+    &quot;weight&quot;: 10,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;招募与leader集合直接来自Loyalists官方阵营，二者不混同。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA002&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;从所有recruit递归追踪advances_to，不遗漏骑士、法师或人鱼目录。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA003&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;可达单位集合、边数和终端正确，未解析ID/循环如实列示。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA004&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;单位字段限定unit_type直接属性，不误取variation/动画内容。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA005&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;基础等级、种族、cost、HP、movement有真实属性来源。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA006&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;movement_type、alignment、experience有真实属性来源，宏不当数值。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA007&quot;,
+    &quot;weight&quot;: 10,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;直接武器范围限定真正attack，不把filter_attack或动画当武器。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA008&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;武器名称、距离、伤害类型、damage和number完整且源行正确。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA009&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;地形信息通过movement_type关联公共配置，不把所有单位当同一移动类型。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA010&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;正确应用单位自身defense/movement_costs/resistance覆盖并标注来源。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA011&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;五类地形的原始移动成本与防御配置完整，未显式给值则不伪造0。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA012&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;六类伤害抗性配置保留原值、正确解释承受伤害比例。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA013&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;解释防御值方向与负值上限，引用附带实现而非猜测。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA014&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;每条升级边HP、movement、cost变化正确。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA015&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;武器按名称+距离+类型对齐，新/删武器不误作同武器差额。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA016&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;武器damage/number升级变化与原始配置相符。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA017&quot;,
+    &quot;weight&quot;: 10,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;列出全部HP上升但movement下降的真实升级边。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA018&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;列出全部alignment改变的真实升级边。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA019&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;从每个招募到每个可达目标枚举不同简单路径，不遗漏分支。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA020&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;路径XP只加非终点的基础experience，终点不多加一次。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA021&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;每个起点-目标最小XP和并列路径及路径数准确。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA022&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;明确基础XP不等于实际训练耗时、不含traits/经验倍率/AMLA。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA023&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;能力/武器特性关联到原始宏定义和引用行，不只列名称。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA024&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;至少三条真实依赖说明面板damage×number/cost排序的局限。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA025&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;不把charge、firststrike、magical等当作无条件通用增伤。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA026&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;所有招募、升级目标、移动类型和业务相关能力宏有来源或明确未解析原因。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA027&quot;,
+    &quot;weight&quot;: 3,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;提出三个绑定真实分支/数值/条件的游戏内验证问题，不伪称已经实测。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA028&quot;,
+    &quot;weight&quot;: 7,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;工作簿包含目录、升级边、XP、地形抗性、能力与覆盖，JSON与之对应。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA029&quot;,
+    &quot;weight&quot;: 10,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;脚本使用结构解析从原件离线重建结果，不硬编码答案或修改来源。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA030&quot;,
+    &quot;weight&quot;: 3,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;description&quot;: &quot;四份产物可打开，保留路径/标签/行号，中文备忘录结论在前。&quot;,
+    &quot;expected_reference&quot;: &quot;reference_output/results.json&quot;,
+    &quot;negate&quot;: false
+  },
+  {
+    &quot;id&quot;: &quot;GA031&quot;,
+    &quot;weight&quot;: 10,
+    &quot;type&quot;: &quot;binary&quot;,
+    &quot;negate&quot;: true,
+    &quot;description&quot;: &quot;捏造原始数据、案例事实、外部文献或条款原文，并声称已核实，触发此扣分项。普通计算错误、遗漏或定位不精确不自动等同于伪造。&quot;
+  }
+]</pre></main></body></html>

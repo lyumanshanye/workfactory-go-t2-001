@@ -1,0 +1,446 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>map.cpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/map.cpp</h1><pre>/*
+	Copyright (C) 2010 - 2024
+	by Guillaume Melquiond &lt;guillaume.melquiond@gmail.com&gt;
+	Copyright (C) 2006 - 2009 by Rusty Russell &lt;rusty@rustcorp.com.au&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+#include &quot;display.hpp&quot;
+#include &quot;log.hpp&quot;
+#include &quot;units/id.hpp&quot;
+#include &quot;units/unit.hpp&quot;
+
+#include &quot;units/map.hpp&quot;
+#include &lt;functional&gt;
+
+static lg::log_domain log_engine(&quot;engine&quot;);
+#define ERR_NG LOG_STREAM(err, log_engine)
+#define WRN_NG LOG_STREAM(warn, log_engine)
+#define LOG_NG LOG_STREAM(info, log_engine)
+#define DBG_NG LOG_STREAM(debug, log_engine)
+
+unit_map::unit_map()
+	: umap_()
+	, lmap_()
+{
+}
+
+unit_map::unit_map(const unit_map&amp; that)
+	: umap_()
+	, lmap_()
+{
+	for(const auto&amp; u : that) {
+		add(u.get_location(), u);
+	}
+}
+
+unit_map&amp; unit_map::operator=(const unit_map&amp; that)
+{
+	unit_map temp(that);
+	swap(temp);
+	return *this;
+}
+
+void unit_map::swap(unit_map&amp; o)
+{
+	assert(num_iters() == 0 &amp;&amp; o.num_iters() == 0);
+
+	std::swap(umap_, o.umap_);
+	std::swap(lmap_, o.lmap_);
+}
+
+unit_map::~unit_map()
+{
+	clear(true);
+}
+
+unit_map::umap::iterator unit_map::begin_core() const
+{
+	self_check();
+
+	umap::iterator i = umap_.begin();
+	while(i != umap_.end() &amp;&amp; (!i-&gt;second.unit)) {
+		++i;
+	}
+
+	return i;
+}
+
+unit_map::umap_retval_pair_t unit_map::add(const map_location&amp; l, const unit&amp; u)
+{
+	self_check();
+
+	 // TODO: should this take a shared pointer to a unit rather than make a copy?
+	unit_ptr p = u.clone();
+	p-&gt;set_location(l);
+
+	unit_map::umap_retval_pair_t res(insert(p));
+	if(res.second == false) {
+		p.reset();
+	}
+
+	return res;
+}
+
+unit_map::umap_retval_pair_t unit_map::move(const map_location&amp; src, const map_location&amp; dst)
+{
+	self_check();
+	DBG_NG &lt;&lt; &quot;Unit map: Moving unit from &quot; &lt;&lt; src &lt;&lt; &quot; to &quot; &lt;&lt; dst;
+
+	// Find the unit at the src location
+	lmap::iterator i = lmap_.find(src);
+	if(i == lmap_.end()) {
+		return std::pair(make_unit_iterator(i), false);
+	}
+
+	umap::iterator uit(i-&gt;second);
+
+	if(src == dst) {
+		return std::pair(make_unit_iterator(uit), true);
+	}
+
+	// Fail if there is no unit to move.
+	unit_ptr p = uit-&gt;second.unit;
+	if(!p) {
+		return std::pair(make_unit_iterator(uit), false);
+	}
+
+	p-&gt;set_location(dst);
+
+	lmap_.erase(i);
+
+	std::pair&lt;lmap::iterator, bool&gt; res = lmap_.emplace(dst, uit);
+
+	// Fail and don&#x27;t move if the destination is already occupied.
+	if(res.second == false) {
+		p-&gt;set_location(src);
+		lmap_.emplace(src, uit);
+		return std::pair(make_unit_iterator(uit), false);
+	}
+
+	display::get_singleton()-&gt;invalidate(src);
+
+	self_check();
+
+	return std::pair(make_unit_iterator(uit), true);
+}
+
+unit_map::umap_retval_pair_t unit_map::insert(unit_ptr p)
+{
+	// 1. Construct a unit_pod.
+	// 2. Try insertion into the umap.
+	// 3. Try insertion in the lmap and remove the umap entry on failure.
+
+	self_check();
+	assert(p);
+
+	std::size_t unit_id = p-&gt;underlying_id();
+	const map_location&amp; loc = p-&gt;get_location();
+
+	if(!loc.valid()) {
+		ERR_NG &lt;&lt; &quot;Trying to add &quot; &lt;&lt; p-&gt;name() &lt;&lt; &quot; - &quot; &lt;&lt; p-&gt;id() &lt;&lt; &quot; at an invalid location; Discarding.&quot;;
+		return std::pair(make_unit_iterator(umap_.end()), false);
+	}
+
+	unit_pod upod;
+	upod.unit = p;
+
+	DBG_NG &lt;&lt; &quot;Adding unit &quot; &lt;&lt; p-&gt;underlying_id() &lt;&lt; &quot; - &quot; &lt;&lt; p-&gt;id() &lt;&lt; &quot; to location: (&quot; &lt;&lt; loc &lt;&lt; &quot;)&quot;;
+
+	std::pair&lt;umap::iterator, bool&gt; uinsert = umap_.emplace(unit_id, upod);
+
+	if(!uinsert.second) {
+		// If the pod is empty reinsert the unit in the same list element.
+		if(!uinsert.first-&gt;second.unit) {
+			unit_pod&amp; opod = uinsert.first-&gt;second;
+			opod.unit = p;
+
+			assert(opod.ref_count != 0);
+		} else {
+			unit_ptr q = uinsert.first-&gt;second.unit;
+			ERR_NG &lt;&lt; &quot;Trying to add &quot; &lt;&lt; p-&gt;name()
+				   &lt;&lt; &quot; - &quot; &lt;&lt; p-&gt;id() &lt;&lt; &quot; - &quot; &lt;&lt; p-&gt;underlying_id()
+				   &lt;&lt; &quot; (&quot;  &lt;&lt; loc &lt;&lt; &quot;) over &quot; &lt;&lt; q-&gt;name()
+				   &lt;&lt; &quot; - &quot; &lt;&lt; q-&gt;id() &lt;&lt; &quot; - &quot; &lt;&lt; q-&gt;underlying_id()
+				   &lt;&lt; &quot; (&quot;  &lt;&lt; q-&gt;get_location()
+				   &lt;&lt; &quot;).&quot;;
+
+			p-&gt;mark_clone(false);
+			ERR_NG &lt;&lt; &quot;The new unit was assigned underlying_id=&quot; &lt;&lt; p-&gt;underlying_id()
+				   &lt;&lt; &quot; to prevent duplicate id conflicts.&quot;;
+
+			uinsert = umap_.emplace(p-&gt;underlying_id(), upod);
+
+			int guard(0);
+			while(!uinsert.second &amp;&amp; (++guard &lt; 1e6)) {
+				p-&gt;mark_clone(false);
+				uinsert = umap_.emplace(p-&gt;underlying_id(), upod);
+			}
+
+			if(!uinsert.second) {
+				throw game::error(&quot;One million collisions in unit_map&quot;);
+			}
+		}
+	}
+
+	std::pair&lt;lmap::iterator, bool&gt; linsert = lmap_.emplace(loc, uinsert.first);
+
+	// Fail if the location is occupied
+	if(!linsert.second) {
+		if(upod.ref_count == 0) {
+			// Undo a virgin insertion
+			umap_.erase(uinsert.first);
+		} else {
+			// undo a reinsertion
+			uinsert.first-&gt;second.unit.reset();
+		}
+
+		DBG_NG &lt;&lt; &quot;Trying to add &quot; &lt;&lt; p-&gt;name() &lt;&lt; &quot; - &quot; &lt;&lt; p-&gt;id() &lt;&lt; &quot; at location (&quot; &lt;&lt; loc &lt;&lt; &quot;); Occupied  by &quot;
+			   &lt;&lt; (linsert.first-&gt;second-&gt;second).unit-&gt;name() &lt;&lt; &quot; - &quot; &lt;&lt; linsert.first-&gt;second-&gt;second.unit-&gt;id()
+			   &lt;&lt; &quot;\n&quot;;
+
+		return std::pair(make_unit_iterator(umap_.end()), false);
+	}
+
+	self_check();
+	return std::pair(make_unit_iterator(uinsert.first), true);
+}
+
+unit_map::umap_retval_pair_t unit_map::replace(const map_location&amp; l, unit_ptr p)
+{
+	self_check();
+	p-&gt;set_location(l);
+	erase(l);
+	return insert(p);
+}
+
+std::size_t unit_map::num_iters() const
+{
+	/** Add up number of extant iterators */
+	std::size_t num_iters(0);
+	umap::const_iterator ui = umap_.begin();
+	umap::const_iterator uend = umap_.end();
+
+	for(; ui != uend; ++ui) {
+		if(ui-&gt;second.ref_count &lt; 0) {
+			// Somewhere, someone generated 2^31 iterators to this unit.
+			bool a_reference_counter_overflowed(false);
+			assert(a_reference_counter_overflowed);
+		}
+
+		num_iters += ui-&gt;second.ref_count;
+	}
+
+	return num_iters;
+}
+
+void unit_map::clear(bool force)
+{
+	assert(force || (num_iters() == 0));
+
+	for(umap::iterator i = umap_.begin(); i != umap_.end(); ++i) {
+		if(is_valid(i)) {
+			DBG_NG &lt;&lt; &quot;Delete unit &quot; &lt;&lt; i-&gt;second.unit-&gt;underlying_id();
+			i-&gt;second.unit.reset();
+		}
+	}
+
+	lmap_.clear();
+	umap_.clear();
+}
+
+unit_ptr unit_map::extract(const map_location&amp; loc)
+{
+	self_check();
+
+	lmap::iterator i = lmap_.find(loc);
+	if(i == lmap_.end()) {
+		return unit_ptr();
+	}
+
+	umap::iterator uit(i-&gt;second);
+
+	unit_ptr u = uit-&gt;second.unit;
+	std::size_t uid(u-&gt;underlying_id());
+
+	DBG_NG &lt;&lt; &quot;Extract unit &quot; &lt;&lt; uid &lt;&lt; &quot; - &quot; &lt;&lt; u-&gt;id() &lt;&lt; &quot; from location: (&quot; &lt;&lt; loc &lt;&lt; &quot;)&quot;;
+
+	assert(uit-&gt;first == uit-&gt;second.unit-&gt;underlying_id());
+	if(uit-&gt;second.ref_count == 0) {
+		umap_.erase(uit);
+	} else {
+		// Soft extraction keeps the old lit item if any iterators reference it
+		uit-&gt;second.unit.reset();
+	}
+
+	lmap_.erase(i);
+	self_check();
+
+	return u;
+}
+
+std::size_t unit_map::erase(const map_location&amp; loc)
+{
+	self_check();
+
+	unit_ptr u = extract(loc);
+	if(!u) {
+		return 0;
+	}
+
+	u.reset();
+	return 1;
+}
+
+unit_map::unit_iterator unit_map::find(std::size_t id)
+{
+	self_check();
+
+	umap::iterator i(umap_.find(id));
+	if((i != umap_.end()) &amp;&amp; !i-&gt;second.unit) {
+		i = umap_.end();
+	}
+
+	return make_unit_iterator&lt;umap::iterator&gt;(i);
+}
+
+unit_map::unit_iterator unit_map::find(const map_location&amp; loc)
+{
+	self_check();
+	return make_unit_iterator&lt;lmap::iterator&gt;(lmap_.find(loc));
+}
+
+unit_map::unit_iterator unit_map::find_leader(int side)
+{
+	unit_map::iterator i = begin(), i_end = end();
+	for(; i != i_end; ++i) {
+		if(i-&gt;side() == side &amp;&amp; i-&gt;can_recruit()) {
+			return i;
+		}
+	}
+
+	return i_end;
+}
+
+unit_map::unit_iterator unit_map::find_first_leader(int side)
+{
+	unit_map::iterator i = begin(), i_end = end();
+	unit_map::iterator first_leader = end();
+
+	for(; i != i_end; ++i) {
+		if(i-&gt;side() == side &amp;&amp; i-&gt;can_recruit()) {
+			if((first_leader == end()) || (i-&gt;underlying_id() &lt; first_leader-&gt;underlying_id())) {
+				first_leader = i;
+			}
+		}
+	}
+
+	return first_leader;
+}
+
+std::vector&lt;unit_map::unit_iterator&gt; unit_map::find_leaders(int side)
+{
+	unit_map::unit_iterator i = begin(), i_end = end();
+
+	std::vector&lt;unit_map::unit_iterator&gt; leaders;
+	for(; i != i_end; ++i) {
+		if(i-&gt;side() == side &amp;&amp; i-&gt;can_recruit()) {
+			leaders.push_back(i);
+		}
+	}
+
+	return leaders;
+}
+
+std::vector&lt;unit_map::const_unit_iterator&gt; unit_map::find_leaders(int side) const
+{
+	const std::vector&lt;unit_map::unit_iterator&gt;&amp; leaders = const_cast&lt;unit_map*&gt;(this)-&gt;find_leaders(side);
+	std::vector&lt;unit_map::const_unit_iterator&gt; const_leaders(leaders.begin(), leaders.end());
+
+	return const_leaders;
+}
+
+bool unit_map::self_check() const
+{
+#ifdef DEBUG_UNIT_MAP
+	bool good(true);
+
+	umap::const_iterator uit(umap_.begin());
+	for(; uit != umap_.end(); ++uit) {
+		if(uit-&gt;second.ref_count &lt; 0) {
+			good = false;
+			ERR_NG &lt;&lt; &quot;unit_map pod ref_count &lt;0 is &quot; &lt;&lt; uit-&gt;second.ref_count;
+		}
+
+		if(uit-&gt;second.unit) {
+			uit-&gt;second.unit-&gt;id(); // crash if bad pointer
+		}
+
+		if(uit-&gt;first &lt;= 0) {
+			good = false;
+			ERR_NG &lt;&lt; &quot;unit_map umap uid &lt;=0 is &quot; &lt;&lt; uit-&gt;first;
+		}
+
+		if(!uit-&gt;second.unit &amp;&amp; uit-&gt;second.ref_count == 0) {
+			good = false;
+			ERR_NG &lt;&lt; &quot;unit_map umap unit==nullptr when refcount == 0&quot;;
+		}
+
+		if(uit-&gt;second.unit &amp;&amp; uit-&gt;second.unit-&gt;underlying_id() != uit-&gt;first) {
+			good = false;
+			ERR_NG &lt;&lt; &quot;unit_map umap uid(&quot; &lt;&lt; uit-&gt;first &lt;&lt; &quot;) != underlying_id()[&quot; &lt;&lt; uit-&gt;second.unit-&gt;underlying_id()
+				   &lt;&lt; &quot;]&quot;;
+		}
+	}
+
+	lmap::const_iterator locit(lmap_.begin());
+	for(; locit != lmap_.end(); ++locit) {
+		if(locit-&gt;second == umap_.end()) {
+			good = false;
+			ERR_NG &lt;&lt; &quot;unit_map lmap element == umap_.end() &quot;;
+		}
+		if(locit-&gt;first != locit-&gt;second-&gt;second.unit-&gt;get_location()) {
+			good = false;
+			ERR_NG &lt;&lt; &quot;unit_map lmap location != unit-&gt;get_location() &quot;;
+		}
+	}
+
+	// assert(good);
+	return good;
+#else
+	return true;
+#endif
+}
+
+bool unit_map::has_unit(const unit* const u) const
+{
+	assert(u);
+
+	for(const umap::value_type&amp; item : umap_) {
+		if(item.second.unit.get() == u) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool unit_map::has_unit_at(const map_location&amp; loc) const
+{
+	return find(loc) != end();
+}
+
+void swap(unit_map&amp; lhs, unit_map&amp; rhs)
+{
+	lhs.swap(rhs);
+}
+</pre></main></body></html>

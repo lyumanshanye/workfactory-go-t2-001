@@ -1,0 +1,243 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Necro_Dark_Adept.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/undead/Necro_Dark_Adept.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Dark Adept
+    name= _ &quot;Dark Adept&quot;
+    gender=male,female
+    race=human
+    ignore_race_traits=yes
+    {TRAIT_QUICK}
+    {TRAIT_INTELLIGENT}
+    {TRAIT_RESILIENT}
+    image=&quot;units/undead-necromancers/adept.png&quot;
+    profile=&quot;portraits/humans/dark-adept.webp&quot;
+    hitpoints=28
+    movement_type=smallfoot
+    movement=5
+    experience=48
+    level=1
+    alignment=chaotic
+    advances_to=Dark Sorcerer
+    cost=16
+    usage=archer
+    description= _ &quot;To attract any practitioners, the lure of black magic must be a great prize indeed, for anyone caught practicing the art in the civilized world is subject to a death sentence. And yet there are those who pursue this art, for the prize offered is nothing less than immortality. Hidden away in secret cults, or initiated into the dark orders of the underworld, the training which these fanatics must endure often drives them to exhaustion and enfeeblement.
+
+In such condition, their only weapon is the craft they have so committed themselves to learning.&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    {DEFENSE_ANIM &quot;units/undead-necromancers/adept-defend-2.png&quot; &quot;units/undead-necromancers/adept-defend-1.png&quot; {SOUND_LIST:HUMAN_HIT} }
+    [attack]
+        name=chill wave
+        description=_&quot;chill wave&quot;
+        type=cold
+        [specials]
+            {WEAPON_SPECIAL_MAGICAL}
+        [/specials]
+        range=ranged
+        damage=10
+        number=2
+        icon=attacks/iceball.png
+    [/attack]
+    [attack]
+        name=shadow wave
+        description=_&quot;shadow wave&quot;
+        type=arcane
+        [specials]
+            {WEAPON_SPECIAL_MAGICAL}
+        [/specials]
+        range=ranged
+        damage=7
+        number=2
+        icon=attacks/dark-missile.png
+    [/attack]
+    [idle_anim]
+        {STANDARD_IDLE_FILTER}
+        start_time=0
+        [frame]
+            image=&quot;units/undead-necromancers/adept-idle-long-[1~21].png:125&quot;
+        [/frame]
+    [/idle_anim]
+    [idle_anim]
+        {STANDARD_IDLE_FILTER}
+        start_time=0
+        [frame]
+            image=&quot;units/undead-necromancers/adept-idle-[1~11].png:[125*11]&quot;
+        [/frame]
+    [/idle_anim]
+    [death]
+        start_time=0
+        [frame]
+            image=&quot;units/undead-necromancers/adept-die[1~8].png:[100*4,120*2,140,120]&quot;
+        [/frame]
+    [/death]
+    [attack_anim]
+        [filter_attack]
+            name=chill wave
+        [/filter_attack]
+
+        {MISSILE_FRAME_CHILL_WAVE 0 -12}
+
+        start_time=-450
+        [frame]
+            image=&quot;units/undead-necromancers/adept.png:25&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/undead-necromancers/adept-magic-[1~3].png:[35,75,15]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/undead-necromancers/adept-magic-3.png&quot;
+            halo=halo/undead/dark-magic-[1~6].png:50
+            halo_x,halo_y=0,-12
+        [/frame]
+        {SOUND:HIT_AND_MISS magic-dark.ogg magic-dark-miss.ogg -100}
+        [frame]
+            image=&quot;units/undead-necromancers/adept-magic-[2,1].png:50&quot;
+        [/frame]
+        [frame]
+            duration=60
+            image=&quot;units/undead-necromancers/adept.png&quot;
+        [/frame]
+    [/attack_anim]
+
+    [attack_anim]
+        [filter_attack]
+            name=shadow wave
+        [/filter_attack]
+
+        {MISSILE_FRAME_SHADOW_WAVE}
+
+        start_time=-700
+        [frame]
+            image=&quot;units/undead-necromancers/adept.png:25&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/undead-necromancers/adept-magic-[1~3].png:[35,75,15]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/undead-necromancers/adept-magic-3.png&quot;
+            halo=halo/undead/dark-magic-[1~6].png:50
+            halo_x,halo_y=0,-12~12
+        [/frame]
+        [frame]
+            image=&quot;units/undead-necromancers/adept-magic-3.png:350&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS magic-dark-big.ogg magic-dark-big-miss.ogg -50}
+        [frame]
+            image=&quot;units/undead-necromancers/adept-magic-[2,1].png:50&quot;
+        [/frame]
+        [frame]
+            duration=50
+            image=&quot;units/undead-necromancers/adept.png&quot;
+        [/frame]
+    [/attack_anim]
+    [recruiting_anim]
+        [filter_second]
+            race=undead
+        [/filter_second]
+        start_time=-450
+        [frame]
+            image=&quot;units/undead-necromancers/adept.png:30&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/undead-necromancers/adept-magic-[1~3].png:[35,75,20]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/undead-necromancers/adept-magic-3.png&quot;
+            halo=halo/undead/dark-magic-[1~6].png:50
+            halo_x,halo_y=0,-12
+        [/frame]
+        sound_start_time=-40
+        [sound_frame]
+            sound=magic-dark.ogg
+        [/sound_frame]
+        [frame]
+            image=&quot;units/undead-necromancers/adept-magic-[2,1].png:[50,40]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/undead-necromancers/adept.png:10&quot;
+        [/frame]
+    [/recruiting_anim]
+    [female]
+        gender=female
+        name= _ &quot;female^Dark Adept&quot;
+        image=&quot;units/undead-necromancers/adept+female.png&quot;
+        profile=&quot;portraits/humans/dark-adept+female.webp&quot;
+        die_sound={SOUND_LIST:HUMAN_FEMALE_DIE}
+        {DEFENSE_ANIM &quot;units/undead-necromancers/adept+female-defend-2.png&quot; &quot;units/undead-necromancers/adept+female-defend-1.png&quot; {SOUND_LIST:HUMAN_FEMALE_HIT} }
+        [recruiting_anim]
+            [filter_second]
+                race=undead
+            [/filter_second]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female.png:30&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female-magic-[1~3].png:[35,75,20]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female-magic-3.png&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female-magic-[2,1].png:[50,40]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female.png:10&quot;
+            [/frame]
+        [/recruiting_anim]
+        # provide empty placeholder anim since no female variation exists.
+        [idle_anim]
+            start_time=0
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female.png:150&quot;
+            [/frame]
+        [/idle_anim]
+        [idle_anim]
+            start_time=0
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female.png:150&quot;
+            [/frame]
+        [/idle_anim]
+        [attack_anim]
+            [filter_attack]
+                name=chill wave
+            [/filter_attack]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female.png:25&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female-magic-[1~3].png:[35,75,20]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female-magic-3.png&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female-magic-[2,1].png:50&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female.png&quot;
+            [/frame]
+        [/attack_anim]
+        [attack_anim]
+            [filter_attack]
+                name=shadow wave
+            [/filter_attack]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female.png:25&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female-magic-[1~3].png:[35,75,15]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female-magic-3.png&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female-magic-3.png:350&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female-magic-[2,1].png:50&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/undead-necromancers/adept+female.png&quot;
+            [/frame]
+        [/attack_anim]
+    [/female]
+[/unit_type]
+</pre></main></body></html>

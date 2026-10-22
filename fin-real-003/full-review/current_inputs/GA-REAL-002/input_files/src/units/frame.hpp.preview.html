@@ -1,0 +1,250 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>frame.hpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/frame.hpp</h1><pre>/*
+	Copyright (C) 2006 - 2024
+	by Jeremy Rosen &lt;jeremy.rosen@enst-bretagne.fr&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+/**
+ *  @file
+ *  Frame for unit&#x27;s animation sequence.
+ */
+
+#pragma once
+
+#include &quot;units/frame_private.hpp&quot;
+
+#include &quot;color.hpp&quot;
+#include &quot;halo.hpp&quot;
+#include &quot;picture.hpp&quot;
+#include &lt;optional&gt;
+
+#include &lt;boost/logic/tribool.hpp&gt;
+
+class config;
+
+/** All parameters from a frame at a given instant */
+struct frame_parameters
+{
+	frame_parameters();
+
+	int duration;
+
+	image::locator image;
+	image::locator image_diagonal;
+
+	std::string image_mod;
+	std::string halo;
+
+	int halo_x;
+	int halo_y;
+
+	std::string halo_mod;
+	std::string sound;
+	std::string text;
+
+	std::optional&lt;color_t&gt; text_color;
+	std::optional&lt;color_t&gt; blend_with;
+
+	double blend_ratio;
+	double highlight_ratio;
+	double offset;
+	double submerge;
+
+	int x;
+	int y;
+	int directional_x;
+	int directional_y;
+
+	boost::tribool auto_vflip;
+	boost::tribool auto_hflip;
+	boost::tribool primary_frame;
+
+	int drawing_layer;
+};
+
+/**
+ * Easily build frame parameters with the serialized constructors
+ */
+class frame_parsed_parameters;
+class frame_builder
+{
+public:
+	frame_builder();
+	frame_builder(const config&amp; cfg, const std::string&amp; frame_string = &quot;&quot;);
+
+	/** Allow easy chained modifications. Will raised assert if used after initialization */
+	frame_builder&amp; duration(const int duration);
+	frame_builder&amp; image(const std::string&amp; image, const std::string&amp; image_mod = &quot;&quot;);
+	frame_builder&amp; image_diagonal(const std::string&amp; image_diagonal, const std::string&amp; image_mod = &quot;&quot;);
+	frame_builder&amp; sound(const std::string&amp; sound);
+	frame_builder&amp; text(const std::string&amp; text, const color_t text_color);
+	frame_builder&amp; halo(const std::string&amp; halo, const std::string&amp; halo_x, const std::string&amp; halo_y, const std::string&amp; halo_mod);
+	frame_builder&amp; blend(const std::string&amp; blend_ratio, const color_t blend_color);
+	frame_builder&amp; highlight(const std::string&amp; highlight);
+	frame_builder&amp; offset(const std::string&amp; offset);
+	frame_builder&amp; submerge(const std::string&amp; submerge);
+	frame_builder&amp; x(const std::string&amp; x);
+	frame_builder&amp; y(const std::string&amp; y);
+	frame_builder&amp; directional_x(const std::string&amp; directional_x);
+	frame_builder&amp; directional_y(const std::string&amp; directional_y);
+	frame_builder&amp; auto_vflip(const bool auto_vflip);
+	frame_builder&amp; auto_hflip(const bool auto_hflip);
+	frame_builder&amp; primary_frame(const bool primary_frame);
+	frame_builder&amp; drawing_layer(const std::string&amp; drawing_layer);
+
+private:
+	friend class frame_parsed_parameters;
+
+	int duration_;
+
+	std::string image_;
+	std::string image_diagonal_;
+	std::string image_mod_;
+	std::string halo_;
+	std::string halo_x_;
+	std::string halo_y_;
+	std::string halo_mod_;
+	std::string sound_;
+	std::string text_;
+
+	std::optional&lt;color_t&gt; text_color_;
+	std::optional&lt;color_t&gt; blend_with_;
+
+	std::string blend_ratio_;
+	std::string highlight_ratio_;
+	std::string offset_;
+	std::string submerge_;
+	std::string x_;
+	std::string y_;
+	std::string directional_x_;
+	std::string directional_y_;
+
+	boost::tribool auto_vflip_;
+	boost::tribool auto_hflip_;
+	boost::tribool primary_frame_;
+
+	std::string drawing_layer_;
+};
+
+/**
+ * Keep most parameters in a separate class to simplify the handling of the large
+ * number of parameters between the frame level and animation level.
+ */
+class frame_parsed_parameters
+{
+public:
+	frame_parsed_parameters(const frame_builder&amp; builder = frame_builder(), int override_duration = 0);
+
+	void override(int duration,
+		const std::string&amp; highlight = &quot;&quot;,
+		const std::string&amp; blend_ratio = &quot;&quot;,
+		color_t blend_color = {0,0,0},
+		const std::string&amp; offset = &quot;&quot;,
+		const std::string&amp; layer = &quot;&quot;,
+		const std::string&amp; modifiers = &quot;&quot;);
+
+	/** Getters for the different parameters */
+	const frame_parameters parameters(int current_time) const;
+
+	int duration() const{ return duration_;}
+	bool does_not_change() const;
+	bool need_update() const;
+
+	/** Contents of frame in strings */
+	std::vector&lt;std::string&gt; debug_strings() const;
+
+private:
+	int duration_;
+
+	progressive_image image_;
+	progressive_image image_diagonal_;
+
+	std::string image_mod_;
+
+	progressive_string halo_;
+	progressive_int halo_x_;
+	progressive_int halo_y_;
+
+	std::string halo_mod_;
+	std::string sound_;
+	std::string text_;
+
+	std::optional&lt;color_t&gt; text_color_;
+	std::optional&lt;color_t&gt; blend_with_;
+
+	progressive_double blend_ratio_;
+	progressive_double highlight_ratio_;
+	progressive_double offset_;
+	progressive_double submerge_;
+	progressive_int x_;
+	progressive_int y_;
+	progressive_int directional_x_;
+	progressive_int directional_y_;
+
+	boost::tribool auto_vflip_;
+	boost::tribool auto_hflip_;
+	boost::tribool primary_frame_;
+
+	progressive_int drawing_layer_;
+};
+
+/** Describes a unit&#x27;s animation sequence. */
+class unit_frame
+{
+public:
+	// Constructors
+	unit_frame(const frame_builder&amp; builder = frame_builder()) : builder_(builder) {}
+
+	void redraw(const int frame_time, bool on_start_time, bool in_scope_of_frame, const map_location&amp; src, const map_location&amp; dst,
+		halo::handle&amp; halo_id, halo::manager&amp; halo_man, const frame_parameters&amp; animation_val, const frame_parameters&amp; engine_val) const;
+
+	frame_parameters merge_parameters(int current_time, const frame_parameters&amp; animation_val,
+		const frame_parameters&amp; engine_val = frame_parameters()) const;
+
+	frame_parameters parameters(int current_time) const
+	{
+		return builder_.parameters(current_time);
+	}
+
+	frame_parameters end_parameters() const
+	{
+		return builder_.parameters(duration());
+	}
+
+	int duration() const
+	{
+		return builder_.duration();
+	}
+
+	bool does_not_change() const
+	{
+		return builder_.does_not_change();
+	}
+
+	bool need_update() const
+	{
+		return builder_.need_update();
+	}
+
+	std::vector&lt;std::string&gt; debug_strings() const
+	{
+		// Contents of frame in strings
+		return builder_.debug_strings();
+	}
+
+	std::set&lt;map_location&gt; get_overlaped_hex(const int frame_time, const map_location&amp; src, const map_location&amp; dst,
+		const frame_parameters&amp; animation_val, const frame_parameters&amp; engine_val) const;
+
+private:
+	frame_parsed_parameters builder_;
+};
+</pre></main></body></html>

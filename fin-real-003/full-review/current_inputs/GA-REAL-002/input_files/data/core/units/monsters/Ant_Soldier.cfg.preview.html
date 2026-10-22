@@ -1,0 +1,56 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ant_Soldier.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Ant_Soldier.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Soldier Ant
+    name= _ &quot;Soldier Ant&quot;
+    race=monster
+    image=&quot;units/monsters/ant/soldier.png&quot;
+    profile=&quot;portraits/monsters/ant-soldier.webp&quot;
+    {DEFENSE_ANIM &quot;units/monsters/ant/soldier-defend.png&quot; &quot;units/monsters/ant/soldier.png&quot; hiss.wav }
+    hitpoints=36
+    movement_type=orcishfoot
+    movement=6
+    level=1
+    alignment=neutral
+    experience=50
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=12
+    usage=fighter
+    description= _ &quot;Giant Ants are common in almost any environment, from caverns deep under the earth to the tops of tall mountains. Most common are the nondescript workers and scouts, but in times of conflict, a more dangerous Soldier caste enters the fray.&quot;
+    die_sound=hiss-die.wav
+    undead_variation=ant
+    [movement_costs]
+        fungus=2
+    [/movement_costs]
+    [resistance]
+        blade=80
+        pierce=90
+        impact=90
+    [/resistance]
+    [defense]
+        castle=50
+        cave=50
+        fungus=50
+        village=50
+    [/defense]
+    [attack]
+        name=fangs
+        description= _&quot;fangs&quot;
+        icon=attacks/fangs-ant.png
+        type=blade
+        range=melee
+        damage=8
+        number=2
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=fangs
+        [/filter_attack]
+        start_time=-100
+        [frame]
+            image=units/monsters/ant/soldier-attack.png:200
+        [/frame]
+        {SOUND:HIT_AND_MISS bite-small.ogg {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

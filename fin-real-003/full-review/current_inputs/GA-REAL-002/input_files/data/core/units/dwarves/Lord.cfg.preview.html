@@ -1,0 +1,148 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lord.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/dwarves/Lord.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Dwarvish Lord
+    name= _ &quot;Dwarvish Lord&quot;
+    race=dwarf
+    image=&quot;units/dwarves/lord.png&quot;
+    profile=&quot;portraits/dwarves/lord.webp&quot;
+    hitpoints=74
+    movement_type=dwarvishfoot
+    movement=4
+    experience=150
+    level=3
+    alignment=neutral
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=69
+    usage=fighter
+    description= _ &quot;Clad in shining armor, these dwarves look like kings from under the mountains. They wield axe and hammer with masterful skill, and can hit a target with a thrown hand axe at several paces. Though slow on their feet, these dwarves are a testament to the prowess of their kin.&quot;
+    die_sound={SOUND_LIST:DWARF_DIE}
+    {STANDING_ANIM_DIRECTIONAL_6_FRAME_FILTERED &quot;units/dwarves/lord&quot; {WOUNDED_UNIT ()} }
+    {STANDING_ANIM_DIRECTIONAL &quot;units/dwarves/lord.png&quot; &quot;units/dwarves/lord-ne.png&quot; }
+
+    {DEFENSE_ANIM_DIRECTIONAL_FILTERED &quot;units/dwarves/lord-se-defend2.png&quot; &quot;units/dwarves/lord-se-defend1.png&quot; &quot;units/dwarves/lord-ne-defend2.png&quot; &quot;units/dwarves/lord-ne-defend1.png&quot; {SOUND_LIST:DWARF_HIT} (
+        [filter_second_attack]
+            name=battle axe
+        [/filter_second_attack]
+    )}
+
+    {DEFENSE_ANIM_DIRECTIONAL_FILTERED &quot;units/dwarves/lord-se-ranged-defend2.png&quot; &quot;units/dwarves/lord-se-ranged-defend1.png&quot; &quot;units/dwarves/lord-ne-ranged-defend2.png&quot; &quot;units/dwarves/lord-ne-ranged-defend1.png&quot; {SOUND_LIST:DWARF_HIT} (
+        [filter_attack]
+            range=ranged
+        [/filter_attack]
+    )}
+
+    {DEFENSE_ANIM_DIRECTIONAL_FILTERED &quot;units/dwarves/lord-se-hammer-defend2.png&quot; &quot;units/dwarves/lord-se-hammer-defend1.png&quot; &quot;units/dwarves/lord-ne-hammer-defend2.png&quot; &quot;units/dwarves/lord-ne-hammer-defend1.png&quot; {SOUND_LIST:DWARF_HIT} (
+        [filter_second_attack]
+            name=hammer
+        [/filter_second_attack]
+    )}
+
+    [resistance]
+        blade=60
+        pierce=70
+        impact=70
+    [/resistance]
+    [attack]
+        name=battle axe
+        description=_&quot;battle axe&quot;
+        type=blade
+        range=melee
+        icon=attacks/battleaxe.png
+        damage=15
+        number=3
+    [/attack]
+    [attack]
+        name=hammer
+        description=_&quot;hammer&quot;
+        icon=attacks/hammer-dwarven.png
+        type=impact
+        range=melee
+        damage=19
+        number=2
+    [/attack]
+    [attack]
+        name=hatchet
+        description=_&quot;hatchet&quot;
+        type=blade
+        range=ranged
+        damage=10
+        number=1
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=hatchet
+        [/filter_attack]
+        start_time=-550
+        {MISSILE_FRAME_HATCHET}
+        [if]
+            direction=s,se,sw
+            [frame]
+                image=&quot;units/dwarves/lord-se-ranged[1~7].png:100&quot;
+            [/frame]
+        [/if]
+        [else]
+            direction=n,ne,nw
+            [frame]
+                image=&quot;units/dwarves/lord-ne-ranged[1~7].png:100&quot;
+            [/frame]
+        [/else]
+        {SOUND:HIT_AND_MISS hatchet.wav hatchet-miss.wav -150}
+    [/attack_anim]
+
+    [attack_anim]
+        [filter_attack]
+            name=hammer
+        [/filter_attack]
+        start_time=-550
+        offset=0.0~-0.05,-0.05~0.1,0.1~0.55,0.55~0.55,0.5~0.0
+        [if]
+            direction=s,se,sw
+            [frame]
+                image=&quot;units/dwarves/lord-se-hammer.png:40&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/dwarves/lord-se-hammer[1~7].png:100,units/dwarves/lord-se-hammer.png:100&quot;
+            [/frame]
+        [/if]
+        [else]
+            [frame]
+                image=&quot;units/dwarves/lord-ne-hammer.png:40&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/dwarves/lord-ne-hammer[1~7].png:100,units/dwarves/lord-ne-hammer.png:100&quot;
+            [/frame]
+        [/else]
+        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}
+    [/attack_anim]
+
+    [attack_anim]
+        [filter_attack]
+            name=battle axe
+        [/filter_attack]
+        start_time=-350
+        #    offset=0.0~-0.15:30,-0.15~0.1:60,0.1~0.5:190,0.5~0.6:30,0.6~0.6:40,0.6~0.15:150,0.15~0.0:40
+        offset=0.0~-0.15:40,-0.15~0.4:240,0.4~0.4:120,0.4~0.0:200
+        [if]
+            direction=s,se,sw
+            [frame]
+                image=&quot;units/dwarves/lord-se-axe[1~9].png:[40,60*6,80*2]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/dwarves/lord.png:40&quot;
+            [/frame]
+        [/if]
+        [else]
+            [frame]
+                image=&quot;units/dwarves/lord-ne-axe[1~9].png:[40,60*6,80*2]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/dwarves/lord-ne.png:40&quot;
+            [/frame]
+        [/else]
+        {SOUND:HIT_AND_MISS axe.ogg {SOUND_LIST:MISS} -50}
+    [/attack_anim]
+
+    {MOVING_ANIM_DIRECTIONAL_10_FRAME &quot;units/dwarves/lord&quot;}
+[/unit_type]
+</pre></main></body></html>

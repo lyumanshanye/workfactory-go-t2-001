@@ -1,0 +1,48 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Great.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/trolls/Great.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Great Troll
+    name= _ &quot;Great Troll&quot;
+    race=troll
+    image=&quot;units/trolls/great-troll.png&quot;
+    profile=portraits/trolls/troll-hero.webp
+    hitpoints=80
+    movement_type=largefoot
+    movement=5
+    experience=150
+    level=3
+    alignment=chaotic
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=78
+    description= _ &quot;When a troll, gifted with abnormal strength of life, matches that with age and wisdom, it becomes something extraordinary, a beast remembered for generations. Their feats of strength and cunning are the source of most tales about trolls, and to see the stories made flesh does nothing to diminish their grandeur.&quot;
+    die_sound={SOUND_LIST:TROLL_DIE}
+    usage=fighter
+    [abilities]
+        {ABILITY_REGENERATES}
+    [/abilities]
+    [attack]
+        name=hammer
+        description=_&quot;hammer&quot;
+        icon=attacks/hammer-troll.png
+        type=impact
+        range=melee
+        damage=18
+        number=3
+    [/attack]
+    {DEFENSE_ANIM &quot;units/trolls/great-troll-defend2.png&quot; &quot;units/trolls/great-troll-defend1.png&quot; {SOUND_LIST:TROLL_HIT} }
+    [attack_anim]
+        [filter_attack]
+            name=hammer
+        [/filter_attack]
+        start_time=-300
+        offset=0.0~-0.05:120,-0.05~0.65:180,0.65~0.0:300
+        [frame]
+            image=&quot;units/trolls/great-troll.png:25&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/trolls/great-troll-attack-[1~5,1].png:[80,75,70,80,210,60]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

@@ -1,0 +1,70 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>objective-utils.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/macros/objective-utils.cfg</h1><pre>#textdomain wesnoth
+# Utility macros for use in the objectives dialog
+
+#define TURNS_RUN_OUT
+    # Adds an objective indicating that you lose when turns run out
+    [objective]
+        description= _ &quot;Turns run out&quot;
+        condition=lose
+        show_turn_counter=yes
+    [/objective]
+#enddef
+
+# Add a footnote to an objective in small print
+#define OBJECTIVE_FOOTNOTE TEXT
+&quot;&lt;span foreground=&#x27;white&#x27;&gt;&lt;small&gt; &quot; + {TEXT} + &quot;&lt;/small&gt;&lt;/span&gt;&quot;#enddef
+
+#wmllint: markcheck off
+# Add a note to an objective indication that you get an early finish bonus
+#define EARLY_FINISH_BONUS_FOOTNOTE
+{OBJECTIVE_FOOTNOTE _&quot;(early finish bonus)&quot;}#enddef
+#wmllint: markcheck on
+
+#define ALTERNATIVE_OBJECTIVE_CAPTION
+    # Add a caption for an alternative objective
+    caption= _ &quot;Alternative objective:&quot;
+#enddef
+
+#define BONUS_OBJECTIVE_CAPTION
+    # Add a caption for a bonus objective
+    caption= _ &quot;Bonus objective:&quot;
+#enddef
+
+#define OPTIONAL_OBJECTIVE_CAPTION
+    # Add a caption for an optional objective
+    caption= _ &quot;Optional objective:&quot;
+#enddef
+
+#define ALTERNATIVE_OBJECTIVE OBJECTIVE_TEXT
+    # Add an alternative objective that can be attained in place of the primary objective to win the scenario.
+    [objective]
+        {ALTERNATIVE_OBJECTIVE_CAPTION}
+        description={OBJECTIVE_TEXT}
+        condition=win
+    [/objective]
+#enddef
+
+#define ALTERNATIVE_OBJECTIVE_BONUS OBJECTIVE_TEXT
+    # Add an alternative objective that grants an early finish bonus.
+    [objective]
+        {ALTERNATIVE_OBJECTIVE_CAPTION}
+        description={OBJECTIVE_TEXT}+{EARLY_FINISH_BONUS_FOOTNOTE}
+        condition=win
+    [/objective]
+#enddef
+
+#define IS_LAST_SCENARIO
+    # Add a note to the objectives indicating that this is the final scenario in the campaign.
+    [note]
+        red,blue,green=0,255,255
+        description=&quot;&lt;b&gt;&quot; + _&quot;This is the last scenario.&quot; + &quot;&lt;/b&gt;&quot;
+    [/note]
+#enddef
+
+#define HAS_NO_TURN_LIMIT
+    # Add a note to the objectives indicating that there is no turn limit.
+    [note]
+        description= &quot;&lt;b&gt;&quot; + _&quot;No turn limit&quot; + &quot;&lt;/b&gt;&quot;
+    [/note]
+#enddef
+</pre></main></body></html>

@@ -1,0 +1,151 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Impaler.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/goblins/Impaler.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Goblin Impaler
+    name= _ &quot;Goblin Impaler&quot;
+    race=goblin
+    image=&quot;units/goblins/impaler.png&quot;
+    small_profile=&quot;portraits/goblins/impaler.webp~CROP(0,100,400,400)&quot;
+    profile=&quot;portraits/goblins/impaler.webp&quot;
+    hitpoints=26
+    movement_type=orcishfoot
+    movement=5
+    experience=50
+    level=1
+    alignment=chaotic
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=13
+    usage=fighter
+    description= _ &quot;Goblins are used by the orcs as skirmishers to disrupt the enemy’s battle line. Those who manage to survive their first few battles equip themselves with a long spear to compensate for their short reach, and better armor to guard their diminutive frames.&quot;
+    die_sound={SOUND_LIST:GOBLIN_DIE}
+
+    {DEFENSE_ANIM_DIRECTIONAL &quot;units/goblins/impaler-defend.png&quot; &quot;units/goblins/impaler.png&quot; &quot;units/goblins/impaler-ne-defend.png&quot; &quot;units/goblins/impaler-ne.png&quot; {SOUND_LIST:GOBLIN_HIT} }
+
+    {STANDING_ANIM_DIRECTIONAL &quot;units/goblins/impaler.png&quot; &quot;units/goblins/impaler-ne.png&quot;}
+
+    [attack]
+        name=spear
+        description=_&quot;spear&quot;
+        type=pierce
+        range=melee
+        damage=8
+        number=3
+        icon=attacks/spear-orcish.png
+        [specials]
+            {WEAPON_SPECIAL_FIRSTSTRIKE}
+        [/specials]
+    [/attack]
+    [attack]
+        name=spear
+        description=_&quot;spear&quot;
+        type=pierce
+        range=ranged
+        damage=5
+        number=1
+        icon=attacks/javelin-orcish.png
+    [/attack]
+
+    [death]
+        start_time=0
+        [frame]
+            image=&quot;units/goblins/impaler-death-[1~9].png:[80,75,70,65,60,55,50,45,150]&quot;
+        [/frame]
+    [/death]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+            range=ranged
+        [/filter_attack]
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/spear-n.png&quot;
+            image_diagonal=&quot;projectiles/spear-ne.png&quot;
+        [/missile_frame]
+        start_time=-250
+        [frame]
+            image=&quot;units/goblins/impaler-attack-se-1.png:100&quot;
+            sound={SOUND_LIST:THROW}
+        [/frame]
+        [frame]
+            image=&quot;units/goblins/impaler-attack-ranged-s.png:100&quot;
+        [/frame]
+        {SOUND:HIT spear.ogg -100}
+        [frame]
+            image=&quot;units/goblins/impaler-death-1.png:50&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+            range=melee
+        [/filter_attack]
+        direction=ne,nw
+        start_time=-200
+        [frame]
+            image=units/goblins/impaler.png:75
+        [/frame]
+        [frame]
+            image=units/goblins/impaler-attack-ne.png:250
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -75}
+        [frame]
+            image=units/goblins/impaler.png:75
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+            range=melee
+        [/filter_attack]
+        direction=n
+        start_time=-200
+        [frame]
+            image=units/goblins/impaler.png:75
+        [/frame]
+        [frame]
+            image=units/goblins/impaler-attack-n.png:250
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -75}
+        [frame]
+            image=units/goblins/impaler.png:75
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+            range=melee
+        [/filter_attack]
+        direction=s
+        start_time=-200
+        [frame]
+            image=units/goblins/impaler.png:75
+        [/frame]
+        [frame]
+            image=units/goblins/impaler-attack-[se-1,s,se-1].png:[50,150,50]
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -75}
+        [frame]
+            image=units/goblins/impaler.png:75
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+            range=melee
+        [/filter_attack]
+        direction=se,sw
+        start_time=-200
+        [frame]
+            image=units/goblins/impaler.png:75
+        [/frame]
+        [frame]
+            image=units/goblins/impaler-attack-se-[1,2,1].png:[50,150,50]
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -75}
+        [frame]
+            image=units/goblins/impaler.png:75
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

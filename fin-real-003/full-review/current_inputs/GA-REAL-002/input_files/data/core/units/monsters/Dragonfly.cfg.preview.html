@@ -1,0 +1,130 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dragonfly.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Dragonfly.cfg</h1><pre>#textdomain wesnoth-units
+
+[unit_type]
+    id=Dragonfly
+    name= _ &quot;Dragonfly&quot;
+    race=monster
+    image=&quot;units/monsters/dragonfly/young/dragonfly.png&quot;
+    profile=&quot;portraits/monsters/dragonfly.webp&quot;
+    hitpoints=28
+    movement_type=smallfly
+    [resistance]
+        blade=90
+        pierce=90
+        impact=100
+        fire=100
+        cold=120
+        arcane=90
+    [/resistance]
+    movement=7
+    vision=8
+    level=1
+    alignment=neutral
+    experience=25
+    advances_to=Grand Dragonfly
+    cost=16
+    usage=scout
+    description= _ &quot;The giant dragonflies seen in some of the swamps, rivers, and lakes around Wesnoth enjoy a longer life cycle than the smaller, more common types. The adult form can live indefinitely, slowly growing to a final moult. They are generally territorial, but can cooperate in small groups to confront common foes or large prey.&quot;
+    undead_variation=bug
+    [attack]
+        name=bite
+        description= _ &quot;bite&quot;
+        type=blade
+        range=melee
+        damage=7
+        number=2
+        [specials]
+            {WEAPON_SPECIAL_MARKSMAN}
+        [/specials]
+        icon=attacks/fangs-bug.png
+    [/attack]
+    [standing_anim]
+        start_time=0
+        direction=se,s,sw
+        bug_start_time=0
+        bug_y=-4~0:300,0~-4:300
+        [frame]
+            image=&quot;units/monsters/dragonfly/young/dragonfly-shadow.png:200&quot;
+        [/frame]
+        [bug_frame]
+            image=&quot;units/monsters/dragonfly/young/dragonfly-flying[1,2,1,2,1,2,1,2,1,2,1,2].png:50&quot;
+            auto_vflip=no
+            primary=yes
+        [/bug_frame]
+    [/standing_anim]
+    [standing_anim]
+        start_time=0
+        direction=nw,n,ne
+        bug_start_time=0
+        bug_y=-4~0:300,0~-4:300
+        [frame]
+            image=&quot;units/monsters/dragonfly/young/dragonfly-n-shadow.png:200&quot;
+        [/frame]
+        [bug_frame]
+            image=&quot;units/monsters/dragonfly/young/dragonfly-n-flying[1,2,1,2,1,2,1,2,1,2,1,2].png:50&quot;
+            auto_vflip=no
+            primary=yes
+        [/bug_frame]
+    [/standing_anim]
+    {DEFENSE_ANIM_FILTERED &quot;units/monsters/dragonfly/young/dragonfly-defend2.png&quot; &quot;units/monsters/dragonfly/young/dragonfly-defend1.png&quot; {SOUND_LIST:BAT_HIT} (
+        direction=se,s,sw
+    )}
+    {DEFENSE_ANIM_FILTERED &quot;units/monsters/dragonfly/young/dragonfly-n-defend2.png&quot; &quot;units/monsters/dragonfly/young/dragonfly-n-defend1.png&quot; {SOUND_LIST:BAT_HIT} (
+        direction=ne,n,nw
+    )}
+    #    [death]
+    #        start_time=0
+    #        [frame]
+    #            image=&quot;units/monsters/dragonfly/young/dragonfly-death[1~4].png:[100,80,80,150]&quot;
+    #        [/frame]
+    #    [/death]
+    [movement_anim]
+        start_time=0
+        bug_start_time=0
+        bug_offset=&quot;0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200&quot;
+        [if]
+            direction=se,s,sw
+            [frame]
+                image=&quot;units/monsters/dragonfly/young/dragonfly-shadow.png:160&quot;
+            [/frame]
+            [bug_frame]
+                image=&quot;units/monsters/dragonfly/young/dragonfly-flying[1,2].png:80&quot;
+                auto_vflip=no
+                primary=yes
+            [/bug_frame]
+        [/if]
+        [else]
+            direction=ne,n,nw
+            [frame]
+                image=&quot;units/monsters/dragonfly/young/dragonfly-n-shadow.png:160&quot;
+            [/frame]
+            [bug_frame]
+                image=&quot;units/monsters/dragonfly/young/dragonfly-n-flying[1,2].png:80&quot;
+                auto_vflip=no
+                primary=yes
+            [/bug_frame]
+        [/else]
+    [/movement_anim]
+    [attack_anim]
+        [filter_attack]
+            name=bite
+        [/filter_attack]
+        start_time=-200
+        offset=0.0~0.65:150,0.65~0.0:200
+        [if]
+            direction=se,s,sw
+            [frame]
+                image=&quot;units/monsters/dragonfly/young/dragonfly.png:350&quot;
+                #    image=&quot;units/monsters/dragonfly/young/dragonfly-melee[1~3].png:[250,100,150]&quot;
+            [/frame]
+        [/if]
+        [else]
+            direction=ne,n,nw
+            [frame]
+                image=&quot;units/monsters/dragonfly/young/dragonfly-n.png:350&quot;
+            [/frame]
+        [/else]
+        {SOUND:HIT_AND_MISS bite.ogg spear-miss.ogg -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

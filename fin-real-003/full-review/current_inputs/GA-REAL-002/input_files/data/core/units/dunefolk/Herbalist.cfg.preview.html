@@ -1,0 +1,58 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Herbalist.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/dunefolk/Herbalist.cfg</h1><pre>#textdomain wesnoth-units
+
+#define PATH_TEMP
+units/dunefolk/herbalist/#enddef
+
+[unit_type]
+    id=Dune Herbalist
+    name= _ &quot;Dune Herbalist&quot;
+    race=dunefolk
+    image=&quot;{PATH_TEMP}herbalist.png&quot;
+    profile=&quot;portraits/dunefolk/herbalist.webp&quot;
+    hitpoints=32
+    movement_type=dunefoot
+    [abilities]
+        {ABILITY_SELF_HEAL}
+        {ABILITY_HEALS}
+    [/abilities]
+    movement=5
+    experience=36
+    level=1
+    alignment=liminal
+    advances_to=Dune Apothecary,Dune Alchemist
+    cost=13
+    usage=healer
+    description= _ &quot;As those responsible for caring for the ill and wounded among the Dunefolk, herbalists possess both the medicinal skills to heal a variety of afflictions and the skill to seek and gather restorative herbs. Their motivations are many; some look to it as an adventure or as a steady source of pay while others feel it to be a duty to their society. No matter the reason, these healers are an invaluable part of Dunefolk society and are especially useful for their ability to administer quick treatments in the midst of battle or while traveling in the desert.
+
+Even among the nomadic Dunefolk, herbalists journey a great deal in search of the various flora and fauna that supply their work. Hardened by their travels, many of these men are even able to heal themselves.&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    {DEFENSE_ANIM &quot;{PATH_TEMP}herbalist-defend2.png&quot; &quot;{PATH_TEMP}herbalist-defend1.png&quot; {SOUND_LIST:HUMAN_HIT} }
+
+    [resistance]
+        blade=110
+    [/resistance]
+
+    [attack]
+        name=mace
+        description= _ &quot;mace&quot;
+        type=impact
+        range=melee
+        damage=4
+        number=3
+        icon=attacks/mace.png
+    [/attack]
+
+    [attack_anim]
+        [filter_attack]
+            name=mace
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;{PATH_TEMP}herbalist.png:300&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}
+    [/attack_anim]
+[/unit_type]
+
+#undef PATH_TEMP
+</pre></main></body></html>

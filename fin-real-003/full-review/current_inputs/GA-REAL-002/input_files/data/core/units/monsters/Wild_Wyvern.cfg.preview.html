@@ -1,0 +1,162 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wild_Wyvern.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Wild_Wyvern.cfg</h1><pre>#textdomain wesnoth-units
+
+#define UNWALKABLE_TERRAINS_TEMP
+!,Wwf*^*,Kme*^*,*^B*,!,W*^*,S*^*,Chs*^*,Chw*^*,Cm*^*,Km*^*,Q*^*,Mv*^*,*^Qov,*^Vm#enddef
+
+[unit_type]
+    id=Wild Wyvern
+    name= _ &quot;Wild Wyvern&quot;
+    race=monster
+    num_traits=2
+    image=&quot;units/monsters/wyvern/wild-wyvern.png&quot;
+    [standing_anim]
+        [frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern.png:50&quot;
+        [/frame]
+    [/standing_anim]
+    [standing_anim]
+        start_time=0
+        wyvern_start_time=0
+        terrain_type={UNWALKABLE_TERRAINS_TEMP}
+        submerge=0.01
+        wyvern_y=-4~2:300,2~-4:500
+        # wmlscope: start ignoring
+        [wyvern_frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern-fly[1~7].png:[100*3,120,130,140,110]&quot;
+            auto_vflip=no
+            layer=60 # taken from bat, may need adjustment
+            primary=yes
+        [/wyvern_frame]
+        [frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern-fly-shadow.png:800&quot;
+        [/frame]
+        # wmlscope: stop ignoring
+    [/standing_anim]
+    hitpoints=72
+    movement_type=fly
+    movement=8
+    experience=150
+    level=3
+    alignment=liminal
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=75
+    usage=scout
+    description= _ &quot;Wyverns are large reptiles that resemble dragons, but are not the intelligent, magical creatures. However, the fact that they are just wild beasts should not cause any traveler who encounters one to dismiss the threat, for they are fast and fierce when threatened or hungry.
+
+Wyverns are social creatures, usually traveling in pairs or small groups. Their hunting patterns and diet are difficult to discern, for they often work with smaller animals that would appear to be potential prey. That odd behavior may be an adaptation to the harsh desert environments they often inhabit.&quot;
+    die_sound=drake-die.ogg
+    undead_variation=drake
+    {DEFENSE_ANIM_FILTERED &quot;units/monsters/wyvern/wild-wyvern-fly-defend.png&quot; &quot;units/monsters/wyvern/wild-wyvern-fly1.png&quot; {SOUND_LIST:DRAKE_HIT} (
+        terrain_type={UNWALKABLE_TERRAINS_TEMP}
+    )}
+    {DEFENSE_ANIM &quot;units/monsters/wyvern/wild-wyvern-defend2.png&quot; &quot;units/monsters/wyvern/wild-wyvern-defend1.png&quot; {SOUND_LIST:DRAKE_HIT}}
+    [pre_movement_anim]
+        start_time=0
+        terrain_type=!,{UNWALKABLE_TERRAINS_TEMP}
+        [frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern-fly-takeoff[1~8].png:60&quot;
+        [/frame]
+    [/pre_movement_anim]
+    [movement_anim]
+        start_time=0
+        wyvern_start_time=0
+        submerge=0.01
+        wyvern_y=-4~2:300,2~-4:500
+        wyvern_offset=&quot;0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200&quot;
+        # wmlscope: start ignoring
+        [wyvern_frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern-fly[1~7].png:[100*3,120,130,140,110]&quot;
+            auto_vflip=no
+            layer=60 # taken from bat, may need adjustment
+            primary=yes
+        [/wyvern_frame]
+        [frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern-fly-shadow.png:800&quot;
+        [/frame]
+        # wmlscope: stop ignoring
+    [/movement_anim]
+    [post_movement_anim]
+        terrain_type=!,{UNWALKABLE_TERRAINS_TEMP}
+        start_time=0
+        [frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern-fly-takeoff[8~1].png:60&quot;
+        [/frame]
+    [/post_movement_anim]
+    [attack]
+        name=slam
+        description= _ &quot;slam&quot;
+        icon=attacks/slam-drake.png
+        type=impact
+        range=melee
+        damage=10
+        number=4
+    [/attack]
+    [attack]
+        name=bite
+        description= _ &quot;bite&quot;
+        icon=attacks/fangs.png
+        type=blade
+        range=melee
+        damage=14
+        number=3
+    [/attack]
+
+    [attack_anim]
+        [filter_attack]
+            name=slam
+        [/filter_attack]
+        terrain_type={UNWALKABLE_TERRAINS_TEMP}
+
+        start_time=-200
+
+        [frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern-fly5.png:300&quot;
+        [/frame]
+
+        {SOUND:HIT_AND_MISS fist.ogg {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=bite
+        [/filter_attack]
+        terrain_type={UNWALKABLE_TERRAINS_TEMP}
+
+        start_time=-200
+
+        [frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern-fly4.png:300&quot;
+        [/frame]
+
+        {SOUND:HIT_AND_MISS bite.ogg {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=slam
+        [/filter_attack]
+
+        start_time=-200
+
+        [frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern.png:300&quot;
+        [/frame]
+
+        {SOUND:HIT_AND_MISS fist.ogg {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=bite
+        [/filter_attack]
+
+        start_time=-200
+
+        [frame]
+            image=&quot;units/monsters/wyvern/wild-wyvern.png:300&quot;
+        [/frame]
+
+        {SOUND:HIT_AND_MISS bite.ogg {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+[/unit_type]
+
+#undef UNWALKABLE_TERRAINS_TEMP
+</pre></main></body></html>

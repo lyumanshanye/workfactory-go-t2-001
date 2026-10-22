@@ -1,0 +1,76 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Giant_Spider.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Giant_Spider.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Giant Spider
+    name= _ &quot;Giant Spider&quot;
+    race=monster
+    image=&quot;units/monsters/spider.png&quot;
+    profile=&quot;portraits/monsters/giant-spider.webp&quot;
+    small_profile=&quot;portraits/monsters/giant-spider.webp~CROP(0,58,400,342)&quot;
+    hitpoints=54
+    movement_type=mountainfoot
+    [movement_costs]
+        fungus=2
+    [/movement_costs]
+    movement=6
+    experience=150
+    level=3
+    alignment=chaotic
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=55
+    usage=fighter
+    undead_variation=spider
+    description= _ &quot;Giant Spiders are said to roam the depths of Knalga, devouring many victims. They have a vicious bite, made worse by the fact that it is poisoned, and can also fling webs through the air to trap their prey.&quot;
+    die_sound=hiss-big.wav
+    {DEFENSE_ANIM &quot;units/monsters/spider-melee-2.png&quot; &quot;units/monsters/spider-melee-1.png&quot; hiss.wav }
+    [attack]
+        name=fangs
+        description=_&quot;fangs&quot;
+        icon=attacks/fangs-spider.png
+        type=blade
+        range=melee
+        damage=18
+        number=2
+        [specials]
+            {WEAPON_SPECIAL_POISON}
+        [/specials]
+    [/attack]
+    [attack]
+        name=web
+        description=_&quot;web&quot;
+        type=impact
+        range=ranged
+        damage=8
+        number=3
+        [specials]
+            {WEAPON_SPECIAL_SLOW}
+        [/specials]
+    [/attack]
+    [attack_anim]
+        start_time=-400
+        [filter_attack]
+            name=web
+        [/filter_attack]
+        missile_start_time=-200
+        [missile_frame]
+            duration=200
+            image=&quot;projectiles/web.png&quot;
+            image_diagonal=&quot;projectiles/web.png&quot;
+        [/missile_frame]
+        [frame]
+            image=&quot;units/monsters/spider-ranged-[1~7,3~1].png:75&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS net.wav {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+    [attack_anim]
+        start_time=-400
+        [filter_attack]
+            name=fangs
+        [/filter_attack]
+        [frame]
+            image=&quot;units/monsters/spider-melee-[1~13].png:50&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS bite.ogg {SOUND_LIST:MISS} -50}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

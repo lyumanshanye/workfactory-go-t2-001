@@ -1,0 +1,458 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>types.hpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/types.hpp</h1><pre>/*
+	Copyright (C) 2003 - 2024
+	by David White &lt;dave@whitevine.net&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+#pragma once
+
+#include &quot;gettext.hpp&quot;
+#include &quot;map/location.hpp&quot;
+#include &quot;movetype.hpp&quot;
+#include &quot;units/unit_alignments.hpp&quot;
+#include &quot;units/race.hpp&quot;
+#include &quot;units/attack_type.hpp&quot;
+#include &quot;units/type_error.hpp&quot;
+#include &quot;game_config_view.hpp&quot;
+
+#include &lt;memory&gt;
+#include &lt;array&gt;
+#include &lt;map&gt;
+#include &lt;set&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+class unit_ability_list;
+class unit_animation;
+class game_config_view;
+
+typedef std::map&lt;std::string, movetype&gt; movement_type_map;
+
+
+/**
+ * A single unit type that the player may recruit.
+ * Individual units are defined by the unit class.
+ */
+class unit_type
+{
+private:
+	struct defaut_ctor_t {};
+	unit_type(defaut_ctor_t, const config&amp; cfg, const std::string &amp; parent_id);
+
+public:
+	using error = unit_type_error;
+	/**
+	 * Creates a unit type for the given config, but delays its build
+	 * till later.
+	 * @note @a cfg is not copied, so it has to point to some permanent
+	 *       storage, that is, a child of unit_type_data::unit_cfg.
+	 */
+	explicit unit_type(const config &amp;cfg, const std::string &amp; parent_id=&quot;&quot;);
+	/**
+	 * Creates a unit type for the given config, but delays its build
+	 * till later.
+	 * @note @a cfg is copied
+	 */
+	explicit unit_type(config &amp;&amp; cfg, const std::string &amp; parent_id=&quot;&quot;);
+	unit_type();
+	unit_type(const unit_type&amp; o);
+	unit_type(unit_type&amp;&amp; o) = default;
+
+	~unit_type();
+
+	/**
+	 * Records the status of the lazy building of unit types.
+	 * These are in order of increasing levels of being built.
+	 * HELP_INDEX is already defined in a windows header under some conditions
+	 */
+	enum BUILD_STATUS {NOT_BUILT, CREATED, VARIATIONS, HELP_INDEXED, FULL};
+
+	/**
+	 * Validate the id argument.
+	 * Replaces invalid characters in the reference with underscores.
+	 * @param id The proposed id for a unit_type.
+	 * @throw error if id starts with a space.
+	 */
+	static void check_id(std::string&amp; id);
+
+private: // These will be called by build().
+	/** Load data into an empty unit_type (build to FULL). */
+	void build_full(const movement_type_map &amp;movement_types,
+		const race_map &amp;races, const config_array_view &amp;traits);
+	/** Partially load data into an empty unit_type (build to HELP_INDEXED). */
+	void build_help_index(const movement_type_map &amp;movement_types,
+		const race_map &amp;races, const config_array_view &amp;traits);
+	/** Load the most needed data into an empty unit_type (build to CREATE). */
+	void build_created();
+
+	typedef std::map&lt;std::string,unit_type&gt; variations_map;
+public:
+	/** Performs a build of this to the indicated stage. */
+	void build(BUILD_STATUS status, const movement_type_map &amp;movement_types,
+	           const race_map &amp;races, const config_array_view &amp;traits);
+	/**
+	 * Performs a build of this to the indicated stage.
+	 * (This does not logically change the unit type, so allow const access.)
+	 */
+	void build(BUILD_STATUS status, const movement_type_map &amp;movement_types,
+	           const race_map &amp;races, const config_array_view &amp;traits) const
+	{ const_cast&lt;unit_type *&gt;(this)-&gt;build(status, movement_types, races, traits); }
+
+
+	/** Get the advancement tree
+	 *  @return A set of ids of all unit_type objects that this unit_type can
+	 *  directly or indirectly advance to.
+	 */
+	std::set&lt;std::string&gt; advancement_tree() const;
+
+	/** A vector of unit_type ids that this unit_type can advance to. */
+	const std::vector&lt;std::string&gt;&amp; advances_to() const { return advances_to_; }
+	/** A vector of unit_type ids that can advance to this unit_type. */
+	const std::vector&lt;std::string&gt; advances_from() const;
+
+	/** Returns two iterators pointing to a range of AMLA configs. */
+	config::const_child_itors modification_advancements() const
+	{ return get_cfg().child_range(&quot;advancement&quot;); }
+
+	/**
+	 * Returns a gendered variant of this unit_type.
+	 * @param gender &quot;male&quot; or &quot;female&quot;.
+	 */
+	const unit_type&amp; get_gender_unit_type(std::string gender) const;
+	/** Returns a gendered variant of this unit_type based on the given parameter. */
+	const unit_type&amp; get_gender_unit_type(unit_race::GENDER gender) const;
+
+	const unit_type&amp; get_variation(const std::string&amp; id) const;
+	/** Info on the type of unit that the unit reanimates as. */
+	const std::string&amp; undead_variation() const { return undead_variation_; }
+
+	unsigned int num_traits() const { return num_traits_; }
+
+	/** The name of the unit in the current language setting. */
+	const t_string&amp; type_name() const { return type_name_; }
+
+	/** The id for this unit_type. */
+	const std::string&amp; id() const { return id_; }
+	/** A variant on id() that is more descriptive, for use with message logging. */
+	const std::string log_id() const { return id_ + debug_id_; }
+	/** The id of the original type from which this (variation) descended. */
+	const std::string&amp; parent_id() const { return parent_id_; }
+	/** The id of this variation; empty if it&#x27;s a gender variation or a base unit. */
+	const std::string&amp; variation_id() const { return variation_id_; }
+	// NOTE: this used to be a const object reference, but it messed up with the
+	// translation engine upon changing the language in the same session.
+	t_string unit_description() const;
+	/**
+	 * Returns only the notes defined by [unit_type][special_note] tags, excluding
+	 * any that would be found from abilities, attacks, etc.
+	 */
+	std::vector&lt;t_string&gt; direct_special_notes() const { return special_notes_; }
+	/**
+	 * Returns all notes that should be displayed in the help page for this type,
+	 * including those found in abilities and attacks.
+	 */
+	std::vector&lt;t_string&gt; special_notes() const;
+	int hitpoints() const { return hitpoints_; }
+	double hp_bar_scaling() const { return hp_bar_scaling_; }
+	double xp_bar_scaling() const { return xp_bar_scaling_; }
+	int level() const { return level_; }
+	int recall_cost() const { return recall_cost_;}
+	int movement() const { return movement_; }
+	int vision() const { return vision_ &lt; 0 ? movement() : vision_; }
+	/** If @a base_value is set to true, do not fall back to movement(). */
+	int vision(bool base_value) const { return base_value ? vision_ : vision(); }
+	int jamming() const {return jamming_; }
+	int max_attacks() const { return max_attacks_; }
+	int cost() const { return cost_; }
+	const std::string&amp; default_variation() const { return default_variation_; }
+	const t_string&amp; variation_name() const { return variation_name_; }
+	const std::string&amp; usage() const { return usage_; }
+	const std::string&amp; image() const { return image_; }
+	const std::string&amp; icon() const { return icon_; }
+	const std::string &amp;small_profile() const { return small_profile_; }
+	const std::string &amp;big_profile() const { return profile_; }
+	std::string halo() const { return get_cfg()[&quot;halo&quot;]; }
+	std::string ellipse() const { return get_cfg()[&quot;ellipse&quot;]; }
+	bool generate_name() const { return get_cfg()[&quot;generate_name&quot;].to_bool(true); }
+	const std::vector&lt;unit_animation&gt;&amp; animations() const;
+
+	const std::string&amp; flag_rgb() const;
+
+	const_attack_itors attacks() const;
+	const movetype &amp; movement_type() const { return movement_type_; }
+
+	int experience_needed(bool with_acceleration=true) const;
+
+	unit_alignments::type alignment() const { return alignment_; }
+	static std::string alignment_description(unit_alignments::type align, unit_race::GENDER gender = unit_race::MALE);
+
+	struct ability_metadata
+	{
+		explicit ability_metadata(const config&amp; cfg);
+
+		std::string id;
+
+		t_string name;
+		t_string name_inactive;
+
+		t_string female_name;
+		t_string female_name_inactive;
+
+		t_string description;
+		t_string description_inactive;
+
+		bool affect_self;
+		bool affect_allies;
+		bool affect_enemies;
+		bool cumulative;
+	};
+
+	const std::vector&lt;ability_metadata&gt;&amp; abilities_metadata() const { return abilities_; }
+
+	/** Some extra abilities that may be gained through AMLA advancements. */
+	const std::vector&lt;ability_metadata&gt;&amp; adv_abilities_metadata() const { return adv_abilities_; }
+
+	bool can_advance() const { return !advances_to_.empty(); }
+
+	bool musthave_status(const std::string&amp; status) const;
+
+	bool has_zoc() const { return zoc_; }
+
+	bool has_ability_by_id(const std::string&amp; ability) const;
+	std::vector&lt;std::string&gt; get_ability_list() const;
+
+	config::const_child_itors possible_traits() const
+	{ return possible_traits_.child_range(&quot;trait&quot;); }
+
+	const config&amp; abilities_cfg() const
+	{ return get_cfg().child_or_empty(&quot;abilities&quot;); }
+
+	config::const_child_itors advancements() const
+	{ return get_cfg().child_range(&quot;advancement&quot;); }
+
+	config::const_child_itors events() const
+	{ return get_cfg().child_range(&quot;event&quot;); }
+
+	bool has_random_traits() const;
+
+	/**
+	 * The returned vector will not be empty, provided this has been built
+	 * to the HELP_INDEXED status.
+	 */
+	const std::vector&lt;unit_race::GENDER&gt;&amp; genders() const { return genders_; }
+	bool has_gender_variation(const unit_race::GENDER gender) const
+	{
+		return std::find(genders_.begin(), genders_.end(), gender) != genders_.end();
+	}
+
+	std::vector&lt;std::string&gt; variations() const;
+	const variations_map&amp; variation_types() const {return variations_; }
+
+	/**
+	 * @param variation_id		The id of the variation we search for.
+	 * @return					Whether one of the type&#x27;s variations&#x27; (or the
+	 *                          siblings&#x27; if the unit_type is a variation
+	 *                          itself) id matches @a variation_id.
+	 */
+	bool has_variation(const std::string&amp; variation_id) const;
+
+	/**
+	 * Whether the unit type has at least one help-visible variation.
+	 */
+	bool show_variations_in_help() const;
+
+	/** Returns the ID of this type&#x27;s race without the need to build the type. */
+	std::string race_id() const { return get_cfg()[&quot;race&quot;]; } //race_-&gt;id(); }
+	/**
+	 * Never returns nullptr, but may point to the null race.
+	 * Requires building to the HELP_INDEXED status to get the correct race.
+	 */
+	const unit_race* race() const { return race_; }
+	bool hide_help() const;
+	bool do_not_list() const { return do_not_list_; }
+
+	const config &amp;get_cfg() const
+	{
+		if(built_cfg_) {
+			return *built_cfg_;
+		}
+		assert(cfg_);
+		return *cfg_;
+	}
+
+	/**
+	 * Gets resistance while considering custom WML abilities.
+	 * Attention: Filters in resistance-abilities will be ignored.
+	 */
+	int resistance_against(const std::string&amp; damage_name, bool attacker) const;
+
+	void apply_scenario_fix(const config&amp; cfg);
+	void remove_scenario_fixes();
+private:
+
+	/** Identical to unit::resistance_filter_matches. */
+	bool resistance_filter_matches(const config&amp; cfg,bool attacker,const std::string&amp; damage_name, int res) const;
+
+private:
+	config&amp; writable_cfg() {
+		if(!built_cfg_) {
+			built_cfg_ = std::make_unique&lt;config&gt;(*cfg_);
+		}
+		return *built_cfg_;
+	}
+	void fill_variations();
+	void fill_variations_and_gender();
+	std::unique_ptr&lt;unit_type&gt; create_sub_type(const config&amp; var_cfg, bool default_inherit);
+
+	unit_type&amp; operator=(const unit_type&amp; o) = delete;
+
+	const config* cfg_;
+	friend class unit_type_data;
+	mutable std::unique_ptr&lt;config&gt; built_cfg_;
+	mutable bool has_cfg_build_;
+	mutable attack_list attacks_cache_;
+
+	std::string id_;
+	/** A suffix for id_, used when logging messages. */
+	std::string debug_id_;
+	/** The id of the top ancestor of this unit_type. */
+	std::string parent_id_;
+	/** from [base_unit] */
+	std::string base_unit_id_;
+	t_string type_name_;
+	t_string description_;
+	std::vector&lt;t_string&gt; special_notes_;
+	int hitpoints_;
+	double hp_bar_scaling_, xp_bar_scaling_;
+	int level_;
+	int recall_cost_;
+	int movement_;
+	int vision_;
+	int jamming_;
+	int max_attacks_;
+	int cost_;
+	std::string usage_;
+	std::string undead_variation_;
+
+	std::string image_;
+	std::string icon_;
+	std::string small_profile_;
+	std::string profile_;
+	std::string flag_rgb_;
+
+	unsigned int num_traits_;
+
+	std::array&lt;std::unique_ptr&lt;unit_type&gt;, 2&gt; gender_types_;
+
+	variations_map variations_;
+	std::string default_variation_;
+	std::string variation_id_;
+	t_string variation_name_;
+
+	/** Never nullptr, but may point to the null race. */
+	const unit_race* race_;
+
+	std::vector&lt;ability_metadata&gt; abilities_, adv_abilities_;
+
+	bool zoc_, hide_help_, do_not_list_;
+
+	std::vector&lt;std::string&gt; advances_to_;
+	int experience_needed_;
+
+
+	unit_alignments::type alignment_;
+
+	movetype movement_type_;
+
+	config possible_traits_;
+
+	std::vector&lt;unit_race::GENDER&gt; genders_;
+
+	// animations are loaded only after the first animations() call
+	mutable std::vector&lt;unit_animation&gt; animations_;
+
+	BUILD_STATUS build_status_;
+};
+
+class unit_type_data
+{
+public:
+	unit_type_data(const unit_type_data&amp;) = delete;
+	unit_type_data&amp; operator=(const unit_type_data&amp;) = delete;
+
+	unit_type_data();
+
+	typedef std::map&lt;std::string,unit_type&gt; unit_type_map;
+
+	const unit_type_map &amp;types() const { return types_; }
+	const race_map &amp;races() const { return races_; }
+	config_array_view traits() const { return units_cfg().child_range(&quot;trait&quot;); }
+	void set_config(const game_config_view &amp;cfg);
+
+	/** Finds a unit_type by its id() and makes sure it is built to the specified level. */
+	const unit_type *find(const std::string &amp;key, unit_type::BUILD_STATUS status = unit_type::FULL) const;
+	void check_types(const std::vector&lt;std::string&gt;&amp; types) const;
+	const unit_race *find_race(const std::string &amp;) const;
+
+	/** Makes sure the all unit_types are built to the specified level. */
+	void build_all(unit_type::BUILD_STATUS status);
+	/** Makes sure the provided unit_type is built to the specified level. */
+	void build_unit_type(const unit_type &amp; ut, unit_type::BUILD_STATUS status) const;
+
+	/** Checks if the [hide_help] tag contains these IDs. */
+	bool hide_help(const std::string &amp;type_id, const std::string &amp;race_id) const;
+
+	void apply_scenario_fix(const config&amp; cfg);
+	void remove_scenario_fixes();
+private:
+	/** Parses the [hide_help] tag. */
+	void read_hide_help(const config &amp;cfg);
+
+	void clear();
+
+	void apply_base_unit(unit_type&amp; type, std::vector&lt;std::string&gt;&amp; base_tree);
+
+	mutable unit_type_map types_;
+	movement_type_map movement_types_;
+	race_map races_;
+
+	/** True if [hide_help] contains a &#x27;all=yes&#x27; at its root. */
+	bool hide_help_all_;
+	// vectors containing the [hide_help] and its sub-tags [not]
+	std::vector&lt; std::set&lt;std::string&gt;&gt; hide_help_type_;
+	std::vector&lt; std::set&lt;std::string&gt;&gt; hide_help_race_;
+
+	const game_config_view&amp; units_cfg() const { return units_cfg_; }
+	game_config_view units_cfg_;
+	unit_type::BUILD_STATUS build_status_;
+};
+
+extern unit_type_data unit_types;
+
+void adjust_profile(std::string&amp; profile);
+
+struct unit_experience_accelerator {
+	unit_experience_accelerator(int modifier);
+	~unit_experience_accelerator();
+	static int get_acceleration();
+private:
+	int old_value_;
+};
+
+/**
+ * Common logic for unit_type::special_notes() and unit::special_notes(). Adds
+ * any notes from the sources given as arguments, and filters out duplicates.
+ *
+ * @return the special notes for a unit or unit_type.
+ */
+std::vector&lt;t_string&gt; combine_special_notes(const std::vector&lt;t_string&gt; direct, const config&amp; abilities, const_attack_itors attacks, const movetype&amp; mt);
+</pre></main></body></html>

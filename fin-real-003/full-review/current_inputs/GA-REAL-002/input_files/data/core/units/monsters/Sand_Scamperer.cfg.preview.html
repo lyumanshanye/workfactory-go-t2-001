@@ -1,0 +1,60 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sand_Scamperer.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Sand_Scamperer.cfg</h1><pre>#textdomain wesnoth-units
+
+#define SAND_SCAMPERER_IPF
+~PAL(b6c8da,9fa9c1,8384a3,5f607f,414c5e,1d2c49&gt;dab6c4,c19fa5,a38583,7f615f,5f414a,491d27)~CS(7,-8,-51)#enddef
+
+[unit_type]
+    id=Sand Scamperer
+    [base_unit]
+        id=Giant Scorpling
+    [/base_unit]
+    name= _ &quot;Sand Scamperer&quot;
+    small_profile=&quot;portraits/monsters/scamperer.webp~FL()~CROP(0,82,400,318)&quot;
+    profile=&quot;portraits/monsters/scamperer.webp~RIGHT()&quot;
+    image=&quot;units/monsters/scorpion/scorpling.png{SAND_SCAMPERER_IPF}&quot;
+    undead_variation=sand_scorpion
+    description= _ &quot;This impressive creature swiftly moves through the scorching desert sand. Its body is covered in a thick, sand-colored exoskeleton absorbing any impact damage. However, it is also highly flammable and vulnerable to arcane energy, making fire and magic-based attacks the most effective way to take this venomous critter down.&quot;
+    hitpoints=27
+    [resistance]
+        blade=90
+        pierce=90
+        impact=30
+        fire=200
+        cold=120
+        arcane=150
+    [/resistance]
+    advances_to=Sand Scuttler
+    {DEFENSE_ANIM &quot;units/monsters/scorpion/scorpling-defend2.png{SAND_SCAMPERER_IPF}&quot; &quot;units/monsters/scorpion/scorpling-defend1.png{SAND_SCAMPERER_IPF}&quot; hiss.wav }
+
+    [attack_anim]
+        [filter_attack]
+            name=pincers
+        [/filter_attack]
+        start_time=-300
+        offset=0:200,0~0.6:150,0.6~0:150
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpling-pincer[1~7].png{SAND_SCAMPERER_IPF}:[50,75,75,50,50,75,100]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS pincers.ogg {SOUND_LIST:MISS} -50}
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpling.png{SAND_SCAMPERER_IPF}:25&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=sting
+        [/filter_attack]
+        start_time=-250
+        offset=0:150,0~0.6:150,0.6:100,0.6~0:150
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpling-sting[1~5].png{SAND_SCAMPERER_IPF}:[75,75,150,100,150]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg {SOUND_LIST:MISS} -100}
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpling.png{SAND_SCAMPERER_IPF}:1&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+
+#undef SAND_SCAMPERER_IPF
+</pre></main></body></html>

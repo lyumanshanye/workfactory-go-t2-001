@@ -1,0 +1,141 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Slurbow.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/orcs/Slurbow.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Orcish Slurbow
+    name= _ &quot;Orcish Slurbow&quot;
+    # wmllint: general spelling slurbow slurbows
+    race=orc
+    image=&quot;units/orcs/slurbow.png&quot;
+    profile=&quot;portraits/orcs/slurbow.webp&quot;
+    hitpoints=56
+    movement_type=orcishfoot
+    movement=5
+    experience=150
+    level=3
+    alignment=chaotic
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=37
+    usage=archer
+    # wmllint: local spellings arbalest cranequin
+    description= _ &quot;The basic design of a crossbow gives rise to the arbalest or ‘slurbow’, a much more intricate device complete with a hand-turned cranequin to recock the weapon, and often with a multi-ply arc of laminate wood or bone, driving the projectile. Such a device is much easier to work with, and much more powerful than simpler crossbows; it is also beyond typical orcish manufacture.
+
+Orcs prize any such weapons they can manage to procure, and they invariably end up in the hands of their most cunning archers.&quot;
+    die_sound={SOUND_LIST:ORC_DIE}
+    {DEFENSE_ANIM_RANGE &quot;units/orcs/slurbow-melee-defend-2.png&quot; &quot;units/orcs/slurbow-melee-defend-1.png&quot; {SOUND_LIST:ORC_HIT} melee}
+    {DEFENSE_ANIM_RANGE &quot;units/orcs/slurbow-ranged-defend.png&quot; &quot;units/orcs/slurbow-ranged.png&quot; {SOUND_LIST:ORC_HIT} ranged}
+    [standing_anim]
+        start_time=0
+        [frame]
+            image=&quot;units/orcs/slurbow-breeze-[1~4,3,2].png:[200*6]&quot;
+        [/frame]
+    [/standing_anim]
+    [attack]
+        name=short sword
+        description=_&quot;short sword&quot;
+        icon=attacks/sword-orcish.png
+        type=blade
+        range=melee
+        damage=8
+        number=3
+    [/attack]
+    [attack]
+        name=crossbow
+        description=_&quot;crossbow&quot;
+        icon=attacks/crossbow-orcish.png
+        type=pierce
+        range=ranged
+        damage=12
+        number=3
+    [/attack]
+    [attack]
+        name=crossbow
+        description=_&quot;crossbow&quot;
+        icon=attacks/crossbow-orcish.png
+        type=fire
+        range=ranged
+        damage=15
+        number=2
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=crossbow
+            type=fire
+        [/filter_attack]
+        missile_start_time=-150
+        start_time=-350
+        [if]
+            hits=yes
+
+            [missile_frame]
+                duration=150
+                image=&quot;projectiles/missile-fire-n.png&quot;
+                image_diagonal=&quot;projectiles/missile-fire-ne.png&quot;
+                offset=0~0.8
+            [/missile_frame]
+
+            {FIRE_BURST_SMALL}
+
+            [frame]
+                image=&quot;units/orcs/slurbow-ranged.png:50&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/orcs/slurbow-ranged-1.png:100&quot;
+                sound=crossbow-fire.ogg
+            [/frame]
+            [frame]
+                image=&quot;units/orcs/slurbow-ranged-2.png:250&quot;
+            [/frame]
+        [/if]
+        [else]
+            hits=no
+
+            [missile_frame]
+                duration=150
+                image=&quot;projectiles/missile-fire-n.png&quot;
+                image_diagonal=&quot;projectiles/missile-fire-ne.png&quot;
+            [/missile_frame]
+
+            [frame]
+                image=&quot;units/orcs/slurbow-ranged.png:50&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/orcs/slurbow-ranged-1.png:100&quot;
+                sound=crossbow-fire-miss.ogg
+            [/frame]
+            [frame]
+                image=&quot;units/orcs/slurbow-ranged-2.png:250&quot;
+            [/frame]
+        [/else]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=crossbow
+            type=pierce
+        [/filter_attack]
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/bullet.png&quot;
+            image_diagonal=&quot;projectiles/bullet.png&quot;
+        [/missile_frame]
+        start_time=-350
+        [frame]
+            image=&quot;units/orcs/slurbow-ranged-[1~2].png:[150,250]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS crossbow.ogg crossbow-miss.ogg -300}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=short sword
+        [/filter_attack]
+        start_time=-250
+        [frame]
+            image=&quot;units/orcs/slurbow-melee.png:75&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/orcs/slurbow-melee-attack-[1~4,2].png:75&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS knife.ogg {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

@@ -1,0 +1,91 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Diviner.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/merfolk/Diviner.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Mermaid Diviner
+    name= _ &quot;female^Mermaid Diviner&quot;
+    race=merman
+    gender=female
+    image=&quot;units/merfolk/diviner.png&quot;
+    profile=portraits/merfolk/priestess.webp
+    hitpoints=45
+    [resistance]
+        arcane=60
+    [/resistance]
+    movement_type=swimmer
+    movement=6
+    experience=150
+    level=3
+    alignment=lawful
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=49
+    usage=healer
+    description= _ &quot;Years of devotion may endow a priestess with great wisdom on the workings of the world, and grants some the favor of the light. The power thus given to these ladies of the water is a recurring motif in tale and song; such as the that of the knights of the silver spire, cornered and slain to a man at the banks of the Alavynne, but who rode again the next day, in full number, and wrought the downfall of the crimson duke.&quot;
+    die_sound=mermaid-die.ogg
+    {DEFENSE_ANIM &quot;units/merfolk/diviner-defend2.png&quot; &quot;units/merfolk/diviner-defend1.png&quot; mermaid-hit.ogg }
+    [abilities]
+        {ABILITY_ILLUMINATES HALO=&quot;halo/illuminates-aura.png&quot;}
+        {ABILITY_CURES}
+    [/abilities]
+    [healing_anim]
+        start_time=-525
+        [frame]
+            image=&quot;units/merfolk/diviner.png:150&quot; ### magic-1
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/diviner.png&quot; ### magic-3
+            halo=halo/holy/halo[6,1~6].png:75
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/diviner.png:150&quot; ### magic-2
+        [/frame]
+    [/healing_anim]
+    [attack]
+        name=staff
+        description=_&quot;staff&quot;
+        icon=attacks/staff-magic.png
+        type=impact
+        range=melee
+        damage=7
+        number=3
+    [/attack]
+    [attack]
+        name=lightbeam
+        description=_&quot;lightbeam&quot;	# wmllint: no spellcheck (until name-&gt;id)
+        type=arcane
+        range=ranged
+        [specials]
+            {WEAPON_SPECIAL_MAGICAL}
+        [/specials]
+        damage=8
+        number=4
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=lightbeam
+        [/filter_attack]
+        {MISSILE_FRAME_LIGHT_BEAM}
+
+        start_time=-250
+        [frame]
+            image=&quot;units/merfolk/diviner.png:75&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:HOLY} {SOUND_LIST:HOLY_MISS} -175}
+        [frame]
+            image=&quot;units/merfolk/diviner.png:175&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=staff
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;units/merfolk/diviner.png:50&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS staff.ogg staff-miss.ogg -125}
+        [frame]
+            image=&quot;units/merfolk/diviner.png:325&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

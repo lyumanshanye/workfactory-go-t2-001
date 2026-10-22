@@ -1,0 +1,60 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wose_Sapling.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/wose/Wose_Sapling.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Wose Sapling
+    name= _ &quot;Wose Sapling&quot;
+    race=wose
+    image=&quot;units/woses/wose-sapling.png&quot;
+    small_profile=&quot;portraits/woses/wose.webp~CROP(0,35,435,435)&quot;
+    profile=&quot;portraits/woses/wose.webp&quot;
+    hitpoints=26
+    movement_type=treefolk
+    movement=4
+    experience=25
+    level=0
+    alignment=lawful
+    advances_to=Wose
+    cost=11
+    description= _ &quot;Rarely seen even by elves, the Wose is an order of creature about which little is known. The elves are the source of most of this knowledge; they know that these beings are not descended from trees, despite the similarity in form, and they know that a wose is more closely tied to the faerie world than the elves themselves, though in a different way. The motives and workings of their kind are unknown, though most subscribe to the obvious theory that woses are dedicated wardens of the natural world.
+
+Woses are utterly unwarlike, but possess a great strength. They are, however, neither used to, nor quick at moving around.&quot;
+    usage=fighter
+    die_sound=wose-die.ogg
+    {DEFENSE_ANIM &quot;units/woses/wose-sapling-defend.png&quot; &quot;units/woses/wose-sapling.png&quot; wose-hit.ogg }
+    [abilities]
+        {ABILITY_AMBUSH}
+        {ABILITY_REGENERATES}
+    [/abilities]
+    [attack]
+        name=crush
+        description=_&quot;crush&quot;
+        icon=attacks/crush-wose.png
+        type=impact
+        range=melee
+        damage=6
+        number=2
+    [/attack]
+    [idle_anim]
+        {STANDARD_IDLE_FILTER}
+        start_time=0
+        [frame]
+            image=&quot;units/woses/wose-sapling-blink.png:750&quot;
+        [/frame]
+    [/idle_anim]
+    [attack_anim]
+        [filter_attack]
+            name=crush
+        [/filter_attack]
+        start_time=-500
+        {SOUND:HIT_AND_MISS wose-attack.ogg wose-miss.ogg -500}
+        [frame]
+            image=&quot;units/woses/wose-sapling.png:400&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/woses/wose-sapling-attack.png:150&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/woses/wose-sapling.png:75&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

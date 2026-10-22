@@ -1,0 +1,78 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ruler.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/orcs/Ruler.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Orcish Ruler
+    name= _ &quot;Orcish Ruler&quot;
+    race=orc
+    image=&quot;units/orcs/ruler.png&quot;
+    profile=&quot;portraits/orcs/ruler.webp&quot;
+    {LEADING_ANIM &quot;units/orcs/ruler-lead-2.png&quot; &quot;units/orcs/ruler-lead-1.png&quot; 0,-30}
+    hitpoints=60
+    movement_type=orcishfoot
+    movement=6
+    experience=102
+    level=2
+    alignment=chaotic
+    advances_to=Orcish Sovereign
+    cost=45
+    usage=mixed fighter
+    description= _ &quot;A common misconception about the hierarchy of orcish clans is the notion that orcs only value brute strength. Although the leader of a smaller orcish troop may be the strongest fighter amongst them, the ruler of a large tribe has the difficult task of stifling internal feuding and in-fighting — something that cannot be accomplished by force alone. Such an orc is inevitably the most shrewd and perceptive among his peers and has won the respect of his brethren through leadership rather than coercion.&quot;
+    die_sound={SOUND_LIST:ORC_DIE}
+    {DEFENSE_ANIM_RANGE &quot;units/orcs/ruler-defend-2.png&quot; &quot;units/orcs/ruler-defend-1.png&quot; {SOUND_LIST:ORC_HIT} melee}
+    {DEFENSE_ANIM_RANGE &quot;units/orcs/ruler-ranged-defend.png&quot; &quot;units/orcs/ruler-ranged.png&quot; {SOUND_LIST:ORC_HIT} ranged}
+    [abilities]
+        {ABILITY_LEADERSHIP}
+    [/abilities]
+    [attack]
+        name=greatsword
+        description=_&quot;greatsword&quot;
+        icon=attacks/greatsword-orcish.png
+        type=blade
+        range=melee
+        damage=9
+        number=3
+    [/attack]
+    [attack]
+        name=crossbow
+        description=_&quot;crossbow&quot;
+        icon=attacks/crossbow-orcish.png
+        type=pierce
+        range=ranged
+        damage=6
+        number=3
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=crossbow
+        [/filter_attack]
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        start_time=-300
+        {SOUND:HIT_AND_MISS crossbow.ogg crossbow-miss.ogg -300}
+        [frame]
+            image=&quot;units/orcs/ruler-ranged-attack-[1~2].png:150&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=greatsword
+        [/filter_attack]
+
+        offset=0.0~0.3,0.3~0.45,0.45~0.3,0.3~0.0
+        start_time=-300
+        [frame]
+            image=&quot;units/orcs/ruler.png:50&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/orcs/ruler-attack-sword-[1~6].png:[100*2,75,100*3]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}
+        [frame]
+            image=&quot;units/orcs/ruler.png:50&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

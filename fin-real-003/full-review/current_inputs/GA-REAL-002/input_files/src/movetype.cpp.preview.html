@@ -1,0 +1,937 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>movetype.cpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/movetype.cpp</h1><pre>/*
+	Copyright (C) 2014 - 2024
+	by David White &lt;dave@whitevine.net&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+/**
+ *  @file
+ *  Handle movement types.
+ */
+
+#include &quot;movetype.hpp&quot;
+
+#include &quot;game_board.hpp&quot;
+#include &quot;game_config_manager.hpp&quot;
+#include &quot;log.hpp&quot;
+#include &quot;map/map.hpp&quot;
+#include &quot;terrain/translation.hpp&quot;
+#include &quot;units/types.hpp&quot; // for attack_type
+
+static lg::log_domain log_config(&quot;config&quot;);
+#define ERR_CF LOG_STREAM(err, log_config)
+#define WRN_CF LOG_STREAM(warn, log_config)
+
+
+/* *** parameters *** */
+
+
+namespace { // Some functions for use with parameters::eval.
+
+	/** Converts config defense values to a &quot;max&quot; value. */
+	int config_to_max(int value)
+	{
+		return value &lt; 0 ? -value : value;
+	}
+
+	/** Converts config defense values to a &quot;min&quot; value. */
+	int config_to_min(int value)
+	{
+		return value &lt; 0 ? -value : 0;
+	}
+}
+
+
+/** The parameters used when calculating a terrain-based value. */
+struct movetype::terrain_info::parameters
+{
+	/** The smallest allowable value. */
+	int min_value;
+	/** The largest allowable value. */
+	int max_value;
+	/** The default value (if no data is available). */
+	int default_value;
+
+	/** Converter for values taken from a config. May be nullptr. */
+	int (*eval)(int);
+
+	/** Whether to look at underlying movement or defense terrains. */
+	bool use_move;
+	/** Whether we are looking for highest or lowest (unless inverted by the underlying terrain). */
+	bool high_is_good;
+
+	parameters(int min, int max, int (*eval_fun)(int)=nullptr, bool move=true, bool high=false) :
+		min_value(min), max_value(max), default_value(high ? min : max),
+		eval(eval_fun), use_move(move), high_is_good(high)
+	{}
+};
+
+
+/** Limits for movement, vision and jamming */
+const movetype::terrain_info::parameters
+	movetype::mvj_params_{1, movetype::UNREACHABLE};
+
+const movetype::terrain_info::parameters
+	movetype::terrain_defense::params_min_(0, 100, config_to_min, false, true);
+const movetype::terrain_info::parameters
+	movetype::terrain_defense::params_max_(0, 100, config_to_max, false, false);
+
+
+/* *** data *** */
+
+
+class movetype::terrain_info::data
+{
+public:
+	/**
+	 * Constructor.
+	 * @a params must be long-lived (typically a static variable).
+	 */
+	explicit data(const parameters &amp; params) :
+		cfg_(), cache_(), params_(params)
+	{}
+	/**
+	 * Constructor.
+	 * @a params must be long-lived (typically a static variable).
+	 */
+	data(const config &amp; cfg, const parameters &amp; params) :
+		cfg_(cfg), cache_(), params_(params)
+	{}
+
+	// The copy constructor does not bother copying the cache since
+	// typically the cache will be cleared shortly after the copy.
+	data(const data &amp; that) :
+		cfg_(that.cfg_), cache_(), params_(that.params_)
+	{}
+
+	/** Clears the cached data (presumably our fallback has changed). */
+	void clear_cache() const;
+	/** Tests if merging @a new_values would result in changes. */
+	bool config_has_changes(const config &amp; new_values, bool overwrite) const;
+	/** Tests for no data in this object. */
+	bool empty() const { return cfg_.empty(); }
+	/** Merges the given config over the existing costs. */
+	void merge(const config &amp; new_values, bool overwrite);
+	/** Read-only access to our parameters. */
+	const parameters &amp; params() const { return params_; }
+	/** Returns the value associated with the given terrain. */
+	int value(const t_translation::terrain_code &amp; terrain,
+	          const terrain_info * fallback) const
+	{ return value(terrain, fallback, 0); }
+	/** If there is data, writes it to the config. */
+	void write(config &amp; out_cfg, const std::string &amp; child_name) const;
+	/** If there is (merged) data, writes it to the config. */
+	void write(config &amp; out_cfg, const std::string &amp; child_name,
+	           const terrain_info * fallback) const;
+
+private:
+	/** Calculates the value associated with the given terrain. */
+	int calc_value(const t_translation::terrain_code &amp; terrain,
+	               const terrain_info * fallback, unsigned recurse_count) const;
+	/** Returns the value associated with the given terrain (possibly cached). */
+	int value(const t_translation::terrain_code &amp; terrain,
+	          const terrain_info * fallback, unsigned recurse_count) const;
+
+private:
+	typedef std::map&lt;t_translation::terrain_code, int&gt; cache_t;
+
+	/** Config describing the terrain values. */
+	config cfg_;
+	/** Cache of values based on the config. */
+	mutable cache_t cache_;
+	/** Various parameters used when calculating values. */
+	const parameters &amp; params_;
+};
+
+
+/**
+ * Clears the cached data (presumably our fallback has changed).
+ */
+void movetype::terrain_info::data::clear_cache() const
+{
+	cache_.clear();
+}
+
+
+/**
+ * Tests if merging @a new_values would result in changes.
+ * This allows the shared data to actually work, as otherwise each unit created
+ * via WML (including unstored units) would &quot;overwrite&quot; its movement data with
+ * a usually identical copy and thus break the sharing.
+ */
+bool movetype::terrain_info::data::config_has_changes(const config &amp; new_values,
+                                                      bool overwrite) const
+{
+	if ( overwrite ) {
+		for (const config::attribute &amp; a : new_values.attribute_range())
+			if ( a.second != cfg_[a.first] )
+				return true;
+	}
+	else {
+		for (const config::attribute &amp; a : new_values.attribute_range())
+			if ( a.second.to_int() != 0 )
+				return true;
+	}
+
+	// If we make it here, new_values has no changes for us.
+	return false;
+}
+
+
+/**
+ * Merges the given config over the existing costs.
+ *
+ * After calling this function, the caller must call clear_cache on any
+ * terrain_info that uses this one as a fallback.
+ *
+ * @param[in] new_values  The new values.
+ * @param[in] overwrite   If true, the new values overwrite the old.
+ *                        If false, the new values are added to the old.
+ */
+void movetype::terrain_info::data::merge(const config &amp; new_values, bool overwrite)
+{
+	if ( overwrite )
+		// We do not support child tags here, so do not copy any that might
+		// be in the input. (If in the future we need to support child tags,
+		// change &quot;merge_attributes&quot; to &quot;merge_with&quot;.)
+		cfg_.merge_attributes(new_values);
+	else {
+		for (const config::attribute &amp; a : new_values.attribute_range()) {
+			config::attribute_value &amp; dest = cfg_[a.first];
+			int old = dest.to_int(params_.max_value);
+
+			// The new value is the absolute value of the old plus the
+			// provided value, capped between minimum and maximum, then
+			// given the sign of the old value.
+			// (Think defenses for why we might have negative values.)
+			int value = std::abs(old) + a.second.to_int(0);
+			value = std::max(params_.min_value, std::min(value, params_.max_value));
+			if ( old &lt; 0 )
+				value = -value;
+
+			dest = value;
+		}
+	}
+
+	// The new data has invalidated the cache.
+	clear_cache();
+}
+
+
+/**
+ * If there is data, writes it to a config.
+ * @param[out] out_cfg     The config that will receive the data.
+ * @param[in]  child_name  If not empty, create and write to a child config with this tag.
+ *                         This child will *not* be created if there is no data to write.
+ */
+void movetype::terrain_info::data::write(
+	config &amp; out_cfg, const std::string &amp; child_name) const
+{
+	if ( cfg_.empty() )
+		return;
+
+	if ( child_name.empty() )
+		out_cfg.merge_with(cfg_);
+	else
+		out_cfg.add_child(child_name, cfg_);
+}
+
+
+/**
+ * Writes merged data to a config.
+ * @param[out] out_cfg     The config that will receive the data.
+ * @param[in]  child_name  If not empty, create and write to a child config with this tag.
+ *                         This *will* be created even if there is no data to write.
+ * @param[in]  fallback    If not nullptr, its data will be merged with ours for the write.
+ */
+void movetype::terrain_info::data::write(
+	config &amp; out_cfg, const std::string &amp; child_name, const terrain_info * fallback) const
+{
+	// Get a place to write to.
+	config &amp; merged = child_name.empty() ? out_cfg : out_cfg.add_child(child_name);
+
+	if ( fallback )
+		fallback-&gt;write(merged, &quot;&quot;, true);
+	merged.merge_with(cfg_);
+}
+
+
+/**
+ * Calculates the value associated with the given terrain.
+ * This is separate from value() to separate the calculating of the
+ * value from the caching of it.
+ * @param[in]  terrain        The terrain whose value is requested.
+ * @param[in]  fallback       Consulted if we are missing data.
+ * @param[in]  recurse_count  Detects (probable) infinite recursion.
+ */
+int movetype::terrain_info::data::calc_value(
+	const t_translation::terrain_code &amp; terrain,
+	const terrain_info * fallback,
+	unsigned recurse_count) const
+{
+	// Infinite recursion detection:
+	if ( recurse_count &gt; 100 ) {
+		ERR_CF &lt;&lt; &quot;infinite terrain_info recursion on &quot;
+		       &lt;&lt; (params_.use_move ? &quot;movement&quot; : &quot;defense&quot;) &lt;&lt; &quot;: &quot;
+			   &lt;&lt; t_translation::write_terrain_code(terrain)
+			   &lt;&lt; &quot; depth &quot; &lt;&lt; recurse_count;
+		return params_.default_value;
+	}
+
+	std::shared_ptr&lt;terrain_type_data&gt; tdata;
+	if (game_config_manager::get()){
+		tdata = game_config_manager::get()-&gt;terrain_types(); //This permits to get terrain info in unit help pages from the help in title screen, even if there is no residual gamemap object
+	}
+	assert(tdata);
+
+	// Get a list of underlying terrains.
+	const t_translation::ter_list &amp; underlying = params_.use_move ?
+			tdata-&gt;underlying_mvt_terrain(terrain) :
+			tdata-&gt;underlying_def_terrain(terrain);
+
+	if (terrain_type::is_indivisible(terrain, underlying))
+	{
+		// This is not an alias; get the value directly.
+		int result = params_.default_value;
+
+		const std::string &amp; id = tdata-&gt;get_terrain_info(terrain).id();
+		if (const config::attribute_value *val = cfg_.get(id)) {
+			// Read the value from our config.
+			result = val-&gt;to_int(params_.default_value);
+			if ( params_.eval != nullptr )
+				result = params_.eval(result);
+		}
+		else if ( fallback != nullptr ) {
+			// Get the value from our fallback.
+			result = fallback-&gt;value(terrain);
+		}
+
+		// Validate the value.
+		if ( result &lt; params_.min_value ) {
+			WRN_CF &lt;&lt; &quot;Terrain &#x27;&quot; &lt;&lt; terrain &lt;&lt; &quot;&#x27; has evaluated to &quot; &lt;&lt; result
+				   &lt;&lt; &quot; (&quot; &lt;&lt; (params_.use_move ? &quot;cost&quot; : &quot;defense&quot;)
+			       &lt;&lt; &quot;), which is less than &quot; &lt;&lt; params_.min_value
+			       &lt;&lt; &quot;; resetting to &quot; &lt;&lt; params_.min_value &lt;&lt; &quot;.&quot;;
+			result = params_.min_value;
+		}
+		if ( result &gt; params_.max_value ) {
+			WRN_CF &lt;&lt; &quot;Terrain &#x27;&quot; &lt;&lt; terrain &lt;&lt; &quot;&#x27; has evaluated to &quot; &lt;&lt; result
+				   &lt;&lt; &quot; (&quot; &lt;&lt; (params_.use_move ? &quot;cost&quot; : &quot;defense&quot;)
+				   &lt;&lt; &quot;), which is more than &quot; &lt;&lt; params_.max_value
+			       &lt;&lt; &quot;; resetting to &quot; &lt;&lt; params_.max_value &lt;&lt; &quot;.&quot;;
+			result = params_.max_value;
+		}
+
+		return result;
+	}
+	else
+	{
+		// This is an alias; select the best of all underlying terrains.
+		bool prefer_high = params_.high_is_good;
+		int result = params_.default_value;
+		if ( underlying.front() == t_translation::MINUS )
+			// Use the other value as the initial value.
+			result =  result == params_.max_value ? params_.min_value :
+			                                        params_.max_value;
+
+		// Loop through all underlying terrains.
+		t_translation::ter_list::const_iterator i;
+		for ( i = underlying.begin(); i != underlying.end(); ++i )
+		{
+			if ( *i == t_translation::PLUS ) {
+				// Prefer what is good.
+				prefer_high = params_.high_is_good;
+			}
+			else if ( *i == t_translation::MINUS ) {
+				// Prefer what is bad.
+				prefer_high = !params_.high_is_good;
+			}
+			else {
+				// Test the underlying terrain&#x27;s value against the best so far.
+				const int num = value(*i, fallback, recurse_count + 1);
+
+				if ( ( prefer_high  &amp;&amp;  num &gt; result)  ||
+					 (!prefer_high  &amp;&amp;  num &lt; result) )
+					result = num;
+			}
+		}
+
+		return result;
+	}
+}
+
+
+/**
+ * Returns the value associated with the given terrain (possibly cached).
+ * @param[in]  terrain        The terrain whose value is requested.
+ * @param[in]  fallback       Consulted if we are missing data.
+ * @param[in]  recurse_count  Detects (probable) infinite recursion.
+ */
+int movetype::terrain_info::data::value(
+	const t_translation::terrain_code &amp; terrain,
+	const terrain_info * fallback,
+	unsigned recurse_count) const
+{
+	// Check the cache.
+	std::pair&lt;cache_t::iterator, bool&gt; cache_it =
+		cache_.emplace(terrain, -127); // Bogus value that should never be seen.
+	if ( cache_it.second )
+		// The cache did not have an entry for this terrain, so calculate the value.
+		cache_it.first-&gt;second = calc_value(terrain, fallback, recurse_count);
+
+	return cache_it.first-&gt;second;
+}
+
+
+/* *** terrain_info *** */
+
+
+/**
+ * Constructor.
+ * @param[in] params    The parameters to use when calculating values.
+ *                      This is stored as a reference, so it must be long-lived (typically a static variable).
+ * @param[in] fallback  Used as a backup in case we are asked for data we do not have (think vision costs falling back to movement costs).
+ */
+movetype::terrain_info::terrain_info(const parameters &amp; params,
+	const terrain_info * fallback) :
+	unique_data_(new data(params)),
+	fallback_(fallback)
+{
+}
+
+
+/**
+ * Constructor.
+ * @param[in] cfg       An initial data set.
+ * @param[in] params    The parameters to use when calculating values.
+ *                      This is stored as a reference, so it must be long-lived (typically a static variable).
+ * @param[in] fallback  Used as a backup in case we are asked for data we do not have (think vision costs falling back to movement costs).
+ */
+movetype::terrain_info::terrain_info(const config &amp; cfg, const parameters &amp; params,
+	const terrain_info * fallback) :
+	unique_data_(new data(cfg, params)),
+	fallback_(fallback)
+{
+}
+
+/**
+ * Reverse of terrain_costs::write. Never returns nullptr.
+ * @param[in] cfg An initial data set
+ */
+std::unique_ptr&lt;movetype::terrain_costs&gt; movetype::read_terrain_costs(const config &amp; cfg)
+{
+	return std::make_unique&lt;terrain_info&gt; (cfg, movetype::mvj_params_, nullptr);
+}
+
+/**
+ * Copy constructor for callers that handle the fallback and cascade. This is
+ * intended for terrain_defense or movetype&#x27;s copy constructors, where a
+ * similar set of terrain_infos will be created, complete with the same
+ * relationships between parts of the set.
+ *
+ * @param[in] that      The terrain_info to copy.
+ * @param[in] fallback  Used as a backup in case we are asked for data we do not have (think vision costs falling back to movement costs).
+ */
+movetype::terrain_info::terrain_info(const terrain_info &amp; that,
+	const terrain_info * fallback) :
+	fallback_(fallback)
+{
+	assert(fallback ? !! that.fallback_ : ! that.fallback_);
+	copy_data(that);
+}
+
+movetype::terrain_info::terrain_info(terrain_info &amp;&amp; that,
+	const terrain_info * fallback) :
+	fallback_(fallback)
+{
+	assert(fallback ? !! that.fallback_ : ! that.fallback_);
+	swap_data(that);
+}
+
+/**
+ * Destructor
+ *
+ * While this is simply the default destructor, it needs
+ * to be defined in this file so that it knows about ~data(), which
+ * is called from the smart pointers&#x27; destructor.
+ */
+movetype::terrain_info::~terrain_info() = default;
+
+/**
+ * This is only expected to be called either when
+ * 1) both this and @a that have no siblings, as happens when terrain_defense is copied, or
+ * 2) all of the siblings are being copied, as happens when movetype is copied.
+ */
+void movetype::terrain_info::copy_data(const movetype::terrain_info &amp; that)
+{
+	that.make_data_shareable();
+	this-&gt;unique_data_.reset();
+	this-&gt;shared_data_ = that.shared_data_;
+}
+
+/**
+ * Swap function for the terrain_info class
+ *
+ * This is only expected to be called either when
+ * 1) both this and @a that have no siblings, as happens when swapping two terrain_defenses, or
+ * 2) all of the siblings are being swapped, as happens when two movetypes are swapped.
+ */
+void movetype::terrain_info::swap_data(movetype::terrain_info &amp; that)
+{
+	// It doesn&#x27;t matter whether they&#x27;re both unique, both shared, or
+	// one unique with the other shared.
+	std::swap(this-&gt;unique_data_, that.unique_data_);
+	std::swap(this-&gt;shared_data_, that.shared_data_);
+}
+/**
+ * Swap function for the terrain_defense class
+ *
+ * This relies on all of the terrain_infos having no fallback and no cascade,
+ * an assumption which is provided by terrain_defense&#x27;s constructors.
+ */
+void swap(movetype::terrain_defense &amp; a, movetype::terrain_defense &amp; b)
+{
+	a.min_.swap_data(b.min_);
+	a.max_.swap_data(b.max_);
+}
+
+/**
+ * Swap function for the movetype class, including its terrain_info members
+ *
+ * This relies on the two sets of the terrain_infos having their movement,
+ * vision and jamming cascaded in the same way. This assumption is provided by
+ * movetype&#x27;s constructors.
+ */
+void swap(movetype &amp; a, movetype &amp; b)
+{
+	a.movement_.swap_data(b.movement_);
+	a.vision_.swap_data(b.vision_);
+	a.jamming_.swap_data(b.jamming_);
+	swap(a.defense_, b.defense_);
+	std::swap(a.resist_, b.resist_);
+	std::swap(a.flying_, b.flying_);
+	std::swap(a.special_notes_, b.special_notes_);
+}
+
+movetype &amp; movetype::operator=(const movetype &amp; that)
+{
+	movetype m(that);
+	swap(*this, m);
+	return *this;
+}
+
+movetype &amp; movetype::operator=(movetype &amp;&amp; that)
+{
+	swap(*this, that);
+	return *this;
+}
+
+/**
+ * Returns whether or not our data is empty.
+ */
+bool movetype::terrain_info::empty() const
+{
+	return get_data().empty();
+}
+
+
+/**
+ * Merges the given config over the existing values.
+ * @param[in] new_values  The new values.
+ * @param[in] overwrite   If true, the new values overwrite the old.
+ *                        If false, the new values are added to the old.
+ * @param[in] dependants  Other instances that use this as a fallback.
+ */
+void movetype::terrain_info::merge(const config &amp; new_values, bool overwrite,
+	const std::vector&lt;movetype::terrain_info * &gt; &amp; dependants)
+{
+	if ( !get_data().config_has_changes(new_values, overwrite) )
+		// Nothing will change, so skip the copy-on-write.
+		return;
+
+	// Copy-on-write.
+	//
+	// We also need to make our cascade writeable, because changes to this
+	// instance will change data that they receive when using this as their
+	// fallback. However, it&#x27;s no problem for a writable instance to have a
+	// shareable instance as its fallback.
+	make_data_writable();
+	for (auto &amp; dependant : dependants) {
+		// This will automatically clear the dependant&#x27;s cache
+		dependant-&gt;make_data_writable();
+	}
+
+	unique_data_-&gt;merge(new_values, overwrite);
+}
+
+
+/**
+ * Returns the value associated with the given terrain.
+ */
+int movetype::terrain_info::value(const t_translation::terrain_code &amp; terrain) const
+{
+	return get_data().value(terrain, fallback_);
+}
+
+/**
+ * Writes our data to a config.
+ * @param[out] cfg         The config that will receive the data.
+ * @param[in]  child_name  If not empty, create and write to a child config with this tag.
+ * @param[in]  merged      If true, our data will be merged with our fallback&#x27;s, and it is possible an empty child will be created.
+ *                         If false, data will not be merged, and an empty child will not be created.
+ */
+void movetype::terrain_info::write(config &amp; cfg, const std::string &amp; child_name,
+                                   bool merged) const
+{
+	if ( !merged )
+		get_data().write(cfg, child_name);
+	else
+		get_data().write(cfg, child_name, fallback_);
+}
+
+
+/**
+ * Does a sufficiently deep copy so that the returned object&#x27;s lifespan
+ * is independent of other objects&#x27; lifespan. Never returns nullptr.
+ *
+ * This implements terrain_costs&#x27;s virtual method for getting an instance that
+ * doesn&#x27;t depend on the lifespan of a terrain_defense or movetype object.
+ * This will do a deep copy of the data (with fallback_ already merged) if
+ * needed.
+ */
+std::unique_ptr&lt;movetype::terrain_costs&gt; movetype::terrain_info::make_standalone() const
+{
+	std::unique_ptr&lt;terrain_costs&gt; t;
+	if(!fallback_) {
+		// Call the copy constructor, which will make_data_shareable().
+		t = std::make_unique&lt;terrain_info&gt;(*this, nullptr);
+	}
+	else if(get_data().empty()) {
+		// Pure fallback.
+		t = fallback_-&gt;make_standalone();
+	}
+	else {
+		// Need to merge data.
+		config merged;
+		write(merged, &quot;&quot;, true);
+		t = std::make_unique&lt;terrain_info&gt;(merged, get_data().params(), nullptr);
+	}
+	return t;
+}
+
+const movetype::terrain_info::data &amp; movetype::terrain_info::get_data() const
+{
+	assert(unique_data_ || shared_data_);
+	assert(! (unique_data_ &amp;&amp; shared_data_));
+	if(unique_data_)
+		return *unique_data_;
+	return *shared_data_;
+}
+
+/**
+ * Copy the immutable data back to unique_data_, no-op if the data
+ * is already in unique_data_.
+ *
+ * Ensures our data is not shared, and therefore that changes only
+ * affect this instance of terrain_info (and any instances using it
+ * as a fallback).
+ *
+ * This does not need to affect the fallback - it&#x27;s no problem if a
+ * writable instance has a fallback to a shareable instance, although
+ * a shareable instance must not fallback to a writable instance.
+ */
+void movetype::terrain_info::make_data_writable() const
+{
+	if(!unique_data_)
+	{
+		// Const hack because this is not really changing the data.
+		auto t = const_cast&lt;terrain_info *&gt;(this);
+		t-&gt;unique_data_.reset(new data(*shared_data_));
+		t-&gt;shared_data_.reset();
+	}
+
+	// As we&#x27;re about to write data, invalidate the cache
+	unique_data_-&gt;clear_cache();
+}
+
+/**
+ * Move data to an immutable copy in shared_data_, no-op if the data
+ * is already in shared_data_.
+ *
+ * This is recursive on the fallback chain, because if the data shouldn&#x27;t be
+ * writable then the data shouldn&#x27;t be writable via the fallback either.
+ */
+void movetype::terrain_info::make_data_shareable() const
+{
+	if(!unique_data_)
+		return;
+
+	if(fallback_)
+		fallback_-&gt;make_data_shareable();
+
+	// Const hack because this is not really changing the data.
+	auto t = const_cast&lt;terrain_info *&gt;(this);
+	t-&gt;shared_data_ = std::move(t-&gt;unique_data_);
+}
+
+/* *** terrain_defense *** */
+
+movetype::terrain_defense::terrain_defense(const terrain_defense &amp; that) :
+	min_(that.min_, nullptr),
+	max_(that.max_, nullptr)
+{
+}
+
+movetype::terrain_defense::terrain_defense(terrain_defense &amp;&amp; that) :
+	min_(std::move(that.min_), nullptr),
+	max_(std::move(that.max_), nullptr)
+{
+}
+
+movetype::terrain_defense &amp; movetype::terrain_defense::operator=(const terrain_defense &amp; that)
+{
+	min_.copy_data(that.min_);
+	max_.copy_data(that.max_);
+	return *this;
+}
+
+movetype::terrain_defense &amp; movetype::terrain_defense::operator=(terrain_defense &amp;&amp; that)
+{
+	min_.swap_data(that.min_);
+	max_.swap_data(that.max_);
+	return *this;
+}
+/**
+ * Merges the given config over the existing costs.
+ * (Not overwriting implies adding.)
+ */
+void movetype::terrain_defense::merge(const config &amp; new_data, bool overwrite)
+{
+	min_.merge(new_data, overwrite, {});
+	max_.merge(new_data, overwrite, {});
+}
+
+/* *** resistances *** */
+
+
+/**
+ * Returns a map from attack types to resistances.
+ */
+utils::string_map_res movetype::resistances::damage_table() const
+{
+	utils::string_map_res result;
+
+	for (const config::attribute &amp; attrb : cfg_.attribute_range()) {
+		result[attrb.first] = attrb.second;
+	}
+
+	return result;
+}
+
+
+/**
+ * Returns the resistance against the indicated attack.
+ */
+int movetype::resistances::resistance_against(const attack_type &amp; attack) const
+{
+	std::pair&lt;std::string, std::string&gt; types = attack.damage_type();
+	int res = resistance_against(types.first);
+	if(!(types.second).empty()){
+		res = std::max(res, resistance_against(types.second));
+	}
+	return res;
+}
+
+
+/**
+ * Returns the resistance against the indicated damage type.
+ */
+int movetype::resistances::resistance_against(const std::string &amp; damage_type) const
+{
+	return cfg_[damage_type].to_int(100);
+}
+
+
+/**
+ * Merges the given config over the existing costs.
+ * If @a overwrite is false, the new values will be added to the old.
+ */
+void movetype::resistances::merge(const config &amp; new_data, bool overwrite)
+{
+	if ( overwrite )
+		// We do not support child tags here, so do not copy any that might
+		// be in the input. (If in the future we need to support child tags,
+		// change &quot;merge_attributes&quot; to &quot;merge_with&quot;.)
+		cfg_.merge_attributes(new_data);
+	else
+		for (const config::attribute &amp; a : new_data.attribute_range()) {
+			config::attribute_value &amp; dest = cfg_[a.first];
+			dest = std::max(0, dest.to_int(100) + a.second.to_int(0));
+		}
+}
+
+
+/**
+ * Writes our data to a config, as a child if @a child_name is specified.
+ * (No child is created if there is no data.)
+ */
+void movetype::resistances::write(config &amp; out_cfg, const std::string &amp; child_name) const
+{
+	if ( cfg_.empty() )
+		return;
+
+	if ( child_name.empty() )
+		out_cfg.merge_with(cfg_);
+	else
+		out_cfg.add_child(child_name, cfg_);
+}
+
+
+/* *** movetype *** */
+
+
+/**
+ * Default constructor
+ */
+movetype::movetype() :
+	movement_(mvj_params_, nullptr),
+	vision_(mvj_params_, &amp;movement_),
+	jamming_(mvj_params_, &amp;vision_),
+	defense_(),
+	resist_(),
+	flying_(false),
+	special_notes_()
+{
+}
+
+
+/**
+ * Constructor from a config
+ */
+movetype::movetype(const config &amp; cfg) :
+	movement_(cfg.child_or_empty(&quot;movement_costs&quot;), mvj_params_, nullptr),
+	vision_(cfg.child_or_empty(&quot;vision_costs&quot;), mvj_params_, &amp;movement_),
+	jamming_(cfg.child_or_empty(&quot;jamming_costs&quot;), mvj_params_, &amp;vision_),
+	defense_(cfg.child_or_empty(&quot;defense&quot;)),
+	resist_(cfg.child_or_empty(&quot;resistance&quot;)),
+	flying_(cfg[&quot;flies&quot;].to_bool(false))
+{
+	// 1.15 will support both &quot;flying&quot; and &quot;flies&quot;, with &quot;flies&quot; being deprecated
+	flying_ = cfg[&quot;flying&quot;].to_bool(flying_);
+
+	for(const config&amp; sn : cfg.child_range(&quot;special_note&quot;)) {
+		special_notes_.push_back(sn[&quot;note&quot;]);
+	}
+}
+
+
+/**
+ * Copy constructor
+ */
+movetype::movetype(const movetype &amp; that) :
+	movement_(that.movement_, nullptr),
+	vision_(that.vision_, &amp;movement_),
+	jamming_(that.jamming_, &amp;vision_),
+	defense_(that.defense_),
+	resist_(that.resist_),
+	flying_(that.flying_),
+	special_notes_(that.special_notes_)
+{
+}
+
+/**
+ * Move constructor.
+ */
+movetype::movetype(movetype &amp;&amp; that) :
+	movement_(std::move(that.movement_), nullptr),
+	vision_(std::move(that.vision_), &amp;movement_),
+	jamming_(std::move(that.jamming_), &amp;vision_),
+	defense_(std::move(that.defense_)),
+	resist_(std::move(that.resist_)),
+	flying_(std::move(that.flying_)),
+	special_notes_(std::move(that.special_notes_))
+{
+}
+
+/**
+ * Checks if we have a defense cap (nontrivial min value) for any of the given terrain types.
+ */
+bool movetype::has_terrain_defense_caps(const std::set&lt;t_translation::terrain_code&gt; &amp; ts) const {
+	for (const t_translation::terrain_code &amp; t : ts) {
+		if (defense_.capped(t))
+			return true;
+	}
+	return false;
+}
+
+void movetype::merge(const config &amp; new_cfg, bool overwrite)
+{
+	for (const auto &amp; applies_to : movetype::effects) {
+		for (const config &amp; child : new_cfg.child_range(applies_to)) {
+			merge(child, applies_to, overwrite);
+		}
+	}
+
+	// &quot;flies&quot; is used when WML defines a movetype.
+	// &quot;flying&quot; is used when WML defines a unit.
+	// It&#x27;s easier to support both than to track which case we are in.
+	// Note: in 1.15 &quot;flies&quot; is deprecated, with &quot;flying&quot; preferred in movetype too.
+	flying_ = new_cfg[&quot;flies&quot;].to_bool(flying_);
+	flying_ = new_cfg[&quot;flying&quot;].to_bool(flying_);
+}
+
+void movetype::merge(const config &amp; new_cfg, const std::string &amp; applies_to, bool overwrite)
+{
+	if(applies_to == &quot;movement_costs&quot;) {
+		movement_.merge(new_cfg, overwrite, {&amp;vision_, &amp;jamming_});
+	}
+	else if(applies_to == &quot;vision_costs&quot;) {
+		vision_.merge(new_cfg, overwrite, {&amp;jamming_});
+	}
+	else if(applies_to == &quot;jamming_costs&quot;) {
+		jamming_.merge(new_cfg, overwrite, {});
+	}
+	else if(applies_to == &quot;defense&quot;) {
+		defense_.merge(new_cfg, overwrite);
+	}
+	else if(applies_to == &quot;resistance&quot;) {
+		resist_.merge(new_cfg, overwrite);
+	}
+	else {
+		ERR_CF &lt;&lt; &quot;movetype::merge with unknown applies_to: &quot; &lt;&lt; applies_to;
+	}
+}
+
+/**
+ * The set of strings defining effects which apply to movetypes.
+ */
+const std::set&lt;std::string&gt; movetype::effects {&quot;movement_costs&quot;,
+	&quot;vision_costs&quot;, &quot;jamming_costs&quot;, &quot;defense&quot;, &quot;resistance&quot;};
+
+void movetype::write(config&amp; cfg, bool include_notes) const
+{
+	movement_.write(cfg, &quot;movement_costs&quot;, false);
+	vision_.write(cfg, &quot;vision_costs&quot;, false);
+	jamming_.write(cfg, &quot;jamming_costs&quot;, false);
+	defense_.write(cfg, &quot;defense&quot;);
+	resist_.write(cfg, &quot;resistance&quot;);
+
+	if(flying_)
+		cfg[&quot;flying&quot;] = true;
+
+	if(include_notes) {
+		for(const auto&amp; note : special_notes_) {
+			cfg.add_child(&quot;special_note&quot;, config{&quot;note&quot;, note});
+		}
+	}
+}
+</pre></main></body></html>

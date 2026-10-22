@@ -1,0 +1,183 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>race.cpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/race.cpp</h1><pre>/*
+	Copyright (C) 2003 - 2024
+	by David White &lt;dave@whitevine.net&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+/**
+ *  @file
+ *  Generate race-specific unit-names.
+ */
+
+#include &quot;units/race.hpp&quot;
+
+#include &quot;filesystem.hpp&quot;
+#include &quot;log.hpp&quot;
+#include &quot;serialization/string_utils.hpp&quot;
+#include &quot;serialization/unicode_cast.hpp&quot;
+#include &quot;utils/name_generator.hpp&quot;
+#include &quot;utils/name_generator_factory.hpp&quot;
+
+static lg::log_domain log_wml(&quot;wml&quot;);
+#define ERR_WML LOG_STREAM(err, log_wml)
+
+/** Dummy race used when a race is not yet known. */
+const unit_race unit_race::null_race;
+/** Standard string id (not translatable) for FEMALE */
+const std::string unit_race::s_female(&quot;female&quot;);
+/** Standard string id (not translatable) for MALE */
+const std::string unit_race::s_male(&quot;male&quot;);
+
+
+static const config &amp;empty_traits() {
+		static config cfg;
+		return cfg;
+}
+
+static const config &amp;empty_topics() {
+		static config cfg;
+		return cfg;
+}
+
+unit_race::unit_race() :
+		cfg_(),
+		id_(),
+		name_(),
+		plural_name_(),
+		description_(),
+		ntraits_(0),
+		traits_(empty_traits().child_range(&quot;trait&quot;)),
+		topics_(empty_topics().child_range(&quot;topic&quot;)),
+		global_traits_(true),
+		undead_variation_(),
+		help_taxonomy_()
+{
+	for(auto&amp; generator : name_generator_) {
+		generator.reset(new name_generator());
+	}
+}
+
+unit_race::unit_race(const config&amp; cfg) :
+		cfg_(cfg),
+		id_(cfg[&quot;id&quot;]),
+		icon_(cfg[&quot;editor_icon&quot;]),
+		plural_name_(cfg[&quot;plural_name&quot;].t_str()),
+		description_(cfg[&quot;description&quot;].t_str()),
+		ntraits_(cfg[&quot;num_traits&quot;]),
+		traits_(cfg.child_range(&quot;trait&quot;)),
+		topics_(cfg.child_range(&quot;topic&quot;)),
+		global_traits_(!cfg[&quot;ignore_global_traits&quot;].to_bool()),
+		undead_variation_(cfg[&quot;undead_variation&quot;]),
+		help_taxonomy_(cfg[&quot;help_taxonomy&quot;])
+
+{
+	if (plural_name_.empty()) {
+		lg::log_to_chat() &lt;&lt; &quot;[race] id=&#x27;&quot; &lt;&lt; id_ &lt;&lt; &quot;&#x27; is missing a plural_name field.\n&quot;;
+		ERR_WML &lt;&lt; &quot;[race] id=&#x27;&quot; &lt;&lt; id_ &lt;&lt; &quot;&#x27; is missing a plural_name field.&quot;;
+		plural_name_ = (cfg[&quot;name&quot;]);
+	}
+
+	// use &quot;name&quot; if &quot;male_name&quot; or &quot;female_name&quot; aren&#x27;t available
+	name_[MALE] = cfg[&quot;male_name&quot;];
+	if(name_[MALE].empty()) {
+		name_[MALE] = (cfg[&quot;name&quot;]);
+	}
+	name_[FEMALE] = cfg[&quot;female_name&quot;];
+	if(name_[FEMALE].empty()) {
+		name_[FEMALE] = (cfg[&quot;name&quot;]);
+	}
+	if(std::any_of(name_.begin(), name_.end(), [](const auto&amp; n) { return n.empty(); })) {
+		lg::log_to_chat()
+			&lt;&lt; &quot;[race] id=&#x27;&quot; &lt;&lt; id_
+			&lt;&lt; &quot;&#x27; is missing a singular name field (either &#x27;name&#x27; or both &#x27;male_name&#x27; and &#x27;female_name&#x27;).\n&quot;;
+		ERR_WML &lt;&lt; &quot;[race] id&#x27;&quot; &lt;&lt; id_
+				&lt;&lt; &quot;&#x27; is missing a singular name field (either &#x27;name&#x27; or both &#x27;male_name&#x27; and &#x27;female_name&#x27;).&quot;;
+	}
+
+	name_generator_factory generator_factory = name_generator_factory(cfg, {&quot;male&quot;, &quot;female&quot;});
+
+	for(int i=MALE; i&lt;NUM_GENDERS; i++) {
+		GENDER gender = static_cast&lt;GENDER&gt;(i);
+		name_generator_[i] = generator_factory.get_name_generator(gender_string(gender));
+	}
+}
+
+std::string unit_race::generate_name(unit_race::GENDER gender) const
+{
+	return name_generator_[gender]-&gt;generate();
+}
+
+const name_generator&amp; unit_race::generator(unit_race::GENDER gender) const
+{
+	return *name_generator_[gender];
+}
+
+bool unit_race::uses_global_traits() const
+{
+	return global_traits_;
+}
+
+const config::const_child_itors &amp;unit_race::additional_traits() const
+{
+	return traits_;
+}
+
+const config::const_child_itors &amp;unit_race::additional_topics() const
+{
+	return topics_;
+}
+
+unsigned int unit_race::num_traits() const { return ntraits_; }
+
+
+const std::string&amp; gender_string(unit_race::GENDER gender) {
+	switch(gender) {
+	case unit_race::FEMALE:
+		return unit_race::s_female;
+	default:
+	case unit_race::MALE:
+		return unit_race::s_male;
+	}
+}
+
+unit_race::GENDER string_gender(const std::string&amp; str, unit_race::GENDER def) {
+	if ( str == unit_race::s_male ) {
+		return unit_race::MALE;
+	} else if ( str == unit_race::s_female ) {
+		return unit_race::FEMALE;
+	}
+	return def;
+}
+
+const config::attribute_value &amp; gender_value(
+    const config &amp; cfg, unit_race::GENDER gender, const std::string &amp; male_key,
+    const std::string &amp; female_key, const std::string &amp; default_key)
+{
+    return cfg.get_or(gender == unit_race::MALE ? male_key : female_key, default_key);
+}
+
+std::string unit_race::get_icon_path_stem() const
+{
+	if(!icon_.empty()) {
+		return icon_;
+	}
+
+	std::string path = &quot;icons/unit-groups/race_&quot; + id_;
+
+	// FIXME: hardcoded &#x27;30&#x27; is bad...
+	if(!filesystem::file_exists(filesystem::get_binary_file_location(&quot;images&quot;, path + &quot;_30.png&quot;))) {
+		path = &quot;icons/unit-groups/race_custom&quot;;
+	}
+
+	return path;
+}
+</pre></main></body></html>

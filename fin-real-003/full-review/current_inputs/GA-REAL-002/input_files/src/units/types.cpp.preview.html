@@ -1,0 +1,1513 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>types.cpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/types.cpp</h1><pre>/*
+	Copyright (C) 2003 - 2024
+	by David White &lt;dave@whitevine.net&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+/**
+ *  @file
+ *  Handle unit-type specific attributes, animations, advancement.
+ */
+
+#include &quot;units/types.hpp&quot;
+
+#include &quot;formula/callable_objects.hpp&quot;
+#include &quot;game_config.hpp&quot;
+#include &quot;game_errors.hpp&quot; //thrown sometimes
+#include &quot;language.hpp&quot; // for string_table
+#include &quot;log.hpp&quot;
+#include &quot;units/abilities.hpp&quot;
+#include &quot;units/animation.hpp&quot;
+#include &quot;units/unit.hpp&quot;
+#include &quot;utils/iterable_pair.hpp&quot;
+
+#include &quot;gui/auxiliary/typed_formula.hpp&quot;
+#include &quot;gui/dialogs/loading_screen.hpp&quot;
+
+#include &lt;boost/range/algorithm_ext/erase.hpp&gt;
+
+#include &lt;array&gt;
+#include &lt;locale&gt;
+
+static lg::log_domain log_config(&quot;config&quot;);
+#define ERR_CF LOG_STREAM(err, log_config)
+#define WRN_CF LOG_STREAM(warn, log_config)
+#define LOG_CONFIG LOG_STREAM(info, log_config)
+#define DBG_CF LOG_STREAM(debug, log_config)
+
+static lg::log_domain log_unit(&quot;unit&quot;);
+#define DBG_UT LOG_STREAM(debug, log_unit)
+#define LOG_UT LOG_STREAM(info, log_unit)
+#define ERR_UT LOG_STREAM(err, log_unit)
+
+/* ** unit_type ** */
+
+unit_type::unit_type(const unit_type&amp; o)
+	: cfg_(o.cfg_)
+	, id_(o.id_)
+	, debug_id_(o.debug_id_)
+	, parent_id_(o.parent_id_)
+	, base_unit_id_(o.base_unit_id_)
+	, type_name_(o.type_name_)
+	, description_(o.description_)
+	, hitpoints_(o.hitpoints_)
+	, hp_bar_scaling_(o.hp_bar_scaling_)
+	, xp_bar_scaling_(o.xp_bar_scaling_)
+	, level_(o.level_)
+	, recall_cost_(o.recall_cost_)
+	, movement_(o.movement_)
+	, vision_(o.vision_)
+	, jamming_(o.jamming_)
+	, max_attacks_(o.max_attacks_)
+	, cost_(o.cost_)
+	, usage_(o.usage_)
+	, undead_variation_(o.undead_variation_)
+	, image_(o.image_)
+	, icon_(o.icon_)
+	, small_profile_(o.small_profile_)
+	, profile_(o.profile_)
+	, flag_rgb_(o.flag_rgb_)
+	, num_traits_(o.num_traits_)
+	, variations_(o.variations_)
+	, default_variation_(o.default_variation_)
+	, variation_name_(o.variation_name_)
+	, race_(o.race_)
+	, abilities_(o.abilities_)
+	, adv_abilities_(o.adv_abilities_)
+	, zoc_(o.zoc_)
+	, hide_help_(o.hide_help_)
+	, do_not_list_(o.do_not_list_)
+	, advances_to_(o.advances_to_)
+	, experience_needed_(o.experience_needed_)
+	, alignment_(o.alignment_)
+	, movement_type_(o.movement_type_)
+	, possible_traits_(o.possible_traits_)
+	, genders_(o.genders_)
+	, animations_(o.animations_)
+	, build_status_(o.build_status_)
+{
+	gender_types_[0].reset(gender_types_[0] != nullptr ? new unit_type(*o.gender_types_[0]) : nullptr);
+	gender_types_[1].reset(gender_types_[1] != nullptr ? new unit_type(*o.gender_types_[1]) : nullptr);
+}
+
+unit_type::unit_type(defaut_ctor_t, const config&amp; cfg, const std::string &amp; parent_id)
+	: cfg_(nullptr)
+	, built_cfg_()
+	, has_cfg_build_()
+	, id_(cfg.has_attribute(&quot;id&quot;) ? cfg[&quot;id&quot;].str() : parent_id)
+	, debug_id_()
+	, parent_id_(!parent_id.empty() ? parent_id : id_)
+	, base_unit_id_()
+	, type_name_()
+	, description_()
+	, hitpoints_(0)
+	, hp_bar_scaling_(0.0)
+	, xp_bar_scaling_(0.0)
+	, level_(0)
+	, recall_cost_()
+	, movement_(0)
+	, vision_(-1)
+	, jamming_(0)
+	, max_attacks_(0)
+	, cost_(0)
+	, usage_()
+	, undead_variation_()
+	, image_()
+	, icon_()
+	, small_profile_()
+	, profile_()
+	, flag_rgb_()
+	, num_traits_(0)
+	, gender_types_()
+	, variations_()
+	, default_variation_()
+	, variation_name_()
+	, race_(&amp;unit_race::null_race)
+	, abilities_()
+	, adv_abilities_()
+	, zoc_(false)
+	, hide_help_(false)
+	, do_not_list_()
+	, advances_to_()
+	, experience_needed_(0)
+	, alignment_(unit_alignments::type::neutral)
+	, movement_type_()
+	, possible_traits_()
+	, genders_()
+	, animations_()
+	, build_status_(NOT_BUILT)
+{
+	if(auto base_unit = cfg.optional_child(&quot;base_unit&quot;)) {
+		base_unit_id_ = base_unit[&quot;id&quot;].str();
+		LOG_UT &lt;&lt; &quot;type &#x27;&quot; &lt;&lt;  id_ &lt;&lt; &quot;&#x27; has base unit &#x27;&quot; &lt;&lt; base_unit_id_ &lt;&lt; &quot;&#x27;&quot;;
+	}
+	check_id(id_);
+	check_id(parent_id_);
+}
+unit_type::unit_type(const config&amp; cfg, const std::string &amp; parent_id)
+	: unit_type(defaut_ctor_t(), cfg, parent_id)
+{
+	cfg_ = &amp;cfg;
+
+}
+
+unit_type::unit_type(config&amp;&amp; cfg, const std::string &amp; parent_id)
+	: unit_type(defaut_ctor_t(), cfg, parent_id)
+{
+	built_cfg_ = std::make_unique&lt;config&gt;(std::move(cfg));
+}
+
+
+unit_type::~unit_type()
+{
+}
+
+unit_type::ability_metadata::ability_metadata(const config&amp; cfg)
+	: id(cfg[&quot;id&quot;])
+	, name(cfg[&quot;name&quot;].t_str())
+	, name_inactive(cfg[&quot;name_inactive&quot;].t_str())
+	, female_name(cfg[&quot;female_name&quot;].t_str())
+	, female_name_inactive(cfg[&quot;female_name_inactive&quot;].t_str())
+	, description(cfg[&quot;description&quot;].t_str())
+	, description_inactive(cfg[&quot;description_inactive&quot;].t_str())
+	, affect_self(cfg[&quot;affect_self&quot;].to_bool())
+	, affect_allies(cfg[&quot;affect_allies&quot;].to_bool())
+	, affect_enemies(cfg[&quot;affect_enemies&quot;].to_bool())
+	, cumulative(cfg[&quot;cumulative&quot;].to_bool())
+{
+}
+
+/**
+ * Load data into an empty unit_type (build to FULL).
+ */
+void unit_type::build_full(
+		const movement_type_map&amp; mv_types, const race_map&amp; races, const config_array_view&amp; traits)
+{
+	// Don&#x27;t build twice.
+	if(FULL &lt;= build_status_) {
+		return;
+	}
+
+	// Make sure we are built to the preceding build level.
+	build_help_index(mv_types, races, traits);
+
+	for(int i = 0; i &lt; 2; ++i) {
+		if(gender_types_[i]) {
+			gender_types_[i]-&gt;build_full(mv_types, races, traits);
+		}
+	}
+
+	if(race_ != &amp;unit_race::null_race) {
+		if(undead_variation_.empty()) {
+			undead_variation_ = race_-&gt;undead_variation();
+		}
+	}
+
+	zoc_ = get_cfg()[&quot;zoc&quot;].to_bool(level_ &gt; 0);
+
+	game_config::add_color_info(game_config_view::wrap(get_cfg()));
+
+	hp_bar_scaling_ = get_cfg()[&quot;hp_bar_scaling&quot;].to_double(game_config::hp_bar_scaling);
+	xp_bar_scaling_ = get_cfg()[&quot;xp_bar_scaling&quot;].to_double(game_config::xp_bar_scaling);
+
+	// Propagate the build to the variations.
+	for(variations_map::value_type&amp; variation : variations_) {
+		variation.second.build_full(mv_types, races, traits);
+	}
+
+	// Deprecation messages, only seen when unit is parsed for the first time.
+
+	build_status_ = FULL;
+}
+
+/**
+ * Partially load data into an empty unit_type (build to HELP_INDEXED).
+ */
+void unit_type::build_help_index(
+		const movement_type_map&amp; mv_types, const race_map&amp; races, const config_array_view&amp; traits)
+{
+	// Don&#x27;t build twice.
+	if(HELP_INDEXED &lt;= build_status_) {
+		return;
+	}
+
+	// Make sure we are built to the preceding build level.
+	build_created();
+
+	const config&amp; cfg = get_cfg();
+
+	type_name_ = cfg[&quot;name&quot;];
+	description_ = cfg[&quot;description&quot;];
+	hitpoints_ = cfg[&quot;hitpoints&quot;].to_int(1);
+	level_ = cfg[&quot;level&quot;];
+	recall_cost_ = cfg[&quot;recall_cost&quot;].to_int(-1);
+	movement_ = cfg[&quot;movement&quot;].to_int(1);
+	vision_ = cfg[&quot;vision&quot;].to_int(-1);
+	jamming_ = cfg[&quot;jamming&quot;].to_int(0);
+	max_attacks_ = cfg[&quot;attacks&quot;].to_int(1);
+	usage_ = cfg[&quot;usage&quot;].str();
+	undead_variation_ = cfg[&quot;undead_variation&quot;].str();
+	default_variation_ = cfg[&quot;variation&quot;].str();
+	icon_ = cfg[&quot;image_icon&quot;].str();
+	small_profile_ = cfg[&quot;small_profile&quot;].str();
+	profile_ = cfg[&quot;profile&quot;].str();
+	flag_rgb_ = cfg[&quot;flag_rgb&quot;].str();
+	do_not_list_ = cfg[&quot;do_not_list&quot;].to_bool(false);
+
+	for(const config&amp; sn : cfg.child_range(&quot;special_note&quot;)) {
+		special_notes_.push_back(sn[&quot;note&quot;]);
+	}
+
+	adjust_profile(profile_);
+
+	alignment_ = unit_alignments::get_enum(cfg[&quot;alignment&quot;].str()).value_or(unit_alignments::type::neutral);
+
+	for(int i = 0; i &lt; 2; ++i) {
+		if(gender_types_[i]) {
+			gender_types_[i]-&gt;build_help_index(mv_types, races, traits);
+		}
+	}
+
+	for(auto&amp; pair : variations_) {
+		pair.second.build_help_index(mv_types, races, traits);
+	}
+
+	const race_map::const_iterator race_it = races.find(cfg[&quot;race&quot;]);
+	if(race_it != races.end()) {
+		race_ = &amp;race_it-&gt;second;
+	} else {
+		race_ = &amp;unit_race::null_race;
+	}
+
+	// if num_traits is not defined, we use the num_traits from race
+	num_traits_ = cfg[&quot;num_traits&quot;].to_int(race_-&gt;num_traits());
+
+	for(const std::string&amp; g : utils::split(cfg[&quot;gender&quot;])) {
+		genders_.push_back(string_gender(g));
+	}
+
+	// For simplicity in other parts of the code, we must have at least one gender.
+	if(genders_.empty()) {
+		genders_.push_back(unit_race::MALE);
+	}
+
+	if(auto abil_cfg = cfg.optional_child(&quot;abilities&quot;)) {
+		for(const config::any_child ab : abil_cfg-&gt;all_children_range()) {
+			abilities_.emplace_back(ab.cfg);
+		}
+	}
+
+	for(const config&amp; adv : cfg.child_range(&quot;advancement&quot;)) {
+		for(const config&amp; effect : adv.child_range(&quot;effect&quot;)) {
+			auto abil_cfg = effect.optional_child(&quot;abilities&quot;);
+
+			if(!abil_cfg || effect[&quot;apply_to&quot;] != &quot;new_ability&quot;) {
+				continue;
+			}
+
+			for(const config::any_child ab : abil_cfg-&gt;all_children_range()) {
+				adv_abilities_.emplace_back(ab.cfg);
+			}
+		}
+	}
+
+	// Set the movement type.
+	const std::string move_type = cfg[&quot;movement_type&quot;];
+	const movement_type_map::const_iterator find_it = mv_types.find(move_type);
+
+	if(find_it != mv_types.end()) {
+		DBG_UT &lt;&lt; &quot;inheriting from movement_type &#x27;&quot; &lt;&lt; move_type &lt;&lt; &quot;&#x27;&quot;;
+		movement_type_ = find_it-&gt;second;
+	} else if(!move_type.empty()) {
+		DBG_UT &lt;&lt; &quot;movement_type &#x27;&quot; &lt;&lt; move_type &lt;&lt; &quot;&#x27; not found&quot;;
+	}
+
+	// Override parts of the movement type with what is in our config.
+	movement_type_.merge(cfg);
+
+	for(const config&amp; t : traits) {
+		possible_traits_.add_child(&quot;trait&quot;, t);
+	}
+
+	if(race_ != &amp;unit_race::null_race) {
+		if(!race_-&gt;uses_global_traits()) {
+			possible_traits_.clear();
+		}
+
+		if(cfg[&quot;ignore_race_traits&quot;].to_bool()) {
+			possible_traits_.clear();
+		} else {
+			for(const config&amp; t : race_-&gt;additional_traits()) {
+				if(alignment_ != unit_alignments::type::neutral || t[&quot;id&quot;] != &quot;fearless&quot;)
+					possible_traits_.add_child(&quot;trait&quot;, t);
+			}
+		}
+
+		if(undead_variation_.empty()) {
+			undead_variation_ = race_-&gt;undead_variation();
+		}
+	}
+
+	// Insert any traits that are just for this unit type
+	for(const config&amp; trait : cfg.child_range(&quot;trait&quot;)) {
+		possible_traits_.add_child(&quot;trait&quot;, trait);
+	}
+
+	hide_help_ = cfg[&quot;hide_help&quot;].to_bool();
+
+	build_status_ = HELP_INDEXED;
+}
+
+/**
+ * Load the most needed data into an empty unit_type (build to CREATE).
+ * This creates the gender-specific types (if needed) and also defines how much
+ * experience is needed to advance as well as what this advances to.
+ */
+void unit_type::build_created()
+{
+	// Don&#x27;t build twice.
+	if(CREATED &lt;= build_status_) {
+		return;
+	}
+
+
+	for(unsigned i = 0; i &lt; gender_types_.size(); ++i) {
+		if(gender_types_[i]) {
+			gender_types_[i]-&gt;build_created();
+		}
+	}
+
+	for(auto&amp; pair : variations_) {
+		pair.second.build_created();
+	}
+
+
+	const config&amp; cfg = get_cfg();
+
+	const std::string&amp; advances_to_val = cfg[&quot;advances_to&quot;];
+	if(advances_to_val != &quot;null&quot; &amp;&amp; !advances_to_val.empty()) {
+		advances_to_ = utils::split(advances_to_val);
+	}
+
+
+	type_name_ = cfg[&quot;name&quot;].t_str();
+	variation_name_ = cfg[&quot;variation_name&quot;].t_str();
+
+	DBG_UT &lt;&lt; &quot;unit_type &#x27;&quot; &lt;&lt; log_id() &lt;&lt; &quot;&#x27; advances to : &quot; &lt;&lt; advances_to_val;
+
+	experience_needed_ = cfg[&quot;experience&quot;].to_int(500);
+	cost_ = cfg[&quot;cost&quot;].to_int(1);
+
+	//needed by the editor.
+	image_ = cfg[&quot;image&quot;].str();
+	build_status_ = CREATED;
+}
+
+/**
+ * Performs a build of this to the indicated stage.
+ */
+void unit_type::build(BUILD_STATUS status,
+		const movement_type_map&amp; movement_types,
+		const race_map&amp; races,
+		const config_array_view&amp; traits)
+{
+	DBG_UT &lt;&lt; &quot;Building unit type &quot; &lt;&lt; log_id() &lt;&lt; &quot;, level &quot; &lt;&lt; status;
+
+	switch(status) {
+	case NOT_BUILT:
+		// Already done in the constructor.
+		return;
+
+	case CREATED:
+		// Build the basic data.
+		build_created();
+		return;
+
+	case VARIATIONS: // Implemented as part of HELP_INDEXED
+	case HELP_INDEXED:
+		// Build the data needed to feed the help index.
+		build_help_index(movement_types, races, traits);
+		return;
+
+	case FULL:
+		build_full(movement_types, races, traits);
+		return;
+
+	default:
+		ERR_UT &lt;&lt; &quot;Build of unit_type to unrecognized status (&quot; &lt;&lt; status &lt;&lt; &quot;) requested.&quot;;
+		// Build as much as possible.
+		build_full(movement_types, races, traits);
+		return;
+	}
+}
+
+const unit_type&amp; unit_type::get_gender_unit_type(std::string gender) const
+{
+	if(gender == unit_race::s_female) {
+		return get_gender_unit_type(unit_race::FEMALE);
+	} else if(gender == unit_race::s_male) {
+		return get_gender_unit_type(unit_race::MALE);
+	}
+
+	return *this;
+}
+
+const unit_type&amp; unit_type::get_gender_unit_type(unit_race::GENDER gender) const
+{
+	const std::size_t i = gender;
+	if(i &lt; gender_types_.size() &amp;&amp; gender_types_[i] != nullptr) {
+		return *gender_types_[i];
+	}
+
+	return *this;
+}
+
+const unit_type&amp; unit_type::get_variation(const std::string&amp; id) const
+{
+	const variations_map::const_iterator i = variations_.find(id);
+	if(i != variations_.end()) {
+		return i-&gt;second;
+	}
+
+	return *this;
+}
+
+t_string unit_type::unit_description() const
+{
+	if(description_.empty()) {
+		return (_(&quot;No description available.&quot;));
+	} else {
+		return description_;
+	}
+}
+
+std::vector&lt;t_string&gt; unit_type::special_notes() const {
+	return combine_special_notes(special_notes_, abilities_cfg(), attacks(), movement_type());
+}
+
+static void append_special_note(std::vector&lt;t_string&gt;&amp; notes, const t_string&amp; new_note) {
+	if(new_note.empty()) return;
+	std::string_view note_plain = new_note.c_str();
+	utils::trim(note_plain);
+	if(note_plain.empty()) return;
+	auto iter = std::find(notes.begin(), notes.end(), new_note);
+	if(iter != notes.end()) return;
+	notes.push_back(new_note);
+}
+
+std::vector&lt;t_string&gt; combine_special_notes(const std::vector&lt;t_string&gt; direct, const config&amp; abilities, const_attack_itors attacks, const movetype&amp; mt)
+{
+	std::vector&lt;t_string&gt; notes;
+	for(const auto&amp; note : direct) {
+		append_special_note(notes, note);
+	}
+	for(const config::any_child ability : abilities.all_children_range()) {
+		if(ability.cfg.has_attribute(&quot;special_note&quot;)) {
+			append_special_note(notes, ability.cfg[&quot;special_note&quot;].t_str());
+		}
+	}
+	for(const auto&amp; attack : attacks) {
+		for(const config::any_child ability : attack.specials().all_children_range()) {
+			if(ability.cfg.has_attribute(&quot;special_note&quot;)) {
+				append_special_note(notes, ability.cfg[&quot;special_note&quot;].t_str());
+			}
+		}
+		if(auto attack_type_note = string_table.find(&quot;special_note_damage_type_&quot; + attack.type()); attack_type_note != string_table.end()) {
+			append_special_note(notes, attack_type_note-&gt;second);
+		}
+	}
+	for(const auto&amp; move_note : mt.special_notes()) {
+		append_special_note(notes, move_note);
+	}
+	return notes;
+}
+
+const std::vector&lt;unit_animation&gt;&amp; unit_type::animations() const
+{
+	if(animations_.empty()) {
+		unit_animation::fill_initial_animations(animations_, get_cfg());
+	}
+
+	return animations_;
+}
+
+const_attack_itors unit_type::attacks() const
+{
+	if(!attacks_cache_.empty()) {
+		return make_attack_itors(attacks_cache_);
+	}
+
+	for(const config&amp; att : get_cfg().child_range(&quot;attack&quot;)) {
+		attacks_cache_.emplace_back(new attack_type(att));
+	}
+
+	return make_attack_itors(attacks_cache_);
+}
+
+namespace
+{
+int experience_modifier = 100;
+}
+
+unit_experience_accelerator::unit_experience_accelerator(int modifier)
+	: old_value_(experience_modifier)
+{
+	experience_modifier = modifier;
+}
+
+unit_experience_accelerator::~unit_experience_accelerator()
+{
+	experience_modifier = old_value_;
+}
+
+int unit_experience_accelerator::get_acceleration()
+{
+	return experience_modifier;
+}
+
+int unit_type::experience_needed(bool with_acceleration) const
+{
+	if(with_acceleration) {
+		int exp = (experience_needed_ * experience_modifier + 50) / 100;
+		if(exp &lt; 1) {
+			exp = 1;
+		}
+
+		return exp;
+	}
+
+	return experience_needed_;
+}
+
+bool unit_type::has_ability_by_id(const std::string&amp; ability) const
+{
+	if(auto abil = get_cfg().optional_child(&quot;abilities&quot;)) {
+		for(const config::any_child ab : abil-&gt;all_children_range()) {
+			if(ab.cfg[&quot;id&quot;] == ability) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+std::vector&lt;std::string&gt; unit_type::get_ability_list() const
+{
+	std::vector&lt;std::string&gt; res;
+
+	auto abilities = get_cfg().optional_child(&quot;abilities&quot;);
+	if(!abilities) {
+		return res;
+	}
+
+	for(const config::any_child ab : abilities-&gt;all_children_range()) {
+		std::string id = ab.cfg[&quot;id&quot;];
+
+		if(!id.empty()) {
+			res.push_back(std::move(id));
+		}
+	}
+
+	return res;
+}
+
+bool unit_type::hide_help() const
+{
+	return hide_help_ || unit_types.hide_help(id_, race_-&gt;id());
+}
+
+
+static void advancement_tree_internal(const std::string&amp; id, std::set&lt;std::string&gt;&amp; tree)
+{
+	const unit_type* ut = unit_types.find(id);
+	if(!ut) {
+		return;
+	}
+
+	for(const std::string&amp; adv : ut-&gt;advances_to()) {
+		if(tree.insert(adv).second) {
+			// insertion succeed, expand the new type
+			advancement_tree_internal(adv, tree);
+		}
+	}
+}
+
+std::set&lt;std::string&gt; unit_type::advancement_tree() const
+{
+	std::set&lt;std::string&gt; tree;
+	advancement_tree_internal(id_, tree);
+	return tree;
+}
+
+const std::vector&lt;std::string&gt; unit_type::advances_from() const
+{
+	// Currently not needed (only help call us and already did it)/
+	unit_types.build_all(unit_type::HELP_INDEXED);
+
+	std::vector&lt;std::string&gt; adv_from;
+	for(const unit_type_data::unit_type_map::value_type&amp; ut : unit_types.types()) {
+		for(const std::string&amp; adv : ut.second.advances_to()) {
+			if(adv == id_) {
+				adv_from.push_back(ut.second.id());
+			}
+		}
+	}
+
+	return adv_from;
+}
+
+// This function is only meant to return the likely state a given status
+// for a new recruit of this type. It should not be used to check if
+// a particular unit has it, use get_state(status_name) for that.
+bool unit_type::musthave_status(const std::string&amp; status_name) const
+{
+	// Statuses default to absent.
+	bool current_status = false;
+
+	// Look at all of the &quot;musthave&quot; traits to see if the
+	// status gets changed. In the unlikely event it gets changed
+	// multiple times, we want to try to do it in the same order
+	// that unit::apply_modifications does things.
+	for(const config&amp; mod : possible_traits()) {
+		if(mod[&quot;availability&quot;] != &quot;musthave&quot;) {
+			continue;
+		}
+
+		for(const config&amp; effect : mod.child_range(&quot;effect&quot;)) {
+			// See if the effect only applies to
+			// certain unit types But don&#x27;t worry
+			// about gender checks, since we don&#x27;t
+			// know what the gender of the
+			// hypothetical recruit is.
+			const std::string&amp; ut = effect[&quot;unit_type&quot;];
+
+			if(!ut.empty()) {
+				const std::vector&lt;std::string&gt;&amp; types = utils::split(ut);
+
+				if(std::find(types.begin(), types.end(), id()) == types.end()) {
+					continue;
+				}
+			}
+
+			// We&#x27;re only interested in status changes.
+			if(effect[&quot;apply_to&quot;] != &quot;status&quot;) {
+				continue;
+			}
+
+			if(effect[&quot;add&quot;] == status_name) {
+				current_status = true;
+			}
+
+			if(effect[&quot;remove&quot;] == status_name) {
+				current_status = false;
+			}
+		}
+	}
+
+	return current_status;
+}
+
+const std::string&amp; unit_type::flag_rgb() const
+{
+	return flag_rgb_.empty() ? game_config::unit_rgb : flag_rgb_;
+}
+
+bool unit_type::has_random_traits() const
+{
+	if(num_traits() == 0) {
+		return false;
+	}
+
+	for(const auto&amp; cfg : possible_traits()) {
+		const config::attribute_value&amp; availability = cfg[&quot;availability&quot;];
+		if(availability.blank()) {
+			return true;
+		}
+
+		if(availability.str() != &quot;musthave&quot;) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+std::vector&lt;std::string&gt; unit_type::variations() const
+{
+	std::vector&lt;std::string&gt; retval;
+	retval.reserve(variations_.size());
+
+	for(const variations_map::value_type&amp; val : variations_) {
+		retval.push_back(val.first);
+	}
+
+	return retval;
+}
+
+bool unit_type::has_variation(const std::string&amp; variation_id) const
+{
+	return variations_.find(variation_id) != variations_.end();
+}
+
+bool unit_type::show_variations_in_help() const
+{
+	for(const variations_map::value_type&amp; val : variations_) {
+		if(!val.second.hide_help()) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+int unit_type::resistance_against(const std::string&amp; damage_name, bool attacker) const
+{
+	int resistance = movement_type_.resistance_against(damage_name);
+	unit_ability_list resistance_abilities;
+
+	if(auto abilities = get_cfg().optional_child(&quot;abilities&quot;)) {
+		for(const config&amp; cfg : abilities-&gt;child_range(&quot;resistance&quot;)) {
+			if(!cfg[&quot;affect_self&quot;].to_bool(true)) {
+				continue;
+			}
+
+			if(!resistance_filter_matches(cfg, attacker, damage_name, 100 - resistance)) {
+				continue;
+			}
+
+			resistance_abilities.emplace_back(&amp;cfg, map_location::null_location(), map_location::null_location());
+		}
+	}
+
+	if(!resistance_abilities.empty()) {
+		unit_abilities::effect resist_effect(resistance_abilities, 100 - resistance);
+
+		resistance = 100 - std::min&lt;int&gt;(
+			resist_effect.get_composite_value(),
+			resistance_abilities.highest(&quot;max_value&quot;).first
+		);
+	}
+
+	return resistance;
+}
+
+bool unit_type::resistance_filter_matches(
+		const config&amp; cfg, bool attacker, const std::string&amp; damage_name, int res) const
+{
+	if(!(cfg[&quot;active_on&quot;].empty() ||
+		(attacker  &amp;&amp; cfg[&quot;active_on&quot;] == &quot;offense&quot;) ||
+		(!attacker &amp;&amp; cfg[&quot;active_on&quot;] == &quot;defense&quot;))
+	) {
+		return false;
+	}
+
+	const std::string&amp; apply_to = cfg[&quot;apply_to&quot;];
+
+	if(!apply_to.empty()) {
+		if(damage_name != apply_to) {
+			if(apply_to.find(&#x27;,&#x27;) != std::string::npos &amp;&amp; apply_to.find(damage_name) != std::string::npos) {
+				const std::vector&lt;std::string&gt;&amp; vals = utils::split(apply_to);
+
+				if(std::find(vals.begin(), vals.end(), damage_name) == vals.end()) {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+	}
+
+	if(!unit_abilities::filter_base_matches(cfg, res)) {
+		return false;
+	}
+
+	return true;
+}
+
+/** Implementation detail of unit_type::alignment_description */
+
+std::string unit_type::alignment_description(unit_alignments::type align, unit_race::GENDER gender)
+{
+	if(gender == unit_race::FEMALE) {
+		switch(align)
+		{
+			case unit_alignments::type::lawful:
+				return _(&quot;female^lawful&quot;);
+			case unit_alignments::type::neutral:
+				return _(&quot;female^neutral&quot;);
+			case unit_alignments::type::chaotic:
+				return _(&quot;female^chaotic&quot;);
+			case unit_alignments::type::liminal:
+				return _(&quot;female^liminal&quot;);
+			default:
+				return _(&quot;female^lawful&quot;);
+		}
+	} else {
+		switch(align)
+		{
+			case unit_alignments::type::lawful:
+				return _(&quot;lawful&quot;);
+			case unit_alignments::type::neutral:
+				return _(&quot;neutral&quot;);
+			case unit_alignments::type::chaotic:
+				return _(&quot;chaotic&quot;);
+			case unit_alignments::type::liminal:
+				return _(&quot;liminal&quot;);
+			default:
+				return _(&quot;lawful&quot;);
+		}
+	}
+}
+
+/* ** unit_type_data ** */
+
+unit_type_data::unit_type_data()
+	: types_()
+	, movement_types_()
+	, races_()
+	, hide_help_all_(false)
+	, hide_help_type_()
+	, hide_help_race_()
+	, units_cfg_()
+	, build_status_(unit_type::NOT_BUILT)
+{
+}
+
+
+// Helpers for set_config()
+
+namespace
+{
+/**
+ * Spits out an error message and throws a config::error.
+ * Called when apply_base_unit() detects a cycle.
+ * (This exists merely to take the error message out of that function.)
+ */
+void throw_base_unit_recursion_error(const std::vector&lt;std::string&gt;&amp; base_tree, const std::string&amp; base_id)
+{
+	std::stringstream ss;
+	ss &lt;&lt; &quot;[base_unit] recursion loop in [unit_type] &quot;;
+
+	for(const std::string&amp; step : base_tree) {
+		ss &lt;&lt; step &lt;&lt; &quot;-&gt;&quot;;
+	}
+
+	ss &lt;&lt; base_id;
+	ERR_CF &lt;&lt; ss.str();
+
+	throw config::error(ss.str());
+}
+
+/**
+ * Insert a new value into a movetype, possibly calculating the value based on
+ * the existing values in the target movetype.
+ */
+void patch_movetype(movetype&amp; mt,
+	const std::string&amp; type_to_patch,
+	const std::string&amp; new_key,
+	const std::string&amp; formula_str,
+	int default_val,
+	bool replace)
+{
+	LOG_CONFIG &lt;&lt; &quot;Patching &quot; &lt;&lt; new_key &lt;&lt; &quot; into movetype.&quot; &lt;&lt; type_to_patch;
+	config mt_cfg;
+	mt.write(mt_cfg, false);
+
+	if(!replace &amp;&amp; mt_cfg.child_or_empty(type_to_patch).has_attribute(new_key)) {
+		// Don&#x27;t replace if this type already exists in the config
+		return;
+	}
+
+	// Make movement_costs.flat, defense.castle, etc available to the formula.
+	// The formula uses config_callables which take references to data in mt;
+	// the enclosing scope is to run all the destructors before calling mt&#x27;s
+	// non-const merge() function. Probably unnecessary, but I&#x27;d rather write
+	// it this way than debug it afterwards.
+	config temp_cfg;
+	{
+		// Instances of wfl::config_callable take a reference to a config,
+		// which means that the &quot;cumulative_values&quot; variable below needs to be
+		// copied so that movement costs aren&#x27;t overwritten by vision costs
+		// before the formula is evaluated.
+		std::list&lt;config&gt; config_copies;
+
+		gui2::typed_formula&lt;int&gt; formula(formula_str, default_val);
+		wfl::map_formula_callable original;
+
+		// These three need to follow movetype&#x27;s fallback system, where values for
+		// movement costs are used for vision too.
+		const std::array fallback_children {&quot;movement_costs&quot;, &quot;vision_costs&quot;, &quot;jamming_costs&quot;};
+		config cumulative_values;
+		for(const auto&amp; x : fallback_children) {
+			if(mt_cfg.has_child(x)) {
+				cumulative_values.merge_with(mt_cfg.mandatory_child(x));
+			}
+			config_copies.emplace_back(cumulative_values);
+			auto val = std::make_shared&lt;wfl::config_callable&gt;(config_copies.back());
+			original.add(x, val);
+
+			// Allow &quot;flat&quot; to work as &quot;vision_costs.flat&quot; when patching vision_costs, etc
+			if(type_to_patch == x) {
+				original.set_fallback(val);
+			}
+		}
+
+		// These don&#x27;t need the fallback system
+		const std::array child_names {&quot;defense&quot;, &quot;resistance&quot;};
+		for(const auto&amp; x : child_names) {
+			if(mt_cfg.has_child(x)) {
+				const auto&amp; subtag = mt_cfg.mandatory_child(x);
+				auto val = std::make_shared&lt;wfl::config_callable&gt;(subtag);
+				original.add(x, val);
+
+				// Allow &quot;arcane&quot; to work as well as &quot;resistance.arcane&quot;, etc
+				if(type_to_patch == x) {
+					original.set_fallback(val);
+				}
+			}
+		}
+
+		LOG_CONFIG &lt;&lt; &quot; formula=&quot; &lt;&lt; formula_str &lt;&lt; &quot;, resolves to &quot; &lt;&lt; formula(original);
+		temp_cfg[new_key] = formula(original);
+	}
+	mt.merge(temp_cfg, type_to_patch, true);
+}
+} // unnamed namespace
+
+/**
+ * Modifies the provided config by merging all base units into it.
+ * The @a base_tree parameter is used for detecting and reporting
+ * cycles of base units and in particular to prevent infinite loops.
+ */
+
+void unit_type_data::apply_base_unit(unit_type&amp; type, std::vector&lt;std::string&gt;&amp; base_tree)
+{
+	// Nothing to do.
+	if(type.base_unit_id_.empty()) {
+		return;
+	}
+
+	// Detect recursion so the WML author is made aware of an error.
+	if(std::find(base_tree.begin(), base_tree.end(), type.base_unit_id_) != base_tree.end()) {
+		throw_base_unit_recursion_error(base_tree, type.base_unit_id_);
+	}
+
+	// Find the base unit.
+	const unit_type_map::iterator itor = types_.find(type.base_unit_id_);
+	if(itor != types_.end()) {
+
+		unit_type&amp; base_type = itor-&gt;second;
+
+		// Make sure the base unit has had its base units accounted for.
+		base_tree.push_back(type.base_unit_id_);
+
+		apply_base_unit(base_type, base_tree);
+
+		base_tree.pop_back();
+
+		// Merge the base unit &quot;under&quot; our config.
+		type.writable_cfg().inherit_from(base_type.get_cfg());
+	}
+	else {
+		ERR_CF &lt;&lt; &quot;[base_unit]: unit type not found: &quot; &lt;&lt; type.base_unit_id_;
+		throw config::error(&quot;unit type not found: &quot; + type.base_unit_id_);
+	}
+}
+
+/**
+ * Handles inheritance for configs of [male], [female], and [variation].
+ * Also removes gendered children, as those serve no purpose.
+ * @a default_inherit is the default value for inherit=.
+ */
+std::unique_ptr&lt;unit_type&gt; unit_type::create_sub_type(const config&amp; var_cfg, bool default_inherit)
+{
+	config var_copy =  var_cfg;
+	if(var_cfg[&quot;inherit&quot;].to_bool(default_inherit)) {
+		var_copy.inherit_from(get_cfg());
+	}
+
+	var_copy.clear_children(&quot;male&quot;);
+	var_copy.clear_children(&quot;female&quot;);
+
+	return std::make_unique&lt;unit_type&gt;(std::move(var_copy), parent_id());
+}
+
+/**
+ * Processes [variation] tags of @a ut_cfg, handling inheritance and
+ * child clearing.
+ */
+void unit_type::fill_variations()
+{
+	// Most unit types do not have variations.
+	if(!get_cfg().has_child(&quot;variation&quot;)) {
+		return;
+	}
+
+	// Handle each variation&#x27;s inheritance.
+	for(const config&amp; var_cfg : get_cfg().child_range(&quot;variation&quot;)) {
+
+		std::unique_ptr&lt;unit_type&gt; var = create_sub_type(var_cfg, false);
+
+		var-&gt;built_cfg_-&gt;remove_children(&quot;variation&quot;, [](const config&amp;){return true;});
+		var-&gt;variation_id_ = var_cfg[&quot;variation_id&quot;].str();
+		var-&gt;debug_id_ = debug_id_ + &quot; [&quot; + var-&gt;variation_id_ + &quot;]&quot;;
+
+		variations_map::iterator ut;
+		bool success;
+		std::tie(ut, success) = variations_.emplace(var_cfg[&quot;variation_id&quot;].str(), std::move(*var));
+		if(!success) {
+			ERR_CF &lt;&lt; &quot;Skipping duplicate unit variation ID: &#x27;&quot; &lt;&lt; var_cfg[&quot;variation_id&quot;]
+				&lt;&lt; &quot;&#x27; of unit_type &#x27;&quot; &lt;&lt; get_cfg()[&quot;id&quot;] &lt;&lt; &quot;&#x27;&quot;;
+		}
+	}
+
+
+}
+
+
+void unit_type::fill_variations_and_gender()
+{
+	// Complete the gender-specific children of the config.
+	if(auto male_cfg = get_cfg().optional_child(&quot;male&quot;)) {
+		gender_types_[0] = create_sub_type(*male_cfg, true);
+		gender_types_[0]-&gt;fill_variations();
+	}
+
+	if(auto female_cfg = get_cfg().optional_child(&quot;female&quot;)) {
+		gender_types_[1] = create_sub_type(*female_cfg, true);
+		gender_types_[1]-&gt;fill_variations();
+	}
+
+	// Complete the variation-defining children of the config.
+	fill_variations();
+
+	gui2::dialogs::loading_screen::progress();
+}
+/**
+ * Resets all data based on the provided config.
+ * This includes some processing of the config, such as expanding base units.
+ * A pointer to the config is stored, so the config must be persistent.
+ */
+void unit_type_data::set_config(const game_config_view&amp; cfg)
+{
+	LOG_UT &lt;&lt; &quot;unit_type_data::set_config, nunits: &quot; &lt;&lt; cfg.child_range(&quot;unit_type&quot;).size();
+
+	clear();
+	units_cfg_ = cfg;
+
+	for(const config&amp; mt : cfg.child_range(&quot;movetype&quot;)) {
+		movement_types_.emplace(mt[&quot;name&quot;].str(), movetype(mt));
+
+		gui2::dialogs::loading_screen::progress();
+	}
+
+	for(const config&amp; r : cfg.child_range(&quot;race&quot;)) {
+		const unit_race race(r);
+		races_.emplace(race.id(), race);
+
+		gui2::dialogs::loading_screen::progress();
+	}
+
+	// Movetype resistance patching
+	DBG_CF &lt;&lt; &quot;Start of movetype patching&quot;;
+	for(const config&amp; r : cfg.child_range(&quot;resistance_defaults&quot;)) {
+		const std::string&amp; dmg_type = r[&quot;id&quot;];
+
+		for(const config::attribute&amp; attr : r.attribute_range()) {
+			const std::string&amp; mt = attr.first;
+
+			if(mt == &quot;id&quot; || mt == &quot;default&quot; || movement_types_.find(mt) == movement_types_.end()) {
+				continue;
+			}
+
+			DBG_CF &lt;&lt; &quot;Patching specific movetype &quot; &lt;&lt; mt;
+			patch_movetype(movement_types_[mt], &quot;resistance&quot;, dmg_type, attr.second, 100, true);
+		}
+
+		if(r.has_attribute(&quot;default&quot;)) {
+			for(movement_type_map::value_type&amp; mt : movement_types_) {
+				// Don&#x27;t apply a default if a value is explicitly specified.
+				if(r.has_attribute(mt.first)) {
+					continue;
+				}
+				// The &quot;none&quot; movetype expects everything to have the default value (to be UNREACHABLE)
+				if(mt.first == &quot;none&quot;) {
+					continue;
+				}
+
+				patch_movetype(mt.second, &quot;resistance&quot;, dmg_type, r[&quot;default&quot;], 100, false);
+			}
+		}
+	}
+	DBG_CF &lt;&lt; &quot;Split between resistance and cost patching&quot;;
+
+	// Movetype move/defend patching
+	for(const config&amp; terrain : cfg.child_range(&quot;terrain_defaults&quot;)) {
+		const std::string&amp; ter_type = terrain[&quot;id&quot;];
+
+		struct ter_defs_to_movetype
+		{
+			/** The data to read from is in [terrain_defaults][subtag], and corresponds to [movetype][subtag] */
+			std::string subtag;
+			/** Deprecated names used in 1.14.0&#x27;s [terrain_defaults]. For [defense] the name didn&#x27;t change. */
+			std::string alias;
+			int default_val;
+		};
+		const std::array terrain_info_tags{
+			ter_defs_to_movetype{{&quot;movement_costs&quot;}, {&quot;movement&quot;}, movetype::UNREACHABLE},
+			ter_defs_to_movetype{{&quot;vision_costs&quot;}, {&quot;vision&quot;}, movetype::UNREACHABLE},
+			ter_defs_to_movetype{{&quot;jamming_costs&quot;}, {&quot;jamming&quot;}, movetype::UNREACHABLE},
+			ter_defs_to_movetype{{&quot;defense&quot;}, {&quot;defense&quot;}, 100}
+		};
+
+		for(const auto&amp; cost_type : terrain_info_tags) {
+			const std::string* src_tag = nullptr;
+			if(terrain.has_child(cost_type.subtag)) {
+				src_tag = &amp;cost_type.subtag;
+			}
+			else if(terrain.has_child(cost_type.alias)) {
+				// Check for the deprecated name, no deprecation warnings are printed.
+				src_tag = &amp;cost_type.alias;
+			}
+			if(!src_tag) {
+				continue;
+			}
+
+			const config&amp; info = terrain.mandatory_child(*src_tag);
+
+			for(const config::attribute&amp; attr : info.attribute_range()) {
+				const std::string&amp; mt = attr.first;
+
+				if(mt == &quot;default&quot; || movement_types_.find(mt) == movement_types_.end()) {
+					continue;
+				}
+
+				patch_movetype(
+					movement_types_[mt], cost_type.subtag, ter_type, attr.second, cost_type.default_val, true);
+			}
+
+			if(info.has_attribute(&quot;default&quot;)) {
+				for(movement_type_map::value_type&amp; mt : movement_types_) {
+					// Don&#x27;t apply a default if a value is explicitly specified.
+					if(info.has_attribute(mt.first)) {
+						continue;
+					}
+					// The &quot;none&quot; movetype expects everything to have the default value
+					if(mt.first == &quot;none&quot;) {
+						continue;
+					}
+
+					patch_movetype(
+						mt.second, cost_type.subtag, ter_type, info[&quot;default&quot;], cost_type.default_val, false);
+				}
+			}
+		}
+	}
+	DBG_CF &lt;&lt; &quot;End of movetype patching&quot;;
+
+	for(const config&amp; ut : cfg.child_range(&quot;unit_type&quot;)) {
+		// Every type is required to have an id.
+		std::string id = ut[&quot;id&quot;].str();
+		if(id.empty()) {
+			ERR_CF &lt;&lt; &quot;[unit_type] with empty id=, ignoring:\n&quot; &lt;&lt; ut.debug();
+			continue;
+		}
+
+		if(types_.emplace(id, unit_type(ut)).second) {
+			LOG_CONFIG &lt;&lt; &quot;added &quot; &lt;&lt; id &lt;&lt; &quot; to unit_type list (unit_type_data.unit_types)&quot;;
+		} else {
+			ERR_CF &lt;&lt; &quot;Multiple [unit_type]s with id=&quot; &lt;&lt; id &lt;&lt; &quot; encountered.&quot;;
+		}
+	}
+
+	// Apply base units.
+	for(auto&amp; type : types_) {
+		std::vector&lt;std::string&gt; base_tree(1, type.second.id());
+		apply_base_unit(type.second, base_tree);
+
+		gui2::dialogs::loading_screen::progress();
+	}
+
+	//handle [male], [female], [variation]
+	for(auto&amp; type : types_) {
+		type.second.fill_variations_and_gender();
+
+		gui2::dialogs::loading_screen::progress();
+	}
+
+	// Build all unit types. (This was not done within the loop for performance.)
+	build_all(unit_type::CREATED);
+
+	// Suppress some unit types (presumably used as base units) from the help.
+	if(auto hide_help = cfg.optional_child(&quot;hide_help&quot;)) {
+		hide_help_all_ = hide_help[&quot;all&quot;].to_bool();
+		read_hide_help(*hide_help);
+	}
+	DBG_UT &lt;&lt; &quot;Finished creating unit types&quot;;
+}
+
+void unit_type_data::build_unit_type(const unit_type &amp; ut, unit_type::BUILD_STATUS status) const
+{
+	ut.build(status, movement_types_, races_, units_cfg().child_range(&quot;trait&quot;));
+}
+
+/**
+ * Finds a unit_type by its id() and makes sure it is built to the specified level.
+ */
+const unit_type* unit_type_data::find(const std::string&amp; key, unit_type::BUILD_STATUS status) const
+{
+	if(key.empty() || key == &quot;random&quot;) {
+		return nullptr;
+	}
+
+	DBG_CF &lt;&lt; &quot;trying to find &quot; &lt;&lt; key &lt;&lt; &quot; in unit_type list (unit_type_data.unit_types)&quot;;
+	const unit_type_map::iterator itor = types_.find(key);
+
+	// This might happen if units of another era are requested (for example for savegames)
+	if(itor == types_.end()) {
+		DBG_CF &lt;&lt; &quot;unable to find &quot; &lt;&lt; key &lt;&lt; &quot; in unit_type list (unit_type_data.unit_types)&quot;;
+		return nullptr;
+	}
+
+	// Make sure the unit_type is built to the requested level.
+	build_unit_type(itor-&gt;second, status);
+
+	return &amp;itor-&gt;second;
+}
+
+void unit_type_data::check_types(const std::vector&lt;std::string&gt;&amp; types) const
+{
+	for(const std::string&amp; type : types) {
+		if(!find(type)) {
+			throw game::game_error(&quot;unknown unit type: &quot; + type);
+		}
+	}
+}
+
+void unit_type_data::clear()
+{
+	types_.clear();
+	movement_types_.clear();
+	races_.clear();
+	build_status_ = unit_type::NOT_BUILT;
+
+	hide_help_all_ = false;
+	hide_help_race_.clear();
+	hide_help_type_.clear();
+}
+
+void unit_type_data::build_all(unit_type::BUILD_STATUS status)
+{
+	// Nothing to do if already built to the requested level.
+	if(status &lt;= build_status_) {
+		return;
+	}
+
+	for(const auto&amp; type : types_) {
+		build_unit_type(type.second, status);
+
+		gui2::dialogs::loading_screen::progress();
+	}
+
+	build_status_ = status;
+}
+
+void unit_type_data::read_hide_help(const config&amp; cfg)
+{
+	hide_help_race_.emplace_back();
+	hide_help_type_.emplace_back();
+
+	std::vector&lt;std::string&gt; races = utils::split(cfg[&quot;race&quot;]);
+	hide_help_race_.back().insert(races.begin(), races.end());
+
+	std::vector&lt;std::string&gt; types = utils::split(cfg[&quot;type&quot;]);
+	hide_help_type_.back().insert(types.begin(), types.end());
+
+	std::vector&lt;std::string&gt; trees = utils::split(cfg[&quot;type_adv_tree&quot;]);
+	hide_help_type_.back().insert(trees.begin(), trees.end());
+
+	for(const std::string&amp; t_id : trees) {
+		unit_type_map::iterator ut = types_.find(t_id);
+
+		if(ut != types_.end()) {
+			std::set&lt;std::string&gt; adv_tree = ut-&gt;second.advancement_tree();
+			hide_help_type_.back().insert(adv_tree.begin(), adv_tree.end());
+		}
+	}
+
+	// We recursively call all the imbricated [not] tags
+	if(auto cfgnot = cfg.optional_child(&quot;not&quot;)) {
+		read_hide_help(*cfgnot);
+	}
+}
+
+bool unit_type_data::hide_help(const std::string&amp; type, const std::string&amp; race) const
+{
+	bool res = hide_help_all_;
+	int lvl = hide_help_all_ ? 1 : 0; // first level is covered by &#x27;all=yes&#x27;
+
+	// supposed to be equal but let&#x27;s be cautious
+	int lvl_nb = std::min(hide_help_race_.size(), hide_help_type_.size());
+
+	for(; lvl &lt; lvl_nb; ++lvl) {
+		if(hide_help_race_[lvl].count(race) || hide_help_type_[lvl].count(type)) {
+			res = !res; // each level is a [not]
+		}
+	}
+
+	return res;
+}
+
+const unit_race* unit_type_data::find_race(const std::string&amp; key) const
+{
+	race_map::const_iterator i = races_.find(key);
+	return i != races_.end() ? &amp;i-&gt;second : nullptr;
+}
+
+void unit_type::apply_scenario_fix(const config&amp; cfg)
+{
+	build_created();
+	if(auto p_setxp = cfg.get(&quot;set_experience&quot;)) {
+		experience_needed_ = p_setxp-&gt;to_int();
+	}
+	if(auto attr = cfg.get(&quot;set_advances_to&quot;)) {
+		advances_to_ = utils::split(attr-&gt;str());
+	}
+	if(auto attr = cfg.get(&quot;set_cost&quot;)) {
+		cost_ = attr-&gt;to_int(1);
+	}
+	if(auto attr = cfg.get(&quot;add_advancement&quot;)) {
+		for(const auto&amp; str : utils::split(attr-&gt;str())) {
+			if(!utils::contains(advances_to_, str)) {
+				advances_to_.push_back(str);
+			}
+		}
+	}
+	if(auto attr = cfg.get(&quot;remove_advancement&quot;)) {
+		for(const auto&amp; str : utils::split(attr-&gt;str())) {
+			boost::remove_erase(advances_to_, str);
+		}
+	}
+
+	// apply recursively to subtypes.
+	for(int gender = 0; gender &lt;= 1; ++gender) {
+		if(!gender_types_[gender]) {
+			continue;
+		}
+		gender_types_[gender]-&gt;apply_scenario_fix(cfg);
+	}
+
+	if(get_cfg().has_child(&quot;variation&quot;)) {
+		// Make sure the variations are created.
+		unit_types.build_unit_type(*this, VARIATIONS);
+		for(auto&amp; v : variations_) {
+			v.second.apply_scenario_fix(cfg);
+		}
+	}
+}
+
+void unit_type_data::apply_scenario_fix(const config&amp; cfg)
+{
+	unit_type_map::iterator itor = types_.find(cfg[&quot;type&quot;].str());
+	// This might happen if units of another era are requested (for example for savegames)
+	if(itor != types_.end()) {
+		itor-&gt;second.apply_scenario_fix(cfg);
+	}
+	else {
+		// should we give an error message?
+	}
+}
+
+void unit_type::remove_scenario_fixes()
+{
+	advances_to_.clear();
+	const std::string&amp; advances_to_val = get_cfg()[&quot;advances_to&quot;];
+	if(advances_to_val != &quot;null&quot; &amp;&amp; !advances_to_val.empty()) {
+		advances_to_ = utils::split(advances_to_val);
+	}
+	experience_needed_ = get_cfg()[&quot;experience&quot;].to_int(500);
+	cost_ = get_cfg()[&quot;cost&quot;].to_int(1);
+
+	// apply recursively to subtypes.
+	for(int gender = 0; gender &lt;= 1; ++gender) {
+		if(!gender_types_[gender]) {
+			continue;
+		}
+		gender_types_[gender]-&gt;remove_scenario_fixes();
+	}
+	for(auto&amp; v : variations_) {
+		v.second.remove_scenario_fixes();
+	}
+}
+
+void unit_type_data::remove_scenario_fixes()
+{
+	for(auto&amp; pair : types_) {
+		pair.second.remove_scenario_fixes();
+	}
+}
+
+void unit_type::check_id(std::string&amp; id)
+{
+	assert(!id.empty());
+
+	// We don&#x27;t allow leading whitepaces.
+	if(id[0] == &#x27; &#x27;) {
+		throw error(&quot;Found unit type id with a leading whitespace \&quot;&quot; + id + &quot;\&quot;&quot;);
+	}
+
+	bool gave_warning = false;
+
+	for(std::size_t pos = 0; pos &lt; id.size(); ++pos) {
+		const char c = id[pos];
+		const bool valid = std::isalnum(c, std::locale::classic()) || c == &#x27;_&#x27; || c == &#x27; &#x27;;
+
+		if(!valid) {
+			if(!gave_warning) {
+				ERR_UT &lt;&lt; &quot;Found unit type id with invalid characters: \&quot;&quot; &lt;&lt; id &lt;&lt; &quot;\&quot;&quot;;
+				gave_warning = true;
+			}
+
+			id[pos] = &#x27;_&#x27;;
+		}
+	}
+}
+
+unit_type_data unit_types;
+
+void adjust_profile(std::string&amp; profile)
+{
+	// Create a temp copy
+	std::string temp = profile;
+
+	static const std::string path_adjust = &quot;/transparent&quot;;
+	const std::string::size_type offset = profile.find_last_of(&#x27;/&#x27;, profile.find(&#x27;~&#x27;));
+
+	// If the path already refers to /transparent...
+	if(profile.find(path_adjust) != std::string::npos &amp;&amp; offset != std::string::npos) {
+		if(!image::locator(profile).file_exists()) {
+			profile.replace(profile.find(path_adjust), path_adjust.length(), &quot;&quot;);
+		}
+
+		return;
+	}
+
+	// else, check for the file with /transparent appended...
+	offset != std::string::npos ? temp.insert(offset, path_adjust) : temp = path_adjust + temp;
+
+	// and use that path if it exists.
+	if(image::locator(temp).file_exists()) {
+		profile = temp;
+	}
+}
+</pre></main></body></html>

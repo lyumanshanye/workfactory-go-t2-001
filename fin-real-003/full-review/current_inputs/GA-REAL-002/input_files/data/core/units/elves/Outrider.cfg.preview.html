@@ -1,0 +1,112 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Outrider.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/elves/Outrider.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Elvish Outrider
+    name= _ &quot;Elvish Outrider&quot;
+    race=elf
+    image=&quot;units/elves-wood/outrider/outrider.png&quot;
+    profile=&quot;portraits/elves/scout.webp&quot;
+    hitpoints=60
+    movement_type=woodland
+    movement=11
+    experience=150
+    level=3
+    alignment=neutral
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=58
+    undead_variation=mounted
+    usage=scout
+    description= _ &quot;There once was an elf by the name of Beirand, who set out on a journey to a distant land.
+Thirteen days he rode, no rest did he take, ‘til a nymph’s abode he entered, ‘side a lake.
+“Look there, Narya!” Came a cry of glee, “Do thee spy that yonder apple tree?”
+The response, a neigh, she jumped with delight, then off she skipped in a canter spright.
+Not a moment passed ‘ere a gusting blast, blew all around, an airy voice cast:
+“Hold there, thee elf, this grove is mine — no fruit shall I yield you, nor your equine.”
+Next came the reply, “Please grant us respite. Long have we travel’d; surely see thee our plight!”
+“Fatigue, I perceive, that is your case, but to earn my grace, let’s have a race.”
+To this, the rider did consent, and toward the tree, then off they went.
+A howl, a rush, a flying gale, the wind left the rider back on its tail.
+But in a flashing streak, a gallop sleek, horse and rider past the wind did barely squeak.
+In augmented time, back and forth they sped, ‘til at last, fleet elf arrived ahead.
+“Well done,” spake the spirit, as she blew in, “my grace I shall grant thee and all of your kin.”
+Beirand and Narya thus took their leave, bearing evermore, the nymph’s reprieve.
+
+The truth of this tale, one can only surmise, but doubtless, Outriders the fastest do comprise.&quot;
+    die_sound=horse-die.ogg
+    [defense]
+        forest=40
+    [/defense]
+    #they are weak against piercing attacks
+    [resistance]
+        pierce=120
+    [/resistance]
+    [attack]
+        name=sword
+        description=_&quot;sword&quot;
+        icon=attacks/sword-elven.png
+        type=blade
+        range=melee
+        damage=8
+        number=4
+    [/attack]
+    [attack]
+        name=bow
+        description=_&quot;bow&quot;
+        icon=attacks/bow-elven.png
+        type=pierce
+        range=ranged
+        damage=11
+        number=3
+    [/attack]
+    {DEFENSE_ANIM &quot;units/elves-wood/outrider/outrider-defend2.png&quot; &quot;units/elves-wood/outrider/outrider-defend1.png&quot; {SOUND_LIST:HORSE_HIT} }
+    [movement_anim]
+        start_time=0
+        [frame]
+            image=&quot;units/elves-wood/outrider/outrider.png:150&quot;
+        [/frame]
+    [/movement_anim]
+    [attack_anim]
+        [filter_attack]
+            name=bow
+        [/filter_attack]
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        start_time=-500
+        {SOUND:HIT_AND_MISS bow.ogg bow-miss.ogg -500}
+        [frame]
+            image=&quot;units/elves-wood/outrider/outrider.png:[100,250,100]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/outrider/outrider.png:100&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=sword
+        [/filter_attack]
+        start_time=-300
+        offset=&quot;0.0:150,0.0~0.6:150,0.6~0.0:220&quot;
+        [frame]
+            image=&quot;units/elves-wood/outrider/outrider-melee-0.png:80&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/outrider/outrider-melee-1.png:70&quot;
+            sound=horse-elf-canter.wav
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/outrider/outrider-melee-[2,3].png:[75,90]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}
+        [frame]
+            image=&quot;units/elves-wood/outrider/outrider-melee-[4,5,6].png:[90,80,75]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/outrider/outrider.png:1&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

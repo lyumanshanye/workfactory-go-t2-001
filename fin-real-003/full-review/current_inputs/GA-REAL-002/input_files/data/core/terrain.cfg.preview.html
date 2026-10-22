@@ -1,0 +1,3337 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>terrain.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/terrain.cfg</h1><p>预览前 80,000 字符；完整内容请下载原文件。</p><pre>#textdomain wesnoth-lib
+# Terrain configuration file. Defines how the terrain _work_ in the game. How
+# the terrains _look_ is defined in terrain_graphics.cfg. The background color
+# of terrain type icons is determined by the terrain type color ranges in
+# ./team-colors.cfg.
+
+# NOTE: terrain id&#x27;s are used implicitly by the in-game help:
+# each &quot;[terrain_type] id=some_id&quot; corresponds to &quot;[section] id=terrain_some_id&quot;
+# or &quot;[topic] id=terrain_some_id&quot; identifying its description in [help].
+# It also corresponds to [color_range] id=some_id in team-colors.cfg.
+
+# NOTE: this list is sorted to group things comprehensibly in the editor
+# NOTE: this data is parsed by data/tools/terrain2wiki.py to generate
+# the TerrainCodeTableWML wiki page.
+
+#
+#    ## Water ##
+#
+
+[terrain_type]
+    symbol_image=water/ocean-grey-tile
+    id=deep_water_gray
+    name= _ &quot;Deep Water&quot;
+    editor_name= _ &quot;Gray Deep Water&quot;
+    string=Wog
+    aliasof=Wdt
+    submerge=0.5
+    editor_group=water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=water/ocean-tile
+    id=deep_water_medium
+    name= _ &quot;Deep Water&quot;
+    editor_name= _ &quot;Medium Deep Water&quot;
+    string=Wo
+    aliasof=Wdt
+    submerge=0.5
+    editor_group=water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=water/ocean-tropical-tile
+    id=deep_water_tropical
+    name= _ &quot;Deep Water&quot;
+    editor_name= _ &quot;Tropical Deep Water&quot;
+    string=Wot
+    aliasof=Wdt
+    submerge=0.5
+    editor_group=water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=water/coast-grey-tile
+    id=gray_tropical_water
+    name= _ &quot;Shallow Water&quot;
+    editor_name= _ &quot;Gray Shallow Water&quot;
+    string=Wwg
+    aliasof=Wst
+    submerge=0.4
+    editor_group=water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=water/coast-tile
+    id=medium_shallow_water
+    name= _ &quot;Shallow Water&quot;
+    editor_name= _ &quot;Medium Shallow Water&quot;
+    string=Ww
+    aliasof=Wst
+    submerge=0.4
+    editor_group=water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=water/coast-tropical-tile
+    id=tropical_water
+    name= _ &quot;Shallow Water&quot;
+    editor_name= _ &quot;Tropical Shallow Water&quot;
+    string=Wwt
+    aliasof=Wst
+    submerge=0.4
+    editor_group=water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=water/ford-tile
+    id=ford
+    name= _ &quot;Ford&quot;
+    editor_name= _ &quot;Ford&quot;
+    string=Wwf
+    aliasof=Gt, Wst
+    submerge=0.3
+    editor_group=water
+    help_topic_text= _ &quot;When a river happens to be extremely shallow, passing over it is a trivial matter for land based units. Moreover, any creature best adapted to swimming has full mobility even at such places in the river. As far as gameplay is concerned, a river ford is treated as either grassland or shallow water, choosing whichever one offers the best defensive and movement bonuses for the unit on it.&quot;
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=water/reef-gray-tile
+    id=gray_reef
+    name= _ &quot;Coastal Reef&quot;
+    editor_name= _ &quot;Gray Coastal Reef&quot;
+    string=Wwrg
+    aliasof=Wrt
+    submerge=0.3
+    editor_group=water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=water/reef-tile
+    id=medium_reef
+    name= _ &quot;Coastal Reef&quot;
+    editor_name= _ &quot;Medium Coastal Reef&quot;
+    aliasof=Wrt
+    string=Wwr
+    submerge=0.3
+    editor_group=water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=water/reef-tropical-tile
+    id=tropical_reef
+    name= _ &quot;Coastal Reef&quot;
+    editor_name= _ &quot;Tropical Coastal Reef&quot;
+    string=Wwrt
+    aliasof=Wrt
+    submerge=0.3
+    editor_group=water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=water/seaweed/kelp-tile
+    id=sea_kelp
+    name= _ &quot;Swamp&quot;
+    editor_name= _ &quot;Kelp Forest&quot;
+    string=^Wkf
+    aliasof=_bas, St
+    submerge=0.45
+    default_base=Ww
+    mvt_alias=-,_bas,St
+    editor_group=water
+[/terrain_type]
+
+#    ## Swamp ##
+
+[terrain_type]
+    symbol_image=swamp/water-tile
+    id=swamp_water_reed
+    name= _ &quot;Swamp&quot;
+    editor_name= _ &quot;Swamp Water Reed&quot;
+    aliasof=St
+    string=Ss
+    submerge=0.4
+    editor_group=water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=swamp/mud-tile
+    id=quagmire
+    name= _ &quot;Swamp&quot;
+    editor_name= _ &quot;Muddy Quagmire&quot;
+    string=Sm
+    aliasof=St
+    submerge=0.4
+    editor_group=water
+[/terrain_type]
+
+#
+#    ## Flat ##
+#
+
+#    ## Grass ##
+
+[terrain_type]
+    symbol_image=grass/green-symbol
+    editor_image=grass/green
+    id=grassland
+    name= _ &quot;Grassland&quot;
+    editor_name= _ &quot;Green Grass&quot;
+    string=Gg
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    #    symbol_image=grass/semi-dry-symbol
+    symbol_image=grass/semi-dry
+    id=savanna
+    name= _ &quot;Grassland&quot;
+    editor_name= _ &quot;Semi-dry Grass&quot;
+    string=Gs
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=grass/dry-symbol
+    editor_image=grass/dry
+    id=grass_dry
+    name= _ &quot;Grassland&quot;
+    editor_name= _ &quot;Dry Grass&quot;
+    string=Gd
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=grass/leaf-litter
+    id=leaf_litter
+    name= _ &quot;Grassland&quot;
+    editor_name= _ &quot;Leaf Litter&quot;
+    string=Gll
+    aliasof=Gt
+    editor_group=flat,fall
+[/terrain_type]
+
+#    ## Roads ##
+
+[terrain_type]
+    symbol_image=flat/dirt-dark
+    id=dirt_dark
+    name = _ &quot;Dirt&quot;
+    editor_name= _ &quot;Dark Dirt&quot;
+    string=Rb
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=flat/dirt
+    id=dirt
+    name = _ &quot;Dirt&quot;
+    editor_name= _ &quot;Regular Dirt&quot;
+    string=Re
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=flat/desert-road
+    id=dirt_dry
+    name = _ &quot;Dirt&quot;
+    editor_name= _ &quot;Dry Dirt&quot;
+    string=Rd
+    aliasof=Gt
+    editor_group=desert, flat
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=flat/road
+    id=road
+    name = _ &quot;Road&quot;
+    editor_name= _ &quot;Regular Cobbles&quot;
+    string=Rr
+    aliasof=Gt
+    editor_group=flat
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Roads&#x27;&lt;/italic&gt; are beaten paths of dirt, formed by many travelers passing over them. As far as gameplay is concerned, roads behave as flat terrain.&quot;
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=flat/road-clean
+    id=road_clean
+    name = _ &quot;Road&quot;
+    editor_name= _ &quot;Clean Gray Cobbles&quot;
+    string=Rrc
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=flat/sandy-path
+    id=road_desert
+    name = _ &quot;Road&quot;
+    editor_name= _ &quot;Rocky Sands&quot;
+    string=Rrd
+    aliasof=Gt
+    editor_group=flat, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=flat/stone-path
+    id=stone_path
+    name = _ &quot;Road&quot;
+    editor_name= _ &quot;Overgrown Cobbles&quot;
+    string=Rp
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=flat/road-icy
+    id=road_icy
+    name = _ &quot;Road&quot;
+    editor_name= _ &quot;Icy Cobbles&quot;
+    string=Rra
+    aliasof=Gt
+    editor_group=flat,frozen
+[/terrain_type]
+
+#
+#    ## Frozen ##
+#
+
+[terrain_type]
+    symbol_image=frozen/ice
+    id=ice
+    name= _ &quot;Ice&quot;
+    string=Ai
+    aliasof=At
+    editor_group=frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=frozen/snow
+    id=snow
+    name= _ &quot;Snow&quot;
+    string=Aa
+    aliasof=At
+    editor_group=frozen
+[/terrain_type]
+
+#
+#    ## Desert ##
+#
+
+[terrain_type]
+    symbol_image=sand/desert
+    id=desert
+    name = _ &quot;Desert&quot;
+    editor_name= _ &quot;Desert Sands&quot;
+    string=Dd
+    aliasof=Dt
+    editor_group=desert
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Deserts&#x27;&lt;/italic&gt; have a somewhat different composition than small sand pits or beaches, however for gameplay purposes they are identical. See &lt;ref&gt;dst=&#x27;..terrain_sand&#x27; text=&#x27;sand&#x27;&lt;/ref&gt;.&quot;
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=sand/beach
+    id=sand_beach
+    name= _ &quot;Sand&quot;
+    editor_name= _ &quot;Beach Sands&quot;
+    string=Ds
+    aliasof=Dt
+    editor_group=desert
+    help_topic_text= _ &quot;The instability of &lt;italic&gt;text=&#x27;sand&#x27;&lt;/italic&gt; makes it harder for most units to cross, and leaves them wide open to attack. In contrast, the wide feet or snakelike bodies of the reptilian races make sand much easier for them to navigate.
+
+Most units receive 20 to 40% defense in sand.&quot;
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=sand/desert-oasis
+    id=oasis
+    name= _ &quot;Oasis&quot;
+    default_base=Dd
+    string=^Do
+    # Note: we must do the aliasing this way to allow the terrain to show up in the &quot;Sands&quot; terrain help group
+    aliasof=Dt
+    def_alias=_bas
+    mvt_alias=_bas
+    heals=8
+    editor_group=desert
+    help_topic_text= _ &quot;A welcome sight to any traveler, an oasis allows units to heal as if stationed in a village, but provides no income or defensive advantage.&quot;
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=misc/rubble-tile
+    id=sand_rubble
+    name= _ &quot;Rubble&quot;
+    string=^Dr
+    aliasof=_bas, Ht
+    mvt_alias=-,_bas,Ht
+    editor_group=desert, rough
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=sand/crater
+    id=crater
+    name= _ &quot;Crater&quot;
+    string=^Dc
+    default_base=Dd
+    aliasof=Dt
+    mvt_alias=-,_bas,Dt
+    editor_group=desert
+[/terrain_type]
+
+#
+#    ## Embellishments ##
+#
+
+[terrain_type]
+    symbol_image=embellishments/flowers-mixed
+    id=flowers_mixed
+    editor_name= _ &quot;Mixed Flowers&quot;
+    string=^Efm
+    aliasof=_bas
+    editor_group=embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/farm-veg-spring-icon
+    id=farm
+    name= _ &quot;Farmland&quot;
+    string=^Gvs
+    aliasof=_bas
+    editor_group=embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/stones-small7
+    id=stones_small
+    editor_name= _ &quot;Stones&quot;
+    string=^Es
+    aliasof=_bas
+    editor_group=embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/snowbits-small4
+    id=snowbits_small
+    editor_name= _ &quot;Snowbits&quot;
+    string=^Esa
+    aliasof=_bas
+    editor_group=embellishments, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/mushroom
+    id=mushrooms_small
+    editor_name= _ &quot;Small Mushrooms&quot;
+    string=^Em
+    aliasof=_bas
+    editor_group=embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/mushroom-farm-small
+    id=mushrooms_farm
+    editor_name= _ &quot;Mushroom Farm&quot;
+    string=^Emf
+    aliasof=_bas
+    editor_group=embellishments,cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/plants/desert-bones
+    id=desert_plants
+    editor_name= _ &quot;Desert Plants&quot;
+    string=^Edp
+    aliasof=_bas
+    editor_group=embellishments, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/plants/desert-plant8
+    id=desert_plants_sans_bones
+    editor_name= _ &quot;Desert Plants without Bones&quot;
+    string=^Edpp
+    aliasof=_bas
+    editor_group=embellishments, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=misc/windmill-embellishment-tile
+    id=windmill
+    editor_name= _ &quot;Windmill&quot;
+    string=^Wm
+    aliasof=_bas
+    editor_group=embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=misc/fire-A01
+    id=campfire
+    editor_name= _ &quot;Campfire&quot;
+    string=^Ecf
+    aliasof=_bas
+    light=25
+    editor_group=embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=walls/stone/flames/flames-tile
+    id=wallfire
+    editor_name= _ &quot;Sconce&quot;
+    string=^Efs
+    aliasof=_bas
+    light=25
+    editor_group=embellishments, cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=misc/brazier-embellishment
+    id=brazier
+    editor_name= _ &quot;Brazier&quot;
+    string=^Eb
+    aliasof=_bas
+    editor_group=embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=misc/brazier-A01
+    id=brazier-lit
+    editor_name= _ &quot;Lit Brazier&quot;
+    string=^Ebn
+    aliasof=_bas
+    light=25
+    editor_group=embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/fence-se-nw-01
+    id=fence
+    editor_name= _ &quot;Fence&quot;
+    string=^Eff
+    aliasof=_bas
+    editor_group=embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=embellishments/fence-iron-tile
+    id=fence_iron
+    name= _ &quot;Fence&quot;
+    editor_name= _ &quot;Iron Fence&quot;
+    string=^Eqf
+    aliasof=Qt
+    editor_group=embellishments, obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=embellishments/fence-palisade-tile
+    id=fence_palisade
+    name= _ &quot;Palisade&quot;
+    editor_name= _ &quot;Wooden Palisade&quot;
+    string=^Eqp
+    aliasof=Qt
+    editor_group=embellishments, obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/rocks
+    id=sand_drifts
+    editor_name= _ &quot;Stones with Sand Drifts&quot;
+    string=^Esd
+    aliasof=_bas
+    editor_group=embellishments, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/water-lilies-tile
+    id=water-lilies
+    editor_name= _ &quot;Water Lilies&quot;
+    string=^Ewl
+    default_base=Ww
+    aliasof=_bas
+    editor_group=water,embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/water-lilies-flower-tile
+    id=water-lilies-flower
+    editor_name= _ &quot;Flowering Water Lilies&quot;
+    string=^Ewf
+    default_base=Ww
+    aliasof=_bas
+    editor_group=water,embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=embellishments/seashells-tile
+    id=seashells
+    editor_name= _ &quot;Seashells&quot;
+    string=^Ewsh
+    default_base=Ds
+    aliasof=_bas
+    editor_group=water,embellishments
+[/terrain_type]
+
+## Trash and battlefield litter ##
+[terrain_type]
+    symbol_image=misc/detritus/trashC-1
+    id=detritus_trash
+    name= _ &quot;Trash&quot;
+    string=^Edt
+    aliasof=_bas
+    editor_group=embellishments
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=misc/detritus/detritusC-1
+    id=detritus_bones
+    name= _ &quot;Remains&quot;
+    string=^Edb
+    aliasof=_bas
+    editor_group=embellishments
+[/terrain_type]
+
+## Windows (wall decorations) ##
+[terrain_type]
+    symbol_image=walls/windows/dark-stone-tile
+    id=wall_windows
+    name= _ &quot;Window&quot;
+    string=^Exw
+    aliasof=_bas
+    editor_group=embellishments, cave
+[/terrain_type]
+
+#
+#    ## Forests ##
+#
+
+[terrain_type]
+    symbol_image=forest/great-tree-tile
+    id=great_tree
+    name= _ &quot;Great Tree&quot;
+    editor_name= _ &quot;Great Tree&quot;
+    string=^Fet
+    default_base=Gg
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/great-tree-snowy-tile
+    id=great_tree_snowy
+    name= _ &quot;Great Tree&quot;
+    editor_name= _ &quot;Snowy Great Tree&quot;
+    string=^Feta
+    default_base=Aa
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=frozen,forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/great-tree-dead-tile
+    id=great_tree_dead
+    name= _ &quot;Great Tree&quot;
+    editor_name= _ &quot;Dead Great Tree&quot;
+    string=^Fetd
+    default_base=Gd
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/great-oak-tree-dead-tile
+    id=great_tree_dead_oak
+    name= _ &quot;Great Tree&quot;
+    editor_name= _ &quot;Dead Great Oak Tree&quot;
+    string=^Feth
+    default_base=Gll
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/tropical/jungle-tile
+    id=tropical_forest
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Tropical Forest&quot;
+    string=^Ft
+    default_base=Gs
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/tropical/rainforest-tile
+    id=rainforest
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Rainforest&quot;
+    string=^Ftr
+    default_base=Gll
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/tropical/palm-desert-tile
+    id=palm_desert_forest
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Palm Forest&quot;
+    string=^Ftd
+    default_base=Dd
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest,desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/tropical/palms-tile
+    id=palm_forest
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Dense Palm Forest&quot;
+    string=^Ftp
+    default_base=Gs
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/tropical/savanna-tile
+    id=savanna_forest
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Savanna&quot;
+    string=^Fts
+    default_base=Gd
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest,desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/pine-tile
+    id=pine_forest
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Pine Forest&quot;
+    string=^Fp
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    default_base=Gll
+    editor_group=forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/snow-forest-tile
+    id=snow_forest
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Snowy Pine Forest&quot;
+    string=^Fpa
+    default_base=Aa
+    aliasof=_bas,At,Ft
+    mvt_alias=-,_bas,At,Ft
+    editor_group=frozen, forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/deciduous-summer-tile
+    id=deciduous_forest_summer
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Summer Deciduous Forest&quot;
+    string=^Fds
+    default_base=Gs
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/deciduous-fall-tile
+    id=deciduous_forest_fall
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Fall Deciduous Forest&quot;
+    string=^Fdf
+    default_base=Gll
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest, fall
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/deciduous-winter-tile
+    id=deciduous_forest_winter
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Winter Deciduous Forest&quot;
+    string=^Fdw
+    default_base=Gll
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest, fall
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/deciduous-winter-snow-tile
+    id=deciduous_forest_winter_snow
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Snowy Deciduous Forest&quot;
+    string=^Fda
+    default_base=Aa
+    aliasof=_bas,At,Ft
+    mvt_alias=-,_bas,At,Ft
+    editor_group=frozen, forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/mixed-summer-tile
+    id=mixed_forest_summer
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Summer Mixed Forest&quot;
+    string=^Fms
+    default_base=Gs
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/mixed-fall-tile
+    id=mixed_forest_fall
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Fall Mixed Forest&quot;
+    string=^Fmf
+    default_base=Gll
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest, fall
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/mixed-winter-tile
+    id=mixed_forest_winter
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Winter Mixed Forest&quot;
+    string=^Fmw
+    default_base=Gll
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest, fall
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/mixed-winter-snow-tile
+    id=mixed_forest_winter_snow
+    name= _ &quot;Forest&quot;
+    editor_name= _ &quot;Snowy Mixed Forest&quot;
+    string=^Fma
+    default_base=Aa
+    aliasof=_bas,At,Ft
+    mvt_alias=-,_bas,At,Ft
+    editor_group=frozen, forest
+[/terrain_type]
+
+#
+#    ## Hills ##
+#
+
+[terrain_type]
+    symbol_image=hills/regular
+    id=hills_regular
+    name= _ &quot;Hills&quot;
+    editor_name= _ &quot;Regular Hills&quot;
+    aliasof=Ht
+    string=Hh
+    editor_group=rough
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=hills/dry
+    id=hills_dry
+    name= _ &quot;Hills&quot;
+    editor_name= _ &quot;Dry Hills&quot;
+    string=Hhd
+    aliasof=Ht
+    editor_group=fall, rough
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=hills/desert
+    id=desert_hills
+    name= _ &quot;Dunes&quot;
+    string=Hd
+    aliasof=Dt, Ht
+    mvt_alias=-,Dt,Ht
+    editor_group=desert, rough
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=hills/snow
+    id=snow_hills
+    name= _ &quot;Hills&quot;
+    editor_name= _ &quot;Snow Hills&quot;
+    string=Ha
+    aliasof=At, Ht
+    mvt_alias=-,At, Ht
+    editor_group=frozen, rough
+[/terrain_type]
+
+#
+#    ## Mountain ##
+#
+
+[terrain_type]
+    symbol_image=mountains/basic-tile
+    id=regular_mountains
+    name= _ &quot;Mountains&quot;
+    editor_name= _ &quot;Regular Mountains&quot;
+    string=Mm
+    aliasof=Mt
+    editor_group=rough
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=mountains/dry-tile
+    id=dry_mountains
+    name= _ &quot;Mountains&quot;
+    editor_name= _ &quot;Dry Mountains&quot;
+    string=Md
+    aliasof=Mt
+    editor_group=rough, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=mountains/snow-tile
+    id=snow_mountains
+    name= _ &quot;Mountains&quot;
+    editor_name= _ &quot;Snowy Mountains&quot;
+    string=Ms
+    aliasof=At, Mt
+    mvt_alias=-,At, Mt
+    editor_group=rough, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=desert_mountains/desert-tile
+    id=desert_mountains
+    name= _ &quot;Mountains&quot;
+    editor_name= _ &quot;Desert Mountains&quot;
+    string=Mdd
+    aliasof=Mt
+    editor_group=rough, desert
+[/terrain_type]
+
+#
+#    ## Interior ##
+#
+
+[terrain_type]
+    name= _ &quot;Stone Floor&quot;
+    id=regular_stone_floor
+    symbol_image=interior/stone-regular
+    editor_name= _ &quot;Basic Stone Floor&quot;
+    string=Isr
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    name= _ &quot;Stone Floor&quot;
+    id=ancient_stone_floor
+    symbol_image=interior/stone-ancient
+    editor_name= _ &quot;Ancient Stone Floor&quot;
+    string=Isa
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    name= _ &quot;Rug&quot;
+    id=rug_floor
+    symbol_image=interior/royal-rug/rug-tile
+    editor_name= _ &quot;Royal Rug&quot;
+    string=Isc
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    name= _ &quot;Rug&quot;
+    id=rug2_floor
+    symbol_image=interior/regular-rug/rug-tile
+    editor_name= _ &quot;Normal Rug&quot;
+    string=Iwc
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    name= _ &quot;Rug&quot;
+    id=rug3_floor
+    symbol_image=interior/cave-rug/rug-tile
+    editor_name= _ &quot;Cave Rug&quot;
+    string=Urc
+    aliasof=Gt
+    editor_group=cave, flat
+[/terrain_type]
+
+[terrain_type]
+    name= _ &quot;Wooden Floor&quot;
+    id=wood_floor
+    symbol_image=interior/wood-regular
+    editor_name= _ &quot;Basic Wooden Floor&quot;
+    string=Iwr
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+[terrain_type]
+    name= _ &quot;Old Wooden Floor&quot;
+    id=old_wood_floor
+    symbol_image=interior/wood-ruined
+    editor_name= _ &quot;Old Wooden Floor&quot;
+    string=Iwo
+    aliasof=Gt
+    editor_group=flat
+[/terrain_type]
+
+#
+#    ## Underground ##
+#
+
+[terrain_type]
+    symbol_image=cave/beam-tile
+    id=lit
+    name= _ &quot;Lit&quot;
+    editor_name= _ &quot;Beam of Light&quot;
+    string=^Ii
+    aliasof=_bas
+    light=25
+    editor_group=cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=cave/floor6
+    id=cave_floor
+    name= _ &quot;Cave&quot;
+    editor_name= _ &quot;Cave Floor&quot;
+    aliasof=Ut
+    string=Uu
+    editor_group=cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=cave/earthy-floor3
+    id=cave_earthy
+    name= _ &quot;Cave&quot;
+    editor_name= _ &quot;Earthy Cave Floor&quot;
+    string=Uue
+    aliasof=Ut
+    editor_group=cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=cave/flagstones-dark
+    id=flagstones_dark
+    name= _ &quot;Road&quot;
+    editor_name= _ &quot;Dark Flagstones&quot;
+    string=Urb
+    editor_group=cave, flat
+    aliasof=Gt
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=cave/path
+    id=cave_path
+    name= _ &quot;Road&quot;
+    editor_name= _ &quot;Cave Path&quot;
+    string=Ur
+    aliasof=Gt
+    editor_group=cave, flat
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/mushrooms-tile
+    id=fungus_grove_old
+    name= _ &quot;Mushroom Grove&quot;
+    editor_name= _ &quot;Non-mixed Mushroom Grove&quot;
+    string=^Uf
+    aliasof=Tt
+    default_base=Uu
+    editor_group=cave, forest
+    hidden=yes # deprecated, only kept around so old maps still work
+#ifdef EDITOR
+    # po: this hint is only shown in the map editor, the ^Uf, ^Tf and Tb are all terrain codes and should be left as-is
+    help_topic_text= _ &quot;editor^The overlays &#x27;^Uf&#x27; and &#x27;^Ufi&#x27; are deprecated because, although the graphics show an overlay with another terrain underneath, the movement and defense stats are purely fungus terrain, ignoring the underlying terrain. The recommended replacements are &#x27;^Tf&#x27; and &#x27;^Tfi&#x27; which look the same but have the stats implied by the graphics. For hexes where the stats of purely fungus are wanted, &#x27;Tb&#x27; is a mushroom base terrain, which can be used with or without &#x27;^Tf&#x27; on top.&quot;
+#else
+    # po: this is only shown when the player opens the help by asking for the terrain description of a old mushroom terrain (^Uf or ^Ufi)
+    help_topic_text= _ &quot;Dwarven tales describe different types of mushrooms — with some types the difficulty of walking on the spongy floor has no relation to the ground underneath, even when the ground underneath is still visible. This terrain’s defense and movement costs are purely based on the unit’s stats for &lt;italic&gt;text=&#x27;Fungus&#x27;&lt;/italic&gt;.&quot;
+#endif
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/mushrooms-beam-tile
+    id=fungus_beam_old
+    name= _ &quot;Mushroom Grove&quot;
+    editor_name= _ &quot;Lit Non-mixed Mushroom Grove&quot;
+    string=^Ufi
+    default_base=Uu
+    aliasof=Tt
+    light=25
+    editor_group=cave
+    hidden=yes # deprecated, only kept around so old maps still work
+#ifdef EDITOR
+    # po: this hint is only shown in the map editor, the ^Uf, ^Tf and Tb are all terrain codes and should be left as-is
+    help_topic_text= _ &quot;editor^The overlays &#x27;^Uf&#x27; and &#x27;^Ufi&#x27; are deprecated because, although the graphics show an overlay with another terrain underneath, the movement and defense stats are purely fungus terrain, ignoring the underlying terrain. The recommended replacements are &#x27;^Tf&#x27; and &#x27;^Tfi&#x27; which look the same but have the stats implied by the graphics. For hexes where the stats of purely fungus are wanted, &#x27;Tb&#x27; is a mushroom base terrain, which can be used with or without &#x27;^Tf&#x27; on top.&quot;
+#else
+    # po: this is only shown when the player opens the help by asking for the terrain description of a old mushroom terrain (^Uf or ^Ufi)
+    help_topic_text= _ &quot;Dwarven tales describe different types of mushrooms — with some types the difficulty of walking on the spongy floor has no relation to the ground underneath, even when the ground underneath is still visible. This terrain’s defense and movement costs are purely based on the unit’s stats for &lt;italic&gt;text=&#x27;Fungus&#x27;&lt;/italic&gt;.&quot;
+#endif
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/mushrooms-tile
+    id=fungus_grove
+    name= _ &quot;Mushroom Grove&quot;
+    editor_name= _ &quot;Mushroom Grove&quot;
+    string=^Tf
+    aliasof=_bas,Tt
+    mvt_alias=-,_bas,Tt
+    default_base=Tb
+    editor_group=cave, forest
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/mushrooms-beam-tile
+    id=fungus_beam
+    name= _ &quot;Mushroom Grove&quot;
+    editor_name= _ &quot;Lit Mushroom Grove&quot;
+    string=^Tfi
+    default_base=Tb
+    aliasof=_bas,Tt
+    mvt_alias=-,_bas,Tt
+    light=25
+    editor_group=cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=forest/mushroom-base
+    id=fungus_floor
+    name= _ &quot;Mycelium&quot;
+    editor_name= _ &quot;Mycelium&quot;
+    string=Tb
+    aliasof=Tt
+    editor_group=cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=cave/hills-variation
+    id=rocky_cave
+    name= _ &quot;Rockbound Cave&quot;
+    editor_name= _ &quot;Rockbound Cave&quot;
+    string=Uh
+    aliasof=Ut, Ht
+    mvt_alias=-,Ut, Ht
+    editor_group=cave, rough
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Rockbound cave&#x27;&lt;/italic&gt; terrain is formed by the action of water and wind, carrying erosive particles that carve the rock. It resembles a scraggy underground cavern which shoulders defense, but is hard for most units to traverse. Only settlers of caves, such as dwarves and trolls, are fully capable of navigating such topography.
+
+Most units have about 50% defense in rocky caves, whereas cavalry are limited to 40%. Dwarves, by dint of their small size, enjoy 60% defense in rockbound caves.
+
+Occasionally caves are &lt;italic&gt;text=&#x27;illuminated&#x27;&lt;/italic&gt;.&quot;
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=cave/earthy-hills-variation
+    id=earthy_rocky_cave
+    name= _ &quot;Rockbound Cave&quot;
+    editor_name= _ &quot;Earthy Rockbound Cave&quot;
+    string=Uhe
+    aliasof=Ut, Ht
+    mvt_alias=-,Ut, Ht
+    editor_group=cave, rough
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Rockbound cave&#x27;&lt;/italic&gt; terrain is formed by the action of water and wind, carrying erosive particles that carve the rock. It resembles a scraggy underground cavern which shoulders defense, but is hard for most units to traverse. Only settlers of caves, such as dwarves and trolls, are fully capable of navigating such topography.
+
+Most units have about 50% defense in rocky caves, whereas cavalry are limited to 40%. Dwarves, by dint of their small size, enjoy 60% defense in rockbound caves.
+
+Occasionally caves are &lt;italic&gt;text=&#x27;illuminated&#x27;&lt;/italic&gt;.&quot;
+[/terrain_type]
+
+#    ## Mine rail tracks ##
+
+[terrain_type]
+    symbol_image=misc/rails-n-s
+    id=mine_rails
+    name= _ &quot;Mine Rail&quot;
+    string=^Br|
+    aliasof=_bas,Rt
+    mvt_alias=Gt,Rt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=misc/rails-ne-sw
+    id=mine_railsdiag1
+    name= _ &quot;Mine Rail&quot;
+    string=^Br/
+    aliasof=_bas,Rt
+    mvt_alias=Gt,Rt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=cave
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=misc/rails-se-nw
+    id=mine_railsdiag2
+    name= _ &quot;Mine Rail&quot;
+    string=^Br\
+    aliasof=_bas,Rt
+    mvt_alias=Gt,Rt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=cave
+    hide_help=yes
+[/terrain_type]
+
+#######################################
+#
+#    ## Raised/Lowered terrain  ##
+#
+#######################################
+
+#    ## visual overlay - higher ##
+[terrain_type]
+    symbol_image=elevation/bluffs-tile
+    id=high_border
+    editor_name= _ &quot;Bluff&quot;
+    string=^Qhh
+    aliasof=_bas
+    editor_group=embellishments, elevation
+[/terrain_type]
+
+#    ## visual overlay - lower ##
+[terrain_type]
+    symbol_image=elevation/regular-tile
+    id=high_canyon
+    editor_name= _ &quot;Gulch&quot;
+    string=^Qhu
+    aliasof=_bas
+    editor_group=embellishments, elevation
+[/terrain_type]
+
+#    ## Unwalkable ##
+[terrain_type]
+    symbol_image=elevation/obstacle-tile
+    id=high_canyon_obst
+    # name= _ &quot;Ravine&quot;
+    editor_name= _ &quot;Unwalkable Ravine&quot;
+    string=^Qhux
+    aliasof=Qt
+    editor_group=obstacle, elevation
+[/terrain_type]
+
+#    ## Forest Bluffs/Gulches ##
+# This is because elevation borders use an overlay
+# There are probably other overlay terrains that
+# could use a similar treatment
+[terrain_type]
+    symbol_image=elevation/bluff-forest-tile
+    id=high_border_woods
+    editor_name= _ &quot;Wooded Bluffs&quot;
+    string=^Qhhf
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest, elevation
+[/terrain_type]
+[terrain_type]
+    symbol_image=elevation/gulch-forest-tile
+    id=high_canyon_woods
+    editor_name= _ &quot;Wooded Gulch&quot;
+    string=^Qhuf
+    aliasof=_bas,Ft
+    mvt_alias=-,_bas,Ft
+    editor_group=forest, elevation
+[/terrain_type]
+
+#######################################
+
+[terrain_type]
+    symbol_image=chasm/depths
+    editor_image=chasm/regular-tile
+    id=canyon
+    name= _ &quot;Chasm&quot;
+    editor_name= _ &quot;Regular Chasm&quot;
+    string=Qxu
+    aliasof=Qt
+    editor_group=cave, obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=chasm/depths
+    editor_image=chasm/earthy-tile
+    id=chasm_earthy
+    name= _ &quot;Chasm&quot;
+    editor_name= _ &quot;Earthy Chasm&quot;
+    string=Qxe
+    aliasof=Qt
+    editor_group=cave, obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=chasm/abyss
+    editor_image=chasm/abyss-tile
+    id=abyss
+    name= _ &quot;Chasm&quot;
+    editor_name= _ &quot;Ethereal Abyss&quot;
+    string=Qxua
+    aliasof=Qt
+    editor_group=cave, obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=unwalkable/lava-tile
+    editor_image=unwalkable/lava-chasm-tile
+    id=lava_chasm
+    name= _ &quot;Chasm&quot;
+    editor_name= _ &quot;Lava Chasm&quot;
+    string=Ql
+    aliasof=Qt
+    light=25
+    max_light=35
+    editor_group=cave, obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=unwalkable/lava-tile
+    editor_image=unwalkable/lava-tile
+    id=lava
+    name= _ &quot;Lava&quot;
+    editor_name= _ &quot;Lava&quot;
+    string=Qlf
+    aliasof=Qt
+    light=25
+    max_light=35
+    editor_group=cave, obstacle
+    help_topic_text= _ &quot;The dangers inherent in trying to walk on &lt;italic&gt;text=&#x27;lava&#x27;&lt;/italic&gt; are fairly obvious. As far as movement is concerned, lava is equivalent to &lt;ref&gt;dst=&#x27;terrain_unwalkable&#x27; text=&#x27;unwalkable&#x27;&lt;/ref&gt; terrain, and can only be crossed by those units capable of flying a considerable distance above it. The molten magma also produces a substantial glow, illuminating the area immediately above it. This provides an attack bonus for lawful units and removes the attack bonus from chaotic units.&quot;
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=mountains/volcano-tile
+    editor_image=mountains/volcano-tile
+    id=volcano
+    name= _ &quot;Volcano&quot;
+    string=Mv
+    aliasof=Qt
+    light=25
+    max_light=35
+    editor_group=rough, obstacle
+[/terrain_type]
+
+#
+# Impassable
+#
+
+[terrain_type]
+    symbol_image=mountains/cloud-tile
+    id=cloud
+    name= _ &quot;Mountains&quot;
+    editor_name= _ &quot;Regular Impassable Mountains&quot;
+    string=Mm^Xm
+    aliasof=-,Mt,Xt
+    editor_group=rough,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=mountains/cloud-desert-tile
+    id=cloud_dry
+    name= _ &quot;Mountains&quot;
+    editor_name= _ &quot;Dry Impassable Mountains&quot;
+    string=Md^Xm
+    aliasof=-,Mt,Xt
+    #mvt_alias=-,M,Xt
+    editor_group=rough,obstacle,desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=mountains/cloud-snow-tile
+    id=cloud_snow
+    name= _ &quot;Mountains&quot;
+    editor_name= _ &quot;Snowy Impassable Mountains&quot;
+    string=Ms^Xm
+    aliasof=-,Mt,Xt
+    editor_group=rough,obstacle,frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=desert_mountains/cloud-desert-tile
+    id=cloud_desert
+    name= _ &quot;Mountains&quot;
+    editor_name= _ &quot;Desert Impassable Mountains&quot;
+    string=Mdd^Xm
+    aliasof=-,Mt,Xt
+    editor_group=rough,obstacle,desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=cave/wall-rough-tile
+    id=cavewall
+    name= _ &quot;Cave Wall&quot;
+    editor_name= _ &quot;Natural Cave Wall&quot;
+    string=Xu
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/wall-mine-tile
+    id=minewall
+    name= _ &quot;Mine Wall&quot;
+    editor_name= _ &quot;Mine Wall&quot;
+    string=Xuc
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=cave/earthy-wall-rough-tile
+    id=cavewall_earthy
+    name= _ &quot;Cave Wall&quot;
+    editor_name= _ &quot;Natural Earthy Cave Wall&quot;
+    string=Xue
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/rubble/wall-rough-tile
+    id=cavewall_damaged
+    name= _ &quot;Cave Wall&quot;
+    editor_name= _ &quot;Damaged Cave Wall&quot;
+    string=Xur
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/hedge/wall-hedge-tile
+    id=wall_hedge
+    name= _ &quot;Thick Hedges&quot;
+    editor_name= _ &quot;Hedges Wall&quot;
+    string=Xuf
+    aliasof=Xt
+    editor_group=forest,obstacle
+[/terrain_type]
+
+[terrain_type]
+    # Made obsolete by new mine walls; drawn exactly like Xuc, but definition kept for compatibility
+    hidden=yes
+    hide_help=yes
+    symbol_image=void/void
+    #editor_image=cave/earthy-wall-hewn-tile
+    id=cavewall_earthy_hewn
+    name= _ &quot;Cave Wall&quot;
+#ifndef SCHEMA_VALIDATION
+    #wmllint: markcheck off
+    editor_name=&quot;Reinforced Earthy Cave Wall&quot;
+    #wmllint: markcheck on
+#endif
+    string=Xuce
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/stone/wall-stone-tile
+    id=wall_stone
+    name= _ &quot;Stone Wall&quot;
+    string=Xos
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/stone/wall-stone-lit-tile
+    id=wall_stone_lit
+    name= _ &quot;Stone Wall&quot;
+    editor_name= _ &quot;Lit Stone Wall&quot;
+    string=Xol
+    aliasof=Xt
+    editor_group=cave,obstacle
+    hidden=yes # Superseded by the Sconce embellishment.
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/stone/wall-stone-mine-tile
+    id=wall_stone_mine
+    name= _ &quot;Mine Wall&quot;
+    editor_name= _ &quot;Straight Mine Wall&quot;
+    string=Xom
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/stone/wall-stone-white-tile
+    id=wall_stone_white
+    name= _ &quot;Interior Wall&quot;
+    editor_name= _ &quot;Straight White Wall&quot;
+    string=Xoi
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/stone/clean/wall-stone-tile
+    id=wall_stone_clean
+    name= _ &quot;Stone Wall&quot;
+    editor_name= _ &quot;Clean Stone Wall&quot;
+    string=Xoc
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/stone/ancient/wall-stone-tile
+    id=wall_stone_ancient
+    name= _ &quot;Stone Wall&quot;
+    editor_name= _ &quot;Ancient Stone Wall&quot;
+    string=Xoa
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/stone/catacombs/wall-stone-tile
+    id=wall_stone_tomb
+    name= _ &quot;Catacombs Wall&quot;
+    editor_name= _ &quot;Catacombs Stone Wall&quot;
+    string=Xot
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/stone/overgrown/wall-stone-tile
+    id=wall_stone_overgrown
+    name= _ &quot;Overgrown Wall&quot;
+    editor_name= _ &quot;Overgrown Stone Wall&quot;
+    string=Xof
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=walls/stone/damaged/wall-stone-tile
+    id=wall_stone_damaged
+    name= _ &quot;Stone Wall&quot;
+    editor_name= _ &quot;Damaged Stone Wall&quot;
+    string=Xor
+    aliasof=Xt
+    editor_group=cave,obstacle
+[/terrain_type]
+
+[terrain_type]
+    # symbol_image=void/void # not using this because this tile is not a barrier
+    symbol_image=walls/stone/ruins/wall-stone-tile
+    id=wall_stone_ruins
+    name= _ &quot;Ruined Wall&quot;
+    string=Exos # it is sort of an embellishment and also a stone wall
+    aliasof=Gt, Ut
+    mvt_alias=-,Gt, Ut
+    def_alias=-,Gt, Ut
+    editor_group=cave,flat
+[/terrain_type]
+
+#
+#    ## Doors and gates ##
+#
+
+#    ## Closed ##
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/gate-rusty-sw-tile
+    id=portal_gate_rusty_sw
+    name= _ &quot;Gate&quot;
+    editor_name= _ &quot;Rusty Gate&quot;
+    string=^Pr\
+    default_base=Rr
+    aliasof=_bas,Xt
+    mvt_alias=Xt
+    editor_group=embellishments,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/gate-rusty-se-tile
+    id=portal_gate_rusty_se
+    name= _ &quot;Gate&quot;
+    editor_name= _ &quot;Rusty Gate&quot;
+    string=^Pr/
+    default_base=Rr
+    aliasof=_bas,Xt
+    mvt_alias=Xt
+    editor_group=embellishments,obstacle
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/gate-rusty-n-tile
+    id=portal_gate_rusty_n
+    name= _ &quot;Gate&quot;
+    editor_name= _ &quot;Rusty Gate&quot;
+    string=^Pr|
+    default_base=Rr
+    aliasof=_bas,Xt
+    mvt_alias=Xt
+    editor_group=embellishments,obstacle
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/door-wooden-sw-tile
+    id=portal_door_wooden_sw
+    name= _ &quot;Door&quot;
+    editor_name= _ &quot;Wooden Door&quot;
+    string=^Pw\
+    default_base=Rr
+    aliasof=_bas,Xt
+    mvt_alias=Xt
+    editor_group=embellishments,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/door-wooden-se-tile
+    id=portal_door_wooden_se
+    name= _ &quot;Door&quot;
+    editor_name= _ &quot;Wooden Door&quot;
+    string=^Pw/
+    default_base=Rr
+    aliasof=_bas,Xt
+    mvt_alias=Xt
+    editor_group=embellishments,obstacle
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/door-wooden-n-tile
+    id=portal_door_wooden_n
+    name= _ &quot;Door&quot;
+    editor_name= _ &quot;Wooden Door&quot;
+    string=^Pw|
+    default_base=Rr
+    aliasof=_bas,Xt
+    mvt_alias=Xt
+    editor_group=embellishments,obstacle
+    hide_help=yes
+[/terrain_type]
+
+#    ## Open ##
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/gate-rusty-open-sw-tile
+    id=portal_gate_rusty_open_sw
+    name= _ &quot;Gate&quot;
+    editor_name= _ &quot;Open Rusty Gate&quot;
+    string=^Pr\o
+    default_base=Rr
+    aliasof=_bas
+    editor_group=embellishments,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/gate-rusty-open-se-tile
+    id=portal_gate_rusty_open_se
+    name= _ &quot;Gate&quot;
+    editor_name= _ &quot;Open Rusty Gate&quot;
+    string=^Pr/o
+    default_base=Rr
+    aliasof=_bas
+    editor_group=embellishments,obstacle
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/gate-rusty-open-n-tile
+    id=portal_gate_rusty_open_n
+    name= _ &quot;Gate&quot;
+    editor_name= _ &quot;Open Rusty Gate&quot;
+    string=^Pr|o
+    default_base=Rr
+    aliasof=_bas
+    editor_group=embellishments,obstacle
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/door-wooden-open-sw-tile
+    id=portal_door_wooden_open_sw
+    name= _ &quot;Door&quot;
+    editor_name= _ &quot;Open Wooden Door&quot;
+    string=^Pw\o
+    default_base=Rr
+    aliasof=_bas
+    editor_group=embellishments,obstacle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/door-wooden-open-se-tile
+    id=portal_door_wooden_open_se
+    name= _ &quot;Door&quot;
+    editor_name= _ &quot;Open Wooden Door&quot;
+    string=^Pw/o
+    default_base=Rr
+    aliasof=_bas
+    editor_group=embellishments,obstacle
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=portals/door-wooden-open-n-tile
+    id=portal_door_wooden_open_n
+    name= _ &quot;Door&quot;
+    editor_name= _ &quot;Open Wooden Door&quot;
+    string=^Pw|o
+    default_base=Rr
+    aliasof=_bas
+    editor_group=embellishments,obstacle
+    hide_help=yes
+[/terrain_type]
+
+#
+#    ## Invisible obstacle overlays ##
+#
+
+[terrain_type]
+    editor_image=impassable-editor
+    id=impassable_overlay
+    editor_name= _ &quot;Impassable Overlay&quot;
+    string=^Xo
+    aliasof=_bas,Xt
+    mvt_alias=Xt
+    editor_group=obstacle, special
+    hide_help=yes
+[/terrain_type]
+
+# wmllint: general spelling unwalkable
+
+[terrain_type]
+    editor_image=unwalkable-editor
+    id=unwalkable_overlay
+    editor_name= _ &quot;Unwalkable Overlay&quot;
+    string=^Qov
+    aliasof=_bas,Qt
+    mvt_alias=Qt
+    editor_group=obstacle, special
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=void/void-editor
+    id=void
+    name= _ &quot;Void&quot;
+    string=Xv
+    aliasof=Xt
+    editor_group=obstacle, special
+    hide_help=yes
+[/terrain_type]
+
+#
+# Villages
+#
+
+#    ## Desert
+
+[terrain_type]
+    symbol_image=village/desert-tile
+    id=desert_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Adobe Village&quot;
+    string=^Vda
+    aliasof=_bas, Vt
+    default_base=Dd
+    heals=8
+    gives_income=yes
+    editor_group=village, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/desert-ruin-tile
+    id=desert_village_ruin
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Ruined Adobe Village&quot;
+    string=^Vdr
+    aliasof=_bas, Vt
+    default_base=Dd
+    heals=8
+    gives_income=yes
+    editor_group=village, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/desert-camp-tile
+    id=desert_village_tent
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Desert Tent Village&quot;
+    string=^Vdt
+    aliasof=_bas, Vt
+    default_base=Dd
+    heals=8
+    gives_income=yes
+    editor_group=village, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/camp-tile
+    id=camp_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Tent Village&quot;
+    string=^Vct
+    aliasof=_bas, Vt
+    default_base=Re
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+#    ## Orcish
+
+[terrain_type]
+    symbol_image=village/orc-tile
+    id=orcish_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Orcish Village&quot;
+    string=^Vo
+    aliasof=_bas, Vt
+    default_base=Gd
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/orc-snow-tile
+    id=orcish_snow_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Snowy Orcish Village&quot;
+    string=^Voa
+    aliasof=_bas, Vt
+    default_base=Aa
+    heals=8
+    gives_income=yes
+    editor_group=village, frozen
+[/terrain_type]
+
+#    ## Elven
+
+[terrain_type]
+    symbol_image=village/elven-snow-tile
+    id=elven_snow_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Snowy Elven Village&quot;
+    string=^Vea
+    aliasof=_bas, Vt
+    default_base=Aa
+    heals=8
+    gives_income=yes
+    editor_group=village, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/elven-tile
+    id=elven_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Elven Village&quot;
+    string=^Ve
+    aliasof=_bas, Vt
+    default_base=Gg
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+#    ## Human
+
+[terrain_type]
+    symbol_image=village/human-tile
+    id=human_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Cottage&quot;
+    string=^Vh
+    aliasof=_bas, Vt
+    default_base=Gs
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/snow-tile
+    id=snow_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Snowy Cottage&quot;
+    string=^Vha
+    aliasof=_bas, Vt
+    default_base=Aa
+    heals=8
+    gives_income=yes
+    editor_group=village, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/human-cottage-ruin-tile
+    id=human_village_ruin
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Ruined Cottage&quot;
+    string=^Vhr
+    aliasof=_bas, Vt
+    default_base=Gd
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/human-city-tile
+    id=city_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Human City&quot;
+    string=^Vhc
+    aliasof=_bas, Vt
+    default_base=Rr
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=misc/windmill-tile
+    id=windmill_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Windmill Village&quot;
+    string=^Vwm
+    aliasof=_bas, Vt
+    default_base=Gg
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/human-city-snow-tile
+    id=city_village_wno
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Snowy Human City&quot;
+    string=^Vhca
+    aliasof=_bas, Vt
+    default_base=Rrc
+    heals=8
+    gives_income=yes
+    editor_group=village, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/human-city-ruin-tile
+    id=city_village_ruin
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Ruined Human City&quot;
+    string=^Vhcr
+    aliasof=_bas, Vt
+    default_base=Rp
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/human-hills-tile
+    id=hill_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Hill Stone Village&quot;
+    string=^Vhh
+    aliasof=_bas, Vt
+    default_base=Hh
+    heals=8
+    gives_income=yes
+    editor_group=village, rough
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/human-snow-hills-tile
+    id=snow-hill_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Snowy Hill Stone Village&quot;
+    string=^Vhha
+    aliasof=_bas, Vt
+    default_base=Ha
+    heals=8
+    gives_income=yes
+    editor_group=village, frozen, rough
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/human-hills-ruin-tile
+    id=hill_village_ruin
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Ruined Hill Stone Village&quot;
+    string=^Vhhr
+    aliasof=_bas, Vt
+    default_base=Hhd
+    heals=8
+    gives_income=yes
+    editor_group=village, rough
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/tropical-tile
+    id=tropical_forest_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Tropical Village&quot;
+    string=^Vht
+    aliasof=_bas, Vt
+    default_base=Gs
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/drake-tile
+    id=drake_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Drake Village&quot;
+    string=^Vd
+    aliasof=_bas, Vt
+    default_base=Rr
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/drake-snow-tile
+    id=drake_snow_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Snowy Drake Village&quot;
+    string=^Vka
+    aliasof=_bas, Vt
+    default_base=Aa
+    heals=8
+    gives_income=yes
+    editor_group=village, frozen
+[/terrain_type]
+
+#    ## Underground
+
+[terrain_type]
+    symbol_image=village/cave-tile
+    id=underground_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Cave Village&quot;
+    string=^Vu
+    aliasof=_bas, Vt
+    default_base=Uu
+    heals=8
+    gives_income=yes
+    editor_group=village, cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/dwarven-tile
+    id=dwarven_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Dwarven Village&quot;
+    string=^Vud
+    aliasof=_bas, Vt
+    default_base=Uu
+    heals=8
+    gives_income=yes
+    editor_group=village, cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/hut-tile
+    id=hut_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Hut&quot;
+    string=^Vc
+    aliasof=_bas, Vt
+    default_base=Gs
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/hut-snow-tile
+    id=hut_snow_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Snowy Hut&quot;
+    string=^Vca
+    aliasof=_bas, Vt
+    default_base=Aa
+    heals=8
+    gives_income=yes
+    editor_group=village, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/log-cabin-tile
+    id=logcabin_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Log Cabin&quot;
+    string=^Vl
+    aliasof=_bas, Vt
+    default_base=Gs
+    heals=8
+    gives_income=yes
+    editor_group=village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/log-cabin-snow-tile
+    id=logcabin_snow_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Snowy Log Cabin&quot;
+    string=^Vla
+    aliasof=_bas, Vt
+    default_base=Aa
+    heals=8
+    gives_income=yes
+    editor_group=village, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/igloo-tile
+    id=igloo
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Igloo&quot;
+    string=^Vaa
+    aliasof=_bas, Vt
+    default_base=Aa
+    heals=8
+    gives_income=yes
+    editor_group=village, frozen
+[/terrain_type]
+
+#    ## Water Village
+
+[terrain_type]
+    symbol_image=village/swampwater-tile
+    id=swamp_village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Swamp Village&quot;
+    string=^Vhs
+    aliasof=_bas, Vt
+    default_base=Ss
+    heals=8
+    gives_income=yes
+    editor_group=water, village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=village/coast-tile
+    id=mermen-village
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Merfolk Village&quot;
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Submerged villages&#x27;&lt;/italic&gt; are the homes of merfolk and nagas. While water-dwelling creatures are at home here, land-dwellers have a hard time navigating and defending these villages. However, like any village, the facilities are available to all creatures which allow units to tend to their wounds. Any unit stationed in a village can heal eight hitpoints each turn, or be cured of poison.
+
+Merfolk and nagas have 60% defense in submerged villages, whereas land based units usually have a low defense.&quot;
+    string=^Vm
+    aliasof=_bas
+    default_base=Ww
+    submerge=0.4
+    heals=8
+    gives_income=yes
+    editor_group=water, village
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=fog/fog1
+    editor_image=village/village-overlay-editor
+    id=village_overlay
+    name= _ &quot;Village&quot;
+    editor_name= _ &quot;Village Overlay&quot;
+    string=^Vov
+    aliasof=_bas
+    heals=8
+    gives_income=yes
+    editor_group=village, special
+    hide_help=yes
+[/terrain_type]
+
+#
+# Castles
+#
+
+[terrain_type]
+    symbol_image=castle/encampment/regular-tile
+    id=encampment
+    name= _ &quot;Encampment&quot;
+    editor_name= _ &quot;Encampment&quot;
+    string=Ce
+    aliasof=Ct
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/encampment-ruin/regular-tile
+    id=encampment_ruin
+    name= _ &quot;Encampment&quot;
+    editor_name= _ &quot;Ruined Encampment&quot;
+    string=Cer
+    aliasof=Ct
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/encampment/snow-tile
+    id=encampment_snow
+    name= _ &quot;Encampment&quot;
+    editor_name= _ &quot;Snowy Encampment&quot;
+    string=Cea
+    aliasof=Ct, At
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/orcish/tile
+    id=orcish_fort
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Orcish Castle&quot;
+    string=Co
+    aliasof=Ct
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/winter-orcish/tile
+    id=snow_orcish_fort
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Snowy Orcish Castle&quot;
+    string=Coa
+    aliasof=Ct, At
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/castle-tile
+    id=human_castle
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Human Castle&quot;
+    string=Ch
+    aliasof=Ct
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/snowy/castle-tile
+    id=snow_castle
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Snowy Human Castle&quot;
+    string=Cha
+    aliasof=Ct, At
+    recruit_onto=yes
+    editor_group=castle, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/elven/tile
+    id=elven_castle
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Elven Castle&quot;
+    string=Cv
+    aliasof=Ct
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/elven-ruin/tile
+    id=elven_castle_ruin
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Elven Castle Ruin&quot;
+    string=Cvr
+    aliasof=Ct
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/winter-elven/tile
+    id=elven_castle_winter
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Winter Elven Castle&quot;
+    string=Cva
+    aliasof=Ct
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/dwarven-castle-tile
+    id=dwarven_castle
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Dwarven Underground Castle&quot;
+    string=Cud
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_onto=yes
+    editor_group=castle, cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/outside-dwarven/dwarven-castle-tile
+    id=dwarven_castle2
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Dwarven Castle&quot;
+    string=Cf
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/ruin-dwarven/dwarven-castle-tile
+    id=dwarven_castle_ruin
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Dwarven Castle Ruins&quot;
+    string=Cfr
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/winter-dwarven/dwarven-castle-tile
+    id=dwarven_castle_winter
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Winter Dwarven Castle&quot;
+    string=Cfa
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_onto=yes
+    editor_group=castle, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/ruin-tile
+    id=ruin
+    name= _ &quot;Ruined Castle&quot;
+    editor_name= _ &quot;Ruined Human Castle&quot;
+    string=Chr
+    aliasof=Ct
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/sunken-ruin-tile
+    id=sunkenruin
+    name= _ &quot;Ruined Castle&quot;
+    editor_name= _ &quot;Sunken Human Ruin&quot;
+    string=Chw
+    aliasof=Ct, Wst
+    submerge=0.4
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle, water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/swamp-ruin-tile
+    id=swampruin
+    name= _ &quot;Ruined Castle&quot;
+    editor_name= _ &quot;Swamp Human Ruin&quot;
+    string=Chs
+    aliasof=Ct, St
+    submerge=0.4
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle, water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/sand/tile
+    id=sand_castle
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Desert Castle&quot;
+    string=Cd
+    aliasof=Ct
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/sand/ruin-tile
+    id=sand_castle_ruin
+    name= _ &quot;Ruined Castle&quot;
+    editor_name= _ &quot;Ruined Desert Castle&quot;
+    string=Cdr
+    aliasof=Ct
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/troll/tile
+    id=troll_encampment
+    name= _ &quot;Encampment&quot;
+    editor_name= _ &quot;Troll Encampment&quot;
+    string=Cte
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/aquatic-camp/tile
+    id=aquatic_camp
+    name= _ &quot;Encampment&quot;
+    editor_name= _ &quot;Aquatic Encampment&quot;
+    string=Cme
+    aliasof=Ct,Wrt
+    submerge=0.3
+    unit_height_adjust=0
+    recruit_onto=yes
+    editor_group=castle, water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/aquatic-castle/castle-tile
+    id=aquatic_castle
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Aquatic Castle&quot;
+    string=Cm
+    aliasof=Ct,Wrt
+    submerge=0.4
+    unit_height_adjust=3
+    recruit_onto=yes
+    editor_group=castle, water
+[/terrain_type]
+
+#
+# Keeps
+#
+
+[terrain_type]
+    symbol_image=castle/encampment/regular-keep-tile
+    id=encampment_keep
+    name= _ &quot;Encampment Keep&quot;
+    string=Ke
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/encampment-ruin/regular-keep-tile
+    id=encampment_ruin_keep
+    name= _ &quot;Ruined Encampment Keep&quot;
+    string=Ker
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/encampment/tall-keep-tile
+    id=encampment_keep_tall
+    name= _ &quot;Encampment Keep&quot;
+    editor_name= _ &quot;Tall Encampment Keep&quot;
+    string=Ket
+    aliasof=Ct
+    unit_height_adjust=17
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/encampment/snow-keep-tile
+    id=encampment_snow_keep
+    name= _ &quot;Encampment Keep&quot;
+    editor_name= _ &quot;Snowy Encampment Keep&quot;
+    string=Kea
+    aliasof=Ct, At
+    unit_height_adjust=0
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/orcish/keep-tile
+    id=orcish_keep
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Orcish Keep&quot;
+    string=Ko
+    aliasof=Ct
+    unit_height_adjust=17
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/winter-orcish/keep-tile
+    id=snow_orcish_keep
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Snowy Orcish Keep&quot;
+    string=Koa
+    aliasof=Ct, At
+    unit_height_adjust=17
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/keep-tile
+    id=human_keep
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Human Castle Keep&quot;
+    string=Kh
+    aliasof=Ct
+    unit_height_adjust=20
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/snowy/keep-tile
+    id=snow_keep
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Snowy Human Castle Keep&quot;
+    string=Kha
+    aliasof=Ct, At
+    unit_height_adjust=20
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/elven/keep-tile
+    id=elven_keep
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Elven Castle Keep&quot;
+    string=Kv
+    aliasof=Ct
+    unit_height_adjust=20
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/elven-ruin/keep-tile
+    id=elven_keep_ruin
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Elven Keep Ruin&quot;
+    string=Kvr
+    aliasof=Ct
+    unit_height_adjust=20
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/winter-elven/keep-tile
+    id=elven_keep_winter
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Winter Elven Keep&quot;
+    string=Kva
+    aliasof=Ct
+    unit_height_adjust=20
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/dwarven-keep-tile
+    id=dwarven_keep
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Dwarven Underground Keep&quot;
+    string=Kud
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/outside-dwarven/dwarven-keep-tile
+    id=dwarven_keep2
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Dwarven Castle Keep&quot;
+    string=Kf
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/ruin-dwarven/dwarven-keep-tile
+    id=dwarven_keep_ruin
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Dwarven Ruin Keep&quot;
+    string=Kfr
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/winter-dwarven/dwarven-keep-tile
+    id=dwarven_keep_winter
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Winter Dwarven Keep&quot;
+    string=Kfa
+    aliasof=Ct
+    unit_height_adjust=0
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, frozen
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/ruined-keep-tile
+    id=ruined_keep
+    name= _ &quot;Ruined Keep&quot;
+    editor_name= _ &quot;Ruined Human Castle Keep&quot;
+    string=Khr
+    aliasof=Ct
+    unit_height_adjust=20
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/sunken-keep-tile
+    id=sunken_keep
+    name= _ &quot;Ruined Keep&quot;
+    editor_name= _ &quot;Sunken Human Castle Keep&quot;
+    string=Khw
+    aliasof=Ct, Wst
+    unit_height_adjust=20
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/swamp-keep-tile
+    id=swamp_keep
+    name= _ &quot;Ruined Keep&quot;
+    editor_name= _ &quot;Swamp Human Castle Keep&quot;
+    string=Khs
+    aliasof=Ct, St
+    unit_height_adjust=20
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/sand/keep-tile
+    id=desert_keep
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Desert Keep&quot;
+    string=Kd
+    aliasof=Ct
+    unit_height_adjust=20
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/sand/ruin-keep-tile
+    id=desert_keep_ruined
+    name= _ &quot;Ruined Keep&quot;
+    editor_name= _ &quot;Ruined Desert Keep&quot;
+    string=Kdr
+    aliasof=Ct
+    unit_height_adjust=20
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, desert
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/aquatic-camp/keep-tile
+    id=merman_campkeep
+    name= _ &quot;Encampment Keep&quot;
+    editor_name= _ &quot;Aquatic Encampment Keep&quot;
+    string=Kme
+    aliasof=Ct, Wrt
+    unit_height_adjust=2
+    recruit_onto=yes
+    recruit_from=yes
+    editor_group=castle, water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/troll/keep-tile
+    id=troll_campkeep
+    name= _ &quot;Encampment Keep&quot;
+    editor_name= _ &quot;Troll Encampment Keep&quot;
+    string=Kte
+    aliasof=Ct
+    unit_height_adjust=1
+    recruit_onto=yes
+    recruit_from=yes
+    editor_group=castle
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=castle/aquatic-castle/keep-tile
+    id=merman_castlekeep
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Aquatic Keep&quot;
+    string=Km
+    aliasof=Ct, Wrt
+    submerge=0.4
+    unit_height_adjust=10
+    recruit_onto=yes
+    recruit_from=yes
+    editor_group=castle, water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=fog/fog1
+    editor_image=castle/castle-overlay-editor
+    id=castle_overlay
+    name= _ &quot;Castle&quot;
+    editor_name= _ &quot;Castle Overlay&quot;
+    string=^Cov
+    aliasof=_bas
+    recruit_onto=yes
+    editor_group=castle, special
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=fog/fog1
+    editor_image=castle/keep-overlay-editor
+    id=keep_overlay
+    name= _ &quot;Keep&quot;
+    editor_name= _ &quot;Keep Overlay&quot;
+    string=^Kov
+    aliasof=_bas
+    recruit_from=yes
+    recruit_onto=yes
+    editor_group=castle, special
+    hide_help=yes
+[/terrain_type]
+
+#
+#  Bridges
+#
+
+#  ######## Wooden Bridge
+
+[terrain_type]
+    symbol_image=bridge/wood-n-s
+    id=bridge
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Wooden Bridge&quot;
+    string=^Bw|
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge, water
+    help_topic_text= _ &quot;To those capable of building one, the ability to lay a &lt;italic&gt;text=&#x27;bridge&#x27;&lt;/italic&gt; offers a liberation from the fickle nature of waterways, whose fords come and go with the rise and fall of the waterline. This is to say nothing of the luxury of dry feet, the loss of which is no laughing matter in the cold months of the year.
+
+For those who go by land or sea, a bridge is the best of both worlds — for gameplay purposes, it is treated either as grassland or the underlying water, whichever offers the best movement and defensive bonuses for the unit occupying the bridge hex. Note that a swimming unit and a land unit are not capable of occupying a bridge hex at the same time.&quot;
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/wood-ne-sw
+    id=bridgediag1
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Wooden Bridge&quot;
+    string=^Bw/
+    aliasof=_bas, Gt
+    editor_group=bridge, water
+    submerge=0
+    unit_height_adjust=22
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/wood-se-nw
+    id=bridgediag2
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Wooden Bridge&quot;
+    string=^Bw\
+    aliasof=_bas, Gt
+    editor_group=bridge, water
+    submerge=0
+    unit_height_adjust=22
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/wood-rotting-n-s
+    id=rotbridge
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Rotting Bridge&quot;
+    string=^Bw|r
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge, water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/wood-rotting-ne-sw
+    id=rotbridgediag1
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Rotting Bridge&quot;
+    string=^Bw/r
+    aliasof=_bas, Gt
+    editor_group=bridge, water
+    submerge=0
+    unit_height_adjust=22
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/wood-rotting-se-nw
+    id=rotbridgediag2
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Rotting Bridge&quot;
+    string=^Bw\r
+    aliasof=_bas, Gt
+    editor_group=bridge, water
+    submerge=0
+    unit_height_adjust=22
+    hide_help=yes
+[/terrain_type]
+
+#  ######## Basic Stone Bridge
+
+[terrain_type]
+    symbol_image=bridge/stonebridge-n-s-tile
+    id=stone_bridge
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Basic Stone Bridge&quot;
+    string=^Bsb|
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge,water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/stonebridge-se-nw-tile
+    id=stone_bridgediag1
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Basic Stone Bridge&quot;
+    string=^Bsb\
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge,water
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/stonebridge-ne-sw-tile
+    id=stone_bridgediag2
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Basic Stone Bridge&quot;
+    string=^Bsb/
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge,water
+    hide_help=yes
+[/terrain_type]
+
+#  ######## Snow-covered Stone Bridge
+
+[terrain_type]
+    symbol_image=bridge/snow/stonebridge-n-s-tile
+    id=snow_stone_bridge
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Snowy Stone Bridge&quot;
+    string=^Bsa|
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge,frozen,water
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/snow/stonebridge-se-nw-tile
+    id=snow_stone_bridgediag1
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Snowy Stone Bridge&quot;
+    string=^Bsa\
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge,frozen,water
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/snow/stonebridge-ne-sw-tile
+    id=snow_stone_bridgediag2
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Snowy Stone Bridge&quot;
+    string=^Bsa/
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge,frozen,water
+    hide_help=yes
+[/terrain_type]
+
+#  ######## Chasm Bridge
+
+[terrain_type]
+    symbol_image=cave/chasm-stone-bridge-s-n-tile
+    id=bridgechasm
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Cave Chasm Bridge&quot;
+    string=^Bs|
+    aliasof=Ut,_bas
+    submerge=0
+    default_base=Qxu
+    editor_group=bridge, cave
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=cave/chasm-stone-bridge-sw-ne-tile
+    id=bridgechasmdiag1
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Cave Chasm Bridge&quot;
+    unit_height_adjust=22
+    string=^Bs/
+    aliasof=Ut,_bas
+    submerge=0
+    default_base=Qxu
+    editor_group=bridge, cave
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=cave/chasm-stone-bridge-se-nw-tile
+    id=bridgechasmdiag2
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Cave Chasm Bridge&quot;
+    unit_height_adjust=22
+    string=^Bs\
+    aliasof=Ut,_bas
+    submerge=0
+    default_base=Qxu
+    editor_group=bridge, cave
+    hide_help=yes
+[/terrain_type]
+
+##########################
+# hanging bridge
+
+[terrain_type]
+    symbol_image=bridge/hanging-se-nw-tile
+    id=hangingbridgediag1
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Hanging Bridge&quot;
+    string=^Bh\
+    aliasof=_bas, Gt
+    default_base=Qxu
+    submerge=0
+    unit_height_adjust=20
+    editor_group=bridge, cave
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/hanging-sw-ne-tile
+    id=hangingbridgediag2
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Hanging Bridge&quot;
+    string=^Bh/
+    aliasof=_bas, Gt
+    default_base=Qxu
+    submerge=0
+    unit_height_adjust=20
+    editor_group=bridge, cave
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/hanging-s-n-tile
+    id=hangingbridge
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Hanging Bridge&quot;
+    string=^Bh|
+    default_base=Qxu
+    aliasof=_bas, Gt
+    submerge=0
+    editor_group=bridge, cave
+[/terrain_type]
+
+# chasm stone bridge
+
+[terrain_type]
+    symbol_image=bridge/chasm-se-nw-tile
+    id=stonechasmbridgediag1
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Stone Chasm Bridge&quot;
+    string=^Bcx\
+    default_base=Qxu
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge, cave
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/chasm-sw-ne-tile
+    id=stonechasmbridgediag2
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Stone Chasm Bridge&quot;
+    string=^Bcx/
+    default_base=Qxu
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge, cave
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/chasm-s-n-tile
+    id=stonechasmbridge
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Stone Chasm Bridge&quot;
+    string=^Bcx|
+    default_base=Qxu
+    aliasof=_bas, Gt
+    submerge=0
+    editor_group=bridge, cave
+[/terrain_type]
+
+# plank bridge
+
+[terrain_type]
+    symbol_image=bridge/planks-se-nw-tile
+    id=plankbridgediag1
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Plank Bridge&quot;
+    string=^Bp\
+    default_base=Qxu
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge, cave
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/planks-sw-ne-tile
+    id=plankbridgediag2
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Plank Bridge&quot;
+    string=^Bp/
+    default_base=Qxu
+    aliasof=_bas, Gt
+    submerge=0
+    unit_height_adjust=22
+    editor_group=bridge, cave
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=bridge/planks-s-n
+    id=plankbridge
+    name= _ &quot;Bridge&quot;
+    editor_name= _ &quot;Plank Bridge&quot;
+    string=^Bp|
+    default_base=Qxu
+    aliasof=_bas, Gt
+    submerge=0
+    editor_group=bridge, cave
+[/terrain_type]
+
+#
+#    ## Special ##
+#
+
+[terrain_type]
+    editor_image=floodfill/marker-high-tile
+    id=mark_high
+    editor_name= _ &quot;Marker High&quot;
+    string=^_mh    # wmllint: ignore
+    aliasof=_bas
+    editor_group=special, elevation
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    editor_image=floodfill/marker-high-2-tile
+    id=mark_high2
+    editor_name= _ &quot;Marker High 2&quot;
+    string=^_mhh    # wmllint: ignore
+    aliasof=_bas
+    editor_group=special, elevation
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    editor_image=floodfill/marker-low-tile
+    id=mark_low
+    editor_name= _ &quot;Marker Low&quot;
+    string=^_ml    # wmllint: ignore
+    aliasof=_bas
+    editor_group=special, elevation
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    editor_image=floodfill/marker-low-2-tile
+    id=mark_low2
+    editor_name= _ &quot;Marker Low 2&quot;
+    string=^_mll    # wmllint: ignore
+    aliasof=_bas
+    editor_group=special, elevation
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=off-map/symbol
+    editor_image=off-map/offmap-editor
+    id=off_map
+    name= _ &quot;Void&quot;
+    editor_name= _ &quot;Off Map&quot;
+    string=_off^_usr    # wmllint: ignore
+    editor_group=special, obstacle
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=off-map/border
+    editor_image=off-map/border-editor
+    id=off_map2
+    editor_name= _ &quot;Fake Map Border&quot;
+    string=^_fme    # wmllint: ignore
+    editor_group=special, obstacle
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=off-map/symbol
+    editor_image=color-hex
+    id=overlay_artplaceholder
+    editor_name= _ &quot;Art Placeholder&quot;
+    string=^Xxxx
+    aliasof=_bas
+    editor_group=special
+    hide_help=yes
+[/terrain_type]
+
+# Kept for compatibility
+[terrain_type]
+    symbol_image=void/void
+    editor_image=void/shroud-editor
+    id=shroud
+    name= _ &quot;Shroud&quot;
+    string=_s       # wmllint: ignore
+    editor_group=special
+    hide_help=yes
+    hidden=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=void/void
+    editor_image=void/shroud-editor
+    id=fake_shroud_overlay
+    name= _ &quot;Fake Shroud&quot;
+    string=^_s       # wmllint: ignore
+    editor_group=special
+    hide_if_impassable=yes
+    hide_help=yes
+[/terrain_type]
+
+[terrain_type]
+    symbol_image=fog/fog1
+    editor_image=fog/fog-editor
+    id=fog
+    name= _ &quot;Fog&quot;
+    string=_f       # wmllint: ignore
+    editor_group=special
+    hide_help=yes
+[/terrain_type]
+
+#
+#    ## Terrain Archetypes ##
+#
+
+######### these are &quot;virtual&quot; terrain
+
+[terrain_type]
+    icon_image=symbols/terrain_type_fungus
+    id=fungus
+    name= _ &quot;Fungus&quot;
+    editor_name= _ &quot;Fungus&quot;
+    string=Tt
+    hidden=yes
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Mushroom groves&#x27;&lt;/italic&gt; are vast underground forests of giant mushrooms, which thrive in the damp darkness. Most units have trouble negotiating the spongy floor of smaller fungi, but they have plenty of cover behind the larger stalks. Mounted units, however, become completely mired and lack proper freedom of movement in combat. Undead units have a natural affinity for decay and function quite well in mushroom forests.
+
+Most units receive 50% to 60% defense in mushroom groves, whereas cavalry receive only 20%.&quot;
+[/terrain_type]
+
+[terrain_type]
+    icon_image=symbols/terrain_type_cave
+    id=cave
+    name= _ &quot;Cave&quot;
+    editor_name= _ &quot;Cave&quot;
+    string=Ut
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Cave&#x27;&lt;/italic&gt; terrain represents any underground cavern with enough room for a unit to pass.
+Most units are wholly unfamiliar with the terrain, and thus are both slowed down and hindered in defense. Dwarves and trolls, who make their homes in caves, both have a relatively easy time navigating this terrain, especially dwarves, who by dint of their small size can navigate many obstacles that other races cannot. Occasionally caves are &lt;italic&gt;text=&#x27;illuminated&#x27;&lt;/italic&gt;.
+
+Rare patches of the underground world are illuminated by light from the surface shining down into the gloomy darkness. This provides an attack bonus for lawful units and removes the attack bonus from chaotic units. In all other regards this terrain is functionally identical to normal cave terrains.
+
+Most units receive 20 to 40% defense in caves, whereas dwarves have 50%.&quot;
+    hidden=yes
+[/terrain_type]
+
+[terrain_type]
+    icon_image=symbols/terrain_type_sand
+    id=sand
+    name= _ &quot;Sand&quot;
+    editor_name= _ &quot;Sands&quot;
+    string=Dt
+    editor_group=desert
+    help_topic_text= _ &quot;The instability of &lt;italic&gt;text=&#x27;sand&#x27;&lt;/italic&gt; makes it harder for most units to cross, and leaves them wide open to attack. In contrast, the wide feet or snakelike bodies of the reptilian races make sand much easier for them to navigate.
+
+Most units receive 20 to 40% defense in sand.&quot;
+    hidden=yes
+[/terrain_type]
+
+[terrain_type]
+    icon_image=symbols/terrain_type_reef
+    id=reef
+    name= _ &quot;Coastal Reef&quot;
+    editor_name= _ &quot;Coastal Reef&quot;
+    string=Wrt
+    submerge=0.3
+    editor_group=water
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Coastal reefs&#x27;&lt;/italic&gt; are shallows formed by stone, coral and sand.
+This provides most land units with a more steady footing and defensive positions than wading in shallow water normally would and also grants most water-dwelling races an exceptionally high defense.
+
+Merfolk and Naga both receive 70% defense on coastal reefs.&quot;
+    hidden=yes
+[/terrain_type]
+
+[terrain_type]
+    icon_image=symbols/terrain_type_hills
+    id=hills
+    name= _ &quot;Hills&quot;
+    editor_name= _ &quot;Hills&quot;
+    string=Ht
+    editor_group=rough
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Hills&#x27;&lt;/italic&gt; represent any reasonably rough terrain, with enough dips and rises in the ground to provide some cover. Hills are difficult for most troops to navigate. Dwarves, trolls, and orcs have enough familiarity with the terrain that they can pass through it without being slowed down. Cavalry have enough trouble navigating the terrain that any defensive aid lent by cover is negated.
+
+Most units have about 50% defense in hills, whereas cavalry are limited to 40%. Dwarves enjoy 60% defense in hills.&quot;
+    hidden=yes
+[/terrain_type]
+
+[terrain_type]
+    icon_image=symbols/terrain_type_swamp_water
+    id=swamp_water
+    name= _ &quot;Swamp&quot;
+    editor_name= _ &quot;Swamp&quot;
+    string=St
+    submerge=0.4
+    editor_group=water
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Swamps&#x27;&lt;/italic&gt; represent any sort of wetlands.
+Swamps slow down nearly everyone, and inhibit their ability to defend themselves. An exception to this is any race bodily skilled in navigating water; these receive both full movement and a defensive bonus. Those that make their living in the wetlands are also adept at using this terrain for cover.
+
+Most units make do with 30% defense in swamps. Merfolk, naga, and saurians all generally enjoy 60%.&quot;
+    hidden=yes
+[/terrain_type]
+
+[terrain_type]
+    icon_image=symbols/terrain_type_shallow_water
+    id=shallow_water
+    string=Wst
+    name= _ &quot;Shallow Water&quot;
+    editor_name= _ &quot;Shallow Water&quot;
+    help_topic_text= _ &quot;&lt;italic&gt;text=&#x27;Shallow water&#x27;&lt;/italic&gt; represents any body of water deep enough to come up to roughly a man’s waist. This is enough to slow down nearly anyone and leave them wide open to attack. Dwarves, given that the water reaches up almost to their heads, have an extremely hard time of this. The</pre></main></body></html>

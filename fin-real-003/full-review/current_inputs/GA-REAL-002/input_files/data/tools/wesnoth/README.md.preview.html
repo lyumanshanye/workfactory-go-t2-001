@@ -1,0 +1,52 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>README.md</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/tools/wesnoth/README.md</h1><pre># README
+
+The programs in this directory data/tools/wesnoth
+are for checking, analysing and maintenance of WML-files.
+
+The modules intended to be imported by other programs are
+documented in the parent directory&#x27;s README.md. These are
+version.py, wmltools3.py, wmldata.py, wmlparser.py, wmlparser3.py and
+wmliterator3.py.
+
+`__init__.py`
+  Cause Python to execute any code in this directory on &quot;import wesnoth&quot;.
+
+`campaignserver_client.py`
+  textmode-client for uploading + downloding campaigns to the server.
+
+`version.py`
+  This module reports the current version of Wesnoth to any script which
+  might need it.
+
+`wescamp.py`
+  This utility provides two tools
+  * sync a campaign with the version on wescamp (using the packed campaign 
+    as base)
+  * update the translations in a campaign (in the packed campaign)
+
+--------------------------------------------------
+
+From IRC #wesnoth-dev - 2007-11-27 
+
+    &lt;hajo&gt; I just don&#x27;t see the big picture about the files in that directory - who needs it for what task ?
+    
+    &lt;Sapient&gt; well, let&#x27;s say you want to process some WML files and transform them or understand them in a program
+    &lt;Sapient&gt; if you want to perform lexical analysis, then using wmliterator would save you a lot of work
+    &lt;Sapient&gt; if you want to parse it and get the overall tree, then wmlparser would be the choice
+    
+    &lt;hajo&gt; Ok, but campaign / scenario-authors rarely do that
+    &lt;Sapient&gt; right...
+    
+    &lt;Sapient&gt; if you want to write tools to help you author those campaigns, 
+    &lt;Sapient&gt; you might write some programs or to maintain them
+    &lt;Sapient&gt; so it is only useful if you are a programmer
+    
+    &lt;Sapient&gt; although wmliterator can do a decent job of detecting unbalanced WML 
+    &lt;Sapient&gt; if that&#x27;s all you need to do just run it from the command line for that
+    &lt;Sapient&gt; so it would let you know that [a][/b][/a] is invalid, and give you a line number
+    &lt;Sapient&gt; or [a][b][/a]
+    
+    &lt;hajo&gt; it just says &quot;reading x.cfg&quot; and &quot;y lines read&quot;
+    &lt;Sapient&gt; right, no errors
+    &lt;Sapient&gt; it iterated successfully
+</pre></main></body></html>

@@ -1,0 +1,107 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shaman.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/elves/Shaman.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Elvish Shaman
+    name= _ &quot;female^Elvish Shaman&quot;
+    race=elf
+    gender=female
+    image=&quot;units/elves-wood/shaman.png&quot;
+    small_profile=&quot;portraits/elves/shaman.webp~CROP(10,10,390,390)&quot;
+    profile=&quot;portraits/elves/shaman.webp~RIGHT()&quot;
+    hitpoints=26
+    movement_type=woodland
+    movement=5
+    experience=32
+    level=1
+    alignment=neutral
+    advances_to=Elvish Druid,Elvish Sorceress
+    cost=15
+    usage=healer
+    description= _ &quot;With a little training, an elf’s inherent affinity with the natural world can be channeled into a material magic that affects the physical plane. Shamans of this discipline most often use their skills to tend to the nature that connects them to their powers, resulting in the unusually lush and verdant forests surrounding their homes. The same magic lends itself to remarkable and well-renowned capabilities in the healing arts. Devoutly peaceful by nature, these shamans rarely engage in combat, instead using their magic to command the earth itself to hinder or pacify their enemies.&quot;
+    die_sound={SOUND_LIST:ELF_FEMALE_HIT}
+    [abilities]
+        {ABILITY_HEALS}
+    [/abilities]
+    [idle_anim]
+        {STANDARD_IDLE_FILTER}
+        start_time=0
+        [frame]
+            image=&quot;units/elves-wood/shaman-idle-[1~6,6,5,4,3].png:200&quot;
+        [/frame]
+    [/idle_anim]
+    [attack]
+        name=staff
+        description=_&quot;staff&quot;
+        type=impact
+        damage=3
+        number=2
+        range=melee
+        icon=attacks/druidstaff.png
+    [/attack]
+    [attack]
+        name=entangle
+        description=_&quot;entangle&quot;
+        type=impact
+        [specials]
+            {WEAPON_SPECIAL_SLOW}
+        [/specials]
+        damage=4
+        number=2
+        range=ranged
+    [/attack]
+    {DEFENSE_ANIM &quot;units/elves-wood/shaman-defend.png&quot; &quot;units/elves-wood/shaman.png&quot; {SOUND_LIST:ELF_FEMALE_HIT} }
+    [healing_anim]
+        start_time=-200
+        [frame]
+            image=&quot;units/elves-wood/shaman-heal[1,2].png:55&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/shaman-heal[3~9].png:55&quot;
+            halo=halo/elven/shaman-heal-halo-[1~7].png
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/shaman-heal9.png:30&quot;
+        [/frame]
+    [/healing_anim]
+    [attack_anim]
+        [filter_attack]
+            name=entangle
+        [/filter_attack]
+        missile_start_time=-200
+        [missile_frame]
+            offset=1.0
+            duration=150
+            image=&quot;projectiles/entangle.png&quot;
+            image_diagonal=&quot;projectiles/entangle.png&quot;
+        [/missile_frame]
+        start_time=-450
+        [frame]
+            image=&quot;units/elves-wood/shaman.png:225,units/elves-wood/shaman-attack2.png:225,units/elves-wood/shaman.png:100&quot;
+            halo=halo/elven/nature-halo[1~6].png:75,halo/elven/nature-halo[7~8].png:50
+            halo_x,halo_y=0,-12
+        [/frame]
+        attack_sound_start_time=-75
+        [attack_sound_frame]
+            sound=entangle.wav
+        [/attack_sound_frame]
+        [frame]
+            image=&quot;units/elves-wood/shaman.png:50&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=staff
+        [/filter_attack]
+        start_time=-175
+        [frame]
+            image=&quot;units/elves-wood/shaman.png:75&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS staff.ogg staff-miss.ogg -125}
+        [frame]
+            image=&quot;units/elves-wood/shaman-attack.png:200&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/shaman.png:75&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

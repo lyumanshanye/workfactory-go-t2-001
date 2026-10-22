@@ -1,0 +1,377 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>traits.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/macros/traits.cfg</h1><pre>#textdomain wesnoth-help
+# Traits for the [modifications] clause of SingleWML descriptions
+
+#define TRAIT_LOYAL
+#arg OVERLAY
+    &quot;misc/loyal-icon.png&quot;
+#endarg
+
+    # Units with trait Loyal have no upkeep.
+    [trait]
+        id=loyal
+        male_name= _ &quot;loyal&quot;
+        female_name= _ &quot;female^loyal&quot;
+        description= _ &quot;Zero upkeep&quot;
+        help_text= _ &quot;&lt;italic&gt;text=&#x27;Loyal&#x27;&lt;/italic&gt; units don’t incur upkeep. Most units incur an upkeep cost at the end of every turn, which is equal to their level. Loyal units do not incur this cost.&quot; + _ &quot;
+
+During campaigns, certain units may opt to join the player’s forces of their own volition. These units are marked with the loyal trait. Although they may require payment to be recalled, they never incur any upkeep costs. This can make them invaluable during a long campaign, when gold is in short supply. This trait is never given to recruited units, so it may be unwise to dismiss such units or to send them to a foolish death.&quot;
+        [effect]
+            apply_to=loyal
+        [/effect]
+        [effect]
+            apply_to=overlay
+            add={OVERLAY}
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_LOYAL_HERO
+    {TRAIT_LOYAL OVERLAY=&quot;misc/hero-icon.png&quot;}
+    [+trait]
+        [effect]
+            apply_to=ellipse
+            ellipse=misc/ellipse-hero
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_LOYAL_HERO_NOSLOT
+    # loyal hero unit where for some reason we don&#x27;t
+    # want the loyal to appear in the traits list, i
+    # really think its be better if stayed consitent and decided for
+    # one way and removed either this or TRAIT_LOYAL_HERO
+    {TRAIT_LOYAL_HERO}
+    [+trait]
+        male_name=&quot;&quot;
+        female_name=&quot;&quot;
+    [/trait]
+#enddef
+
+#define TRAIT_UNDEAD
+    # Units with trait Undead cannot be drained, poisoned, or plagued.
+    [trait]
+        id=undead
+        availability=&quot;musthave&quot;
+        male_name= _ &quot;undead&quot;
+        female_name= _ &quot;female^undead&quot;
+        description= _ &quot;Immune to drain, poison, and plague&quot;
+        help_text= _ &quot;&lt;italic&gt;text=&#x27;Undead&#x27;&lt;/italic&gt; units are immune to poison, drain, and plague.&quot; + _ &quot;
+
+Undead units generally have undead as their only trait. Since undead units are the bodies of the dead, risen to fight again, poison has no effect upon them. This can make them invaluable in dealing with foes who use poison in conjunction with their attacks.&quot;
+        [effect]
+            apply_to=status
+            add=unpoisonable
+        [/effect]
+        [effect]
+            apply_to=status
+            add=undrainable
+        [/effect]
+        [effect]
+            apply_to=status
+            add=unplagueable
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_MECHANICAL
+    # Units with trait Mechanical cannot be drained, poisoned, or plagued.
+    [trait]
+        id=mechanical
+        availability=&quot;musthave&quot;
+        male_name= _ &quot;mechanical&quot;
+        female_name= _ &quot;female^mechanical&quot;
+        description= _ &quot;Immune to drain, poison, and plague&quot;
+        help_text= _ &quot;&lt;italic&gt;text=&#x27;Mechanical&#x27;&lt;/italic&gt; units are immune to poison, drain, and plague.&quot; + _ &quot;
+
+Mechanical units generally have mechanical as their only trait. Since mechanical units don’t really have life, drain, poison, and plague have no effect upon them.&quot;
+        [effect]
+            apply_to=status
+            add=unpoisonable
+        [/effect]
+        [effect]
+            apply_to=status
+            add=undrainable
+        [/effect]
+        [effect]
+            apply_to=status
+            add=unplagueable
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_ELEMENTAL
+    # Units with trait Elemental cannot be drained, poisoned, or plagued.
+    [trait]
+        id=elemental
+        availability=&quot;musthave&quot;
+        male_name= _ &quot;elemental&quot;
+        female_name= _ &quot;female^elemental&quot;
+        description= _ &quot;Immune to drain, poison, and plague&quot;
+        help_text= _ &quot;&lt;italic&gt;text=&#x27;Elemental&#x27;&lt;/italic&gt; units are immune to poison, drain, and plague.&quot; + _ &quot;
+
+Elemental units generally have elemental as their only trait. Since elemental units are energy-based beings, drain, poison, and plague have no effect upon them.&quot;
+        [effect]
+            apply_to=status
+            add=unpoisonable
+        [/effect]
+        [effect]
+            apply_to=status
+            add=undrainable
+        [/effect]
+        [effect]
+            apply_to=status
+            add=unplagueable
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_STRONG
+    # Units with trait Strong get a +1 increment in hitpoints and melee damage.
+    [trait]
+        id=strong
+        male_name= _ &quot;strong&quot;
+        female_name= _ &quot;female^strong&quot;
+        help_text= _ &quot;&lt;italic&gt;text=&#x27;Strong&#x27;&lt;/italic&gt; units do 1 more damage for every successful strike in melee combat, and have 1 additional hitpoint.&quot; + _ &quot;
+
+While useful for any close-combat unit, strong is most effective for units who have a high number of swings such as the elvish fighter. Strong units can be very useful when a tiny bit of extra damage is all that is needed to turn a damaging stroke into a killing blow.&quot;
+        [effect]
+            apply_to=attack
+            range=melee
+            increase_damage=1
+        [/effect]
+        [effect]
+            apply_to=hitpoints
+            increase_total=1
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_DEXTROUS
+    # Units with trait Dextrous get a +1 to ranged damage.
+    [trait]
+        id=dextrous
+        male_name= _ &quot;dextrous&quot;
+        female_name= _ &quot;female^dextrous&quot;
+        help_text= _ &quot;&lt;italic&gt;text=&#x27;Dextrous&#x27;&lt;/italic&gt; units do 1 more damage for every successful strike in ranged combat.&quot; + _ &quot;
+
+Dextrous is a trait possessed only by elves. The elven people are known for their uncanny grace, and their great facility with the bow. Some, however, are gifted with natural talent that exceeds their brethren. These elves inflict an additional point of damage with each arrow.&quot;
+        [effect]
+            apply_to=attack
+            range=ranged
+            increase_damage=1
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_QUICK
+    # Units with trait Quick have +1 movement and 5% less hitpoints.
+    [trait]
+        id=quick
+        male_name= _ &quot;quick&quot;
+        female_name= _ &quot;female^quick&quot;
+        help_text= _ &quot;&lt;italic&gt;text=&#x27;Quick&#x27;&lt;/italic&gt; units have 1 extra movement point, but 5% less hitpoints than usual.&quot; + _ &quot;
+
+Quick is the most noticeable trait, particularly in slower moving units such as trolls or heavy infantry. Units with the quick trait often have greatly increased mobility in rough terrain, which can be important to consider when deploying your forces. Also, quick units aren’t quite as tough as units without this trait and are subsequently less good at holding contested positions.&quot;
+        [effect]
+            apply_to=movement
+            increase=1
+        [/effect]
+        [effect]
+            apply_to=hitpoints
+            increase_total=-5%
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_INTELLIGENT
+    # Units with trait Intelligent get a 20% decrease in XP required to advance.
+    [trait]
+        id=intelligent
+        male_name= _ &quot;intelligent&quot;
+        female_name= _ &quot;female^intelligent&quot;
+        help_text= _ &quot;Intelligent units require 20% less experience than usual to advance.&quot; + _ &quot;
+
+&lt;italic&gt;text=&#x27;Intelligent&#x27;&lt;/italic&gt; units are very useful at the beginning of a campaign as they can advance to higher levels more quickly. Later in campaigns Intelligent is not quite as useful because the &lt;italic&gt;text=&#x27;After Maximum Level Advancement&#x27;&lt;/italic&gt; (AMLA) is not as significant a change as advancing a level. If you have many ‘maximum level’ units you may wish to recall units with more desirable traits.&quot;
+        [effect]
+            apply_to=max_experience
+            increase=-20%
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_RESILIENT
+    # Units with trait Resilient get 4 more HP plus 1 per level.
+    [trait]
+        id=resilient
+        male_name= _ &quot;resilient&quot;
+        female_name= _ &quot;female^resilient&quot;
+        help_text= _ &quot;&lt;italic&gt;text=&#x27;Resilient&#x27;&lt;/italic&gt; units have an additional 4 hitpoints, and gain 1 more per level.&quot; + _ &quot;
+
+Resilient units can be useful at all stages of a campaign, and this is a useful trait for all units. Resilient is often most helpful as a trait when it occurs in a unit that has some combination of low hitpoints, good defense, or high resistances. Resilient units are especially useful for holding strategic positions against opponents.&quot;
+        [effect]
+            apply_to=hitpoints
+            increase_total=4
+        [/effect]
+        [effect]
+            apply_to=hitpoints
+            times=per level
+            increase_total=1
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_HEALTHY
+    # Units with trait Healthy get 1 more HP plus 1 per level and always rest heal.
+    [trait]
+        id=healthy
+        male_name= _ &quot;healthy&quot;
+        female_name= _ &quot;female^healthy&quot;
+        description= _ &quot;Always rest heals&quot;
+        help_text= _ &quot;Renowned for their vitality, some dwarves are sturdier than others and can rest even when traveling.&quot; + _ &quot;
+
+&lt;italic&gt;text=&#x27;Healthy&#x27;&lt;/italic&gt; units have 1 additional hitpoint, and gain 1 more per level. They will also heal 2 hitpoints each turn, regardless of whether they engaged in combat the turn before.&quot;
+        [effect]
+            apply_to=&quot;healthy&quot;
+        [/effect]
+        [effect]
+            apply_to=hitpoints
+            increase_total=1
+        [/effect]
+        [effect]
+            apply_to=hitpoints
+            times=per level
+            increase_total=1
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_FEARLESS
+    # Units with trait Fearless fight normally during unfavorable day/night times.
+    [trait]
+        id=fearless
+        male_name= _ &quot;fearless&quot;
+        female_name= _ &quot;female^fearless&quot;
+        description= _ &quot;Fights normally during unfavorable times of day/night&quot;
+        help_text= _ &quot;Aversion to light and dark holds no sway over these brave individuals.&quot;
+        [effect]
+            apply_to=&quot;fearless&quot;
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_FEARLESS_MUSTHAVE
+    # A clone of the above that would be generated even if random
+    # trait generation is not used. This is needed for WCs and
+    # Soullesses
+    [trait]
+        id=fearless
+        availability=&quot;musthave&quot;
+        male_name= _ &quot;fearless&quot;
+        female_name= _ &quot;female^fearless&quot;
+        description= _ &quot;Fights normally during unfavorable times of day/night&quot;
+        help_text= _ &quot;Aversion to light and dark holds no sway over these brave individuals.&quot;
+        [effect]
+            apply_to=&quot;fearless&quot;
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_FERAL_MUSTHAVE
+    # Units with trait Feral only receive 50% defense in villages regardless of
+    # the base terrain the village is on.
+    [trait]
+        id=feral
+        availability=&quot;musthave&quot;
+        male_name= _ &quot;feral&quot;
+        female_name= _ &quot;female^feral&quot;
+        description= _ &quot;Receives only 50% defense in land-based villages&quot;
+        help_text= _ &quot;Dwellings of sentient beings are not easily used for cover by feral creatures of low intelligence. As a result, &lt;italic&gt;text=&#x27;feral&#x27;&lt;/italic&gt; units receive a maximum of 50% defense in any land-based village regardless of base terrain.&quot;
+        [effect]
+            apply_to=defense
+            replace=yes
+
+            [defense]
+                village=-50
+            [/defense]
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_WEAK
+    # Units with trait Weak get a -1 increment in hitpoints and melee damage.
+    [trait]
+        id=weak
+        male_name= _ &quot;weak&quot;
+        female_name= _ &quot;female^weak&quot;
+        help_text= _ &quot;Units with the &lt;italic&gt;text=&#x27;weak&#x27;&lt;/italic&gt; trait receive a 1 point decrease in hitpoints and melee damage.&quot;
+        [effect]
+            apply_to=attack
+            range=melee
+            increase_damage=-1
+        [/effect]
+        [effect]
+            apply_to=hitpoints
+            increase_total=-1
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_SLOW
+    # Units with trait Slow have -1 movement and 5% more hitpoints.
+    [trait]
+        id=slow
+        male_name= _ &quot;slow&quot;
+        female_name= _ &quot;female^slow&quot;
+        help_text= _ &quot;&lt;italic&gt;text=&#x27;Slow&#x27;&lt;/italic&gt; units have 1 less movement point but 5% more hitpoints.&quot; + _ &quot;
+
+Thick-bodied and clumsy, slow individuals of goblins and other species take a movement penalty but are compensated for it with a slight increase in endurance.&quot;
+        [effect]
+            apply_to=movement
+            increase=-1
+        [/effect]
+        [effect]
+            apply_to=hitpoints
+            increase_total=5%
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_DIM
+    # Units with trait Dim get a 20% increase in XP required to advance.
+    [trait]
+        id=dim
+        male_name= _ &quot;dim&quot;
+        female_name= _ &quot;female^dim&quot;
+        help_text= _ &quot;Units with trait &lt;italic&gt;text=&#x27;dim&#x27;&lt;/italic&gt; suffer a 20% increase in experience required to advance.&quot; + _ &quot;
+
+Dim is a trait all too common in goblins and other lesser species. There are reasons these species are lesser, and this is one of them.&quot;
+        [effect]
+            apply_to=max_experience
+            increase=20%
+        [/effect]
+    [/trait]
+#enddef
+
+#define TRAIT_AGED
+    # Units with trait Aged get a 8 points HP decrease and have -1 movement and melee damage.
+    [trait]
+        id=aged
+        male_name= _ &quot;aged&quot;
+        female_name= _ &quot;female^aged&quot;
+        help_text= _ &quot;Units with the &lt;italic&gt;text=&#x27;aged&#x27;&lt;/italic&gt; trait have 8 hitpoints less and suffer from a 1 point decrease in movement and melee damage.&quot;
+        [effect]
+            apply_to=hitpoints
+            increase_total=-8
+        [/effect]
+        [effect]
+            apply_to=movement
+            increase=-1
+        [/effect]
+        [effect]
+            apply_to=attack
+            range=melee
+            increase_damage=-1
+        [/effect]
+    [/trait]
+#enddef
+</pre></main></body></html>

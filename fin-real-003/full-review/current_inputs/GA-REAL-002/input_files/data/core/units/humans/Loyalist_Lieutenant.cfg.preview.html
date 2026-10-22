@@ -1,0 +1,90 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Loyalist_Lieutenant.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/humans/Loyalist_Lieutenant.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Lieutenant
+    name= _ &quot;Lieutenant&quot;
+    race=human
+    image=&quot;units/human-loyalists/lieutenant.png&quot;
+    profile=&quot;portraits/humans/lieutenant.webp&quot;
+    {LEADING_ANIM &quot;units/human-loyalists/lieutenant-lead-2.png&quot; &quot;units/human-loyalists/lieutenant-lead-1.png&quot; -5,-28}
+    hitpoints=40
+    movement_type=smallfoot
+    movement=6
+    experience=85
+    level=2
+    alignment=lawful
+    advances_to=General
+    cost=31
+    usage=fighter
+    description= _ &quot;Lieutenants are some of the more respected commanding officers among humans and are often seen leading smaller-scale incursions and managing the battlefield. Trained both with sword and crossbow, they excel at neither, and are somewhat less resilient than the warlords of other races — this is more than made up for by their superior knowledge and training in military strategy.&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    {DEFENSE_ANIM_RANGE &quot;units/human-loyalists/lieutenant-defend-2.png&quot; &quot;units/human-loyalists/lieutenant-defend-1.png&quot; {SOUND_LIST:HUMAN_HIT} melee}
+    {DEFENSE_ANIM_RANGE &quot;units/human-loyalists/lieutenant-crossbow-defend.png&quot; &quot;units/human-loyalists/lieutenant-crossbow.png&quot; {SOUND_LIST:HUMAN_HIT} ranged}
+    [abilities]
+        {ABILITY_LEADERSHIP}
+    [/abilities]
+    [attack]
+        name=sword
+        description=_&quot;sword&quot;
+        icon=attacks/sword-human.png
+        type=blade
+        range=melee
+        damage=8
+        number=3
+    [/attack]
+    [attack]
+        name=crossbow
+        description=_&quot;crossbow&quot;
+        icon=attacks/crossbow-human.png
+        type=pierce
+        range=ranged
+        damage=5
+        number=3
+    [/attack]
+    # [idle_anim]
+    #    {STANDARD_IDLE_FILTER}
+    #    start_time=0
+    #    [frame]
+    #        image=&quot;units/human-loyalists/lieutenant-idle-[1~8,7~5,9,1].png:[100*2,300,50*4,500,100*5]&quot;
+    #    [/frame]
+    # [/idle_anim]
+
+    [death]
+        start_time=0
+        [frame]
+            image=&quot;units/human-loyalists/lieutenant-die-[1~9].png:75&quot;
+        [/frame]
+    [/death]
+    [attack_anim]
+        [filter_attack]
+            name=crossbow
+        [/filter_attack]
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        start_time=-400
+        [frame]
+            image=&quot;units/human-loyalists/lieutenant-crossbow.png:100&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS crossbow.ogg crossbow-miss.ogg -300}
+        [frame]
+            image=&quot;units/human-loyalists/lieutenant-crossbow-attack[1~2].png:150&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=sword
+        [/filter_attack]
+        start_time=-225
+        [frame]
+            image=&quot;units/human-loyalists/lieutenant.png:50&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/lieutenant-attack-sword-[1~3].png:[75,150,100]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

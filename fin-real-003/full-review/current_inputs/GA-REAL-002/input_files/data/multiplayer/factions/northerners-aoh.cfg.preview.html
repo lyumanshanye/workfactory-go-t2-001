@@ -1,0 +1,22 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>northerners-aoh.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/multiplayer/factions/northerners-aoh.cfg</h1><pre>#textdomain wesnoth-multiplayer
+[multiplayer_side]
+    id=Northerners
+    name= _&quot;Northerners&quot;
+    image=&quot;units/orcs/warlord.png&quot;
+    type=random
+    leader=Orcish Warlord,Troll Warrior,Orcish Slurbow,Orcish Nightblade
+    random_leader=Orcish Warlord,Troll Warrior,Orcish Slurbow
+    recruit=Orcish Grunt,Orcish Warrior,Troll Whelp,Troll,Troll Rocklobber,Wolf Rider,Goblin Knight,Goblin Pillager,Orcish Archer,Orcish Crossbowman,Orcish Assassin,Orcish Slayer,Naga Fighter,Naga Warrior,Goblin Spearman,Goblin Impaler,Goblin Rouser
+    terrain_liked=Hh, Ha, Mm, Ss
+    # wmllint: markcheck off
+    # extra newline below to fit the wmllint noconvert directive, please don&#x27;t change this
+    description=&quot;&lt;img&gt;src=&#x27;portraits/orcs/warlord.webp~BG()&#x27; align=&#x27;middle&#x27;&lt;/img&gt;&quot;+# wmllint: noconvert
+        &quot;
+
+&quot;+_&quot;The &lt;bold&gt;text=&#x27;Northerners&#x27;&lt;/bold&gt; are a faction of &lt;ref&gt;text=&#x27;Orcs&#x27; dst=&#x27;..race_orc&#x27;&lt;/ref&gt; and their allies who live in the north of the Great Continent, thus their name. Northerners consist of the warrior orcs race, the enslaved &lt;ref&gt;text=&#x27;goblins&#x27; dst=&#x27;..race_goblin&#x27;&lt;/ref&gt;, &lt;ref&gt;text=&#x27;trolls&#x27; dst=&#x27;..race_troll&#x27;&lt;/ref&gt; who are tricked into combat by the orcs, and the serpentine &lt;ref&gt;text=&#x27;naga&#x27; dst=&#x27;..race_naga&#x27;&lt;/ref&gt;. The Northerners play best by taking advantage of having many low-cost and high HP soldiers.&quot;
+    # wmllint: markcheck on
+    [ai]
+        recruitment_pattern=fighter,fighter,fighter,mixed fighter,archer,scout
+    [/ai]
+[/multiplayer_side]
+</pre></main></body></html>

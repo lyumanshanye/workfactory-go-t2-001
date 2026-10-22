@@ -1,0 +1,71 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Skele_Chocobone.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/undead/Skele_Chocobone.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Chocobone
+    name= _ &quot;Chocobone&quot;
+    race=undead
+    image=&quot;units/undead-skeletal/chocobone.png&quot;
+    hitpoints=45
+    movement_type=undeadfoot
+    [defense]
+        hills=60
+        mountains=50
+        fungus=60
+        forest=-70
+        village=60
+    [/defense]
+    [resistance]
+        blade=80
+    [/resistance]
+    movement=9
+    experience=100
+    level=2
+    alignment=chaotic
+    advances_to=null
+    {AMLA_DEFAULT}
+    [abilities]
+        {ABILITY_SUBMERGE}
+    [/abilities]
+    cost=28
+    usage=scout
+    description= _ &quot;Riding the bones of ostrich-like large birds once used as mounts by a lost civilization, the skeletal Chocobones can move faster than most cavalry units.&quot;
+    die_sound={SOUND_LIST:SKELETON_DIE}
+    {DEFENSE_ANIM &quot;units/undead-skeletal/chocobone-defend-2.png&quot; &quot;units/undead-skeletal/chocobone-defend-1.png&quot; {SOUND_LIST:SKELETON_HIT} }
+    [attack]
+        name=spear
+        description=_&quot;spear&quot;
+        type=pierce
+        range=melee
+        [specials]
+            {WEAPON_SPECIAL_CHARGE}
+        [/specials]
+        damage=11
+        number=2
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=spear
+        [/filter_attack]
+        start_time=-350
+        [frame]
+            image=&quot;units/undead-skeletal/chocobone-attack-[1~2].png:100&quot;
+        [/frame]
+        [if]
+            hits=no
+            [frame]
+                image=&quot;units/undead-skeletal/chocobone-attack-3.png:100&quot;
+                sound=spear-miss.ogg
+            [/frame]
+        [/if]
+        [else]
+            hits=yes
+            [frame]
+                image=&quot;units/undead-skeletal/chocobone-attack-3.png:50&quot;
+                sound=spear.ogg
+            [/frame]
+        [/else]
+        [frame]
+            image=&quot;units/undead-skeletal/chocobone-attack-[4,2,1].png:100&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

@@ -1,0 +1,62 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Warrior.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/drakes/Warrior.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Drake Warrior
+    name= _ &quot;Drake Warrior&quot;
+    race=drake
+    gender=male,female
+    image=&quot;units/drakes/warrior.png&quot;
+    profile=&quot;portraits/drakes/fighter.webp&quot;
+    hitpoints=60
+    movement_type=drakefly
+    movement=6
+    experience=81
+    level=2
+    alignment=lawful
+    advances_to=Drake Blademaster
+    cost=31
+    usage=fighter
+    description= _ &quot;Drakes of the Fighter caste, like the Warrior, are the foundation of any tribe’s army. No special abilities or skills set them apart; only their natural brute strength and military training help them carve their way through enemy forces. They fight as they have for centuries, clad in ceramic-plated leather with the traditional war blade mounted on the back of each hand.&quot;
+    die_sound=drake-die.ogg
+    {DEFENSE_ANIM &quot;units/drakes/warrior-defend-2.png&quot; &quot;units/drakes/warrior-defend-1.png&quot; {SOUND_LIST:DRAKE_HIT} }
+    {DRAKE_STANDING_ANIM warrior}
+    {DRAKE_MOVEMENT_ANIM warrior}
+    {DRAKE_WEAPON_ANIM warrior}
+    [attack]
+        name=war blade
+        description=_&quot;war blade&quot;
+        type=blade
+        range=melee
+        damage=11
+        number=3
+        icon=attacks/warblade.png
+    [/attack]
+    [attack]
+        name=fire breath
+        description=_&quot;fire breath&quot;
+        icon=attacks/fire-breath-drake.png
+        type=fire
+        range=ranged
+        damage=5
+        number=3
+    [/attack]
+    {DRAKE_FIRE_ANIM_S_DIAGONAL warrior 35,40}
+    {DRAKE_FIRE_ANIM_N_DIAGONAL_CURRENT warrior 35,-20}
+    {DRAKE_FIRE_ANIM_S warrior 8,50}
+    {DRAKE_FIRE_ANIM_N_CURRENT warrior 8,-50}
+    [attack_anim]
+        [filter_attack]
+            name=war blade
+        [/filter_attack]
+        offset=0.0~0.2,0.2~0.7,0.7~0.2,0.2~0.0
+        start_time=-400
+        [frame]
+            image=&quot;units/drakes/warrior-melee-[1~6].png:100&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+    [female]
+        name= _ &quot;female^Drake Warrior&quot;
+        gender=female
+    [/female]
+[/unit_type]
+</pre></main></body></html>

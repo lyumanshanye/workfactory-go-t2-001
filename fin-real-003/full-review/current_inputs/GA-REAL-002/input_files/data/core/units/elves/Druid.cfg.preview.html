@@ -1,0 +1,122 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Druid.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/elves/Druid.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Elvish Druid
+    name= _ &quot;female^Elvish Druid&quot;
+    race=elf
+    gender=female
+    image=&quot;units/elves-wood/druid.png&quot;
+    small_profile=&quot;portraits/elves/druid.webp~CROP(18,48,362,362)&quot;
+    profile=&quot;portraits/elves/druid.webp&quot;
+    hitpoints=36
+    movement_type=woodland
+    movement=5
+    experience=85
+    level=2
+    alignment=neutral
+    advances_to=Elvish Shyde
+    cost=25
+    usage=healer
+    description= _ &quot;Some elves choose to deepen their connection to the corporeal world, thereby enhancing their already potent abilities to foster and manipulate natural energies. Perhaps the most notable effect of these druids’ magic is the marked sense of motion in the deep woodlands that they preserve. Outsiders wandering through Elven woods often speak of entangling roots and vines, moving nearly as fast as a warrior’s marching pace, or the creaking shamble of ancient trees, lumbering across entire camps in just a single night. The forest and the earth become almost like a connected entity, something that lives and breathes like a single massive organism. As it flourishes under the druids’ careful tending, the forest kindles their magics in turn, symbiotically enhancing the already potent powers that these elves possess.&quot;
+    die_sound={SOUND_LIST:ELF_FEMALE_HIT}
+    [abilities]
+        {ABILITY_CURES}
+    [/abilities]
+    [attack]
+        name=staff
+        description=_&quot;staff&quot;
+        type=impact
+        damage=4
+        number=2
+        range=melee
+        icon=attacks/druidstaff.png
+    [/attack]
+    [attack]
+        name=ensnare
+        description=_&quot;ensnare&quot;
+        type=impact
+        [specials]
+            {WEAPON_SPECIAL_SLOW}
+        [/specials]
+        damage=6
+        number=2
+        range=ranged
+        icon=attacks/entangle.png
+    [/attack]
+    [attack]
+        name=thorns
+        description=_&quot;thorns&quot;
+        type=pierce
+        [specials]
+            {WEAPON_SPECIAL_MAGICAL}
+        [/specials]
+        damage=6
+        number=3
+        range=ranged
+    [/attack]
+    {DEFENSE_ANIM &quot;units/elves-wood/druid-defend-2.png&quot; &quot;units/elves-wood/druid-defend-1.png&quot; {SOUND_LIST:ELF_FEMALE_HIT} }
+    [healing_anim]
+        start_time=-300
+        [frame]
+            image=&quot;units/elves-wood/druid-magic-[1~4,4~1].png:75&quot;
+            halo=&quot;halo/elven/druid-healing[1~8].png&quot;
+        [/frame]
+    [/healing_anim]
+    [attack_anim]
+        [filter_attack]
+            name=thorns
+        [/filter_attack]
+        missile_start_time=-200
+        [missile_frame]
+            duration=200
+            image=&quot;projectiles/thorns.png&quot;
+            image_diagonal=&quot;projectiles/thorns-ne.png&quot;
+        [/missile_frame]
+
+        start_time=-300
+        [frame]
+            image=&quot;units/elves-wood/druid-magic-[1~4,4~1].png:75&quot;
+            halo=&quot;halo/elven/nature-halo[1~8].png&quot;
+            halo_x,halo_y=0,-12
+        [/frame]
+        {SOUND:HIT_AND_MISS magic-thorns-[1,2].ogg magic-thorns-miss-[1,2].ogg -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=ensnare
+        [/filter_attack]
+        missile_start_time=-200
+        [missile_frame]
+            offset=1.0
+            duration=200
+            image=&quot;projectiles/entangle.png&quot;
+            image_diagonal=&quot;projectiles/entangle.png&quot;
+        [/missile_frame]
+        start_time=-300
+        [frame]
+            image=&quot;units/elves-wood/druid-magic-[1~4,4~1].png:75&quot;
+            halo=&quot;halo/elven/nature-halo[1~8].png&quot;
+            halo_x,halo_y=0,-12
+        [/frame]
+        attack_sound_start_time=-75
+        [attack_sound_frame]
+            sound=entangle.wav
+        [/attack_sound_frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=staff
+        [/filter_attack]
+        start_time=-175
+        [frame]
+            image=&quot;units/elves-wood/druid.png:75&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS staff.ogg staff-miss.ogg -125}
+        [frame]
+            image=&quot;units/elves-wood/druid-attack.png:200&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/druid.png:75&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

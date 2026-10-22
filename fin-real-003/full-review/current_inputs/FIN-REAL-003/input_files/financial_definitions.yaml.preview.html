@@ -1,0 +1,2425 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>financial_definitions.yaml</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>financial_definitions.yaml</h1><p>预览前 80,000 字符；完整内容请下载原文件。</p><pre>type: object
+properties:
+  data:
+    type: object
+    properties:
+      ACTEVT:
+        type: string
+        title: Activity Event Code
+        description: Structure activity event code. Merger or closing codes only.
+        x-source-mapping:
+          - file: RISVIEW
+            field: ACTEVT
+      ASSET:
+        type: number
+        title: Total assets
+        description: &gt;-
+          The sum of all assets owned by the institution including cash,
+          loans, securities, bank premises and other assets. This total does
+          not include off-balance-sheet accounts.
+        x-source-mapping:
+          - file: RISVIEW
+            field: ASSET
+          - file: RISVIEW_MERGED
+            field: L_ASSET
+      BRANCH:
+        type: number
+        title: BRANCHING
+        description:
+          A flag used to indicate whether an institution has branches.
+          0 means no branches and 1 means it has branches.
+        x-source-mapping:
+          - file: RISVIEW
+            field: BRANCH
+      CALLFORM:
+        title: Call Form Number
+        description: TBD
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CALLFORM
+          - file: RISVIEW_MERGED
+            field: CALLFORM
+      CB:
+        title: Community Bank
+        description: &gt;-
+          A flag used to indicate whether an institution is a community bank. 0 = Not a community Bank. 1 = Is a community bank. For more information, visit the community bank research program page: https://www.fdic.gov/community-banking-research-program.
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: CB
+      CBSADIV:
+        type: number
+        title: Core Based Statistical Division Number
+        description:
+          A metropolitan division is a county or group of counties within a
+          core based statistical area that contains a population of at least 2.5 million.
+          A metropolitan division consists of one or more main/secondary countues that
+          represent an employment center or centers, plus adjacent conuties associated
+          withe the main county or counties through commuting ties.
+        x-source-mapping:
+          - file: RISVIEW
+            field: CBSADIV
+      CBSANAME:
+        type: string
+        title: Core Based Statistical Division Name
+        description:
+          A statistical geographic entity consisting of the county or counties
+          associated with at least one core (urbanized area or urban cluster) of at least
+          10,000 population, plus adjacent counties having a high degree of social and
+          economic integration with the core as measured through commuting ties with
+          the counties containing the core.
+        x-source-mapping:
+          - file: RISVIEW
+            field: CBSANAME
+      STMULT:
+        title: Multi State Offices Flag
+        description: &gt;-
+          Multi State Offices Flag
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: STMULT
+      ADDRESS:
+        title: ADDRESS
+        description: &gt;-
+          ADDRESS
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: ADDRESS
+      CBLRIND:
+        title: Community Bank Ratio
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - file: RISVIEW
+            field: CBLRIND
+      CD1T3:
+        title: TIME DEP $250,000 OR MORE REMAINING MATURITY REPRICING OF 1-3 YEARS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CD1T3
+      CD1T3R:
+        title: TIME DEP $250,000 OR MORE REMAINING MATURITY REPRICING OF 1-3 YEARS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: CD1T3R
+                numerator: CD1T3
+                denominator: ASSET
+      CD3LES:
+        title: TIME DEP $250,000 OR MORE REMAINING MATURITY REPRICING OF 3 MONTH OR LESS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CD3LES
+      CD3LESR:
+        title: TIME DEP $250,000 OR MORE REMAINING MATURITY REPRICING OF 3 MONTH OR LESS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: CD3LESR
+                numerator: CD3LES
+                denominator: ASSET
+      CD3LESS:
+        title: TIME DEP $250,000 OR LESS REMAINING MATURITY REPRICING OF 3 MONTH OR LESS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CD3LESS
+      CD3LESSR:
+        title: TIME DEP $250,000 OR LESS REMAINING MATURITY REPRICING OF 3 MONTH OR LESS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: CD3LESSR
+                numerator: CD3LESS
+                denominator: ASSET
+      CDOV3:
+        title: TIME DEP $250,000 OR MORE REMAINING MATURITY OR REPRICING OVER 3 YEARS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CDOV3
+      CDOV3R:
+        title: TIME DEP $250,000 OR MORE REMAINING MATURITY OR REPRICING OVER 3 YEARS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: CDOV3R
+                numerator: CDOV3
+                denominator: ASSET
+      CDOV3S:
+        title: TIME DEP $250,000 OR LESS REMAINING MATURITY OR REPRICING OVER 3 YEARS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CDOV3S
+      CDOV3SR:
+        title: TIME DEP $250,000 OR LESS REMAINING MATURITY OR REPRICING OVER 3 YEARS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: CDOV3SR
+                numerator: CDOV3S
+                denominator: ASSET
+      CD3T12:
+        title: TIME DEP $250,000 OR MORE REMAINING MATURITY OR REPRICING 3-12 MONTHS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CD3T12
+      CD3T12R:
+        title: TIME DEP $250,000 OR MORE REMAINING MATURITY OR REPRICING 3-12 MONTHS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: CD3T12R
+                numerator: CD3T12
+                denominator: ASSET
+      CD3T12S:
+        title: TIME DEP $250,000 OR LESS REMAINING MATURITY OR REPRICING 3-12 MONTHS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CD3T12S
+      CD3T12SR:
+        title: TIME DEP $250,000 OR LESS REMAINING MATURITY OR REPRICING 3-12 MONTHS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: CD3T12SR
+                numerator: CD3T12S
+                denominator: ASSET
+      CD1T3S:
+        title: TIME DEP $250,000 OR LESS REMAINING MATURITY OR REPRICING 1-3 YEARS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CD1T3S
+      CD1T3SR:
+        title: TIME DEP $250,000 OR LESS REMAINING MATURITY OR REPRICING 1-3 YEARS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: CD1T3SR
+                numerator: CD1T3S
+                denominator: ASSET
+      CERT:
+        title: &#x27;FDIC Certificate #&#x27;
+        description: &gt;-
+          A unique NUMBER assigned by the FDIC used to identify institutions
+          and for the issuance of insurance certificates.
+        type: number
+        x-source-overwrite: false
+        x-source-mapping:
+          - file: RISVIEW
+            field: CERT
+          - file: RISVIEW_MERGED
+            field: C_CERT
+          - file: VINST_FIN_CUR_SDC
+            field: ORG_CERT_NUM
+      CERTCONS:
+        title: Directly owned by another bank (CERT)
+        description: &gt;-
+          FDIC certificate number of the parent bank or savings institution
+          with which the reported institution’s financial data has been
+          consolidated. Beginning in March 1997, both the Thrift Financial
+          Reports and Call Reports are completed on a fully consolidated
+          basis.  Previously, the consolidation of subsidiary depository
+          institutions was prohibited.  Now, parent institutions are required
+          to file consolidated reports, while their subsidiary financial
+          institutions are still required to file separate reports.  Click on
+          the certificate number to identify the parent bank or thrift.
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: CERTCONS
+      CITYHCR:
+        title: City of High Holder
+        description: &gt;-
+          City in which the headquarters of the institution&#x27;s regulatory high
+          holder are physically located.
+        type: string
+        x-elastic-type: keyword
+        x-elastic-analyzer:
+          - variable: raw
+            analyzer: whitespace_analyzer
+          - variable: autocomplete
+            analyzer: autocomplete_analyzer
+        x-source-mapping:
+          - file: RISVIEW
+            field: CITYHCR
+      CLCODE:
+        title: Classcode
+        type: number
+        description: A number that sub-categorizes a major class of institutions. 3 = National bank, Federal Reserve System (FRS) member; 13 = State commercial bank, FRS member; 15 = State savings, co-op, or insdustrial bank, FRS member; 21 = State commercial bank, not FRS member; 23 = State savings, co-op, or industrial bank, not FRS member; 25 = State mutual commercial bank, not FRS member; 33 =  Federal chartered stock savings bank; 34 = Federal chartered mutual savings bank; 35 = State chartered stock savings and loan association; 36 = State chartered mutual savings and loan association; 37 = Federal chartered stock savings and loan association; 38 = Federal chartered mutual savings and loan association; 41 = State chartered stock savings bank; 42 = State chartered mutual savings bank; 43 = Federal chartered stock savings bank (historical); 44 = Federal chartered mutual savings bank (historical); 50 = OCC chartered nondeposit and/or noninsured trust companies; 51 = Noninsured commercial bank; 52 = Noninsured domestic offices of foreign bank (International Banking Act); 53 = Noninsured industrial bank; 54 = State chartered nondeposit and/or noninsured trust company, not FRS member; 55 = State chartered domestic branches of foreign banks; 56 = OCC chartered domestic branches of foreign banks; 57 = New York investment company; 58 = State chartered nondeposit and/or noninsured trust company, FRS member; 59 = OTS chartered nondeposit and/or noninsured trust company, 61 = Noninsured private bank; 62 = Noninsured loan workout bank, OCC chartered; 63 = Noninsured loan workout bank, state chartered, FRS member; 64 = Noninsured loan workout bank, state chartered, not FRS member; 65 = Other holding company; 71 = Transfer agent; 81 = Noninsured stock savings bank; 82 = Noninsured mutual savings bank; 85 = Noninsured stock savings and loan association; 86 = Noninsured mutual savings and loan association; 89 = Noninsured insurance company; 91 = State chartered credit unions; 92 = Federal chartered credit unions; 93 = Privately insured state credit union.
+        x-source-mapping:
+          - file: RISVIEW
+            field: CLCODE
+      CLOSED:
+        title: Closed Institution Flag
+        type: number
+        description:
+          A flag used to indicate whether an institution has been closed.
+          0 is institution not closed. 1 is institution closed.
+        x-source-mapping:
+          - file: RISVIEW
+            field: CLOSED
+      CNTRYALP:
+        title: FIPS Country Code
+        type: string
+        description:
+          The Federal Information Processing Standards Alphabetic Code of the country in
+          which the institution is physically located.
+        x-source-mapping:
+          - file: RISVIEW
+            field: CNTRYALP
+      CNTRYNUM:
+        title: FIPS Country Number
+        type: number
+        description:
+          The Federal Information Processing Standards Numeric Code of the country in
+          which the institution is physically located.
+        x-source-mapping:
+          - file: RISVIEW
+            field: CNTRYNUM
+      CNTYNUM:
+        title: FIPS County Number
+        type: number
+        description:
+          The Federal Information Processing Standards Numeric Code of the county in
+          which the institution is physically located.
+        x-source-mapping:
+          - file: RISVIEW
+            field: CNTYNUM
+      CSA:
+        title: Combined Statistical Area
+        type: string
+        description: &gt;-
+          U.S. CENSUS BUREAU OFFICE OF MANANGEMENT AND BUDGET DEFINES                                  
+          THE COMBINED STATISTICAL AREA (CSA) AS A GEOGRAPHIC ENTITY                                        
+          CONSISTING OF TWO OR MORE ADJACENT CORE BASED STATISTICAL AREAS                                 
+          (CBSAS) WITH EMPLOYMENT INTERCHANGE MEASURES OF AT LEAST 15.                                    
+          PAIRS OF CBSAS WITH EMPLOYMENT INTERCHANGE MEASURES OF AT LEAST                                 
+          25 COMBINE AUTOMATICALLY.  PAIRS OF CBSAS WITH EMPLOYMENT                                       
+          INTERCHANGE MEASURES OF AT LEAST 15, BUT LESS THAN 25, MAY                                       
+          COMBINE IF LOCAL OPTION IN BOTH AREAS FAVOR COMBINATION.
+        x-source-mapping:
+          - file: RISVIEW
+            field: CSA
+      DENOVO:
+        title: Denovo Institution
+        description: &gt;-
+          A flag used to indicate whether an institution is a new institution
+          (not a recharter). This flag is set quarterly. For instance, if
+          REPDTE is 3/31/98 and DENOVO equals 1, the institution was a denovo
+          during the first quarter of 1998.
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: DENOVO
+      DEP:
+        title: Total deposits
+        description: &gt;-
+          The sum of all deposits including demand deposits, money market
+          deposits, other savings deposits, time deposits and deposits in
+          foreign offices.
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DEP
+          - file: RISVIEW_MERGED
+            field: L_DEP
+      DEPR:
+        title: TOTAL DEPOSITS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: DEPR
+                numerator: DEP
+                denominator: ASSET
+      DEPDOM:
+        title: Deposits held in domestic offices
+        description: &gt;-
+          The sum of all domestic office deposits, including demand deposits,
+          money market deposits, other savings deposits and time deposits.
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DEPDOM
+      DEPDOMR:
+        title: DEPOSITS HELD IN DOM OFF RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: DEPDOMR
+                numerator: DEPDOM
+                denominator: ASSET
+      DIVISION:
+        title: Division Flag
+        type: number
+        description: &gt;-
+          A flag used to indicate whether an institution is in a CBSA
+          division. 0 is institution is not in a CBSA division. 1 is institution
+          is in a CBSA division.
+        x-source-mapping:
+          - file: RISVIEW
+            field: DIVISION
+      DOCKET:
+        title: Docket Number
+        type: number
+        description: &gt;-
+          A unique identification number assigned to institutions chartered
+          by the office of thrift supervision or that become members of the federal home
+          loan system.
+        x-source-mapping:
+          - file: RISVIEW
+            field: DOCKET
+      EDGECODE:
+        title: International Activity Flag
+        type: number
+        description: &gt;-
+          A FLAG USED TO INDICATE WHETHER AN INSTITUTION OPERATES ONE OR                                  
+          MORE EDGE ACT OR AGREEMENT CORPORATIONS.  AN EDGE ACT CORPORATION                                
+          IS A FEDERALLY CHARTERED DOMESTIC ORGANIZATION THAT IS ALLOWED TO                               
+          ENGAGE ONLY IN INTERNATIONAL BANKING OR OTHER FINANCIAL                                         
+          TRANSACTIONS RELATED TO INTERNATIONAL BUSINESS.  AN AGREEMENT
+          CORPORATION IS RESTRICTED, IN GENERAL, TO INTERNATIONAL BANKING
+          OPERATIONS. 0 = NO AFFILIATIONS WITH EDGE ACT CORPORATIONS.                                                                                   
+          1 = AFFILIATED WITH EDGE ACT CORPORATIONS.
+        x-source-mapping:
+          - file: RISVIEW
+            field: EDGECODE
+      ENTTYPE:
+        title: Entity Type
+        type: number
+        description: &gt;-
+          A three digit number indicating the major type or category of an 
+          institution. The entity code is used to categorize an institution
+          by type of financial organization.
+        x-source-mapping:
+          - file: RISVIEW
+            field: ENTTYPE
+      EQ:
+        title: Equity capital
+        description: &gt;-
+          Total equity capital (includes preferred and common stock, surplus
+          and undivided profits).
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQ
+      EQ2:
+        title: Equity capital
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQ2
+      EQR:
+        title: EQUITY CAPITAL RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: EQR
+                numerator: EQ
+                denominator: ASSET
+      FAILED:
+        title: Failed Institution Flag
+        type: number
+        description: A flag used to indicate whether an institution has failed.
+          Failures include assisted mergers and payoffs.
+        x-source-mapping:
+          - file: RISVIEW
+            field: FAILED
+      FDICAREA:
+        title: FDIC Compliance Area
+        type: number
+        description: A number used to identify the compliance area in which
+          an institution is located.
+        x-source-mapping:
+          - file: RISVIEW
+            field: FDICAREA
+      FDICTERR:
+        title: FDIC Compliance Territory
+        type: string
+        description:
+          An abbreviation of the current compliance territory where an
+          institution is located (FDIC Compliance Territory). All periods are
+          displayed in the current perspective (exceptions can exist depending on
+          when a quarter is updated).
+        x-source-mapping:
+          - file: RISVIEW
+            field: FDICTERR
+      FLDOFDCA:
+        title: DCA Field Office
+        type: string
+        description:
+          The name of the compliance field office to which an institution
+          is assigned. All periods are diplayed in the current perspective (exceptions
+          can exist depending on when a quarter is updated).
+        x-source-mapping:
+          - file: RISVIEW
+            field: FLDOFDCA
+      FORM31:
+        title: FFIEC Call Report 31 Filer
+        description: &gt;-
+          A flag (1=yes,0=no) that indicates whether and institution filed an
+          FFIEC 031 Call Report. Commercial banks with domestic and foreign
+          offices are required to file such a report.
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: FORM31
+      HCTMULT:
+        title: Bank Holding Company Type
+        description: &gt;-
+          A flag used to indicate whether an institution is a member of a
+          multibank holding company 1=yes, 0=no
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: HCTMULT
+      HCTNONE:
+        title: Bank Not Member of Hold Company
+        type: number
+        description: A flag used to indicated whether an institution is an
+          independent bank. 0 is member of a bank hold company. 1 is not a
+          member of a bank holding company.
+        x-source-mapping:
+          - file: RISVIEW
+            field: HCTNONE
+      INSAGNT2:
+        title: Secondary Insurer
+        type: string
+        description: The secondary insurer, insurance agent, or insurance status
+          of an institution.
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSAGNT2
+      INSBIF:
+        title: TBD
+        description: &gt;-
+          TBD
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSBIF
+      INSDIF:
+        title: Deposit Insurance Fund member
+        description: &gt;-
+          A flag used to indicate whether an institution is insured under the
+          Deposit Insurance Fund (DIF).  As of April 1, 2006 the Bank
+          Insurance Fund (BIF) was merged together with the Savings
+          Institution Insurance Fund (SAIF) to create a single Deposit
+          Insurance Fund (DIF).  All FDIC-Insured BIF and SAIF member
+          institutions that are still active or open are now insured members
+          of DIF.    0 = No, not DIF insured and 1 = Yes, DIF insured.  Note
+          that institutions that became inactive prior to April 1006 will also
+          have zero value.
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSDIF
+      INSTAG:
+        title: Agricultural lending institution indicator
+        description: &gt;-
+          An indicator specifying whether an institution is primarily an
+          agricultural lending institution.
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSTAG
+      INSTCRCD:
+        title: Credit Card Institutions
+        description: &gt;-
+          Institutions with total loans greater than 50% of total assets and
+          credit card loans greater than 50% of total loans, including loans
+          that have been securitized and sold.
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSTCRCD
+      INSSAIF:
+        title: SAIF Insured
+        description: &gt;-
+          Institutions who are members of the Savings Association Insurance
+          Fund. As of April 1, 2006 SAIF was merged together with the Bank
+          Insurance Fund (BIF) to create a single Deposit Insurance Fund
+          (DIF).  All FDIC-Insured SAIF member institutions, that are still
+          active or open, are now insured members of DIF.
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSSAIF
+          - file: RISVIEW_MERGED
+            field: C_INSSAI
+      MINORITY:
+        title: MINORITY OWNED INSTITUTIONS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: MINORITY
+      MUTUAL:
+        title: Ownership Type
+        description: &gt;-
+          Banking institutions fall into one of two ownership types, stock or
+          non-stock. An institution which sells stock to raise capital is
+          called a stock institution. It is owned by the shareholders who
+          benefit from profits earned by the institution. A non-stock
+          institution, or mutual institution, is owned and controlled solely
+          by its depositors. A mutual does not issue capital stock.
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: MUTUAL
+      NAMEHCR:
+        title: Bank Holding Company (Regulatory Top Holder)
+        description: &gt;-
+          Regulatory top holder is assigned by the Federal Reserve Board based
+          on ownership and control percentages. Note: Information on bank
+          holding companies is only as of quarter-end. Regulatory top holder
+          is any company that directly or indirectly owns, controls or has
+          power to vote 25 percent or more of a bank&#x27;s or direct holding
+          company&#x27;s shares or  controls in any manner the election of a
+          majority of the directors or trustees of a bank or direct holding
+          company or  exercises a controlling influence over the management or
+          policies of a bank or direct holding company.   Information on
+          Thrift Holding Companies that own Savings Associations but do not
+          own banks is not currently available in the ID System.  Source:
+          Federal Reserve Board National Information Center data base.
+        type: string
+        x-elastic-type: keyword
+        x-elastic-analyzer:
+          - variable: raw
+            analyzer: whitespace_analyzer
+          - variable: autocomplete
+            analyzer: autocomplete_analyzer
+        x-source-mapping:
+          - file: RISVIEW
+            field: NAMEHCR
+      NETINC:
+        title: Net income
+        description: &gt;-
+          Net interest income plus total noninterest income plus realized
+          gains (losses) on securities and extraordinary items, less total
+          noninterest expense, loan loss provisions and income taxes.
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: NETINC
+      NETINCR:
+        title: NET INCOME - RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: NETINCR
+                numerator: NETINC
+                denominator: ASSET5
+      NETINCQ:
+        title: Net income - quarterly
+        description: &gt;-
+          Quarterly net interest income plus total noninterest income plus
+          realized gains (losses) on securities and extraordinary items, less
+          total noninterest expense, loan loss provisions and income taxes.
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: NETINCQ
+      NETINCQA:
+        title: Net income - quarterly
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: NETINCQA
+      NETINCQR:
+        title: NET INCOME - QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: NETINCQR
+                numerator: NETINCQ
+                denominator: ASSET2
+      OFFDOM:
+        title: Number of Domestic Offices
+        description: &gt;-
+          The number of domestic offices (including headquarters) operated by
+          active institutions in the 50 states of the U.S.A.
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: OFFDOM
+      OFFFOR:
+        title: Number of Foreign Offices
+        description: &gt;-
+          The number of foreign offices (outside the U.S.) operated by the
+          institution.
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: OFFFOR
+      OFFOA:
+        title: Number of US Offices
+        description: &gt;-
+          The number of offices operated by an FDIC-insured institution in all
+          commonwealths and terrirtories of the US, along with those in freely
+          associated states under the Compact of Free Association
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: OFFOA
+      PARCERT:
+        title: Directly owned by another bank (CERT)
+        description: &gt;-
+          The PARCERT number identifies the subsidiary institutions parent
+          certificate number. Beginning in March 1997, both the Thrift
+          Financial Reports and Call Reports are completed on a fully
+          consolidated basis.  Previously, the consolidation of subsidiary
+          depository institutions was prohibited.  Now, parent institutions
+          are required to file consolidated reports, while their subsidiary
+          financial institutions are still required to file separate
+          reports.
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: PARCERT
+      L_REPDTE:
+        title: Report Date
+        description: The last day of the financial reporting period selected.
+        type: string
+        x-elastic-type: keyword
+        x-source-mapping:
+          - file: RISVIEW_MERGED
+            field: L_REPDTE
+      REPDTE_RAW:
+        title: Report Date
+        description: The last day of the financial reporting period selected.
+        type: string
+        x-elastic-type: keyword
+        x-source-mapping:
+          - file: RISVIEW
+            field: REPDTE
+          - file: RISVIEW_MERGED
+            field: REPDTE
+      REPDTE:
+        title: Report Date
+        description: The last day of the financial reporting period selected.
+        type: string
+        x-elastic-type: keyword
+        x-source-mapping:
+          - file: RISVIEW
+            field: REPDTE
+          - file: RISVIEW_MERGED
+            field: REPDTE
+      REPYEAR:
+        title: REPORT YEAR
+        description:
+        type: string
+        x-elastic-type: keyword
+        x-source-mapping:
+          - formula:
+              type: raw
+              parameters:
+                script: |
+                  def reportDate = ctx.REPDTE ?: &quot;9999&quot;;
+                  ctx.REPYEAR = reportDate.substring(0, 4);
+      RISDATE:
+        title: Report Date
+        description: The financial reporting period selected in CCYYMM format.
+        type: string
+        format: date-time
+        x-source-mapping:
+          - file: RISVIEW
+            field: REPDTE
+          - file: RISVIEW_MERGED
+            field: REPDTE
+      ROA:
+        title: Return on assets (ROA)
+        description: &gt;-
+          Net income after taxes and extraordinary items (annualized) as a
+          percent of average total assets.
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: ROA
+                numerator: NETINCA
+                denominator: ASSET5
+      ROAPTX:
+        title: Pretax return on assets
+        description: &gt;-
+          Annualized pre-tax net income as a percent of average assets. Note:
+          Includes extraordinary items and other adjustments, net of taxes.
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: ROAPTX
+                numerator: NETINBXA
+                denominator: ASSET5
+      ROAPTXQ:
+        title: Quarterly Pretax return on assets
+        description: &gt;-
+          Quarterly pre-tax net income as a percent of average assets. Note:
+          Includes extraordinary items and other adjustments, net of taxes.
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - file: RISVIEW
+            field: ROAPTXQ
+      ROAQ:
+        title: Quarterly return on assets
+        description: &gt;-
+          Quarterly net income after taxes and extraordinary items as a
+          percent of average total assets.
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - file: RISVIEW
+            field: ROAQ
+      ROE:
+        title: Return on Equity (ROE)
+        description: &gt;-
+          Annualized net income as a percent of average equity on a
+          consolidated basis.     Note: If retained earnings are  negative,
+          the ratio is shown as NA.
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - file: RISVIEW
+            field: ROE
+      ROEQ:
+        title: Quarterly return on equity
+        description: &gt;-
+          Quarterly net income (including gains or losses on securities and
+          extraordinary items) as a percentage of average total equity
+          capital.
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - file: RISVIEW
+            field: ROEQ
+      RSSDHCR:
+        title: RSSDID - High Regulatory Holder
+        description: &gt;-
+          The unique number assigned by the Federal Reserve Board to the
+          regulatory high holding company of the institution.
+        type: string
+        x-elastic-type: keyword
+        x-source-mapping:
+          - file: RISVIEW
+            field: RSSDHCR
+      SPECGRP:
+        title: Asset Concentration Hierarchy
+        description: &gt;-
+          An indicator of an institution&#x27;s primary specialization in terms of
+          asset concentration
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: SPECGRP
+      SPECGRPDESC:
+        title: Asset Concentration Hierarchy Description
+        description: &gt;-
+          An indicator of an institution&#x27;s primary specialization in terms of
+          asset concentration Description
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: SPECGRPDESC
+      STALPHCR:
+        title: Regulatory holding company state location
+        description: &gt;-
+          State location of the regulatory high holding company (either direct
+          or indirect owner).
+        type: string
+        x-elastic-type: keyword
+        x-source-mapping:
+          - file: RISVIEW
+            field: STALPHCR
+      SUBCHAPS:
+        title: Subchapter S Corporations
+        description: &gt;-
+          The Small Business Job Protection Act of 1996 changed the Internal
+          Revenue Code to allow financial institutions to elect Subchapter S
+          corporation status, beginning in 1997. Banks are required to
+          indicate on the Call Report whether there is currently in effect an
+          election to file under Subchapter S. Thrifts have a similar
+          requirement as of March 1998.  The most important IRS requirements
+          to elect and maintain Subchapter S status are: There can be no more
+          than 75 eligible shareholders and no more than one class of stock.
+          (In general, shareholders can only be individuals, estates, and
+          certain types of trusts. Certain retirement plans and charitable
+          organizations will be eligible in 1998.) All shareholders must
+          consent.  Banks and thrifts converting to Subchapter S status must
+          use the specific charge-off method for tax purposes rather than the
+          reserve method of accounting for bad debts and recapture tax bad
+          debt reserves over a period of six years, if the reserve method had
+          been used prior to conversion. (Note: even though the specific
+          charge-off method is required for tax purposes, an adequate
+          allowance for loan and lease losses must still be maintained on the
+          financial statements and Call Reports.) Banks and thrifts are
+          subject to a built-in gains (BIG) tax, if the aggregate fair market
+          value of assets is greater than their aggregate adjusted bases on
+          the date of conversion to Subchapter S status.     [Banks are
+          required to indicate separately on the Call Report in December of
+          each year, the deferred portion of income taxes reported in net
+          income. For Subchapter S banks, some or all of their deferred tax
+          assets and liabilities may be eliminated upon conversion to
+          Subchapter S status; however, deferred taxes related to the BIG tax
+          and the recapture of bad debt reserves must be recognized.].   A
+          Subchapter S corporation is treated as a pass-through entity,
+          similar to a partnership, for federal income tax purposes. It is
+          generally not subject to any federal income taxes at the corporate
+          level. Its taxable income flows through to its shareholders in
+          proportion to their stock ownership, and the shareholders generally
+          pay federal income taxes on their share of this taxable income. This
+          can have the effect of reducing institutions&#x27; reported income tax
+          expense and increasing their after-tax earnings..   The election of
+          Subchapter S status may result in an increase in shareholders&#x27;
+          personal tax liabilities. Therefore, S corporations typically
+          increase the amount of earnings distributed as dividends to
+          compensate for higher personal taxes.
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: SUBCHAPS
+      TRACT:
+        title: &#x27;&#x27;
+        description: &gt;-
+          Beyond having trust powers granted and exercised, institutions with
+          fiduciary assets accounts, income, or other reportable fiduciary
+          related service
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: TRACT
+      TRUST:
+        title: Trust Powers
+        description: &gt;-
+          A flag used to indicate an institution&#x27;s Trust Powers Granted
+          status. 0 = No Trust Power Granted 1 = Trust Power Granted Where
+          Trust Power has been granted specific codes are: 00 - Trust powers
+          not know 10 - Full trust powers granted 11 - Full trust powers
+          granted, exercised 12 - Full trust powers granted, not exercised 20
+          - Limited trust powers granted 21 - Limited trust powers granted,
+          exercised 22 - Limited trust powers granted, not exercised 30 -
+          Trust powers not granted 31 - Trust powers not granted, but
+          exercised
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: TRUST
+      ACEPT:
+        title: BANKS LIABILITY ON ACCEPTANCES
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ACEPT
+      ACTIVE:
+        title: ACTIVE INSTITUTION FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ACTIVE
+      BKCLASS:
+        title: INSTITUTION CLASS
+        description: A classification code assigned by the FDIC based on the institution&#x27;s charter type (commercial bank or savings institution), charter agent (state or federal), Federal Reserve membership status (Fed member, Fed non-member) and its primary federal regulator (state chartered institutions are subject to both federal and state supervision). N - Commercial bank, national (federal) charter, Fed member, and supervised by the Office of the Comptroller of the Currency (OCC); NM - Commercial bank, state charter, Fed non-member, and supervised by the Federal Deposit Insurance Corporation (FDIC); OI - Insured U.S. branch of a foreign chartered institution (IBA) and supervised by the OCC or FDIC; SB – Federal savings banks, federal charter, supervised by the OCC or before July 21,2011 the Office of Thrift Supervision (OTS); SI - State chartered stock savings banks, supervised by the FDIC; SL - State chartered stock savings and loan associations, supervised by the FDIC or before July 21,2011 the OTS; SM - Commercial bank, state charter, Fed member, and supervised by the Federal Reserve Bank (FRB); NC – Noninsured non-deposit commercial banks and/or trust companies regulated by the OCC, a state, or a territory; NS - Noninsured stock savings bank supervised by a state or territory; CU - state or federally chartered credit unions supervised by the National Credit Union Association (NCUA).
+        type: string
+        x-elastic-type: keyword
+        x-source-mapping:
+          - file: RISVIEW
+            field: BKCLASS
+      BKPREM:
+        title: PREMISES AND FIXED ASSETS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: BKPREM
+      BKPREMR:
+        title: PREMISES AND FIXED ASSETS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: BKPREMR
+                numerator: BKPREM
+                denominator: ASSET
+      BRO:
+        title: BROKERED DEP
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: BRO
+      BROR:
+        title: BROKERED RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: BROR
+                numerator: BRO
+                denominator: ASSET
+      CALLYM:
+        title: REPORT DATE (CCYYMM)
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CALLYM
+      CHBAL:
+        title: CASH &amp; DUE FROM DEPOSITORY INST
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CHBAL
+      CHBALR:
+        title: CASH &amp; DUE FROM DEPOSITORY INST RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: CHBALR
+                numerator: CHBAL
+                denominator: ASSET
+      CHBALI:
+        title: INTEREST-BEARING CASH &amp; DUE
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CHBALI
+      CHBALIR:
+        title: INTEREST-BEARING CASH &amp; DUE RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: CHBALIR
+                numerator: CHBALI
+                denominator: ASSET
+      CHRTAGNT:
+        title: CHARTER AGENT
+        description:
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: CHRTAGNT
+      CONSERVE:
+        title: RTC CONSERVATORSHIP FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CONSERVE
+      CRLNLS:
+        title: TOTAL LN&amp;LS RECOVERIES
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CRLNLS
+      CRLNLSR:
+        title: TOTAL LN&amp;LS RECOVERIES RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: CRLNLSR
+                numerator: CRLNLS
+                denominator: ASSET5
+      CRLNLSQ:
+        title: TOTAL LN&amp;LS RECOVERIES QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CRLNLSQ
+      CRLNLSQR:
+        title: TOTAL LN&amp;LS RECOVERIES QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: CRLNLSQR
+                numerator: CRLNLSQ
+                denominator: ASSET2
+      CUSLI:
+        title: CUSTOMERS ACCEPTANCES
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: CUSLI
+      DDT:
+        title: DDA TRANS-TOTAL
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DDT
+      DDTR:
+        title: DDA TRANS-TOTAL RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: DDTR
+                numerator: DDT
+                denominator: ASSET
+      DEPFOR:
+        title: TOTAL DEPOSITS-FOR
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DEPFOR
+      DEPFORR:
+        title: TOTAL DEPOSITS-FOR RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: DEPFORR
+                numerator: DEPFOR
+                denominator: ASSET
+      DEPI:
+        title: INTEREST-BEARING DEP
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DEPI
+      DEPIFOR:
+        title: INTEREST-BEARING DEP-FOR
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DEPIFOR
+      DEPIFORR:
+        title: INTEREST-BEARING DEP-FOR RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: DEPIFORR
+                numerator: DEPIFOR
+                denominator: ASSET
+      DEPIPCCF:
+        title: IPC &amp; OFFICIAL CHECKS-FOR
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DEPIPCCF
+      DEPIPCCFR:
+        title: IPC &amp; OFFICIAL CHECKS-FOR RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: DEPIPCCFR
+                numerator: DEPIPCCF
+                denominator: ASSET
+      DEPIPCF:
+        title: IPC-FOR
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DEPIPCF
+      DEPNI:
+        title: NONINTEREST-BEARING DEP
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DEPNI
+      DEPNIFOR:
+        title: NONINTEREST-BEARING DEP-FOR
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DEPNIFOR
+      DEPNIFORR:
+        title: NONINTEREST-BEARING DEP-FOR RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: DEPNIFORR
+                numerator: DEPNIFOR
+                denominator: ASSET
+      DRLNLS:
+        title: TOTAL LN&amp;LS CHARGE-OFFS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DRLNLS
+      DRLNLSR:
+        title: TOTAL LN&amp;LS CHARGE-OFFS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: DRLNLSR
+                numerator: DRLNLS
+                denominator: ASSET5
+      DRLNLSQ:
+        title: TOTAL LN&amp;LS CHARGE-OFFS QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: DRLNLSQ
+      DRLNLSQR:
+        title: TOTAL LN&amp;LS CHARGE-OFFS QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: DRLNLSQR
+                numerator: DRLNLSQ
+                denominator: ASSET2
+      EAMINTAN:
+        title: AMORT &amp; IMPAIR LOSS AST
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EAMINTAN
+      EAMINTANR:
+        title: AMORT &amp; IMPAIR LOSS AST RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EAMINTANR
+                numerator: EAMINTAN
+                denominator: ASSET5
+      EAMINTQ:
+        title: AMORT &amp; IMPAIR LOSS AST QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EAMINTQ
+      EAMINTQR:
+        title: AMORT &amp; IMPAIR LOSS AST QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: EAMINTQR
+                numerator: EAMINTQ
+                denominator: ASSET2
+      EDEP:
+        title: DEPOSIT INTEREST EXPENSE
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EDEP
+      EDEPDOM:
+        title: DEPOSIT INTEREST EXPENSE-DOM
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EDEPDOM
+      EDEPDOMR:
+        title: DEPOSIT INTEREST EXPENSE-DOM RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EDEPDOMR
+                numerator: EDEPDOM
+                denominator: ASSET5
+      EDEPDOMQ:
+        title: DEPOSIT INTEREST EXPENSE-DOM QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EDEPDOMQ
+      EDEPDOMQR:
+        title: DEPOSIT INTEREST EXPENSE-DOM QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: EDEPDOMQR
+                numerator: EDEPDOMQ
+                denominator: ASSET2
+      EDEPFOR:
+        title: DEPOSIT INTEREST EXPENSE-FOR
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EDEPFOR
+      EDEPFORR:
+        title: DEPOSIT INTEREST EXPENSE-FOR RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EDEPFORR
+                numerator: EDEPFOR
+                denominator: ASSET5
+      EDEPFORQ:
+        title: DEPOSIT INTEREST EXPENSE-FOR QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EDEPFORQ
+      EDEPFORQR:
+        title: DEPOSIT INTEREST EXPENSE-FOR QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: EDEPFORQR
+                numerator: EDEPFORQ
+                denominator: ASSET2
+      EFHLBADV:
+        title: ADVANCES FROM FHLBANK INT EXP
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EFHLBADV
+      EFREPP:
+        title: FED FUNDS &amp; REPOS INT EXPENSE
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EFREPP
+      EFREPPR:
+        title: FED FUNDS &amp; REPOS INT EXPENSE RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EFREPPR
+                numerator: EFREPP
+                denominator: ASSET5
+      EFREPPQ:
+        title: FED FUNDS &amp; REPOS INT EXPENSE QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EFREPPQ
+      EFREPPQR:
+        title: FED FUNDS &amp; REPOS INT EXPENSE QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: EFREPPQR
+                numerator: EFREPPQ
+                denominator: ASSET2
+      EINTEXP:
+        title: TOTAL INTEREST EXPENSE
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EINTEXP
+      EINTEXPR:
+        title: TOTAL INTEREST EXPENSE RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EINTEXPR
+                numerator: EINTEXP
+                denominator: ASSET5
+      EINTXQ:
+        title: TOTAL INTEREST EXPENSE QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EINTXQ
+      EINTXQA:
+        title: TOTAL INTEREST EXPENSE QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EINTXQA
+      EINTEXPA:
+        title: TOTAL INTEREST EXPENSE ANNUALLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EINTEXPA
+      EINTXQR:
+        title: TOTAL INTEREST EXPENSE QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: EINTXQR
+                numerator: EINTXQ
+                denominator: ASSET2
+      ELNATR:
+        title: PROVISIONS FOR CREDIT LOSSES
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ELNATR
+      ELNATRR:
+        title: PROVISIONS FOR CREDIT LOSSES RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: ELNATRR
+                numerator: ELNATR
+                denominator: ASSET5
+      ELNATQ:
+        title: PROVISIONS FOR CREDIT LOSSES QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ELNATQ
+      ELNATQA:
+        title: PROVISIONS FOR CREDIT LOSSES QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ELNATQA
+      ELNATQR:
+        title: PROVISIONS FOR CREDIT LOSSES QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - file: RISVIEW
+            field: ELNATQR
+      ELNLOSQ:
+        title: PROVISIONS FOR CREDIT LOSSES QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - file: RISVIEW
+            field: ELNLOSQ
+      NTTOTQ:
+        title: PROVISIONS FOR CREDIT LOSSES QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - file: RISVIEW
+            field: NTTOTQ
+      ELNLOS:
+        title: PROVISIONS FOR LN &amp; LEASE LOSSES
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ELNLOS
+      EMTGLS:
+        title: MORTGAGE DEBT INTEREST EXPENSE
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EMTGLS
+      ADDNONINTEXP:
+        title: ADDITIONAL NONINTEREST EXPENSE
+        description:
+        type: number
+        x-source-mapping:
+          - formula:
+              type: raw
+              parameters:
+                script: |
+                  def EOTHNINT = ctx.EOTHNINT ?: 0;
+                  def EAMINTAN = ctx.EAMINTAN ?: 0;
+                  if (Integer.parseInt(ctx.REPYEAR) &gt; 2000) {
+                    ctx.ADDNONINTEXP = EOTHNINT + EAMINTAN;
+                  } else {
+                    ctx.ADDNONINTEXP = EOTHNINT;
+                  }
+      ADDNONINTEXPR:
+        title: ADDITIONAL NONINTEREST EXPENSE RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: ADDNONINTEXPR
+                numerator: ADDNONINTEXP
+                denominator: ASSET5
+      ADDNONINTEXPQ:
+        title: ADDITIONAL NONINTEREST EXPENSE QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - formula:
+              type: raw
+              parameters:
+                script: |
+                  def EOTHNINQ = ctx.EOTHNINQ ?: 0;
+                  def EAMINTQ = ctx.EAMINTQ ?: 0;
+                  if (Integer.parseInt(ctx.REPYEAR) &gt; 2000) {
+                    ctx.ADDNONINTEXPQ = EOTHNINQ + EAMINTQ;
+                  } else {
+                    ctx.ADDNONINTEXPQ = EOTHNINQ;
+                  }
+      ADDNONINTEXPQR:
+        title: ADDITIONAL NONINTEREST EXPENSE QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: ADDNONINTEXPQR
+                numerator: ADDNONINTEXPQ
+                denominator: ASSET2
+      EOTHNINT:
+        title: ALL OTHER NONINTEREST EXPENSE
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EOTHNINT
+      EOTHNINTR:
+        title: ALL OTHER NONINTEREST EXPENSE RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EOTHNINTR
+                numerator: EOTHNINT
+                denominator: ASSET5
+      EOTHNINQ:
+        title: ALL OTHER NONINTEREST EXPENSE QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EOTHNINQ
+      EOTHNINQR:
+        title: ALL OTHER NONINTEREST EXPENSE QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: EOTHNINQR
+                numerator: EOTHNINQ
+                denominator: ASSET2
+      EPREMAGG:
+        title: PREMISES &amp; FIXED ASSETS EXPENSE
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EPREMAGG
+      EPREMAGGR:
+        title: PREMISES &amp; EQUIPMENT EXPENSE RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EPREMAGGR
+                numerator: EPREMAGG
+                denominator: ASSET5
+      EPREMAGQ:
+        title: PREMISES &amp; FIXED ASSETS EXPENSE QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EPREMAGQ
+      EPREMAGQR:
+        title: PREMISES &amp; EQUIPMENT EXPENSE QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: EPREMAGQR
+                numerator: EPREMAGQ
+                denominator: ASSET2
+      EQCDIV:
+        title: CASH DIVIDENDS ON COMM &amp; PREF
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQCDIV
+      EQCDIVR:
+        title: CASH DIVIDENDS ON COMM &amp; PREF RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EQCDIVR
+                numerator: EQCDIV
+                denominator: ASSET5
+      EQCDIVC:
+        title: CASH DIVIDENDS ON COMM STOCK
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQCDIVC
+      EQCDIVCR:
+        title: CASH DIVIDENDS ON COMM STOCK RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EQCDIVCR
+                numerator: EQCDIVC
+                denominator: ASSET5
+      EQCDIVP:
+        title: CASH DIVIDENDS ON PREF STOCK
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQCDIVP
+      EQCDIVPR:
+        title: CASH DIVIDENDS ON PREF STOCK RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EQCDIVPR
+                numerator: EQCDIVP
+                denominator: ASSET5
+      EQCDIVQ:
+        title: CASH DIVIDENDS ON COMM &amp; PREF QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQCDIVQ
+      EQCDIVQR:
+        title: CASH DIVIDENDS ON COMM &amp; PREF QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: EQCDIVQR
+                numerator: EQCDIVQ
+                denominator: ASSET2
+      EQCFCTA:
+        title: EQCFCTA
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQCFCTA
+      EQCONSUB:
+        title: MINOR INT IN CONSOL SUBS-EQ
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQCONSUB
+      EQCS:
+        title: COMMON STOCK
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQCS
+      EQCSR:
+        title: COMMON STOCK RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: EQCSR
+                numerator: EQCS
+                denominator: ASSET
+      EQNWCERT:
+        title: NET WORTH CERTIFICATES
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQNWCERT
+      EQOTHCC:
+        title: OTHER EQUITY CAPITAL COMPONENTS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQOTHCC
+      EQPP:
+        title: PERPETUAL PREFERRED STOCK
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQPP
+      EQPPR:
+        title: PERPETUAL PREFERRED STOCK RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: EQPPR
+                numerator: EQPP
+                denominator: ASSET
+      EQSUR:
+        title: SURPLUS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQSUR
+      EQSURR:
+        title: SURPLUS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: EQSURR
+                numerator: EQSUR
+                denominator: ASSET
+      EQUP:
+        title: EQUP
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQUP
+      EQUPTOT:
+        title: UP-NET &amp; OTHER CAPITAL COMP
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EQUPTOT
+      EQUPTOTR:
+        title: UP-NET &amp; OTHER CAPITAL RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: EQUPTOTR
+                numerator: EQUPTOT
+                denominator: ASSET
+      ESAL:
+        title: SALARIES AND EMPLOYEE BENEFITS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ESAL
+      ESALR:
+        title: SALARIES AND EMPLOYEE BENEFITS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: ESALR
+                numerator: ESAL
+                denominator: ASSET5
+      ESALQ:
+        title: SALARIES AND EMPLOYEE BENEFITS QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ESALQ
+      ESALQR:
+        title: SALARIES AND EMPLOYEE BENEFITS QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: ESALQR
+                numerator: ESALQ
+                denominator: ASSET2
+      ESUBND:
+        title: SUBORDINATED NOTES INT EXPENSE
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ESUBND
+      ETTLOTBO:
+        title: TT&amp;L &amp; OTHER BORROWINGS INT EXP
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ETTLOTBO
+      EXTRA:
+        title: NET DISCONTINUED OPERATIONS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EXTRA
+      EXTRAR:
+        title: NET DISCONTINUED RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: EXTRAR
+                numerator: EXTRA
+                denominator: ASSET5
+      EXTRAQ:
+        title: NET DISCONTINUED OPERATIONS QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: EXTRAQ
+      EXTRAQR:
+        title: NET DISCONTINUED OPERATIONS QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: EXTRAQR
+                numerator: EXTRAQ
+                denominator: ASSET2
+      FDICDBS:
+        title: FDIC REGION
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: FDICDBS
+      FDICDBSDESC:
+        title: FDIC REGION DESC
+        description:
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: FDICDBSDESC
+      FDICSUPV:
+        title: FDIC REGION - SUPERVISORY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: FDICSUPV
+      FDICSUPVDESC:
+        title: FDIC REGION - SUPERVISORY DESC
+        description:
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: FDICSUPVDESC
+      FED:
+        title: FED DISTRICT
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: FED
+      FEDDESC:
+        title: FED DISTRICT DESC
+        description:
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: FEDDESC
+      FEDCHRTR:
+        title: FEDERAL CHARTER FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: FEDCHRTR
+      FLDOFF:
+        title: FDIC RISK MANAGEMENT FIELD OFFICE
+        description:
+        type: string
+        x-elastic-type: keyword
+        x-source-mapping:
+          - file: RISVIEW
+            field: FLDOFF
+      FORCHRTR:
+        title: FOREIGN CHARTER FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: FORCHRTR
+      FORMCFR:
+        title: COMMERCIAL FINANCIAL REPORT FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: FORMCFR
+      FREPO:
+        title: FED FUNDS &amp; REPOS SOLD
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: FREPO
+      FREPOR:
+        title: FED FUNDS &amp; REPOS SOLD
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: FREPOR
+                numerator: FREPO
+                denominator: ASSET
+      FREPP:
+        title: FED FUNDS &amp; REPOS PURCHASED
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: FREPP
+      FREPPR:
+        title: FED FUNDS &amp; REPOS PURCHASED RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentage
+              parameters:
+                setField: FREPPR
+                numerator: FREPP
+                denominator: ASSET
+      FRSMEM:
+        title: FRS MEMBER FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: FRSMEM
+      HCTONE:
+        title: MEMBER OF A ONE BANK HOLDING CO
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: HCTONE
+      IBA:
+        title: INTL BANKING ACT ENTITY FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: IBA
+      IBEFTAX:
+        title: INCOME BEFORE INC TAXES &amp; DISC
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: IBEFTAX
+      ICHBAL:
+        title: DEPOSITORY INSTITUTIONS INT INC
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ICHBAL
+      ICHBALR:
+        title: BALANCES FROM DEPOSITORY INSTITUTIONS YTD RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: ICHBALR
+                numerator: ICHBAL
+                denominator: ASSET5
+      ICHBALQ:
+        title: DEPOSITORY INSTITUTIONS INT INC QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ICHBALQ
+      ICHBALQR:
+        title: DEPOSITORY INSTITUTIONS INT INC QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: ICHBALQR
+                numerator: ICHBALQ
+                denominator: ASSET2
+      IFREPO:
+        title: FED FUNDS &amp; REPO INTEREST INCOME
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: IFREPO
+      IFREPOR:
+        title: FEDERAL FUNDS SOLD YTD RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: IFREPOR
+                numerator: IFREPO
+                denominator: ASSET5
+      IFREPOQ:
+        title: FED FUNDS &amp; REPO INTEREST INCOME QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: IFREPOQ
+      IFREPOQR:
+        title: FED FUNDS &amp; REPO INTEREST INCOME QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: IFREPOQR
+                numerator: IFREPOQ
+                denominator: ASSET2
+      IGLSEC:
+        title: SECURITIES GAINS AND LOSSES
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: IGLSEC
+      IGLSECR:
+        title: SECURITIES GAINS AND LOSSES RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: IGLSECR
+                numerator: IGLSEC
+                denominator: ASSET5
+      IGLSECQR:
+        title: SECURITIES GAINS AND LOSSES QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: IGLSECQR
+                numerator: IGLSECQ
+                denominator: ASSET2
+      ILNDOM:
+        title: LOAN INCOME-DOM
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ILNDOM
+      ILNDOMR:
+        title: DOMESTIC OFFICE LOANS YTD RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: ILNDOMR
+                numerator: ILNDOM
+                denominator: ASSET5
+      ILNDOMQ:
+        title: LOAN INCOME-DOM QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ILNDOMQ
+      ILNDOMQR:
+        title: LOAN INCOME-DOM QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: ILNDOMQR
+                numerator: ILNDOMQ
+                denominator: ASSET2
+      ILNFOR:
+        title: LOAN INCOME-FOR
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ILNFOR
+      ILNFORR:
+        title: FOREIGN OFFICE LOANS YTD RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: ILNFORR
+                numerator: ILNFOR
+                denominator: ASSET5
+      ILNFORQ:
+        title: LOAN INCOME-FOR QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ILNFORQ
+      ILNFORQR:
+        title: LOAN INCOME-FOR QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: ILNFORQR
+                numerator: ILNFORQ
+                denominator: ASSET2
+      ILS:
+        title: LEASE INCOME
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ILS
+      ILSR:
+        title: LEASE FINANCING RECEIVABLES YTD RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageYTD
+              parameters:
+                setField: ILSR
+                numerator: ILS
+                denominator: ASSET5
+      ILSQ:
+        title: LEASE INCOME QUARTERLY
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: ILSQ
+      ILSQR:
+        title: LEASE INCOME QUARTERLY RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-mapping:
+          - formula:
+              type: percentageQuarterly
+              parameters:
+                setField: ILSQR
+                numerator: ILSQ
+                denominator: ASSET2
+      INSALL:
+        title: INSURED INSTITUTION FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSALL
+      INSCOML:
+        title: INSURED COMMERCIAL FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSCOML
+      INSFDIC:
+        title: FDIC-Insured FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSFDIC
+      INSNONE:
+        title: NOT FEDERALLY INSURED FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSNONE
+      INSSAVE:
+        title: INSURED SAVINGS INSTITUTION FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSSAVE
+      INSTCOML:
+        title: COMMERCIAL INSTITUTION FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSTCOML
+      INSTSAVE:
+        title: SAVING &amp; S&amp;L INSTITUTION FLAG
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSTSAVE
+      INSTTYPE:
+        title: INSTITUTION TYPE
+        description:
+        type: string
+        x-source-mapping:
+          - file: RISVIEW
+            field: INSTTYPE
+      INTAN:
+        title: INTANGIBLE ASSETS
+        description:
+        type: number
+        x-source-mapping:
+          - file: RISVIEW
+            field: INTAN
+      INTANR:
+        title: INTANGIBLE ASSETS RATIO
+        description:
+        type: number
+        x-elastic-type: double
+        x-source-</pre></main></body></html>

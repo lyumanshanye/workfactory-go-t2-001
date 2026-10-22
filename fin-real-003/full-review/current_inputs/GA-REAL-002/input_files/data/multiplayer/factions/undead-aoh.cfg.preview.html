@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>undead-aoh.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/multiplayer/factions/undead-aoh.cfg</h1><pre>#textdomain wesnoth-multiplayer
+[multiplayer_side]
+    id=Undead
+    name= _&quot;Undead&quot;
+    image=&quot;units/undead-necromancers/lich.png&quot;
+    type=random
+    leader=Lich,Necromancer,Draug,Banebow,Ghast,Deathblade
+    random_leader=Lich,Necromancer,Draug,Banebow
+    recruit=Skeleton,Revenant,Deathblade,Skeleton Archer,Bone Shooter,Walking Corpse,Soulless,Ghost,Wraith,Shadow,Vampire Bat,Blood Bat,Ghoul,Necrophage,Dark Adept,Dark Sorcerer
+    terrain_liked=Ss, Hh, Ha, Ww
+    # wmllint: markcheck off
+    description=&quot;&lt;img&gt;src=&#x27;portraits/undead/spectre.webp~BG()&#x27; align=&#x27;middle&#x27;&lt;/img&gt;
+
+&quot;+_&quot;The &lt;bold&gt;text=&#x27;Undead&#x27;&lt;/bold&gt; are a faction of &lt;ref&gt;text=&#x27;undead&#x27; dst=&#x27;..race_undead&#x27;&lt;/ref&gt; creatures and &lt;ref&gt;text=&#x27;human&#x27; dst=&#x27;..race_human&#x27;&lt;/ref&gt; practitioners of dark arts that usually accompany them. Often, these “Dark Adepts” are the units that do the most damage for the faction, but they have a major vulnerability — their practicing of this forbidden, evil magic has consumed all their energy and so they have no melee attack at all. The Undead are a very aggressive faction and the most powerful &lt;ref&gt;text=&#x27;Default Era&#x27; dst=&#x27;..era_era_default&#x27;&lt;/ref&gt; faction at nighttime.&quot;
+    # wmllint: markcheck on
+    [ai]
+        recruitment_pattern=fighter,fighter,fighter,mixed fighter,archer,scout
+    [/ai]
+[/multiplayer_side]
+</pre></main></body></html>

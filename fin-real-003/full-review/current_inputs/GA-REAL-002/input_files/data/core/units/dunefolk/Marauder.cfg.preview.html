@@ -1,0 +1,112 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marauder.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/dunefolk/Marauder.cfg</h1><pre>#textdomain wesnoth-units
+
+#define PATH_TEMP
+units/dunefolk/rider/#enddef
+
+#define TORCH_STATIC_IMAGE
+{PATH_TEMP}marauder.png~BLIT({PATH_TEMP}marauder-torch-overlay.png,0,0)#enddef
+
+[unit_type]
+    id=Dune Marauder
+    name= _ &quot;Dune Marauder&quot;
+    race=dunefolk
+#ifndef __WMLUNITS__
+    image=&quot;{TORCH_STATIC_IMAGE}&quot;
+#else
+    # Shown on units.wesnoth.org instead,
+    # because Image Path Functions aren&#x27;t available there.
+    image=&quot;{PATH_TEMP}marauder.png&quot;
+#endif
+    hitpoints=58
+    movement_type=dunehorse
+    movement=9
+    experience=150
+    level=3
+    alignment=chaotic
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=60
+    undead_variation=mounted
+    usage=scout
+    description= _ &quot;Some find themselves well suited to the life of a raider and may even form their own clans with like-minded individuals. Ever roaming the deserts for unwary travelers or vulnerable caravans, these horsemen make their livelihood off scavenging and pilfering. Having no particular specialty, marauders are neither the strongest warriors, nor the most dextrous archers, but are nevertheless among the most dangerous enemies out in the desert due to their sheer maneuverability. A coordinated marauder attack can wipe out medium-sized camps before any response is possible, and guerrilla tactics may allow them to prevail against stronger foes where brute force does not. For this reason, they are sometimes hired by small armies or wealthier caravans as a deterrent to unwanted raids.&quot;
+    die_sound=horse-die.ogg
+    {DEFENSE_ANIM_FILTERED &quot;{PATH_TEMP}marauder.png&quot; &quot;{PATH_TEMP}marauder.png&quot; {SOUND_LIST:HORSE_HIT} (
+        [filter_second_attack]
+            range=ranged
+        [/filter_second_attack]
+    )}
+    {DEFENSE_ANIM_FILTERED &quot;{TORCH_STATIC_IMAGE}&quot; &quot;{TORCH_STATIC_IMAGE}&quot; {SOUND_LIST:HORSE_HIT} (
+        [filter_second_attack]
+            range=melee
+        [/filter_second_attack]
+    )}
+    {STANDING_ANIM_BIG_TORCH &quot;{PATH_TEMP}marauder.png&quot; 22 -22 -28}
+    [movement_anim]
+        start_time=-0
+        [frame]
+            image=&quot;{TORCH_STATIC_IMAGE}:150&quot;
+        [/frame]
+    [/movement_anim]
+
+    [resistance]
+        blade=80
+        impact=80
+    [/resistance]
+    [defense]
+        mountains=50
+    [/defense]
+
+    [attack]
+        name=torch
+        description= _ &quot;torch&quot;
+        type=fire
+        range=melee
+        damage=11
+        number=3
+        icon=attacks/torch.png
+    [/attack]
+    [attack]
+        name=bow
+        description=_&quot;bow&quot;
+        type=pierce
+        range=ranged
+        damage=10
+        number=3
+        icon=attacks/bow-short-reinforced.png
+    [/attack]
+
+    [attack_anim]
+        [filter_attack]
+            name=torch
+        [/filter_attack]
+        start_time=-250
+        horse_sound_start_time=-250
+        [frame]
+            image=&quot;{TORCH_STATIC_IMAGE}:400&quot;
+        [/frame]
+        [horse_sound_frame]
+            sound=horse-canter.wav
+        [/horse_sound_frame]
+        {SOUND:HIT_AND_MISS torch.ogg torch-miss.ogg -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=bow
+        [/filter_attack]
+        start_time=-250
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        [frame]
+            image=&quot;{PATH_TEMP}marauder.png:300&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS bow-puny.ogg bow-puny-miss.ogg -225}
+    [/attack_anim]
+[/unit_type]
+
+#undef PATH_TEMP
+#undef TORCH_STATIC_IMAGE
+</pre></main></body></html>

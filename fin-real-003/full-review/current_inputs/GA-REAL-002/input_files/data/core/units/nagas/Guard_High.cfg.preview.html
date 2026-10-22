@@ -1,0 +1,72 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Guard_High.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/nagas/Guard_High.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Naga High Guard
+    name= _ &quot;Naga High Guard&quot;
+    race=naga
+    image=&quot;units/nagas/guardian/sentinel.png&quot;
+    profile=portraits/nagas/naga-mace_warrior3.webp
+    hitpoints=55
+    movement_type=naga
+    movement=6
+    experience=150
+    [resistance]
+        blade=90
+        pierce=90
+        impact=90
+    [/resistance]
+    level=3
+    alignment=neutral
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=44
+    usage=fighter
+    description= _ &quot;The elite naga guards are a rigid barrier to any invaders of a naga stronghold. They have powerful strikes and, like the lesser Shield Guard, they are difficult to dislodge from their posts because of effective use of a shield in melee techniques. This tactic does nothing against ranged attacks, but the nagas can usually seek better terrain advantage in such situations.&quot;
+    die_sound=naga-die.ogg
+    {DEFENSE_ANIM_FILTERED &quot;units/nagas/guardian/sentinel-defend-2abs.png&quot; &quot;units/nagas/guardian/sentinel-defend-1abs.png&quot; {SOUND_LIST:NAGA_HIT} (
+        [filter]
+            type=Naga High Guard
+        [/filter]
+        [filter_second_attack]
+            name=shield
+        [/filter_second_attack]
+    )}
+    {DEFENSE_ANIM &quot;units/nagas/guardian/sentinel-defend-2.png&quot; &quot;units/nagas/guardian/sentinel-defend-1.png&quot; {SOUND_LIST:NAGA_HIT}}
+
+    [attack]
+        name=mace
+        description= _&quot;mace&quot;
+        type=impact
+        range=melee
+        damage=15
+        number=3
+    [/attack]
+    [attack]
+        name=shield
+        description= _&quot;shield&quot;
+        type=impact
+        range=melee
+        damage=10
+        number=1
+        [specials]
+            {WEAPON_SPECIAL_ABSORB 0.6}
+        [/specials]
+        icon=icons/shield_steel.png
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=mace
+        [/filter_attack]
+        start_time=-500
+        offset=0.0:300,0.0~0.6:200,0.6~0.0:300
+        [frame]
+            image=&quot;units/nagas/guardian/sentinel.png:700&quot;
+            # image=&quot;units/nagas/guardian/sentinel-attack-[1~4].png:[100*2,150,200]&quot;
+        [/frame]
+        [frame]
+            duration=100
+            image=&quot;units/nagas/guardian/sentinel.png&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

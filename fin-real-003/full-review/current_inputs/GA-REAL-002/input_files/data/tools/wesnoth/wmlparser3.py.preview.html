@@ -1,0 +1,1023 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>wmlparser3.py</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/tools/wesnoth/wmlparser3.py</h1><pre>#!/usr/bin/env python3
+# encoding: utf-8
+
+&quot;&quot;&quot;
+This parser uses the --preprocess option of wesnoth so a working
+wesnoth executable must be available at runtime if the WML to parse
+contains preprocessing directives.
+
+Pure WML can be parsed as is.
+
+For example:
+
+    wml = &quot;&quot;
+    [unit]
+        id=elve
+        name=Elve
+        [abilities]
+            [damage]
+                id=Ensnare
+            [/dama  ge]
+        [/abilities]
+    [/unit]
+    &quot;&quot;
+
+    p = Parser()
+    cfg = p.parse_text(wml)
+
+    for unit in cfg.get_all(tag = &quot;unit&quot;):
+        print(unit.get_text_val(&quot;id&quot;))
+        print(unit.get_text_val(&quot;name&quot;))
+        for abilities in unit.get_all(tag = &quot;abilitities&quot;):
+            for ability in abilities.get_all(tag = &quot;&quot;):
+                print(ability.get_name())
+                print(ability.get_text_val(&quot;id&quot;))
+
+Because no preprocessing is required, we did not have to pass the
+location of the wesnoth executable to Parser.
+
+The get_all method always returns a list over matching tags or
+attributes.
+
+The get_name method can be used to get the name and the get_text_val
+method can be used to query the value of an attribute.
+&quot;&quot;&quot;
+
+import os, glob, sys, re, subprocess, argparse, tempfile, shutil
+import atexit
+
+tempdirs_to_clean = []
+tmpfiles_to_clean = []
+
+@atexit.register
+def cleaner():
+    for temp_dir in tempdirs_to_clean:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+    for temp_file in tmpfiles_to_clean:
+        os.remove(temp_file)
+
+
+class WMLError(Exception):
+    &quot;&quot;&quot;
+    Catch this exception to retrieve the first error message from
+    the parser.
+    &quot;&quot;&quot;
+
+    def __init__(self, parser=None, message=None):
+        if parser:
+            self.line = parser.parser_line
+            self.wml_line = parser.last_wml_line
+            self.message = message
+            self.preprocessed = parser.preprocessed
+
+    def __str__(self):
+        return &quot;&quot;&quot;WMLError:
+    %s %s
+    %s
+    %s
+&quot;&quot;&quot; % (str(self.line), self.preprocessed, self.wml_line, self.message)
+
+
+class StringNode:
+    &quot;&quot;&quot;
+    One part of an attribute&#x27;s value. Because a single WML string
+    can be made from multiple translatable strings we model
+    it as a list of several StringNode each with its own text domain.
+    &quot;&quot;&quot;
+
+    def __init__(self, data: bytes):
+        self.textdomain = None  # non-translatable by default
+        self.data = data
+
+    def wml(self) -&gt; bytes:
+        if not self.data:
+            return b&quot;&quot;
+        return self.data
+
+    def debug(self):
+        if self.textdomain:
+            return &quot;_&lt;%s&gt;&#x27;%s&#x27;&quot; % (self.textdomain,
+                                  self.data.decode(&quot;utf8&quot;, &quot;ignore&quot;))
+        else:
+            return &quot;&#x27;%s&#x27;&quot; % self.data.decode(&quot;utf8&quot;, &quot;ignore&quot;)
+
+    def __str__(self):
+        return &quot;StringNode({})&quot;.format(self.debug())
+
+    def __repr__(self):
+        return str(self)
+
+
+class AttributeNode:
+    &quot;&quot;&quot;
+    A WML attribute. For example the &quot;id=Elfish Archer&quot; in:
+        [unit]
+            id=Elfish Archer
+        [/unit]
+    &quot;&quot;&quot;
+
+    def __init__(self, name, location=None):
+        self.name = name
+        self.location = location
+        self.value = []  # List of StringNode
+
+    def wml(self) -&gt; bytes:
+        s = self.name + b&quot;=\&quot;&quot;
+        for v in self.value:
+            s += v.wml().replace(b&quot;\&quot;&quot;, b&quot;\&quot;\&quot;&quot;)
+        s += b&quot;\&quot;&quot;
+        return s
+
+    def debug(self):
+        return self.name.decode(&quot;utf8&quot;) + &quot;=&quot; + &quot; .. &quot;.join(
+            [v.debug() for v in self.value])
+
+    def get_text(self, translation=None) -&gt; str:
+        &quot;&quot;&quot;
+        Returns a text representation of the node&#x27;s value. The
+        translation callback, if provided, will be called on each
+        partial string with the string and its corresponding textdomain
+        and the returned translation will be used.
+        &quot;&quot;&quot;
+        r = &quot;&quot;
+        for s in self.value:
+            ustr = s.data.decode(&quot;utf8&quot;, &quot;ignore&quot;)
+            if translation:
+                r += translation(ustr, s.textdomain)
+            else:
+                r += ustr
+        return r
+
+    def get_binary(self):
+        &quot;&quot;&quot;
+        Returns the unmodified binary representation of the value.
+        &quot;&quot;&quot;
+        r = b&quot;&quot;
+        for s in self.value:
+            r += s.data
+        return r
+
+    def get_name(self):
+        return self.name.decode(&quot;utf8&quot;)
+
+    def __str__(self):
+        return &quot;AttributeNode({})&quot;.format(self.debug())
+
+    def __repr__(self):
+        return str(self)
+
+
+class TagNode:
+    &quot;&quot;&quot;
+    A WML tag. For example the &quot;unit&quot; in this example:
+        [unit]
+            id=Elfish Archer
+        [/unit]
+    &quot;&quot;&quot;
+
+    def __init__(self, name, location=None):
+        self.name = name
+        self.location = location
+        # List of child elements, which are either of type TagNode or
+        # AttributeNode.
+        self.data = []
+
+        self.speedy_tags = {}
+
+    def wml(self) -&gt; bytes:
+        &quot;&quot;&quot;
+        Returns a (binary) WML representation of the entire node.
+        All attribute values are enclosed in quotes and quotes are
+        escaped (as double quotes). Note that no other escaping is
+        performed (see the BinaryWML specification for additional
+        escaping you may require).
+        &quot;&quot;&quot;
+        s = b&quot;[&quot; + self.name + b&quot;]\n&quot;
+        for sub in self.data:
+            s += sub.wml() + b&quot;\n&quot;
+        s += b&quot;[/&quot; + self.name.lstrip(b&#x27;+&#x27;) + b&quot;]\n&quot;
+        return s
+
+    def debug(self):
+        s = &quot;[%s]\n&quot; % self.name.decode(&quot;utf8&quot;)
+        for sub in self.data:
+            for subline in sub.debug().splitlines():
+                s += &quot;    %s\n&quot; % subline
+        s += &quot;[/%s]\n&quot; % self.name.decode(&quot;utf8&quot;).lstrip(&#x27;+&#x27;)
+        return s
+
+    def get_all(self, **kw):
+        &quot;&quot;&quot;
+        This gets all child tags or child attributes of the tag.
+        For example:
+
+        [unit]
+            name=A
+            name=B
+            [attack]
+            [/attack]
+            [attack]
+            [/attack]
+        [/unit]
+
+        unit.get_all(att = &quot;name&quot;)
+        will return two nodes for &quot;name=A&quot; and &quot;name=B&quot;
+
+        unit.get_all(tag = &quot;attack&quot;)
+        will return two nodes for the two [attack] tags.
+
+        unit.get_all()
+        will return 4 nodes for all 4 sub-elements.
+
+        unit.get_all(att = &quot;&quot;)
+        Will return the two attribute nodes.
+
+        unit.get_all(tag = &quot;&quot;)
+        Will return the two tag nodes.
+
+        If no elements are found an empty list is returned.
+        &quot;&quot;&quot;
+        if len(kw) == 1 and &quot;tag&quot; in kw and kw[&quot;tag&quot;]:
+            return self.speedy_tags.get(kw[&quot;tag&quot;].encode(&quot;utf8&quot;), [])
+
+        r = []
+        for sub in self.data:
+            ok = True
+            for k, v in list(kw.items()):
+                v = v.encode(&quot;utf8&quot;)
+                if k == &quot;tag&quot;:
+                    if not isinstance(sub, TagNode):
+                        ok = False
+                    elif v != b&quot;&quot; and sub.name != v:
+                        ok = False
+                elif k == &quot;att&quot;:
+                    if not isinstance(sub, AttributeNode):
+                        ok = False
+                    elif v != b&quot;&quot; and sub.name != v:
+                        ok = False
+            if ok:
+                r.append(sub)
+        return r
+
+    def get_text_val(self, name, default=None, translation=None, val=-1):
+        &quot;&quot;&quot;
+        Returns the value of the specified attribute. If the attribute
+        is given multiple times, the value number val is returned (default
+        behaviour being to return the last value). If the
+        attribute is not found, the default parameter is returned.
+
+        If a translation is specified, it should be a function which
+        when passed a unicode string and text-domain returns a
+        translation of the unicode string. The easiest way is to pass
+        it to gettext.translation if you have the binary message
+        catalogues loaded.
+        &quot;&quot;&quot;
+        x = self.get_all(att=name)
+        if not x: return default
+        return x[val].get_text(translation)
+
+    def get_binary(self, name, default=None):
+        &quot;&quot;&quot;
+        Returns the unmodified binary data for the first attribute
+        of the given name or the passed default value if it is not
+        found.
+        &quot;&quot;&quot;
+        x = self.get_all(att=name)
+        if not x: return default
+        return x[0].get_binary()
+
+    def append(self, node):
+        &quot;&quot;&quot;
+        Appends a child node (must be either a TagNode or
+        AttributeNode).
+        &quot;&quot;&quot;
+        self.data.append(node)
+
+        if isinstance(node, TagNode):
+            if node.name not in self.speedy_tags:
+                self.speedy_tags[node.name] = []
+            self.speedy_tags[node.name].append(node)
+
+    def get_name(self):
+        return self.name.decode(&quot;utf8&quot;)
+
+    def __str__(self):
+        return &quot;TagNode({})&quot;.format(self.get_name())
+
+    def __repr__(self):
+        return str(self)
+
+
+class RootNode(TagNode):
+    &quot;&quot;&quot;
+    The root node. There is exactly one such node.
+    &quot;&quot;&quot;
+
+    def __init__(self):
+        TagNode.__init__(self, None)
+
+    def debug(self):
+        s = &quot;&quot;
+        for sub in self.data:
+            for subline in sub.debug().splitlines():
+                s += subline + &quot;\n&quot;
+        return s
+
+    def get_name(self):
+        return &quot;root&quot;
+
+    def __str__(self):
+        return &quot;RootNode()&quot;
+
+    def __repr__(self):
+        return str(self)
+
+
+class Parser:
+    def __init__(self, wesnoth_exe=None, config_dir=None,
+                 data_dir=None):
+        &quot;&quot;&quot;
+        wesnoth_exe - Wesnoth executable to use. This should have been
+            configured to use the desired data and config directories.
+        config_dir - The Wesnoth configuration directory, can be
+            None to use the wesnoth default.
+        data_dir - The Wesnoth data  directory, can be None to use
+            the wesnoth default.
+
+        After parsing is done the root node of the result will be
+        in the root attribute.
+        &quot;&quot;&quot;
+        self.wesnoth_exe = wesnoth_exe
+        self.config_dir = None
+        if config_dir: self.config_dir = os.path.abspath(config_dir)
+        self.data_dir = None
+        if data_dir: self.data_dir = os.path.abspath(data_dir)
+        self.keep_temp_dir = None
+        self.temp_dir = None
+        self.no_preprocess = (wesnoth_exe is None)
+        self.preprocessed = None
+        self.verbose = False
+
+        self.last_wml_line = &quot;?&quot;
+        self.parser_line = 0
+        self.line_in_file = 42424242
+        self.chunk_start = &quot;?&quot;
+
+    def parse_file(self, path, defines=&quot;&quot;) -&gt; RootNode:
+        &quot;&quot;&quot;
+        Parse the given file found under path.
+        &quot;&quot;&quot;
+        self.path = path
+        if not self.no_preprocess:
+            self.preprocess(defines)
+        return self.parse()
+
+    def parse_binary(self, binary: bytes, defines=&quot;&quot;) -&gt; RootNode:
+        &quot;&quot;&quot;
+        Parse a chunk of binary WML.
+        &quot;&quot;&quot;
+        td, tmpfilePath = tempfile.mkstemp(prefix=&quot;wmlparser_&quot;,
+                                            suffix=&quot;.cfg&quot;)
+        with open(tmpfilePath, &#x27;wb&#x27;) as temp:
+            temp.write(binary)
+        os.close(td)
+        self.path = tmpfilePath
+        tmpfiles_to_clean.append(tmpfilePath)
+        if not self.no_preprocess:
+            self.preprocess(defines)
+        return self.parse()
+
+    def parse_text(self, text, defines=&quot;&quot;) -&gt; RootNode:
+        &quot;&quot;&quot;
+        Parse a text string.
+        &quot;&quot;&quot;
+        return self.parse_binary(text.encode(&quot;utf8&quot;), defines)
+
+    def preprocess(self, defines):
+        &quot;&quot;&quot;
+        This is called by the parse functions to preprocess the
+        input from a normal WML .cfg file into a preprocessed
+        .plain file.
+        &quot;&quot;&quot;
+        if self.keep_temp_dir:
+            output = self.keep_temp_dir
+        else:
+            output = tempfile.mkdtemp(prefix=&quot;wmlparser_&quot;)
+            tempdirs_to_clean.append(output)
+
+        self.temp_dir = output
+        commandline = [self.wesnoth_exe]
+        if self.data_dir:
+            commandline += [&quot;--data-dir&quot;, self.data_dir]
+        if self.config_dir:
+            commandline += [&quot;--config-dir&quot;, self.config_dir]
+        commandline += [&quot;--preprocess&quot;, self.path, output]
+        if defines:
+            commandline += [&quot;--preprocess-defines&quot;, defines]
+        if self.verbose:
+            print((&quot; &quot;.join(commandline)))
+        p = subprocess.Popen(commandline,
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        if self.verbose:
+            print((out + err).decode(&quot;utf8&quot;))
+        self.preprocessed = output + &quot;/&quot; + os.path.basename(self.path) + \
+                            &quot;.plain&quot;
+        if not os.path.exists(self.preprocessed):
+            first_line = open(self.path).readline().strip()
+            raise WMLError(self, &quot;Preprocessor error:\n&quot; +
+                           &quot; &quot;.join(commandline) + &quot;\n&quot; +
+                           &quot;First line: &quot; + first_line + &quot;\n&quot; +
+                           out.decode(&quot;utf8&quot;) +
+                           err.decode(&quot;utf8&quot;))
+
+    def parse_line_without_commands_loop(self, line: str) -&gt; str:
+        &quot;&quot;&quot;
+        Once the .plain commands are handled WML lines are passed to
+        this.
+        &quot;&quot;&quot;
+        if not line: return
+
+        if line.strip():
+            self.skip_newlines_after_plus = False
+
+        if self.in_tag:
+            self.handle_tag(line)
+            return
+
+        if self.in_arrows:
+            arrows = line.find(b&#x27;&gt;&gt;&#x27;)
+            if arrows &gt;= 0:
+                self.in_arrows = False
+                self.temp_string += line[:arrows]
+                self.temp_string_node = StringNode(self.temp_string)
+                self.temp_string = b&quot;&quot;
+                self.temp_key_nodes[self.commas].value.append(
+                    self.temp_string_node)
+                self.in_arrows = False
+                return line[arrows + 2:]
+            else:
+                self.temp_string += line
+            return
+
+        quote = line.find(b&#x27;&quot;&#x27;)
+
+        if not self.in_string:
+            arrows = line.find(b&#x27;&lt;&lt;&#x27;)
+            if arrows &gt;= 0 and (quote &lt; 0 or quote &gt; arrows):
+                self.parse_line_without_commands(line[:arrows])
+                self.in_arrows = True
+                return line[arrows + 2:]
+
+        if quote &gt;= 0:
+            if self.in_string:
+                # double quote
+                if quote &lt; len(line) - 1 and line[quote + 1] == b&#x27;&quot;&#x27;[0]:
+                    self.temp_string += line[:quote + 1]
+                    return line[quote + 2:]
+                self.temp_string += line[:quote]
+                self.temp_string_node = StringNode(self.temp_string)
+                if self.translatable:
+                    self.temp_string_node.textdomain = self.textdomain
+                    self.translatable = False
+                self.temp_string = b&quot;&quot;
+                if not self.temp_key_nodes:
+                    raise WMLError(self, &quot;Unexpected string value.&quot;)
+
+                self.temp_key_nodes[self.commas].value.append(
+                    self.temp_string_node)
+
+                self.in_string = False
+                return line[quote + 1:]
+            else:
+                self.parse_outside_strings(line[:quote])
+                self.in_string = True
+                return line[quote + 1:]
+        else:
+            if self.in_string:
+                self.temp_string += line
+            else:
+                self.parse_outside_strings(line)
+
+    def parse_line_without_commands(self, line):
+        while True:
+            line = self.parse_line_without_commands_loop(line)
+            if not line:
+                break
+
+    def parse_outside_strings(self, line):
+        &quot;&quot;&quot;
+        Parse a WML fragment outside of strings.
+        &quot;&quot;&quot;
+        if not line: return
+        if line.lstrip(b&quot; \t&quot;).startswith(b&quot;#textdomain &quot;):
+            self.textdomain = line.lstrip(b&quot; \t&quot;)[12:].strip().decode(&quot;utf8&quot;)
+            return
+        if not self.temp_key_nodes:
+            line = line.lstrip()
+            if not line: return
+
+            # Is it a tag?
+            if line.startswith(b&quot;[&quot;):
+                self.handle_tag(line)
+            # No tag, must be an attribute.
+            else:
+                self.handle_attribute(line)
+        else:
+            for i, segment in enumerate(line.split(b&quot;+&quot;)):
+                segment = segment.lstrip(b&quot; \t&quot;)
+
+                if i &gt; 0:
+                    # If the last segment is empty (there was a plus sign
+                    # at the end) we need to skip newlines.
+                    self.skip_newlines_after_plus = not segment.strip()
+
+                if not segment: continue
+
+                if segment.rstrip(b&quot; &quot;) == b&quot;_&quot;:
+                    self.translatable = True
+                    segment = segment[1:].lstrip(b&quot; &quot;)
+                    if not segment: continue
+                self.handle_value(segment)
+
+    def handle_tag(self, line):
+        end = line.find(b&quot;]&quot;)
+        if end &lt; 0:
+            if line.endswith(b&quot;\n&quot;):
+                raise WMLError(self, &quot;Expected closing bracket.&quot;)
+            self.in_tag += line
+            return
+        tag = (self.in_tag + line[:end])[1:]
+        self.in_tag = b&quot;&quot;
+        if tag.startswith(b&quot;/&quot;):
+            self.parent_node = self.parent_node[:-1]
+        elif tag.startswith(b&quot;+&quot;) and self.parent_node and self.parent_node[-1].get_all(tag=tag[1:].decode()):
+            node_to_append_to = self.parent_node[-1].get_all(tag=tag[1:].decode())[-1]
+            self.parent_node.append(node_to_append_to)
+        else:
+            node = TagNode(tag, location=(self.line_in_file, self.chunk_start))
+            if self.parent_node:
+                self.parent_node[-1].append(node)
+            self.parent_node.append(node)
+        self.parse_outside_strings(line[end + 1:])
+
+    def handle_attribute(self, line):
+        assign = line.find(b&quot;=&quot;)
+        remainder = None
+        if assign &gt;= 0:
+            remainder = line[assign + 1:]
+            line = line[:assign]
+
+        self.commas = 0
+        self.temp_key_nodes = []
+        for att in line.split(b&quot;,&quot;):
+            att = att.strip()
+            node = AttributeNode(att, location=(self.line_in_file, self.chunk_start))
+            self.temp_key_nodes.append(node)
+            if self.parent_node:
+                self.parent_node[-1].append(node)
+
+        if remainder:
+            self.parse_outside_strings(remainder)
+
+    def handle_value(self, segment):
+        def add_text(segment):
+            segment = segment.rstrip()
+            if not segment: return
+            n = len(self.temp_key_nodes)
+            maxsplit = n - self.commas - 1
+            if maxsplit &lt; 0: maxsplit = 0
+            for subsegment in segment.split(b&quot;,&quot;, maxsplit):
+                self.temp_string += subsegment.strip()
+                self.temp_string_node = StringNode(self.temp_string)
+                self.temp_string = b&quot;&quot;
+                self.temp_key_nodes[self.commas].value.append(
+                    self.temp_string_node)
+                if self.commas &lt; n - 1:
+                    self.commas += 1
+
+        # Finish assignment on newline, except if there is a
+        # plus sign before the newline.
+        add_text(segment)
+        if segment.endswith(b&quot;\n&quot;) and not self.skip_newlines_after_plus:
+            self.temp_key_nodes = []
+
+    def parse(self) -&gt; RootNode:
+        &quot;&quot;&quot;
+        Parse preprocessed WML into a tree of tags and attributes.
+        &quot;&quot;&quot;
+
+        # parsing state
+        self.temp_string = b&quot;&quot;
+        self.temp_string_node = None
+        self.commas = 0
+        self.temp_key_nodes = []
+        self.in_string = False
+        self.in_arrows = False
+        self.textdomain = &quot;wesnoth&quot;
+        self.translatable = False
+        self.root = RootNode()
+        self.parent_node = [self.root]
+        self.skip_newlines_after_plus = False
+        self.in_tag = b&quot;&quot;
+
+        command_marker_byte = bytes([254])
+
+        input = self.preprocessed
+        if not input: input = self.path
+
+        for rawline in open(input, &quot;rb&quot;):
+            compos = rawline.find(command_marker_byte)
+            self.parser_line += 1
+            # Everything from chr(254) to newline is the command.
+            if compos != 0:
+                self.line_in_file += 1
+            if compos &gt;= 0:
+                self.parse_line_without_commands(rawline[:compos])
+                self.handle_command(rawline[compos + 1:-1])
+            else:
+                self.parse_line_without_commands(rawline)
+
+        if self.keep_temp_dir is None and self.temp_dir:
+            if self.verbose:
+                print((&quot;removing &quot; + self.temp_dir))
+            shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+        return self.root
+
+    def handle_command(self, com):
+        if com.startswith(b&quot;line &quot;):
+            self.last_wml_line = com[5:]
+            _ = self.last_wml_line.split(b&quot; &quot;)
+            self.chunk_start = [(_[i + 1], int(_[i])) for i in range(0, len(_), 2)]
+            self.line_in_file = self.chunk_start[0][1]
+        elif com.startswith(b&quot;textdomain &quot;):
+            self.textdomain = com[11:].decode(&quot;utf8&quot;)
+        else:
+            raise WMLError(self, &quot;Unknown parser command: &quot; + com)
+
+    def get_all(self, **kw):
+        return self.root.get_all(**kw)
+
+    def get_text_val(self, name, default=None, translation=None):
+        return self.root.get_text_val(name, default, translation)
+
+
+def jsonify(tree, verbose=False, depth=1):
+    &quot;&quot;&quot;
+Convert a Parser tree into JSON
+
+If verbose, insert a linebreak after every brace and comma (put every
+item on its own line), otherwise, condense everything into a single line.
+&quot;&quot;&quot;
+    import json
+    def node_to_dict(n):
+        d = {}
+        tags = set(x.get_name() for x in n.get_all(tag=&quot;&quot;))
+        for tag in tags:
+            d[tag] = [node_to_dict(x) for x in n.get_all(tag=tag)]
+        for att in n.get_all(att=&quot;&quot;):
+            d[att.get_name()] = att.get_text()
+        return d
+
+    print(json.dumps(node_to_dict(tree), indent=depth if verbose else None))
+
+
+def xmlify(tree, verbose=False, depth=0):
+    import xml.etree.ElementTree as ET
+
+    def node_to_et(n):
+        et = ET.Element(n.get_name())
+
+        for att in n.get_all(att=&quot;&quot;):
+            attel = ET.Element(att.get_name())
+            attel.text = att.get_text()
+            et.append(attel)
+        for tag in n.get_all(tag=&quot;&quot;):
+            et.append(node_to_et(tag))
+        return et
+
+    ET.ElementTree(node_to_et(tree)).write(sys.stdout, encoding=&quot;unicode&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    arg = argparse.ArgumentParser()
+    arg.add_argument(&quot;-a&quot;, &quot;--data-dir&quot;, help=&quot;directly passed on to wesnoth.exe&quot;)
+    arg.add_argument(&quot;-c&quot;, &quot;--config-dir&quot;, help=&quot;directly passed on to wesnoth.exe&quot;)
+    arg.add_argument(&quot;-i&quot;, &quot;--input&quot;, help=&quot;a WML file to parse&quot;)
+    arg.add_argument(&quot;-k&quot;, &quot;--keep-temp&quot;, help=&quot;specify directory where to keep temp files&quot;)
+    arg.add_argument(&quot;-t&quot;, &quot;--text&quot;, help=&quot;WML text to parse&quot;)
+    arg.add_argument(&quot;-w&quot;, &quot;--wesnoth&quot;, help=&quot;path to wesnoth.exe&quot;)
+    arg.add_argument(&quot;-d&quot;, &quot;--defines&quot;, help=&quot;comma separated list of WML defines&quot;)
+    arg.add_argument(&quot;-T&quot;, &quot;--test&quot;, action=&quot;store_true&quot;)
+    arg.add_argument(&quot;-j&quot;, &quot;--to-json&quot;, action=&quot;store_true&quot;)
+    arg.add_argument(&quot;-v&quot;, &quot;--verbose&quot;, action=&quot;store_true&quot;)
+    arg.add_argument(&quot;-x&quot;, &quot;--to-xml&quot;, action=&quot;store_true&quot;)
+    args = arg.parse_args()
+
+    if not args.input and not args.text and not args.test:
+        sys.stderr.write(&quot;No input given. Use -h for help.\n&quot;)
+        sys.exit(1)
+
+    if (args.wesnoth and not os.path.exists(args.wesnoth)):
+        sys.stderr.write(&quot;Wesnoth executable not found.\n&quot;)
+        sys.exit(1)
+
+    if not args.wesnoth:
+        print(&quot;Warning: Without the -w option WML is not preprocessed!&quot;,
+              file=sys.stderr)
+
+    if args.test:
+        print(&quot;Running tests&quot;)
+        p = Parser(args.wesnoth, args.config_dir,
+                   args.data_dir)
+        if args.keep_temp:
+            p.keep_temp_dir = args.keep_temp
+        if args.verbose: p.verbose = True
+
+        only = None
+
+
+        def test2(input, expected, note, function):
+            if only and note != only: return
+            input = input.strip()
+            expected = expected.strip()
+            p.parse_text(input)
+            output = function(p).strip()
+            if output != expected:
+                print(&quot;__________&quot;)
+                print((&quot;FAILED &quot; + note))
+                print(&quot;INPUT:&quot;)
+                print(input)
+                print(&quot;OUTPUT:&quot;)
+                print(output)
+                print(&quot;EXPECTED:&quot;)
+                print(expected)
+                print(&quot;__________&quot;)
+            else:
+                print((&quot;PASSED &quot; + note))
+
+
+        def test(input, expected, note):
+            test2(input, expected, note, lambda p: p.root.debug())
+
+        def test_with_preprocessor(input, expected, note):
+            if not args.wesnoth:
+                print(&quot;SKIPPED WITHOUT PREPROCESSOR &quot; + note)
+                return
+            test(input, expected, note)
+
+        test(
+&quot;&quot;&quot;
+[test]
+a=1
+[/test]
+&quot;&quot;&quot;, &quot;&quot;&quot;
+[test]
+    a=&#x27;1&#x27;
+[/test]
+&quot;&quot;&quot;, &quot;simple&quot;)
+
+        test(
+&quot;&quot;&quot;
+[+foo]
+a=1
+[/foo]
+&quot;&quot;&quot;, &quot;&quot;&quot;
+[+foo]
+    a=&#x27;1&#x27;
+[/foo]
+&quot;&quot;&quot;, &quot;+foo without foo in toplevel&quot;)
+
+        test(
+&quot;&quot;&quot;
+[foo]
+[+bar]
+a=1
+[/bar]
+[/foo]
+&quot;&quot;&quot;, &quot;&quot;&quot;
+[foo]
+    [+bar]
+        a=&#x27;1&#x27;
+    [/bar]
+[/foo]
+&quot;&quot;&quot;, &quot;+foo without foo in child&quot;)
+
+        test(
+&quot;&quot;&quot;
+[test]
+[foo]
+a=1
+[/foo]
+[/test]
+&quot;&quot;&quot;, &quot;&quot;&quot;
+[test]
+    [foo]
+        a=&#x27;1&#x27;
+    [/foo]
+[/test]
+&quot;&quot;&quot;, &quot;subtag, part 1&quot;)
+
+        test(
+&quot;&quot;&quot;
+[test]
+[foo]
+a=1
+[/foo]
+[/test]
+[+test]
+[+foo]
+[/foo]
+[/test]
+&quot;&quot;&quot;, &quot;&quot;&quot;
+[test]
+    [foo]
+        a=&#x27;1&#x27;
+    [/foo]
+[/test]
+&quot;&quot;&quot;, &quot;subtag, part 2&quot;)
+
+        test(
+&quot;&quot;&quot;
+[test]
+a, b, c = 1, 2, 3
+[/test]
+&quot;&quot;&quot;, &quot;&quot;&quot;
+[test]
+    a=&#x27;1&#x27;
+    b=&#x27;2&#x27;
+    c=&#x27;3&#x27;
+[/test]
+&quot;&quot;&quot;, &quot;multi assign&quot;)
+
+        test(
+&quot;&quot;&quot;
+[test]
+a, b = 1, 2, 3
+[/test]
+&quot;&quot;&quot;, &quot;&quot;&quot;
+[test]
+    a=&#x27;1&#x27;
+    b=&#x27;2, 3&#x27;
+[/test]
+&quot;&quot;&quot;, &quot;multi assign 2&quot;)
+
+        test(
+&quot;&quot;&quot;
+[test]
+a, b, c = 1, 2
+[/test]
+&quot;&quot;&quot;, &quot;&quot;&quot;
+[test]
+    a=&#x27;1&#x27;
+    b=&#x27;2&#x27;
+    c=
+[/test]
+&quot;&quot;&quot;, &quot;multi assign 3&quot;)
+
+        test_with_preprocessor(
+&quot;&quot;&quot;
+#textdomain A
+#define X
+    _ &quot;abc&quot;
+#enddef
+#textdomain B
+[test]
+x = _ &quot;abc&quot; + {X}
+[/test]
+&quot;&quot;&quot;, &quot;&quot;&quot;
+[test]
+    x=_&lt;B&gt;&#x27;abc&#x27; .. _&lt;A&gt;&#x27;abc&#x27;
+[/test]
+&quot;&quot;&quot;, &quot;textdomain&quot;)
+
+        test(
+&quot;&quot;&quot;
+[test]
+x,y = _1,_2
+[/test]
+&quot;&quot;&quot;, &quot;&quot;&quot;
+[test]
+    x=&#x27;_1&#x27;
+    y=&#x27;_2&#x27;
+[/test]
+&quot;&quot;&quot;, &quot;underscores&quot;)
+
+        test(
+&quot;&quot;&quot;
+[test]
+a = &quot;a &quot;&quot;quoted&quot;&quot; word&quot;
+[/test]
+&quot;&quot;&quot;,
+&quot;&quot;&quot;
+[test]
+    a=&#x27;a &quot;quoted&quot; word&#x27;
+[/test]
+&quot;&quot;&quot;, &quot;quoted&quot;)
+
+        test(
+&quot;&quot;&quot;
+[test]
+code = &lt;&lt;
+    &quot;quotes&quot; here
+    &quot;&quot;blah&quot;&quot;
+&gt;&gt;
+[/test]
+&quot;&quot;&quot;,
+&quot;&quot;&quot;
+[test]
+    code=&#x27;
+        &quot;quotes&quot; here
+        &quot;&quot;blah&quot;&quot;
+    &#x27;
+[/test]
+&quot;&quot;&quot;, &quot;quoted2&quot;)
+
+        test(
+&quot;&quot;&quot;
+foo=&quot;bar&quot;+
+
+
+
+&quot;baz&quot;
+&quot;&quot;&quot;,
+&quot;&quot;&quot;
+foo=&#x27;bar&#x27; .. &#x27;baz&#x27;
+&quot;&quot;&quot;, &quot;multi line string&quot;)
+
+        test_with_preprocessor(
+&quot;&quot;&quot;
+#define baz
+
+&quot;baz&quot;
+#enddef
+foo=&quot;bar&quot;+{baz}
+&quot;&quot;&quot;,
+&quot;&quot;&quot;
+foo=&#x27;bar&#x27; .. &#x27;baz&#x27;
+&quot;&quot;&quot;, &quot;defined multi line string&quot;)
+
+        test_with_preprocessor(
+&quot;&quot;&quot;
+foo=&quot;bar&quot; + &quot;baz&quot; # blah
+&quot;&quot;&quot;,
+&quot;&quot;&quot;
+foo=&#x27;bar&#x27; .. &#x27;baz&#x27;
+&quot;&quot;&quot;, &quot;comment after +&quot;)
+
+        test_with_preprocessor(
+&quot;&quot;&quot;
+#define baz
+&quot;baz&quot;
+#enddef
+foo=&quot;bar&quot; {baz}
+&quot;&quot;&quot;,
+&quot;&quot;&quot;
+foo=&#x27;bar&#x27; .. &#x27;baz&#x27;
+&quot;&quot;&quot;, &quot;defined string concatenation&quot;)
+
+        test_with_preprocessor(
+&quot;&quot;&quot;
+#define A BLOCK
+[{BLOCK}]
+[/{BLOCK}]
+#enddef
+{A blah}
+&quot;&quot;&quot;,
+&quot;&quot;&quot;
+[blah]
+[/blah]
+&quot;&quot;&quot;, &quot;defined tag&quot;)
+
+        test2(
+&quot;&quot;&quot;
+[test]
+    a=1
+    b=2
+    a=3
+    b=4
+[/test]
+&quot;&quot;&quot;, &quot;3, 4&quot;, &quot;multiatt&quot;,
+    lambda p:
+        p.get_all(tag = &quot;test&quot;)[0].get_text_val(&quot;a&quot;) + &quot;, &quot; +
+        p.get_all(tag = &quot;test&quot;)[0].get_text_val(&quot;b&quot;))
+
+        sys.exit(0)
+
+    p = Parser(args.wesnoth, args.config_dir, args.data_dir)
+    if args.keep_temp:
+        p.keep_temp_dir = args.keep_temp
+    if args.verbose: p.verbose = True
+    if args.input:
+        p.parse_file(args.input, args.defines)
+    elif args.text:
+        p.parse_text(args.text, args.defines)
+    if args.to_json:
+        jsonify(p.root, True)
+        print()
+    elif args.to_xml:
+        print(&#x27;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;&#x27;)
+        xmlify(p.root, True, 1)
+    else:
+        print((p.root.debug()))
+</pre></main></body></html>

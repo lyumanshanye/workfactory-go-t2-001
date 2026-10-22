@@ -1,0 +1,57 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Horse_Great.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Horse_Great.cfg</h1><pre>#textdomain wesnoth-units
+
+[unit_type]
+    id=Great Horse
+    name= _ &quot;Great Horse&quot;
+    race=horse
+    generate_name=no
+    image=&quot;units/monsters/horse/horse-larger.png&quot;
+    profile=&quot;portraits/monsters/great-horse.webp&quot;
+    hitpoints=50
+    movement_type=mounted
+    movement=8
+    experience=100
+    {AMLA_DEFAULT}
+    level=2
+    alignment=neutral
+    advances_to=null
+    cost=25
+    usage=scout
+    description=_ &quot;Great horses are significantly larger than the usual domesticated horse, but despite their similar appearance, they are wild animals. Their obstinate and often feisty temperaments make them too difficult to tame, though many an arrogant prince or warlord has tried and failed.&quot;
+    die_sound=horse-die.ogg
+    [defense]
+        hills=50
+        forest=50
+    [/defense]
+    [resistance]
+        blade=100
+        pierce=120
+        impact=110
+    [/resistance]
+    {DEFENSE_ANIM &quot;units/monsters/horse/horse-larger-defend-2.png&quot; &quot;units/monsters/horse/horse-larger-defend-1.png&quot; {SOUND_LIST:HORSE_HIT} }
+    [attack]
+        name=hooves
+        description=_&quot;hooves&quot;
+        icon=attacks/hoof.png
+        type=impact
+        range=melee
+        damage=13
+        number=2
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=hooves
+        [/filter_attack]
+        start_time=-550
+        offset=0.0~-0.05:350,-0.05~0.7:200,0.7~0.0:320
+        [frame]
+            image=&quot;units/monsters/horse/horse-larger-attack[1~7].png:[100*4,80,70,260]&quot;
+            sound=horse-elf-canter.wav
+        [/frame]
+        [frame]
+            image=&quot;units/monsters/horse/horse-larger.png:60&quot;
+        [/frame]
+        {SOUND:HIT club.ogg -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

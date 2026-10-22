@@ -1,0 +1,84 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>optional_unit_advancements.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/macros/optional_unit_advancements.cfg</h1><pre>#textdomain wesnoth
+
+#define ENABLE_ADVANCEMENT UNIT ADVANCEMENT_TYPE EXTRA_WML
+    # Place in a campaign or scenario definition to allow {UNIT} to advance to {ADVANCEMENT_TYPE}.
+    # {EXTRA_WML} is mostly for (set_experience=XX) in case the max XP required needs to be overridden.
+    [modify_unit_type]
+        type={UNIT}
+        add_advancement={ADVANCEMENT_TYPE}
+        {EXTRA_WML}
+    [/modify_unit_type]
+#enddef
+
+#define DISABLE_ADVANCEMENT UNIT ADVANCEMENT_TYPE EXTRA_WML
+    # Place in a campaign or scenario definition to disallow {UNIT} from advancing to {ADVANCEMENT_TYPE}.
+    # {EXTRA_WML} is mostly for (set_experience=XX) in case the max XP required needs to be overridden.
+    [modify_unit_type]
+        type={UNIT}
+        remove_advancement={ADVANCEMENT_TYPE}
+        {EXTRA_WML}
+    [/modify_unit_type]
+#enddef
+
+# Examples:
+# {ENABLE_ADVANCEMENT &quot;Great Mage&quot; &quot;Elder Mage&quot; (set_experience=299)}
+# {ENABLE_ADVANCEMENT &quot;Great Mage&quot; &quot;Elder Mage&quot; ()}
+# {DISABLE_ADVANCEMENT &quot;Great Mage&quot; &quot;Elder Mage&quot; (set_experience=150)}
+# {DISABLE_ADVANCEMENT &quot;Spearman&quot; &quot;Swordsman&quot; ()}
+
+#define ENABLE_PARAGON
+    # Place in a campaign or scenario definition to allow Dune Blademaster to advance to Dune Paragon.
+    {ENABLE_ADVANCEMENT &quot;Dune Blademaster&quot; &quot;Dune Paragon&quot; (set_experience=220)}
+#enddef
+
+#define DISABLE_GRAND_MARSHAL
+    # Place in a campaign or scenario definition to disallow General from advancing to Grand Marshal.
+    {DISABLE_ADVANCEMENT &quot;General&quot; &quot;Grand Marshal&quot; (set_experience=150)}
+#enddef
+
+#define ENABLE_ARMAGEDDON_DRAKE
+    # Place in a campaign or scenario definition to allow Inferno Drake to advance to Armageddon Drake.
+    {ENABLE_ADVANCEMENT &quot;Inferno Drake&quot; &quot;Armageddon Drake&quot; (set_experience=220)}
+#enddef
+
+#define ENABLE_DWARVISH_ARCANISTER
+    # Place in a campaign or scenario definition to allow Dwarvish Runemaster to advance to Dwarvish Arcanister.
+    {ENABLE_ADVANCEMENT &quot;Dwarvish Runemaster&quot; &quot;Dwarvish Arcanister&quot; (set_experience=210)}
+#enddef
+
+#define ENABLE_DWARVISH_RUNESMITH
+    # Place in a campaign or scenario definition to allow Dwarvish Fighter to advance to Dwarvish Runesmith.
+    {ENABLE_ADVANCEMENT &quot;Dwarvish Fighter&quot; &quot;Dwarvish Runesmith&quot; ()}
+#enddef
+
+#define ENABLE_WOLF_ADVANCEMENT
+    # Place in a campaign or scenario definition to allow Wolf to advance to Great Wolf and Great Wolf to advance to Direwolf.
+    {ENABLE_ADVANCEMENT &quot;Wolf&quot; &quot;Great Wolf&quot; (set_experience=30)}
+    {ENABLE_ADVANCEMENT &quot;Great Wolf&quot; &quot;Direwolf&quot; (set_experience=65)}
+#enddef
+
+#define ENABLE_TROLL_SHAMAN
+    # Place in a campaign or scenario definition to allow Troll Whelp to advance to Troll Shaman.
+    {ENABLE_ADVANCEMENT &quot;Troll Whelp&quot; &quot;Troll Shaman&quot; ()}
+#enddef
+
+#define ENABLE_ANCIENT_LICH
+    # Place in a campaign or scenario definition to allow Lich to advance to Ancient Lich.
+    {ENABLE_ADVANCEMENT &quot;Lich&quot; &quot;Ancient Lich&quot; (set_experience=250)}
+#enddef
+
+#define ENABLE_DEATH_KNIGHT
+    # Place in a campaign or scenario definition to allow Revenant to advance to Death Knight.
+    {ENABLE_ADVANCEMENT &quot;Revenant&quot; &quot;Death Knight&quot; (set_experience=85)}
+#enddef
+
+#define ENABLE_WOSE_SHAMAN
+    # Place in a campaign or scenario definition to allow Wose to advance to Wose Shaman.
+    {ENABLE_ADVANCEMENT &quot;Wose&quot; &quot;Wose Shaman&quot; ()}
+#enddef
+
+#define ENABLE_SAURIAN_SPEARTHROWER
+    # Place in a campaign or scenario definition to allow Saurian Skirmisher to advance to Saurian Spearthrower.
+    {ENABLE_ADVANCEMENT &quot;Saurian Skirmisher&quot; &quot;Saurian Spearthrower&quot; ()}
+#enddef
+</pre></main></body></html>

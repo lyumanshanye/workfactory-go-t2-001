@@ -1,0 +1,74 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Loyalist_Swordsman.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/humans/Loyalist_Swordsman.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Swordsman
+    name= _ &quot;Swordsman&quot;
+    race=human
+    image=&quot;units/human-loyalists/swordsman.png&quot;
+    profile=&quot;portraits/humans/swordsman.webp&quot;
+    hitpoints=55
+    movement_type=smallfoot
+    movement=5
+    experience=80
+    level=2
+    alignment=lawful
+    advances_to=Royal Guard
+    cost=29
+    usage=fighter
+    description= _ &quot;An experienced soldier will often save enough to equip himself with a suit of scale or chain armor, and a sturdy broadsword. Though trading their spears for swords can be a jarring change, most spearmen will leap at the chance, knowing all too well the limitations of the weapon they are leaving behind. A sword is not without its own drawbacks, but is more versatile than a spear, and much better in close quarters.&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    {DEFENSE_ANIM &quot;units/human-loyalists/swordsman-defend-2.png&quot; &quot;units/human-loyalists/swordsman-defend-1.png&quot; {SOUND_LIST:HUMAN_HIT} }
+    [special_note]
+        note= _ &quot;Compared to other loyalists, Swordsmen have a higher resistance to ‘blade’ and ‘impact’ attacks.&quot;
+    [/special_note]
+    [resistance]
+        blade=80
+        impact=80
+    [/resistance]
+    [attack]
+        name=sword
+        description=_&quot;sword&quot;
+        icon=attacks/sword-human.png
+        type=blade
+        range=melee
+        damage=8
+        number=4
+    [/attack]
+    # [idle_anim]
+    #    {STANDARD_IDLE_FILTER}
+    #    start_time=0
+    #    [frame]
+    #        image=&quot;units/human-loyalists/swordsman-idle-[1~12,4,12,3~1].png:[100*12,400,100*4]&quot;
+    #    [/frame]
+    # [/idle_anim]
+    [standing_anim]
+        start_time=0
+        [frame]
+            image=&quot;units/human-loyalists/swordsman.png:200&quot;
+        [/frame]
+    [/standing_anim]
+    [standing_anim]
+        start_time=0
+        {WOUNDED_UNIT ()}
+        [frame]
+            image=&quot;units/human-loyalists/swordsman.png:900&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/swordsman-bob-s-[1~3,2,1].png:[180,120,600,250,350]&quot;
+        [/frame]
+    [/standing_anim]
+    [attack_anim]
+        [filter_attack]
+            name=sword
+        [/filter_attack]
+        start_time=-600
+        offset=0.0:300,0.0~0.6:200,0.6:50,0.6~0.0:300
+        [frame]
+            image=&quot;units/human-loyalists/swordsman-attack-se-[1~8].png:[100*8]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/swordsman.png:50&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -75}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

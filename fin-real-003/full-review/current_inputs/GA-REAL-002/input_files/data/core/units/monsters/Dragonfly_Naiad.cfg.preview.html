@@ -1,0 +1,85 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dragonfly_Naiad.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Dragonfly_Naiad.cfg</h1><pre>#textdomain wesnoth-units
+
+[unit_type]
+    id=Dragonfly Naiad
+    name= _ &quot;Dragonfly Naiad&quot;
+    race=monster
+    image=&quot;units/monsters/dragonfly/naiad/naiad.png&quot;
+    profile=&quot;portraits/monsters/naiad.webp&quot;
+    hitpoints=19
+    movement_type=smallfoot # maybe need a new movetype
+    [movement_costs]
+        shallow_water=1
+        reef=2
+        swamp_water=1
+        flat=2
+        sand=3
+        forest=2
+        hills=3
+        mountains=4
+        village=1
+        castle=2
+        cave=2
+        frozen=3
+        fungus=2
+    [/movement_costs]
+
+    [defense]
+        shallow_water=40
+        reef=50
+        swamp_water=40
+        flat=60
+        sand=70
+        forest=50
+        hills=50
+        mountains=50
+        village=50
+        castle=50
+        cave=60
+        frozen=70
+        fungus=50
+    [/defense]
+
+    [resistance]
+        blade=90
+        pierce=90
+        impact=100
+        fire=100
+        cold=120
+        arcane=90
+    [/resistance]
+    movement=6
+    level=0
+    alignment=neutral
+    experience=16
+    advances_to=Dragonfly
+    cost=11
+    usage=scout
+    description= _ &quot;Young dragonflies live an aquatic life, mostly preying upon small fish or other insect nymphs. They can crawl over rocks and mud, but they need to stay submerged to breathe, which explains why the giant dragonflies are usually found only near rivers, lakes, and coves.&quot;
+    undead_variation=bug
+    [attack]
+        name=bite
+        description= _ &quot;bite&quot;
+        type=blade
+        range=melee
+        damage=5
+        number=2
+        [specials]
+            {WEAPON_SPECIAL_MARKSMAN}
+        [/specials]
+        icon=attacks/fangs-bug.png
+    [/attack]
+    {DEFENSE_ANIM &quot;units/monsters/dragonfly/naiad/naiad-defend2.png&quot; &quot;units/monsters/dragonfly/naiad/naiad-defend1.png&quot; {SOUND_LIST:BAT_HIT} }
+    [attack_anim]
+        [filter_attack]
+            name=bite
+        [/filter_attack]
+        start_time=-200
+        offset=0.0~0.65:150,0.65~0.0:200
+        [frame]
+            image=&quot;units/monsters/dragonfly/naiad/naiad.png:350&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS bite.ogg spear-miss.ogg -100}
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

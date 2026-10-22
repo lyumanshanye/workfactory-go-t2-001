@@ -1,0 +1,116 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sharpshooter.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/elves/Sharpshooter.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Elvish Sharpshooter
+    name= _ &quot;Elvish Sharpshooter&quot;
+    race=elf
+    gender=male,female
+    image=&quot;units/elves-wood/sharpshooter.png&quot;
+    small_profile=&quot;portraits/elves/marksman.webp~CROP(30,30,370,370)~FL()&quot;
+    profile=&quot;portraits/elves/marksman.webp&quot;
+    hitpoints=47
+    movement_type=woodland
+    movement=6
+    experience=150
+    level=3
+    alignment=neutral
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=62
+    usage=archer
+    description= _ &quot;Though not a formal title, ‘Sharpshooter’ is the epithet given to the most gifted Elvish marksmen. These expert archers are capable of feats that, even by Elven standards, border on miraculous — they have the precision to split incoming arrows midair and can loose a second arrow before the first hits, all while maintaining enough power to damage full plate armor. A single volley of their arrows is enough to bring down a knight on horseback, and even heavily-armored infantry will survive few additional shots. The sharpshooters of the elves have honed their art to its highest form and are the undisputed masters of archery.&quot;
+    die_sound={SOUND_LIST:ELF_HIT}
+    [attack]
+        name=sword
+        description=_&quot;sword&quot;
+        icon=attacks/sword-elven.png
+        type=blade
+        range=melee
+        damage=7
+        number=2
+    [/attack]
+    [attack]
+        name=longbow
+        description=_&quot;longbow&quot;
+        icon=attacks/bow-elven-magic.png
+        type=pierce
+        [specials]
+            {WEAPON_SPECIAL_MARKSMAN}
+        [/specials]
+        range=ranged
+        damage=12
+        number=5
+    [/attack]
+    {DEFENSE_ANIM_RANGE &quot;units/elves-wood/sharpshooter-sword-defend.png&quot; &quot;units/elves-wood/sharpshooter-sword.png&quot; {SOUND_LIST:ELF_HIT} melee }
+    {DEFENSE_ANIM_RANGE &quot;units/elves-wood/sharpshooter-bow-defend.png&quot; &quot;units/elves-wood/sharpshooter-bow.png&quot; {SOUND_LIST:ELF_HIT} ranged }
+    [attack_anim]
+        [filter_attack]
+            name=longbow
+        [/filter_attack]
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        start_time=-445
+        [frame]
+            image=&quot;units/elves-wood/sharpshooter-bow.png:65&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS bow.ogg bow-miss.ogg -380}
+        [frame]
+            image=&quot;units/elves-wood/sharpshooter-bow-attack[1~5].png:[75*2,100,130,150]&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=sword
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;units/elves-wood/sharpshooter-sword.png:25&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/elves-wood/sharpshooter-sword-[1~3].png:[100,175,75]&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -75}
+        [frame]
+            image=&quot;units/elves-wood/sharpshooter-sword.png:25&quot;
+        [/frame]
+    [/attack_anim]
+    [female]
+        name= _ &quot;female^Elvish Sharpshooter&quot;
+        gender=female
+        image=&quot;units/elves-wood/sharpshooter+female.png&quot;
+        small_profile=&quot;portraits/elves/marksman+female.webp~CROP(0,30,370,370)&quot;
+        profile=&quot;portraits/elves/marksman+female.webp&quot;
+        die_sound={SOUND_LIST:ELF_FEMALE_HIT}
+        {DEFENSE_ANIM_RANGE &quot;units/elves-wood/sharpshooter+female-sword-defend.png&quot; &quot;units/elves-wood/sharpshooter+female-sword.png&quot; {SOUND_LIST:ELF_FEMALE_HIT} melee}
+        {DEFENSE_ANIM_RANGE &quot;units/elves-wood/sharpshooter+female-bow-defend.png&quot; &quot;units/elves-wood/sharpshooter+female-bow.png&quot; {SOUND_LIST:ELF_FEMALE_HIT} ranged}
+        [attack_anim]
+            [filter_attack]
+                name=longbow
+            [/filter_attack]
+            [frame]
+                image=&quot;units/elves-wood/sharpshooter+female-bow.png:65&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/elves-wood/sharpshooter+female-bow-attack[1~5].png:[75*2,100,130,150]&quot;
+            [/frame]
+        [/attack_anim]
+        [attack_anim]
+            [filter_attack]
+                name=sword
+            [/filter_attack]
+            [frame]
+                image=&quot;units/elves-wood/sharpshooter+female-sword.png:25&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/elves-wood/sharpshooter+female-sword-[1~3].png:[100,175,75]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/elves-wood/sharpshooter+female-sword.png:25&quot;
+            [/frame]
+        [/attack_anim]
+    [/female]
+[/unit_type]
+</pre></main></body></html>

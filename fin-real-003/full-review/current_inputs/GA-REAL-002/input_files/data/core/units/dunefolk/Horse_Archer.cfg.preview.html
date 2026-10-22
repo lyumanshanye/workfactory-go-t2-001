@@ -1,0 +1,77 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Horse_Archer.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/dunefolk/Horse_Archer.cfg</h1><pre>#textdomain wesnoth-units
+
+#define PATH_TEMP
+units/dunefolk/rider/#enddef
+
+[unit_type]
+    id=Dune Horse Archer
+    name= _ &quot;Dune Horse Archer&quot;
+    race=dunefolk
+    image=&quot;{PATH_TEMP}horse-archer.png&quot;
+    hitpoints=44
+    movement_type=dunehorse
+    movement=8
+    experience=62
+    level=2
+    alignment=liminal
+    advances_to=Dune Windbolt
+    cost=38
+    usage=archer
+    undead_variation=mounted
+    description= _ &quot;Though relatively few in number, some riders favor archery as their technique of choice for battle. Fleet and elusive, these horsemen are experts at harassing less mobile foes with hails of arrows and hunting down fleeing enemies from a distance. Though not usually trained for infiltration or spying, these equestrians’ ability to pass messages from afar with their long-ranged arrows is of great use to maintain communication among the Dunefolk armies.&quot;
+    die_sound=horse-die.ogg
+    {DEFENSE_ANIM &quot;{PATH_TEMP}horse-archer.png&quot; &quot;{PATH_TEMP}horse-archer.png&quot; {SOUND_LIST:HORSE_HIT} }
+
+    [attack]
+        name=mace
+        description= _ &quot;mace&quot;
+        type=impact
+        range=melee
+        damage=7
+        number=2
+        icon=attacks/mace.png
+    [/attack]
+    [attack]
+        name=composite bow
+        description= _ &quot;composite bow&quot;
+        type=pierce
+        range=ranged
+        damage=7
+        number=4
+        icon=attacks/bow-short-reinforced.png
+    [/attack]
+
+    [attack_anim]
+        [filter_attack]
+            name=mace
+        [/filter_attack]
+        start_time=-250
+        horse_sound_start_time=-250
+        [frame]
+            image=&quot;{PATH_TEMP}horse-archer.png:400&quot;
+        [/frame]
+        [horse_sound_frame]
+            sound=horse-canter.wav
+        [/horse_sound_frame]
+        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=composite bow
+        [/filter_attack]
+        start_time=-250
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        [frame]
+            image=&quot;{PATH_TEMP}horse-archer.png:300&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS bow-puny.ogg bow-puny-miss.ogg -225}
+    [/attack_anim]
+[/unit_type]
+
+#undef PATH_TEMP
+</pre></main></body></html>

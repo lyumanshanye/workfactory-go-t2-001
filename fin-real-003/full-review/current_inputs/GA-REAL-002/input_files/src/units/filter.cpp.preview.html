@@ -1,0 +1,870 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>filter.cpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/filter.cpp</h1><pre>/*
+	Copyright (C) 2014 - 2024
+	by Chris Beck &lt;render787@gmail.com&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+#include &quot;units/filter.hpp&quot;
+
+#include &quot;log.hpp&quot;
+
+#include &quot;display.hpp&quot;
+#include &quot;display_context.hpp&quot;
+#include &quot;config.hpp&quot;
+#include &quot;game_data.hpp&quot;
+#include &quot;map/map.hpp&quot;
+#include &quot;map/location.hpp&quot;
+#include &quot;scripting/game_lua_kernel.hpp&quot; //Needed for lua kernel
+#include &quot;side_filter.hpp&quot;
+#include &quot;team.hpp&quot;
+#include &quot;terrain/filter.hpp&quot;
+#include &quot;tod_manager.hpp&quot;
+#include &quot;units/unit.hpp&quot;
+#include &quot;units/formula_manager.hpp&quot;
+#include &quot;units/types.hpp&quot;
+#include &quot;variable.hpp&quot; // needed for vconfig, scoped unit
+#include &quot;formula/callable_objects.hpp&quot;
+#include &quot;formula/formula.hpp&quot;
+#include &quot;formula/function_gamestate.hpp&quot;
+#include &quot;formula/string_utils.hpp&quot;
+#include &quot;resources.hpp&quot;
+
+static lg::log_domain log_config(&quot;config&quot;);
+#define ERR_CF LOG_STREAM(err, log_config)
+#define WRN_CF LOG_STREAM(warn, log_config)
+#define DBG_CF LOG_STREAM(debug, log_config)
+
+static lg::log_domain log_wml(&quot;wml&quot;);
+#define ERR_WML LOG_STREAM(err, log_wml)
+
+using namespace unit_filter_impl;
+
+unit_filter::unit_filter(vconfig cfg)
+	: cfg_(cfg)
+	, fc_(resources::filter_con)
+	, use_flat_tod_(false)
+	, impl_(cfg_)
+	, max_matches_(-1)
+{
+}
+
+bool unit_filter::matches(const unit&amp; u) const {
+	return impl_.matches(unit_filter_impl::unit_filter_args{u, u.get_location(), nullptr, fc_, use_flat_tod_});
+}
+
+bool unit_filter::matches(const unit &amp; u, const unit &amp; u2) const {
+	return impl_.matches(unit_filter_impl::unit_filter_args{u, u.get_location(), &amp;u2, fc_, use_flat_tod_});
+}
+
+std::vector&lt;const unit *&gt; unit_filter::all_matches_on_map(const map_location* loc, const unit* other_unit) const
+{
+	std::vector&lt;const unit *&gt; ret;
+	int max_matches = max_matches_;
+
+	for (const unit &amp; u : fc_-&gt;get_disp_context().units()) {
+		if (impl_.matches(unit_filter_impl::unit_filter_args{u, loc ? *loc : u.get_location(), other_unit, fc_, use_flat_tod_})) {
+			if(max_matches == 0) {
+				return ret;
+			}
+			--max_matches;
+			ret.push_back(&amp;u);
+		}
+	}
+	return ret;
+}
+
+unit_const_ptr unit_filter::first_match_on_map() const {
+	const unit_map &amp; units = fc_-&gt;get_disp_context().units();
+	for(unit_map::const_iterator u = units.begin(); u != units.end(); ++u) {
+		if (matches(*u, u-&gt;get_location())) {
+			return u.get_shared_ptr();
+		}
+	}
+	return unit_const_ptr();
+}
+
+namespace {
+
+struct unit_filter_xy : public unit_filter_base
+{
+	unit_filter_xy(const std::string&amp; x, const std::string&amp; y) : x_(x), y_(y) {}
+
+	virtual bool matches(const unit_filter_args&amp; args) const override
+	{
+		std::string x = utils::interpolate_variables_into_string(x_, *(resources::gamedata));
+		std::string y = utils::interpolate_variables_into_string(y_, *(resources::gamedata));
+
+		if(x.empty() &amp;&amp; y.empty()) {
+			return false;
+		}
+		else if(x == &quot;recall&quot; &amp;&amp; y == &quot;recall&quot;) {
+			return !args.context().get_disp_context().map().on_board(args.loc);
+		}
+		else {
+			return args.loc.matches_range(x, y);
+		}
+	}
+
+	const std::string x_;
+	const std::string y_;
+};
+
+struct unit_filter_adjacent : public unit_filter_base
+{
+	unit_filter_adjacent(const vconfig&amp; cfg)
+		: child_(cfg)
+		, cfg_(cfg)
+	{
+	}
+
+	virtual bool matches(const unit_filter_args&amp; args) const override
+	{
+		const unit_map&amp; units = args.context().get_disp_context().units();
+		const auto adjacent = get_adjacent_tiles(args.loc);
+		int match_count=0;
+
+		config::attribute_value i_adjacent = cfg_[&quot;adjacent&quot;];
+		std::vector&lt;map_location::DIRECTION&gt; dirs;
+		if (i_adjacent.empty()) {
+			dirs = map_location::default_dirs();
+		} else {
+			dirs = map_location::parse_directions(i_adjacent);
+		}
+		for (map_location::DIRECTION dir : dirs) {
+			unit_map::const_iterator unit_itor = units.find(adjacent[dir]);
+			if (unit_itor == units.end() || !child_.matches(unit_filter_args{*unit_itor, unit_itor-&gt;get_location(), &amp;args.u, args.fc, args.use_flat_tod} )) {
+				continue;
+			}
+			auto is_enemy = cfg_[&quot;is_enemy&quot;];
+			if (!is_enemy.empty() &amp;&amp; is_enemy.to_bool() != args.context().get_disp_context().get_team(args.u.side()).is_enemy(unit_itor-&gt;side())) {
+				continue;
+			}
+			++match_count;
+		}
+
+		static std::vector&lt;std::pair&lt;int,int&gt;&gt; default_counts = utils::parse_ranges_unsigned(&quot;1-6&quot;);
+		config::attribute_value i_count = cfg_[&quot;count&quot;];
+		return in_ranges(match_count, !i_count.blank() ? utils::parse_ranges_unsigned(i_count) : default_counts);
+	}
+
+	const unit_filter_compound child_;
+	const vconfig cfg_;
+};
+
+
+template&lt;typename F&gt;
+struct unit_filter_child_literal : public unit_filter_base
+{
+	unit_filter_child_literal(const vconfig&amp; v, const F&amp; f) : v_(v) , f_(f) {}
+	virtual bool matches(const unit_filter_args&amp; args) const override
+	{
+		return f_(v_, args);
+	}
+	vconfig v_;
+	F f_;
+};
+
+template&lt;typename T, typename F&gt;
+struct unit_filter_attribute_parsed : public unit_filter_base
+{
+	unit_filter_attribute_parsed(T&amp;&amp; v, F&amp;&amp; f) : v_(std::move(v)), f_(std::move(f)) {}
+	virtual bool matches(const unit_filter_args&amp; args) const override
+	{
+		return f_(v_, args);
+	}
+	T v_;
+	F f_;
+};
+
+template&lt;typename C, typename F&gt;
+struct unit_filter_attribute_literal : public unit_filter_base
+{
+	unit_filter_attribute_literal(std::string&amp;&amp; v, C&amp;&amp; c, F&amp;&amp; f) : v_(std::move(v)), c_(std::move(c)), f_(std::move(f)) {}
+	virtual bool matches(const unit_filter_args&amp; args) const override
+	{
+		config::attribute_value v;
+		v = utils::interpolate_variables_into_string(v_, *(resources::gamedata));
+		return f_(c_(v), args);
+	}
+	std::string v_;
+	C c_;
+	F f_;
+};
+
+class contains_dollar_visitor
+#ifdef USING_BOOST_VARIANT
+	: public boost::static_visitor&lt;bool&gt;
+#endif
+{
+public:
+	contains_dollar_visitor() {}
+
+
+	template&lt;typename T&gt;
+	bool operator()(const T&amp;) const { return false; }
+
+	bool operator()(const t_string&amp;)    const { return true; }
+
+	bool operator()(const std::string&amp; s) const
+	{
+		return s.find(&#x27;$&#x27;) != std::string::npos;
+	}
+};
+
+}
+
+
+unit_filter_compound::unit_filter_compound(vconfig cfg)
+	: children_()
+	, cond_children_()
+{
+	fill(cfg);
+}
+
+bool unit_filter_compound::matches(const unit_filter_args&amp; args) const
+{
+	bool res;
+
+	if(args.loc.valid()) {
+		scoped_xy_unit auto_store(&quot;this_unit&quot;, args.u.get_location(), args.context().get_disp_context().units());
+		if (args.u2) {
+			const map_location&amp; loc2 = args.u2-&gt;get_location();
+			scoped_xy_unit u2_auto_store(&quot;other_unit&quot;, loc2, args.context().get_disp_context().units());
+			res = filter_impl(args);
+		} else {
+			res = filter_impl(args);
+		}
+	} else {
+		// If loc is invalid, then this is a recall list unit (already been scoped)
+		res = filter_impl(args);
+	}
+
+	// Handle [and], [or], and [not] with in-order precedence
+	for(const auto &amp; filter : cond_children_) {
+		switch (filter.first) {
+		case conditional_type::type::filter_and:
+			res = res &amp;&amp; filter.second.matches(args);
+			break;
+		case conditional_type::type::filter_or:
+			res = res || filter.second.matches(args);
+			break;
+		case conditional_type::type::filter_not:
+			res = res &amp;&amp; !filter.second.matches(args);
+			break;
+		}
+	}
+	return res;
+}
+
+bool unit_filter_compound::filter_impl(const unit_filter_args&amp; args) const
+{
+	for(const auto &amp; filter : children_) {
+		if (!filter-&gt;matches(args)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+template&lt;typename F&gt;
+void unit_filter_compound::create_child(const vconfig&amp; c, F func)
+{
+	children_.emplace_back(new unit_filter_child_literal&lt;F&gt;(c, func));
+}
+
+template&lt;typename C, typename F&gt;
+void unit_filter_compound::create_attribute(const config::attribute_value v, C conv, F func)
+{
+	if(v.blank()) {
+	}
+	else if(v.apply_visitor(contains_dollar_visitor())) {
+		children_.emplace_back(new unit_filter_attribute_literal&lt;C, F&gt;(std::move(v.str()), std::move(conv), std::move(func)));
+	}
+	else {
+		children_.emplace_back(new unit_filter_attribute_parsed&lt;decltype(conv(v)), F&gt;(std::move(conv(v)), std::move(func)));
+	}
+}
+
+namespace {
+
+	struct ability_match
+	{
+		std::string tag_name;
+		const config* cfg;
+	};
+
+	void get_ability_children_id(std::vector&lt;ability_match&gt;&amp; id_result,
+	                           const config&amp; parent, const std::string&amp; id) {
+		for (const config::any_child sp : parent.all_children_range())
+		{
+			if(sp.cfg[&quot;id&quot;] == id) {
+				ability_match special = { sp.key, &amp;sp.cfg };
+				id_result.push_back(special);
+			}
+		}
+	}
+}
+
+void unit_filter_compound::fill(vconfig cfg)
+	{
+		const config&amp; literal = cfg.get_config();
+
+		//optimisation
+		if(literal.empty()) { return; }
+
+		create_attribute(literal[&quot;name&quot;],
+			[](const config::attribute_value&amp; c) { return c.t_str(); },
+			[](const t_string&amp; str, const unit_filter_args&amp; args) { return str == args.u.name(); }
+		);
+
+		create_attribute(literal[&quot;id&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; id_list, const unit_filter_args&amp; args)
+			{
+				return std::find(id_list.begin(), id_list.end(), args.u.id()) != id_list.end();
+			}
+		);
+
+		create_attribute(literal[&quot;type&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; types, const unit_filter_args&amp; args)
+			{
+				return std::find(types.begin(), types.end(), args.u.type_id()) != types.end();
+			}
+		);
+
+		create_attribute(literal[&quot;type_adv_tree&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; types, const unit_filter_args&amp; args)
+			{
+				std::set&lt;std::string&gt; types_expanded;
+				for(const std::string&amp; type : types) {
+					if(types_expanded.count(type)) {
+						continue;
+					}
+					if(const unit_type* ut = unit_types.find(type)) {
+						const auto&amp; tree = ut-&gt;advancement_tree();
+						types_expanded.insert(tree.begin(), tree.end());
+						types_expanded.insert(type);
+					}
+				}
+				return types_expanded.find(args.u.type_id()) != types_expanded.end();
+			}
+		);
+
+		create_attribute(literal[&quot;variation&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; types, const unit_filter_args&amp; args)
+			{
+				return std::find(types.begin(), types.end(), args.u.variation()) != types.end();
+			}
+		);
+
+		create_attribute(literal[&quot;has_variation&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; types, const unit_filter_args&amp; args)
+			{
+				// If this unit is a variation itself then search in the base unit&#x27;s variations.
+				const unit_type* const type = args.u.variation().empty() ? &amp;args.u.type() : unit_types.find(args.u.type().parent_id());
+				assert(type);
+
+				for(const std::string&amp; variation_id : types) {
+					if (type-&gt;has_variation(variation_id)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;ability&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; abilities, const unit_filter_args&amp; args)
+			{
+				for(const std::string&amp; ability_id : abilities) {
+					if (args.u.has_ability_by_id(ability_id)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;ability_type&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; abilities, const unit_filter_args&amp; args)
+			{
+				for(const std::string&amp; ability : abilities) {
+					if (args.u.has_ability_type(ability)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;ability_id_active&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; abilities, const unit_filter_args&amp; args)
+			{
+				assert(display::get_singleton());
+				const unit_map&amp; units = display::get_singleton()-&gt;get_units();
+				for(const std::string&amp; ability : abilities) {
+					std::vector&lt;ability_match&gt; ability_id_matches_self;
+					get_ability_children_id(ability_id_matches_self, args.u.abilities(), ability);
+					for(const ability_match&amp; entry : ability_id_matches_self) {
+						if (args.u.get_self_ability_bool(*entry.cfg, entry.tag_name, args.loc)) {
+							return true;
+						}
+					}
+
+					const auto adjacent = get_adjacent_tiles(args.loc);
+					for(unsigned i = 0; i &lt; adjacent.size(); ++i) {
+						const unit_map::const_iterator it = units.find(adjacent[i]);
+						if (it == units.end() || it-&gt;incapacitated())
+							continue;
+						if (&amp;*it == (args.u.shared_from_this()).get())
+							continue;
+
+						std::vector&lt;ability_match&gt; ability_id_matches_adj;
+						get_ability_children_id(ability_id_matches_adj, it-&gt;abilities(), ability);
+						for(const ability_match&amp; entry : ability_id_matches_adj) {
+							if (args.u.get_adj_ability_bool(*entry.cfg, entry.tag_name,i, args.loc, *it)) {
+								return true;
+							}
+						}
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;ability_type_active&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; abilities, const unit_filter_args&amp; args)
+			{
+				for(const std::string&amp; ability : abilities) {
+					if (!args.u.get_abilities(ability, args.loc).empty()) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;trait&quot;],
+			[](const config::attribute_value&amp; c)
+			{
+				auto res = utils::split(c.str());
+				std::sort(res.begin(), res.end());
+				return res;
+
+			},
+			[](const std::vector&lt;std::string&gt;&amp; check_traits, const unit_filter_args&amp; args)
+			{
+
+				std::vector&lt;std::string&gt; have_traits = args.u.get_traits_list();
+				std::vector&lt;std::string&gt; isect;
+				std::sort(have_traits.begin(), have_traits.end());
+				std::set_intersection(check_traits.begin(), check_traits.end(), have_traits.begin(), have_traits.end(), std::back_inserter(isect));
+				return !isect.empty();
+			}
+		);
+
+		create_attribute(literal[&quot;race&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; races, const unit_filter_args&amp; args)
+			{
+				return std::find(races.begin(), races.end(), args.u.race()-&gt;id()) != races.end();
+			}
+		);
+
+		create_attribute(literal[&quot;gender&quot;],
+			[](const config::attribute_value&amp; c) { return string_gender(c.str()); },
+			[](unit_race::GENDER gender, const unit_filter_args&amp; args)
+			{
+				return gender == args.u.gender();
+			}
+		);
+
+		create_attribute(literal[&quot;upkeep&quot;],
+			[](const config::attribute_value&amp; c) -&gt; unit::upkeep_t
+			{
+				try {
+					return c.apply_visitor(unit::upkeep_parser_visitor());
+				} catch(std::invalid_argument&amp;) {
+					return unit::upkeep_full();
+				}
+			},
+			[](unit::upkeep_t upkeep, const unit_filter_args&amp; args)
+			{
+				return args.u.upkeep() == utils::visit(unit::upkeep_value_visitor{args.u}, upkeep);
+			}
+		);
+
+		create_attribute(literal[&quot;side&quot;],
+			[](const config::attribute_value&amp; c)
+			{
+				std::vector&lt;int&gt; res;
+				for(const std::string&amp; s : utils::split(c.str())) {
+					try {
+						res.push_back(std::stoi(s));
+					} catch(std::invalid_argument&amp;) {
+						WRN_CF &lt;&lt; &quot;ignored invalid side=&#x27;&quot; &lt;&lt; s &lt;&lt; &quot;&#x27; in filter&quot;;
+					}
+				}
+				return res;
+			},
+			[](const std::vector&lt;int&gt;&amp; sides, const unit_filter_args&amp; args)
+			{
+				return std::find(sides.begin(), sides.end(), args.u.side()) != sides.end();
+			}
+		);
+
+		create_attribute(literal[&quot;status&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; statuses, const unit_filter_args&amp; args)
+			{
+				for(const std::string&amp; status : statuses) {
+					if (args.u.get_state(status)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;has_weapon&quot;],
+			[](const config::attribute_value&amp; c) { return c.str(); },
+			[](const std::string&amp; weapon, const unit_filter_args&amp; args)
+			{
+
+				for(const attack_type&amp; a : args.u.attacks()) {
+					if(a.id() == weapon) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;role&quot;],
+			[](const config::attribute_value&amp; c) { return c.str(); },
+			[](const std::string&amp; role, const unit_filter_args&amp; args)
+			{
+				return args.u.get_role() == role;
+			}
+		);
+
+		create_attribute(literal[&quot;alignment&quot;],
+			[](const config::attribute_value&amp; c) { return c.str(); },
+			[](const std::string&amp; alignment, const unit_filter_args&amp; args)
+			{
+				return unit_alignments::get_string(args.u.alignment()) == alignment;
+			}
+		);
+
+		create_attribute(literal[&quot;ai_special&quot;],
+			[](const config::attribute_value&amp; c) { return c.str(); },
+			[](const std::string&amp; ai_special, const unit_filter_args&amp; args)
+			{
+				return (ai_special == &quot;guardian&quot;) == args.u.get_state(unit::STATE_GUARDIAN);
+			}
+		);
+
+		create_attribute(literal[&quot;usage&quot;],
+			[](const config::attribute_value&amp; c) { return utils::split(c.str()); },
+			[](const std::vector&lt;std::string&gt;&amp; usages, const unit_filter_args&amp; args)
+			{
+				for(const std::string&amp; usage : usages) {
+					if(args.u.usage() == usage) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;canrecruit&quot;],
+			[](const config::attribute_value&amp; c) { return c.to_bool(); },
+			[](bool canrecruit, const unit_filter_args&amp; args)
+			{
+				return args.u.can_recruit() == canrecruit;
+			}
+		);
+
+		create_attribute(literal[&quot;recall_cost&quot;],
+			[](const config::attribute_value&amp; c) { return utils::parse_ranges_unsigned(c.str()); },
+			[](const std::vector&lt;std::pair&lt;int,int&gt;&gt;&amp; ranges, const unit_filter_args&amp; args)
+			{
+				for(auto cost : ranges) {
+					if(cost.first &lt;= args.u.recall_cost() &amp;&amp; args.u.recall_cost() &lt;= cost.second) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;level&quot;],
+			[](const config::attribute_value&amp; c) { return utils::parse_ranges_unsigned(c.str()); },
+			[](const std::vector&lt;std::pair&lt;int,int&gt;&gt;&amp; ranges, const unit_filter_args&amp; args)
+			{
+				for(auto lvl : ranges) {
+					if(lvl.first &lt;= args.u.level() &amp;&amp; args.u.level() &lt;= lvl.second) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;defense&quot;],
+			[](const config::attribute_value&amp; c) { return utils::parse_ranges_unsigned(c.str()); },
+			[](const std::vector&lt;std::pair&lt;int,int&gt;&gt;&amp; ranges, const unit_filter_args&amp; args)
+			{
+				int actual_defense = args.u.defense_modifier(args.context().get_disp_context().map().get_terrain(args.loc));
+				for(auto def : ranges) {
+					if(def.first &lt;= actual_defense &amp;&amp; actual_defense &lt;= def.second) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;movement_cost&quot;],
+			[](const config::attribute_value&amp; c) { return utils::parse_ranges_unsigned(c.str()); },
+			[](const std::vector&lt;std::pair&lt;int,int&gt;&gt;&amp; ranges, const unit_filter_args&amp; args)
+			{
+				int actual_cost = args.u.movement_cost(args.context().get_disp_context().map().get_terrain(args.loc));
+				for(auto cost : ranges) {
+					if(cost.first &lt;= actual_cost &amp;&amp; actual_cost &lt;= cost.second) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;vision_cost&quot;],
+			[](const config::attribute_value&amp; c) { return utils::parse_ranges_unsigned(c.str()); },
+			[](const std::vector&lt;std::pair&lt;int,int&gt;&gt;&amp; ranges, const unit_filter_args&amp; args)
+			{
+				int actual_cost = args.u.vision_cost(args.context().get_disp_context().map().get_terrain(args.loc));
+				for(auto cost : ranges) {
+					if(cost.first &lt;= actual_cost &amp;&amp; actual_cost &lt;= cost.second) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;jamming_cost&quot;],
+			[](const config::attribute_value&amp; c) { return utils::parse_ranges_unsigned(c.str()); },
+			[](const std::vector&lt;std::pair&lt;int,int&gt;&gt;&amp; ranges, const unit_filter_args&amp; args)
+			{
+				int actual_cost = args.u.jamming_cost(args.context().get_disp_context().map().get_terrain(args.loc));
+				for(auto cost : ranges) {
+					if(cost.first &lt;= actual_cost &amp;&amp; actual_cost &lt;= cost.second) {
+						return true;
+					}
+				}
+				return false;
+			}
+		);
+
+		create_attribute(literal[&quot;lua_function&quot;],
+			[](const config::attribute_value&amp; c) { return c.str(); },
+			[](const std::string&amp; lua_function, const unit_filter_args&amp; args)
+			{
+				if (game_lua_kernel * lk = args.context().get_lua_kernel()) {
+					return lk-&gt;run_filter(lua_function.c_str(), args.u);
+				}
+				return true;
+			}
+		);
+
+		create_attribute(literal[&quot;formula&quot;],
+			[](const config::attribute_value&amp; c)
+			{
+				//TODO: catch syntax error.
+				return wfl::formula(c, new wfl::gamestate_function_symbol_table());
+			},
+			[](const wfl::formula&amp; form, const unit_filter_args&amp; args)
+			{
+				try {
+					const wfl::unit_callable main(args.loc, args.u);
+					wfl::map_formula_callable callable(main.fake_ptr());
+					if (args.u2) {
+						auto secondary = std::make_shared&lt;wfl::unit_callable&gt;(*args.u2);
+						callable.add(&quot;other&quot;, wfl::variant(secondary));
+						// It&#x27;s not destroyed upon scope exit because the variant holds a reference
+					}
+					if(!form.evaluate(callable).as_bool()) {
+						return false;
+					}
+					return true;
+				} catch(const wfl::formula_error&amp; e) {
+					lg::log_to_chat() &lt;&lt; &quot;Formula error in unit filter: &quot; &lt;&lt; e.type &lt;&lt; &quot; at &quot; &lt;&lt; e.filename &lt;&lt; &#x27;:&#x27; &lt;&lt; e.line &lt;&lt; &quot;)\n&quot;;
+					ERR_WML &lt;&lt; &quot;Formula error in unit filter: &quot; &lt;&lt; e.type &lt;&lt; &quot; at &quot; &lt;&lt; e.filename &lt;&lt; &#x27;:&#x27; &lt;&lt; e.line &lt;&lt; &quot;)&quot;;
+					// Formulae with syntax errors match nothing
+					return false;
+				}
+			}
+		);
+
+		create_attribute(literal[&quot;find_in&quot;],
+			[](const config::attribute_value&amp; c) { return c.str(); },
+			[](const std::string&amp; find_in, const unit_filter_args&amp; args)
+			{
+				// Allow filtering by searching a stored variable of units
+				if (const game_data * gd = args.context().get_game_data()) {
+					try
+					{
+						for (const config&amp; c : gd-&gt;get_variable_access_read(find_in).as_array())
+						{
+							if(c[&quot;id&quot;] == args.u.id()) {
+								return true;
+							}
+						}
+						return false;
+					}
+					catch(const invalid_variablename_exception&amp;)
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+		);
+
+		if (!literal[&quot;x&quot;].blank() || !literal[&quot;y&quot;].blank()) {
+			children_.emplace_back(new unit_filter_xy(literal[&quot;x&quot;], literal[&quot;y&quot;]));
+		}
+
+		for(auto child : cfg.all_ordered()) {
+			auto cond = conditional_type::get_enum(child.first);
+			if(cond) {
+				cond_children_.emplace_back(std::piecewise_construct_t(), std::tuple(*cond), std::tuple(child.second));
+			}
+			else if (child.first == &quot;filter_wml&quot;) {
+				create_child(child.second, [](const vconfig&amp; c, const unit_filter_args&amp; args) {
+					config fwml = c.get_parsed_config();
+
+					/* Check if the filter only cares about variables.
+					   If so, no need to serialize the whole unit. */
+					config::all_children_itors ci = fwml.all_children_range();
+					if (fwml.all_children_count() == 1 &amp;&amp; fwml.attribute_count() == 1 &amp;&amp; ci.front().key == &quot;variables&quot;) {
+						return args.u.variables().matches(ci.front().cfg);
+					} else {
+						config ucfg;
+						args.u.write(ucfg);
+						return ucfg.matches(fwml);
+					}
+				});
+			}
+			else if (child.first == &quot;filter_vision&quot;) {
+				create_child(child.second, [](const vconfig&amp; c, const unit_filter_args&amp; args) {
+					std::set&lt;int&gt; viewers;
+					side_filter ssf(c, args.fc);
+					std::vector&lt;int&gt; sides = ssf.get_teams();
+					viewers.insert(sides.begin(), sides.end());
+
+					for (const int viewer : viewers) {
+						bool fogged = args.context().get_disp_context().get_team(viewer).fogged(args.loc);
+						// Check is_enemy() before invisible() to prevent infinite recursion in [abilities][hides][filter_self][filter_vision]
+						bool hiding = args.context().get_disp_context().get_team(viewer).is_enemy(args.u.side()) &amp;&amp; args.u.invisible(args.loc);
+						bool unit_hidden = fogged || hiding;
+						if (c[&quot;visible&quot;].to_bool(true) != unit_hidden) {
+							return true;
+						}
+					}
+					return false;
+				});
+			}
+			else if (child.first == &quot;filter_adjacent&quot;) {
+				children_.emplace_back(new unit_filter_adjacent(child.second));
+			}
+			else if (child.first == &quot;filter_location&quot;) {
+				create_child(child.second, [](const vconfig&amp; c, const unit_filter_args&amp; args) {
+					return terrain_filter(c, args.fc, args.use_flat_tod).match(args.loc);
+				});
+			}
+			else if (child.first == &quot;filter_side&quot;) {
+				create_child(child.second, [](const vconfig&amp; c, const unit_filter_args&amp; args) {
+					return side_filter(c, args.fc).match(args.u.side());
+				});
+			}
+			else if (child.first == &quot;experimental_filter_ability&quot;) {
+				create_child(child.second, [](const vconfig&amp; c, const unit_filter_args&amp; args) {
+					for(const config::any_child ab : args.u.abilities().all_children_range()) {
+						if(args.u.ability_matches_filter(ab.cfg, ab.key, c.get_parsed_config())) {
+							return true;
+						}
+					}
+					return false;
+				});
+			}
+			else if (child.first == &quot;experimental_filter_ability_active&quot;) {
+				create_child(child.second, [](const vconfig&amp; c, const unit_filter_args&amp; args) {
+					if(!display::get_singleton()){
+						return false;
+					}
+					const unit_map&amp; units = display::get_singleton()-&gt;get_units();
+					for(const config::any_child ab : args.u.abilities().all_children_range()) {
+						if(args.u.ability_matches_filter(ab.cfg, ab.key, c.get_parsed_config())) {
+							if (args.u.get_self_ability_bool(ab.cfg, ab.key, args.loc)) {
+								return true;
+							}
+						}
+					}
+
+					const auto adjacent = get_adjacent_tiles(args.loc);
+					for(unsigned i = 0; i &lt; adjacent.size(); ++i) {
+						const unit_map::const_iterator it = units.find(adjacent[i]);
+						if (it == units.end() || it-&gt;incapacitated())
+							continue;
+						if (&amp;*it == (args.u.shared_from_this()).get())
+							continue;
+
+						for(const config::any_child ab : it-&gt;abilities().all_children_range()) {
+							if(it-&gt;ability_matches_filter(ab.cfg, ab.key, c.get_parsed_config())) {
+								if (args.u.get_adj_ability_bool(ab.cfg, ab.key, i, args.loc, *it)) {
+									return true;
+								}
+							}
+						}
+					}
+				return false;
+				});
+			}
+			else if (child.first == &quot;has_attack&quot;) {
+				create_child(child.second, [](const vconfig&amp; c, const unit_filter_args&amp; args) {
+					for(const attack_type&amp; a : args.u.attacks()) {
+						if(a.matches_filter(c.get_parsed_config())) {
+							return true;
+						}
+					}
+					return false;
+				});
+			}
+			else {
+				std::stringstream errmsg;
+				errmsg &lt;&lt; &quot;encountered a child [&quot; &lt;&lt; child.first &lt;&lt; &quot;] of a standard unit filter, it is being ignored&quot;;
+				DBG_CF &lt;&lt; errmsg.str();
+			}
+
+		}
+	}
+</pre></main></body></html>

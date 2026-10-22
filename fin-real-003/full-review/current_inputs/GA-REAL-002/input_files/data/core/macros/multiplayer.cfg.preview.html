@@ -1,0 +1,63 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>multiplayer.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/macros/multiplayer.cfg</h1><pre>#textdomain wesnoth-multiplayer
+
+#define RANDOM_SIDE
+    [multiplayer_side]
+        id=Random
+        name= _&quot;Random&quot;
+        image=&quot;units/random-dice.png&quot;
+        random_faction=yes
+    [/multiplayer_side]
+#enddef
+
+#define QUICK_4MP_LEADERS
+    # This makes all leaders with 4 MP receive the quick trait, except ones with
+    # unit.variables.dont_make_me_quick=yes (boolean)
+
+    [event]
+        name=prestart
+        [lua]
+            code = &lt;&lt; wesnoth.require(&quot;multiplayer/eras.lua&quot;).quick_4mp_leaders(...) &gt;&gt;
+            [args]
+                {TRAIT_QUICK}
+            [/args]
+        [/lua]
+    [/event]
+#enddef
+
+#define TURNS_OVER_ADVANTAGE
+    [event]
+        name=time over
+        [lua]
+            code = &lt;&lt; wesnoth.require(&quot;multiplayer/eras.lua&quot;).turns_over_advantage() &gt;&gt;
+        [/lua]
+    [/event]
+#enddef
+
+# These macros make things easier for UMC eras which are additions to or modifications of the default eras.
+# If anything gets changed or added to the default eras, please do it in the code included in these macros.
+#define ERA_DEFAULT
+    {RANDOM_SIDE}
+    {multiplayer/factions/loyalists-default.cfg}
+    {multiplayer/factions/rebels-default.cfg}
+    {multiplayer/factions/northerners-default.cfg}
+    {multiplayer/factions/undead-default.cfg}
+    {multiplayer/factions/knalgans-default.cfg}
+    {multiplayer/factions/drakes-default.cfg}
+
+    {QUICK_4MP_LEADERS}
+    {TURNS_OVER_ADVANTAGE}
+#enddef
+
+#define ERA_HEROES
+    {RANDOM_SIDE}
+    {multiplayer/factions/loyalists-aoh.cfg}
+    {multiplayer/factions/rebels-aoh.cfg}
+    {multiplayer/factions/northerners-aoh.cfg}
+    {multiplayer/factions/undead-aoh.cfg}
+    {multiplayer/factions/knalgans-aoh.cfg}
+    {multiplayer/factions/drakes-aoh.cfg}
+
+    {QUICK_4MP_LEADERS}
+    {TURNS_OVER_ADVANTAGE}
+#enddef
+</pre></main></body></html>

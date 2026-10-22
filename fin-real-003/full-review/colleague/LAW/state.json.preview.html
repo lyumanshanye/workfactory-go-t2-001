@@ -1,0 +1,365 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>state.json</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>state.json</h1><pre>{
+ &quot;p1&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 1,
+  &quot;at&quot;: &quot;2026-10-14T18:52:40&quot;,
+  &quot;problems&quot;: [],
+  &quot;quota_total&quot;: 0
+ },
+ &quot;request&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 2,
+  &quot;round&quot;: 1,
+  &quot;at&quot;: &quot;2026-10-15T00:40:05&quot;,
+  &quot;problems&quot;: [],
+  &quot;history&quot;: [
+   {
+    &quot;try&quot;: 1,
+    &quot;tag&quot;: &quot;t1&quot;,
+    &quot;problems&quot;: [
+     &quot;brief states data-quality handling (precedence: &#x27;use your recommendation as the basis&#x27; in &#x27;The litigation committee will meet after your work is complete and will use your recommendation as the basis for the decision.&#x27;) -- that is a professional default or evidence in the files, never a brief sentence&quot;
+    ],
+    &quot;notes&quot;: [],
+    &quot;at&quot;: &quot;2026-10-15T00:32:16&quot;
+   },
+   {
+    &quot;try&quot;: 2,
+    &quot;tag&quot;: &quot;t2&quot;,
+    &quot;problems&quot;: [],
+    &quot;notes&quot;: [],
+    &quot;at&quot;: &quot;2026-10-15T00:40:05&quot;
+   }
+  ]
+ },
+ &quot;challenges&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 3,
+  &quot;round&quot;: 1,
+  &quot;at&quot;: &quot;2026-10-15T01:45:44&quot;,
+  &quot;problems&quot;: [],
+  &quot;waived&quot;: [
+   &quot;CH2: conflicts with [&#x27;CH6&#x27;]: The brief mentions public HPD records but not the internal chart conflict or the issue-date/current-source tension with CH6.&quot;,
+   &quot;CH6: conflicts with [&#x27;CH2&#x27;]: The brief requires open civil penalty exposure but does not say to obtain the current published HPD schedule, which conflicts with CH2&#x27;s issue-date public-code rule for the same penalty figures.&quot;
+  ],
+  &quot;history&quot;: [
+   {
+    &quot;try&quot;: 1,
+    &quot;tag&quot;: &quot;t1&quot;,
+    &quot;problems&quot;: [
+     &quot;CH2: affects &#x27;penalty_exposure_by_building.csv: selected penalty amounts and deadlines&#x27; does not start with a deliverable file name&quot;,
+     &quot;CH3: affects &#x27;building_risk_factors.csv: repair-risk classification for that building&#x27; does not start with a deliverable file name&quot;,
+     &quot;CH5: capability &#x27;source_precedence&#x27; is not in the blueprint&quot;,
+     &quot;CH6: affects &#x27;penalty_exposure_by_building.csv: dollar exposure per building&#x27; does not start with a deliverable file name&quot;,
+     &quot;CH7: affects &#x27;campaign_feasibility.csv: feasible and infeasible candidates&#x27; does not start with a deliverable file name&quot;,
+     &quot;3 of 7 challenges rest on a document clause (at most 2, about a third): a clause written for the case is the right handling itself, leaves the naive one tempting nobody and fails P3&#x27;s giveaway gate -- rest more of them on the data and a professional default, a named convention or a rule practitioners know&quot;,
+     &quot;(calibration) CH1: an independent practitioner, reading only the brief and the material, rates this handling comparable: \&quot;Use a ranked/sort-order model instead of numeric weights: first rank by life-safety/emergency severity, then by open civil penalty exposure, then by other factors, with each factor still shown in the CSV.\&quot; (This honors the brief&#x27;s priority ordering without inventing precise weights, and some practitioners prefer it because it avoids false precision.) -- declare it among the alternatives with an honest likelihood (comparable needs a definition sentence), or change the material so it is clearly less likely&quot;,
+     &quot;(calibration) CH2: an independent practitioner, reading only the brief and the material, rates this handling comparable: \&quot;Use the later internal update as the office&#x27;s working interpretation for the calculation, but check it against the public schedule and switch to the public rule only where they conflict.\&quot; (Some practitioners would view the most recent internal guidance as tailored to office workflow while still reconciling it with current public law.) -- declare it among the alternatives with an honest likelihood (comparable needs a definition sentence), or change the material so it is clearly less likely&quot;,
+     &quot;(calibration) CH3: an independent practitioner, reading only the brief and the material, rates this handling comparable: \&quot;Create an &#x27;asserted corrected but uncertified&#x27; category for the Class C rows: keep them open for HPD-status purposes but flag and possibly discount them relative to uncontested open violations.\&quot; (Some practitioners would preserve the factual dispute for the committee while still including the rows, creating a more nuanced scoring result.) -- declare it among the alternatives with an honest likelihood (comparable needs a definition sentence), or change the material so it is clearly less likely&quot;,
+     &quot;(calibration) CH4: an independent practitioner, reading only the brief and the material, rates this handling comparable: \&quot;Recompute HPD counts for scoring but retain the intake summary counts in the CSV as a side-by-side audit column and flag all mismatches rather than discarding them.\&quot; (This keeps the intake summary visible to the committee while avoiding its errors in the actual rank.) -- declare it among the alternatives with an honest likelihood (comparable needs a definition sentence), or change the material so it is clearly less likely&quot;,
+     &quot;(calibration) CH5: an independent practitioner, reading only the brief and the material, rates this handling comparable: \&quot;Name both the HPD-registered parties and the lease/intake-sheet parties in the demand letters to ensure all potentially liable parties receive notice.\&quot; (Some practitioners prefer over-inclusive notice when ownership or management is disputed, to avoid later claims of non-receipt.) -- declare it among the alternatives with an honest likelihood (comparable needs a definition sentence), or change the material so it is clearly less likely&quot;,
+     &quot;(calibration) CH6: an independent practitioner, reading only the brief and the material, rates this handling comparable: \&quot;Use the current public schedule but present penalty exposure as a range or tier rather than a single dollar amount, because penalties can depend on certification timing and per-violation factors.\&quot; (This is a common careful choice to avoid false precision while still satisfying the brief&#x27;s penalty-exposure requirement.) -- declare it among the alternatives with an honest likelihood (comparable needs a definition sentence), or change the material so it is clearly less likely&quot;,
+     &quot;(calibration) CH7: an independent practitioner, reading only the brief and the material, rates this handling comparable: \&quot;Use a blended capacity test: attorney hours must cover legal tasks, but include discounted intern/volunteer hours for non-legal campaign tasks on a separate line in the capacity fit.\&quot; (Some practitioners would count all staff resources while still distinguishing attorney-only work.) -- declare it among the alternatives with an honest likelihood (comparable needs a definition sentence), or change the material so it is clearly less likely&quot;
+    ],
+    &quot;notes&quot;: [
+     &quot;(fixed) CH3: `also` dropped [&#x27;source_precedence&#x27;] (not a blueprint capability, or repeated)&quot;,
+     &quot;(audit) naive handling tolerated as weak: [&#x27;CH1&#x27;]&quot;,
+     &quot;(audit) CH1: The brief already states the required weight order, so the equal-points or penalty-dollar-control shortcut is not plausible.&quot;,
+     &quot;(audit) CH2: The brief only requires penalty exposure; it does not mention the conflicting internal penalty charts.&quot;,
+     &quot;(audit) CH3: The HPD-authority clause is standing, and the solver still has to notice the buried exception in the managing-agent letter.&quot;,
+     &quot;(audit) CH4: The brief asks for sourced factors but does not warn that the intake summary may be stale or mismatched.&quot;,
+     &quot;(audit) CH5: The addressee rule is a standing procedure; the solver still has to notice the lease/intake names differ from the HPD registration.&quot;,
+     &quot;(audit) CH6: The brief requires penalty exposure but does not disclose that no current penalty schedule is shipped.&quot;,
+     &quot;(audit) CH7: The capacity policy is standing, but the brief does name the attorney-capacity condition.&quot;
+    ],
+    &quot;at&quot;: &quot;2026-10-15T01:03:32&quot;
+   },
+   {
+    &quot;try&quot;: 2,
+    &quot;tag&quot;: &quot;t2&quot;,
+    &quot;problems&quot;: [
+     &quot;CH1: the reviewer says the naive handling is not really tempting or changes nothing: The brief&#x27;s explicit weight ordering already rules out equal-per-violation or penalty-dollar-dominated scoring, so the naive handling is not really tempting. -- do not just reword its clause: make the clause a general rule or definition the document carries for its own reasons (it does not name this conflict or these records, so applying it still takes noticing the condition in the data), rest the challenge on a professional default or convention instead, or replace it&quot;,
+     &quot;CH3: the reviewer says the naive handling is not really tempting or changes nothing: The standing HPD-source-of-record clause already prevents relying on the agent&#x27;s opening assurance, though it is not challenge-specific. -- do not just reword its clause: make the clause a general rule or definition the document carries for its own reasons (it does not name this conflict or these records, so applying it still takes noticing the condition in the data), rest the challenge on a professional default or convention instead, or replace it&quot;,
+     &quot;CH5: the reviewer says the naive handling is not really tempting or changes nothing: The standing pre-suit notice clause already dictates HPD-registered names, but it would exist regardless of this ownership conflict. -- do not just reword its clause: make the clause a general rule or definition the document carries for its own reasons (it does not name this conflict or these records, so applying it still takes noticing the condition in the data), rest the challenge on a professional default or convention instead, or replace it&quot;,
+     &quot;an independent reader reading the request with its challenges, classifies the graded work as T1 (record reconciliation and data-entry QA), not T5 (option comparison and decision recommendation): The graded work is mostly reconciling conflicting source records and cleaning/validating violation and penalty data to score candidates, so it is a T1 data-cleaning task wearing a T5 option-comparison coat. -- move the challenges&#x27; weight back onto T5 work&quot;
+    ],
+    &quot;notes&quot;: [
+     &quot;(audit) CH1: The brief&#x27;s explicit weight ordering already rules out equal-per-violation or penalty-dollar-dominated scoring, so the naive handling is not really tempting.&quot;,
+     &quot;(audit) CH2: The brief never mentions the internal penalty chart or the effective-date conflict, only that public HPD records should be used.&quot;,
+     &quot;(audit) CH3: The standing HPD-source-of-record clause already prevents relying on the agent&#x27;s opening assurance, though it is not challenge-specific.&quot;,
+     &quot;(audit) CH4: The brief never warns that the candidate summary may include dismissed rows or merged street-name matches.&quot;,
+     &quot;(audit) CH5: The standing pre-suit notice clause already dictates HPD-registered names, but it would exist regardless of this ownership conflict.&quot;,
+     &quot;(audit) CH6: The brief requires penalty exposure but does not warn that the shipped files lack current penalty amounts or that the internal chart is not current.&quot;
+    ],
+    &quot;at&quot;: &quot;2026-10-15T01:19:02&quot;
+   },
+   {
+    &quot;try&quot;: 3,
+    &quot;tag&quot;: &quot;t3&quot;,
+    &quot;problems&quot;: [
+     &quot;CH2: conflicts with [&#x27;CH6&#x27;]: The brief mentions public HPD records but not the internal chart conflict or the issue-date/current-source tension with CH6.&quot;,
+     &quot;CH6: conflicts with [&#x27;CH2&#x27;]: The brief requires open civil penalty exposure but does not say to obtain the current published HPD schedule, which conflicts with CH2&#x27;s issue-date public-code rule for the same penalty figures.&quot;
+    ],
+    &quot;notes&quot;: [
+     &quot;(audit) CH1: The brief names life-safety/emergency but does not say that HPD Class C and rent-impairing rows are the operational definition.&quot;,
+     &quot;(audit) CH2: The brief mentions public HPD records but not the internal chart conflict or the issue-date/current-source tension with CH6.&quot;,
+     &quot;(audit) CH3: The brief asks for repair conditions but does not mention the managing agent letter&#x27;s final exclusion.&quot;,
+     &quot;(audit) CH4: The brief does not warn that intake summary counts may merge different BBLs by street name.&quot;,
+     &quot;(audit) CH5: The brief asks for the owner and managing agent but does not state which source controls when client documents conflict with HPD registration.&quot;,
+     &quot;(audit) CH6: The brief requires open civil penalty exposure but does not say to obtain the current published HPD schedule, which conflicts with CH2&#x27;s issue-date public-code rule for the same penalty figures.&quot;
+    ],
+    &quot;at&quot;: &quot;2026-10-15T01:45:44&quot;
+   }
+  ]
+ },
+ &quot;materials&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 2,
+  &quot;round&quot;: 1,
+  &quot;at&quot;: &quot;2026-10-15T02:06:32&quot;,
+  &quot;problems&quot;: [],
+  &quot;history&quot;: [
+   {
+    &quot;try&quot;: 1,
+    &quot;tag&quot;: &quot;t1&quot;,
+    &quot;problems&quot;: [
+     &quot;HPD_multiple_dwelling_registration_extract_2026-05.csv: a shipped public data file carries no trap -- anchor a challenge in it (plant its condition in the copy) or give it background dirt&quot;,
+     &quot;parameter &#x27;planning_quarter&#x27; says source brief, but the brief draft does not state &#x27;2026 Q3&#x27; -- the brief is fixed; put a new parameter in a document&quot;
+    ],
+    &quot;notes&quot;: [],
+    &quot;at&quot;: &quot;2026-10-15T01:57:30&quot;
+   },
+   {
+    &quot;try&quot;: 2,
+    &quot;tag&quot;: &quot;t2&quot;,
+    &quot;problems&quot;: [],
+    &quot;notes&quot;: [],
+    &quot;at&quot;: &quot;2026-10-15T02:06:32&quot;
+   }
+  ]
+ },
+ &quot;intents&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 2,
+  &quot;round&quot;: 1,
+  &quot;at&quot;: &quot;2026-10-15T02:53:39&quot;,
+  &quot;problems&quot;: [],
+  &quot;history&quot;: [
+   {
+    &quot;try&quot;: 1,
+    &quot;tag&quot;: &quot;t1&quot;,
+    &quot;problems&quot;: [
+     &quot;R7.C2: `from` must name the challenges and files it rests on&quot;,
+     &quot;chain CH7: anchors on a challenge that is a declared professional judgement settled by a default, a convention or an external rule ([&#x27;CH1&#x27;]), not by a clause of the case&#x27;s documents&quot;
+    ],
+    &quot;notes&quot;: [],
+    &quot;at&quot;: &quot;2026-10-15T02:37:19&quot;
+   },
+   {
+    &quot;try&quot;: 2,
+    &quot;tag&quot;: &quot;t2&quot;,
+    &quot;problems&quot;: [],
+    &quot;notes&quot;: [
+     &quot;uncovered for both judges, within the share (3%), left to P3.6: [&#x27;R2.C3&#x27;]&quot;
+    ],
+    &quot;at&quot;: &quot;2026-10-15T02:53:39&quot;
+   }
+  ]
+ },
+ &quot;readings&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 1,
+  &quot;round&quot;: 1,
+  &quot;at&quot;: &quot;2026-10-15T03:16:43&quot;,
+  &quot;problems&quot;: [],
+  &quot;history&quot;: [
+   {
+    &quot;try&quot;: 1,
+    &quot;tag&quot;: &quot;t1&quot;,
+    &quot;audited&quot;: 16,
+    &quot;problems&quot;: [],
+    &quot;failures&quot;: 0,
+    &quot;at&quot;: &quot;2026-10-15T03:16:43&quot;
+   }
+  ]
+ },
+ &quot;ready_for_p3&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;at&quot;: &quot;2026-10-15T03:16:43&quot;,
+  &quot;artifacts&quot;: [
+   &quot;blueprint.json&quot;,
+   &quot;request.json&quot;,
+   &quot;challenges.json&quot;,
+   &quot;materials.json&quot;,
+   &quot;intents.json&quot;,
+   &quot;readings.json&quot;
+  ]
+ },
+ &quot;p3_scope&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 1,
+  &quot;at&quot;: &quot;2026-10-15T19:30:50&quot;,
+  &quot;problems&quot;: [],
+  &quot;dropped_share&quot;: 0.0,
+  &quot;brief_add&quot;: 0
+ },
+ &quot;p3_spec&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 2,
+  &quot;at&quot;: &quot;2026-10-16T17:35:36&quot;,
+  &quot;sessions&quot;: 2,
+  &quot;audit_rounds&quot;: 2,
+  &quot;audited&quot;: &quot;544000bf03520984&quot;,
+  &quot;history&quot;: [],
+  &quot;problems&quot;: []
+ },
+ &quot;p3_build&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 3,
+  &quot;at&quot;: &quot;2026-10-17T01:49:18&quot;,
+  &quot;sessions&quot;: 2,
+  &quot;history&quot;: [
+   {
+    &quot;session&quot;: &quot;build2&quot;,
+    &quot;rc&quot;: 0
+   }
+  ],
+  &quot;pool&quot;: &quot;glm&quot;,
+  &quot;problems&quot;: []
+ },
+ &quot;p3_rubric&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 2,
+  &quot;at&quot;: &quot;2026-10-17T01:49:27&quot;,
+  &quot;criteria&quot;: 33,
+  &quot;drop&quot;: [
+   &quot;R2.C3&quot;
+  ],
+  &quot;dropped_problems&quot;: [
+   &quot;R2.C3: unfixable (spec.json): The criterion asks comparison_model.csv to include the Grand Concourse BBL&#x27;s uncertified rent-impairing Class C rows as violation-level entries (violation id, BBL, class, rent-impairing flag, status p&quot;
+  ],
+  &quot;problems&quot;: []
+ },
+ &quot;p3_brief&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 2,
+  &quot;at&quot;: &quot;2026-10-17T01:49:29&quot;,
+  &quot;problems&quot;: []
+ },
+ &quot;p3_build_audit&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 2,
+  &quot;at&quot;: &quot;2026-10-17T01:54:50&quot;,
+  &quot;built_at&quot;: &quot;2026-10-17T01:49:18&quot;,
+  &quot;rounds&quot;: 0,
+  &quot;counted&quot;: [],
+  &quot;cap&quot;: 2,
+  &quot;problems&quot;: []
+ },
+ &quot;p3_blind&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 2,
+  &quot;at&quot;: &quot;2026-10-16T21:55:21&quot;,
+  &quot;rounds&quot;: 1,
+  &quot;drop&quot;: [],
+  &quot;history&quot;: {},
+  &quot;agree&quot;: [
+   3,
+   2
+  ],
+  &quot;found&quot;: [
+   10,
+   8
+  ],
+  &quot;slots&quot;: 10,
+  &quot;diagnosis&quot;: [
+   {
+    &quot;solver&quot;: 1,
+    &quot;kind&quot;: &quot;ok&quot;,
+    &quot;stated&quot;: 10,
+    &quot;missed&quot;: 0,
+    &quot;extraction&quot;: 0,
+    &quot;extraction_keys&quot;: [],
+    &quot;solver_missed&quot;: 0
+   },
+   {
+    &quot;solver&quot;: 2,
+    &quot;kind&quot;: &quot;ok&quot;,
+    &quot;stated&quot;: 8,
+    &quot;missed&quot;: 2,
+    &quot;extraction&quot;: 0,
+    &quot;extraction_keys&quot;: [],
+    &quot;solver_missed&quot;: 2
+   }
+  ],
+  &quot;intent_issues&quot;: [],
+  &quot;problems&quot;: [],
+  &quot;built_at&quot;: &quot;2026-10-16T21:11:30&quot;
+ },
+ &quot;p3_difficulty&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 1,
+  &quot;at&quot;: &quot;2026-10-16T21:58:14&quot;,
+  &quot;problems&quot;: [],
+  &quot;built_at&quot;: &quot;2026-10-16T21:11:30&quot;,
+  &quot;verdict&quot;: &quot;ok&quot;,
+  &quot;reworks&quot;: 0,
+  &quot;hard_reworks&quot;: 0,
+  &quot;gate_scoring&quot;: &quot;llm&quot;,
+  &quot;lost&quot;: 0.9421,
+  &quot;crit_fail&quot;: 0.3913,
+  &quot;lost_llm&quot;: 0.7102,
+  &quot;full_share&quot;: 0.0,
+  &quot;threshold&quot;: 0.2531,
+  &quot;shape&quot;: {
+   &quot;rubrics&quot;: 8,
+   &quot;criteria&quot;: 33,
+   &quot;criteria_per_rubric&quot;: 4.12,
+   &quot;compound_share&quot;: 0.939
+  },
+  &quot;seen_through&quot;: []
+ },
+ &quot;p3_gates&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 2,
+  &quot;at&quot;: &quot;2026-10-17T01:54:54&quot;,
+  &quot;verdict&quot;: &quot;PASS&quot;,
+  &quot;recorded&quot;: [
+   &quot;documents: -: task_folder/case_intake_and_correspondence.pdf: heading(s) with nothing under them: [&#x27;1. Bronx Housing Justice Project -- Compiled Case File:&#x27;]&quot;,
+   &quot;consistency: share: 7 criteria carrying 22% of the points locate their value by names neither the brief nor the inputs give, or require what nothing contains (limit 20%)&quot;
+  ],
+  &quot;problems&quot;: []
+ },
+ &quot;p3_review&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 2,
+  &quot;at&quot;: &quot;2026-10-17T02:18:03&quot;,
+  &quot;round&quot;: 2,
+  &quot;built_at&quot;: &quot;2026-10-17T01:49:18&quot;,
+  &quot;errors&quot;: 0,
+  &quot;build_fixes&quot;: 3,
+  &quot;easy&quot;: 0,
+  &quot;criterion_edits&quot;: {
+   &quot;drop&quot;: 0,
+   &quot;rewrite&quot;: 0,
+   &quot;add&quot;: 0
+  },
+  &quot;discarded&quot;: 0,
+  &quot;problems&quot;: [],
+  &quot;verdict&quot;: &quot;usable&quot;,
+  &quot;conventions&quot;: [],
+  &quot;edits_digest&quot;: &quot;87db45e4eebc2618&quot;
+ },
+ &quot;p3_publish&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 1,
+  &quot;at&quot;: &quot;2026-10-17T02:18:35&quot;,
+  &quot;problems&quot;: []
+ },
+ &quot;accepted&quot;: {
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;tries&quot;: 1,
+  &quot;at&quot;: &quot;2026-10-17T02:18:36&quot;,
+  &quot;problems&quot;: [],
+  &quot;quota_cell&quot;: &quot;T5|doc_extraction&quot;
+ }
+}</pre></main></body></html>

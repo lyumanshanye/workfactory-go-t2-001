@@ -1,0 +1,85 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Loyalist_Duelist.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/humans/Loyalist_Duelist.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Duelist
+    name= _ &quot;Duelist&quot;
+    race=human
+    image=&quot;units/human-loyalists/duelist.png&quot;
+    profile=&quot;portraits/humans/duelist.webp&quot;
+    hitpoints=44
+    movement_type=elusivefoot
+    movement=7
+    experience=80
+    level=2
+    alignment=lawful
+    advances_to=Master at Arms
+    cost=29
+    usage=mixed fighter
+    description= _ &quot;It is a peculiar custom of Wesnoth’s nobility that they typically enroll their sons into one of two orders of armigers, training them either in the art of horsemanship or fencing. Duelists are so named for an unfortunately common practice of young aristocrats, for whom the sting of insult, whether real or fancied, can incite a rash demonstration of their natural right.
+
+Experienced fencers carry with them a small crossbow that is easily concealed under a coat or cape. Slow to load and sometimes thought dishonorable to use, it is in fact very useful, and those of their ranks who live long enough to be veterans typically do so by making such concessions to utility and survival.&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    {DEFENSE_ANIM &quot;units/human-loyalists/duelist-defend.png&quot; &quot;units/human-loyalists/duelist.png&quot; {SOUND_LIST:HUMAN_HIT} }
+    [resistance]
+        cold=90
+    [/resistance]
+    [abilities]
+        {ABILITY_SKIRMISHER}
+    [/abilities]
+    [death]
+        start_time=0
+        [frame]
+            image=&quot;units/human-loyalists/duelist-die[1~8].png:100&quot;
+        [/frame]
+    [/death]
+    [attack]
+        name=saber
+        description=_&quot;saber&quot;
+        icon=attacks/saber-human.png
+        type=blade
+        range=melee
+        damage=5
+        number=5
+    [/attack]
+    [attack]
+        name=crossbow
+        description=_&quot;crossbow&quot;
+        icon=attacks/crossbow-human.png
+        type=pierce
+        range=ranged
+        damage=12
+        number=1
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=crossbow
+        [/filter_attack]
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        start_time=-350
+        {SOUND:HIT_AND_MISS crossbow.ogg crossbow-miss.ogg -300}
+        [frame]
+            image=&quot;units/human-loyalists/duelist-ranged.png:400&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=saber
+        [/filter_attack]
+        start_time=-250
+        [frame]
+            image=&quot;units/human-loyalists/duelist.png:100&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}
+        [frame]
+            image=&quot;units/human-loyalists/duelist-attack.png:200&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/duelist.png:100&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

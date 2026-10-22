@@ -1,0 +1,192 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>filter.hpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/filter.hpp</h1><pre>/*
+	Copyright (C) 2014 - 2024
+	by Chris Beck &lt;render787@gmail.com&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+/**
+ * This namespace contains the function that checks if a unit matches
+ * a filter. It helps by simplifying the unit object (which before now
+ * holds the &quot;match&quot; function).
+ *
+ * TODO:
+ * Make a class that abstracts a unit filter, assembles the constituent
+ * side filters and terrain filters and conditional filters, and caches
+ * these to speed up repeated application of the filter.
+ */
+
+#pragma once
+
+#include &quot;units/conditional_type.hpp&quot;
+#include &quot;units/ptr.hpp&quot;
+
+#include &quot;display_context.hpp&quot;
+#include &quot;filter_context.hpp&quot;
+#include &quot;units/map.hpp&quot;
+#include &quot;variable.hpp&quot;
+
+#include &lt;memory&gt;
+#include &lt;vector&gt;
+
+class filter_context;
+class unit;
+class config;
+class vconfig;
+struct map_location;
+
+
+
+namespace unit_filter_impl
+{
+	struct filter_error : public game::error
+	{
+		explicit filter_error(const std::string&amp; message = &quot;filter error&quot;)
+			: game::error(message)
+		{
+		}
+	};
+
+	struct unit_filter_args
+	{
+		const unit&amp; u;
+		map_location loc;
+		const unit* u2;
+		const filter_context* fc;
+		bool use_flat_tod;
+
+		const filter_context&amp; context() const
+		{
+			if(fc) {
+				return *fc;
+			}
+			throw filter_error();
+		}
+		// This constructor is here to shut down warnings that the default constructor couldn&#x27;t be generated.
+		// It&#x27;s technically unnecessary since lacking of a default constructor doesn&#x27;t prevent aggregate-initialization, but...
+		unit_filter_args(const unit&amp; u, map_location loc, const unit* u2, const filter_context* fc, bool use_flat_tod)
+			: u(u), loc(loc), u2(u2), fc(fc), use_flat_tod(use_flat_tod)
+		{}
+	};
+
+	struct unit_filter_base
+	{
+		virtual bool matches(const unit_filter_args&amp;) const = 0;
+		virtual ~unit_filter_base() {}
+	};
+
+	struct unit_filter_compound : public unit_filter_base
+	{
+		unit_filter_compound(vconfig cfg);
+
+		template&lt;typename C, typename F&gt;
+		void create_attribute(const config::attribute_value c, C conv, F func);
+		template&lt;typename F&gt;
+		void create_child(const vconfig&amp; c, F func);
+
+		void fill(vconfig cfg);
+
+		virtual bool matches(const unit_filter_args&amp; u) const override;
+		bool filter_impl(const unit_filter_args&amp; u) const;
+
+		std::vector&lt;std::shared_ptr&lt;unit_filter_base&gt;&gt; children_;
+		std::vector&lt;std::pair&lt;conditional_type::type, unit_filter_compound&gt;&gt; cond_children_;
+	};
+
+}
+
+class unit_filter
+{
+public:
+	explicit unit_filter(vconfig cfg);
+
+	unit_filter(const unit_filter&amp;) = default;
+	unit_filter&amp; operator=(const unit_filter&amp;) = default;
+
+	unit_filter(unit_filter&amp;&amp;) = default;
+	unit_filter&amp; operator=(unit_filter&amp;&amp;) = default;
+
+	unit_filter&amp; set_use_flat_tod(bool value) {
+		use_flat_tod_ = value;
+		return *this;
+	}
+
+	/**
+	 * Determine if *this matches @a filter at a specified location.
+	 * Use this for units on a recall list, or to test for a match if
+	 * a unit is hypothetically moved.
+	 */
+	bool matches(const unit &amp; u, const map_location &amp; loc) const {
+		return impl_.matches(unit_filter_impl::unit_filter_args{u, loc, nullptr, fc_, use_flat_tod_});
+	}
+
+	/**
+	 * Determine if *this matches @a filter at its current location.
+	 * (Only use for units currently on the map; otherwise use the overload
+	 * that takes a location, possibly with a null location.)
+	 */
+	bool matches(const unit &amp; u) const;
+
+	bool matches(const unit &amp; u, const map_location &amp; loc, const unit &amp; u2) const {
+		return impl_.matches(unit_filter_impl::unit_filter_args{u, loc, &amp;u2, fc_, use_flat_tod_});
+	}
+
+	bool matches(const unit &amp; u, const unit &amp; u2) const;
+
+	bool operator()(const unit &amp; u, const map_location &amp; loc) const {
+		return matches(u, loc);
+	}
+
+	bool operator()(const unit &amp; u) const {
+		return matches(u);
+	}
+
+	bool operator()(const unit &amp; u, const map_location &amp; loc, const unit &amp; u2) const {
+		return matches(u, loc, u2);
+	}
+
+	bool operator()(const unit &amp; u, const unit &amp; u2) const {
+		return matches(u, u2);
+	}
+
+	std::vector&lt;const unit *&gt; all_matches_on_map(const map_location* loc = nullptr, const unit* other_unit = nullptr) const;
+
+	std::vector&lt;const unit*&gt; all_matches_at(const map_location&amp; loc) const {
+		return all_matches_on_map(&amp;loc);
+	}
+
+	std::vector&lt;const unit*&gt; all_matches_with_unit(const unit&amp; u) const {
+		return all_matches_on_map(nullptr, &amp;u);
+	}
+
+	std::vector&lt;const unit*&gt; all_matches_with_unit_at(const unit&amp; u, const map_location&amp; loc) const {
+		return all_matches_on_map(&amp;loc, &amp;u);
+	}
+
+	unit_const_ptr first_match_on_map() const;
+
+	config to_config() const {
+		return cfg_.get_config();
+	}
+
+	bool empty() const {
+		return cfg_.get_config().empty();
+	}
+
+private:
+
+	vconfig cfg_;
+	const filter_context * fc_;
+	bool use_flat_tod_;
+	unit_filter_impl::unit_filter_compound impl_;
+	int max_matches_;
+};
+</pre></main></body></html>

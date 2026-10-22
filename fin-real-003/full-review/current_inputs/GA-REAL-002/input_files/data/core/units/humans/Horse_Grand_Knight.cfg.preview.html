@@ -1,0 +1,115 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Horse_Grand_Knight.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/humans/Horse_Grand_Knight.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Grand Knight
+    name= _ &quot;Grand Knight&quot;
+    race=human
+    image=&quot;units/human-loyalists/grand-knight/grand-knight.png&quot;
+    image_icon=&quot;units/human-loyalists/grand-knight/grand-knight.png~CROP(13,14,72,72)&quot;
+    profile=&quot;portraits/humans/grand-knight.webp&quot;
+    hitpoints=84
+    movement_type=mounted
+    movement=7
+    experience=150
+    level=3
+    alignment=lawful
+    advances_to=null
+    {AMLA_DEFAULT}
+    undead_variation=mounted
+    cost=86
+    usage=fighter
+    description= _ &quot;Grand Knights have reached the acme of skill with sword and lance. Wearing full plate, and riding steeds bred more for power than for speed, these warriors form the core of any serious cavalry force. A grand knight at the head of a charge is a terrifying sight for infantry, and is often enough to break right through a defensive line.&quot;
+    die_sound=horse-die.ogg
+    [attack]
+        name=sword
+        description=_&quot;longsword&quot;
+        icon=attacks/greatsword-human.png
+        type=blade
+        range=melee
+        damage=12
+        number=4
+    [/attack]
+    [attack]
+        name=lance
+        description=_&quot;lance&quot;
+        type=pierce
+        [specials]
+            {WEAPON_SPECIAL_CHARGE}
+        [/specials]
+        range=melee
+        damage=19
+        number=2
+    [/attack]
+    [standing_anim]
+        start_time=0
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight.png:250&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight-se-breeze[1~3,2,1].png:[400,600,900,300,250]&quot;
+        [/frame]
+    [/standing_anim]
+    [standing_anim]
+        start_time=0
+        {WOUNDED_UNIT ()}
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight.png:850&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight-se-bob[1~3,2,1].png:[450,300,200,550,650]&quot;
+        [/frame]
+    [/standing_anim]
+    [movement_anim]
+        start_time=0
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight.png:150&quot;
+        [/frame]
+    [/movement_anim]
+    {DEFENSE_ANIM &quot;units/human-loyalists/grand-knight/grand-knight-se-defend2.png&quot; &quot;units/human-loyalists/grand-knight/grand-knight-se-defend1.png&quot; {SOUND_LIST:HORSE_HIT} }
+    [attack_anim]
+        [filter_attack]
+            name=lance
+        [/filter_attack]
+        start_time=-480
+        offset=0.0~-0.1:240,-0.1~0.7:240,0.7~0.8:140,0.8~0.0:441
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight-se-attack[1~3].png:80&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight-se-attack[4~6].png:[90,110,140]&quot;
+            sound=horse-canter.wav
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg {SOUND_LIST:MISS} -200}
+        [if]
+            hits=yes
+            [frame]
+                image=&quot;units/human-loyalists/grand-knight/grand-knight-se-attack[7~11].png:[70,70,140,100,100]&quot;
+            [/frame]
+        [/if]
+        [else]
+            [frame]
+                image=&quot;units/human-loyalists/grand-knight/grand-knight-se-attack[6b,7b,9~11].png:[70,70,140,100,100]&quot;
+            [/frame]
+        [/else]
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight.png:1&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=sword
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight.png:50&quot;
+            sound=horse-canter.wav
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight.png:250&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/human-loyalists/grand-knight/grand-knight.png:100&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

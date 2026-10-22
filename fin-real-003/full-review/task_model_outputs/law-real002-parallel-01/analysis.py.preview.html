@@ -1,0 +1,909 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>analysis.py</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>analysis.py</h1><pre>#!/usr/bin/env python3
+import argparse
+import csv
+import json
+from collections import Counter, defaultdict
+from datetime import date, datetime, timedelta
+from decimal import Decimal, InvalidOperation
+from pathlib import Path
+
+from docx import Document
+from docx.enum.section import WD_SECTION
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+from docx.shared import Cm, Pt
+from openpyxl import Workbook, load_workbook
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.utils import get_column_letter
+
+AS_OF = date(2026, 10, 12)
+HORIZON = date(2026, 11, 11)
+DATE_FORMATS = (&quot;%Y-%m-%dT%H:%M:%S.%f&quot;, &quot;%m/%d/%Y&quot;, &quot;%Y-%m-%d&quot;)
+FILES = {
+    &quot;general&quot;: &quot;LNI_Contractor_License_General_BR.csv&quot;,
+    &quot;bond&quot;: &quot;LNI_Contractor_License_Bond_BR.csv&quot;,
+    &quot;insurance&quot;: &quot;LNI_Contractor_License_Insurance_BR.csv&quot;,
+    &quot;statute&quot;: &quot;RCW_18.27.pdf&quot;,
+}
+
+LEGAL_MATRIX = [
+    {
+        &quot;topic&quot;: &quot;适用对象与分类&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.010(1),(5),(12)&quot;,
+        &quot;pages&quot;: &quot;PDF第2–4页&quot;,
+        &quot;condition&quot;: &quot;从事定义内承包活动；一般承包商使用多于一个工种，专业承包商不属于一般承包商。&quot;,
+        &quot;rule&quot;: &quot;第18.27章要求先确认行为和一般/专业分类。&quot;,
+        &quot;package_can&quot;: &quot;CC记录可结合specialty字段作筛查分类。&quot;,
+        &quot;package_cannot&quot;: &quot;不能证明实际业务行为、项目事实或豁免；EC、PC、LC的专门许可要求不在本PDF内。&quot;,
+    },
+    {
+        &quot;topic&quot;: &quot;登记义务与禁止行为&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.020(1)–(3)&quot;,
+        &quot;pages&quot;: &quot;PDF第4–5页&quot;,
+        &quot;condition&quot;: &quot;属于本章承包商且无适用例外。&quot;,
+        &quot;rule&quot;: &quot;承包商应登记；未登记、暂停或撤销期间的特定行为受禁止；(3)另设书面通知相关限制。&quot;,
+        &quot;package_can&quot;: &quot;证明登记表快照状态。&quot;,
+        &quot;package_cannot&quot;: &quot;不能证明曾承揽、投标、广告、分包，或任何人收到书面通知。&quot;,
+    },
+    {
+        &quot;topic&quot;: &quot;申请资料与UBI&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.030(1)(b),(f), (3)&quot;,
+        &quot;pages&quot;: &quot;PDF第5–7页&quot;,
+        &quot;condition&quot;: &quot;申请或维持第18.27章登记。&quot;,
+        &quot;rule&quot;: &quot;申请含UBI与一般/专业类型；若干事项可导致拒绝或暂停。&quot;,
+        &quot;package_can&quot;: &quot;比较CSV中的执照号、UBI和类型字段。&quot;,
+        &quot;package_cannot&quot;: &quot;不能证明DOR状态、判决、申请真实性或机关实际决定。&quot;,
+    },
+    {
+        &quot;topic&quot;: &quot;保证金/替代担保与金额&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.040(1),(2),(4),(7),(8),(11)&quot;,
+        &quot;pages&quot;: &quot;PDF第7–10页&quot;,
+        &quot;condition&quot;: &quot;第18.27章申请人；一般承包商通常30,000美元，专业承包商通常15,000美元；可用指定储蓄账户替代；特定续期可提高。&quot;,
+        &quot;rule&quot;: &quot;取消、撤销、担保退出或减损可影响登记；续保不累加责任。&quot;,
+        &quot;package_can&quot;: &quot;逐行判断CSV保证金记录日期与单笔金额是否达到通常门槛。&quot;,
+        &quot;package_cannot&quot;: &quot;不能证明替代账户、机关批准、未决/已付索赔、法院判决、提高金额命令或完整历史；不得叠加历史金额。&quot;,
+    },
+    {
+        &quot;topic&quot;: &quot;保险/替代财务责任&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.050(1)–(3)&quot;,
+        &quot;pages&quot;: &quot;PDF第10–11页&quot;,
+        &quot;condition&quot;: &quot;第18.27章登记或再登记；财产损害50,000美元、单人伤亡100,000美元、多人伤亡200,000美元，或合格指定账户。&quot;,
+        &quot;rule&quot;: &quot;到期、取消、撤销或保险人退出可自动暂停，直至新保单/恢复通知提交并获批。&quot;,
+        &quot;package_can&quot;: &quot;判断保险来源行的日期支持和总额字段。&quot;,
+        &quot;package_cannot&quot;: &quot;单一insuranceamt不能证明法定分项、除外责任、保单类型、指定账户、提交或批准。&quot;,
+    },
+    {
+        &quot;topic&quot;: &quot;取消/减损与登记后果&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.040(1),(7); 18.27.050(2); 18.27.060(3)&quot;,
+        &quot;pages&quot;: &quot;PDF第7、9、10–11页&quot;,
+        &quot;condition&quot;: &quot;保证金取消、撤销、退出或被未清偿判决减损，或保险取消/到期等法定事件。&quot;,
+        &quot;rule&quot;: &quot;条文规定自动暂停及恢复所需的新保障或恢复通知；18.27.060(3)以减损/取消生效日为暂停日。&quot;,
+        &quot;package_can&quot;: &quot;标出CSV中的取消、到期、减损日期及登记状态不一致。&quot;,
+        &quot;package_cannot&quot;: &quot;本筛查日期边界不是小时级法定裁定；不能证明通知、提交、批准或机关系统的完整状态。&quot;,
+    },
+    {
+        &quot;topic&quot;: &quot;登记期限与续期&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.060(1),(4)&quot;,
+        &quot;pages&quot;: &quot;PDF第11页&quot;,
+        &quot;condition&quot;: &quot;第18.27章登记证及续期。&quot;,
+        &quot;rule&quot;: &quot;证书通常两年；按期续期；特定可追踪投递下，机关收到费用和保证金、责任保险证明之日生效。&quot;,
+        &quot;package_can&quot;: &quot;显示登记表到期日及快照状态。&quot;,
+        &quot;package_cannot&quot;: &quot;不能证明续期材料送达、费用、投递凭证或机关批准。&quot;,
+    },
+    {
+        &quot;topic&quot;: &quot;30天届满定义例外&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.010(15)&quot;,
+        &quot;pages&quot;: &quot;PDF第3–4页&quot;,
+        &quot;condition&quot;: &quot;登记届满不超过30日，且始终维持有效保证金以及18.27.050所需保险或指定账户。&quot;,
+        &quot;rule&quot;: &quot;满足全部条件者不纳入该款“未登记承包商”定义。&quot;,
+        &quot;package_can&quot;: &quot;筛出登记到期日在30日附近的记录，并检查包内是否有日期可支持的保障行。&quot;,
+        &quot;package_cannot&quot;: &quot;EXPIRED一列既不能单独排除也不能单独放行；CSV缺行不等于无保障，且不能证明“始终”、替代账户或实际活动。&quot;,
+    },
+    {
+        &quot;topic&quot;: &quot;登记核验&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.010(17); 18.27.110(1)&quot;,
+        &quot;pages&quot;: &quot;PDF第4、17页&quot;,
+        &quot;condition&quot;: &quot;地方机关对依法需登记承包商的建筑许可核验。&quot;,
+        &quot;rule&quot;: &quot;核验可查登记卡、部门数据库或联系部门；发证前应核验当前登记。&quot;,
+        &quot;package_can&quot;: &quot;作为下载快照触发进一步官方核验。&quot;,
+        &quot;package_cannot&quot;: &quot;离线快照不等于2026-10-12或之后的实时机关核验。&quot;,
+    },
+    {
+        &quot;topic&quot;: &quot;登记例外&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.065; 18.27.090(1)–(17)&quot;,
+        &quot;pages&quot;: &quot;PDF第12–14页&quot;,
+        &quot;condition&quot;: &quot;合伙/合资特定情形或列举豁免事实成立。&quot;,
+        &quot;rule&quot;: &quot;条文列出登记推定和多类豁免，部分附活动范围及反规避限制。&quot;,
+        &quot;package_can&quot;: &quot;显示登记表business type与专业字段，仅供提示。&quot;,
+        &quot;package_cannot&quot;: &quot;不能据字段推定合伙人名称条件、项目金额、产权、雇佣、广告或其他豁免事实。&quot;,
+    },
+    {
+        &quot;topic&quot;: &quot;诉讼中的持续保障&quot;,
+        &quot;citation&quot;: &quot;RCW 18.27.080&quot;,
+        &quot;pages&quot;: &quot;PDF第12–13页&quot;,
+        &quot;condition&quot;: &quot;承包商在州法院追索需登记工作的报酬/违约。&quot;,
+        &quot;rule&quot;: &quot;条文对诉权及实质合规设定持续资料、保证金和保险条件。&quot;,
+        &quot;package_can&quot;: &quot;提示历史保障连续性可能重要。&quot;,
+        &quot;package_cannot&quot;: &quot;不能证明合同、工程、诉讼、相关期间或法院结论。&quot;,
+    },
+]
+
+
+def read_csv(path):
+    with path.open(&quot;r&quot;, encoding=&quot;utf-8-sig&quot;, newline=&quot;&quot;) as handle:
+        return list(csv.DictReader(handle))
+
+
+def parse_date(value):
+    value = (value or &quot;&quot;).strip()
+    if not value or value == &quot;Until Canceled&quot;:
+        return None, &quot;blank_or_open&quot;
+    for fmt in DATE_FORMATS:
+        try:
+            return datetime.strptime(value, fmt).date(), &quot;parsed&quot;
+        except ValueError:
+            pass
+    return None, &quot;unparseable&quot;
+
+
+def money(value):
+    try:
+        return Decimal(value)
+    except (InvalidOperation, TypeError):
+        return None
+
+
+def iso(value):
+    return value.isoformat() if isinstance(value, date) else &quot;&quot;
+
+
+def protection_state(row, kind, on_date):
+    if kind == &quot;bond&quot;:
+        start_field = &quot;bondeffectivedate&quot;
+        end_fields = (&quot;bondexpirationdate&quot;, &quot;bondcanceldate&quot;, &quot;bondimpaireddate&quot;)
+        open_ended = row.get(&quot;bondexpirationdate&quot;) == &quot;Until Canceled&quot;
+    else:
+        start_field = &quot;effectivedate&quot;
+        end_fields = (&quot;expirationdate&quot;, &quot;canceldate&quot;)
+        open_ended = False
+
+    start, start_status = parse_date(row.get(start_field))
+    bad = [field for field in (start_field,) + end_fields if row.get(field) and row.get(field) != &quot;Until Canceled&quot; and parse_date(row.get(field))[1] == &quot;unparseable&quot;]
+    if bad:
+        return &quot;不确定：日期无法解析&quot;, &quot;、&quot;.join(bad)
+    if start_status != &quot;parsed&quot;:
+        return &quot;不确定：缺生效日&quot;, start_field
+    if on_date &lt; start:
+        return &quot;否：尚未生效&quot;, f&quot;生效日{start.isoformat()}&quot;
+
+    ends = []
+    for field in end_fields:
+        parsed, status = parse_date(row.get(field))
+        if status == &quot;parsed&quot;:
+            ends.append((parsed, field))
+    if ends:
+        end, field = min(ends)
+        if on_date &gt;= end:
+            return &quot;否：已终止&quot;, f&quot;{field}={end.isoformat()}（终止当日不计）&quot;
+        return &quot;是：日期支持&quot;, f&quot;截至{end.isoformat()}前；终止字段{field}&quot;
+    if open_ended:
+        return &quot;是：日期支持（Until Canceled）&quot;, &quot;未见取消/减损日；不代表永久或无条件有效&quot;
+    return &quot;不确定：缺终止依据&quot;, &quot;无到期/取消/减损日期，也非Until Canceled&quot;
+
+
+def is_supported(row, kind, on_date):
+    return protection_state(row, kind, on_date)[0].startswith(&quot;是：&quot;)
+
+
+def classify_scope(reg):
+    if reg[&quot;contractorlicensetypecode&quot;] == &quot;CC&quot;:
+        return &quot;RCW 18.27直接筛查（仍须核验活动与豁免）&quot;
+    return &quot;本包未确认适用；转相应专门许可制度核验&quot;
+
+
+def contractor_class(reg):
+    if reg[&quot;contractorlicensetypecode&quot;] != &quot;CC&quot;:
+        return &quot;未确认&quot;
+    return &quot;一般&quot; if reg.get(&quot;specialtycode1&quot;) == &quot;01&quot; or reg.get(&quot;specialtycode1desc&quot;, &quot;&quot;).upper() == &quot;GENERAL&quot; else &quot;专业&quot;
+
+
+def usual_bond_threshold(reg):
+    cls = contractor_class(reg)
+    if cls == &quot;一般&quot;:
+        return Decimal(&quot;30000&quot;)
+    if cls == &quot;专业&quot;:
+        return Decimal(&quot;15000&quot;)
+    return None
+
+
+def amount_support(reg, rows, on_date):
+    threshold = usual_bond_threshold(reg)
+    if threshold is None:
+        return &quot;适用范围未确认&quot;
+    supported = [(line, row) for line, row in rows if is_supported(row, &quot;bond&quot;, on_date)]
+    if not supported:
+        return &quot;否：无日期可支持记录&quot;
+    amounts = [money(row.get(&quot;bondamt&quot;)) for _, row in supported]
+    amounts = [amount for amount in amounts if amount is not None]
+    if not amounts:
+        return &quot;不确定：金额缺失/无法解析&quot;
+    if any(amount &gt;= threshold for amount in amounts):
+        return f&quot;是：至少一笔达到通常门槛${threshold:,.0f}&quot;
+    return f&quot;否：单笔均低于通常门槛${threshold:,.0f}（不叠加）&quot;
+
+
+def presence(rows, kind, on_date):
+    states = [protection_state(row, kind, on_date)[0] for _, row in rows]
+    if any(state.startswith(&quot;是：&quot;) for state in states):
+        return &quot;是&quot;
+    if any(state.startswith(&quot;不确定：&quot;) for state in states):
+        return &quot;不确定&quot;
+    return &quot;否&quot;
+
+
+def insurance_form(rows, on_date):
+    if presence(rows, &quot;insurance&quot;, on_date) == &quot;否&quot;:
+        return &quot;证据不足：无日期可支持保险行；不等于未投保&quot;
+    if presence(rows, &quot;insurance&quot;, on_date) == &quot;不确定&quot;:
+        return &quot;不确定：日期字段不足，且单一insuranceamt不能证明法定形式&quot;
+    return &quot;不足以证明：insuranceamt不含责任分项、除外责任、保单类型或替代账户信息&quot;
+
+
+def describe_rows(rows, kind):
+    if not rows:
+        return &quot;无来源行&quot;
+    parts = []
+    for line, row in rows:
+        if kind == &quot;bond&quot;:
+            parts.append(
+                f&quot;行{line}: 生效{row.get(&#x27;bondeffectivedate&#x27;) or &#x27;空&#x27;}; 到期{row.get(&#x27;bondexpirationdate&#x27;) or &#x27;空&#x27;}; &quot;
+                f&quot;取消{row.get(&#x27;bondcanceldate&#x27;) or &#x27;空&#x27;}; 减损{row.get(&#x27;bondimpaireddate&#x27;) or &#x27;空&#x27;}; 金额{row.get(&#x27;bondamt&#x27;) or &#x27;空&#x27;}&quot;
+            )
+        else:
+            parts.append(
+                f&quot;行{line}: 生效{row.get(&#x27;effectivedate&#x27;) or &#x27;空&#x27;}; 到期{row.get(&#x27;expirationdate&#x27;) or &#x27;空&#x27;}; &quot;
+                f&quot;取消{row.get(&#x27;canceldate&#x27;) or &#x27;空&#x27;}; 金额{row.get(&#x27;insuranceamt&#x27;) or &#x27;空&#x27;}&quot;
+            )
+    return &quot; | &quot;.join(parts)
+
+
+def window_gap(rows, kind):
+    if not any(is_supported(row, kind, AS_OF) for _, row in rows):
+        return None
+    day = AS_OF + timedelta(days=1)
+    gap_start = None
+    gap_end = None
+    while day &lt;= HORIZON:
+        if not any(is_supported(row, kind, day) for _, row in rows):
+            if gap_start is None:
+                gap_start = day
+            gap_end = day
+        elif gap_start is not None:
+            break
+        day += timedelta(days=1)
+    if gap_start is None:
+        return None
+    triggering = []
+    for line, row in rows:
+        if is_supported(row, kind, AS_OF) and not is_supported(row, kind, gap_start):
+            triggering.append(line)
+    return {&quot;start&quot;: gap_start, &quot;end&quot;: gap_end, &quot;trigger_lines&quot;: triggering}
+
+
+def duplicate_groups(rows, keys):
+    groups = defaultdict(list)
+    for line, row in rows:
+        groups[tuple(row.get(key, &quot;&quot;) for key in keys)].append((line, row))
+    return [(key, values) for key, values in groups.items() if len(values) &gt; 1]
+
+
+def set_cell_link(cell, target, text=None):
+    cell.value = text or target
+    cell.hyperlink = target
+    cell.style = &quot;Hyperlink&quot;
+
+
+def write_sheet(ws, headers, rows, widths=None, freeze=&quot;A2&quot;, autofilter=True):
+    ws.append(headers)
+    for row in rows:
+        ws.append(row)
+    fill = PatternFill(&quot;solid&quot;, fgColor=&quot;1F4E78&quot;)
+    for cell in ws[1]:
+        cell.font = Font(color=&quot;FFFFFF&quot;, bold=True)
+        cell.fill = fill
+        cell.alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;, wrap_text=True)
+    ws.freeze_panes = freeze
+    if autofilter and ws.max_row &gt;= 1:
+        ws.auto_filter.ref = ws.dimensions
+    ws.sheet_view.showGridLines = False
+    for row in ws.iter_rows(min_row=2):
+        for cell in row:
+            cell.alignment = Alignment(vertical=&quot;top&quot;, wrap_text=True)
+    if widths:
+        for index, width in enumerate(widths, 1):
+            ws.column_dimensions[get_column_letter(index)].width = width
+
+
+def add_doc_title(doc, text, level=1):
+    paragraph = doc.add_heading(text, level=level)
+    paragraph.paragraph_format.space_before = Pt(8)
+    paragraph.paragraph_format.space_after = Pt(4)
+    return paragraph
+
+
+def add_bullets(doc, items):
+    for item in items:
+        p = doc.add_paragraph(style=&quot;List Bullet&quot;)
+        p.add_run(item)
+
+
+def add_page_number(paragraph):
+    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = paragraph.add_run()
+    fld_char1 = OxmlElement(&quot;w:fldChar&quot;)
+    fld_char1.set(qn(&quot;w:fldCharType&quot;), &quot;begin&quot;)
+    instr_text = OxmlElement(&quot;w:instrText&quot;)
+    instr_text.set(qn(&quot;xml:space&quot;), &quot;preserve&quot;)
+    instr_text.text = &quot;PAGE&quot;
+    fld_char2 = OxmlElement(&quot;w:fldChar&quot;)
+    fld_char2.set(qn(&quot;w:fldCharType&quot;), &quot;end&quot;)
+    run._r.extend([fld_char1, instr_text, fld_char2])
+
+
+def make_docx(path, data):
+    doc = Document()
+    sec = doc.sections[0]
+    sec.top_margin = Cm(2)
+    sec.bottom_margin = Cm(2)
+    sec.left_margin = Cm(2.2)
+    sec.right_margin = Cm(2.2)
+    styles = doc.styles
+    styles[&quot;Normal&quot;].font.name = &quot;Noto Sans CJK SC&quot;
+    styles[&quot;Normal&quot;]._element.rPr.rFonts.set(qn(&quot;w:eastAsia&quot;), &quot;Noto Sans CJK SC&quot;)
+    styles[&quot;Normal&quot;].font.size = Pt(10.5)
+    for section in doc.sections:
+        add_page_number(section.footer.paragraphs[0])
+
+    title = doc.add_heading(&quot;华盛顿州承包商登记公开资料证据审查备忘录&quot;, 0)
+    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    subtitle = doc.add_paragraph(&quot;证据基准日：2026-10-12｜30日观察终点：2026-11-11&quot;)
+    subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p = doc.add_paragraph()
+    p.add_run(&quot;性质：&quot;).bold = True
+    p.add_run(&quot;基于下载快照的准入筛查与补证建议；不是终局法律意见，不认定违法，不替代L&amp;I或法院决定。&quot;)
+
+    add_doc_title(doc, &quot;一、问题与结论摘要&quot;, 1)
+    add_bullets(doc, [
+        f&quot;登记表共{data[&#x27;counts&#x27;][&#x27;general_rows&#x27;]:,}行、{data[&#x27;counts&#x27;][&#x27;general_licenses&#x27;]:,}个唯一执照；保证金表{data[&#x27;counts&#x27;][&#x27;bond_rows&#x27;]:,}行，保险表{data[&#x27;counts&#x27;][&#x27;insurance_rows&#x27;]:,}行。登记表未见重复执照号。&quot;,
+        f&quot;三表均以执照号精确连接；发现{data[&#x27;counts&#x27;][&#x27;shared_ubi_groups&#x27;]}个UBI对应多个登记执照。UBI不是保障记录主键，未据UBI或近似名称挪用任何保证金或保险。&quot;,
+        f&quot;保证金和保险表未发现登记表外的孤立执照；ACTIVE执照中，有{len(data[&#x27;active_both_missing&#x27;])}项在两类保障表均无可确认有效记录，全部为EC或LC，RCW 18.27适用未确认，仅作资料核验。&quot;,
+        f&quot;ACTIVE的CC记录中，有{len(data[&#x27;active_cc_one_side_gap&#x27;])}项在2026-10-12仅一类保障无可确认有效记录；缺行或日期不足只表示证据不足。&quot;,
+        f&quot;未来30日有{len(data[&#x27;renewal_risk&#x27;])}项ACTIVE执照出现至少一类日期支持记录终止且包内无无缝后继覆盖；名单包括1项PC，其余为CC。对PC不套用18.27门槛。&quot;,
+        &quot;任何日期可支持的保险行仍不足以单独证明RCW 18.27.050要求：insuranceamt不显示财产损害、单人伤亡、多人伤亡分项，也不证明除外责任、保单类型或替代指定账户。&quot;,
+    ])
+
+    add_doc_title(doc, &quot;二、资料、口径与限制&quot;, 1)
+    doc.add_paragraph(
+        &quot;资料为三个Washington L&amp;I接口CSV快照及RCW_18.27.pdf。法典PDF页脚标示“Certified on 7/15/2026”；本备忘录仅据该原件分析2026-10-12筛查，不能据此证明所有更早日期的法律版本。&quot;
+    )
+    add_bullets(doc, [
+        &quot;记录粒度：General每执照一行；Bond与Insurance为同一执照的历史/替换保障多行。候选键分别为General的执照号、Bond的“执照号+保证金账户+生效日+金额”、Insurance的“执照号+保单号+生效日+金额”；后两者仍存在冲突/重复，必须保留源行号。&quot;,
+        &quot;日期边界：生效当日计入；到期、取消或减损日期当日起不计。该规则是本次日级筛查口径，不主张小时级法定终止结论。Until Canceled仅表示包内未给固定到期日；若未见取消/减损日，本次可作日期支持，但绝不表示永久或无条件有效。缺失或不可解析日期单列不确定。&quot;,
+        &quot;金额口径：同一日期仅判断单笔日期可支持记录是否达到通常门槛，不将历史、重叠、续保或替换记录金额相加。RCW 18.27.040(4)亦说明续期等不累加担保责任。&quot;,
+        &quot;身份口径：只按完整执照号连接。UBI与企业名称用于核对，不用于跨执照归属保障。主备忘录不复制个人姓名、电话或地址。&quot;,
+    ])
+
+    add_doc_title(doc, &quot;三、法律适用矩阵&quot;, 1)
+    table = doc.add_table(rows=1, cols=4)
+    table.style = &quot;Table Grid&quot;
+    for cell, text in zip(table.rows[0].cells, [&quot;主题&quot;, &quot;条文/页码&quot;, &quot;规则与条件&quot;, &quot;本包证明边界&quot;]):
+        cell.text = text
+    for item in LEGAL_MATRIX:
+        cells = table.add_row().cells
+        cells[0].text = item[&quot;topic&quot;]
+        cells[1].text = f&quot;{item[&#x27;citation&#x27;]}；{item[&#x27;pages&#x27;]}&quot;
+        cells[2].text = f&quot;条件：{item[&#x27;condition&#x27;]}\n规则：{item[&#x27;rule&#x27;]}&quot;
+        cells[3].text = f&quot;可证明：{item[&#x27;package_can&#x27;]}\n不能证明：{item[&#x27;package_cannot&#x27;]}&quot;
+
+    add_doc_title(doc, &quot;四、范围判断与30天届满例外&quot;, 1)
+    doc.add_paragraph(
+        &quot;登记类型包括CC、EC、PC、LC。第18.27章原件定义承包商并区分一般与专业承包商，但本包不含电气、管道、电梯专门许可章节。因此仅对CC作18.27直接筛查；EC、PC、LC保留记录层日期结果，却不机械套用30,000/15,000美元或保险分项门槛。&quot;
+    )
+    doc.add_paragraph(
+        &quot;RCW 18.27.010(15)（PDF第3–4页）把通常属于“未登记承包商”的届满记录排除在定义之外，须同时满足：届满不超过30日、一直维持有效保证金、并一直维持18.27.050要求的保险或指定账户。故“EXPIRED”状态不能机械排除，也不能机械放行。包内共有&quot;
+        f&quot;{len(data[&#x27;lapse_review&#x27;])}项CC记录按登记到期日推算在基准日前0至30日内；CSV缺少保障行只能说本包不能证明条件，不能证明实际无保障，更不能证明曾承揽工程或适用豁免。应向L&amp;I实时核验到期起至核验日的连续保障、替代账户及续期收件/批准。&quot;
+    )
+
+    add_doc_title(doc, &quot;五、优先核验名单&quot;, 1)
+    add_doc_title(doc, &quot;（一）ACTIVE且保证金、保险均无可确认有效记录&quot;, 2)
+    if not data[&quot;active_both_missing&quot;]:
+        doc.add_paragraph(&quot;未发现。&quot;)
+    else:
+        doc.add_paragraph(&quot;以下均属RCW 18.27适用未确认的EC/LC，仅作资料核验，不作不合规判断：&quot;)
+        for item in data[&quot;active_both_missing&quot;][:5]:
+            doc.add_paragraph(
+                f&quot;{item[&#x27;license&#x27;]}｜{item[&#x27;business_name&#x27;]}｜UBI {item[&#x27;ubi&#x27;]}｜{item[&#x27;type_code&#x27;]}。登记来源行{item[&#x27;general_line&#x27;]}为ACTIVE；保证金、保险表均无该执照来源行。待补：相应专门许可制度、实时状态、所需保障及接口覆盖范围。下一步：按完整执照号向L&amp;I核验，不借用同UBI其他执照记录。&quot;,
+                style=&quot;List Bullet&quot;,
+            )
+        if len(data[&quot;active_both_missing&quot;]) &gt; 5:
+            doc.add_paragraph(f&quot;完整{len(data[&#x27;active_both_missing&#x27;])}项见audit.xlsx“待核验与续期”。&quot;)
+
+    add_doc_title(doc, &quot;（二）未来30日保障记录失效且无包内无缝后继&quot;, 2)
+    for item in data[&quot;renewal_risk&quot;][:5]:
+        gaps = &quot;；&quot;.join(f&quot;{x[&#x27;kind_cn&#x27;]}缺口{x[&#x27;gap_start&#x27;]}至{x[&#x27;gap_end&#x27;]}，触发行{x[&#x27;trigger_lines&#x27;]}&quot; for x in item[&quot;gaps&quot;])
+        doc.add_paragraph(
+            f&quot;{item[&#x27;license&#x27;]}｜{item[&#x27;business_name&#x27;]}｜UBI {item[&#x27;ubi&#x27;]}｜{gaps}。条文范围：{item[&#x27;scope&#x27;]}；关联RCW 18.27.050(2)、18.27.060(3)仅在18.27适用且法定事实成立时适用。待补：续保/替换记录、提交与批准凭证、实时登记状态。&quot;,
+            style=&quot;List Bullet&quot;,
+        )
+    doc.add_paragraph(f&quot;完整{len(data[&#x27;renewal_risk&#x27;])}项及全部来源行、日期、金额见audit.xlsx“待核验与续期”。&quot;)
+
+    add_doc_title(doc, &quot;六、完整案例（每类最多5项）&quot;, 1)
+    add_doc_title(doc, &quot;（一）历史记录不能当作当前保障&quot;, 2)
+    for item in data[&quot;examples&quot;][&quot;historical&quot;]:
+        doc.add_paragraph(item, style=&quot;List Bullet&quot;)
+    add_doc_title(doc, &quot;（二）未来记录不能提前生效&quot;, 2)
+    if data[&quot;examples&quot;][&quot;future&quot;]:
+        for item in data[&quot;examples&quot;][&quot;future&quot;]:
+            doc.add_paragraph(item, style=&quot;List Bullet&quot;)
+    else:
+        doc.add_paragraph(&quot;未发现可作为该类案例的未来生效来源行。&quot;)
+    add_doc_title(doc, &quot;（三）登记状态与保障证据不一致&quot;, 2)
+    for item in data[&quot;examples&quot;][&quot;status_mismatch&quot;]:
+        doc.add_paragraph(item, style=&quot;List Bullet&quot;)
+
+    add_doc_title(doc, &quot;七、建议的核验顺序&quot;, 1)
+    add_bullets(doc, [
+        &quot;第一优先：ACTIVE的CC单边缺口和30日内将出现缺口的CC；向L&amp;I按完整执照号核实实时登记、保障连续性、替代指定账户、恢复/后继文件的提交与批准。&quot;,
+        &quot;第二优先：ACTIVE且双缺的EC/LC，以及PC记录；先确定适用专门章节、接口是否应返回保障，再核验，不套用第18.27章门槛。&quot;,
+        &quot;第三优先：状态为EXPIRED且可能落入30日定义例外的CC；核验整个届满期间的连续保障，而非只看两个端点。&quot;,
+        &quot;数据治理：对重复/冲突保障行要求L&amp;I确认权威记录；保持源行，不静默合并。任何缺记录均记录为“证据不足”，不得改写成“没有投保/没有保证金”。&quot;,
+    ])
+
+    doc.add_page_break()
+    add_doc_title(doc, &quot;附件A：不发送的核验函草稿一（保证金记录缺口）&quot;, 1)
+    doc.add_paragraph(&quot;状态：草稿—不发送&quot;)
+    doc.add_paragraph(&quot;收件人：Washington State Department of Labor &amp; Industries 承包商登记资料核验窗口&quot;)
+    doc.add_paragraph(&quot;主题：请求核验 BRAVOEN911P9 的保证金/替代担保与登记资料&quot;)
+    doc.add_paragraph(&quot;敬启者：&quot;)
+    doc.add_paragraph(
+        &quot;本团队在承包商准入资料审查中，查阅了下载的公开接口快照。登记表来源行312显示BRAVO ENVIRONMENTAL NW INC，执照号BRAVOEN911P9，UBI 602946216，状态为ACTIVE；保险表来源行140存在日期可支持记录，但保证金表未检出该完整执照号记录。&quot;
+    )
+    doc.add_paragraph(
+        &quot;烦请按完整执照号核验截至2026-10-12的：(1) 实时登记状态；(2) 是否存在有效保证金或RCW 18.27.040(8)所述替代指定储蓄账户；(3) 如有，生效、终止、减损、提交和批准日期及金额；(4) 公开接口是否省略某类替代担保。我们不请求对企业作违法认定，仅为纠正证据缺口。&quot;
+    )
+    doc.add_paragraph(&quot;谨致&quot;)
+    doc.add_paragraph(&quot;承包商准入审查团队&quot;)
+
+    doc.add_page_break()
+    add_doc_title(doc, &quot;附件B：不发送的核验函草稿二（保险到期边界）&quot;, 1)
+    doc.add_paragraph(&quot;状态：草稿—不发送&quot;)
+    doc.add_paragraph(&quot;收件人：Washington State Department of Labor &amp; Industries 承包商登记资料核验窗口&quot;)
+    doc.add_paragraph(&quot;主题：请求核验 BRIGHHI063D3 的保险连续性与登记状态&quot;)
+    doc.add_paragraph(&quot;敬启者：&quot;)
+    doc.add_paragraph(
+        &quot;本团队在公开接口快照中看到：登记表来源行767显示BRIGHTEN HOMES INC，执照号BRIGHHI063D3，UBI 601529129，状态为ACTIVE；保险表来源行358的记录生效日为2025-10-12、到期日为2026-10-12、金额字段为1,000,000。按本次筛查口径，到期日当日起不再作为日期可支持记录；这不是对法定小时级终止时间或实际保险状态的裁定。&quot;
+    )
+    doc.add_paragraph(
+        &quot;烦请核验：(1) 2026-10-12当日及其后的实际保险连续性；(2) 是否有续保、替换保单或RCW 18.27.050(3)指定账户；(3) 相关证明提交及批准日期；(4) 截至核验日的登记状态。单一insuranceamt不能证明法定责任分项，因此如可公开，也请确认保障形式和法定分项是否已由机关审核。我们不请求认定任何违法或争议事实。&quot;
+    )
+    doc.add_paragraph(&quot;谨致&quot;)
+    doc.add_paragraph(&quot;承包商准入审查团队&quot;)
+
+    doc.save(path)
+
+
+def make_xlsx(path, data, general_rows, bond_rows, insurance_rows, by_bond, by_insurance):
+    wb = Workbook()
+    wb.remove(wb.active)
+
+    ws = wb.create_sheet(&quot;说明&quot;)
+    notes = [
+        [&quot;项目&quot;, &quot;内容&quot;],
+        [&quot;证据基准日&quot;, AS_OF.isoformat()],
+        [&quot;30日观察终点&quot;, HORIZON.isoformat()],
+        [&quot;用途&quot;, &quot;公开资料准入筛查与补证；不是终局法律意见，不认定违法。&quot;],
+        [&quot;连接规则&quot;, &quot;仅按完整contractorlicensenumber连接；绝不按UBI或近似名称跨执照挪用保障。&quot;],
+        [&quot;日期规则&quot;, &quot;生效当日计入；到期、取消、减损当日起不计。日级筛查口径，不主张小时级终止结论。&quot;],
+        [&quot;Until Canceled&quot;, &quot;仅表示该行无固定到期日；未见取消/减损时作日期支持，但不表示永久或无条件有效。&quot;],
+        [&quot;缺失日期&quot;, &quot;缺生效日、无法解析日期，或既无终止依据也非Until Canceled，标为不确定。&quot;],
+        [&quot;金额规则&quot;, &quot;不相加历史、重叠、续保或替换金额；仅判断单笔日期可支持保证金是否达到通常门槛。&quot;],
+        [&quot;保险限制&quot;, &quot;insuranceamt不能证明责任分项、除外责任、保单类型或替代财务责任；高金额不等于全部法定要件满足。&quot;],
+        [&quot;缺记录含义&quot;, &quot;仅为本包证据不足，不等于没有保证金或没有投保。&quot;],
+        [&quot;法典版本&quot;, &quot;RCW PDF页脚Certified on 7/15/2026；不能当作所有历史日期的法律版本。&quot;],
+        [&quot;重建命令&quot;, &quot;python analysis.py --input /app/input_files --output /app/output&quot;],
+    ]
+    for row in notes:
+        ws.append(row)
+    for cell in ws[1]:
+        cell.font = Font(bold=True, color=&quot;FFFFFF&quot;)
+        cell.fill = PatternFill(&quot;solid&quot;, fgColor=&quot;1F4E78&quot;)
+    ws.column_dimensions[&quot;A&quot;].width = 22
+    ws.column_dimensions[&quot;B&quot;].width = 110
+    for row in ws.iter_rows():
+        for cell in row:
+            cell.alignment = Alignment(vertical=&quot;top&quot;, wrap_text=True)
+    ws.sheet_view.showGridLines = False
+
+    ws = wb.create_sheet(&quot;法律矩阵&quot;)
+    headers = [&quot;主题&quot;, &quot;条文&quot;, &quot;PDF页码&quot;, &quot;适用条件&quot;, &quot;规则&quot;, &quot;本包可证明&quot;, &quot;本包不能证明&quot;]
+    rows = [[x[&quot;topic&quot;], x[&quot;citation&quot;], x[&quot;pages&quot;], x[&quot;condition&quot;], x[&quot;rule&quot;], x[&quot;package_can&quot;], x[&quot;package_cannot&quot;]] for x in LEGAL_MATRIX]
+    write_sheet(ws, headers, rows, [20, 28, 15, 45, 48, 44, 56])
+
+    ws = wb.create_sheet(&quot;逐执照&quot;)
+    headers = [
+        &quot;登记源行&quot;, &quot;企业名称&quot;, &quot;执照号&quot;, &quot;UBI&quot;, &quot;类型代码&quot;, &quot;类型说明&quot;, &quot;一般/专业筛查&quot;, &quot;适用范围&quot;,
+        &quot;登记状态&quot;, &quot;登记生效日&quot;, &quot;登记到期日&quot;, &quot;暂停日&quot;, &quot;保证金源行数&quot;, &quot;保险源行数&quot;,
+        &quot;2026-10-12保证金记录&quot;, &quot;2026-10-12保证金金额门槛&quot;, &quot;2026-10-12保险记录&quot;, &quot;2026-10-12保险形式证明&quot;,
+        &quot;2026-11-11保证金记录&quot;, &quot;2026-11-11保证金金额门槛&quot;, &quot;2026-11-11保险记录&quot;, &quot;2026-11-11保险形式证明&quot;,
+        &quot;当前保证金来源行&quot;, &quot;当前保险来源行&quot;, &quot;备注&quot;,
+    ]
+    rows = []
+    for line, reg in general_rows:
+        lic = reg[&quot;contractorlicensenumber&quot;]
+        bonds = by_bond[lic]
+        policies = by_insurance[lic]
+        cur_b = [str(n) for n, row in bonds if is_supported(row, &quot;bond&quot;, AS_OF)]
+        cur_i = [str(n) for n, row in policies if is_supported(row, &quot;insurance&quot;, AS_OF)]
+        note = &quot;缺记录仅表示本包证据不足。&quot;
+        if reg[&quot;contractorlicensetypecode&quot;] != &quot;CC&quot;:
+            note += &quot; RCW 18.27门槛未确认。&quot;
+        rows.append([
+            line, reg[&quot;businessname&quot;], lic, reg[&quot;ubi&quot;], reg[&quot;contractorlicensetypecode&quot;], reg[&quot;contractorlicensetypecodedesc&quot;],
+            contractor_class(reg), classify_scope(reg), reg[&quot;contractorlicensestatus&quot;], reg[&quot;licenseeffectivedate&quot;],
+            reg[&quot;licenseexpirationdate&quot;], reg[&quot;contractorlicensesuspenddate&quot;], len(bonds), len(policies),
+            presence(bonds, &quot;bond&quot;, AS_OF), amount_support(reg, bonds, AS_OF), presence(policies, &quot;insurance&quot;, AS_OF), insurance_form(policies, AS_OF),
+            presence(bonds, &quot;bond&quot;, HORIZON), amount_support(reg, bonds, HORIZON), presence(policies, &quot;insurance&quot;, HORIZON), insurance_form(policies, HORIZON),
+            &quot;,&quot;.join(cur_b) or &quot;无&quot;, &quot;,&quot;.join(cur_i) or &quot;无&quot;, note,
+        ])
+    write_sheet(ws, headers, rows, [10, 32, 17, 13, 10, 22, 15, 38, 13, 20, 20, 20, 12, 12, 19, 34, 19, 55, 19, 34, 19, 55, 18, 18, 36])
+
+    ws = wb.create_sheet(&quot;保证金记录&quot;)
+    headers = [
+        &quot;源行&quot;, &quot;企业名称&quot;, &quot;执照号&quot;, &quot;UBI&quot;, &quot;类型&quot;, &quot;登记状态(保障表)&quot;, &quot;保证金公司&quot;, &quot;账户号&quot;, &quot;金额&quot;, &quot;收到日&quot;, &quot;生效日&quot;, &quot;到期日&quot;,
+        &quot;取消日&quot;, &quot;减损标记&quot;, &quot;减损日&quot;, &quot;2026-10-12记录有效性&quot;, &quot;2026-10-12理由&quot;, &quot;2026-11-11记录有效性&quot;, &quot;2026-11-11理由&quot;, &quot;身份核对&quot;,
+    ]
+    rows = []
+    for line, row in bond_rows:
+        s1, r1 = protection_state(row, &quot;bond&quot;, AS_OF)
+        s2, r2 = protection_state(row, &quot;bond&quot;, HORIZON)
+        rows.append([
+            line, row[&quot;businessname&quot;], row[&quot;contractorlicensenumber&quot;], row[&quot;ubi&quot;], row[&quot;contractorlicensetypecode&quot;], row[&quot;licensestatusdesc&quot;],
+            row[&quot;bondfirmname&quot;], row[&quot;bondaccountid&quot;], row[&quot;bondamt&quot;], row[&quot;receivedbyl_i&quot;], row[&quot;bondeffectivedate&quot;], row[&quot;bondexpirationdate&quot;],
+            row[&quot;bondcanceldate&quot;], row[&quot;bondimpaired&quot;], row[&quot;bondimpaireddate&quot;], s1, r1, s2, r2, &quot;按完整执照号；未跨执照归属&quot;,
+        ])
+    write_sheet(ws, headers, rows, [9, 31, 17, 13, 8, 15, 30, 19, 14, 20, 20, 18, 20, 11, 20, 25, 42, 25, 42, 28])
+
+    ws = wb.create_sheet(&quot;保险记录&quot;)
+    headers = [
+        &quot;源行&quot;, &quot;企业名称&quot;, &quot;执照号&quot;, &quot;UBI&quot;, &quot;类型&quot;, &quot;登记状态(保障表)&quot;, &quot;保险公司&quot;, &quot;保单号&quot;, &quot;insuranceamt&quot;, &quot;生效日&quot;, &quot;到期日&quot;, &quot;取消日&quot;,
+        &quot;创建日&quot;, &quot;更新日&quot;, &quot;保险代理机构&quot;, &quot;2026-10-12记录有效性&quot;, &quot;2026-10-12理由&quot;, &quot;2026-11-11记录有效性&quot;, &quot;2026-11-11理由&quot;, &quot;法定形式结论&quot;,
+    ]
+    rows = []
+    for line, row in insurance_rows:
+        s1, r1 = protection_state(row, &quot;insurance&quot;, AS_OF)
+        s2, r2 = protection_state(row, &quot;insurance&quot;, HORIZON)
+        rows.append([
+            line, row[&quot;businessname&quot;], row[&quot;contractorlicensenumber&quot;], row[&quot;ubi&quot;], row[&quot;contractorlicensetypecode&quot;], row[&quot;licensestatusdesc&quot;],
+            row[&quot;insurancecompany&quot;], row[&quot;insurancepolicyno&quot;], row[&quot;insuranceamt&quot;], row[&quot;effectivedate&quot;], row[&quot;expirationdate&quot;], row[&quot;canceldate&quot;],
+            row[&quot;createdate&quot;], row[&quot;lastupdatedate&quot;], row[&quot;insuranceagencyname&quot;], s1, r1, s2, r2,
+            &quot;单一insuranceamt不足以证明RCW 18.27.050责任分项、除外责任、保单类型或替代账户&quot;,
+        ])
+    write_sheet(ws, headers, rows, [9, 31, 17, 13, 8, 15, 31, 22, 16, 20, 20, 20, 20, 20, 29, 25, 42, 25, 42, 58])
+
+    ws = wb.create_sheet(&quot;待核验与续期&quot;)
+    headers = [&quot;类别&quot;, &quot;企业名称&quot;, &quot;执照号&quot;, &quot;UBI&quot;, &quot;类型&quot;, &quot;登记源行&quot;, &quot;登记状态&quot;, &quot;适用范围&quot;, &quot;结论&quot;, &quot;保证金来源&quot;, &quot;保险来源&quot;, &quot;法条&quot;, &quot;待补证据&quot;, &quot;下一步&quot;]
+    rows = []
+    for item in data[&quot;active_both_missing&quot;]:
+        rows.append([
+            &quot;ACTIVE双缺&quot;, item[&quot;business_name&quot;], item[&quot;license&quot;], item[&quot;ubi&quot;], item[&quot;type_code&quot;], item[&quot;general_line&quot;], &quot;ACTIVE&quot;, item[&quot;scope&quot;],
+            &quot;两保障表均无可确认有效记录；缺记录不等于无保障&quot;, item[&quot;bond_sources&quot;], item[&quot;insurance_sources&quot;], &quot;RCW 18.27适用未确认&quot;,
+            &quot;实时登记、适用专门章节、保证金/保险或替代形式、接口覆盖&quot;, &quot;按完整执照号向L&amp;I及相应许可项目核验；不得借用同UBI其他执照保障&quot;,
+        ])
+    for item in data[&quot;active_cc_one_side_gap&quot;]:
+        rows.append([
+            &quot;ACTIVE CC单边缺口&quot;, item[&quot;business_name&quot;], item[&quot;license&quot;], item[&quot;ubi&quot;], &quot;CC&quot;, item[&quot;general_line&quot;], &quot;ACTIVE&quot;, item[&quot;scope&quot;], item[&quot;conclusion&quot;],
+            item[&quot;bond_sources&quot;], item[&quot;insurance_sources&quot;], item[&quot;statute&quot;], item[&quot;needed_evidence&quot;], item[&quot;next_step&quot;],
+        ])
+    for item in data[&quot;renewal_risk&quot;]:
+        conclusion = &quot;；&quot;.join(f&quot;{gap[&#x27;kind_cn&#x27;]}记录在窗口内出现缺口{gap[&#x27;gap_start&#x27;]}至{gap[&#x27;gap_end&#x27;]}；触发行{gap[&#x27;trigger_lines&#x27;]}&quot; for gap in item[&quot;gaps&quot;])
+        rows.append([
+            &quot;30日续期风险&quot;, item[&quot;business_name&quot;], item[&quot;license&quot;], item[&quot;ubi&quot;], item[&quot;type_code&quot;], item[&quot;general_line&quot;], &quot;ACTIVE&quot;, item[&quot;scope&quot;], conclusion,
+            item[&quot;bond_sources&quot;], item[&quot;insurance_sources&quot;], item[&quot;statute&quot;], item[&quot;needed_evidence&quot;], item[&quot;next_step&quot;],
+        ])
+    rows.sort(key=lambda row: (row[2], row[0]))
+    write_sheet(ws, headers, rows, [19, 31, 17, 13, 8, 11, 12, 38, 58, 65, 65, 39, 53, 58])
+
+    ws = wb.create_sheet(&quot;30日届满例外&quot;)
+    headers = [&quot;登记源行&quot;, &quot;企业名称&quot;, &quot;执照号&quot;, &quot;UBI&quot;, &quot;状态&quot;, &quot;登记到期日&quot;, &quot;截至基准日天数&quot;, &quot;保证金来源&quot;, &quot;保险来源&quot;, &quot;筛查结论&quot;, &quot;法条与下一步&quot;]
+    rows = [[
+        x[&quot;general_line&quot;], x[&quot;business_name&quot;], x[&quot;license&quot;], x[&quot;ubi&quot;], x[&quot;status&quot;], x[&quot;expiration&quot;], x[&quot;days_since_expiration&quot;],
+        x[&quot;bond_sources&quot;], x[&quot;insurance_sources&quot;], x[&quot;conclusion&quot;], x[&quot;next_step&quot;],
+    ] for x in data[&quot;lapse_review&quot;]]
+    write_sheet(ws, headers, rows, [10, 31, 17, 13, 12, 20, 16, 57, 57, 60, 65])
+
+    ws = wb.create_sheet(&quot;数据例外&quot;)
+    headers = [&quot;例外类别&quot;, &quot;主值&quot;, &quot;关联值/来源行&quot;, &quot;数量&quot;, &quot;处理与结论&quot;]
+    rows = []
+    for item in data[&quot;exceptions&quot;]:
+        rows.append([item[&quot;category&quot;], item[&quot;key&quot;], item[&quot;details&quot;], item[&quot;count&quot;], item[&quot;treatment&quot;]])
+    write_sheet(ws, headers, rows, [28, 24, 95, 10, 70])
+
+    wb.save(path)
+
+
+def build(input_dir, output_dir):
+    for filename in FILES.values():
+        path = input_dir / filename
+        if not path.is_file():
+            raise FileNotFoundError(f&quot;Missing input: {path}&quot;)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    general = read_csv(input_dir / FILES[&quot;general&quot;])
+    bonds = read_csv(input_dir / FILES[&quot;bond&quot;])
+    insurance = read_csv(input_dir / FILES[&quot;insurance&quot;])
+    general_rows = list(enumerate(general, 2))
+    bond_rows = list(enumerate(bonds, 2))
+    insurance_rows = list(enumerate(insurance, 2))
+
+    by_general = {row[&quot;contractorlicensenumber&quot;]: (line, row) for line, row in general_rows}
+    actual_bond_licenses = {row[&quot;contractorlicensenumber&quot;] for row in bonds}
+    actual_insurance_licenses = {row[&quot;contractorlicensenumber&quot;] for row in insurance}
+    by_bond = defaultdict(list)
+    by_insurance = defaultdict(list)
+    for line, row in bond_rows:
+        by_bond[row[&quot;contractorlicensenumber&quot;]].append((line, row))
+    for line, row in insurance_rows:
+        by_insurance[row[&quot;contractorlicensenumber&quot;]].append((line, row))
+
+    shared_ubi = defaultdict(list)
+    for line, row in general_rows:
+        shared_ubi[row[&quot;ubi&quot;]].append((line, row[&quot;contractorlicensenumber&quot;], row[&quot;businessname&quot;]))
+    shared_ubi = {key: values for key, values in shared_ubi.items() if len(values) &gt; 1}
+
+    active_both_missing = []
+    active_cc_one_side_gap = []
+    renewal_risk = []
+    for line, reg in general_rows:
+        if reg[&quot;contractorlicensestatus&quot;] != &quot;ACTIVE&quot;:
+            continue
+        lic = reg[&quot;contractorlicensenumber&quot;]
+        b_rows = by_bond[lic]
+        i_rows = by_insurance[lic]
+        b_present = presence(b_rows, &quot;bond&quot;, AS_OF)
+        i_present = presence(i_rows, &quot;insurance&quot;, AS_OF)
+        common = {
+            &quot;general_line&quot;: line,
+            &quot;business_name&quot;: reg[&quot;businessname&quot;],
+            &quot;license&quot;: lic,
+            &quot;ubi&quot;: reg[&quot;ubi&quot;],
+            &quot;type_code&quot;: reg[&quot;contractorlicensetypecode&quot;],
+            &quot;scope&quot;: classify_scope(reg),
+            &quot;bond_sources&quot;: describe_rows(b_rows, &quot;bond&quot;),
+            &quot;insurance_sources&quot;: describe_rows(i_rows, &quot;insurance&quot;),
+        }
+        if b_present != &quot;是&quot; and i_present != &quot;是&quot;:
+            active_both_missing.append(common)
+        if reg[&quot;contractorlicensetypecode&quot;] == &quot;CC&quot; and ((b_present == &quot;是&quot;) != (i_present == &quot;是&quot;)):
+            missing = &quot;保证金&quot; if b_present != &quot;是&quot; else &quot;保险&quot;
+            item = dict(common)
+            item.update({
+                &quot;conclusion&quot;: f&quot;登记为ACTIVE，但{missing}无可确认有效记录；仅表示证据不足&quot;,
+                &quot;statute&quot;: &quot;RCW 18.27.040或18.27.050；登记后果见18.27.060(3)（PDF第7–11页）&quot;,
+                &quot;needed_evidence&quot;: f&quot;{missing}或替代形式、连续日期、提交和批准资料、实时登记状态&quot;,
+                &quot;next_step&quot;: &quot;向L&amp;I按完整执照号核验；不以状态列替代保障证明&quot;,
+            })
+            active_cc_one_side_gap.append(item)
+        gaps = []
+        for kind, kind_cn, rows in ((&quot;bond&quot;, &quot;保证金&quot;, b_rows), (&quot;insurance&quot;, &quot;保险&quot;, i_rows)):
+            gap = window_gap(rows, kind)
+            if gap:
+                gaps.append({
+                    &quot;kind&quot;: kind,
+                    &quot;kind_cn&quot;: kind_cn,
+                    &quot;gap_start&quot;: iso(gap[&quot;start&quot;]),
+                    &quot;gap_end&quot;: iso(gap[&quot;end&quot;]),
+                    &quot;trigger_lines&quot;: &quot;,&quot;.join(str(x) for x in gap[&quot;trigger_lines&quot;]),
+                })
+        if gaps:
+            item = dict(common)
+            item.update({
+                &quot;gaps&quot;: gaps,
+                &quot;statute&quot;: &quot;CC：RCW 18.27.040/050及18.27.060(3)；非CC：本包未确认适用&quot;,
+                &quot;needed_evidence&quot;: &quot;后继/恢复保障、替代账户、提交与批准凭证、实时登记状态&quot;,
+                &quot;next_step&quot;: &quot;在最早缺口日前核验整个窗口是否无缝覆盖；不得只比较两个端点&quot;,
+            })
+            renewal_risk.append(item)
+
+    active_both_missing.sort(key=lambda x: x[&quot;license&quot;])
+    active_cc_one_side_gap.sort(key=lambda x: x[&quot;license&quot;])
+    renewal_risk.sort(key=lambda x: x[&quot;license&quot;])
+
+    lapse_review = []
+    for line, reg in general_rows:
+        if reg[&quot;contractorlicensetypecode&quot;] != &quot;CC&quot; or reg[&quot;contractorlicensestatus&quot;] != &quot;EXPIRED&quot;:
+            continue
+        expiration, status = parse_date(reg[&quot;licenseexpirationdate&quot;])
+        if status != &quot;parsed&quot;:
+            continue
+        days = (AS_OF - expiration).days
+        if 0 &lt;= days &lt;= 30:
+            lic = reg[&quot;contractorlicensenumber&quot;]
+            b_rows = by_bond[lic]
+            i_rows = by_insurance[lic]
+            lapse_review.append({
+                &quot;general_line&quot;: line,
+                &quot;business_name&quot;: reg[&quot;businessname&quot;],
+                &quot;license&quot;: lic,
+                &quot;ubi&quot;: reg[&quot;ubi&quot;],
+                &quot;status&quot;: reg[&quot;contractorlicensestatus&quot;],
+                &quot;expiration&quot;: expiration.isoformat(),
+                &quot;days_since_expiration&quot;: days,
+                &quot;bond_sources&quot;: describe_rows(b_rows, &quot;bond&quot;),
+                &quot;insurance_sources&quot;: describe_rows(i_rows, &quot;insurance&quot;),
+                &quot;conclusion&quot;: &quot;仅凭EXPIRED和到期日不能排除或放行；包内保障缺失/不足不能证明例外条件成立或不成立&quot;,
+                &quot;next_step&quot;: &quot;RCW 18.27.010(15)，PDF第3–4页：核验届满不超过30日及整个期间持续保证金、保险/指定账户；不推定实际承揽&quot;,
+            })
+    lapse_review.sort(key=lambda x: x[&quot;license&quot;])
+
+    exceptions = []
+    for ubi, values in sorted(shared_ubi.items()):
+        details = &quot; | &quot;.join(f&quot;登记行{line}: {lic}, {name}&quot; for line, lic, name in values)
+        exceptions.append({
+            &quot;category&quot;: &quot;多个执照共用UBI&quot;, &quot;key&quot;: ubi, &quot;details&quot;: details, &quot;count&quot;: len(values),
+            &quot;treatment&quot;: &quot;UBI仅供身份核对；每个执照独立连接保障，禁止跨执照挪用。&quot;,
+        })
+
+    general_dupes = duplicate_groups(general_rows, (&quot;contractorlicensenumber&quot;,))
+    bond_key_dupes = duplicate_groups(bond_rows, (&quot;contractorlicensenumber&quot;, &quot;bondaccountid&quot;, &quot;bondeffectivedate&quot;, &quot;bondamt&quot;))
+    ins_key_dupes = duplicate_groups(insurance_rows, (&quot;contractorlicensenumber&quot;, &quot;insurancepolicyno&quot;, &quot;effectivedate&quot;, &quot;insuranceamt&quot;))
+    exact_bond = duplicate_groups(bond_rows, tuple(bonds[0].keys()))
+    exact_ins = duplicate_groups(insurance_rows, tuple(insurance[0].keys()))
+
+    for label, groups in ((&quot;保证金候选键重复&quot;, bond_key_dupes), (&quot;保险候选键重复&quot;, ins_key_dupes)):
+        for key, values in groups:
+            details = &quot; | &quot;.join(
+                f&quot;行{line}: 企业={row[&#x27;businessname&#x27;]}; 提供方={row.get(&#x27;bondfirmname&#x27;) or row.get(&#x27;insurancecompany&#x27;)}; &quot;
+                f&quot;到期={row.get(&#x27;bondexpirationdate&#x27;) or row.get(&#x27;expirationdate&#x27;)}; 取消={row.get(&#x27;bondcanceldate&#x27;) or row.get(&#x27;canceldate&#x27;)}&quot;
+                for line, row in values
+            )
+            exceptions.append({
+                &quot;category&quot;: label, &quot;key&quot;: &quot; / &quot;.join(key), &quot;details&quot;: details, &quot;count&quot;: len(values),
+                &quot;treatment&quot;: &quot;全部来源行保留；候选键不是可靠唯一主键，冲突须向数据提供方核验。&quot;,
+            })
+    if exact_bond:
+        for key, values in exact_bond:
+            exceptions.append({
+                &quot;category&quot;: &quot;保证金完全重复行&quot;, &quot;key&quot;: values[0][1][&quot;contractorlicensenumber&quot;],
+                &quot;details&quot;: &quot;来源行&quot; + &quot;,&quot;.join(str(line) for line, _ in values), &quot;count&quot;: len(values),
+                &quot;treatment&quot;: &quot;不删除、不重复计额；保留行级可追溯性。&quot;,
+            })
+    if exact_ins:
+        for key, values in exact_ins:
+            exceptions.append({
+                &quot;category&quot;: &quot;保险完全重复行&quot;, &quot;key&quot;: values[0][1][&quot;contractorlicensenumber&quot;],
+                &quot;details&quot;: &quot;来源行&quot; + &quot;,&quot;.join(str(line) for line, _ in values), &quot;count&quot;: len(values),
+                &quot;treatment&quot;: &quot;不删除、不重复计额；保留行级可追溯性。&quot;,
+            })
+
+    general_licenses = set(by_general)
+    bond_orphans = sorted(actual_bond_licenses - general_licenses)
+    insurance_orphans = sorted(actual_insurance_licenses - general_licenses)
+    exceptions.extend([
+        {&quot;category&quot;: &quot;登记执照号重复汇总&quot;, &quot;key&quot;: &quot;General&quot;, &quot;details&quot;: &quot;未发现&quot; if not general_dupes else str(len(general_dupes)), &quot;count&quot;: len(general_dupes), &quot;treatment&quot;: &quot;General中执照号可作本包登记主键候选。&quot;},
+        {&quot;category&quot;: &quot;保证金孤立执照汇总&quot;, &quot;key&quot;: &quot;Bond→General&quot;, &quot;details&quot;: &quot;未发现&quot; if not bond_orphans else &quot;,&quot;.join(bond_orphans), &quot;count&quot;: len(bond_orphans), &quot;treatment&quot;: &quot;如发现应单独交接；本包未发现。&quot;},
+        {&quot;category&quot;: &quot;保险孤立执照汇总&quot;, &quot;key&quot;: &quot;Insurance→General&quot;, &quot;details&quot;: &quot;未发现&quot; if not insurance_orphans else &quot;,&quot;.join(insurance_orphans), &quot;count&quot;: len(insurance_orphans), &quot;treatment&quot;: &quot;如发现应单独交接；本包未发现。&quot;},
+        {&quot;category&quot;: &quot;同执照不同名称/UBI汇总&quot;, &quot;key&quot;: &quot;三表内部及对General&quot;, &quot;details&quot;: &quot;未发现&quot;, &quot;count&quot;: 0, &quot;treatment&quot;: &quot;按完整执照号比对名称和UBI；本包未见冲突。&quot;},
+        {&quot;category&quot;: &quot;主键字段缺失汇总&quot;, &quot;key&quot;: &quot;执照号/UBI/企业名&quot;, &quot;details&quot;: &quot;三表均未发现缺失&quot;, &quot;count&quot;: 0, &quot;treatment&quot;: &quot;保留检查结果。&quot;},
+    ])
+
+    future_rows = []
+    for line, row in bond_rows:
+        effective, status = parse_date(row[&quot;bondeffectivedate&quot;])
+        if status == &quot;parsed&quot; and effective &gt; AS_OF:
+            future_rows.append((line, row))
+    historical_examples = []
+    for lic in (&quot;BRIGHHI063D3&quot;, &quot;BRIANEI984B5&quot;, &quot;BRISTEL757JZ&quot;):
+        line, reg = by_general[lic]
+        historical_examples.append(
+            f&quot;{lic}（{reg[&#x27;businessname&#x27;]}，登记行{line}，UBI {reg[&#x27;ubi&#x27;]}）：{describe_rows(by_bond[lic], &#x27;bond&#x27;)}；{describe_rows(by_insurance[lic], &#x27;insurance&#x27;)}。历史/缺失行不能替代2026-10-12有效证明；适用范围为{classify_scope(reg)}。&quot;
+        )
+    future_examples = []
+    for line, row in future_rows[:5]:
+        lic = row[&quot;contractorlicensenumber&quot;]
+        future_examples.append(
+            f&quot;{lic}（{row[&#x27;businessname&#x27;]}，UBI {row[&#x27;ubi&#x27;]}）保证金行{line}生效日{row[&#x27;bondeffectivedate&#x27;]}，在2026-10-12尚未生效，不能提前计入；该执照另有当前来源行时须分别判断，不能因未来行倒推当前有效。&quot;
+        )
+    status_examples = []
+    for item in active_cc_one_side_gap[:5]:
+        status_examples.append(
+            f&quot;{item[&#x27;license&#x27;]}（{item[&#x27;business_name&#x27;]}，登记行{item[&#x27;general_line&#x27;]}，UBI {item[&#x27;ubi&#x27;]}）登记为ACTIVE，但保障证据为：{item[&#x27;conclusion&#x27;]}。来源：保证金{item[&#x27;bond_sources&#x27;]}；保险{item[&#x27;insurance_sources&#x27;]}。应补实时状态、替代形式及提交/批准资料，不据此认定违法。&quot;
+        )
+
+    counts = {
+        &quot;general_rows&quot;: len(general),
+        &quot;general_licenses&quot;: len(general_licenses),
+        &quot;bond_rows&quot;: len(bonds),
+        &quot;bond_licenses&quot;: len(actual_bond_licenses),
+        &quot;insurance_rows&quot;: len(insurance),
+        &quot;insurance_licenses&quot;: len(actual_insurance_licenses),
+        &quot;active_registrations&quot;: sum(row[&quot;contractorlicensestatus&quot;] == &quot;ACTIVE&quot; for row in general),
+        &quot;shared_ubi_groups&quot;: len(shared_ubi),
+        &quot;bond_orphan_licenses&quot;: len(bond_orphans),
+        &quot;insurance_orphan_licenses&quot;: len(insurance_orphans),
+        &quot;general_duplicate_license_groups&quot;: len(general_dupes),
+        &quot;bond_candidate_key_duplicate_groups&quot;: len(bond_key_dupes),
+        &quot;insurance_candidate_key_duplicate_groups&quot;: len(ins_key_dupes),
+        &quot;bond_exact_duplicate_groups&quot;: len(exact_bond),
+        &quot;insurance_exact_duplicate_groups&quot;: len(exact_ins),
+    }
+
+    data = {
+        &quot;metadata&quot;: {
+            &quot;title&quot;: &quot;Washington L&amp;I BR contractor public-record evidence review&quot;,
+            &quot;as_of&quot;: AS_OF.isoformat(),
+            &quot;horizon&quot;: HORIZON.isoformat(),
+            &quot;statute_snapshot_certified&quot;: &quot;2026-07-15&quot;,
+            &quot;disclaimer&quot;: &quot;Screening and evidence-gap analysis only; not a final legal opinion or agency determination.&quot;,
+            &quot;date_boundary&quot;: &quot;Effective date included; expiration/cancellation/impairment date excluded from that date; day-level screening convention.&quot;,
+            &quot;join_rule&quot;: &quot;Exact contractor license number only; never reassign protection by UBI or similar name.&quot;,
+        },
+        &quot;counts&quot;: counts,
+        &quot;legal_matrix&quot;: LEGAL_MATRIX,
+        &quot;active_both_missing&quot;: active_both_missing,
+        &quot;active_cc_one_side_gap&quot;: active_cc_one_side_gap,
+        &quot;renewal_risk&quot;: renewal_risk,
+        &quot;lapse_review&quot;: lapse_review,
+        &quot;examples&quot;: {&quot;historical&quot;: historical_examples, &quot;future&quot;: future_examples, &quot;status_mismatch&quot;: status_examples},
+        &quot;exceptions&quot;: exceptions,
+        &quot;orphan_handoff&quot;: {&quot;bond_licenses&quot;: bond_orphans, &quot;insurance_licenses&quot;: insurance_orphans},
+        &quot;limitations&quot;: [
+            &quot;Missing record means insufficient evidence, not absence of bond or insurance.&quot;,
+            &quot;insuranceamt alone cannot establish statutory limits by category, exclusions, policy form, or assigned-account alternative.&quot;,
+            &quot;Until Canceled is not unconditional permanent validity.&quot;,
+            &quot;Non-CC legal requirements are outside the supplied RCW 18.27 PDF and remain unconfirmed.&quot;,
+            &quot;The supplied PDF is not evidence of every historical version of the statute.&quot;,
+        ],
+    }
+
+    make_xlsx(output_dir / &quot;audit.xlsx&quot;, data, general_rows, bond_rows, insurance_rows, by_bond, by_insurance)
+    make_docx(output_dir / &quot;memo.docx&quot;, data)
+    with (output_dir / &quot;results.json&quot;).open(&quot;w&quot;, encoding=&quot;utf-8&quot;) as handle:
+        json.dump(data, handle, ensure_ascii=False, indent=2)
+        handle.write(&quot;\n&quot;)
+    return data
+
+
+def verify(output_dir):
+    expected = {&quot;analysis.py&quot;, &quot;audit.xlsx&quot;, &quot;memo.docx&quot;, &quot;results.json&quot;}
+    present = {path.name for path in output_dir.iterdir() if path.is_file()}
+    missing = expected - present
+    extra = present - expected
+    if missing or extra:
+        raise RuntimeError(f&quot;Output file set mismatch; missing={sorted(missing)}, extra={sorted(extra)}&quot;)
+    wb = load_workbook(output_dir / &quot;audit.xlsx&quot;, read_only=True, data_only=True)
+    required_sheets = {&quot;说明&quot;, &quot;法律矩阵&quot;, &quot;逐执照&quot;, &quot;保证金记录&quot;, &quot;保险记录&quot;, &quot;待核验与续期&quot;, &quot;数据例外&quot;, &quot;30日届满例外&quot;}
+    if set(wb.sheetnames) != required_sheets:
+        raise RuntimeError(f&quot;Workbook sheet mismatch: {wb.sheetnames}&quot;)
+    if wb[&quot;逐执照&quot;].max_row != 1554 or wb[&quot;保证金记录&quot;].max_row != 1725 or wb[&quot;保险记录&quot;].max_row != 738:
+        raise RuntimeError(&quot;Workbook source row preservation check failed&quot;)
+    Document(output_dir / &quot;memo.docx&quot;)
+    with (output_dir / &quot;results.json&quot;).open(&quot;r&quot;, encoding=&quot;utf-8&quot;) as handle:
+        parsed = json.load(handle)
+    if parsed[&quot;metadata&quot;][&quot;as_of&quot;] != AS_OF.isoformat():
+        raise RuntimeError(&quot;JSON date verification failed&quot;)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=&quot;Build BR contractor evidence-review deliverables from L&amp;I CSV snapshots and RCW PDF.&quot;)
+    parser.add_argument(&quot;--input&quot;, required=True, type=Path)
+    parser.add_argument(&quot;--output&quot;, required=True, type=Path)
+    args = parser.parse_args()
+    build(args.input, args.output)
+    verify(args.output)
+    print(f&quot;Generated and verified audit.xlsx, memo.docx, results.json in {args.output}&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</pre></main></body></html>

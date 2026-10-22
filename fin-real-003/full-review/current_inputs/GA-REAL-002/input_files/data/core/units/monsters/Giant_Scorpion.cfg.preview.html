@@ -1,0 +1,206 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Giant_Scorpion.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Giant_Scorpion.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Giant Scorpion
+    name= _ &quot;Giant Scorpion&quot;
+    race=monster
+    image=&quot;units/monsters/scorpion/scorpion.png&quot;
+    small_profile=&quot;portraits/monsters/scorpion-elder.webp~FL()&quot;
+    profile=&quot;portraits/monsters/scorpion-elder.webp~RIGHT()&quot;
+    [standing_anim]
+        start_time=0
+        direction=s,sw,se
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpion.png:150&quot;
+        [/frame]
+    [/standing_anim]
+    [standing_anim]
+        start_time=0
+        direction=n,nw,ne
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpion-ne.png:150&quot;
+        [/frame]
+    [/standing_anim]
+    hitpoints=35
+    movement_type=scuttlefoot
+    [resistance]
+        blade=90
+        pierce=80
+        impact=110
+        fire=90
+        cold=110
+        arcane=80
+    [/resistance]
+    movement=8
+    experience=50
+    level=1
+    alignment=neutral
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=17
+    undead_variation=scorpion
+    usage=fighter
+    description= _ &quot;A normal scorpion is dangerous enough — the deadliness of one the size of a man needs little explanation.&quot;
+    die_sound=hiss-big.wav
+    {DEFENSE_ANIM_DIRECTIONAL &quot;units/monsters/scorpion/scorpion-defend2.png&quot; &quot;units/monsters/scorpion/scorpion-defend1.png&quot; &quot;units/monsters/scorpion/scorpion-ne-defend2.png&quot; &quot;units/monsters/scorpion/scorpion-ne-defend1.png&quot; hiss.wav }
+    [attack]
+        name=sting
+        description=_&quot;sting&quot;
+        type=pierce
+        range=melee
+        [specials]
+            {WEAPON_SPECIAL_POISON}
+        [/specials]
+        damage=9
+        defense_weight=4.0
+        number=1
+    [/attack]
+    [attack]
+        name=pincers
+        description=_&quot;pincers&quot;
+        type=impact
+        range=melee
+        damage=4
+        number=4
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=pincers
+        [/filter_attack]
+        direction=s,sw,se
+        start_time=-240
+        offset=0.0~-0.1:200,-0.1~0.7:160,0.7~0.0:240
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpion-pincer-[1~6].png:[100,100,80*2,120,120]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpion.png:1&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS pincers.ogg {SOUND_LIST:MISS} -150}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=pincers
+        [/filter_attack]
+        direction=n,nw,ne
+        start_time=-240
+        offset=0.0~-0.2:200,-0.2~0.6:160,0.6~0.0:240
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpion-ne-pincer[1~6].png:[100,120,100,80,100,100]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpion-ne.png:1&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS pincers.ogg {SOUND_LIST:MISS} -150}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=sting
+        [/filter_attack]
+        start_time=-620
+        offset=0.0:320,0.0~0.8:240,0.8~0.0:320
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpion-stinger-[1~7,6,5,4,1].png:[80,100,120,80*8]&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/monsters/scorpion/scorpion.png:1&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg {SOUND_LIST:MISS} -100}
+    [/attack_anim]
+    [variation]
+        variation_id=scuttler
+        variation_name= _ &quot;scuttler&quot;
+        name= _ &quot;Sand Scuttler&quot;
+        inherit=yes
+        hide_help=yes
+        small_profile=&quot;portraits/monsters/scuttler.webp~FL()&quot;
+        profile=&quot;portraits/monsters/scuttler.webp~RIGHT()&quot;
+        image=&quot;units/monsters/scorpion/sand-scuttler.png&quot;
+        undead_variation=sand_scorpion
+        description= _ &quot;Making their homes in sandy dunes, these critters are an odd mix of mundane creature and elemental beast. Though usually timid, Sand Scuttlers sometimes attack unwary travelers, especially when startled.&quot;
+        [standing_anim]
+            start_time=0
+            direction=s,sw,se
+            [frame]
+                image=&quot;units/monsters/scorpion/sand-scuttler.png:150&quot;
+            [/frame]
+        [/standing_anim]
+        [standing_anim]
+            start_time=0
+            direction=n,nw,ne
+            [frame]
+                image=&quot;units/monsters/scorpion/sand-scuttler-ne.png:150&quot;
+            [/frame]
+        [/standing_anim]
+        hitpoints=40
+        [resistance]
+            blade=90
+            pierce=90
+            impact=30
+            fire=200
+            cold=120
+            arcane=150
+        [/resistance]
+        {DEFENSE_ANIM_DIRECTIONAL &quot;units/monsters/scorpion/sand-scuttler-defend2.png&quot; &quot;units/monsters/scorpion/sand-scuttler-defend1.png&quot; &quot;units/monsters/scorpion/sand-scuttler-ne-defend2.png&quot; &quot;units/monsters/scorpion/sand-scuttler-ne-defend1.png&quot; hiss.wav }
+
+        [attack_anim]
+            [filter_attack]
+                name=pincers
+            [/filter_attack]
+            direction=s,sw,se
+            start_time=-240
+            offset=0.0~-0.1:200,-0.1~0.7:160,0.7~0.0:240
+            [frame]
+                image=&quot;units/monsters/scorpion/sand-scuttler-pincer-[1~6].png:[100,100,80*2,120,120]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/monsters/scorpion/sand-scuttler.png:1&quot;
+            [/frame]
+            {SOUND:HIT_AND_MISS pincers.ogg {SOUND_LIST:MISS} -150}
+        [/attack_anim]
+        [attack_anim]
+            [filter_attack]
+                name=pincers
+            [/filter_attack]
+            direction=n,nw,ne
+            start_time=-240
+            offset=0.0~-0.2:200,-0.2~0.6:160,0.6~0.0:240
+            [frame]
+                image=&quot;units/monsters/scorpion/sand-scuttler-ne-pincer[1~6].png:[100,120,100,80,100,100]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/monsters/scorpion/sand-scuttler-ne.png:1&quot;
+            [/frame]
+            {SOUND:HIT_AND_MISS pincers.ogg {SOUND_LIST:MISS} -150}
+        [/attack_anim]
+        [attack_anim]
+            [filter_attack]
+                name=sting
+            [/filter_attack]
+            start_time=-620
+            offset=0.0:320,0.0~0.8:240,0.8~0.0:320
+            [frame]
+                image=&quot;units/monsters/scorpion/sand-scuttler-stinger-[1~7,6,5,4,1].png:[80,100,120,80*8]&quot;
+            [/frame]
+            [frame]
+                image=&quot;units/monsters/scorpion/sand-scuttler.png:1&quot;
+            [/frame]
+            {SOUND:HIT_AND_MISS spear.ogg {SOUND_LIST:MISS} -100}
+        [/attack_anim]
+        [event]
+            id=unit_deprecation_message_scuttler
+            name=unit placed
+            [filter]
+                type=Giant Scorpion
+                variation=scuttler
+            [/filter]
+
+            [deprecated_message]
+                what=&quot;Giant Scorpion scuttler variation&quot;
+                level=3
+                message=&quot;This variation has been moved to a separate unit, use unit type Sand Scuttler instead.&quot;
+                version=1.19
+            [/deprecated_message]
+        [/event]
+    [/variation]
+[/unit_type]
+</pre></main></body></html>

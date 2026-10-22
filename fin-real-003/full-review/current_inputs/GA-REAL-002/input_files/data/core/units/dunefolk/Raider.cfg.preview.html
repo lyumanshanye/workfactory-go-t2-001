@@ -1,0 +1,110 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Raider.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/dunefolk/Raider.cfg</h1><pre>#textdomain wesnoth-units
+
+#define PATH_TEMP
+units/dunefolk/rider/#enddef
+
+#define TORCH_STATIC_IMAGE
+{PATH_TEMP}raider.png~BLIT({PATH_TEMP}raider-torch-overlay.png,0,0)#enddef
+
+[unit_type]
+    id=Dune Raider
+    name= _ &quot;Dune Raider&quot;
+    race=dunefolk
+#ifndef __WMLUNITS__
+    image=&quot;{TORCH_STATIC_IMAGE}&quot;
+#else
+    # Shown on units.wesnoth.org instead,
+    # because Image Path Functions aren&#x27;t available there.
+    image=&quot;{PATH_TEMP}raider.png&quot;
+#endif
+    hitpoints=45
+    movement_type=dunehorse
+    movement=9
+    experience=77
+    level=2
+    alignment=chaotic
+    advances_to=Dune Marauder
+    cost=35
+    usage=scout
+    undead_variation=mounted
+    description= _ &quot;Though rarely found in organized armies, raiders are a staple among the nomadic Dunefolk, who regularly ambush rival caravans and camps at night. In these scenarios, raw power is of little concern. The greatest importance is placed on speed — striking quickly and spreading as much chaos as possible in the shortest time possible allows these riders to get in and out of the blitz without fear of counterattack. Raiders are the fastest of the Dunefolk, capable of outpacing nearly anything they might encounter in the sandy deserts.&quot;
+    die_sound={SOUND_LIST:HUMAN_DIE}
+    {DEFENSE_ANIM_FILTERED &quot;{PATH_TEMP}raider.png&quot; &quot;{PATH_TEMP}raider.png&quot; {SOUND_LIST:HUMAN_HIT} (
+        [filter_second_attack]
+            range=ranged
+        [/filter_second_attack]
+    )}
+    {DEFENSE_ANIM_FILTERED &quot;{TORCH_STATIC_IMAGE}&quot; &quot;{TORCH_STATIC_IMAGE}&quot; {SOUND_LIST:HUMAN_HIT} (
+        [filter_second_attack]
+            range=melee
+        [/filter_second_attack]
+    )}
+    {STANDING_ANIM_SMALL_TORCH &quot;{PATH_TEMP}raider.png&quot; 20 -20 -28}
+    [movement_anim]
+        start_time=-0
+        [frame]
+            image=&quot;{TORCH_STATIC_IMAGE}:150&quot;
+        [/frame]
+    [/movement_anim]
+
+    [resistance]
+        blade=90
+    [/resistance]
+    [defense]
+        mountains=50
+    [/defense]
+
+    [attack]
+        name=torch
+        description= _ &quot;torch&quot;
+        type=fire
+        range=melee
+        damage=8
+        number=3
+        icon=attacks/torch.png
+    [/attack]
+    [attack]
+        name=bow
+        description=_&quot;bow&quot;
+        type=pierce
+        range=ranged
+        damage=7
+        number=3
+        icon=attacks/bow-short-reinforced.png
+    [/attack]
+
+    [attack_anim]
+        [filter_attack]
+            name=torch
+        [/filter_attack]
+        start_time=-250
+        horse_sound_start_time=-250
+        [frame]
+            image=&quot;{TORCH_STATIC_IMAGE}:400&quot;
+        [/frame]
+        [horse_sound_frame]
+            sound=horse-canter.wav
+        [/horse_sound_frame]
+        {SOUND:HIT_AND_MISS torch.ogg torch-miss.ogg -100}
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=bow
+        [/filter_attack]
+        start_time=-250
+        missile_start_time=-150
+        [missile_frame]
+            duration=150
+            image=&quot;projectiles/missile-n.png&quot;
+            image_diagonal=&quot;projectiles/missile-ne.png&quot;
+        [/missile_frame]
+        [frame]
+            image=&quot;{PATH_TEMP}raider.png:300&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS bow-puny.ogg bow-puny-miss.ogg -225}
+    [/attack_anim]
+[/unit_type]
+
+#undef PATH_TEMP
+#undef TORCH_STATIC_IMAGE
+</pre></main></body></html>

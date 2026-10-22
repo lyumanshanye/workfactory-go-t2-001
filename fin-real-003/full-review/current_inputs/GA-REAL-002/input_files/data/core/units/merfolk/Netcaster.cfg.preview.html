@@ -1,0 +1,95 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Netcaster.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/merfolk/Netcaster.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Merman Netcaster
+    name= _ &quot;Merman Netcaster&quot;
+    race=merman
+    image=&quot;units/merfolk/netcaster.png&quot;
+    small_profile=portraits/merfolk/netcaster.webp~CROP(20,0,400,400)~FL()
+    profile=portraits/merfolk/netcaster.webp
+    hitpoints=40
+    movement_type=swimmer
+    movement=7
+    experience=54
+    level=2
+    alignment=lawful
+    advances_to=Merman Entangler
+    cost=26
+    usage=mixed fighter
+    description= _ &quot;Fishing, as practiced by merfolk, is largely a matter of chasing schools of fish into waiting nets, where oar-like clubs are used to dispatch the prey. The improvisation of using these against soldiers proved very effective; most land-native creatures are already quite awkward when waist-deep in water, and getting caught in a net can render them nearly helpless.
+
+The effectiveness of this method led to the development of smaller, weighted nets, which could be cast through the air; these were useless for fishing, but were useful both in combat and in hunting game that came too close to shore. Clubs were used in combat with little or no adaptation from fishing, since they were already quite deadly.&quot;
+    {DEFENSE_ANIM &quot;units/merfolk/netcaster-defend2.png&quot; &quot;units/merfolk/netcaster-defend1.png&quot; mermen-hit.wav }
+    die_sound=mermen-die.ogg
+    [attack]
+        name=club
+        description=_&quot;club&quot;
+        type=impact
+        range=melee
+        damage=6
+        number=3
+    [/attack]
+    [attack]
+        name=net
+        description=_&quot;net&quot;
+        type=impact
+        range=ranged
+        [specials]
+            {WEAPON_SPECIAL_SLOW}
+        [/specials]
+        damage=9
+        number=2
+        icon=attacks/net.png
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=net
+        [/filter_attack]
+        missile_start_time=-200
+        [missile_frame]
+            duration=200
+            image=&quot;projectiles/web.png&quot;
+            image_diagonal=&quot;projectiles/web.png&quot;
+        [/missile_frame]
+        start_time=-150
+        [if]
+            hits=yes
+            [frame]
+                image=&quot;units/merfolk/netcaster.png:75&quot;
+                sound=net.wav
+            [/frame]
+        [/if]
+        [else]
+            hits=no
+            [frame]
+                image=&quot;units/merfolk/netcaster.png:75&quot;
+                sound={SOUND_LIST:MISS}
+            [/frame]
+        [/else]
+        [frame]
+            image=&quot;units/merfolk/netcaster.png:175&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=club
+        [/filter_attack]
+        [frame]
+            image=&quot;units/merfolk/netcaster.png:100&quot;
+        [/frame]
+        [if]
+            hits=yes
+            [frame]
+                image=&quot;units/merfolk/netcaster.png:250&quot;
+                sound=club.ogg
+            [/frame]
+        [/if]
+        [else]
+            hits=no
+            [frame]
+                image=&quot;units/merfolk/netcaster.png:250&quot;
+                sound={SOUND_LIST:MISS}
+            [/frame]
+        [/else]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

@@ -1,0 +1,34 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fog_Clearer.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/fake/Fog_Clearer.cfg</h1><pre>#textdomain wesnoth-units
+
+# important note:
+# While this unit is no longer used for clearing fog since r53779 meaning it&#x27;s no longer used in mainline at all,
+# it would be a bad idea to remove it, since addon multiplayer scenarios may rely heavily on it. (Due to the fact that the wesnoth
+# engine does not transfer units over the network.) I know at least one addon (mine) which would be broken heavily, so
+# PLEASE DON&#x27;T DO THIS!
+
+# Use this unit to temporarily clear fog around a particular location.
+
+[unit_type]
+    id=Fog Clearer
+    name=_ &quot;dummy_unit^Fog Clearer&quot;
+    race=monster
+    image=&quot;misc/blank-hex.png&quot;
+    # These traits don&#x27;t occur elsewhere in mainline races or units and are added here
+    # so they will appear in the traits section in help. The Fog Clearer doesn&#x27;t receive
+    # traits because it is a monster, so these shouldn&#x27;t affect umc use.
+    {TRAIT_LOYAL}
+    {TRAIT_AGED}
+    hitpoints=1
+    movement_type=fly
+    movement=1
+    experience=1
+    level=1
+    alignment=neutral
+    advances_to=null
+    cost=1
+    usage=scout
+    hide_help=yes
+    do_not_list=yes
+    {DEPRECATED_UNIT &quot;Fog Clearer&quot; &quot;&quot; 1.15}
+[/unit_type]
+</pre></main></body></html>

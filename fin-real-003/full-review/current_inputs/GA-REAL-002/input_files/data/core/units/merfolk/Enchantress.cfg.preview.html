@@ -1,0 +1,88 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Enchantress.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/merfolk/Enchantress.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Mermaid Enchantress
+    name= _ &quot;female^Mermaid Enchantress&quot;
+    race=merman
+    gender=female
+    image=&quot;units/merfolk/enchantress.png&quot;
+    profile=portraits/merfolk/enchantress.webp
+    hitpoints=39
+    movement_type=swimmer
+    movement=6
+    experience=46
+    level=2
+    alignment=lawful
+    advances_to=Mermaid Siren
+    cost=32
+    usage=mixed fighter
+    description= _ &quot;Mermaids, like elves, have a powerful and native ability in magic, though theirs is considerably different than that of the elves. Those who master this ability are held in high regard, and their skill is used in a multitude of crafts, many of which humanity would never dream. The obvious use in war is forbidden against their own race — this power is the greater part of what protects their people from the monsters that wander out of the abyss.&quot;
+    die_sound=mermaid-die.ogg
+    {DEFENSE_ANIM &quot;units/merfolk/enchantress-defend2.png&quot; &quot;units/merfolk/enchantress-defend1.png&quot; mermaid-hit.ogg }
+    [attack]
+        name=staff
+        description=_&quot;staff&quot;
+        icon=attacks/staff-magic.png
+        type=impact
+        range=melee
+        damage=9
+        number=1
+    [/attack]
+    [attack]
+        name=water spray
+        description=_&quot;water spray&quot;
+        icon=attacks/waterspray.png
+        type=impact
+        range=ranged
+        [specials]
+            {WEAPON_SPECIAL_MAGICAL}
+        [/specials]
+        damage=14
+        number=2
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=water spray
+        [/filter_attack]
+        missile_start_time=-165
+        [missile_frame]
+            duration=165
+            image=&quot;projectiles/water-spray.png&quot;
+            image_diagonal=&quot;projectiles/water-spray.png&quot;
+        [/missile_frame]
+        start_time=-420
+
+        {MERMAID_WATER_BLAST_HALO}
+        {MERMAID_STAFF_FLARE 16 -12}
+
+        [frame]
+            image=&quot;units/merfolk/enchantress.png:300&quot; ### magic-1
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/enchantress.png:50&quot; ### magic-2
+            sound=water-blast.wav
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/enchantress.png:80&quot; ### magic-1
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=staff
+        [/filter_attack]
+        start_time=-250
+        [frame]
+            image=&quot;units/merfolk/enchantress.png:50&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/enchantress.png:[100,200]&quot; ### attack-1,2
+        [/frame]
+        {SOUND:HIT_AND_MISS staff.ogg staff-miss.ogg -125}
+        [frame]
+            image=&quot;units/merfolk/enchantress.png:50&quot; ### magic-1
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/enchantress.png:50&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

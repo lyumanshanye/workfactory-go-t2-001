@@ -1,0 +1,1530 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>animation.cpp</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>src/units/animation.cpp</h1><pre>/*
+	Copyright (C) 2006 - 2024
+	by Jeremy Rosen &lt;jeremy.rosen@enst-bretagne.fr&gt;
+	Part of the Battle for Wesnoth Project https://www.wesnoth.org/
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY.
+
+	See the COPYING file for more details.
+*/
+
+#include &quot;units/animation.hpp&quot;
+
+#include &quot;display.hpp&quot;
+#include &quot;filter_context.hpp&quot;
+#include &quot;map/map.hpp&quot;
+#include &quot;play_controller.hpp&quot;
+#include &quot;resources.hpp&quot;
+#include &quot;color.hpp&quot;
+#include &quot;units/unit.hpp&quot;
+#include &quot;units/animation_component.hpp&quot;
+#include &quot;units/filter.hpp&quot;
+#include &quot;variable.hpp&quot;
+#include &quot;random.hpp&quot;
+
+#include &lt;algorithm&gt;
+
+static std::string get_heal_sound(const config&amp; cfg)
+{
+	return cfg[&quot;healed_sound&quot;].empty() ? &quot;heal.wav&quot; : cfg[&quot;healed_sound&quot;].str();
+}
+
+struct animation_branch
+{
+	animation_branch()
+		: attributes()
+		, children()
+	{}
+
+	config merge() const
+	{
+		config result = attributes;
+		for(const config::const_all_children_iterator&amp; i : children) {
+			result.add_child(i-&gt;key, i-&gt;cfg);
+		}
+
+		return result;
+	}
+
+	config attributes;
+	std::vector&lt;config::const_all_children_iterator&gt; children;
+};
+
+typedef std::list&lt;animation_branch&gt; animation_branches;
+
+struct animation_cursor
+{
+	animation_cursor(const config&amp; cfg)
+		: itors(cfg.all_children_range()), branches(1), parent(nullptr)
+	{
+		branches.back().attributes.merge_attributes(cfg);
+	}
+
+	animation_cursor(const config&amp;cfg, animation_cursor *p)
+		: itors(cfg.all_children_range()), branches(p-&gt;branches), parent(p)
+	{
+		// If similar &#x27;if&#x27; condition in parent branches, we need to
+		// cull the branches where there are partial matches.
+		// Hence the need to check if the condition has come up before.
+		// Also, the attributes are merged here between branches.
+		bool previously_hits_set      = false;
+		bool previously_direction_set = false;
+		bool previously_terrain_set   = false;
+		bool previously_value_set     = false;
+		bool previously_value_2nd_set = false;
+
+		const std::string s_cfg_hits      = cfg[&quot;hits&quot;];
+		const std::string s_cfg_direction = cfg[&quot;direction&quot;];
+		const std::string s_cfg_terrain   = cfg[&quot;terrain_types&quot;];
+		const std::string s_cfg_value     = cfg[&quot;value&quot;];
+		const std::string s_cfg_value_2nd = cfg[&quot;value_2nd&quot;];
+
+		for(const auto&amp; branch : branches) {
+			const std::string s_branch_hits      = branch.attributes[&quot;hits&quot;];
+			const std::string s_branch_direction = branch.attributes[&quot;direction&quot;];
+			const std::string s_branch_terrain   = branch.attributes[&quot;terrain_types&quot;];
+			const std::string s_branch_value     = branch.attributes[&quot;value&quot;];
+			const std::string s_branch_value_2nd = branch.attributes[&quot;value_second&quot;];
+
+			if(!s_branch_hits.empty() &amp;&amp; s_branch_hits == s_cfg_hits) {
+				previously_hits_set = true;
+			}
+
+			if(!s_branch_direction.empty() &amp;&amp; s_branch_direction == s_cfg_direction) {
+				previously_direction_set = true;
+			}
+
+			if(!s_branch_terrain.empty() &amp;&amp; s_branch_terrain == s_cfg_terrain) {
+				previously_terrain_set = true;
+			}
+
+			if(!s_branch_value.empty() &amp;&amp; s_branch_value == s_cfg_value) {
+				previously_value_set = true;
+			}
+
+			if(!s_branch_value_2nd.empty() &amp;&amp; s_branch_value_2nd == s_cfg_value_2nd) {
+				previously_value_2nd_set = true;
+			}
+		}
+
+		// Merge all frames that have new matches and prune any impossible
+		// matches, e.g. hits=&#x27;yes&#x27; and hits=&#x27;no&#x27;
+		for(auto iter = branches.begin(); iter != branches.end(); /* nothing */) {
+			const std::string s_branch_hits      = (*iter).attributes[&quot;hits&quot;];
+			const std::string s_branch_direction = (*iter).attributes[&quot;direction&quot;];
+			const std::string s_branch_terrain   = (*iter).attributes[&quot;terrain_types&quot;];
+			const std::string s_branch_value     = (*iter).attributes[&quot;value&quot;];
+			const std::string s_branch_value_2nd = (*iter).attributes[&quot;value_second&quot;];
+
+			const bool hits_match      = (previously_hits_set &amp;&amp; s_branch_hits != s_cfg_hits);
+			const bool direction_match = (previously_direction_set &amp;&amp; s_branch_direction != s_cfg_direction);
+			const bool terrain_match   = (previously_terrain_set &amp;&amp; s_branch_terrain != s_cfg_terrain);
+			const bool value_match     = (previously_value_set &amp;&amp; s_branch_value != s_cfg_value);
+			const bool value_2nd_match = (previously_value_2nd_set &amp;&amp; s_branch_value_2nd != s_cfg_value_2nd);
+
+			if((!previously_hits_set      || hits_match) &amp;&amp;
+			   (!previously_direction_set || direction_match) &amp;&amp;
+			   (!previously_terrain_set   || terrain_match) &amp;&amp;
+			   (!previously_value_set     || value_match)  &amp;&amp;
+			   (!previously_value_2nd_set || value_2nd_match) &amp;&amp;
+			    (hits_match || direction_match || terrain_match || value_match || value_2nd_match))
+			{
+				branches.erase(iter++);
+			} else {
+				(*iter).attributes.merge_attributes(cfg);
+				++iter;
+			}
+		}
+
+		// Then we prune all parent branches with similar matches as they
+		// now will not have the full frame list
+		for(auto iter = parent-&gt;branches.begin(); iter != parent-&gt;branches.end(); /* nothing */) {
+			const std::string s_branch_hits      = (*iter).attributes[&quot;hits&quot;];
+			const std::string s_branch_direction = (*iter).attributes[&quot;direction&quot;];
+			const std::string s_branch_terrain   = (*iter).attributes[&quot;terrain_types&quot;];
+			const std::string s_branch_value     = (*iter).attributes[&quot;value&quot;];
+			const std::string s_branch_value_2nd = (*iter).attributes[&quot;value_second&quot;];
+
+			const bool hits_match      = (previously_hits_set &amp;&amp; s_branch_hits == s_cfg_hits);
+			const bool direction_match = (previously_direction_set &amp;&amp; s_branch_direction == s_cfg_direction);
+			const bool terrain_match   = (previously_terrain_set &amp;&amp; s_branch_terrain == s_cfg_terrain);
+			const bool value_match     = (previously_value_set &amp;&amp; s_branch_value == s_cfg_value);
+			const bool value_2nd_match = (previously_value_2nd_set &amp;&amp; s_branch_value_2nd == s_cfg_value_2nd);
+
+			if((!previously_hits_set        || hits_match) &amp;&amp;
+			     (!previously_direction_set || direction_match) &amp;&amp;
+			     (!previously_terrain_set   || terrain_match) &amp;&amp;
+			     (!previously_value_set     || value_match) &amp;&amp;
+			     (!previously_value_2nd_set || value_2nd_match) &amp;&amp;
+			     (hits_match || direction_match || terrain_match || value_match || value_2nd_match))
+			{
+				parent-&gt;branches.erase(iter++);
+			} else {
+				++iter;
+			}
+		}
+	}
+
+	config::const_all_children_itors itors;
+
+	animation_branches branches;
+	animation_cursor* parent;
+};
+
+static void prepare_single_animation(const config&amp; anim_cfg, animation_branches&amp; expanded_anims)
+{
+	/* The anim_cursor holds the current parsing through the config and the branches hold the data
+	 * that will be interpreted as the actual animation. The branches store the config attributes
+	 * for each block and the children of those branches make up all the &#x27;frame&#x27;, &#x27;missile_frame&#x27;,
+	 * etc. individually (so 2 instances of &#x27;frame&#x27; would be stored as 2 children).
+	 */
+	std::list&lt;animation_cursor&gt; anim_cursors;
+	anim_cursors.emplace_back(anim_cfg);
+
+	while(!anim_cursors.empty()) {
+		animation_cursor&amp; ac = anim_cursors.back();
+
+		// Reached end of sub-tag config block
+		if(ac.itors.empty()) {
+			if(!ac.parent) break;
+
+			// Merge all the current branches into the parent.
+			ac.parent-&gt;branches.splice(ac.parent-&gt;branches.end(), ac.branches);
+			anim_cursors.pop_back();
+			continue;
+		}
+
+		if(ac.itors.front().key != &quot;if&quot;) {
+			// Append current config object to all the branches in scope.
+			for(animation_branch &amp;ab : ac.branches) {
+				ab.children.push_back(ac.itors.begin());
+			}
+
+			ac.itors.pop_front();
+			continue;
+		}
+
+		int count = 0;
+		do {
+			// Copies the current branches to each cursor created for the conditional clauses.
+			// Merge attributes of the clause into them.
+			anim_cursors.emplace_back(ac.itors.front().cfg, &amp;ac);
+			ac.itors.pop_front();
+			++count;
+		} while (!ac.itors.empty() &amp;&amp; ac.itors.front().key == &quot;else&quot;);
+
+		if(count &gt; 1) {
+			// When else statements present, clear all branches before &#x27;if&#x27;
+			ac.branches.clear();
+		}
+	}
+
+#if 0
+	// Debug aid
+	for(animation_branch&amp; ab : anim_cursors.back().branches) {
+		std::cout &lt;&lt; &quot;--branch--\n&quot; &lt;&lt; ab.attributes;
+		for(config::all_children_iterator &amp;ci : ab.children) {
+			std::cout &lt;&lt; &quot;--branchcfg--\n&quot; &lt;&lt; ci-&gt;cfg;
+		}
+		std::cout &lt;&lt; &quot;\n&quot;;
+	}
+#endif
+
+	// Create the config object describing each branch.
+	assert(anim_cursors.size() == 1);
+	animation_cursor&amp; ac = anim_cursors.back();
+	expanded_anims.splice(expanded_anims.end(), ac.branches, ac.branches.begin(), ac.branches.end());
+}
+
+static animation_branches prepare_animation(const config&amp; cfg, const std::string&amp; animation_tag)
+{
+	animation_branches expanded_animations;
+	for(const config &amp;anim : cfg.child_range(animation_tag)) {
+		prepare_single_animation(anim, expanded_animations);
+	}
+
+	return expanded_animations;
+}
+
+unit_animation::unit_animation(int start_time,
+		const unit_frame&amp; frame, const std::string&amp; event, const int variation, const frame_builder&amp; builder)
+	: terrain_types_()
+	, unit_filter_()
+	, secondary_unit_filter_()
+	, directions_()
+	, frequency_(0)
+	, base_score_(variation)
+	, event_(utils::split(event))
+	, value_()
+	, primary_attack_filter_()
+	, secondary_attack_filter_()
+	, hits_()
+	, value2_()
+	, sub_anims_()
+	, unit_anim_(start_time,builder)
+	, src_()
+	, dst_()
+	, invalidated_(false)
+	, play_offscreen_(true)
+	, overlaped_hex_()
+{
+	add_frame(frame.duration(),frame,!frame.does_not_change());
+}
+
+unit_animation::unit_animation(const config&amp; cfg,const std::string&amp; frame_string )
+	: terrain_types_(t_translation::read_list(cfg[&quot;terrain_type&quot;].str()))
+	, unit_filter_()
+	, secondary_unit_filter_()
+	, directions_()
+	, frequency_(cfg[&quot;frequency&quot;])
+	, base_score_(cfg[&quot;base_score&quot;])
+	, event_()
+	, value_()
+	, primary_attack_filter_()
+	, secondary_attack_filter_()
+	, hits_()
+	, value2_()
+	, sub_anims_()
+	, unit_anim_(cfg,frame_string)
+	, src_()
+	, dst_()
+	, invalidated_(false)
+	, play_offscreen_(true)
+	, overlaped_hex_()
+{
+	//if(!cfg[&quot;debug&quot;].empty()) printf(&quot;DEBUG WML: FINAL\n%s\n\n&quot;,cfg.debug().c_str());
+
+	for(const config::any_child fr : cfg.all_children_range()) {
+		if(fr.key == frame_string) {
+			continue;
+		}
+
+		if(fr.key.find(&quot;_frame&quot;, fr.key.size() - 6) == std::string::npos) {
+			continue;
+		}
+
+		if(sub_anims_.find(fr.key) != sub_anims_.end()) {
+			continue;
+		}
+
+		sub_anims_[fr.key] = particle(cfg, fr.key.substr(0, fr.key.size() - 5));
+	}
+
+	event_ = utils::split(cfg[&quot;apply_to&quot;]);
+
+	const std::vector&lt;std::string&gt;&amp; my_directions = utils::split(cfg[&quot;direction&quot;]);
+	for(const auto&amp; direction :  my_directions) {
+		const map_location::DIRECTION d = map_location::parse_direction(direction);
+		directions_.push_back(d);
+	}
+
+	/*const filter_context* fc = game_display::get_singleton();
+	if(!fc) {
+		// This is a pointer to the gamestate. Would prefer to tie unit animations only to the display, but for now this
+		// is an acceptable fallback. It seems to be relevant because when a second game is created, it seems that the
+		// game_display is null at the time that units are being constructed, and hence at the time that this code is running.
+		// A different solution might be to delay the team_builder stage 2 call until after the gui is initialized. Note that
+		// the current set up could conceivably cause problems with the editor, iirc it doesn&#x27;t initialize a filter context.
+		fc = resources::filter_con;
+		assert(fc);
+	}*/
+
+	for(const config&amp; filter : cfg.child_range(&quot;filter&quot;)) {
+		unit_filter_.push_back(filter);
+	}
+
+	for(const config&amp; filter : cfg.child_range(&quot;filter_second&quot;)) {
+		secondary_unit_filter_.push_back(filter);
+	}
+
+	for(const auto&amp; v : utils::split(cfg[&quot;value&quot;])) {
+		value_.push_back(atoi(v.c_str()));
+	}
+
+	for(const auto&amp; h : utils::split(cfg[&quot;hits&quot;])) {
+		if(h == &quot;yes&quot; || h == strike_result::hit) {
+			hits_.push_back(strike_result::type::hit);
+		}
+
+		if(h == &quot;no&quot; || h == strike_result::miss) {
+			hits_.push_back(strike_result::type::miss);
+		}
+
+		if(h == &quot;yes&quot; || h == strike_result::kill ) {
+			hits_.push_back(strike_result::type::kill);
+		}
+	}
+
+	for(const auto&amp; v2 : utils::split(cfg[&quot;value_second&quot;])) {
+		value2_.push_back(atoi(v2.c_str()));
+	}
+
+	for(const config&amp; filter : cfg.child_range(&quot;filter_attack&quot;)) {
+		primary_attack_filter_.push_back(filter);
+	}
+
+	for(const config&amp; filter : cfg.child_range(&quot;filter_second_attack&quot;)) {
+		secondary_attack_filter_.push_back(filter);
+	}
+
+	play_offscreen_ = cfg[&quot;offscreen&quot;].to_bool(true);
+}
+
+int unit_animation::matches(const map_location&amp; loc, const map_location&amp; second_loc,
+		unit_const_ptr my_unit, const std::string&amp; event, const int value, strike_result::type hit, const_attack_ptr attack,
+		const_attack_ptr second_attack, int value2) const
+{
+	int result = base_score_;
+	const display&amp; disp = *display::get_singleton();
+
+	if(!event.empty() &amp;&amp; !event_.empty()) {
+		if(std::find(event_.begin(), event_.end(), event) == event_.end()) {
+			return MATCH_FAIL;
+		}
+
+		result++;
+	}
+
+	if(!terrain_types_.empty()) {
+		if(!t_translation::terrain_matches(disp.get_map().get_terrain(loc), terrain_types_)) {
+			return MATCH_FAIL;
+		}
+
+		result++;
+	}
+
+	if(!value_.empty()) {
+		if(std::find(value_.begin(), value_.end(), value) == value_.end()) {
+			return MATCH_FAIL;
+		}
+
+		result++;
+	}
+
+	if(my_unit) {
+		if(!directions_.empty()) {
+			if(std::find(directions_.begin(), directions_.end(), my_unit-&gt;facing()) == directions_.end()) {
+				return MATCH_FAIL;
+			}
+
+			result++;
+		}
+
+		for(const auto&amp; filter : unit_filter_) {
+			unit_filter f{ vconfig(filter) };
+			if(!f(*my_unit, loc)) return MATCH_FAIL;
+			++result;
+		}
+
+		if(!secondary_unit_filter_.empty()) {
+			unit_map::const_iterator unit = disp.get_units().find(second_loc);
+			if(!unit.valid()) {
+				return MATCH_FAIL;
+			}
+
+			for(const config&amp; c : secondary_unit_filter_) {
+				unit_filter f{ vconfig(c) };
+				if(!f(*unit, second_loc)) return MATCH_FAIL;
+				result++;
+			}
+		}
+	} else if(!unit_filter_.empty()) {
+		return MATCH_FAIL;
+	}
+
+	if(frequency_ &amp;&amp; !(randomness::rng::default_instance().get_random_int(0, frequency_-1))) {
+		return MATCH_FAIL;
+	}
+
+	if(!hits_.empty()) {
+		if(std::find(hits_.begin(),hits_.end(),hit) == hits_.end()) {
+			return MATCH_FAIL;
+		}
+
+		result ++;
+	}
+
+	if(!value2_.empty()) {
+		if(std::find(value2_.begin(),value2_.end(),value2) == value2_.end()) {
+			return MATCH_FAIL;
+		}
+
+		result ++;
+	}
+
+	if(!attack) {
+		if(!primary_attack_filter_.empty()) {
+			return MATCH_FAIL;
+		}
+	}
+
+	for(const auto&amp; iter : primary_attack_filter_) {
+		if(!attack-&gt;matches_filter(iter)) return MATCH_FAIL;
+		result++;
+	}
+
+	if(!second_attack) {
+		if(!secondary_attack_filter_.empty()) {
+			return MATCH_FAIL;
+		}
+	}
+
+	for(const auto&amp; iter : secondary_attack_filter_) {
+		if(!second_attack-&gt;matches_filter(iter)) return MATCH_FAIL;
+		result++;
+	}
+
+	return result;
+}
+
+void unit_animation::fill_initial_animations(std::vector&lt;unit_animation&gt;&amp; animations, const config&amp; cfg)
+{
+	add_anims(animations, cfg);
+
+	std::vector&lt;unit_animation&gt; animation_base;
+	for(const auto&amp; anim : animations) {
+		if(std::find(anim.event_.begin(), anim.event_.end(), &quot;default&quot;) != anim.event_.end()) {
+			animation_base.push_back(anim);
+			animation_base.back().base_score_ += unit_animation::DEFAULT_ANIM;
+			animation_base.back().event_.clear();
+		}
+	}
+
+	const std::string default_image = cfg[&quot;image&quot;];
+
+	if(animation_base.empty()) {
+		animation_base.push_back(unit_animation(0, frame_builder().image(default_image).duration(1), &quot;&quot;, unit_animation::DEFAULT_ANIM));
+	}
+
+	animations.push_back(unit_animation(0, frame_builder().image(default_image).duration(1), &quot;_disabled_&quot;, 0));
+	animations.push_back(unit_animation(0,
+		frame_builder().image(default_image).duration(300).blend(&quot;0.0~0.3:100,0.3~0.0:200&quot;, {255,255,255}),
+		&quot;_disabled_selected_&quot;, 0));
+
+	for(const auto&amp; base : animation_base) {
+		animations.push_back(base);
+		animations.back().event_ = { &quot;standing&quot; };
+		animations.back().play_offscreen_ = false;
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;_ghosted_&quot; };
+		animations.back().unit_anim_.override(0, animations.back().unit_anim_.get_animation_duration(),particle::UNSET,&quot;0.9&quot;, &quot;&quot;, {0,0,0}, &quot;&quot;, &quot;&quot;, &quot;~GS()&quot;);
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;_disabled_ghosted_&quot; };
+		animations.back().unit_anim_.override(0, 1, particle::UNSET, &quot;0.4&quot;, &quot;&quot;, {0,0,0}, &quot;&quot;, &quot;&quot;, &quot;~GS()&quot;);
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;selected&quot; };
+		animations.back().unit_anim_.override(0, 300, particle::UNSET, &quot;&quot;, &quot;0.0~0.3:100,0.3~0.0:200&quot;, {255,255,255});
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;recruited&quot; };
+		animations.back().unit_anim_.override(0, 600, particle::NO_CYCLE, &quot;0~1:600&quot;);
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;levelin&quot; };
+		animations.back().unit_anim_.override(0, 600, particle::NO_CYCLE, &quot;&quot;, &quot;1~0:600&quot;, {255,255,255});
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;levelout&quot; };
+		animations.back().unit_anim_.override(0, 600, particle::NO_CYCLE, &quot;&quot;, &quot;0~1:600,1&quot;, {255,255,255});
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;pre_movement&quot; };
+		animations.back().unit_anim_.override(0, 1, particle::NO_CYCLE);
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;post_movement&quot; };
+		animations.back().unit_anim_.override(0, 1, particle::NO_CYCLE);
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;movement&quot; };
+		animations.back().unit_anim_.override(0, 200,
+			particle::NO_CYCLE, &quot;&quot;, &quot;&quot;, {0,0,0}, &quot;0~1:200&quot;, std::to_string(display::LAYER_UNIT_MOVE_DEFAULT - display::LAYER_UNIT_FIRST));
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;defend&quot; };
+		animations.back().unit_anim_.override(0, animations.back().unit_anim_.get_animation_duration(),
+			particle::NO_CYCLE, &quot;&quot;, &quot;0.0,0.5:75,0.0:75,0.5:75,0.0&quot;, {255,0,0});
+		animations.back().hits_.push_back(strike_result::type::hit);
+		animations.back().hits_.push_back(strike_result::type::kill);
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;defend&quot; };
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;attack&quot; };
+		animations.back().unit_anim_.override(-150, 300, particle::NO_CYCLE, &quot;&quot;, &quot;&quot;, {0,0,0}, &quot;0~0.6:150,0.6~0:150&quot;, std::to_string(display::LAYER_UNIT_MOVE_DEFAULT-display::LAYER_UNIT_FIRST));
+		animations.back().primary_attack_filter_.emplace_back(&quot;range&quot;, &quot;melee&quot;);
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;attack&quot; };
+		animations.back().unit_anim_.override(-150, 150, particle::NO_CYCLE);
+		animations.back().primary_attack_filter_.emplace_back(&quot;range&quot;, &quot;ranged&quot;);
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;death&quot; };
+		animations.back().unit_anim_.override(0, 600, particle::NO_CYCLE, &quot;1~0:600&quot;);
+		animations.back().sub_anims_[&quot;_death_sound&quot;] = particle();
+		animations.back().sub_anims_[&quot;_death_sound&quot;].add_frame(1, frame_builder().sound(cfg[&quot;die_sound&quot;]), true);
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;victory&quot; };
+		animations.back().unit_anim_.override(0, animations.back().unit_anim_.get_animation_duration(), particle::CYCLE);
+
+		animations.push_back(base);
+		animations.back().unit_anim_.override(0, 150, particle::NO_CYCLE, &quot;1~0:150&quot;);
+		animations.back().event_ = { &quot;pre_teleport&quot; };
+
+		animations.push_back(base);
+		animations.back().unit_anim_.override(0, 150, particle::NO_CYCLE, &quot;0~1:150,1&quot;);
+		animations.back().event_ = { &quot;post_teleport&quot; };
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;healing&quot; };
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;healed&quot; };
+		animations.back().unit_anim_.override(0, 300, particle::NO_CYCLE, &quot;&quot;, &quot;0:30,0.5:30,0:30,0.5:30,0:30,0.5:30,0:30,0.5:30,0:30&quot;, {255,255,255});
+
+		const std::string healed_sound = get_heal_sound(cfg);
+
+		animations.back().sub_anims_[&quot;_healed_sound&quot;].add_frame(1, frame_builder().sound(healed_sound), true);
+
+		animations.push_back(base);
+		animations.back().event_ = { &quot;poisoned&quot; };
+		animations.back().unit_anim_.override(0, 300, particle::NO_CYCLE, &quot;&quot;, &quot;0:30,0.5:30,0:30,0.5:30,0:30,0.5:30,0:30,0.5:30,0:30&quot;, {0,255,0});
+		animations.back().sub_anims_[&quot;_poison_sound&quot;] = particle();
+		animations.back().sub_anims_[&quot;_poison_sound&quot;].add_frame(1, frame_builder().sound(game_config::sounds::status::poisoned), true);
+	}
+}
+
+static void add_simple_anim(std::vector&lt;unit_animation&gt;&amp; animations,
+	const config&amp; cfg, char const* tag_name, char const* apply_to,
+	display::drawing_layer layer = display::LAYER_UNIT_DEFAULT,
+	bool offscreen = true)
+{
+	for(const animation_branch&amp; ab : prepare_animation(cfg, tag_name)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = apply_to;
+
+		if(!offscreen) {
+			config::attribute_value&amp; v = anim[&quot;offscreen&quot;];
+			if(v.empty()) v = false;
+		}
+
+		config::attribute_value&amp; v = anim[&quot;layer&quot;];
+		if(v.empty()) v = layer - display::LAYER_UNIT_FIRST;
+
+		animations.emplace_back(anim);
+	}
+}
+
+void unit_animation::add_anims( std::vector&lt;unit_animation&gt; &amp; animations, const config &amp; cfg)
+{
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;animation&quot;)) {
+		animations.emplace_back(ab.merge());
+	}
+
+	const int default_layer = display::LAYER_UNIT_DEFAULT - display::LAYER_UNIT_FIRST;
+	const int move_layer    = display::LAYER_UNIT_MOVE_DEFAULT - display::LAYER_UNIT_FIRST;
+	const int missile_layer = display::LAYER_UNIT_MISSILE_DEFAULT - display::LAYER_UNIT_FIRST;
+
+	add_simple_anim(animations, cfg, &quot;resistance_anim&quot;, &quot;resistance&quot;);
+	add_simple_anim(animations, cfg, &quot;leading_anim&quot;, &quot;leading&quot;);
+	add_simple_anim(animations, cfg, &quot;teaching_anim&quot;, &quot;teaching&quot;);
+	add_simple_anim(animations, cfg, &quot;recruit_anim&quot;, &quot;recruited&quot;);
+	add_simple_anim(animations, cfg, &quot;recruiting_anim&quot;, &quot;recruiting&quot;);
+	add_simple_anim(animations, cfg, &quot;idle_anim&quot;, &quot;idling&quot;, display::LAYER_UNIT_DEFAULT, false);
+	add_simple_anim(animations, cfg, &quot;levelin_anim&quot;, &quot;levelin&quot;);
+	add_simple_anim(animations, cfg, &quot;levelout_anim&quot;, &quot;levelout&quot;);
+
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;standing_anim&quot;)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = &quot;standing&quot;;
+		anim[&quot;cycles&quot;] = true;
+
+		// Add cycles to all frames within a standing animation block
+		for(config::const_all_children_iterator ci : ab.children) {
+			std::string sub_frame_name = ci-&gt;key;
+			std::size_t pos = sub_frame_name.find(&quot;_frame&quot;);
+			if(pos != std::string::npos) {
+				anim[sub_frame_name.substr(0, pos) + &quot;_cycles&quot;] = true;
+			}
+		}
+
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = default_layer;
+		}
+
+		if(anim[&quot;offscreen&quot;].empty()) {
+			anim[&quot;offscreen&quot;] = false;
+		}
+
+		animations.emplace_back(anim);
+	}
+
+	// Standing animations are also used as default animations
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;standing_anim&quot;)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = &quot;default&quot;;
+		anim[&quot;cycles&quot;] = true;
+
+		for(config::const_all_children_iterator ci : ab.children) {
+			std::string sub_frame_name = ci-&gt;key;
+			std::size_t pos = sub_frame_name.find(&quot;_frame&quot;);
+			if(pos != std::string::npos) {
+				anim[sub_frame_name.substr(0, pos) + &quot;_cycles&quot;] = true;
+			}
+		}
+
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = default_layer;
+		}
+
+		if(anim[&quot;offscreen&quot;].empty()) {
+			anim[&quot;offscreen&quot;] = false;
+		}
+
+		animations.emplace_back(anim);
+	}
+
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;healing_anim&quot;)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = &quot;healing&quot;;
+		anim[&quot;value&quot;] = anim[&quot;damage&quot;];
+
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = default_layer;
+		}
+
+		animations.emplace_back(anim);
+	}
+
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;healed_anim&quot;)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = &quot;healed&quot;;
+		anim[&quot;value&quot;] = anim[&quot;healing&quot;];
+
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = default_layer;
+		}
+
+		animations.emplace_back(anim);
+		animations.back().sub_anims_[&quot;_healed_sound&quot;] = particle();
+
+		const std::string healed_sound = get_heal_sound(cfg);
+		animations.back().sub_anims_[&quot;_healed_sound&quot;].add_frame(1,frame_builder().sound(healed_sound),true);
+	}
+
+	for(const animation_branch &amp;ab : prepare_animation(cfg, &quot;poison_anim&quot;)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = &quot;poisoned&quot;;
+		anim[&quot;value&quot;] = anim[&quot;damage&quot;];
+
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = default_layer;
+		}
+
+		animations.emplace_back(anim);
+		animations.back().sub_anims_[&quot;_poison_sound&quot;] = particle();
+		animations.back().sub_anims_[&quot;_poison_sound&quot;].add_frame(1,frame_builder().sound(game_config::sounds::status::poisoned),true);
+	}
+
+	add_simple_anim(animations, cfg, &quot;pre_movement_anim&quot;, &quot;pre_movement&quot;, display::LAYER_UNIT_MOVE_DEFAULT);
+
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;movement_anim&quot;)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = &quot;movement&quot;;
+
+		if(anim[&quot;offset&quot;].empty()) {
+			anim[&quot;offset&quot;] = &quot;0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,0~1:200,&quot;;
+		}
+
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = move_layer;
+		}
+
+		animations.emplace_back(anim);
+	}
+
+	add_simple_anim(animations, cfg, &quot;post_movement_anim&quot;, &quot;post_movement&quot;, display::LAYER_UNIT_MOVE_DEFAULT);
+
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;defend&quot;)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = &quot;defend&quot;;
+
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = default_layer;
+		}
+
+		if(!anim[&quot;damage&quot;].empty() &amp;&amp; anim[&quot;value&quot;].empty()) {
+			anim[&quot;value&quot;] = anim[&quot;damage&quot;];
+		}
+
+		if(anim[&quot;hits&quot;].empty()) {
+			anim[&quot;hits&quot;] = false;
+			animations.emplace_back(anim);
+			animations.back().base_score_--; //so default doesn&#x27;t interfere with &#x27;if&#x27; block
+
+			anim[&quot;hits&quot;] = true;
+			animations.emplace_back(anim);
+			animations.back().base_score_--;
+
+			image::locator image_loc = animations.back().get_last_frame().end_parameters().image;
+			animations.back().add_frame(225, frame_builder()
+				.image(image_loc.get_filename()+image_loc.get_modifications())
+				.duration(225)
+				.blend(&quot;0.0,0.5:75,0.0:75,0.5:75,0.0&quot;, {255,0,0}));
+		} else {
+			for(const std::string&amp; hit_type : utils::split(anim[&quot;hits&quot;])) {
+				config tmp = anim;
+				tmp[&quot;hits&quot;] = hit_type;
+
+				animations.emplace_back(tmp);
+
+				image::locator image_loc = animations.back().get_last_frame().end_parameters().image;
+				if(hit_type == &quot;yes&quot; || hit_type == strike_result::hit || hit_type == strike_result::kill) {
+					animations.back().add_frame(225, frame_builder()
+						.image(image_loc.get_filename() + image_loc.get_modifications())
+						.duration(225)
+						.blend(&quot;0.0,0.5:75,0.0:75,0.5:75,0.0&quot;, {255,0,0}));
+				}
+			}
+		}
+	}
+
+	add_simple_anim(animations, cfg, &quot;draw_weapon_anim&quot;, &quot;draw_weapon&quot;, display::LAYER_UNIT_MOVE_DEFAULT);
+	add_simple_anim(animations, cfg, &quot;sheath_weapon_anim&quot;, &quot;sheath_weapon&quot;, display::LAYER_UNIT_MOVE_DEFAULT);
+
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;attack_anim&quot;)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = &quot;attack&quot;;
+
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = move_layer;
+		}
+
+		config::const_child_itors missile_fs = anim.child_range(&quot;missile_frame&quot;);
+		if(anim[&quot;offset&quot;].empty() &amp;&amp; missile_fs.empty()) {
+			anim[&quot;offset&quot;] =&quot;0~0.6,0.6~0&quot;;
+		}
+
+		if(!missile_fs.empty()) {
+			if(anim[&quot;missile_offset&quot;].empty()) {
+				anim[&quot;missile_offset&quot;] = &quot;0~0.8&quot;;
+			}
+
+			if(anim[&quot;missile_layer&quot;].empty()) {
+				anim[&quot;missile_layer&quot;] = missile_layer;
+			}
+
+			config tmp;
+			tmp[&quot;duration&quot;] = 1;
+
+			anim.add_child(&quot;missile_frame&quot;, tmp);
+			anim.add_child_at(&quot;missile_frame&quot;, tmp, 0);
+		}
+
+		animations.emplace_back(anim);
+	}
+
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;death&quot;)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = &quot;death&quot;;
+
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = default_layer;
+		}
+
+		animations.emplace_back(anim);
+		image::locator image_loc = animations.back().get_last_frame().end_parameters().image;
+
+		animations.back().add_frame(600, frame_builder()
+			.image(image_loc.get_filename()+image_loc.get_modifications())
+			.duration(600)
+			.highlight(&quot;1~0:600&quot;));
+
+		if(!cfg[&quot;die_sound&quot;].empty()) {
+			animations.back().sub_anims_[&quot;_death_sound&quot;] = particle();
+			animations.back().sub_anims_[&quot;_death_sound&quot;].add_frame(1,frame_builder().sound(cfg[&quot;die_sound&quot;]),true);
+		}
+	}
+
+	add_simple_anim(animations, cfg, &quot;victory_anim&quot;, &quot;victory&quot;);
+
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;extra_anim&quot;)) {
+		config anim = ab.merge();
+		anim[&quot;apply_to&quot;] = anim[&quot;flag&quot;];
+
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = default_layer;
+		}
+
+		animations.emplace_back(anim);
+	}
+
+	for(const animation_branch&amp; ab : prepare_animation(cfg, &quot;teleport_anim&quot;)) {
+		config anim = ab.merge();
+		if(anim[&quot;layer&quot;].empty()) {
+			anim[&quot;layer&quot;] = default_layer;
+		}
+
+		anim[&quot;apply_to&quot;] = &quot;pre_teleport&quot;;
+		animations.emplace_back(anim);
+		animations.back().unit_anim_.set_end_time(0);
+
+		anim[&quot;apply_to&quot;] =&quot;post_teleport&quot;;
+		animations.emplace_back(anim);
+		animations.back().unit_anim_.remove_frames_until(0);
+	}
+}
+
+void unit_animation::particle::override(int start_time
+	, int duration
+	, const cycle_state cycles
+	, const std::string&amp; highlight
+	, const std::string&amp; blend_ratio
+	, color_t blend_color
+	, const std::string&amp; offset
+	, const std::string&amp; layer
+	, const std::string&amp; modifiers)
+{
+	set_begin_time(start_time);
+	parameters_.override(duration,highlight,blend_ratio,blend_color,offset,layer,modifiers);
+
+	if(cycles == CYCLE) {
+		cycles_=true;
+	} else if(cycles==NO_CYCLE) {
+		cycles_=false;
+	}
+
+	if(get_animation_duration() &lt; duration) {
+		add_frame(duration -get_animation_duration(), get_last_frame());
+	} else if(get_animation_duration() &gt; duration) {
+		set_end_time(duration);
+	}
+}
+
+bool unit_animation::particle::need_update() const
+{
+	if(animated&lt;unit_frame&gt;::need_update()) return true;
+	if(get_current_frame().need_update()) return true;
+	if(parameters_.need_update()) return true;
+	return false;
+}
+
+bool unit_animation::particle::need_minimal_update() const
+{
+	return get_current_frame_begin_time() != last_frame_begin_time_;
+}
+
+unit_animation::particle::particle(const config&amp; cfg, const std::string&amp; frame_string)
+	: animated&lt;unit_frame&gt;()
+	, accelerate(true)
+	, parameters_()
+	, halo_id_()
+	, last_frame_begin_time_(0)
+	, cycles_(false)
+{
+	starting_frame_time_ = INT_MAX;
+
+	config::const_child_itors range = cfg.child_range(frame_string + &quot;frame&quot;);
+	if(!range.empty() &amp;&amp; cfg[frame_string + &quot;start_time&quot;].empty()) {
+		for(const config&amp; frame : range) {
+			starting_frame_time_ = std::min(starting_frame_time_, frame[&quot;begin&quot;].to_int());
+		}
+	} else {
+		starting_frame_time_ = cfg[frame_string + &quot;start_time&quot;];
+	}
+
+	for(const config&amp; frame : range) {
+		unit_frame tmp_frame(frame);
+		add_frame(tmp_frame.duration(), tmp_frame, !tmp_frame.does_not_change());
+	}
+
+	cycles_  = cfg[frame_string + &quot;cycles&quot;].to_bool(false);
+	parameters_ = frame_parsed_parameters(frame_builder(cfg,frame_string), get_animation_duration());
+
+	if(!parameters_.does_not_change()) {
+		force_change();
+	}
+}
+
+bool unit_animation::need_update() const
+{
+	if(unit_anim_.need_update()) return true;
+	for(const auto&amp; anim : sub_anims_) {
+		if(anim.second.need_update()) return true;
+	}
+
+	return false;
+}
+
+bool unit_animation::need_minimal_update() const
+{
+	if(!play_offscreen_) {
+		return false;
+	}
+
+	if(unit_anim_.need_minimal_update()) return true;
+
+	for(const auto&amp; anim : sub_anims_) {
+		if(anim.second.need_minimal_update()) return true;
+	}
+
+	return false;
+}
+
+bool unit_animation::animation_finished() const
+{
+	if(!unit_anim_.animation_finished()) return false;
+	for(const auto&amp; anim : sub_anims_) {
+		if(!anim.second.animation_finished()) return false;
+	}
+
+	return true;
+}
+
+bool unit_animation::animation_finished_potential() const
+{
+	if(!unit_anim_.animation_finished_potential()) return false;
+	for(const auto&amp; anim : sub_anims_) {
+		if(!anim.second.animation_finished_potential()) return false;
+	}
+
+	return true;
+}
+
+void unit_animation::update_last_draw_time()
+{
+	double acceleration = unit_anim_.accelerate ? display::get_singleton()-&gt;turbo_speed() : 1.0;
+	unit_anim_.update_last_draw_time(acceleration);
+	for(auto&amp; anim : sub_anims_) {
+		anim.second.update_last_draw_time(acceleration);
+	}
+}
+
+int unit_animation::get_end_time() const
+{
+	int result = unit_anim_.get_end_time();
+	for(const auto&amp; anim : sub_anims_) {
+		result = std::max&lt;int&gt;(result, anim.second.get_end_time());
+	}
+
+	return result;
+}
+
+int unit_animation::get_begin_time() const
+{
+	int result = unit_anim_.get_begin_time();
+	for(const auto&amp; anim : sub_anims_) {
+		result = std::min&lt;int&gt;(result, anim.second.get_begin_time());
+	}
+
+	return result;
+}
+
+void unit_animation::start_animation(int start_time
+	, const map_location&amp; src
+	, const map_location&amp; dst
+	, const std::string&amp; text
+	, const color_t text_color
+	, const bool accelerate)
+{
+	unit_anim_.accelerate = accelerate;
+	src_ = src;
+	dst_ = dst;
+
+	unit_anim_.start_animation(start_time);
+
+	if(!text.empty()) {
+		particle crude_build;
+		crude_build.add_frame(1, frame_builder());
+		crude_build.add_frame(1, frame_builder().text(text, text_color), true);
+		sub_anims_[&quot;_add_text&quot;] = crude_build;
+	}
+
+	for(auto&amp; anim : sub_anims_) {
+		anim.second.accelerate = accelerate;
+		anim.second.start_animation(start_time);
+	}
+}
+
+void unit_animation::update_parameters(const map_location&amp; src, const map_location&amp; dst)
+{
+	src_ = src;
+	dst_ = dst;
+}
+
+void unit_animation::pause_animation()
+{
+	unit_anim_.pause_animation();
+
+	for(auto&amp; anim : sub_anims_) {
+		anim.second.pause_animation();
+	}
+}
+
+void unit_animation::restart_animation()
+{
+	unit_anim_.restart_animation();
+
+	for(auto&amp; anim : sub_anims_) {
+		anim.second.restart_animation();
+	}
+}
+
+void unit_animation::redraw(frame_parameters&amp; value, halo::manager&amp; halo_man)
+{
+	invalidated_ = false;
+	overlaped_hex_.clear();
+
+	value.primary_frame = true;
+	unit_anim_.redraw(value,src_,dst_, halo_man);
+
+	value.primary_frame = false;
+	for(auto&amp; anim : sub_anims_) {
+		anim.second.redraw(value, src_, dst_, halo_man);
+	}
+}
+
+void unit_animation::clear_haloes()
+{
+	unit_anim_.clear_halo();
+
+	for(auto&amp; anim : sub_anims_) {
+		anim.second.clear_halo();
+	}
+}
+
+bool unit_animation::invalidate(frame_parameters&amp; value)
+{
+	if(invalidated_) return false;
+
+	display* disp = display::get_singleton();
+	const bool complete_redraw = disp-&gt;tile_nearly_on_screen(src_) || disp-&gt;tile_nearly_on_screen(dst_);
+
+	if(overlaped_hex_.empty()) {
+		if(complete_redraw) {
+			value.primary_frame = true;
+			overlaped_hex_ = unit_anim_.get_overlaped_hex(value, src_, dst_);
+			value.primary_frame = false;
+
+			for(auto&amp; anim : sub_anims_) {
+				std::set&lt;map_location&gt; tmp = anim.second.get_overlaped_hex(value, src_, dst_);
+				overlaped_hex_.insert(tmp.begin(), tmp.end());
+			}
+		} else {
+			// Offscreen animations only invalidate their own hex, no propagation,
+			// but we still need this to play sounds
+			overlaped_hex_.insert(src_);
+		}
+	}
+
+	if(complete_redraw) {
+		if( need_update()) {
+			disp-&gt;invalidate(overlaped_hex_);
+			invalidated_ = true;
+			return true;
+		} else {
+			invalidated_ = disp-&gt;propagate_invalidation(overlaped_hex_);
+			return invalidated_;
+		}
+	} else {
+		if(need_minimal_update()) {
+			disp-&gt;invalidate(overlaped_hex_);
+			invalidated_ = true;
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+std::string unit_animation::debug() const
+{
+	std::ostringstream outstream;
+	outstream &lt;&lt; *this;
+	return outstream.str();
+}
+
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; outstream, const unit_animation&amp; u_animation)
+{
+	std::string events_string = utils::join(u_animation.event_);
+	outstream &lt;&lt; &quot;[&quot; &lt;&lt; events_string &lt;&lt; &quot;]\n&quot;;
+
+	outstream &lt;&lt; &quot;\tstart_time=&quot; &lt;&lt; u_animation.get_begin_time() &lt;&lt; &#x27;\n&#x27;;
+
+	if(u_animation.hits_.size() &gt; 0) {
+		std::vector&lt;std::string&gt; hits;
+		std::transform(u_animation.hits_.begin(), u_animation.hits_.end(), std::back_inserter(hits), strike_result::get_string);
+		outstream &lt;&lt; &quot;\thits=&quot; &lt;&lt; utils::join(hits) &lt;&lt; &#x27;\n&#x27;;
+	}
+
+	if(u_animation.directions_.size() &gt; 0) {
+		std::vector&lt;std::string&gt; dirs;
+		std::transform(u_animation.directions_.begin(), u_animation.directions_.end(), std::back_inserter(dirs), map_location::write_direction);
+		outstream &lt;&lt; &quot;\tdirections=&quot; &lt;&lt; utils::join(dirs) &lt;&lt; &#x27;\n&#x27;;
+	}
+
+	if(u_animation.terrain_types_.size() &gt; 0) {
+		outstream &lt;&lt; &quot;\tterrain=&quot; &lt;&lt; utils::join(u_animation.terrain_types_) &lt;&lt; &#x27;\n&#x27;;
+	}
+
+	if(u_animation.frequency_ &gt; 0) outstream &lt;&lt; &quot;frequency=&quot; &lt;&lt; u_animation.frequency_ &lt;&lt; &#x27;\n&#x27;;
+
+	if(u_animation.unit_filter_.size() &gt; 0) {
+		outstream &lt;&lt; &quot;[filter]\n&quot;;
+		for(const config&amp; cfg : u_animation.unit_filter_) {
+			outstream &lt;&lt; cfg.debug();
+		}
+
+		outstream &lt;&lt; &quot;[/filter]\n&quot;;
+	}
+
+	if(u_animation.secondary_unit_filter_.size() &gt; 0) {
+		outstream &lt;&lt; &quot;[filter_second]\n&quot;;
+		for(const config&amp; cfg : u_animation.secondary_unit_filter_) {
+			outstream &lt;&lt; cfg.debug();
+		}
+
+		outstream &lt;&lt; &quot;[/filter_second]\n&quot;;
+	}
+
+	if(u_animation.primary_attack_filter_.size() &gt; 0) {
+		outstream &lt;&lt; &quot;[filter_attack]\n&quot;;
+		for(const config&amp; cfg : u_animation.primary_attack_filter_) {
+			outstream &lt;&lt; cfg.debug();
+		}
+
+		outstream &lt;&lt; &quot;[/filter_attack]\n&quot;;
+	}
+
+	if(u_animation.secondary_attack_filter_.size() &gt; 0) {
+		outstream &lt;&lt; &quot;[filter_second_attack]\n&quot;;
+		for(const config&amp; cfg : u_animation.secondary_attack_filter_) {
+			outstream &lt;&lt; cfg.debug();
+		}
+
+		outstream &lt;&lt; &quot;[/filter_second_attack]\n&quot;;
+	}
+
+	for(std::size_t i = 0; i &lt; u_animation.unit_anim_.get_frames_count(); i++) {
+		outstream &lt;&lt; &quot;\t[frame]\n&quot;;
+		for(const std::string&amp; frame_string : u_animation.unit_anim_.get_frame(i).debug_strings()) {
+			outstream &lt;&lt; &quot;\t\t&quot; &lt;&lt; frame_string &lt;&lt;&quot;\n&quot;;
+		}
+		outstream &lt;&lt; &quot;\t[/frame]\n&quot;;
+	}
+
+	for(std::pair&lt;std::string, unit_animation::particle&gt; p : u_animation.sub_anims_) {
+		for(std::size_t i = 0; i &lt; p.second.get_frames_count(); i++) {
+			std::string sub_frame_name = p.first;
+			std::size_t pos = sub_frame_name.find(&quot;_frame&quot;);
+			if(pos != std::string::npos) sub_frame_name = sub_frame_name.substr(0, pos);
+
+			outstream &lt;&lt; &quot;\t&quot; &lt;&lt; sub_frame_name &lt;&lt; &quot;_start_time=&quot; &lt;&lt; p.second.get_begin_time() &lt;&lt; &#x27;\n&#x27;;
+			outstream &lt;&lt; &quot;\t[&quot; &lt;&lt; p.first &lt;&lt; &quot;]\n&quot;;
+
+			for(const std::string&amp; frame_string : p.second.get_frame(i).debug_strings()) {
+				outstream &lt;&lt; &quot;\t\t&quot; &lt;&lt; frame_string &lt;&lt; &#x27;\n&#x27;;
+			}
+
+			outstream &lt;&lt; &quot;\t[/&quot; &lt;&lt; p.first &lt;&lt; &quot;]\n&quot;;
+		}
+	}
+
+	outstream &lt;&lt; &quot;[/&quot; &lt;&lt; events_string &lt;&lt; &quot;]\n&quot;;
+	return outstream;
+}
+
+void unit_animation::particle::redraw(const frame_parameters&amp; value,const map_location&amp; src, const map_location&amp; dst, halo::manager&amp; halo_man)
+{
+	const unit_frame&amp; current_frame = get_current_frame();
+	const int animation_time = get_animation_time();
+	const frame_parameters default_val = parameters_.parameters(animation_time - get_begin_time());
+
+	// Everything is relative to the first frame in an attack/defense/etc. block.
+	// so we need to check if this particular frame is due to be shown at this time
+	bool in_scope_of_frame = (animation_time &gt;= get_current_frame_begin_time() ? true: false);
+	if(animation_time &gt; get_current_frame_end_time()) in_scope_of_frame = false;
+
+	// Sometimes even if the frame is not due to be shown, a frame image still must be shown.
+	// i.e. in a defense animation that is shorter than an attack animation.
+	// the halos should not persist though and use the &#x27;in_scope_of_frame&#x27; variable.
+
+	// For sound frames we want the first time variable set only after the frame has started.
+	if(get_current_frame_begin_time() != last_frame_begin_time_ &amp;&amp; animation_time &gt;= get_current_frame_begin_time()) {
+		last_frame_begin_time_ = get_current_frame_begin_time();
+		current_frame.redraw(get_current_frame_time(), true, in_scope_of_frame, src, dst, halo_id_, halo_man, default_val, value);
+	} else {
+		current_frame.redraw(get_current_frame_time(), false, in_scope_of_frame, src, dst, halo_id_, halo_man, default_val, value);
+	}
+}
+
+void unit_animation::particle::clear_halo()
+{
+	halo_id_.reset();
+}
+
+std::set&lt;map_location&gt; unit_animation::particle::get_overlaped_hex(const frame_parameters&amp; value, const map_location&amp; src, const map_location&amp; dst)
+{
+	const unit_frame&amp; current_frame = get_current_frame();
+	const frame_parameters default_val = parameters_.parameters(get_animation_time() - get_begin_time());
+	return current_frame.get_overlaped_hex(get_current_frame_time(), src, dst, default_val,value);
+}
+
+unit_animation::particle::~particle()
+{
+	halo_id_.reset();
+}
+
+void unit_animation::particle::start_animation(int start_time)
+{
+	halo_id_.reset();
+	parameters_.override(get_animation_duration());
+	animated&lt;unit_frame&gt;::start_animation(start_time,cycles_);
+	last_frame_begin_time_ = get_begin_time() -1;
+}
+
+void unit_animator::add_animation(unit_const_ptr animated_unit
+		, const std::string&amp; event
+		, const map_location &amp;src
+		, const map_location &amp;dst
+		, const int value
+		, bool with_bars
+		, const std::string&amp; text
+		, const color_t text_color
+		, const strike_result::type hit_type
+		, const_attack_ptr attack
+		, const_attack_ptr second_attack
+		, int value2)
+{
+	if(!animated_unit) return;
+
+	anim_elem tmp;
+	tmp.my_unit = std::move(animated_unit);
+	tmp.text = text;
+	tmp.text_color = text_color;
+	tmp.src = src;
+	tmp.with_bars= with_bars;
+	tmp.animation = tmp.my_unit-&gt;anim_comp().choose_animation(src, event, dst, value, hit_type, attack, second_attack, value2);
+
+	if(!tmp.animation) return;
+
+	start_time_ = std::max&lt;int&gt;(start_time_, tmp.animation-&gt;get_begin_time());
+	animated_units_.push_back(std::move(tmp));
+}
+
+void unit_animator::add_animation(unit_const_ptr animated_unit
+	, const unit_animation* anim
+	, const map_location &amp;src
+	, bool with_bars
+	, const std::string&amp; text
+	, const color_t text_color)
+{
+	if(!animated_unit) return;
+
+	anim_elem tmp;
+	tmp.my_unit = std::move(animated_unit);
+	tmp.text = text;
+	tmp.text_color = text_color;
+	tmp.src = src;
+	tmp.with_bars = with_bars;
+	tmp.animation = anim;
+
+	if(!tmp.animation) return;
+
+	start_time_ = std::max&lt;int&gt;(start_time_, tmp.animation-&gt;get_begin_time());
+	animated_units_.push_back(std::move(tmp));
+}
+
+bool unit_animator::has_animation(unit_const_ptr animated_unit
+		, const std::string&amp; event
+		, const map_location &amp;src
+		, const map_location &amp;dst
+		, const int value
+		, const strike_result::type hit_type
+		, const_attack_ptr attack
+		, const_attack_ptr second_attack
+		, int value2) const
+{
+	return (animated_unit &amp;&amp; animated_unit-&gt;anim_comp().choose_animation(src, event, dst, value, hit_type, attack, second_attack, value2));
+}
+
+void unit_animator::replace_anim_if_invalid(unit_const_ptr animated_unit
+	, const std::string&amp; event
+	, const map_location &amp;src
+	, const map_location &amp; dst
+	, const int value
+	, bool with_bars
+	, const std::string&amp; text
+	, const color_t text_color
+	, const strike_result::type hit_type
+	, const_attack_ptr attack
+	, const_attack_ptr second_attack
+	, int value2)
+{
+	if(!animated_unit) return;
+
+	if(animated_unit-&gt;anim_comp().get_animation() &amp;&amp;
+		!animated_unit-&gt;anim_comp().get_animation()-&gt;animation_finished_potential() &amp;&amp;
+		 animated_unit-&gt;anim_comp().get_animation()-&gt;matches(
+			src, dst, animated_unit, event, value, hit_type, attack, second_attack, value2) &gt; unit_animation::MATCH_FAIL)
+	{
+		anim_elem tmp;
+		tmp.my_unit = animated_unit;
+		tmp.text = text;
+		tmp.text_color = text_color;
+		tmp.src = src;
+		tmp.with_bars= with_bars;
+		tmp.animation = nullptr;
+
+		animated_units_.push_back(std::move(tmp));
+	} else {
+		add_animation(animated_unit,event,src,dst,value,with_bars,text,text_color,hit_type,attack,second_attack,value2);
+	}
+}
+
+void unit_animator::start_animations()
+{
+	int begin_time = INT_MAX;
+
+	for(const auto&amp; anim : animated_units_) {
+		if(anim.my_unit-&gt;anim_comp().get_animation()) {
+			if(anim.animation) {
+				begin_time = std::min&lt;int&gt;(begin_time, anim.animation-&gt;get_begin_time());
+			} else  {
+				begin_time = std::min&lt;int&gt;(begin_time, anim.my_unit-&gt;anim_comp().get_animation()-&gt;get_begin_time());
+			}
+		}
+	}
+
+	for(auto&amp; anim : animated_units_) {
+		if(anim.animation) {
+			anim.my_unit-&gt;anim_comp().start_animation(begin_time, anim.animation, anim.with_bars, anim.text, anim.text_color);
+			anim.animation = nullptr;
+		} else {
+			anim.my_unit-&gt;anim_comp().get_animation()-&gt;update_parameters(anim.src, anim.src.get_direction(anim.my_unit-&gt;facing()));
+		}
+	}
+}
+
+bool unit_animator::would_end() const
+{
+	bool finished = true;
+	for(const auto&amp; anim : animated_units_) {
+		finished &amp;= anim.my_unit-&gt;anim_comp().get_animation()-&gt;animation_finished_potential();
+	}
+
+	return finished;
+}
+
+void unit_animator::wait_until(int animation_time) const
+{
+	if(animated_units_.empty()) {
+		return;
+	}
+	// important to set a max animation time so that the time does not go past this value for movements.
+	// fix for bug #1565
+	animated_units_[0].my_unit-&gt;anim_comp().get_animation()-&gt;set_max_animation_time(animation_time);
+
+	display* disp = display::get_singleton();
+	double speed = disp-&gt;turbo_speed();
+
+	resources::controller-&gt;play_slice(false);
+
+	int end_tick = animated_units_[0].my_unit-&gt;anim_comp().get_animation()-&gt;time_to_tick(animation_time);
+	while(SDL_GetTicks() &lt; unsigned(end_tick - std::min(int(20 / speed), 20))) {
+		if(!game_config::no_delay) {
+			SDL_Delay(std::clamp(int((animation_time - get_animation_time()) * speed), 0, 10));
+		}
+		resources::controller-&gt;play_slice(false);
+		end_tick = animated_units_[0].my_unit-&gt;anim_comp().get_animation()-&gt;time_to_tick(animation_time);
+	}
+
+	if(!game_config::no_delay) {
+		SDL_Delay(std::max&lt;int&gt;(0, end_tick - SDL_GetTicks() + 5));
+	}
+
+	new_animation_frame();
+	animated_units_[0].my_unit-&gt;anim_comp().get_animation()-&gt;set_max_animation_time(0);
+}
+
+void unit_animator::wait_for_end() const
+{
+	if(game_config::no_delay) return;
+
+	bool finished = false;
+	while(!finished) {
+		resources::controller-&gt;play_slice(false);
+
+		SDL_Delay(10);
+
+		finished = true;
+		for(const auto&amp; anim : animated_units_) {
+			finished &amp;= anim.my_unit-&gt;anim_comp().get_animation()-&gt;animation_finished_potential();
+		}
+	}
+}
+
+int unit_animator::get_animation_time() const
+{
+	if(animated_units_.empty()) {
+		return 0;
+	}
+	return animated_units_[0].my_unit-&gt;anim_comp().get_animation()-&gt;get_animation_time() ;
+}
+
+int unit_animator::get_animation_time_potential() const
+{
+	if(animated_units_.empty()) {
+		return 0;
+	}
+	return animated_units_[0].my_unit-&gt;anim_comp().get_animation()-&gt;get_animation_time_potential() ;
+}
+
+int unit_animator::get_end_time() const
+{
+	int end_time = INT_MIN;
+	for(const auto&amp; anim : animated_units_) {
+		if(anim.my_unit-&gt;anim_comp().get_animation()) {
+			end_time = std::max&lt;int&gt;(end_time, anim.my_unit-&gt;anim_comp().get_animation()-&gt;get_end_time());
+		}
+	}
+
+	return end_time;
+}
+
+void unit_animator::pause_animation()
+{
+	for(const auto&amp; anim : animated_units_) {
+		if(anim.my_unit-&gt;anim_comp().get_animation()) {
+			anim.my_unit-&gt;anim_comp().get_animation()-&gt;pause_animation();
+		}
+	}
+}
+
+void unit_animator::restart_animation()
+{
+	for(const auto&amp; anim : animated_units_) {
+		if(anim.my_unit-&gt;anim_comp().get_animation()) {
+			anim.my_unit-&gt;anim_comp().get_animation()-&gt;restart_animation();
+		}
+	}
+}
+
+void unit_animator::set_all_standing()
+{
+	for(const auto&amp; anim : animated_units_) {
+		anim.my_unit-&gt;anim_comp().set_standing();
+	}
+}
+</pre></main></body></html>

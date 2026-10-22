@@ -1,0 +1,930 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>wmlparser.py</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/tools/wesnoth/wmlparser.py</h1><pre>#!/usr/bin/env python3
+# encoding: utf-8
+
+try:
+    from . import wmldata
+except ImportError:
+    import wmldata
+import os, glob, sys
+import re
+
+&quot;&quot;&quot;
+NOTE: You should use wmlparser3.py instead which uses the C++
+preprocessor.
+
+Module implementing a WML parser in pure python.
+&quot;&quot;&quot;
+
+class Error(Exception):
+    &quot;&quot;&quot;
+    This is a custom exception the parser throws on errors. It can display
+    the position of the error as a tree of all files and macros leading to
+    the error, with line numbers.
+    &quot;&quot;&quot;
+
+    def __init__(self, parser, text):
+        self.text = &quot;%s:%d: %s&quot; % (parser.filename, parser.line, text)
+        for i in range(len(parser.texts)):
+            parent = parser.texts[-1 - i]
+            self.text += &quot;\n &quot; + &quot; &quot; * i + &quot;from %s:%d&quot; % (parent.filename, parent.line)
+
+    def __str__(self):
+        return self.text
+
+class Parser:
+    &quot;&quot;&quot;
+    The main parser class. An instance of this is needed for parsing.
+    &quot;&quot;&quot;
+
+    class Macro:
+        &quot;&quot;&quot;Class to hold one single macro.&quot;&quot;&quot;
+        def __init__(self, name, params, text, textdomain):
+            self.name, self.params, self.text, self.textdomain =\
+                name, params, text, textdomain
+
+    class TextState:
+        def __init__(self, filename, text, textpos, line, current_path,
+            textdomain):
+            self.filename, self.text, self.textpos, self.line =\
+                filename, text, textpos, line
+            self.current_path = current_path
+            self.textdomain = textdomain
+
+    def __init__(self, data_dir, user_dir=None, no_macros_in_string=False):
+        &quot;&quot;&quot;
+        Initialize a new WMLParser instance.
+
+        data_dir is used for resolving {filepath} and {@filepath}
+        user_dir is used for resolving {~filepath} and {@filepath}
+        See https://www.wesnoth.org/wiki/PreprocessorRef
+        &quot;&quot;&quot;
+
+        self.data_dir = data_dir
+        self.user_dir = user_dir
+        self.no_macros_in_string = no_macros_in_string
+
+        self.textpos = 0
+        self.line = 1
+        self.macros = {}
+        self.texts = []
+
+        self.text = &quot;&quot;
+        self.filename = &quot;&quot;
+
+        self.current_path = &quot;.&quot;
+
+        self.textdomain = &quot;&quot;
+
+        # Callback which is called for each macro. If it returns False, the
+        # macro is ignored.
+        self.macro_callback = None
+        self.macro_not_found_callback = None
+        self.no_macros = False
+
+        # If set to a function, the function is called with the current
+        # textdomain and string as arguments for any translatable string, and
+        # is expected to return a translation.
+        self.gettext = None
+
+        # A list containing the stacked up #ifdefs.
+        self.preprocessor_nesting = []
+        self.stay_in_file = False
+
+        # If set, included files are only parsed when under the given directory.
+        self.only_expand_pathes = []
+
+        # Whether to print current file, comments, and macro replacements.
+        self.verbose = False
+
+    def read_encoded(self, filename):
+        &quot;&quot;&quot;
+        Helper for gracefully handling non-utf8 files and fixing up non-unix
+        line endings.
+        &quot;&quot;&quot;
+        try:
+            with open(filename, encoding=&quot;utf8&quot;) as f:
+                text = f.read()
+        except UnicodeDecodeError:
+            with open(filename, encoding=&quot;latin1&quot;) as f:
+                text = f.read()
+        except IOError:
+            sys.stderr.write(&quot;Cannot open file %s!\n&quot; % filename)
+            return &quot;&quot;
+        text = text.replace(&quot;\r\n&quot;, &quot;\n&quot;).replace(&quot;\t&quot;, &quot; &quot;).replace(&quot;\r&quot;, &quot;\n&quot;)
+        if text == &quot;&quot; or text[-1] != &quot;\n&quot;:
+            text += &quot;\n&quot;
+        return text
+
+    def set_macro_not_found_callback(self, callback):
+        &quot;&quot;&quot;
+        You can set a last-resort function which is called when a macro could
+        not be resolved by the Parser. The calling format is:
+
+        callback(wmlparser, name, params)
+        &quot;&quot;&quot;
+        self.macro_not_found_callback = callback
+
+    def parse_file(self, filename):
+        &quot;&quot;&quot;
+        Set the parser to parse the given file.
+        &quot;&quot;&quot;
+        text = self.read_encoded(filename)
+        self.push_text(filename, text, cd = os.path.dirname(filename))
+
+    def parse_stream(self, stream, binary = False):
+        &quot;&quot;&quot;
+        Set the parser to parse from a file object.
+        &quot;&quot;&quot;
+        text = stream.read()
+        if not binary:
+            text = text.replace(&quot;\r\n&quot;, &quot;\n&quot;).replace(&quot;\t&quot;, &quot; &quot;).replace(&quot;\r&quot;, &quot;\n&quot;)
+        self.push_text(&quot;inline&quot;, text)
+
+    def parse_text(self, text, binary = False):
+        &quot;&quot;&quot;
+        Set the parser to directly parse from the given string.
+        &quot;&quot;&quot;
+        if not binary:
+            text = text.replace(&quot;\r\n&quot;, &quot;\n&quot;).replace(&quot;\t&quot;, &quot; &quot;)
+        self.push_text(&quot;inline&quot;, text)
+
+    def push_text(self, filename, text, params = None, cd = None,
+        initial_textdomain = &quot;&quot;):
+        &quot;&quot;&quot;
+        Recursively parse a sub-document, e.g. when a file is included or a
+        macro is executed.
+        &quot;&quot;&quot;
+        if self.verbose:
+            sys.stderr.write(&quot;%s:%d: Now parsing %s.\n&quot; % (self.filename,
+                                                           self.line, filename))
+        if not text: text = &quot;\n&quot;
+        self.texts.append(self.TextState(self.filename, self.text, self.textpos,
+            self.line, self.current_path, self.textdomain))
+        self.filename, self.text, self.params = filename, text, params
+        self.textpos = 0
+        self.line = 1
+        self.textdomain = initial_textdomain
+        if cd: self.current_path = cd
+
+    def pop_text(self):
+        &quot;&quot;&quot;
+        Finish the current text and return to parsing the caller.
+        &quot;&quot;&quot;
+        textstate = self.texts.pop()
+        self.filename, self.text, self.textpos, self.line =\
+            textstate.filename, textstate.text, textstate.textpos, textstate.line
+        self.current_path = textstate.current_path
+        self.textdomain = textstate.textdomain
+        if self.verbose:
+            sys.stderr.write(&quot;%s:%d: Back.\n&quot; % (self.filename, self.line))
+
+    def get_macros(self):
+        &quot;&quot;&quot;
+        Return a list of all macros currently known to the parser.
+        &quot;&quot;&quot;
+        return self.macros
+
+    def add_macros(self, macros):
+        &quot;&quot;&quot;
+        Add additional macros to the parser.
+        &quot;&quot;&quot;
+        for macro in macros:
+            self.macros[macro] = macros[macro]
+
+    def read_next(self):
+        &quot;&quot;&quot;Read the next character, taking care of \r and \t.&quot;&quot;&quot;
+        c = self.text[self.textpos]
+        self.textpos += 1
+        if c == &quot;\n&quot;:
+            self.line += 1
+        if self.textpos == len(self.text):
+            if len(self.texts) and not self.stay_in_file: self.pop_text()
+        return c
+
+    def at_end(self):
+        &quot;&quot;&quot;
+        Return True if the parser is at the very end of the input, that is the
+        last character of the topmost input text has been read.
+        &quot;&quot;&quot;
+        return (len(self.texts) == 0
+            or self.stay_in_file) and self.textpos == len(self.text)
+
+    def check_end(self):
+        if self.textpos == len(self.text):
+            if len(self.texts): self.pop_text()
+
+    def peek_next(self):
+        &quot;&quot;&quot;Like read_next, but does not consume.&quot;&quot;&quot;
+        if self.textpos &gt;= len(self.text):
+            if len(self.texts) and not self.stay_in_file:
+                ts = self.texts[-1]
+                if ts.textpos &gt;= len(ts.text): return &quot;&quot;
+                return ts.text[ts.textpos]
+        return self.text[self.textpos]
+
+    def read_until(self, sep):
+        &quot;&quot;&quot;Read until a character inside the string sep is found.&quot;&quot;&quot;
+        mob = re.compile(&quot;.*?[&quot; + sep + &quot;]&quot;, re.S).match(self.text, self.textpos)
+        if mob:
+            found = mob.group(0)
+            self.line += found.count(&quot;\n&quot;)
+            self.textpos = mob.end(0)
+            if self.textpos == len(self.text) and not self.stay_in_file:
+                if len(self.texts): self.pop_text()
+            return found
+        else:
+            found = self.text[self.textpos:]
+            self.line += found.count(&quot;\n&quot;)
+            self.textpos = len(self.text)
+            if len(self.texts) and not self.stay_in_file:
+                self.pop_text()
+                found += self.read_until(sep)
+            return found
+
+    def read_while(self, sep):
+        &quot;&quot;&quot;Read while characters are inside the string sep.&quot;&quot;&quot;
+        text = &quot;&quot;
+        while not self.at_end():
+            c = self.peek_next()
+            if not c in sep:
+                return text
+            c = self.read_next()
+            text += c
+        return text
+
+    def skip_whitespace_and_newlines(self):
+        self.read_while(&quot; \t\r\n&quot;)
+
+    preprocessor_commands = [&quot;#define&quot;, &quot;#undef&quot;, &quot;#textdomain&quot;, &quot;#ifdef&quot;,
+        &quot;#ifndef&quot;, &quot;#else&quot;, &quot;#enddef&quot;, &quot;#endif&quot;]
+
+    def read_lines_until(self, string):
+        &quot;&quot;&quot;
+        Read lines until one contains the given string, but throw away any
+        comments.
+        &quot;&quot;&quot;
+        text = &quot;&quot;
+        in_string = False
+        while 1:
+            if self.at_end():
+                return None
+            line = self.read_until(&quot;\n&quot;)
+
+            line_start = 0
+            if in_string:
+                string_end = line.find(&#x27;&quot;&#x27;)
+                if string_end &lt; 0:
+                    text += line
+                    continue
+                in_string = False
+                line_start = string_end + 1
+
+            elif line.lstrip().startswith(&quot;#&quot;):
+                possible_comment = line.lstrip()
+                for com in self.preprocessor_commands:
+                    if possible_comment.startswith(com):
+                        break
+                else:
+                    continue
+
+
+            quotation = line.find(&#x27;&quot;&#x27;, line_start)
+            while quotation &gt;= 0:
+                in_string = True
+                string_end = line.find(&#x27;&quot;&#x27;, quotation + 1)
+                if string_end &lt; 0: break
+                line_start = string_end + 1
+                in_string = False
+                quotation = line.find(&#x27;&quot;&#x27;, line_start)
+
+            if not in_string:
+                end = line.find(string, line_start)
+                if end &gt;= 0:
+                    text += line[:end]
+                    break
+            text += line
+        return text
+
+    def read_lua(self):
+        &quot;&quot;&quot;
+        Read a &lt;&lt; .... &gt;&gt; string, return contents literally.
+        &quot;&quot;&quot;
+        text = &quot;&quot;
+        while not self.at_end():
+            c = self.read_next()
+            if c == &quot;&gt;&quot; and self.peek_next() == &quot;&gt;&quot;:
+                self.read_next() #get rid of trailing &gt;
+                return text
+            text += c
+        raise Error(self, &quot;Unexpected end of file&quot;)
+
+    def skip_whitespace_inside_statement(self):
+        self.read_while(&quot; \t\r\n&quot;)
+        if not self.at_end():
+            c = self.peek_next()
+            if c == &quot;#&quot;:
+                for command in self.preprocessor_commands:
+                    if self.check_for(command): return
+                self.read_until(&quot;\n&quot;)
+                self.skip_whitespace_inside_statement()
+
+    def skip_whitespace(self):
+        self.read_while(&quot; &quot;)
+
+    def check_for(self, str):
+        &quot;&quot;&quot;Compare the following text with str.&quot;&quot;&quot;
+        return self.text[self.textpos:self.textpos + len(str)] == str
+
+    def parse_macro(self):
+        &quot;&quot;&quot;No recursive macro processing is done here. If a macro is passed as
+        parameter to a macro, then whoever parses the macro replacement will do
+        the macro recursion.
+        Actually - I&#x27;m too tired right now to think this through. Maybe it
+        should be done the other way around, starting expansion with the
+        innermost macro?
+        &quot;&quot;&quot;
+        params = []
+        balance = 1
+        macro = &quot;&quot;
+        while balance &gt; 0:
+            macro += self.read_until(&quot;{}&quot;)
+            if macro[-1] == &quot;{&quot;:
+                balance += 1
+            elif macro[-1] == &quot;}&quot;:
+                balance -= 1
+            else:
+                raise Error(self, &quot;Unclosed macro&quot;)
+                return
+
+        preserve = macro
+        macro = macro[:-1] # Get rid of final }
+
+        if self.macro_callback:
+            if not self.macro_callback(macro): return None
+
+        # If the macro starts with ~, assume a file in userdata.
+        if macro[0] == &quot;~&quot;:
+            if self.user_dir:
+                dirpath = self.user_dir + &quot;/&quot; + macro[1:]
+            else:
+                dirpath = None
+        # If the macro starts with @, look first in data then in userdata.
+        elif macro[0] == &quot;@&quot;:
+            if self.data_dir:
+                dirpath = self.data_dir + &quot;/&quot; + macro[1:]
+                if not os.path.exists(dirpath): dirpath = None
+            else:
+                dirpath = None
+            if not dirpath and self.user_dir:
+                dirpath = self.user_dir + &quot;/&quot; + macro[1:]
+        # If the macro starts with ., look relative to the currently parsed
+        # file.
+        elif macro[0] == &quot;.&quot;:
+            dirpath = self.current_path + macro[1:]
+        # Otherwise, try to interpret the macro as a filename in the data dir.
+        elif self.data_dir is not None:
+            dirpath = self.data_dir + &quot;/&quot; + macro
+        else:
+            dirpath = None
+
+        if dirpath is not None and os.path.exists(dirpath):
+            dirpath = os.path.normpath(dirpath)
+            if self.only_expand_pathes:
+                if not [x for x in self.only_expand_pathes if os.path.commonprefix([dirpath, x]) == x]:
+                    return None
+            # If it is a directory, parse all cfg files within.
+            if os.path.isdir(dirpath):
+                # Note: glob.glob will try to return unicode filenames
+                # if you pass it an unicode string - but to deal with
+                # non-unicode filenames as are allowed in linux we
+                # convert to a byte-string.
+                # Execute all WML files in the directory.
+                files = glob.glob(str(dirpath + &quot;/*.cfg&quot;))
+                # And also execute directories with a _main.cfg.
+                files += glob.glob(str(dirpath + &quot;/*/_main.cfg&quot;))
+                files.sort()
+                mc = dirpath + &quot;/_main.cfg&quot;
+                fc = dirpath + &quot;/_final.cfg&quot;
+
+                if mc in files:
+                    # If there&#x27;s a file called _main.cfg, only parse that.
+                    files = [mc]
+                elif fc in files:
+                    # If there&#x27;s a file called _final.cfg, parse it only after
+                    # all others.
+                    files.remove(fc)
+                    files.append(fc)
+            else:
+                files = [dirpath]
+            files.reverse()
+            for path in files:
+                self.push_text(path, self.read_encoded(path), cd = os.path.dirname(path))
+            return None
+
+        # It&#x27;s OK for user directories not to exist.
+        # Nothing prefixed with ~ can be a macro.
+        if macro.startswith(&quot;~&quot;) and not self.verbose:
+            return None
+
+        # No file was found, try to do macro expansion. First, push the
+        # macro call again. E.g. {blah 1 2 3}.
+        self.push_text(&quot;macro&quot;, preserve)
+
+        # Find all parameters.
+        while 1:
+            read = self.read_until(&#x27;&quot;}{ (\n&#x27;)
+            if not read:
+                sys.stderr.write(&quot;? %s\n&quot; % macro)
+                sys.stderr.write(&quot; (%s)\n&quot; % params)
+                raise Error(self, &quot;Unexpected end of file&quot;)
+                break
+            sep = read[-1]
+            read = read[:-1]
+
+            if sep == &quot;}&quot;:
+                if read: params += [read]
+                break
+
+            elif sep == &quot;{&quot;:
+                balance = 1
+                param = sep + read
+                while balance:
+                    c = self.read_next()
+                    if c == &quot;{&quot;:
+                        balance += 1
+                    elif c == &quot;}&quot;:
+                        balance -= 1
+                    param += c
+                params += [param]
+
+            elif sep == &#x27;&quot;&#x27;:
+                # Cannot parse strings here.. it must be passed to the macro as
+                # is, so the real string parser can handle it. Else there will
+                # be subtle bugs, e.g. when a MACRO evaluates to a + at the end
+                # of line.
+                read += &#x27;&quot;&#x27; + self.read_until(&#x27;&quot;&#x27;)
+                params += [read]
+
+            elif sep == &quot;(&quot;:
+                in_string = False
+                balance = 1
+                param = read
+                while balance:
+                    c = self.read_next()
+                    # Ignore () within strings
+                    if c == &#x27;&quot;&#x27;:
+                        in_string = not in_string
+
+                    if not in_string:
+                        if c == &quot;(&quot;:
+                            balance += 1
+                        elif c == &quot;)&quot;:
+                            balance -= 1
+                    param += c
+                params += [param[:-1]]
+
+            else:
+                if read:
+                    params += [read]
+                self.read_while(&quot; \n&quot;)
+
+        if self.no_macros:
+            return wmldata.DataMacro(&quot;macro&quot;, &quot; &quot;.join(params))
+
+        name = params[0]
+        if name in self.macros:
+            macro = self.macros[name]
+            text = macro.text
+            for i, j in enumerate(macro.params):
+                if 1 + i &gt;= len(params):
+                    raise Error(self, &quot;Not enough parameters for macro %s. &quot; % name +
+                        &quot;%d given but %d needed %s.&quot; % (len(params) - 1,
+                            len(macro.params), macro.params))
+                rep = params[1 + i]
+                # Handle gettext replacement here, since inside the macro
+                # the textdomain will be wrong.
+                if self.gettext and rep and rep[0] == &quot;_&quot;:
+                    q = rep.find(&#x27;&quot;&#x27;)
+                    qe = rep.find(&#x27;&quot;&#x27;, q + 1)
+                    rep = self.gettext(self.textdomain, rep[q + 1:qe])
+                    rep = &#x27;&quot;&#x27; + rep + &#x27;&quot;&#x27;
+                if self.verbose:
+                    #s = &quot;Replacing {%s} with %s\n&quot; % (j, rep)
+                    ##sys.stderr.write(s.encode(&quot;utf8&quot;))
+                    pass
+                text = text.replace(&quot;{%s}&quot; % j, rep)
+
+            if text:
+                self.push_text(name, text, initial_textdomain = macro.textdomain)
+            else:
+                pass # empty macro, nothing to do
+        else:
+            if self.macro_not_found_callback:
+                keep_macro = self.macro_not_found_callback(self, name, params)
+                if keep_macro: return keep_macro
+            if self.verbose:
+                sys.stderr.write(&quot;No macro %s.\n&quot; % name.encode(&quot;utf8&quot;))
+            if self.verbose:
+                sys.stderr.write(&quot; (%s:%d)\n&quot; % (self.filename, self.line))
+            return name
+        return None
+
+    def parse_string(self):
+        text = &quot;&quot;
+        match_read_end = &#x27;&quot;&#x27;
+        if not self.no_macros_in_string:
+            match_read_end += &#x27;{&#x27;
+        while not self.at_end():
+            text += self.read_until(match_read_end)
+            if text[-1] == &#x27;&quot;&#x27;:
+                if self.peek_next() == &#x27;&quot;&#x27;:
+                    self.read_next()
+                else:
+                    return text[:-1]
+            elif text[-1] == &#x27;{&#x27;:
+                text = text[:-1]
+                not_found = self.parse_macro()
+                if not isinstance(not_found, wmldata.Data):
+                    if not_found:
+                        text += not_found
+            else:
+                break
+        raise Error(self, &quot;Unclosed string&quot;)
+
+    def parse_inside(self, data, c):
+        variables = []
+        values = []
+        variable = &quot;&quot;
+        value = &quot;&quot;
+        got_assign = False
+        spaces = &quot;&quot;
+        filename = &quot;(None)&quot;
+        line = -1
+        got_lua = False
+        while 1:
+            if c == &quot;{&quot;:
+                keep_macro = self.parse_macro()
+                if keep_macro:
+                    if self.no_macros:
+                        values += [keep_macro.name]
+                    else:
+                        values += [keep_macro]
+            elif c == &quot;\n&quot;:
+                break
+            elif c == &quot;#&quot;:
+                # FIXME
+                # Assume something like:
+                # name=&quot;picture.png=&quot;+
+                # #textdomain blah
+                # &quot;translateable name&quot;
+                #
+                # For now, we ignore the textdomain...
+                self.read_until(&quot;\n&quot;)
+                break
+            elif c == &quot;+&quot;:
+                value = value.rstrip() # remove whitespace before +
+                self.skip_whitespace_inside_statement() # read over newline
+            elif not got_assign:
+                if c == &quot;=&quot;:
+                    variables += [variable.rstrip()]
+                    got_assign = True
+                    translatable = False
+                    filename = self.filename
+                    line = self.line
+                    self.skip_whitespace()
+                else:
+                    if c == &quot;,&quot;:
+                        variables += [variable]
+                        variable = &quot;&quot;
+                    else:
+                        variable += c
+            else:
+                if c == &quot;&lt;&quot; and self.peek_next() == &quot;&lt;&quot;:
+                    self.read_next() #skip the rest of the opening
+                    value += self.read_lua()
+                elif c == &#x27;&quot;&#x27;:
+                    # We want the textdomain at the beginning of the string,
+                    # the end of the string may be outside a macro and already
+                    # in another textdomain.
+                    textdomain = self.textdomain
+                    # remove possible _
+                    i = len(value)
+                    while i &gt; 0:
+                        i -= 1
+                        if value[i] != &quot; &quot;: break
+                    got_underscore = False
+                    if value and value[i] == &quot;_&quot;:
+                        got_underscore = True
+                        translatable = True
+                        # remove whitespace before _
+                        while i &gt; 1:
+                            if value[i - 1] != &quot; &quot;: break
+                            i -= 1
+                        value = value[:i]
+
+                    string = self.parse_string()
+                    if got_underscore:
+                        if self.gettext:
+                            string = self.gettext(textdomain, string)
+                    value += string
+                    spaces = &quot;&quot;
+                else:
+                    if c == &quot;,&quot; and len(values) + 1 &lt; len(variables):
+                        values += [value]
+                        value = &quot;&quot;
+                        spaces = &quot;&quot;
+                    elif c == &quot; &quot;:
+                        spaces += c
+                    else:
+                        if spaces:
+                            value += spaces
+                            spaces = &quot;&quot;
+                        value += c
+            if self.at_end(): break
+            c = self.read_next()
+        if not got_assign:
+            raise Error(self, &quot;= expected for \&quot;%s\&quot;&quot; % variable)
+            return []
+        values += [value]
+
+        data = []
+        for i in range(len(variables)):
+            try:
+                key = wmldata.DataText(variables[i], values[i], translatable)
+                key.set_meta(filename, line)
+                data.append(key)
+            except IndexError:
+                raise Error(self, &quot;Assignement does not match: %s = %s&quot; % (
+                    str(variables), str(values)))
+        return data
+
+    def parse_top(self, data, state = None):
+        while 1:
+            self.skip_whitespace_and_newlines()
+            if self.at_end():
+                if state:
+                    raise Error(self, &quot;Tag stack non-empty (%s) at end of data&quot; % state)
+                break
+            c = self.read_next()
+            if c == &quot;#&quot;: # comment or preprocessor
+                if self.check_for(&quot;define &quot;):
+                    self.read_until(&quot; &quot;)
+                    params = []
+                    while 1:
+                        name = self.read_until(&quot; \n&quot;)
+                        sep = name[-1]
+                        name = name[:-1]
+                        if name: params += [name]
+                        if sep == &quot;\n&quot;: break
+                        self.read_while(&quot; &quot;)
+
+                    text = self.read_lines_until(&quot;#enddef&quot;)
+                    if text is None:
+                        raise Error(self, &quot;#define without #enddef&quot;)
+
+                    self.macros[params[0]] = self.Macro(
+                        params[0], params[1:], text, self.textdomain)
+                    if self.verbose:
+                        sys.stderr.write(&quot;New macro: %s.\n&quot; % params[0])
+
+                elif self.check_for(&quot;undef &quot;):
+                    self.read_until(&quot; &quot;)
+                    name = self.read_until(&quot;\n&quot;)
+                    name = name.rstrip()
+                    if &quot; &quot; in name:
+                        if self.verbose: sys.stderr.write(&quot;Stray symbols in #undef %s\n&quot; % name)
+                        name = name.split(&quot; &quot;)[0]
+                    if name in self.macros: del self.macros[name]
+                    elif self.verbose: sys.stderr.write(&quot;undef&#x27;d macro &#x27;%s&#x27; did not exist\n&quot; % name)
+                elif self.check_for(&quot;ifdef &quot;) or self.check_for(&quot;ifndef&quot;):
+
+                    what = &quot;#&quot; + self.read_until(&quot; &quot;).rstrip()
+
+                    name = self.read_until(&quot; \n&quot;)
+                    if name[-1] == &quot; &quot;: self.read_while(&quot; \n&quot;)
+                    name = name[:-1]
+
+                    condition_failed = False
+                    if what == &quot;#ifdef&quot;:
+                        if name in self.macros:
+                            pass
+                        else:
+                            condition_failed = True
+                    else: # what == &quot;#ifndef&quot;
+                        if not name in self.macros:
+                            pass
+                        else:
+                            condition_failed = True
+
+                    self.preprocessor_nesting.append((what, condition_failed))
+
+                    # If the condition is true, we simply continue parsing. At
+                    # some point we will either hit an #else or #endif, and
+                    # things continue there. If the condition failed, we skip
+                    # over everything until we find the matching #else or
+                    # endif.
+                    if condition_failed:
+                        self.stay_in_file = True
+                        balance = 1
+                        while balance &gt; 0 and not self.at_end():
+                            line = self.read_until(&quot;\n&quot;)
+                            line = line.lstrip()
+                            if line.startswith(&quot;#ifdef&quot;): balance += 1
+                            if line.startswith(&quot;#ifndef&quot;): balance += 1
+                            if line.startswith(&quot;#endif&quot;): balance -= 1
+                            if line.startswith(&quot;#else&quot;):
+                                if balance == 1:
+                                    balance = -1
+                                    break
+
+                        self.stay_in_file = False
+                        if balance == 0:
+                            self.preprocessor_nesting.pop()
+                        if balance &gt; 0:
+                            raise Error(self, &quot;Missing  #endif for %s&quot; % what)
+
+                        self.check_end()
+
+                elif self.check_for(&quot;else&quot;):
+                    if not self.preprocessor_nesting:
+                        raise Error(self, &quot;#else without #ifdef&quot;)
+
+                    self.read_until(&quot;\n&quot;)
+
+                    # We seen an #else - that means we are at the end of a
+                    # conditional preprocessor block which has executed. So
+                    # we should now ignore everything up to the #endif.
+                    balance = 1
+                    self.stay_in_file = True
+                    while balance &gt; 0 and not self.at_end():
+                        line = self.read_until(&quot;\n&quot;)
+                        line = line.lstrip()
+                        if line.startswith(&quot;#ifdef&quot;): balance += 1
+                        if line.startswith(&quot;#ifndef&quot;): balance += 1
+                        if line.startswith(&quot;#endif&quot;): balance -= 1
+                    self.stay_in_file = False
+                    if balance != 0:
+                        raise Error(self, &quot;Missing #endif for #else&quot;)
+
+                    self.check_end()
+
+                elif self.check_for(&quot;endif&quot;):
+                    if not self.preprocessor_nesting:
+                        raise Error(self, &quot;#endif without #ifdef&quot;)
+                    self.preprocessor_nesting.pop()
+                    self.read_until(&quot;\n&quot;)
+
+                elif self.check_for(&quot;textdomain&quot;):
+                    self.read_until(&quot; &quot;)
+                    self.textdomain = self.read_until(&quot;\n&quot;).strip()
+                else: # comment
+                    line = self.read_until(&quot;\n&quot;)
+                    #comment = c + line
+                    if self.verbose:
+                        #msg = &quot;Comment removed: %s&quot; % comment
+                        ##sys.stderr.write(msg.encode(&quot;utf8&quot;))
+                        pass
+            elif c == &#x27;[&#x27;:
+                name = self.read_until(&quot;]&quot;)[:-1]
+                if name[0] == &#x27;/&#x27;:
+                    if state == name[1:]:
+                        return
+                    raise Error(self, &quot;Mismatched closing tag [%s], expected [/%s]&quot; % (name, state))
+                elif name[0] == &#x27;+&#x27;:
+                    name = name[1:]
+                    try:
+                        subdata = data.dict[name][-1]
+                        self.parse_top(subdata, name)
+                    except KeyError:
+                        subdata = wmldata.DataSub(name)
+                        subdata.set_meta(self.filename, self.line)
+                        self.parse_top(subdata, name)
+                        data.insert(subdata)
+                elif name[0] == &quot; &quot;:
+                    # We single this case out explicitly as the wesnoth parser
+                    # ignores it due to implementation reasons and this makes
+                    # more sense of the error message
+                    raise Error(self, &quot;Invalid tag [%s] contains whitespace&quot; % name)
+                else:
+                    subdata = wmldata.DataSub(name)
+                    subdata.set_meta(self.filename, self.line)
+                    self.parse_top(subdata, name)
+                    data.insert(subdata)
+            elif c == &#x27;{&#x27;:
+                keep_macro = self.parse_macro()
+                if isinstance(keep_macro, wmldata.Data):
+                    data.insert(keep_macro)
+            else:
+                for subdata in self.parse_inside(data, c):
+                    data.insert(subdata)
+
+
+import json
+def jsonify(tree, verbose=False, depth=0):
+    &quot;&quot;&quot;
+Convert a DataSub into JSON
+
+If verbose, insert a linebreak after every brace and comma (put every item on its own line), otherwise, condense everything into a single line.
+&quot;&quot;&quot;
+    print(&quot;{&quot;, end=&quot; &quot;)
+    first = True
+    sdepth1 = &quot;\n&quot; + &quot; &quot; * depth
+    sdepth2 = sdepth1 + &quot; &quot;
+    for child in tree.children():
+        if first:
+            first = False
+        else:
+            sys.stdout.write(&quot;,&quot;)
+        if verbose:
+            sys.stdout.write(sdepth2)
+        print(&#x27;&quot;%s&quot;:&#x27; % child.name, end=&quot; &quot;)
+        if child.get_type() == &quot;DataSub&quot;:
+            jsonify(child, verbose, depth + 1)
+        else:
+            print(json.dumps(child.get_value()), end=&quot; &quot;)
+    if verbose:
+        sys.stdout.write(sdepth1)
+    sys.stdout.write(&quot;}&quot;)
+
+from xml.sax.saxutils import escape
+def xmlify(tree, verbose=False, depth=0):
+    sdepth = &quot;&quot;
+    if verbose:
+        sdepth = &quot;  &quot; * depth
+    for child in tree.children():
+        if child.get_type() == &quot;DataSub&quot;:
+            print(&#x27;%s&lt;%s&gt;&#x27; % (sdepth, child.name))
+            xmlify(child, verbose, depth + 1)
+            print(&#x27;%s&lt;/%s&gt;&#x27; % (sdepth, child.name))
+        else:
+            if &quot;\n&quot; in child.get_value() or &quot;\r&quot; in child.get_value():
+                print(sdepth + &#x27;&lt;&#x27; + child.name + &#x27;&gt;&#x27; + \
+            &#x27;&lt;![CDATA[&#x27; + child.get_value() + &#x27;]]&gt;&#x27; + &#x27;&lt;/&#x27; + child.name + &#x27;&gt;&#x27;)
+            else:
+                print(sdepth + &#x27;&lt;&#x27; + child.name + &#x27;&gt;&#x27; + \
+            escape(child.get_value())  + &#x27;&lt;/&#x27; + child.name + &#x27;&gt;&#x27;)
+
+if __name__ == &quot;__main__&quot;:
+    import argparse, subprocess
+
+    argumentparser = argparse.ArgumentParser(&quot;usage: %(prog)s [options]&quot;)
+    argumentparser.add_argument(&quot;-p&quot;, &quot;--path&quot;,  help = &quot;specify wesnoth data path&quot;)
+    argumentparser.add_argument(&quot;-C&quot;, &quot;--color&quot;, action = &quot;store_true&quot;,
+        help = &quot;use colored output&quot;)
+    argumentparser.add_argument(&quot;-u&quot;, &quot;--userpath&quot;,  help = &quot;specify userdata path&quot;)
+    argumentparser.add_argument(&quot;-e&quot;, &quot;--execute&quot;,  help = &quot;execute given WML&quot;)
+    argumentparser.add_argument(&quot;-v&quot;, &quot;--verbose&quot;, action = &quot;store_true&quot;,
+        help = &quot;make the parser very verbose&quot;)
+    argumentparser.add_argument(&quot;-n&quot;, &quot;--no-macros&quot;, action = &quot;store_true&quot;,
+        help = &quot;do not expand any macros&quot;)
+    argumentparser.add_argument(&quot;-c&quot;, &quot;--contents&quot;, action = &quot;store_true&quot;,
+        help = &quot;display contents of every tag&quot;)
+    argumentparser.add_argument(&quot;-j&quot;, &quot;--to-json&quot;, action = &quot;store_true&quot;,
+        help = &quot;output JSON version of tree&quot;)
+    argumentparser.add_argument(&quot;-x&quot;, &quot;--to-xml&quot;, action = &quot;store_true&quot;,
+        help = &quot;output XML version of tree&quot;)
+    argumentparser.add_argument(&quot;filename&quot;, nargs = &quot;?&quot;,
+        help = &quot;file to parse&quot;)
+    args = argumentparser.parse_args()
+
+    if args.path:
+        path = args.path
+    else:
+        try:
+            p = subprocess.Popen([&quot;wesnoth&quot;, &quot;--data-path&quot;], stdout = subprocess.PIPE, encoding=&quot;utf8&quot;)
+            path = p.stdout.read().strip()
+            path = os.path.join(path, &quot;data&quot;)
+        except OSError:
+            sys.stderr.write(&quot;Could not determine Wesnoth path.\n&quot;)
+            path = None
+
+    wmlparser = Parser(path, args.userpath)
+    if args.no_macros:
+        wmlparser.no_macros = True
+
+    if args.verbose:
+        wmlparser.verbose = True
+        def gt(domain, x):
+            print(&quot;gettext: &#x27;%s&#x27; &#x27;%s&#x27;&quot; % (domain, x))
+            return x
+        wmlparser.gettext = gt
+
+    wmlparser.do_preprocessor_logic = True
+
+    if args.execute:
+        wmlparser.parse_text(args.execute)
+    elif args.filename:
+        wmlparser.parse_file(args.filename)
+    else:
+        wmlparser.parse_stream(sys.stdin)
+
+    data = wmldata.DataSub(&quot;WML&quot;)
+    wmlparser.parse_top(data)
+
+    if args.to_json:
+        jsonify(data, True) # For more readable results
+    elif args.to_xml:
+        xmlify(data, True)
+    else:
+        data.debug(show_contents = args.contents, use_color = args.color)
+</pre></main></body></html>

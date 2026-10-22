@@ -1,0 +1,75 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Triton.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/merfolk/Triton.cfg</h1><pre>#textdomain wesnoth-units
+[unit_type]
+    id=Merman Triton
+    name= _ &quot;Merman Triton&quot;
+    race=merman
+    image=&quot;units/merfolk/triton.png&quot;
+    profile=portraits/merfolk/triton.webp
+    hitpoints=60
+    movement_type=swimmer
+    movement=6
+    experience=150
+    level=3
+    alignment=lawful
+    advances_to=null
+    {AMLA_DEFAULT}
+    cost=46
+    usage=fighter
+    # wmllint: local spelling tritons
+    description= _ &quot;Tritons are combat masters of the sea. Skilled in use of the trident, Tritons easily defeat any enemy foolish enough to wander into their preferred environment. Their mastery of their weapon affords them flexibility in its use, and the highest-ranking among them use weaponry more comparable to halberds than simple spears.&quot;
+    die_sound=mermen-die.ogg
+    {DEFENSE_ANIM &quot;units/merfolk/triton-defend2.png&quot; &quot;units/merfolk/triton-defend1.png&quot; mermen-hit.wav }
+    [attack]
+        name=trident
+        description=_&quot;trident&quot;
+        type=pierce
+        range=melee
+        damage=14
+        number=3
+        icon=attacks/trident2-pierce.png
+    [/attack]
+    [attack]
+        name=trident
+        description=_&quot;trident&quot;
+        type=blade
+        range=melee
+        damage=19
+        number=2
+        icon=attacks/trident2-blade.png
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=trident
+            type=blade
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;units/merfolk/triton.png:75&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}
+        [frame]
+            image=&quot;units/merfolk/triton.png:175&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/triton.png:100&quot;
+        [/frame]
+    [/attack_anim]
+    [attack_anim]
+        [filter_attack]
+            name=trident
+            type=pierce
+        [/filter_attack]
+        start_time=-200
+        [frame]
+            image=&quot;units/merfolk/triton.png:75&quot;
+        [/frame]
+        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -125}
+        [frame]
+            image=&quot;units/merfolk/triton.png:175&quot;
+        [/frame]
+        [frame]
+            image=&quot;units/merfolk/triton.png:100&quot;
+        [/frame]
+    [/attack_anim]
+[/unit_type]
+</pre></main></body></html>

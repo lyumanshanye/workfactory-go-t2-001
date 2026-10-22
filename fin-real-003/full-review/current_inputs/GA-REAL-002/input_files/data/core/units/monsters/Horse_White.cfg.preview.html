@@ -1,0 +1,63 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Horse_White.cfg</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>data/core/units/monsters/Horse_White.cfg</h1><pre>#textdomain wesnoth-units
+
+#wmlindent: start ignoring
+#define HORSE_WHITE_IPF
+~CHAN(
+    if((red &gt; green) and (green &gt; blue), red*1.35, red*0.8),
+    if((red &gt; green) and (green &gt; blue), green*1.85, green*0.6),
+    if((red &gt; green) and (green &gt; blue), blue*3.6, blue*0.9)
+    )#enddef
+#wmlindent: stop ignoring
+
+[unit_type]
+    id=White Horse
+    name= _ &quot;White Horse&quot;
+    [base_unit]
+        id=Bay Horse
+    [/base_unit]
+    image=&quot;units/monsters/horse/horse.png{HORSE_WHITE_IPF}&quot;
+    profile=&quot;portraits/monsters/white-horse.webp&quot;
+    hitpoints=50
+    advances_to=null
+    {AMLA_DEFAULT}
+    movement_type=woodland
+    movement=9
+    description=_ &quot;Some horses have a white color, and they are merely white horses. But there exist a special breed, found only in the wild woods, that are White Horses. As if blessed by the faerie world, they have a grace and agility not found in their more common relatives.&quot;
+    {DEFENSE_ANIM &quot;units/monsters/horse/horse-defend-2.png{HORSE_WHITE_IPF}&quot; &quot;units/monsters/horse/horse-defend-1.png{HORSE_WHITE_IPF}&quot; {SOUND_LIST:HORSE_HIT} }
+    [defense]
+        forest=40
+        village=60
+    [/defense]
+    [resistance]
+        pierce=120
+        impact=100
+        arcane=100
+    [/resistance]
+    [attack]
+        name=hooves
+        description=_&quot;hooves&quot;
+        icon=attacks/hoof.png
+        type=impact
+        range=melee
+        damage=8
+        number=2
+    [/attack]
+    [attack_anim]
+        [filter_attack]
+            name=hooves
+        [/filter_attack]
+        start_time=-550
+        offset=0.0~-0.05:350,-0.05~0.7:200,0.7~0.0:320
+        [frame]
+            image=&quot;units/monsters/horse/horse-attack[1~7].png{HORSE_WHITE_IPF}:[100*4,80,70,260]&quot;
+            sound=horse-elf-canter.wav
+        [/frame]
+        [frame]
+            image=&quot;units/monsters/horse/horse.png{HORSE_WHITE_IPF}:60&quot;
+        [/frame]
+        {SOUND:HIT club.ogg -100}
+    [/attack_anim]
+[/unit_type]
+
+# #undef HORSE_WHITE_IPF
+</pre></main></body></html>

@@ -1,0 +1,624 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>analysis.py</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>analysis.py</h1><pre>#!/usr/bin/env python3
+import argparse
+import csv
+import json
+from collections import Counter, defaultdict
+from datetime import date, datetime
+from decimal import Decimal
+from pathlib import Path
+
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Inches, Pt
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.table import Table, TableStyleInfo
+
+CUTOFF = date(2024, 12, 31)
+PAYMENTS_FILE = &quot;Chicago_Payments_2024.csv&quot;
+CONTRACTS_FILE = &quot;Chicago_Contracts_2019plus.csv&quot;
+DIRECT_MARKERS = {&quot;&quot;, &quot;DV&quot;}
+MONEY_FMT = &#x27;$#,##0.00;[Red]-$#,##0.00&#x27;
+RATIO_FMT = &#x27;0.00x&#x27;
+
+
+def read_csv(path):
+    with path.open(&quot;r&quot;, encoding=&quot;utf-8-sig&quot;, newline=&quot;&quot;) as handle:
+        reader = csv.DictReader(handle)
+        return reader.fieldnames, [(row_number, row) for row_number, row in enumerate(reader, 2)]
+
+
+def money(value):
+    return Decimal(value) if value not in (None, &quot;&quot;) else None
+
+
+def iso_date(value):
+    return datetime.fromisoformat(value).date()
+
+
+def decimal_text(value):
+    if value is None:
+        return None
+    return format(value, &quot;f&quot;)
+
+
+def payment_rows(path):
+    fields, raw = read_csv(path)
+    required = {&quot;voucher_number&quot;, &quot;amount&quot;, &quot;check_date&quot;, &quot;department_name&quot;, &quot;contract_number&quot;, &quot;vendor_name&quot;}
+    if set(fields) != required:
+        raise ValueError(f&quot;付款字段与预期不符: {fields}&quot;)
+    rows = []
+    for source_row, row in raw:
+        rows.append({**row, &quot;source_row&quot;: source_row, &quot;amount_decimal&quot;: money(row[&quot;amount&quot;])})
+    return fields, rows
+
+
+def contract_rows(path):
+    fields, raw = read_csv(path)
+    required = {
+        &quot;purchase_order_description&quot;, &quot;purchase_order_contract_number&quot;, &quot;revision_number&quot;,
+        &quot;specification_number&quot;, &quot;contract_type&quot;, &quot;start_date&quot;, &quot;end_date&quot;, &quot;approval_date&quot;,
+        &quot;department&quot;, &quot;vendor_name&quot;, &quot;vendor_id&quot;, &quot;address_1&quot;, &quot;address_2&quot;, &quot;city&quot;, &quot;state&quot;,
+        &quot;zip&quot;, &quot;award_amount&quot;, &quot;procurement_type&quot;, &quot;contract_pdf&quot;
+    }
+    if set(fields) != required:
+        raise ValueError(f&quot;合同字段与预期不符: {fields}&quot;)
+    rows = []
+    for source_row, row in raw:
+        rows.append({
+            **row,
+            &quot;source_row&quot;: source_row,
+            &quot;approval_date_value&quot;: iso_date(row[&quot;approval_date&quot;]),
+            &quot;revision_value&quot;: int(row[&quot;revision_number&quot;]),
+            &quot;award_decimal&quot;: money(row[&quot;award_amount&quot;]),
+        })
+    return fields, rows
+
+
+def exact_tuple(row, fields):
+    return tuple(row[field] for field in fields)
+
+
+def duplicate_stats(rows, fields):
+    counts = Counter(exact_tuple(row, fields) for row in rows)
+    return {
+        &quot;duplicate_groups&quot;: sum(count &gt; 1 for count in counts.values()),
+        &quot;duplicate_extra_rows&quot;: sum(count - 1 for count in counts.values() if count &gt; 1),
+        &quot;maximum_multiplicity&quot;: max(counts.values(), default=0),
+    }
+
+
+def select_contract_view(rows, cutoff=None):
+    grouped = defaultdict(list)
+    for row in rows:
+        if cutoff is None or row[&quot;approval_date_value&quot;] &lt;= cutoff:
+            grouped[row[&quot;purchase_order_contract_number&quot;]].append(row)
+    selected = {}
+    for contract_number, candidates in grouped.items():
+        latest_approval = max(row[&quot;approval_date_value&quot;] for row in candidates)
+        candidates = [row for row in candidates if row[&quot;approval_date_value&quot;] == latest_approval]
+        highest_revision = max(row[&quot;revision_value&quot;] for row in candidates)
+        selected[contract_number] = [row for row in candidates if row[&quot;revision_value&quot;] == highest_revision]
+    return selected
+
+
+def payment_status(row, year_end_view):
+    contract_number = row[&quot;contract_number&quot;]
+    if contract_number in DIRECT_MARKERS:
+        return &quot;直接付款/空号&quot;
+    if contract_number not in year_end_view:
+        return &quot;未匹配&quot;
+    if len(year_end_view[contract_number]) != 1:
+        return &quot;版本冲突&quot;
+    return &quot;唯一匹配&quot;
+
+
+def summarize_status(rows, view):
+    buckets = defaultdict(list)
+    for row in rows:
+        buckets[payment_status(row, view)].append(row)
+    order = [&quot;唯一匹配&quot;, &quot;未匹配&quot;, &quot;版本冲突&quot;, &quot;直接付款/空号&quot;]
+    return [{
+        &quot;status&quot;: status,
+        &quot;row_count&quot;: len(buckets[status]),
+        &quot;contract_count&quot;: len({row[&quot;contract_number&quot;] for row in buckets[status] if row[&quot;contract_number&quot;] not in DIRECT_MARKERS}),
+        &quot;amount&quot;: sum((row[&quot;amount_decimal&quot;] for row in buckets[status]), Decimal(&quot;0&quot;)),
+    } for status in order]
+
+
+def aggregate_annual(rows):
+    grouped = defaultdict(list)
+    for row in rows:
+        grouped[row[&quot;contract_number&quot;]].append(row)
+    return grouped
+
+
+def source_rows_text(rows):
+    return &quot;, &quot;.join(str(row[&quot;source_row&quot;]) for row in sorted(rows, key=lambda item: item[&quot;source_row&quot;]))
+
+
+def vendors_text(rows):
+    return &quot; | &quot;.join(sorted({row[&quot;vendor_name&quot;] for row in rows}))
+
+
+def build_analysis(payment_fields, payments, contract_fields, contracts):
+    daily = [row for row in payments if row[&quot;check_date&quot;].count(&quot;/&quot;) == 2]
+    annual = [row for row in payments if row[&quot;check_date&quot;] == &quot;2024&quot;]
+    unexplained_dates = [row for row in payments if row not in daily and row not in annual]
+    year_end_view = select_contract_view(contracts, CUTOFF)
+    full_latest_view = select_contract_view(contracts)
+    annual_by_contract = aggregate_annual(annual)
+
+    daily_contracts = {row[&quot;contract_number&quot;] for row in daily if row[&quot;contract_number&quot;] not in DIRECT_MARKERS}
+    annual_contracts = {row[&quot;contract_number&quot;] for row in annual if row[&quot;contract_number&quot;] not in DIRECT_MARKERS}
+    overlap = []
+    for contract_number in sorted(daily_contracts &amp; annual_contracts):
+        daily_rows = [row for row in daily if row[&quot;contract_number&quot;] == contract_number]
+        annual_rows = annual_by_contract[contract_number]
+        overlap.append({
+            &quot;contract_number&quot;: contract_number,
+            &quot;daily_source_rows&quot;: source_rows_text(daily_rows),
+            &quot;daily_row_count&quot;: len(daily_rows),
+            &quot;daily_amount&quot;: sum((row[&quot;amount_decimal&quot;] for row in daily_rows), Decimal(&quot;0&quot;)),
+            &quot;annual_source_rows&quot;: source_rows_text(annual_rows),
+            &quot;annual_row_count&quot;: len(annual_rows),
+            &quot;annual_amount&quot;: sum((row[&quot;amount_decimal&quot;] for row in annual_rows), Decimal(&quot;0&quot;)),
+        })
+
+    changed = []
+    for contract_number, year_candidates in year_end_view.items():
+        latest_candidates = full_latest_view[contract_number]
+        if {row[&quot;source_row&quot;] for row in year_candidates} != {row[&quot;source_row&quot;] for row in latest_candidates}:
+            payment_rows_for_contract = annual_by_contract.get(contract_number, [])
+            annual_amount = sum((row[&quot;amount_decimal&quot;] for row in payment_rows_for_contract), Decimal(&quot;0&quot;))
+            changed.append({
+                &quot;comparison_type&quot;: &quot;年末既有合同被未来版本替换&quot;,
+                &quot;contract_number&quot;: contract_number,
+                &quot;annual_payment_amount&quot;: annual_amount,
+                &quot;annual_payment_source_rows&quot;: source_rows_text(payment_rows_for_contract),
+                &quot;year_end_contract_rows&quot;: source_rows_text(year_candidates),
+                &quot;year_end_approval&quot;: &quot; | &quot;.join(sorted({row[&quot;approval_date&quot;] for row in year_candidates})),
+                &quot;year_end_revision&quot;: &quot; | &quot;.join(sorted({row[&quot;revision_number&quot;] for row in year_candidates}, key=int)),
+                &quot;year_end_award&quot;: &quot; | &quot;.join(sorted({decimal_text(row[&quot;award_decimal&quot;]) if row[&quot;award_decimal&quot;] is not None else &quot;缺失&quot; for row in year_candidates})),
+                &quot;latest_contract_rows&quot;: source_rows_text(latest_candidates),
+                &quot;latest_approval&quot;: &quot; | &quot;.join(sorted({row[&quot;approval_date&quot;] for row in latest_candidates})),
+                &quot;latest_revision&quot;: &quot; | &quot;.join(sorted({row[&quot;revision_number&quot;] for row in latest_candidates}, key=int)),
+                &quot;latest_award&quot;: &quot; | &quot;.join(sorted({decimal_text(row[&quot;award_decimal&quot;]) if row[&quot;award_decimal&quot;] is not None else &quot;缺失&quot; for row in latest_candidates})),
+            })
+    for contract_number in set(full_latest_view) - set(year_end_view):
+        latest_candidates = full_latest_view[contract_number]
+        payment_rows_for_contract = annual_by_contract.get(contract_number, [])
+        annual_amount = sum((row[&quot;amount_decimal&quot;] for row in payment_rows_for_contract), Decimal(&quot;0&quot;))
+        changed.append({
+            &quot;comparison_type&quot;: &quot;全快照最新法引入年末不存在合同&quot;,
+            &quot;contract_number&quot;: contract_number,
+            &quot;annual_payment_amount&quot;: annual_amount,
+            &quot;annual_payment_source_rows&quot;: source_rows_text(payment_rows_for_contract),
+            &quot;year_end_contract_rows&quot;: &quot;&quot;,
+            &quot;year_end_approval&quot;: &quot;&quot;,
+            &quot;year_end_revision&quot;: &quot;&quot;,
+            &quot;year_end_award&quot;: &quot;&quot;,
+            &quot;latest_contract_rows&quot;: source_rows_text(latest_candidates),
+            &quot;latest_approval&quot;: &quot; | &quot;.join(sorted({row[&quot;approval_date&quot;] for row in latest_candidates})),
+            &quot;latest_revision&quot;: &quot; | &quot;.join(sorted({row[&quot;revision_number&quot;] for row in latest_candidates}, key=int)),
+            &quot;latest_award&quot;: &quot; | &quot;.join(sorted({decimal_text(row[&quot;award_decimal&quot;]) if row[&quot;award_decimal&quot;] is not None else &quot;缺失&quot; for row in latest_candidates})),
+        })
+    changed.sort(key=lambda item: (-abs(item[&quot;annual_payment_amount&quot;]), item[&quot;contract_number&quot;]))
+
+    unmatched = []
+    high_ratio = []
+    award_exceptions = []
+    for contract_number, rows in annual_by_contract.items():
+        annual_amount = sum((row[&quot;amount_decimal&quot;] for row in rows), Decimal(&quot;0&quot;))
+        status = payment_status(rows[0], year_end_view)
+        if status in {&quot;未匹配&quot;, &quot;版本冲突&quot;, &quot;直接付款/空号&quot;}:
+            candidates = year_end_view.get(contract_number, [])
+            if status == &quot;未匹配&quot;:
+                gap = &quot;截至2024-12-31的合同快照中无该合同号&quot;
+                next_step = &quot;调取合同封面、截至年末的批准/修订记录及对应发票；核对合同号录入&quot;
+            elif status == &quot;版本冲突&quot;:
+                gap = &quot;最高批准日期和修订号仍有内容冲突，不能唯一选版&quot;
+                next_step = &quot;调取两条原始合同记录及采购系统版本审计轨迹，确认年末有效版本&quot;
+            else:
+                gap = &quot;付款标识为DV或合同号为空，不应按名称强配&quot;
+                next_step = &quot;调取付款凭证、发票和采购依据，确认是否属于直接付款及其授权&quot;
+            unmatched.append({
+                &quot;contract_number&quot;: contract_number or &quot;(空号)&quot;,
+                &quot;payment_source_rows&quot;: source_rows_text(rows),
+                &quot;payment_row_count&quot;: len(rows),
+                &quot;payment_vendor_names&quot;: vendors_text(rows),
+                &quot;annual_payment_amount&quot;: annual_amount,
+                &quot;match_status&quot;: status,
+                &quot;contract_source_rows&quot;: source_rows_text(candidates),
+                &quot;approval_date&quot;: &quot; | &quot;.join(row[&quot;approval_date&quot;] for row in candidates),
+                &quot;revision_number&quot;: &quot; | &quot;.join(row[&quot;revision_number&quot;] for row in candidates),
+                &quot;evidence_gap&quot;: gap,
+                &quot;next_step&quot;: next_step,
+            })
+        elif status == &quot;唯一匹配&quot;:
+            selected = year_end_view[contract_number][0]
+            award = selected[&quot;award_decimal&quot;]
+            common = {
+                &quot;contract_number&quot;: contract_number,
+                &quot;payment_source_rows&quot;: source_rows_text(rows),
+                &quot;payment_row_count&quot;: len(rows),
+                &quot;payment_vendor_names&quot;: vendors_text(rows),
+                &quot;annual_payment_amount&quot;: annual_amount,
+                &quot;contract_source_row&quot;: selected[&quot;source_row&quot;],
+                &quot;approval_date&quot;: selected[&quot;approval_date&quot;],
+                &quot;revision_number&quot;: selected[&quot;revision_number&quot;],
+                &quot;contract_vendor_name&quot;: selected[&quot;vendor_name&quot;],
+                &quot;award_amount&quot;: award,
+            }
+            if award is not None and award &gt; 0:
+                high_ratio.append({
+                    **common,
+                    &quot;payment_award_ratio&quot;: annual_amount / award,
+                    &quot;evidence_gap&quot;: &quot;年度付款高于该时点所选版本的授予额；快照不含完整合同档案、发票或授予额字段释义&quot;,
+                    &quot;next_step&quot;: &quot;调取截至年末全部批准修订、订单/发票和付款明细；确认授予额字段口径及是否跨期/跨版本&quot;,
+                })
+            else:
+                category = &quot;授予额缺失&quot; if award is None else &quot;授予额为零&quot; if award == 0 else &quot;授予额为负&quot;
+                award_exceptions.append({
+                    **common,
+                    &quot;exception_type&quot;: category,
+                    &quot;evidence_gap&quot;: f&quot;{category}，不能计算有意义的付款/授予额比率&quot;,
+                    &quot;next_step&quot;: &quot;调取合同原件和修订历史，核对授予额字段含义、调整方向及累计授权金额&quot;,
+                })
+    unmatched.sort(key=lambda item: (-abs(item[&quot;annual_payment_amount&quot;]), item[&quot;contract_number&quot;]))
+    high_ratio.sort(key=lambda item: (-item[&quot;payment_award_ratio&quot;], item[&quot;contract_number&quot;]))
+    award_exceptions.sort(key=lambda item: (-abs(item[&quot;annual_payment_amount&quot;]), item[&quot;contract_number&quot;]))
+
+    year_conflicts = []
+    for contract_number, candidates in sorted(year_end_view.items()):
+        if len(candidates) &gt; 1:
+            for row in candidates:
+                year_conflicts.append({
+                    &quot;contract_number&quot;: contract_number,
+                    &quot;contract_source_row&quot;: row[&quot;source_row&quot;],
+                    &quot;approval_date&quot;: row[&quot;approval_date&quot;],
+                    &quot;revision_number&quot;: row[&quot;revision_number&quot;],
+                    &quot;vendor_name&quot;: row[&quot;vendor_name&quot;],
+                    &quot;award_amount&quot;: row[&quot;award_decimal&quot;],
+                })
+
+    negative_payments = [{
+        &quot;source_row&quot;: row[&quot;source_row&quot;], &quot;grain&quot;: &quot;逐日&quot; if row in daily else &quot;年度汇总&quot;,
+        &quot;voucher_number&quot;: row[&quot;voucher_number&quot;], &quot;check_date&quot;: row[&quot;check_date&quot;],
+        &quot;contract_number&quot;: row[&quot;contract_number&quot;], &quot;vendor_name&quot;: row[&quot;vendor_name&quot;],
+        &quot;amount&quot;: row[&quot;amount_decimal&quot;],
+    } for row in payments if row[&quot;amount_decimal&quot;] &lt; 0]
+
+    full_contract_key = duplicate_stats(contracts, contract_fields)
+    contract_business_key = duplicate_stats(contracts, [&quot;purchase_order_contract_number&quot;, &quot;revision_number&quot;, &quot;approval_date&quot;])
+    daily_exact = duplicate_stats(daily, payment_fields)
+    annual_exact = duplicate_stats(annual, payment_fields)
+    daily_voucher = duplicate_stats(daily, [&quot;voucher_number&quot;])
+    annual_candidate = duplicate_stats(annual, [&quot;department_name&quot;, &quot;contract_number&quot;, &quot;vendor_name&quot;, &quot;check_date&quot;])
+
+    scope_rows = []
+    for grain, rows in [(&quot;逐日付款&quot;, daily), (&quot;年度汇总&quot;, annual), (&quot;无法解释日期&quot;, unexplained_dates)]:
+        scope_rows.append({
+            &quot;grain&quot;: grain,
+            &quot;row_count&quot;: len(rows),
+            &quot;amount&quot;: sum((row[&quot;amount_decimal&quot;] for row in rows), Decimal(&quot;0&quot;)),
+            &quot;negative_rows&quot;: sum(row[&quot;amount_decimal&quot;] &lt; 0 for row in rows),
+            &quot;negative_amount&quot;: sum((row[&quot;amount_decimal&quot;] for row in rows if row[&quot;amount_decimal&quot;] &lt; 0), Decimal(&quot;0&quot;)),
+            &quot;dv_rows&quot;: sum(row[&quot;contract_number&quot;] == &quot;DV&quot; for row in rows),
+            &quot;blank_contract_rows&quot;: sum(not row[&quot;contract_number&quot;] for row in rows),
+            &quot;distinct_contract_markers&quot;: len({row[&quot;contract_number&quot;] for row in rows}),
+        })
+
+    return {
+        &quot;daily&quot;: daily,
+        &quot;annual&quot;: annual,
+        &quot;unexplained_dates&quot;: unexplained_dates,
+        &quot;year_end_view&quot;: year_end_view,
+        &quot;full_latest_view&quot;: full_latest_view,
+        &quot;scope_rows&quot;: scope_rows,
+        &quot;daily_status&quot;: summarize_status(daily, year_end_view),
+        &quot;annual_status&quot;: summarize_status(annual, year_end_view),
+        &quot;overlap&quot;: overlap,
+        &quot;changed&quot;: changed,
+        &quot;unmatched_top20&quot;: unmatched[:20],
+        &quot;high_ratio_top20&quot;: high_ratio[:20],
+        &quot;award_exceptions&quot;: award_exceptions,
+        &quot;year_conflicts&quot;: year_conflicts,
+        &quot;negative_payments&quot;: negative_payments,
+        &quot;diagnostics&quot;: {
+            &quot;payments&quot;: {
+                &quot;record_grain&quot;: &quot;check_date为MM/DD/YYYY的是逐日付款查询行；check_date为2024的是年度汇总行；两者分开报告&quot;,
+                &quot;stable_key&quot;: &quot;CSV物理行号（表头为第1行）&quot;,
+                &quot;daily_candidate_key&quot;: &quot;无可证实唯一业务键；voucher_number重复，完整字段也有重复&quot;,
+                &quot;annual_candidate_key&quot;: &quot;无可证实唯一业务键；department_name+contract_number+vendor_name+check_date仍可能重复&quot;,
+                &quot;all_rows&quot;: len(payments), &quot;daily_exact_duplicates&quot;: daily_exact,
+                &quot;annual_exact_duplicates&quot;: annual_exact, &quot;daily_voucher_duplicates&quot;: daily_voucher,
+                &quot;annual_candidate_duplicates&quot;: annual_candidate,
+            },
+            &quot;contracts&quot;: {
+                &quot;record_grain&quot;: &quot;批准合同版本/修订记录；一个合同号可有多版本，版本数不等于合同数&quot;,
+                &quot;stable_key&quot;: &quot;CSV物理行号（表头为第1行）&quot;,
+                &quot;candidate_business_key&quot;: &quot;合同号+修订号+批准日期，但存在重复/内容冲突，不能单独作为唯一键&quot;,
+                &quot;all_rows&quot;: len(contracts), &quot;distinct_contracts&quot;: len({row[&quot;purchase_order_contract_number&quot;] for row in contracts}),
+                &quot;full_row_duplicates&quot;: full_contract_key, &quot;business_key_duplicates&quot;: contract_business_key,
+            },
+        },
+    }
+
+
+def json_ready(value):
+    if isinstance(value, Decimal):
+        return decimal_text(value)
+    if isinstance(value, date):
+        return value.isoformat()
+    if isinstance(value, dict):
+        return {key: json_ready(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [json_ready(item) for item in value]
+    return value
+
+
+def result_payload(analysis):
+    daily_total = sum((row[&quot;amount_decimal&quot;] for row in analysis[&quot;daily&quot;]), Decimal(&quot;0&quot;))
+    annual_total = sum((row[&quot;amount_decimal&quot;] for row in analysis[&quot;annual&quot;]), Decimal(&quot;0&quot;))
+    changed_with_payments = [item for item in analysis[&quot;changed&quot;] if item[&quot;annual_payment_source_rows&quot;]]
+    changed_net = sum((item[&quot;annual_payment_amount&quot;] for item in changed_with_payments), Decimal(&quot;0&quot;))
+    changed_abs = sum((abs(item[&quot;annual_payment_amount&quot;]) for item in changed_with_payments), Decimal(&quot;0&quot;))
+    return {
+        &quot;metadata&quot;: {
+            &quot;cutoff&quot;: CUTOFF.isoformat(),
+            &quot;inputs&quot;: [PAYMENTS_FILE, CONTRACTS_FILE],
+            &quot;source_row_rule&quot;: &quot;CSV表头为第1行，数据从第2行起&quot;,
+            &quot;limitations&quot;: &quot;仅评价两份公开快照；不推断快照外合同、发票、银行流水或违法性&quot;,
+        },
+        &quot;record_grain_and_keys&quot;: analysis[&quot;diagnostics&quot;],
+        &quot;payment_scope&quot;: analysis[&quot;scope_rows&quot;],
+        &quot;conservation&quot;: {
+            &quot;daily&quot;: {&quot;before_join&quot;: daily_total, &quot;after_join&quot;: sum((item[&quot;amount&quot;] for item in analysis[&quot;daily_status&quot;]), Decimal(&quot;0&quot;)), &quot;difference&quot;: daily_total - sum((item[&quot;amount&quot;] for item in analysis[&quot;daily_status&quot;]), Decimal(&quot;0&quot;))},
+            &quot;annual&quot;: {&quot;before_join&quot;: annual_total, &quot;after_join&quot;: sum((item[&quot;amount&quot;] for item in analysis[&quot;annual_status&quot;]), Decimal(&quot;0&quot;)), &quot;difference&quot;: annual_total - sum((item[&quot;amount&quot;] for item in analysis[&quot;annual_status&quot;]), Decimal(&quot;0&quot;))},
+        },
+        &quot;join_summary&quot;: {&quot;daily&quot;: analysis[&quot;daily_status&quot;], &quot;annual&quot;: analysis[&quot;annual_status&quot;]},
+        &quot;cross_grain_overlap&quot;: analysis[&quot;overlap&quot;],
+        &quot;contract_views&quot;: {
+            &quot;year_end_contract_count&quot;: len(analysis[&quot;year_end_view&quot;]),
+            &quot;year_end_conflict_contract_count&quot;: len({item[&quot;contract_number&quot;] for item in analysis[&quot;year_conflicts&quot;]}),
+            &quot;full_latest_contract_count&quot;: len(analysis[&quot;full_latest_view&quot;]),
+            &quot;different_contract_count_total&quot;: len(analysis[&quot;changed&quot;]),
+            &quot;existing_year_end_contracts_replaced&quot;: sum(item[&quot;comparison_type&quot;] == &quot;年末既有合同被未来版本替换&quot; for item in analysis[&quot;changed&quot;]),
+            &quot;future_contracts_introduced&quot;: sum(item[&quot;comparison_type&quot;] == &quot;全快照最新法引入年末不存在合同&quot; for item in analysis[&quot;changed&quot;]),
+            &quot;different_contracts_with_annual_payments&quot;: len(changed_with_payments),
+            &quot;annual_payment_exposure_net&quot;: changed_net,
+            &quot;annual_payment_exposure_absolute&quot;: changed_abs,
+            &quot;top10_by_absolute_annual_payment&quot;: analysis[&quot;changed&quot;][:10],
+            &quot;year_end_conflict_candidates&quot;: analysis[&quot;year_conflicts&quot;],
+        },
+        &quot;unmatched_follow_up_top20&quot;: analysis[&quot;unmatched_top20&quot;],
+        &quot;high_ratio_follow_up_top20&quot;: analysis[&quot;high_ratio_top20&quot;],
+        &quot;nonpositive_or_missing_award_contracts&quot;: analysis[&quot;award_exceptions&quot;],
+        &quot;payment_records&quot;: [{
+            &quot;source_row&quot;: row[&quot;source_row&quot;],
+            &quot;grain&quot;: grain,
+            &quot;voucher_number&quot;: row[&quot;voucher_number&quot;],
+            &quot;check_date&quot;: row[&quot;check_date&quot;],
+            &quot;department_name&quot;: row[&quot;department_name&quot;],
+            &quot;contract_number&quot;: row[&quot;contract_number&quot;],
+            &quot;vendor_name&quot;: row[&quot;vendor_name&quot;],
+            &quot;amount&quot;: row[&quot;amount_decimal&quot;],
+            &quot;negative_flag&quot;: row[&quot;amount_decimal&quot;] &lt; 0,
+            &quot;direct_or_blank_flag&quot;: row[&quot;contract_number&quot;] in DIRECT_MARKERS,
+            &quot;join_status&quot;: payment_status(row, analysis[&quot;year_end_view&quot;]),
+        } for grain, rows in [(&quot;逐日付款&quot;, analysis[&quot;daily&quot;]), (&quot;年度汇总&quot;, analysis[&quot;annual&quot;]), (&quot;无法解释日期&quot;, analysis[&quot;unexplained_dates&quot;])] for row in rows],
+        &quot;negative_payments&quot;: analysis[&quot;negative_payments&quot;],
+    }
+
+
+def add_sheet(workbook, title, headers, rows, money_columns=(), ratio_columns=()):
+    ws = workbook.create_sheet(title)
+    ws.append(headers)
+    for row in rows:
+        ws.append([row.get(header) for header in headers])
+    for cell in ws[1]:
+        cell.font = Font(bold=True, color=&quot;FFFFFF&quot;)
+        cell.fill = PatternFill(&quot;solid&quot;, fgColor=&quot;1F4E78&quot;)
+        cell.alignment = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;, wrap_text=True)
+    ws.freeze_panes = &quot;A2&quot;
+    ws.auto_filter.ref = ws.dimensions
+    for column in money_columns:
+        if column in headers:
+            index = headers.index(column) + 1
+            for cell in ws.iter_cols(min_col=index, max_col=index, min_row=2):
+                cell[0].number_format = MONEY_FMT
+    for column in ratio_columns:
+        if column in headers:
+            index = headers.index(column) + 1
+            for cell in ws.iter_cols(min_col=index, max_col=index, min_row=2):
+                cell[0].number_format = RATIO_FMT
+    for index, header in enumerate(headers, 1):
+        values = [str(ws.cell(row=row, column=index).value or &quot;&quot;) for row in range(1, min(ws.max_row, 100) + 1)]
+        width = min(max(max(map(len, values)) + 2, 12), 45)
+        ws.column_dimensions[get_column_letter(index)].width = width
+    if rows:
+        table = Table(displayName=f&quot;T{len(workbook.worksheets)}&quot;, ref=ws.dimensions)
+        table.tableStyleInfo = TableStyleInfo(name=&quot;TableStyleMedium2&quot;, showRowStripes=True, showColumnStripes=False)
+        ws.add_table(table)
+    return ws
+
+
+def write_workbook(path, analysis):
+    wb = Workbook()
+    wb.remove(wb.active)
+    scope = []
+    for item in analysis[&quot;scope_rows&quot;]:
+        scope.append({&quot;类别&quot;: &quot;付款范围&quot;, &quot;口径/状态&quot;: item[&quot;grain&quot;], &quot;行数&quot;: item[&quot;row_count&quot;], &quot;合同标识数&quot;: item[&quot;distinct_contract_markers&quot;], &quot;金额&quot;: item[&quot;amount&quot;], &quot;负数行&quot;: item[&quot;negative_rows&quot;], &quot;负数金额&quot;: item[&quot;negative_amount&quot;], &quot;DV行&quot;: item[&quot;dv_rows&quot;], &quot;空合同号行&quot;: item[&quot;blank_contract_rows&quot;], &quot;说明&quot;: &quot;不同付款粒度不合并去重&quot;})
+    for grain, items in [(&quot;逐日付款&quot;, analysis[&quot;daily_status&quot;]), (&quot;年度汇总&quot;, analysis[&quot;annual_status&quot;])]:
+        before = sum((row[&quot;amount_decimal&quot;] for row in analysis[&quot;daily&quot;] if grain == &quot;逐日付款&quot;), Decimal(&quot;0&quot;)) if grain == &quot;逐日付款&quot; else sum((row[&quot;amount_decimal&quot;] for row in analysis[&quot;annual&quot;]), Decimal(&quot;0&quot;))
+        for item in items:
+            scope.append({&quot;类别&quot;: f&quot;{grain}关联&quot;, &quot;口径/状态&quot;: item[&quot;status&quot;], &quot;行数&quot;: item[&quot;row_count&quot;], &quot;合同标识数&quot;: item[&quot;contract_count&quot;], &quot;金额&quot;: item[&quot;amount&quot;], &quot;负数行&quot;: None, &quot;负数金额&quot;: None, &quot;DV行&quot;: None, &quot;空合同号行&quot;: None, &quot;说明&quot;: &quot;按源付款行分类，不展开合同候选&quot;})
+        after = sum((item[&quot;amount&quot;] for item in items), Decimal(&quot;0&quot;))
+        scope.append({&quot;类别&quot;: f&quot;{grain}守恒&quot;, &quot;口径/状态&quot;: &quot;关联前后差额&quot;, &quot;行数&quot;: None, &quot;合同标识数&quot;: None, &quot;金额&quot;: before - after, &quot;负数行&quot;: None, &quot;负数金额&quot;: None, &quot;DV行&quot;: None, &quot;空合同号行&quot;: None, &quot;说明&quot;: f&quot;关联前={before}；关联后={after}&quot;})
+    d = analysis[&quot;diagnostics&quot;]
+    scope.extend([
+        {&quot;类别&quot;: &quot;键与重复&quot;, &quot;口径/状态&quot;: &quot;付款稳定键&quot;, &quot;说明&quot;: d[&quot;payments&quot;][&quot;stable_key&quot;] + &quot;；&quot; + d[&quot;payments&quot;][&quot;daily_candidate_key&quot;]},
+        {&quot;类别&quot;: &quot;键与重复&quot;, &quot;口径/状态&quot;: &quot;逐日完整字段重复&quot;, &quot;行数&quot;: d[&quot;payments&quot;][&quot;daily_exact_duplicates&quot;][&quot;duplicate_extra_rows&quot;], &quot;说明&quot;: str(d[&quot;payments&quot;][&quot;daily_exact_duplicates&quot;])},
+        {&quot;类别&quot;: &quot;键与重复&quot;, &quot;口径/状态&quot;: &quot;年度完整字段重复&quot;, &quot;行数&quot;: d[&quot;payments&quot;][&quot;annual_exact_duplicates&quot;][&quot;duplicate_extra_rows&quot;], &quot;说明&quot;: str(d[&quot;payments&quot;][&quot;annual_exact_duplicates&quot;])},
+        {&quot;类别&quot;: &quot;键与重复&quot;, &quot;口径/状态&quot;: &quot;合同稳定键&quot;, &quot;说明&quot;: d[&quot;contracts&quot;][&quot;stable_key&quot;] + &quot;；&quot; + d[&quot;contracts&quot;][&quot;candidate_business_key&quot;]},
+        {&quot;类别&quot;: &quot;键与重复&quot;, &quot;口径/状态&quot;: &quot;合同候选业务键重复&quot;, &quot;行数&quot;: d[&quot;contracts&quot;][&quot;business_key_duplicates&quot;][&quot;duplicate_extra_rows&quot;], &quot;说明&quot;: str(d[&quot;contracts&quot;][&quot;business_key_duplicates&quot;])},
+    ])
+    add_sheet(wb, &quot;口径与守恒&quot;, [&quot;类别&quot;, &quot;口径/状态&quot;, &quot;行数&quot;, &quot;合同标识数&quot;, &quot;金额&quot;, &quot;负数行&quot;, &quot;负数金额&quot;, &quot;DV行&quot;, &quot;空合同号行&quot;, &quot;说明&quot;], scope, [&quot;金额&quot;, &quot;负数金额&quot;])
+
+    payment_detail = []
+    for grain, rows in [(&quot;逐日付款&quot;, analysis[&quot;daily&quot;]), (&quot;年度汇总&quot;, analysis[&quot;annual&quot;]), (&quot;无法解释日期&quot;, analysis[&quot;unexplained_dates&quot;])]:
+        for row in rows:
+            payment_detail.append({
+                &quot;付款原始行&quot;: row[&quot;source_row&quot;], &quot;粒度&quot;: grain, &quot;凭证号&quot;: row[&quot;voucher_number&quot;],
+                &quot;支票日期/年度标识&quot;: row[&quot;check_date&quot;], &quot;部门&quot;: row[&quot;department_name&quot;],
+                &quot;合同号/直接付款标识&quot;: row[&quot;contract_number&quot;], &quot;供应商名&quot;: row[&quot;vendor_name&quot;],
+                &quot;金额&quot;: row[&quot;amount_decimal&quot;], &quot;负数标识&quot;: &quot;是&quot; if row[&quot;amount_decimal&quot;] &lt; 0 else &quot;否&quot;,
+                &quot;DV/空号标识&quot;: &quot;是&quot; if row[&quot;contract_number&quot;] in DIRECT_MARKERS else &quot;否&quot;,
+                &quot;年末合同关联状态&quot;: payment_status(row, analysis[&quot;year_end_view&quot;]),
+            })
+    add_sheet(wb, &quot;付款明细&quot;, [&quot;付款原始行&quot;, &quot;粒度&quot;, &quot;凭证号&quot;, &quot;支票日期/年度标识&quot;, &quot;部门&quot;, &quot;合同号/直接付款标识&quot;, &quot;供应商名&quot;, &quot;金额&quot;, &quot;负数标识&quot;, &quot;DV/空号标识&quot;, &quot;年末合同关联状态&quot;], payment_detail, [&quot;金额&quot;])
+
+    version_rows = []
+    for item in analysis[&quot;changed&quot;]:
+        version_rows.append({
+            &quot;偏差类型&quot;: item[&quot;comparison_type&quot;], &quot;合同号&quot;: item[&quot;contract_number&quot;], &quot;年度付款原始行&quot;: item[&quot;annual_payment_source_rows&quot;], &quot;年度付款净额&quot;: item[&quot;annual_payment_amount&quot;],
+            &quot;年末合同原始行&quot;: item[&quot;year_end_contract_rows&quot;], &quot;年末批准日期&quot;: item[&quot;year_end_approval&quot;], &quot;年末修订号&quot;: item[&quot;year_end_revision&quot;], &quot;年末授予额&quot;: item[&quot;year_end_award&quot;],
+            &quot;全快照最新原始行&quot;: item[&quot;latest_contract_rows&quot;], &quot;最新批准日期&quot;: item[&quot;latest_approval&quot;], &quot;最新修订号&quot;: item[&quot;latest_revision&quot;], &quot;最新授予额&quot;: item[&quot;latest_award&quot;],
+            &quot;说明&quot;: &quot;全快照最新法与年末视图不同；未来版本不代表年末已获批，年末空白表示该合同截至年末尚无批准记录&quot;,
+        })
+    add_sheet(wb, &quot;版本对照&quot;, [&quot;偏差类型&quot;, &quot;合同号&quot;, &quot;年度付款原始行&quot;, &quot;年度付款净额&quot;, &quot;年末合同原始行&quot;, &quot;年末批准日期&quot;, &quot;年末修订号&quot;, &quot;年末授予额&quot;, &quot;全快照最新原始行&quot;, &quot;最新批准日期&quot;, &quot;最新修订号&quot;, &quot;最新授予额&quot;, &quot;说明&quot;], version_rows, [&quot;年度付款净额&quot;])
+
+    unmatched_rows = [{
+        &quot;合同号&quot;: x[&quot;contract_number&quot;], &quot;付款原始行&quot;: x[&quot;payment_source_rows&quot;], &quot;付款行数&quot;: x[&quot;payment_row_count&quot;], &quot;付款供应商名&quot;: x[&quot;payment_vendor_names&quot;], &quot;年度付款净额&quot;: x[&quot;annual_payment_amount&quot;], &quot;匹配状态&quot;: x[&quot;match_status&quot;],
+        &quot;合同原始行&quot;: x[&quot;contract_source_rows&quot;], &quot;批准日期&quot;: x[&quot;approval_date&quot;], &quot;修订号&quot;: x[&quot;revision_number&quot;], &quot;证据缺口&quot;: x[&quot;evidence_gap&quot;], &quot;具体下一步&quot;: x[&quot;next_step&quot;]
+    } for x in analysis[&quot;unmatched_top20&quot;]]
+    add_sheet(wb, &quot;未匹配追查&quot;, [&quot;合同号&quot;, &quot;付款原始行&quot;, &quot;付款行数&quot;, &quot;付款供应商名&quot;, &quot;年度付款净额&quot;, &quot;匹配状态&quot;, &quot;合同原始行&quot;, &quot;批准日期&quot;, &quot;修订号&quot;, &quot;证据缺口&quot;, &quot;具体下一步&quot;], unmatched_rows, [&quot;年度付款净额&quot;])
+
+    ratio_rows = [{
+        &quot;合同号&quot;: x[&quot;contract_number&quot;], &quot;付款原始行&quot;: x[&quot;payment_source_rows&quot;], &quot;付款行数&quot;: x[&quot;payment_row_count&quot;], &quot;付款供应商名&quot;: x[&quot;payment_vendor_names&quot;], &quot;年度付款净额&quot;: x[&quot;annual_payment_amount&quot;],
+        &quot;合同原始行&quot;: x[&quot;contract_source_row&quot;], &quot;批准日期&quot;: x[&quot;approval_date&quot;], &quot;修订号&quot;: x[&quot;revision_number&quot;], &quot;合同供应商名&quot;: x[&quot;contract_vendor_name&quot;], &quot;授予额&quot;: x[&quot;award_amount&quot;], &quot;付款/授予额&quot;: x[&quot;payment_award_ratio&quot;], &quot;证据缺口&quot;: x[&quot;evidence_gap&quot;], &quot;具体下一步&quot;: x[&quot;next_step&quot;]
+    } for x in analysis[&quot;high_ratio_top20&quot;]]
+    add_sheet(wb, &quot;高比率追查&quot;, [&quot;合同号&quot;, &quot;付款原始行&quot;, &quot;付款行数&quot;, &quot;付款供应商名&quot;, &quot;年度付款净额&quot;, &quot;合同原始行&quot;, &quot;批准日期&quot;, &quot;修订号&quot;, &quot;合同供应商名&quot;, &quot;授予额&quot;, &quot;付款/授予额&quot;, &quot;证据缺口&quot;, &quot;具体下一步&quot;], ratio_rows, [&quot;年度付款净额&quot;, &quot;授予额&quot;], [&quot;付款/授予额&quot;])
+
+    exceptions = []
+    for x in analysis[&quot;award_exceptions&quot;]:
+        exceptions.append({&quot;例外类型&quot;: x[&quot;exception_type&quot;], &quot;合同号&quot;: x[&quot;contract_number&quot;], &quot;付款原始行&quot;: x[&quot;payment_source_rows&quot;], &quot;付款日期/口径&quot;: &quot;2024&quot;, &quot;付款供应商名&quot;: x[&quot;payment_vendor_names&quot;], &quot;付款金额&quot;: x[&quot;annual_payment_amount&quot;], &quot;合同原始行&quot;: x[&quot;contract_source_row&quot;], &quot;批准日期&quot;: x[&quot;approval_date&quot;], &quot;修订号&quot;: x[&quot;revision_number&quot;], &quot;授予额&quot;: x[&quot;award_amount&quot;], &quot;证据缺口&quot;: x[&quot;evidence_gap&quot;], &quot;具体下一步&quot;: x[&quot;next_step&quot;]})
+    for x in analysis[&quot;negative_payments&quot;]:
+        exceptions.append({&quot;例外类型&quot;: &quot;负数付款/冲销（保留）&quot;, &quot;合同号&quot;: x[&quot;contract_number&quot;], &quot;付款原始行&quot;: x[&quot;source_row&quot;], &quot;付款日期/口径&quot;: x[&quot;check_date&quot;], &quot;付款供应商名&quot;: x[&quot;vendor_name&quot;], &quot;付款金额&quot;: x[&quot;amount&quot;], &quot;合同原始行&quot;: None, &quot;批准日期&quot;: None, &quot;修订号&quot;: None, &quot;授予额&quot;: None, &quot;证据缺口&quot;: &quot;快照不说明冲销对应的原付款&quot;, &quot;具体下一步&quot;: &quot;调取付款凭证和总账分录，核对冲销关联及会计期间&quot;})
+    for x in analysis[&quot;year_conflicts&quot;]:
+        exceptions.append({&quot;例外类型&quot;: &quot;年末版本冲突候选&quot;, &quot;合同号&quot;: x[&quot;contract_number&quot;], &quot;付款原始行&quot;: None, &quot;付款日期/口径&quot;: None, &quot;付款供应商名&quot;: None, &quot;付款金额&quot;: None, &quot;合同原始行&quot;: x[&quot;contract_source_row&quot;], &quot;批准日期&quot;: x[&quot;approval_date&quot;], &quot;修订号&quot;: x[&quot;revision_number&quot;], &quot;授予额&quot;: x[&quot;award_amount&quot;], &quot;证据缺口&quot;: &quot;最高批准日期和修订号相同但内容不一致&quot;, &quot;具体下一步&quot;: &quot;调取采购系统版本审计轨迹和合同原件，确认有效内容&quot;})
+    for x in analysis[&quot;overlap&quot;]:
+        exceptions.append({&quot;例外类型&quot;: &quot;跨粒度合同交集&quot;, &quot;合同号&quot;: x[&quot;contract_number&quot;], &quot;付款原始行&quot;: f&quot;逐日:{x[&#x27;daily_source_rows&#x27;]}；年度:{x[&#x27;annual_source_rows&#x27;]}&quot;, &quot;付款日期/口径&quot;: &quot;逐日与年度&quot;, &quot;付款供应商名&quot;: None, &quot;付款金额&quot;: x[&quot;daily_amount&quot;] + x[&quot;annual_amount&quot;], &quot;合同原始行&quot;: None, &quot;批准日期&quot;: None, &quot;修订号&quot;: None, &quot;授予额&quot;: None, &quot;证据缺口&quot;: f&quot;逐日净额{x[&#x27;daily_amount&#x27;]}；年度净额{x[&#x27;annual_amount&#x27;]}；无证据证明互斥&quot;, &quot;具体下一步&quot;: &quot;调取查询定义和底层交易标识，确认年度行是否汇总包含逐日行；在此之前不得相加为真实总支出&quot;})
+    add_sheet(wb, &quot;例外&quot;, [&quot;例外类型&quot;, &quot;合同号&quot;, &quot;付款原始行&quot;, &quot;付款日期/口径&quot;, &quot;付款供应商名&quot;, &quot;付款金额&quot;, &quot;合同原始行&quot;, &quot;批准日期&quot;, &quot;修订号&quot;, &quot;授予额&quot;, &quot;证据缺口&quot;, &quot;具体下一步&quot;], exceptions, [&quot;付款金额&quot;, &quot;授予额&quot;])
+    wb.save(path)
+
+
+def add_heading(document, text, level=1):
+    paragraph = document.add_heading(text, level=level)
+    paragraph.style.font.name = &quot;Arial&quot;
+    return paragraph
+
+
+def add_bullet(document, text):
+    paragraph = document.add_paragraph(style=&quot;List Bullet&quot;)
+    paragraph.add_run(text)
+    return paragraph
+
+
+def write_memo(path, analysis):
+    daily_total = sum((row[&quot;amount_decimal&quot;] for row in analysis[&quot;daily&quot;]), Decimal(&quot;0&quot;))
+    annual_total = sum((row[&quot;amount_decimal&quot;] for row in analysis[&quot;annual&quot;]), Decimal(&quot;0&quot;))
+    changed_paid = [item for item in analysis[&quot;changed&quot;] if item[&quot;annual_payment_source_rows&quot;]]
+    changed_net = sum((item[&quot;annual_payment_amount&quot;] for item in changed_paid), Decimal(&quot;0&quot;))
+    doc = Document()
+    section = doc.sections[0]
+    section.top_margin = Inches(0.65)
+    section.bottom_margin = Inches(0.65)
+    title = doc.add_heading(&quot;芝加哥2024年付款复核备忘录&quot;, 0)
+    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.add_run(&quot;研究截点：2024-12-31｜仅基于两份公开快照&quot;).bold = True
+
+    daily_direct = next(item for item in analysis[&quot;daily_status&quot;] if item[&quot;status&quot;] == &quot;直接付款/空号&quot;)
+    annual_unique = next(item for item in analysis[&quot;annual_status&quot;] if item[&quot;status&quot;] == &quot;唯一匹配&quot;)
+    annual_unmatched = next(item for item in analysis[&quot;annual_status&quot;] if item[&quot;status&quot;] == &quot;未匹配&quot;)
+    add_heading(doc, &quot;结论先行&quot;, 1)
+    add_bullet(doc, f&quot;付款快照混有两种不可直接相加的粒度：{len(analysis[&#x27;daily&#x27;]):,}条具体日期行，净额${daily_total:,.2f}；{len(analysis[&#x27;annual&#x27;]):,}条check_date=&#x27;2024&#x27;年度汇总行，净额${annual_total:,.2f}。{len(analysis[&#x27;overlap&#x27;])}个合同号同时出现在两类中；没有底层交易标识证明互斥，因此本复核不报告消除重叠后的“真实总支出”。&quot;)
+    add_bullet(doc, f&quot;截至年末可选出{len(analysis[&#x27;year_end_view&#x27;]):,}个合同号；{len({item[&#x27;contract_number&#x27;] for item in analysis[&#x27;year_conflicts&#x27;]}):,}个合同号在最高批准日期和修订号下仍有内容冲突候选，未擅选。年度付款中，{annual_unique[&#x27;row_count&#x27;]:,}行/{annual_unique[&#x27;contract_count&#x27;]:,}个合同号/净额${annual_unique[&#x27;amount&#x27;]:,.2f}唯一匹配，{annual_unmatched[&#x27;row_count&#x27;]:,}行/{annual_unmatched[&#x27;contract_count&#x27;]:,}个合同号/净额${annual_unmatched[&#x27;amount&#x27;]:,.2f}未匹配。&quot;)
+    replaced_count = sum(item[&quot;comparison_type&quot;] == &quot;年末既有合同被未来版本替换&quot; for item in analysis[&quot;changed&quot;])
+    introduced_count = sum(item[&quot;comparison_type&quot;] == &quot;全快照最新法引入年末不存在合同&quot; for item in analysis[&quot;changed&quot;])
+    add_bullet(doc, f&quot;若直接采用全快照最新版本，与年末视图不同的合同共{len(analysis[&#x27;changed&#x27;]):,}个：{replaced_count:,}个年末既有合同被未来版本替换，另引入{introduced_count:,}个截至年末尚不存在的合同；其中{len(changed_paid):,}个带有年度付款，付款敞口净额${changed_net:,.2f}。这是时点偏差，不是付款错误。&quot;)
+    add_bullet(doc, &quot;优先补档分两组：先查年度未唯一匹配且绝对净额最大的合同；再查唯一匹配但付款/正授予额比率最高的合同。高比率只表示快照字段之间需要解释，不等于违法、超付或损失。&quot;)
+
+    add_heading(doc, &quot;已核实事实&quot;, 1)
+    add_bullet(doc, &quot;付款CSV以物理行号作为稳定来源键。voucher_number及完整字段均存在重复，不能假定凭证号唯一；重复记录未删除。合同CSV同样以物理行号为稳定键，合同号+修订号+批准日期有9个重复组，完整行无重复。&quot;)
+    add_bullet(doc, &quot;付款中保留两条负数：原始行8720为逐日DV付款-$500.00；原始行39009为合同192984年度汇总-$4,051.61。负数被视为冲销/调整线索并纳入净额。&quot;)
+    add_bullet(doc, &quot;年末版本规则严格为：先排除批准日期晚于2024-12-31的记录，再按合同号选批准日期最新、其后数值修订号最大；最高顺序内容冲突全部保留。授予额是所选版本字段，不是累计付款。&quot;)
+    add_bullet(doc, f&quot;逐日付款中直接付款/空号共{daily_direct[&#x27;row_count&#x27;]:,}行，净额${daily_direct[&#x27;amount&#x27;]:,.2f}，独立归类且未按供应商名称强配。两个粒度关联后金额差额均为$0.00。&quot;)
+
+    add_heading(doc, &quot;优先追查与完整证据链示范&quot;, 1)
+    unmatched_example = analysis[&quot;unmatched_top20&quot;][0]
+    ratio_example = analysis[&quot;high_ratio_top20&quot;][0]
+    changed_example = analysis[&quot;changed&quot;][0]
+    conflict_contract = analysis[&quot;year_conflicts&quot;][0][&quot;contract_number&quot;] if analysis[&quot;year_conflicts&quot;] else None
+    examples = [
+        (unmatched_example[&quot;contract_number&quot;], &quot;未匹配&quot;, f&quot;付款原始行{unmatched_example[&#x27;payment_source_rows&#x27;]}记录年度净额${unmatched_example[&#x27;annual_payment_amount&#x27;]:,.2f}、供应商{unmatched_example[&#x27;payment_vendor_names&#x27;]}；年末合同视图无该合同号。下一步取得合同封面、年末前批准/修订、发票及付款凭证，并核对付款合同号录入。现有证据只能说明快照间未匹配。&quot;),
+        (ratio_example[&quot;contract_number&quot;], &quot;高比率&quot;, f&quot;付款原始行{ratio_example[&#x27;payment_source_rows&#x27;]}记录年度净额${ratio_example[&#x27;annual_payment_amount&#x27;]:,.2f}；年末所选合同原始行{ratio_example[&#x27;contract_source_row&#x27;]}，批准日{ratio_example[&#x27;approval_date&#x27;][:10]}、修订{ratio_example[&#x27;revision_number&#x27;]}、授予额${ratio_example[&#x27;award_amount&#x27;]:,.2f}，付款与合同供应商文本分别为“{ratio_example[&#x27;payment_vendor_names&#x27;]}”和“{ratio_example[&#x27;contract_vendor_name&#x27;]}”，比率{ratio_example[&#x27;payment_award_ratio&#x27;]:,.2f}倍。下一步核对合同原件、授予额字段口径、全部修订及发票；不能仅据此认定超付。&quot;),
+        (changed_example[&quot;contract_number&quot;], &quot;未来版本偏差&quot;, f&quot;付款原始行为{changed_example[&#x27;annual_payment_source_rows&#x27;] or &#x27;无年度付款行&#x27;}，年度净额${changed_example[&#x27;annual_payment_amount&#x27;]:,.2f}；年末版本为合同原始行{changed_example[&#x27;year_end_contract_rows&#x27;]}（{changed_example[&#x27;year_end_approval&#x27;][:10]}、修订{changed_example[&#x27;year_end_revision&#x27;]}、授予额{changed_example[&#x27;year_end_award&#x27;]}），全快照最新变为原始行{changed_example[&#x27;latest_contract_rows&#x27;]}（{changed_example[&#x27;latest_approval&#x27;][:10]}、修订{changed_example[&#x27;latest_revision&#x27;]}、授予额{changed_example[&#x27;latest_award&#x27;]}）。采用最新法会把未来批准版本倒灌至年末。&quot;),
+    ]
+    if conflict_contract:
+        candidates = [item for item in analysis[&quot;year_conflicts&quot;] if item[&quot;contract_number&quot;] == conflict_contract]
+        details = &quot;；&quot;.join(f&quot;原始行{item[&#x27;contract_source_row&#x27;]}，{item[&#x27;approval_date&#x27;][:10]}、修订{item[&#x27;revision_number&#x27;]}、供应商“{item[&#x27;vendor_name&#x27;]}”、授予额${item[&#x27;award_amount&#x27;]:,.2f}&quot; for item in candidates)
+        examples.append((conflict_contract, &quot;版本冲突&quot;, f&quot;{details}。最高批准日期和修订号相同但内容不一致，年末规则不能唯一选择；应调取采购系统版本审计轨迹和合同原件。&quot;))
+    for number, label, detail in examples:
+        paragraph = doc.add_paragraph()
+        paragraph.add_run(f&quot;合同{number}（{label}）：&quot;).bold = True
+        paragraph.add_run(detail)
+
+    add_heading(doc, &quot;需要补档的异常&quot;, 1)
+    top_unmatched = analysis[&quot;unmatched_top20&quot;][:2]
+    top_unmatched_text = &quot;和&quot;.join(f&quot;合同{item[&#x27;contract_number&#x27;]}（${item[&#x27;annual_payment_amount&#x27;]:,.2f}）&quot; for item in top_unmatched)
+    add_bullet(doc, f&quot;“未匹配追查”前20按年度付款绝对净额降序，首两项为{top_unmatched_text}。应取得合同号主数据、合同封面、年末前批准修订与发票链。&quot;)
+    add_bullet(doc, &quot;“高比率追查”前20按付款/授予额降序；应确认授予额字段是否代表净变更、单一修订或其他口径，以及付款是否跨期、跨订单或跨版本。名称差异仅记录为证据问题，不用于认定实体同一。&quot;)
+    zero_count = sum(item[&quot;exception_type&quot;] == &quot;授予额为零&quot; for item in analysis[&quot;award_exceptions&quot;])
+    negative_count = sum(item[&quot;exception_type&quot;] == &quot;授予额为负&quot; for item in analysis[&quot;award_exceptions&quot;])
+    missing_count = sum(item[&quot;exception_type&quot;] == &quot;授予额缺失&quot; for item in analysis[&quot;award_exceptions&quot;])
+    add_bullet(doc, f&quot;另有{zero_count}个付款合同的所选授予额为零、{negative_count}个为负、{missing_count}个缺失；这些项目在“例外”中单列，不制造无穷比率。&quot;)
+
+    add_heading(doc, &quot;不能下的结论&quot;, 1)
+    add_bullet(doc, &quot;不能把付款高于所选版本授予额直接写成违法、超付、浪费或欺诈；快照不含完整合同档案、发票、采购订单、总账或银行流水。&quot;)
+    add_bullet(doc, &quot;不能将全快照最新合同视为2024年末已获批版本；合同表含2025—2026年批准记录。&quot;)
+    add_bullet(doc, &quot;不能把逐日净额与年度汇总净额简单相加，也不能在无交易级映射时消除重叠后声称得到真实总支出。&quot;)
+    add_bullet(doc, &quot;不能依据供应商名称相似或不同强制匹配、拆分或合并实体；DV/空号必须靠付款凭证和采购依据补证。&quot;)
+
+    add_heading(doc, &quot;范围与复核路径&quot;, 1)
+    doc.add_paragraph(&quot;本包仅复核Chicago_Payments_2024.csv与Chicago_Contracts_2019plus.csv的下载快照。audit.xlsx提供口径守恒、版本对照、两张前20清单和全部例外；results.json保留结构化数值和来源行号；analysis.py可离线重建三份产物。前20是取证顺序，不是违规排序。&quot;)
+    styles = doc.styles
+    styles[&quot;Normal&quot;].font.name = &quot;Arial&quot;
+    styles[&quot;Normal&quot;].font.size = Pt(9.5)
+    doc.save(path)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=&quot;重建芝加哥2024付款复核交付物&quot;)
+    parser.add_argument(&quot;--input&quot;, required=True, type=Path)
+    parser.add_argument(&quot;--output&quot;, required=True, type=Path)
+    args = parser.parse_args()
+    if not args.output.exists() or not args.output.is_dir():
+        raise ValueError(&quot;输出目录必须预先存在&quot;)
+    payment_fields, payments = payment_rows(args.input / PAYMENTS_FILE)
+    contract_fields, contracts = contract_rows(args.input / CONTRACTS_FILE)
+    analysis = build_analysis(payment_fields, payments, contract_fields, contracts)
+    payload = result_payload(analysis)
+    with (args.output / &quot;results.json&quot;).open(&quot;w&quot;, encoding=&quot;utf-8&quot;) as handle:
+        json.dump(json_ready(payload), handle, ensure_ascii=False, indent=2)
+    write_workbook(args.output / &quot;audit.xlsx&quot;, analysis)
+    write_memo(args.output / &quot;memo.docx&quot;, analysis)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</pre></main></body></html>

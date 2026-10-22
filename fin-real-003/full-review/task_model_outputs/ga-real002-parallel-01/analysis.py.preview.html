@@ -1,0 +1,816 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>analysis.py</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>analysis.py</h1><pre>#!/usr/bin/env python3
+import argparse
+import json
+import re
+import zipfile
+from collections import defaultdict, deque
+from datetime import datetime
+from pathlib import Path
+
+from docx import Document
+from docx.shared import Inches, Pt
+from openpyxl import Workbook, load_workbook
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.utils import get_column_letter
+
+TERRAINS = [&quot;flat&quot;, &quot;forest&quot;, &quot;village&quot;, &quot;shallow_water&quot;, &quot;deep_water&quot;]
+DAMAGE_TYPES = [&quot;blade&quot;, &quot;pierce&quot;, &quot;impact&quot;, &quot;fire&quot;, &quot;cold&quot;, &quot;arcane&quot;]
+UNIT_FIELDS = [&quot;id&quot;, &quot;level&quot;, &quot;race&quot;, &quot;cost&quot;, &quot;hitpoints&quot;, &quot;movement&quot;, &quot;movement_type&quot;, &quot;alignment&quot;, &quot;experience&quot;, &quot;advances_to&quot;]
+
+
+def rel(path, root):
+    return path.relative_to(root).as_posix()
+
+
+def clean_value(value):
+    value = value.strip()
+    if value.startswith(&quot;_&quot;):
+        value = value[1:].strip()
+    if len(value) &gt;= 2 and value[0] == value[-1] == &#x27;&quot;&#x27;:
+        value = value[1:-1]
+    return value.strip()
+
+
+def int_or_none(value):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def split_csv(value):
+    if not value or value.strip().lower() == &quot;null&quot;:
+        return []
+    return [x.strip() for x in value.split(&quot;,&quot;) if x.strip()]
+
+
+def parse_faction(path, root):
+    lines = path.read_text(encoding=&quot;utf-8&quot;).splitlines()
+    result = {&quot;source_path&quot;: rel(path, root), &quot;source_line&quot;: 1}
+    for no, line in enumerate(lines, 1):
+        m = re.match(r&quot;\s*(id|leader|random_leader|recruit)\s*=\s*(.*?)\s*$&quot;, line)
+        if m:
+            key, value = m.groups()
+            result[key] = clean_value(value)
+            result[key + &quot;_line&quot;] = no
+            result[key + &quot;_source&quot;] = f&quot;{rel(path, root)}:{no}&quot;
+            result[key + &quot;_source_record&quot;] = {&quot;path&quot;: rel(path, root), &quot;tag&quot;: &quot;multiplayer_side&quot;, &quot;attribute&quot;: key, &quot;line&quot;: no}
+    for key in (&quot;leader&quot;, &quot;random_leader&quot;, &quot;recruit&quot;):
+        result[key + &quot;_ids&quot;] = split_csv(result.get(key, &quot;&quot;))
+    return result
+
+
+def parse_cfg_units(path, root):
+    lines = path.read_text(encoding=&quot;utf-8&quot;).splitlines()
+    units = []
+    stack = []
+    current = None
+    attack = None
+    section = None
+    variation_depth = 0
+    for no, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if stripped.startswith(&quot;#&quot;):
+            continue
+        close = re.match(r&quot;\[/([^]]+)\]&quot;, stripped)
+        open_tag = re.match(r&quot;\[([^]/+][^]]*)\]&quot;, stripped)
+        if open_tag:
+            tag = open_tag.group(1).strip()
+            stack.append(tag)
+            if tag == &quot;unit_type&quot;:
+                current = {
+                    &quot;source_path&quot;: rel(path, root), &quot;source_line&quot;: no,
+                    &quot;fields&quot;: {}, &quot;field_lines&quot;: {}, &quot;attacks&quot;: [],
+                    &quot;overrides&quot;: {&quot;movement_costs&quot;: {}, &quot;defense&quot;: {}, &quot;resistance&quot;: {}},
+                    &quot;override_lines&quot;: {&quot;movement_costs&quot;: {}, &quot;defense&quot;: {}, &quot;resistance&quot;: {}},
+                    &quot;ability_macros&quot;: [],
+                }
+            elif current and tag == &quot;variation&quot;:
+                variation_depth += 1
+            elif current and variation_depth == 0 and tag == &quot;attack&quot; and stack.count(&quot;unit_type&quot;) == 1:
+                attack = {&quot;source_path&quot;: rel(path, root), &quot;source_line&quot;: no, &quot;fields&quot;: {}, &quot;field_lines&quot;: {}, &quot;special_macros&quot;: []}
+            elif current and variation_depth == 0 and tag in (&quot;movement_costs&quot;, &quot;defense&quot;, &quot;resistance&quot;, &quot;abilities&quot;):
+                section = tag
+            continue
+        if close:
+            tag = close.group(1).strip()
+            if current and tag == &quot;attack&quot; and attack is not None:
+                current[&quot;attacks&quot;].append(attack)
+                attack = None
+            elif current and tag == &quot;variation&quot;:
+                variation_depth = max(0, variation_depth - 1)
+            elif current and tag in (&quot;movement_costs&quot;, &quot;defense&quot;, &quot;resistance&quot;, &quot;abilities&quot;):
+                section = None
+            elif tag == &quot;unit_type&quot; and current:
+                units.append(current)
+                current = None
+                section = None
+                attack = None
+            if stack and stack[-1] == tag:
+                stack.pop()
+            elif tag in stack:
+                stack = stack[:len(stack) - 1 - stack[::-1].index(tag)]
+            continue
+        if not current or variation_depth:
+            continue
+        macro = re.match(r&quot;\s*\{([A-Za-z0-9_:]+)(?:\s+.*?)?\}\s*$&quot;, line)
+        if macro:
+            name = macro.group(1)
+            ref = {&quot;macro&quot;: name, &quot;source_path&quot;: rel(path, root), &quot;source_line&quot;: no, &quot;source&quot;: f&quot;{rel(path, root)}:{no}&quot;}
+            if attack is not None and &quot;specials&quot; in stack:
+                attack[&quot;special_macros&quot;].append(ref)
+            elif section == &quot;abilities&quot;:
+                current[&quot;ability_macros&quot;].append(ref)
+            continue
+        attr = re.match(r&quot;\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([^#]+?)\s*$&quot;, line)
+        if not attr:
+            continue
+        key, value = attr.group(1), clean_value(attr.group(2))
+        if attack is not None and stack and stack[-1] in (&quot;attack&quot;, &quot;specials&quot;):
+            if stack[-1] == &quot;attack&quot;:
+                attack[&quot;fields&quot;][key] = value
+                attack[&quot;field_lines&quot;][key] = no
+        elif section in (&quot;movement_costs&quot;, &quot;defense&quot;, &quot;resistance&quot;) and stack and stack[-1] == section:
+            current[&quot;overrides&quot;][section][key] = value
+            current[&quot;override_lines&quot;][section][key] = no
+        elif stack and stack[-1] == &quot;unit_type&quot;:
+            current[&quot;fields&quot;][key] = value
+            current[&quot;field_lines&quot;][key] = no
+    return units
+
+
+def parse_movetypes(path, root):
+    lines = path.read_text(encoding=&quot;utf-8&quot;).splitlines()
+    result = {}
+    current = None
+    section = None
+    for no, line in enumerate(lines, 1):
+        stripped = line.strip()
+        op = re.match(r&quot;\[([^]/+][^]]*)\]&quot;, stripped)
+        cl = re.match(r&quot;\[/([^]]+)\]&quot;, stripped)
+        if op:
+            tag = op.group(1)
+            if tag == &quot;movetype&quot;:
+                current = {&quot;source_path&quot;: rel(path, root), &quot;source_line&quot;: no, &quot;values&quot;: defaultdict(dict), &quot;lines&quot;: defaultdict(dict)}
+            elif current and tag in (&quot;movement_costs&quot;, &quot;defense&quot;, &quot;resistance&quot;):
+                section = tag
+            continue
+        if cl:
+            tag = cl.group(1)
+            if current and tag in (&quot;movement_costs&quot;, &quot;defense&quot;, &quot;resistance&quot;):
+                section = None
+            elif current and tag == &quot;movetype&quot;:
+                name = current.get(&quot;name&quot;)
+                if name:
+                    current[&quot;values&quot;] = dict(current[&quot;values&quot;])
+                    current[&quot;lines&quot;] = dict(current[&quot;lines&quot;])
+                    result[name] = current
+                current = None
+            continue
+        if not current:
+            continue
+        attr = re.match(r&quot;\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([^#]+?)\s*$&quot;, line)
+        if not attr:
+            continue
+        key, value = attr.group(1), clean_value(attr.group(2))
+        if section:
+            current[&quot;values&quot;][section][key] = value
+            current[&quot;lines&quot;][section][key] = no
+        elif key == &quot;name&quot;:
+            current[&quot;name&quot;] = value
+            current[&quot;name_line&quot;] = no
+    return result
+
+
+def parse_macros(paths, root):
+    definitions = {}
+    for path in paths:
+        lines = path.read_text(encoding=&quot;utf-8&quot;).splitlines()
+        i = 0
+        while i &lt; len(lines):
+            m = re.match(r&quot;\s*#define\s+([^\s]+)(?:\s+(.*))?$&quot;, lines[i])
+            if not m:
+                i += 1
+                continue
+            name = m.group(1)
+            start = i + 1
+            body = []
+            i += 1
+            while i &lt; len(lines) and not re.match(r&quot;\s*#enddef&quot;, lines[i]):
+                body.append(lines[i])
+                i += 1
+            attrs = {}
+            tags = []
+            nested = []
+            for offset, text in enumerate(body, start + 1):
+                tm = re.match(r&quot;\s*\[([^]/+][^]]*)\]&quot;, text)
+                if tm:
+                    tags.append({&quot;tag&quot;: tm.group(1), &quot;line&quot;: offset})
+                am = re.match(r&quot;\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$&quot;, text)
+                if am and am.group(1) in (&quot;id&quot;, &quot;value&quot;, &quot;multiply&quot;, &quot;active_on&quot;, &quot;apply_to&quot;, &quot;cumulative&quot;, &quot;max_value&quot;, &quot;sub&quot;, &quot;poison&quot;, &quot;affect_self&quot;, &quot;affect_allies&quot;):
+                    attrs[am.group(1)] = clean_value(am.group(2))
+                nm = re.match(r&quot;\s*\{([A-Za-z0-9_:]+)(?:\s+.*?)?\}&quot;, text)
+                if nm:
+                    nested.append(nm.group(1))
+            definitions[name] = {
+                &quot;macro&quot;: name, &quot;source_path&quot;: rel(path, root), &quot;source_line&quot;: start,
+                &quot;source&quot;: f&quot;{rel(path, root)}:{start}&quot;, &quot;end_line&quot;: i + 1,
+                &quot;tags&quot;: tags, &quot;attributes&quot;: attrs, &quot;nested_macros&quot;: nested,
+            }
+            i += 1
+    return definitions
+
+
+def unit_public(unit):
+    f = unit[&quot;fields&quot;]
+    return {
+        &quot;id&quot;: f.get(&quot;id&quot;), &quot;level&quot;: int_or_none(f.get(&quot;level&quot;)), &quot;race&quot;: f.get(&quot;race&quot;),
+        &quot;cost&quot;: int_or_none(f.get(&quot;cost&quot;)), &quot;hp&quot;: int_or_none(f.get(&quot;hitpoints&quot;)),
+        &quot;movement&quot;: int_or_none(f.get(&quot;movement&quot;)), &quot;movement_type&quot;: f.get(&quot;movement_type&quot;),
+        &quot;alignment&quot;: f.get(&quot;alignment&quot;), &quot;experience&quot;: int_or_none(f.get(&quot;experience&quot;)),
+        &quot;advances_to&quot;: split_csv(f.get(&quot;advances_to&quot;, &quot;&quot;)),
+        &quot;source_path&quot;: unit[&quot;source_path&quot;], &quot;source_line&quot;: unit[&quot;source_line&quot;],
+        &quot;source&quot;: f&quot;{unit[&#x27;source_path&#x27;]}:{unit[&#x27;source_line&#x27;]}&quot;, &quot;source_tag&quot;: &quot;unit_type&quot;,
+        &quot;field_sources&quot;: {k: {&quot;path&quot;: unit[&quot;source_path&quot;], &quot;tag&quot;: &quot;unit_type&quot;, &quot;attribute&quot;: k, &quot;line&quot;: line} for k, line in unit[&quot;field_lines&quot;].items()},
+    }
+
+
+def build_graph(recruits, index):
+    reachable = set()
+    unresolved = []
+    edges = []
+    queue = deque(recruits)
+    while queue:
+        uid = queue.popleft()
+        if uid in reachable:
+            continue
+        if uid not in index:
+            unresolved.append({&quot;id&quot;: uid, &quot;reason&quot;: &quot;招募或升级目标在扫描到的 [unit_type] ID 中不存在&quot;})
+            continue
+        reachable.add(uid)
+        src = index[uid]
+        for target in split_csv(src[&quot;fields&quot;].get(&quot;advances_to&quot;, &quot;&quot;)):
+            edge_source = (f&quot;{src[&#x27;source_path&#x27;]}:{src[&#x27;field_lines&#x27;][&#x27;advances_to&#x27;]}&quot;
+                           if &#x27;advances_to&#x27; in src[&#x27;field_lines&#x27;] else f&quot;{src[&#x27;source_path&#x27;]}:{src[&#x27;source_line&#x27;]}&quot;)
+            edge = {&quot;from&quot;: uid, &quot;to&quot;: target, &quot;source&quot;: edge_source,
+                    &quot;source_record&quot;: {&quot;path&quot;: src[&quot;source_path&quot;], &quot;tag&quot;: &quot;unit_type&quot;, &quot;attribute&quot;: &quot;advances_to&quot;, &quot;line&quot;: src[&quot;field_lines&quot;].get(&quot;advances_to&quot;, src[&quot;source_line&quot;])},
+                    &quot;resolved&quot;: target in index}
+            edges.append(edge)
+            if target in index:
+                queue.append(target)
+            else:
+                unresolved.append({&quot;id&quot;: target, &quot;from&quot;: uid, &quot;reason&quot;: &quot;advances_to 目标未解析&quot;, &quot;source&quot;: edge[&quot;source&quot;]})
+    adj = defaultdict(list)
+    for e in edges:
+        if e[&quot;resolved&quot;]:
+            adj[e[&quot;from&quot;]].append(e[&quot;to&quot;])
+    cycles = []
+    def dfs(node, path):
+        if node in path:
+            cycles.append(path[path.index(node):] + [node])
+            return
+        for nxt in adj[node]:
+            dfs(nxt, path + [node])
+    for r in recruits:
+        if r in index:
+            dfs(r, [])
+    return reachable, edges, unresolved, cycles, adj
+
+
+def attack_public(attack):
+    f = attack[&quot;fields&quot;]
+    return {
+        &quot;name&quot;: f.get(&quot;name&quot;), &quot;range&quot;: f.get(&quot;range&quot;), &quot;type&quot;: f.get(&quot;type&quot;),
+        &quot;damage&quot;: int_or_none(f.get(&quot;damage&quot;)), &quot;number&quot;: int_or_none(f.get(&quot;number&quot;)),
+        &quot;source_path&quot;: attack[&quot;source_path&quot;], &quot;source_line&quot;: attack[&quot;source_line&quot;],
+        &quot;source&quot;: f&quot;{attack[&#x27;source_path&#x27;]}:{attack[&#x27;source_line&#x27;]}&quot;, &quot;source_tag&quot;: &quot;attack&quot;,
+        &quot;field_sources&quot;: {k: {&quot;path&quot;: attack[&quot;source_path&quot;], &quot;tag&quot;: &quot;attack&quot;, &quot;attribute&quot;: k, &quot;line&quot;: v} for k, v in attack[&quot;field_lines&quot;].items()},
+        &quot;special_macros&quot;: attack[&quot;special_macros&quot;],
+    }
+
+
+def terrain_rows(reachable, index, movetypes):
+    rows = []
+    unresolved = set()
+    cpp_fallback = {
+        &quot;movement_costs&quot;: &quot;src/movetype.cpp:79-86, src/movetype.hpp:173-176&quot;,
+        &quot;defense&quot;: &quot;src/movetype.cpp:40-50,79-86; src/movetype.hpp:194-199&quot;,
+        &quot;resistance&quot;: &quot;src/movetype.cpp:755-761&quot;,
+    }
+    for uid in sorted(reachable):
+        unit = index[uid]
+        mt_name = unit[&quot;fields&quot;].get(&quot;movement_type&quot;)
+        mt = movetypes.get(mt_name)
+        if not mt:
+            unresolved.add(mt_name or &quot;&lt;missing&gt;&quot;)
+        for category, keys in ((&quot;movement_costs&quot;, TERRAINS), (&quot;defense&quot;, TERRAINS), (&quot;resistance&quot;, DAMAGE_TYPES)):
+            for key in keys:
+                raw = None
+                source_kind = &quot;缺失&quot;
+                source = cpp_fallback[category]
+                if mt and key in mt[&quot;values&quot;].get(category, {}):
+                    raw = mt[&quot;values&quot;][category][key]
+                    source_kind = &quot;movement_type 公共值&quot;
+                    source = f&quot;{mt[&#x27;source_path&#x27;]}:{mt[&#x27;lines&#x27;][category][key]}&quot;
+                if key in unit[&quot;overrides&quot;].get(category, {}):
+                    raw = unit[&quot;overrides&quot;][category][key]
+                    source_kind = &quot;单位覆盖&quot;
+                    source = f&quot;{unit[&#x27;source_path&#x27;]}:{unit[&#x27;override_lines&#x27;][category][key]}&quot;
+                numeric = int_or_none(raw)
+                cap = category == &quot;defense&quot; and numeric is not None and numeric &lt; 0
+                if numeric is not None:
+                    effective = abs(numeric) if category == &quot;defense&quot; else numeric
+                    derivation = &quot;单位覆盖公共值&quot; if source_kind == &quot;单位覆盖&quot; else &quot;公共 movement_type&quot;
+                else:
+                    if category == &quot;movement_costs&quot;:
+                        effective = 99
+                    elif category == &quot;defense&quot;:
+                        effective = 100
+                    else:
+                        effective = 100
+                    derivation = &quot;WML 未配置；按随包 C++ 默认解释，非 WML 明文值&quot;
+                rows.append({
+                    &quot;unit_id&quot;: uid, &quot;movement_type&quot;: mt_name, &quot;category&quot;: category, &quot;key&quot;: key,
+                    &quot;raw_value&quot;: raw, &quot;effective_value&quot;: effective, &quot;source_kind&quot;: source_kind,
+                    &quot;source&quot;: source, &quot;source_tag&quot;: category, &quot;source_attribute&quot;: key,
+                    &quot;derivation&quot;: derivation, &quot;defense_cap&quot;: cap,
+                    &quot;meaning&quot;: (&quot;每次进入地形消耗；99 为引擎不可达哨兵&quot; if category == &quot;movement_costs&quot; else
+                                &quot;命中率配置值；闪避率=100-有效值；负号还表示防御上限&quot; if category == &quot;defense&quot; else
+                                &quot;承受伤害百分比；100=全额，80=承受80%，并非‘80%减伤’&quot;),
+                })
+    return rows, sorted(unresolved)
+
+
+def edge_details(edges, index):
+    result = []
+    for e in edges:
+        row = dict(e)
+        if not e[&quot;resolved&quot;]:
+            result.append(row)
+            continue
+        a, b = index[e[&quot;from&quot;]], index[e[&quot;to&quot;]]
+        ap, bp = unit_public(a), unit_public(b)
+        for key in (&quot;hp&quot;, &quot;movement&quot;, &quot;cost&quot;):
+            av, bv = ap[key], bp[key]
+            row[key + &quot;_from&quot;] = av
+            row[key + &quot;_to&quot;] = bv
+            row[key + &quot;_delta&quot;] = bv - av if av is not None and bv is not None else None
+        row[&quot;alignment_from&quot;] = ap[&quot;alignment&quot;]
+        row[&quot;alignment_to&quot;] = bp[&quot;alignment&quot;]
+        row[&quot;alignment_changed&quot;] = ap[&quot;alignment&quot;] != bp[&quot;alignment&quot;]
+        row[&quot;hp_up_movement_down&quot;] = (row[&quot;hp_delta&quot;] or 0) &gt; 0 and (row[&quot;movement_delta&quot;] or 0) &lt; 0
+        aa = { (x[&quot;name&quot;], x[&quot;range&quot;], x[&quot;type&quot;]): x for x in map(attack_public, a[&quot;attacks&quot;]) }
+        ba = { (x[&quot;name&quot;], x[&quot;range&quot;], x[&quot;type&quot;]): x for x in map(attack_public, b[&quot;attacks&quot;]) }
+        changes = []
+        for key in sorted(set(aa) | set(ba), key=lambda x: tuple(str(v) for v in x)):
+            if key not in aa:
+                changes.append({&quot;status&quot;: &quot;新增&quot;, &quot;key&quot;: key, &quot;to&quot;: ba[key], &quot;source&quot;: ba[key][&quot;source&quot;]})
+            elif key not in ba:
+                changes.append({&quot;status&quot;: &quot;删除&quot;, &quot;key&quot;: key, &quot;from&quot;: aa[key], &quot;source&quot;: aa[key][&quot;source&quot;]})
+            else:
+                x, y = aa[key], ba[key]
+                changes.append({
+                    &quot;status&quot;: &quot;保留&quot;, &quot;key&quot;: key,
+                    &quot;damage_from&quot;: x[&quot;damage&quot;], &quot;damage_to&quot;: y[&quot;damage&quot;],
+                    &quot;damage_delta&quot;: y[&quot;damage&quot;] - x[&quot;damage&quot;] if x[&quot;damage&quot;] is not None and y[&quot;damage&quot;] is not None else None,
+                    &quot;number_from&quot;: x[&quot;number&quot;], &quot;number_to&quot;: y[&quot;number&quot;],
+                    &quot;number_delta&quot;: y[&quot;number&quot;] - x[&quot;number&quot;] if x[&quot;number&quot;] is not None and y[&quot;number&quot;] is not None else None,
+                    &quot;specials_from&quot;: [m[&quot;macro&quot;] for m in x[&quot;special_macros&quot;]],
+                    &quot;specials_to&quot;: [m[&quot;macro&quot;] for m in y[&quot;special_macros&quot;]],
+                    &quot;source&quot;: f&quot;{x[&#x27;source&#x27;]} -&gt; {y[&#x27;source&#x27;]}&quot;,
+                })
+        row[&quot;weapon_changes&quot;] = changes
+        result.append(row)
+    return result
+
+
+def enumerate_paths(recruits, reachable, adj, index):
+    rows = []
+    for root in recruits:
+        if root not in reachable:
+            continue
+        paths_by_end = defaultdict(list)
+        def walk(node, path):
+            if node in path:
+                return
+            new_path = path + [node]
+            if node != root:
+                paths_by_end[node].append(new_path)
+            for nxt in adj[node]:
+                walk(nxt, new_path)
+        walk(root, [])
+        for endpoint, paths in sorted(paths_by_end.items()):
+            values = []
+            for p in paths:
+                xp_parts = [int_or_none(index[x][&quot;fields&quot;].get(&quot;experience&quot;)) for x in p[:-1]]
+                xp = sum(v for v in xp_parts if v is not None) if all(v is not None for v in xp_parts) else None
+                values.append((p, xp))
+            valid = [v for _, v in values if v is not None]
+            minimum = min(valid) if valid else None
+            for p, xp in values:
+                rows.append({
+                    &quot;recruit&quot;: root, &quot;endpoint&quot;: endpoint, &quot;path&quot;: p, &quot;path_text&quot;: &quot; -&gt; &quot;.join(p),
+                    &quot;non_endpoint_units&quot;: p[:-1], &quot;base_xp_sum&quot;: xp, &quot;minimum_for_pair&quot;: minimum,
+                    &quot;is_minimum&quot;: xp == minimum if minimum is not None else False,
+                    &quot;sources&quot;: [(f&quot;{index[x][&#x27;source_path&#x27;]}:{index[x][&#x27;field_lines&#x27;][&#x27;experience&#x27;]}&quot;
+                                 if &#x27;experience&#x27; in index[x][&#x27;field_lines&#x27;] else f&quot;{index[x][&#x27;source_path&#x27;]}:{index[x][&#x27;source_line&#x27;]}&quot;)
+                                for x in p[:-1]],
+                    &quot;caveat&quot;: &quot;仅为途中各非终点单位 experience 原始值之和；不含击杀获益、经验倍率、traits 或 AMLA，不代表真实升级耗时。&quot;,
+                })
+    return rows
+
+
+def capability_rows(reachable, index, macro_defs):
+    uses = []
+    unresolved = []
+    for uid in sorted(reachable):
+        unit = index[uid]
+        for ref in unit[&quot;ability_macros&quot;]:
+            uses.append((uid, &quot;unit_ability&quot;, None, ref))
+        for attack in unit[&quot;attacks&quot;]:
+            ap = attack_public(attack)
+            for ref in attack[&quot;special_macros&quot;]:
+                uses.append((uid, &quot;weapon_special&quot;, f&quot;{ap[&#x27;name&#x27;]}|{ap[&#x27;range&#x27;]}|{ap[&#x27;type&#x27;]}&quot;, ref))
+    def dependency_chain(name, seen=None):
+        seen = set() if seen is None else set(seen)
+        if name in seen:
+            return [{&quot;macro&quot;: name, &quot;cycle&quot;: True}]
+        definition = macro_defs.get(name)
+        if not definition:
+            return [{&quot;macro&quot;: name, &quot;unresolved&quot;: True}]
+        item = {
+            &quot;macro&quot;: name, &quot;source&quot;: definition[&quot;source&quot;], &quot;tags&quot;: definition[&quot;tags&quot;],
+            &quot;attributes&quot;: definition[&quot;attributes&quot;], &quot;dependencies&quot;: [],
+        }
+        for nested in definition[&quot;nested_macros&quot;]:
+            if nested.startswith(&quot;INTERNAL:SPECIAL_NOTES&quot;):
+                continue
+            item[&quot;dependencies&quot;].extend(dependency_chain(nested, seen | {name}))
+        return [item]
+    rows = []
+    for uid, kind, weapon, ref in uses:
+        definition = macro_defs.get(ref[&quot;macro&quot;])
+        chain = dependency_chain(ref[&quot;macro&quot;])
+        missing = []
+        def collect_missing(items):
+            for item in items:
+                if item.get(&quot;unresolved&quot;):
+                    missing.append(item[&quot;macro&quot;])
+                collect_missing(item.get(&quot;dependencies&quot;, []))
+        collect_missing(chain)
+        if not definition or missing:
+            unresolved.append({&quot;unit_id&quot;: uid, &quot;macro&quot;: ref[&quot;macro&quot;], &quot;use_source&quot;: ref[&quot;source&quot;], &quot;reason&quot;: &quot;宏定义或业务嵌套定义未解析&quot;, &quot;missing&quot;: missing})
+        rows.append({
+            &quot;unit_id&quot;: uid, &quot;kind&quot;: kind, &quot;weapon&quot;: weapon, &quot;macro&quot;: ref[&quot;macro&quot;],
+            &quot;use_source&quot;: ref[&quot;source&quot;], &quot;use_tag&quot;: &quot;abilities&quot; if kind == &quot;unit_ability&quot; else &quot;attack/specials&quot;,
+            &quot;definition_source&quot;: definition[&quot;source&quot;] if definition else None,
+            &quot;definition&quot;: definition, &quot;dependency_chain&quot;: chain,
+        })
+    return rows, unresolved
+
+
+def flatten_weapon_changes(edge_rows):
+    rows = []
+    for e in edge_rows:
+        for w in e.get(&quot;weapon_changes&quot;, []):
+            key = w[&quot;key&quot;]
+            rows.append({&quot;from&quot;: e[&quot;from&quot;], &quot;to&quot;: e[&quot;to&quot;], &quot;weapon_name&quot;: key[0], &quot;range&quot;: key[1], &quot;type&quot;: key[2], **{k: v for k, v in w.items() if k != &quot;key&quot;}})
+    return rows
+
+
+def add_sheet(wb, title, headers, rows):
+    ws = wb.create_sheet(title)
+    ws.append(headers)
+    for cell in ws[1]:
+        cell.font = Font(bold=True, color=&quot;FFFFFF&quot;)
+        cell.fill = PatternFill(&quot;solid&quot;, fgColor=&quot;1F4E78&quot;)
+        cell.alignment = Alignment(wrap_text=True, vertical=&quot;top&quot;)
+    for row in rows:
+        ws.append([json.dumps(v, ensure_ascii=False) if isinstance(v, (dict, list, tuple)) else v for v in row])
+    ws.freeze_panes = &quot;A2&quot;
+    ws.auto_filter.ref = ws.dimensions
+    for col_idx, col in enumerate(ws.columns, 1):
+        width = min(70, max(10, max(len(str(c.value or &quot;&quot;)) for c in col) + 2))
+        ws.column_dimensions[get_column_letter(col_idx)].width = width
+        for c in col:
+            c.alignment = Alignment(wrap_text=True, vertical=&quot;top&quot;)
+    return ws
+
+
+def create_workbook(path, data):
+    wb = Workbook()
+    fixed = datetime(2000, 1, 1)
+    wb.properties.created = fixed
+    wb.properties.modified = fixed
+    wb.properties.lastPrinted = None
+    wb.remove(wb.active)
+    f = data[&quot;faction&quot;]
+    faction_rows = []
+    for kind, ids, source in ((&quot;recruit&quot;, f[&quot;recruit_ids&quot;], f[&quot;recruit_source&quot;]), (&quot;leader&quot;, f[&quot;leader_ids&quot;], f[&quot;leader_source&quot;]), (&quot;random_leader&quot;, f[&quot;random_leader_ids&quot;], f[&quot;random_leader_source&quot;])):
+        for uid in ids:
+            faction_rows.append([kind, uid, uid in data[&quot;reachable_ids&quot;], uid in data[&quot;unit_ids&quot;], source])
+    add_sheet(wb, &quot;阵营集合&quot;, [&quot;集合&quot;, &quot;unit_id&quot;, &quot;升级闭包内&quot;, &quot;全局单位已解析&quot;, &quot;来源&quot;], faction_rows)
+
+    unit_rows = []
+    for u in data[&quot;units&quot;]:
+        weapons = [f&quot;{a[&#x27;name&#x27;]}|{a[&#x27;range&#x27;]}|{a[&#x27;type&#x27;]} {a[&#x27;damage&#x27;]}×{a[&#x27;number&#x27;]}&quot; for a in u[&quot;attacks&quot;]]
+        unit_rows.append([u[k] for k in (&quot;id&quot;, &quot;level&quot;, &quot;race&quot;, &quot;cost&quot;, &quot;hp&quot;, &quot;movement&quot;, &quot;movement_type&quot;, &quot;alignment&quot;, &quot;experience&quot;)] + [&quot;,&quot;.join(u[&quot;advances_to&quot;]), &quot;\n&quot;.join(weapons), u[&quot;source&quot;], u[&quot;field_sources&quot;]])
+    add_sheet(wb, &quot;单位目录&quot;, [&quot;ID&quot;, &quot;等级&quot;, &quot;种族&quot;, &quot;cost&quot;, &quot;HP&quot;, &quot;movement&quot;, &quot;movement_type&quot;, &quot;alignment&quot;, &quot;experience&quot;, &quot;advances_to&quot;, &quot;直接武器&quot;, &quot;单位来源&quot;, &quot;字段来源&quot;], unit_rows)
+
+    attack_rows = []
+    for u in data[&quot;units&quot;]:
+        for a in u[&quot;attacks&quot;]:
+            attack_rows.append([u[&quot;id&quot;], a[&quot;name&quot;], a[&quot;range&quot;], a[&quot;type&quot;], a[&quot;damage&quot;], a[&quot;number&quot;], [m[&quot;macro&quot;] for m in a[&quot;special_macros&quot;]], a[&quot;source&quot;], a[&quot;field_sources&quot;]])
+    add_sheet(wb, &quot;直接武器&quot;, [&quot;unit_id&quot;, &quot;名称&quot;, &quot;距离&quot;, &quot;类型&quot;, &quot;伤害&quot;, &quot;次数&quot;, &quot;特殊宏&quot;, &quot;attack来源&quot;, &quot;字段来源&quot;], attack_rows)
+
+    edge_rows = []
+    for e in data[&quot;edges&quot;]:
+        edge_rows.append([e.get(k) for k in (&quot;from&quot;, &quot;to&quot;, &quot;resolved&quot;, &quot;hp_from&quot;, &quot;hp_to&quot;, &quot;hp_delta&quot;, &quot;movement_from&quot;, &quot;movement_to&quot;, &quot;movement_delta&quot;, &quot;cost_from&quot;, &quot;cost_to&quot;, &quot;cost_delta&quot;, &quot;alignment_from&quot;, &quot;alignment_to&quot;, &quot;alignment_changed&quot;, &quot;hp_up_movement_down&quot;, &quot;source&quot;)])
+    add_sheet(wb, &quot;升级边&quot;, [&quot;起点&quot;, &quot;终点&quot;, &quot;已解析&quot;, &quot;HP前&quot;, &quot;HP后&quot;, &quot;HP变化&quot;, &quot;移动前&quot;, &quot;移动后&quot;, &quot;移动变化&quot;, &quot;cost前&quot;, &quot;cost后&quot;, &quot;cost变化&quot;, &quot;阵营前&quot;, &quot;阵营后&quot;, &quot;alignment改变&quot;, &quot;HP升且移动降&quot;, &quot;边来源&quot;], edge_rows)
+
+    wc_rows = []
+    for w in data[&quot;weapon_changes&quot;]:
+        wc_rows.append([w.get(k) for k in (&quot;from&quot;, &quot;to&quot;, &quot;status&quot;, &quot;weapon_name&quot;, &quot;range&quot;, &quot;type&quot;, &quot;damage_from&quot;, &quot;damage_to&quot;, &quot;damage_delta&quot;, &quot;number_from&quot;, &quot;number_to&quot;, &quot;number_delta&quot;, &quot;specials_from&quot;, &quot;specials_to&quot;, &quot;source&quot;)])
+    add_sheet(wb, &quot;武器变化&quot;, [&quot;起点&quot;, &quot;终点&quot;, &quot;状态&quot;, &quot;名称&quot;, &quot;距离&quot;, &quot;类型&quot;, &quot;伤害前&quot;, &quot;伤害后&quot;, &quot;伤害变化&quot;, &quot;次数前&quot;, &quot;次数后&quot;, &quot;次数变化&quot;, &quot;特殊前&quot;, &quot;特殊后&quot;, &quot;来源&quot;], wc_rows)
+
+    path_rows = [[p[&quot;recruit&quot;], p[&quot;endpoint&quot;], p[&quot;path_text&quot;], p[&quot;base_xp_sum&quot;], p[&quot;minimum_for_pair&quot;], p[&quot;is_minimum&quot;], p[&quot;sources&quot;], p[&quot;caveat&quot;]] for p in data[&quot;paths&quot;]]
+    add_sheet(wb, &quot;路径XP&quot;, [&quot;招募起点&quot;, &quot;终点&quot;, &quot;简单路径&quot;, &quot;非终点XP和&quot;, &quot;该对最小值&quot;, &quot;最小路径&quot;, &quot;XP来源&quot;, &quot;口径限制&quot;], path_rows)
+
+    tr_rows = [[r[k] for k in (&quot;unit_id&quot;, &quot;movement_type&quot;, &quot;category&quot;, &quot;key&quot;, &quot;raw_value&quot;, &quot;effective_value&quot;, &quot;source_kind&quot;, &quot;source_tag&quot;, &quot;source_attribute&quot;, &quot;defense_cap&quot;, &quot;derivation&quot;, &quot;meaning&quot;, &quot;source&quot;)] for r in data[&quot;terrain_resistance&quot;]]
+    add_sheet(wb, &quot;地形抗性&quot;, [&quot;unit_id&quot;, &quot;movement_type&quot;, &quot;类别&quot;, &quot;地形/伤害类型&quot;, &quot;WML原始值&quot;, &quot;静态有效值&quot;, &quot;来源层&quot;, &quot;来源标签&quot;, &quot;来源属性&quot;, &quot;负值上限&quot;, &quot;推导&quot;, &quot;解释&quot;, &quot;来源&quot;], tr_rows)
+
+    cap_rows = []
+    for c in data[&quot;capabilities&quot;]:
+        d = c.get(&quot;definition&quot;) or {}
+        cap_rows.append([c[&quot;unit_id&quot;], c[&quot;kind&quot;], c[&quot;weapon&quot;], c[&quot;macro&quot;], c[&quot;use_tag&quot;], c[&quot;use_source&quot;], c[&quot;definition_source&quot;], d.get(&quot;tags&quot;), d.get(&quot;attributes&quot;), d.get(&quot;nested_macros&quot;), c.get(&quot;dependency_chain&quot;)])
+    add_sheet(wb, &quot;能力依赖&quot;, [&quot;unit_id&quot;, &quot;类别&quot;, &quot;武器键&quot;, &quot;宏&quot;, &quot;使用标签&quot;, &quot;使用来源&quot;, &quot;定义来源&quot;, &quot;定义标签&quot;, &quot;关键属性&quot;, &quot;嵌套宏&quot;, &quot;完整定义链&quot;], cap_rows)
+
+    cov = data[&quot;coverage&quot;]
+    coverage_rows = [
+        [&quot;招募ID&quot;, cov[&quot;recruits_total&quot;], cov[&quot;recruits_resolved&quot;], cov[&quot;unresolved_recruits&quot;], f[&quot;recruit_source&quot;]],
+        [&quot;升级目标&quot;, cov[&quot;edge_targets_total&quot;], cov[&quot;edge_targets_resolved&quot;], cov[&quot;unresolved_edges&quot;], &quot;各单位 advances_to 字段&quot;],
+        [&quot;movement_type&quot;, cov[&quot;movement_types_total&quot;], cov[&quot;movement_types_resolved&quot;], cov[&quot;unresolved_movement_types&quot;], &quot;data/core/units.cfg&quot;],
+        [&quot;业务相关能力宏&quot;, cov[&quot;macros_total&quot;], cov[&quot;macros_resolved&quot;], cov[&quot;unresolved_macros&quot;], &quot;能力使用与宏定义&quot;],
+        [&quot;升级环&quot;, len(cov[&quot;cycles&quot;]), 0 if cov[&quot;cycles&quot;] else len(cov[&quot;cycles&quot;]), cov[&quot;cycles&quot;], &quot;递归简单路径检测&quot;],
+        [&quot;多分支节点&quot;, len(cov[&quot;branch_nodes&quot;]), len(cov[&quot;branch_nodes&quot;]), cov[&quot;branch_nodes&quot;], &quot;升级图&quot;],
+        [&quot;交汇节点&quot;, len(cov[&quot;merge_nodes&quot;]), len(cov[&quot;merge_nodes&quot;]), cov[&quot;merge_nodes&quot;], &quot;升级图&quot;],
+    ]
+    add_sheet(wb, &quot;完整性与覆盖&quot;, [&quot;检查项&quot;, &quot;总数&quot;, &quot;已解析/结果数&quot;, &quot;详情&quot;, &quot;依据&quot;], coverage_rows)
+    wb.save(path)
+
+
+def add_doc_table(doc, headers, rows):
+    table = doc.add_table(rows=1, cols=len(headers))
+    table.style = &quot;Table Grid&quot;
+    for i, h in enumerate(headers):
+        table.rows[0].cells[i].text = str(h)
+    for row in rows:
+        cells = table.add_row().cells
+        for i, value in enumerate(row):
+            cells[i].text = &quot;&quot; if value is None else str(value)
+    return table
+
+
+def create_memo(path, data):
+    doc = Document()
+    styles = doc.styles
+    styles[&quot;Normal&quot;].font.name = &quot;Microsoft YaHei&quot;
+    styles[&quot;Normal&quot;].font.size = Pt(9)
+    doc.add_heading(&quot;Wesnoth 1.18.0 Loyalists 招募与升级静态审计备忘录&quot;, 0)
+    doc.add_paragraph(&quot;范围：官方 1.18.0 快照中的 Loyalists 默认多人阵营；仅做配置依赖审计，不推断完整战斗胜率，也不声称运行了游戏引擎。&quot;)
+
+    f = data[&quot;faction&quot;]
+    doc.add_heading(&quot;1. 集合与升级闭包&quot;, level=1)
+    doc.add_paragraph(f&quot;真实 recruit 共 {len(f[&#x27;recruit_ids&#x27;])} 个：{&#x27;, &#x27;.join(f[&#x27;recruit_ids&#x27;])}（{f[&#x27;recruit_source&#x27;]}）。&quot;)
+    doc.add_paragraph(f&quot;leader 共 {len(f[&#x27;leader_ids&#x27;])} 个：{&#x27;, &#x27;.join(f[&#x27;leader_ids&#x27;])}（{f[&#x27;leader_source&#x27;]}）。leader 列表不是 recruit 列表；例如 Shock Trooper 可作领袖但不是基础招募。&quot;)
+    doc.add_paragraph(f&quot;从 recruit 递归 advances_to 得到 {len(data[&#x27;reachable_ids&#x27;])} 个可达单位、{len(data[&#x27;edges&#x27;])} 条升级边。单位来自 human-loyalists 之外的法师、骑士和 merfolk 路径也已纳入。&quot;)
+    cov = data[&quot;coverage&quot;]
+    doc.add_paragraph(f&quot;多分支：{&#x27;, &#x27;.join(cov[&#x27;branch_nodes&#x27;]) or &#x27;无&#x27;}；交汇：{&#x27;, &#x27;.join(cov[&#x27;merge_nodes&#x27;]) or &#x27;无&#x27;}；循环：{json.dumps(cov[&#x27;cycles&#x27;], ensure_ascii=False) if cov[&#x27;cycles&#x27;] else &#x27;无&#x27;}。未解析项见工作簿“完整性与覆盖”。&quot;)
+
+    doc.add_heading(&quot;2. 口径与容易误读的引擎语义&quot;, level=1)
+    for text in [
+        &quot;单位属性和武器只读取 [unit_type] 的直接属性与直接 [attack]；不把 [attack_anim]/[filter_attack]、文本引用或 [variation] 当基础武器。&quot;,
+        &quot;地形表按引擎加载顺序先继承 movement_type，再合并单位自身配置（src/units/types.cpp:323-335）。工作簿同时保留 WML 原始值、最终来源和静态有效值。&quot;,
+        &quot;[defense] 的配置值是受击命中率方向：有效值 60 对应 40% 闪避。负值先取绝对值，同时建立防御上限；mounted 的 forest=-70 不能只抄成普通 70（src/movetype.cpp:40-50,83-86；src/movetype.hpp:194-199）。&quot;,
+        &quot;[resistance] 数字是承受伤害比例，不是减伤率：80 表示承受 80%（约 20% 减伤），120 表示承受 120%（弱点）。战斗计算乘以 damage_from（src/actions/attack.cpp:182-203）。&quot;,
+        &quot;WML 缺失不写成 0。静态有效栏若显示 movement=99、defense=100 或 resistance=100，明确标为随包 C++ 默认解释：src/movetype.cpp:54-86,268-334,755-761；src/movetype.hpp:173-176。未运行引擎。&quot;,
+        &quot;路径 XP 是每条简单升级路径中所有非终点单位 experience 原始值之和，仅是基础配置门槛；不含击杀获益、经验倍率、traits 或 AMLA，不能称为真实升级耗时。&quot;,
+    ]:
+        doc.add_paragraph(text, style=&quot;List Bullet&quot;)
+
+    doc.add_heading(&quot;3. 升级边中的隐性代价&quot;, level=1)
+    special_edges = [e for e in data[&quot;edges&quot;] if e.get(&quot;hp_up_movement_down&quot;) or e.get(&quot;alignment_changed&quot;)]
+    rows = []
+    for e in special_edges:
+        flags = []
+        if e.get(&quot;hp_up_movement_down&quot;):
+            flags.append(&quot;HP上升但movement下降&quot;)
+        if e.get(&quot;alignment_changed&quot;):
+            flags.append(&quot;alignment改变&quot;)
+        rows.append([f&quot;{e[&#x27;from&#x27;]} → {e[&#x27;to&#x27;]}&quot;, f&quot;{e.get(&#x27;hp_from&#x27;)}→{e.get(&#x27;hp_to&#x27;)} ({e.get(&#x27;hp_delta&#x27;):+d})&quot; if e.get(&#x27;hp_delta&#x27;) is not None else &quot;&quot;, f&quot;{e.get(&#x27;movement_from&#x27;)}→{e.get(&#x27;movement_to&#x27;)} ({e.get(&#x27;movement_delta&#x27;):+d})&quot; if e.get(&#x27;movement_delta&#x27;) is not None else &quot;&quot;, f&quot;{e.get(&#x27;alignment_from&#x27;)}→{e.get(&#x27;alignment_to&#x27;)}&quot;, &quot;；&quot;.join(flags), e[&quot;source&quot;]])
+    add_doc_table(doc, [&quot;升级边&quot;, &quot;HP&quot;, &quot;移动&quot;, &quot;alignment&quot;, &quot;标记&quot;, &quot;来源&quot;], rows or [[&quot;无&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;]])
+
+    doc.add_heading(&quot;4. 为什么 damage×number÷cost 会失真&quot;, level=1)
+    examples = data[&quot;distortion_examples&quot;]
+    for ex in examples:
+        doc.add_heading(ex[&quot;title&quot;], level=2)
+        doc.add_paragraph(ex[&quot;text&quot;])
+        doc.add_paragraph(&quot;配置依据：&quot; + &quot;；&quot;.join(ex[&quot;sources&quot;]))
+
+    doc.add_heading(&quot;5. 建议的三个游戏内验证问题&quot;, level=1)
+    for i, q in enumerate(data[&quot;test_questions&quot;], 1):
+        doc.add_heading(f&quot;{i}. {q[&#x27;question&#x27;]}&quot;, level=2)
+        doc.add_paragraph(&quot;分支与现有证据：&quot; + q[&quot;evidence&quot;])
+        doc.add_paragraph(&quot;需实测条件：&quot; + q[&quot;conditions&quot;])
+        doc.add_paragraph(&quot;静态来源：&quot; + &quot;；&quot;.join(q[&quot;sources&quot;]))
+    doc.add_paragraph(&quot;以上是待验证问题，不是现成测试日志；不预设敌军、权重或胜率。&quot;)
+
+    doc.add_heading(&quot;6. 完整性结论&quot;, level=1)
+    doc.add_paragraph(f&quot;招募 ID {cov[&#x27;recruits_resolved&#x27;]}/{cov[&#x27;recruits_total&#x27;]} 已解析；升级目标 {cov[&#x27;edge_targets_resolved&#x27;]}/{cov[&#x27;edge_targets_total&#x27;]} 已解析；movement_type {cov[&#x27;movement_types_resolved&#x27;]}/{cov[&#x27;movement_types_total&#x27;]} 已解析；业务相关能力宏 {cov[&#x27;macros_resolved&#x27;]}/{cov[&#x27;macros_total&#x27;]} 已解析。详细来源、逐值覆盖、武器变化和路径均在 audit.xlsx 与 results.json。&quot;)
+    doc.save(path)
+
+
+def pick_unit(data, uid):
+    return next(u for u in data[&quot;units&quot;] if u[&quot;id&quot;] == uid)
+
+
+def build_narrative(data):
+    macro_src = {c[&quot;macro&quot;]: c[&quot;definition_source&quot;] for c in data[&quot;capabilities&quot;] if c[&quot;definition_source&quot;]}
+    def u(uid): return pick_unit(data, uid)
+    def us(uid): return u(uid)[&quot;source&quot;]
+    data[&quot;distortion_examples&quot;] = [
+        {
+            &quot;title&quot;: &quot;Charge：面板输出上升同时放大反击风险&quot;,
+            &quot;text&quot;: &quot;Horseman → Lancer 的 spear 仍带 charge。该宏只在进攻时生效，将双方伤害乘 2；因此只按攻击者面板 damage×number÷cost 排序，会漏掉触发条件与承受双倍反击的代价。Knight/Paladin/Grand Knight 路线也保留 charge，但具体面板、HP、cost 与其他武器变化不同。&quot;,
+            &quot;sources&quot;: [us(&quot;Horseman&quot;), us(&quot;Lancer&quot;), macro_src.get(&quot;WEAPON_SPECIAL_CHARGE&quot;, &quot;未解析&quot;)],
+        },
+        {
+            &quot;title&quot;: &quot;Magical：命中率依赖无法由伤害乘次数表达&quot;,
+            &quot;text&quot;: &quot;Mage 的 missile 及法师升级线相关法术带 magical，定义为命中率固定 70%，不取决于目标地形防御。Mage → Red Mage 还把 alignment 从 lawful 改为 neutral；静态面板比值既漏掉命中规则，也漏掉时段修正差异。&quot;,
+            &quot;sources&quot;: [us(&quot;Mage&quot;), us(&quot;Red Mage&quot;), macro_src.get(&quot;WEAPON_SPECIAL_MAGICAL&quot;, &quot;未解析&quot;)],
+        },
+        {
+            &quot;title&quot;: &quot;First strike：改变出手顺序，而非无条件增加面板伤害&quot;,
+            &quot;text&quot;: &quot;Spearman 的近战 spear 带 first strike，Pikeman/Halberdier/Javelineer 分支也有对应特殊。它让该武器即使防守也先出手，价值取决于是否发生对应近战与双方存活状态，不能作为无条件数值奖励加到 damage×number。&quot;,
+            &quot;sources&quot;: [us(&quot;Spearman&quot;), us(&quot;Pikeman&quot;), us(&quot;Javelineer&quot;), macro_src.get(&quot;WEAPON_SPECIAL_FIRSTSTRIKE&quot;, &quot;未解析&quot;)],
+        },
+        {
+            &quot;title&quot;: &quot;单位能力与机动：成本分母看不到治疗、照明、传送和防御态抗性&quot;,
+            &quot;text&quot;: &quot;White Mage 有 cures，Mage of Light 另有 illuminates；Silver Mage 有 teleport；Merman Hoplite 有仅防守时生效的 steadfast（抗性翻倍且最高 50%，弱点不受影响）。这些依赖位置、回合、时段或攻守状态，均不在单武器面板比值中。&quot;,
+            &quot;sources&quot;: [us(&quot;White Mage&quot;), us(&quot;Mage of Light&quot;), us(&quot;Silver Mage&quot;), us(&quot;Merman Hoplite&quot;), macro_src.get(&quot;ABILITY_STEADFAST&quot;, &quot;未解析&quot;)],
+        },
+    ]
+    edge_map = {(e[&quot;from&quot;], e[&quot;to&quot;]): e for e in data[&quot;edges&quot;]}
+    def edge_ev(a, b):
+        e = edge_map[(a, b)]
+        return f&quot;{a}→{b}: HP {e[&#x27;hp_from&#x27;]}→{e[&#x27;hp_to&#x27;]}，movement {e[&#x27;movement_from&#x27;]}→{e[&#x27;movement_to&#x27;]}，cost {e[&#x27;cost_from&#x27;]}→{e[&#x27;cost_to&#x27;]}&quot;
+    data[&quot;test_questions&quot;] = [
+        {
+            &quot;question&quot;: &quot;Horseman 的 Knight 与 Lancer 分支，在什么进攻/防守节奏下 charge 的收益能覆盖双倍反击风险？&quot;,
+            &quot;evidence&quot;: edge_ev(&quot;Horseman&quot;, &quot;Knight&quot;) + &quot;；&quot; + edge_ev(&quot;Horseman&quot;, &quot;Lancer&quot;) + &quot;。两线武器变化详见工作簿。&quot;,
+            &quot;conditions&quot;: &quot;分别记录主动 charge、被动接战、是否有合法反击、地形命中率与昼夜；保持地图、资金和对局条件可复现，不预设敌军权重。&quot;,
+            &quot;sources&quot;: [us(&quot;Horseman&quot;), us(&quot;Knight&quot;), us(&quot;Lancer&quot;), macro_src.get(&quot;WEAPON_SPECIAL_CHARGE&quot;, &quot;未解析&quot;)],
+        },
+        {
+            &quot;question&quot;: &quot;Mage 的 White Mage 与 Red Mage 分支，治疗/照明潜力和 neutral 输出在昼夜与高低防御地形中如何交换？&quot;,
+            &quot;evidence&quot;: edge_ev(&quot;Mage&quot;, &quot;White Mage&quot;) + &quot;；&quot; + edge_ev(&quot;Mage&quot;, &quot;Red Mage&quot;) + &quot;；Mage→Red Mage 存在 alignment 改变，法术带 magical。&quot;,
+            &quot;conditions&quot;: &quot;分别覆盖白天、黄昏、夜间，目标处于不同防御地形，并记录 cures/后续 illuminates 的实际触发机会与 magical 的固定命中；不把一次场景结果外推成胜率。&quot;,
+            &quot;sources&quot;: [us(&quot;Mage&quot;), us(&quot;White Mage&quot;), us(&quot;Red Mage&quot;), us(&quot;Mage of Light&quot;), macro_src.get(&quot;WEAPON_SPECIAL_MAGICAL&quot;, &quot;未解析&quot;)],
+        },
+        {
+            &quot;question&quot;: &quot;Merman Warrior 的 Triton 与 Hoplite 分支，在水域转陆地和防守态下，机动损失是否由抗性与 steadfast 补偿？&quot;,
+            &quot;evidence&quot;: edge_ev(&quot;Merman Warrior&quot;, &quot;Merman Triton&quot;) + &quot;；&quot; + edge_ev(&quot;Merman Warrior&quot;, &quot;Merman Hoplite&quot;) + &quot;。Hoplite 有单位抗性覆盖及仅防守生效的 steadfast。&quot;,
+            &quot;conditions&quot;: &quot;覆盖 deep/shallow water、village、flat、forest 的路径与驻防，区分主动进攻和被攻击，记录移动可达性、受击类型和 steadfast 是否满足防守条件。&quot;,
+            &quot;sources&quot;: [us(&quot;Merman Warrior&quot;), us(&quot;Merman Triton&quot;), us(&quot;Merman Hoplite&quot;), macro_src.get(&quot;ABILITY_STEADFAST&quot;, &quot;未解析&quot;)],
+        },
+    ]
+
+
+def build(input_root):
+    faction_path = input_root / &quot;data/multiplayer/factions/loyalists-default.cfg&quot;
+    units_root = input_root / &quot;data/core/units&quot;
+    units_cfg = input_root / &quot;data/core/units.cfg&quot;
+    faction = parse_faction(faction_path, input_root)
+    raw_units = []
+    for path in sorted(units_root.rglob(&quot;*.cfg&quot;)):
+        raw_units.extend(parse_cfg_units(path, input_root))
+    index = {}
+    duplicates = defaultdict(list)
+    for raw in raw_units:
+        uid = raw[&quot;fields&quot;].get(&quot;id&quot;)
+        if uid:
+            duplicates[uid].append(raw[&quot;source_path&quot;])
+            index[uid] = raw
+    reachable, graph_edges, unresolved_graph, cycles, adj = build_graph(faction[&quot;recruit_ids&quot;], index)
+    movetypes = parse_movetypes(units_cfg, input_root)
+    macro_paths = [input_root / &quot;data/core/macros/weapon_specials.cfg&quot;, input_root / &quot;data/core/macros/abilities.cfg&quot;]
+    macro_defs = parse_macros(macro_paths, input_root)
+    terrains, unresolved_mts = terrain_rows(reachable, index, movetypes)
+    edges = edge_details(graph_edges, index)
+    paths = enumerate_paths(faction[&quot;recruit_ids&quot;], reachable, adj, index)
+    capabilities, unresolved_macros = capability_rows(reachable, index, macro_defs)
+    units = []
+    for uid in sorted(reachable):
+        p = unit_public(index[uid])
+        p[&quot;attacks&quot;] = [attack_public(a) for a in index[uid][&quot;attacks&quot;]]
+        p[&quot;ability_macros&quot;] = index[uid][&quot;ability_macros&quot;]
+        p[&quot;overrides&quot;] = index[uid][&quot;overrides&quot;]
+        units.append(p)
+    indegree = defaultdict(int)
+    for e in edges:
+        if e[&quot;resolved&quot;]:
+            indegree[e[&quot;to&quot;]] += 1
+    used_mts = sorted({index[u][&quot;fields&quot;].get(&quot;movement_type&quot;) for u in reachable})
+    recruit_unresolved = [u for u in faction[&quot;recruit_ids&quot;] if u not in index]
+    unresolved_edges = [x for x in unresolved_graph if x.get(&quot;from&quot;)]
+    coverage = {
+        &quot;recruits_total&quot;: len(faction[&quot;recruit_ids&quot;]), &quot;recruits_resolved&quot;: len(faction[&quot;recruit_ids&quot;]) - len(recruit_unresolved), &quot;unresolved_recruits&quot;: recruit_unresolved,
+        &quot;edge_targets_total&quot;: len(edges), &quot;edge_targets_resolved&quot;: sum(1 for e in edges if e[&quot;resolved&quot;]), &quot;unresolved_edges&quot;: unresolved_edges,
+        &quot;movement_types_total&quot;: len(used_mts), &quot;movement_types_resolved&quot;: len(used_mts) - len(unresolved_mts), &quot;unresolved_movement_types&quot;: unresolved_mts,
+        &quot;macros_total&quot;: len(capabilities), &quot;macros_resolved&quot;: sum(1 for c in capabilities if c[&quot;definition&quot;]), &quot;unresolved_macros&quot;: unresolved_macros,
+        &quot;cycles&quot;: cycles, &quot;branch_nodes&quot;: sorted([u for u in reachable if len(adj[u]) &gt; 1]), &quot;merge_nodes&quot;: sorted([u for u, n in indegree.items() if n &gt; 1]),
+        &quot;duplicate_unit_ids_in_snapshot&quot;: {k: v for k, v in duplicates.items() if len(v) &gt; 1},
+    }
+    data = {
+        &quot;metadata&quot;: {
+            &quot;scope&quot;: &quot;Battle for Wesnoth 1.18.0 Loyalists default faction static configuration audit&quot;,
+            &quot;input_root&quot;: str(input_root), &quot;engine_executed&quot;: False,
+            &quot;parser_note&quot;: &quot;analysis.py performs a line-aware constrained WML scan; official wmlparser3.py requires a wesnoth executable for preprocessing (data/tools/wesnoth/wmlparser3.py:3-7), so macro definitions are traced explicitly without executing unrelated scripts.&quot;,
+            &quot;source_entry&quot;: f&quot;{faction[&#x27;source_path&#x27;]}:1&quot;,
+        },
+        &quot;faction&quot;: faction, &quot;unit_ids&quot;: sorted(index), &quot;reachable_ids&quot;: sorted(reachable),
+        &quot;units&quot;: units, &quot;edges&quot;: edges, &quot;weapon_changes&quot;: flatten_weapon_changes(edges),
+        &quot;paths&quot;: paths, &quot;terrain_resistance&quot;: terrains, &quot;capabilities&quot;: capabilities,
+        &quot;coverage&quot;: coverage,
+        &quot;semantics_sources&quot;: {
+            &quot;movement_type_inheritance&quot;: [&quot;src/units/types.cpp:323-335&quot;],
+            &quot;defense_direction&quot;: [&quot;src/actions/attack.cpp:167-180&quot;, &quot;src/movetype.cpp:40-50&quot;, &quot;src/movetype.hpp:194-199&quot;],
+            &quot;missing_defaults&quot;: [&quot;src/movetype.cpp:54-86&quot;, &quot;src/movetype.cpp:268-334&quot;, &quot;src/movetype.cpp:755-761&quot;, &quot;src/movetype.hpp:173-176&quot;],
+            &quot;resistance_damage_multiplier&quot;: [&quot;src/actions/attack.cpp:182-203&quot;, &quot;src/movetype.cpp:755-761&quot;],
+        },
+    }
+    build_narrative(data)
+    return data
+
+
+def validate(data, out):
+    assert data[&quot;coverage&quot;][&quot;recruits_resolved&quot;] == data[&quot;coverage&quot;][&quot;recruits_total&quot;]
+    assert data[&quot;coverage&quot;][&quot;edge_targets_resolved&quot;] == data[&quot;coverage&quot;][&quot;edge_targets_total&quot;]
+    assert data[&quot;coverage&quot;][&quot;movement_types_resolved&quot;] == data[&quot;coverage&quot;][&quot;movement_types_total&quot;]
+    assert data[&quot;coverage&quot;][&quot;macros_resolved&quot;] == data[&quot;coverage&quot;][&quot;macros_total&quot;]
+    assert not data[&quot;coverage&quot;][&quot;cycles&quot;]
+    assert len(data[&quot;distortion_examples&quot;]) &gt;= 3
+    for name in (&quot;audit.xlsx&quot;, &quot;memo.docx&quot;, &quot;results.json&quot;, &quot;analysis.py&quot;):
+        assert (out / name).exists(), name
+    wb = load_workbook(out / &quot;audit.xlsx&quot;, read_only=True)
+    required = {&quot;阵营集合&quot;, &quot;单位目录&quot;, &quot;直接武器&quot;, &quot;升级边&quot;, &quot;武器变化&quot;, &quot;路径XP&quot;, &quot;地形抗性&quot;, &quot;能力依赖&quot;, &quot;完整性与覆盖&quot;}
+    assert required.issubset(set(wb.sheetnames))
+    wb.close()
+    Document(out / &quot;memo.docx&quot;)
+    parsed = json.loads((out / &quot;results.json&quot;).read_text(encoding=&quot;utf-8&quot;))
+    assert parsed[&quot;reachable_ids&quot;] == data[&quot;reachable_ids&quot;]
+
+
+def normalize_ooxml(path):
+    fixed_time = (2000, 1, 1, 0, 0, 0)
+    temp = path.with_suffix(path.suffix + &quot;.tmp&quot;)
+    with zipfile.ZipFile(path, &quot;r&quot;) as src, zipfile.ZipFile(temp, &quot;w&quot;, compression=zipfile.ZIP_DEFLATED, compresslevel=9) as dst:
+        for name in sorted(src.namelist()):
+            old = src.getinfo(name)
+            payload = src.read(name)
+            if name == &quot;docProps/core.xml&quot;:
+                payload = re.sub(
+                    rb&quot;(&lt;dcterms:(?:created|modified)[^&gt;]*&gt;)[^&lt;]*(&lt;/dcterms:(?:created|modified)&gt;)&quot;,
+                    rb&quot;\g&lt;1&gt;2000-01-01T00:00:00Z\g&lt;2&gt;&quot;, payload,
+                )
+            info = zipfile.ZipInfo(name, fixed_time)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = old.external_attr
+            info.create_system = old.create_system
+            dst.writestr(info, payload)
+    temp.replace(path)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=&quot;Rebuild the Wesnoth 1.18.0 Loyalists static audit&quot;)
+    parser.add_argument(&quot;--input&quot;, required=True, type=Path)
+    parser.add_argument(&quot;--output&quot;, required=True, type=Path)
+    args = parser.parse_args()
+    args.output.mkdir(parents=True, exist_ok=True)
+    data = build(args.input.resolve())
+    create_workbook(args.output / &quot;audit.xlsx&quot;, data)
+    create_memo(args.output / &quot;memo.docx&quot;, data)
+    normalize_ooxml(args.output / &quot;audit.xlsx&quot;)
+    normalize_ooxml(args.output / &quot;memo.docx&quot;)
+    (args.output / &quot;results.json&quot;).write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding=&quot;utf-8&quot;)
+    validate(data, args.output)
+    print(json.dumps({
+        &quot;reachable_units&quot;: len(data[&quot;reachable_ids&quot;]), &quot;edges&quot;: len(data[&quot;edges&quot;]),
+        &quot;paths&quot;: len(data[&quot;paths&quot;]), &quot;capability_uses&quot;: len(data[&quot;capabilities&quot;]),
+        &quot;coverage&quot;: data[&quot;coverage&quot;],
+    }, ensure_ascii=False, indent=2))
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</pre></main></body></html>
