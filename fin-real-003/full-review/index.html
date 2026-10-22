@@ -1,27 +1,113 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FIN-REAL-003 完整审阅</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>银行风险变化诊断与尽调决策包</h1><p>FIN-REAL-003 · 完整人工审阅包</p><div class="status">尚未正式验收。参考答案为作者候选；GPT 原始评分 68.1、Qwen 原始评分 100，均未通过独立证据审批。Qwen 为接续运行，最终因回合上限退出，但保留了三份完整文件。该页面包含私有参考答案和 rubric，不能提供给盲解模型。</div><nav><a href="#instruction">完整题面</a><a href="#inputs">输入原件</a><a href="#reference">参考文件</a><a href="#rubric">完整 Rubric</a><a href="#outputs">模型输出</a><a href="#scores">评分证据</a><a href="#pipeline">四题验证</a></nav><p><a href="../FIN-REAL-003-full-review.zip">下载全部审阅文件 ZIP</a></p><h2 id="instruction">完整题面</h2><p><a href="instruction.md" download>instruction.md</a> (2600 bytes)</p><pre># 银行风险变化诊断与尽调决策包
-
-你将作为我们的高级财务分析师，完成一项明确为假设性的北新英格兰地区银行组合评估。管理层需要了解截至2025年6月30日，样本内银行的经营表现和财务风险如何演变，哪些机构值得优先跟进，以及有限的复核资源应投向何处。本次结论用于内部管理决策，不应外推为对全国银行业的判断。
-
-请交付regional_bank_risk_model.xlsx。工作簿应提供可复核的银行季度分析，清楚展示样本覆盖、机构对应关系、经营与风险指标、时间趋势、同类比较、组合变化归因、优先级依据和支持管理层复核的明细。模型应能说明组合结果的变化在多大程度上来自持续机构自身表现，又在多大程度上来自样本构成或规模权重变化。
-
-请交付operating_performance_diagnosis.docx。报告应形成完整判断，而不是简单排列若干比率或列出表现最差的银行。请综合盈利能力、资本承受力、信用质量、资金状况、贷款结构、增长和业务特征，指出主要变化驱动与持续落后机构。执行摘要请明确呈现样本整体资产回报率、非应计资产率、净核销率和总风险资本比率。对于重要变化，请提出并比较合理的竞争性解释，说明哪些解释获得现有证据支持、哪些仍需验证，不要把观察性归因表述为已经证明的因果关系。报告应给出可执行的组合层面和机构层面改进建议，并明确推荐管理层采用的优先行动方案。
-
-请交付priority_follow_up_brief.docx。该简报应选择一个有证据支持的优先跟进范围，逐家说明关注理由、需要管理层回答的问题、下一步资料请求、建议行动及后续监测重点。优先范围不设固定银行名单或固定数量，但选择必须能够从模型和报告中核验。
-
-评估期间为2022年3月31日至2025年6月30日。跟进方案应支持未来九十天的管理安排。请在全部交付物中清楚陈述结果所依赖的假设和限制。
-
-## 输入原件
-
-- `FDIC_RMS_Manual_3.2_Loans.pdf`
-- `OCC_Rating_Credit_Risk.pdf`
-- `fdic_api_documentation.html`
-- `fdic_financials_VT_NH_ME_2022_2025.csv`
-- `fdic_institutions_VT_NH_ME.csv`
-- `financial_definitions.yaml`
-- `institution_definitions.yaml`
-
-本题为新拟分析委托；所有随题输入均为真实公开原件。这是基于所给快照的回顾分析，不是分析期末当时可得信息回测。输入路径为 `/app/input_files/`，交付路径为 `/app/output/`。
-</pre><h2 id="inputs">七份真实输入原件</h2><p>所有文件保留原始字节。官方字段定义和两份监管手册同时属于题目参考材料。</p><details><summary>FDIC_RMS_Manual_3.2_Loans.pdf</summary><p><a href="input_files/FDIC_RMS_Manual_3.2_Loans.pdf" download>FDIC_RMS_Manual_3.2_Loans.pdf</a> (2085732 bytes)</p><iframe title="FDIC_RMS_Manual_3.2_Loans.pdf" loading="lazy" src="input_files/FDIC_RMS_Manual_3.2_Loans.pdf"></iframe><details><summary>来源 URL、下载记录与 SHA256</summary><p><a href="provenance/FDIC_RMS_Manual_3.2_Loans.pdf.json" download>FDIC_RMS_Manual_3.2_Loans.pdf.json</a> (1450 bytes)</p><pre>{
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FIN-REAL-003 完整审阅</title><style>*{box-sizing:border-box}body{margin:0;font:15px/1.7 system-ui,sans-serif;color:#222;letter-spacing:0;background:#fff}main{max-width:1280px;margin:auto;padding:24px}h1{font-size:28px}h2{font-size:22px;border-top:1px solid #ccc;padding-top:22px}h3{font-size:18px}a{color:#176652;overflow-wrap:anywhere}nav{display:flex;gap:18px;flex-wrap:wrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 ui-monospace,monospace}.scroll{overflow:auto;max-height:650px;border:1px solid #ccc}table{border-collapse:collapse;min-width:100%;font-size:13px}td,th{padding:6px 9px;border:1px solid #ddd;vertical-align:top;min-width:100px;max-width:500px;overflow-wrap:anywhere}th{background:#edf4f0;position:sticky;top:0}details{margin:14px 0}summary{cursor:pointer;font-weight:600}.status{padding:12px;border-left:4px solid #ad7023;background:#faf7ed}p{overflow-wrap:anywhere}iframe{width:100%;height:700px;border:1px solid #ccc}@media(max-width:600px){main{padding:16px}h1{font-size:24px}}</style></head><body><main><h1>银行风险变化诊断与尽调决策包</h1><p>FIN-REAL-003 · 完整人工审阅包</p><div class="status">尚未正式验收。参考答案为作者候选；GPT 原始评分 68.1、Qwen 原始评分 100，均未通过独立证据审批。Qwen 为接续运行，最终因回合上限退出，但保留了三份完整文件。该页面包含私有参考答案和 rubric，不能提供给盲解模型。</div><nav><a href="#instruction">完整题面</a><a href="#inputs">输入原件</a><a href="#reference">参考文件</a><a href="#rubric">完整 Rubric</a><a href="#outputs">模型输出</a><a href="#scores">评分证据</a><a href="#pipeline">四题验证</a></nav><p><a href="../FIN-REAL-003-full-review.zip">下载全部审阅文件 ZIP</a></p><h2 id="all-tasks">五个领域 · 全部完整题面</h2><p>当前五题：GO、LAW、DA、GA 为 REAL-002，FIN 为新版 REAL-003。另附金融旧版用于对照。以下按原文件全文展示，没有改写题目，也不代表已经验收。</p><p>流程核对：四道 REAL-002 未完整落实同学的 P2 设计流程；金融 REAL-003 复用了原 P2 模块，但完整原管线未执行，设计审查结果为 revise，尚未通过 Gold 和难度标定。</p><nav><a href="#task-GO-REAL-002">GO-REAL-002</a><a href="#task-LAW-REAL-002">LAW-REAL-002</a><a href="#task-DA-REAL-002">DA-REAL-002</a><a href="#task-GA-REAL-002">GA-REAL-002</a><a href="#task-FIN-REAL-003">FIN-REAL-003</a><a href="#task-FIN-REAL-002">FIN-REAL-002（旧版）</a></nav><article id="task-GO-REAL-002"><h3>GO-REAL-002</h3><p><a href="task_statements/GO-REAL-002.md" download>instruction.md</a> (3548 bytes)</p><h1>复核芝加哥2024年付款：哪些合同值得先追查？</h1>
+<p>你接手一份年终付款复核。请用两份真实公开快照，向行政采购负责人解释2024年的资金去向，并给出可以拿着原始记录去追查的优先清单。不能把“付款超过授予额”直接写成违法，也不能把合同最新版本当成年末已经获批的版本。</p>
+<h2>材料与范围</h2>
+<p><code>/app/input_files/Chicago_Payments_2024.csv</code> 是芝加哥财政部门的公开付款查询原始响应；<code>Chicago_Contracts_2019plus.csv</code> 是采购部门2019年起批准的合同记录原始响应。两个文件均保留下载字节，未插入模拟记录。快照不是完整合同档案或银行流水；合同表还包含2024年之后的修订。</p>
+<p>这是一项新拟的分析委托，不代表芝加哥市实际发出的审计要求。研究截点为2024-12-31，仅评价这两份快照能支持的结论。不得联网补造缺失付款、合同或发票。</p>
+<h2>要完成的工作</h2>
+<ol>
+<li>先确定两份表的真实记录粒度、候选键和重复状况。分别列出逐日付款、年度汇总、负数付款、没有合同号/直接付款标识及其他无法解释的日期。全部金额核对到原表，保留冲销，不得把年度行伪装成具体日期。不同粒度之间有同合同交集时，逐项列出；在无证据证明互斥时，不给出消除重叠后的“真实总支出”。</li>
+<li>重建年末合同视图：仅在批准时间不晚于截点的记录中，按合同号选批准时间最新、再按数值修订号最大的版本。最高顺序仍有内容冲突时保留冲突候选，不擅选一条。另建直接选全快照最新版本的对照，量化会被未来记录改写的合同数、对应付款敞口和前10个案例。版本数量不是合同数量；授予额也不是累计付款。</li>
+<li>将两个付款粒度分别关联年末合同视图，不做会使付款膨胀的多对多展开。给出匹配/未匹配/版本冲突的行数、合同数和金额；按各自粒度做关联前后守恒检验。DV/空号独立处理，不拿供应商模糊名称强配合同。名称差异作为证据问题记录，不据此认定同一实体。</li>
+<li>形成两张前20追查表：年度合同付款中未能唯一匹配的合同，按绝对净额降序；已唯一匹配且授予额为正的年度合同，按年度付款/授予额降序。并列时按合同号字典序。每条列原始付款行号、选中合同的原始行号/批准日期/修订号、金额、证据缺口及具体下一步。另列授予额为零、负数或缺失的付款合同，不算无穷比率。</li>
+<li>给负责人一份结论在前的中文备忘录：分清已核实事实、需要补档的异常和不能下的结论，说明用最新合同造成的实际偏差、混合粒度风险和本包的查询范围。用至少3个不同的真实合同示范完整证据链；这些合同由你从实际结果中选择。</li>
+</ol>
+<h2>交付</h2>
+<p>仅在 <code>/app/output/</code> 交付 <code>audit.xlsx</code>、<code>memo.docx</code>、<code>results.json</code> 和 <code>analysis.py</code>。工作簿须含“口径与守恒”“版本对照”“未匹配追查”“高比率追查”“例外”，表头清楚、金额可读、可筛选。JSON与表格数值一致并保留稳定来源行号（CSV表头为第1行）。脚本支持 <code>python analysis.py --input /app/input_files --output /app/output</code>，离线从原件重建其他三份文件，不能硬编码结果或更改输入。允许Python标准库、openpyxl、python-docx、lxml。原始公开材料及真实实体不得被改写为虚构事实。</p>
+</article><article id="task-LAW-REAL-002"><h3>LAW-REAL-002</h3><p><a href="task_statements/LAW-REAL-002.md" download>instruction.md</a> (4165 bytes)</p><h1>审查真实承包商登记资料：哪些状态有证据，哪些还不能下结论？</h1>
+<p>你为承包商准入审查团队整理华盛顿州真实公开资料。请审查下载快照中执照号以BR开头的记录，围绕2026-10-12的证据状态及随后30天的续期风险，形成法律研究意见。业务问题是“下一步需要核验谁、核验什么”，不是给实际企业定罪或代行政机关撤销执照。</p>
+<h2>文件</h2>
+<p>三个 <code>LNI_Contractor_License_*_BR.csv</code> 分别为Washington L&amp;I官方接口的登记、保证金和保险原始查询响应，筛选范围相同。<code>RCW_18.27.pdf</code> 是华盛顿州议会公开法典原件。所有文件均来自真实下载，未编造承包商、投保事实或纠纷。记录可能历史不完整，最新状态不等于完整历史；PDF也不能被当作所有过去日期的法律版本。</p>
+<h2>工作</h2>
+<ol>
+<li>核对三表记录粒度、执照号/UBI关系和主键候选，列出重复、孤立记录、多个执照共用UBI、同执照不同名称/UBI等真实例外。不得用UBI或近似名称把不同执照的保证金和保险互相挪用。</li>
+<li>按原件条文建立法律适用矩阵：先核对登记类型与RCW18.27的适用范围，再分析一般与专业承包商、保证金与保险/替代财务责任、取消/减损与登记后果、登记核验与例外。不能对三表中所有执照类型机械套用同一个法定门槛；本包不足以确认适用的类别单列范围限制。列具体条款、适用条件和本包能够/不能够证明的事实。讨论法典中的30天登记届满例外为何不能仅由“EXPIRED”一列机械排除或放行；不得编造已承揽工程、已收到通知或适用豁免的事实。</li>
+<li>为每个登记执照保留全部保证金与保险来源行，并在2026-10-12及30天后的2026-11-11分别给出记录层面的有效性。明确日期边界：生效当日计入；到期、取消、减损日期当日起不视为该记录支持有效；Until Canceled不等于无条件永久有效；缺失/无法解析日期单列不确定。这个边界是本次筛查口径，不能冒称法定的小时级终止裁定。识别重叠、替换和未来生效记录，不把多个历史金额相加凑最低保障额。</li>
+<li>分开报告“登记表状态”“存在日期可支持的保证金记录”“保证金金额可支持最低要求”“存在日期可支持的保险记录”“保险字段是否足以证明法定保障形式”。单一insuranceamt不能证明责任分项、除外责任或保单类型；即使金额很高，也不能凭此宣布法定要件全部满足。缺记录只能叫证据不足，不能等同于没有投保。未列在登记表的孤立记录单独交接。</li>
+<li>在当前登记表标为ACTIVE的执照中，列出保证金/保险当前均无可确认有效记录的名单、未来30天有保障记录失效且无已记录后继覆盖的名单，并按执照号排序。未来窗口需要检查中间是否断档，不能仅比较两个端点。两张表均标注法条适用范围，未确认适用者只作资料核验。每个结论关联来源行号、日期/金额、条文、待补证据和下一步。各选最多5个真实执照形成完整案例：历史记录不能当当前保障、未来保单不能提前生效、状态与保障证据不一致。某类实际不存在就报告未发现，不编造示例。</li>
+<li>写中文法律备忘录及两份不发送的核验函草稿，针对实际发现的两个不同证据缺口，引用真实执照和记录但不捏造合同或争议。主备忘录不复制个人电话、家庭地址或个人姓名；保留公开企业名称、执照号和UBI用于业务核对。</li>
+</ol>
+<h2>交付</h2>
+<p>仅在 <code>/app/output/</code> 交付 <code>audit.xlsx</code>（法律矩阵、逐执照、逐保障记录、待核验与续期、数据例外）、<code>memo.docx</code>、<code>results.json</code>、<code>analysis.py</code>。保留CSV原始行号和PDF页码/条款。离线命令：<code>python analysis.py --input /app/input_files --output /app/output</code>，从真实输入重建另外三份文件。允许标准库、openpyxl、python-docx、lxml；禁止修改输入、补造事实或把筛查结果写成终局法律意见。</p>
+</article><article id="task-DA-REAL-002"><h3>DA-REAL-002</h3><p><a href="task_statements/DA-REAL-002.md" download>instruction.md</a> (3606 bytes)</p><h1>发布一份不会错配地域的人均收入变化分析</h1>
+<p>区域研究团队想了解2020到2024年人口变化与居民收入增长的关系。请把BEA的两张真实长表与Census人口、县代码表核对，发布一份范围清楚、可以追查差异的分析。重点是判断哪些地区能直接比较、哪些必须留待核验，不是把所有行强行拼成一个全国排名。</p>
+<h2>原件</h2>
+<p><code>CAINC1__ALL_AREAS.csv</code> 为BEA个人收入/人口/人均收入；<code>CAINC4__ALL_AREAS.csv</code> 为BEA收入分项；<code>co-est2024-alldata.csv</code> 为Census人口估计；<code>national_county2020.txt</code> 为Census县代码。均是实际下载留存的原始字节，可能含脚注、州/全国/都会区和县级记录，代码表与收入数据的地理时间口径也不必相同。原件没有提供的地域映射不能自行编造。</p>
+<h2>任务</h2>
+<ol>
+<li>报告每张表的记录数、地理/指标粒度、年份覆盖、重复键及非数值标记。按实际编码和说明识别CAINC1的总收入、人口、人均收入及CAINC4的总收入、净劳动收入、股息利息租金和个人转移收入。不用名称模糊匹配猜列；同一FIPS不同LineCode不是重复地区。</li>
+<li>将GeoFIPS正规化但保留前导零，Census按SUMLEV=050取县级人口；在BEA表之间使用FIPS+年份+指标口径核验2020—2024。不得将州或都会区行算入县级总计，也不得仅因代码格式为5位就认作县。以Census人口估计的县级代码为比较目标集合，另列BEA不在该集合的地域，不默默丢弃。</li>
+<li>输出双向覆盖与集合差异，标出BEA合并地区、县码版本差异和无法证实的匹配。没有官方交叉表时不拆分BEA合并地区，不按相似县名补值。人口表与2020代码表不一致时，保留其对候选集的影响，不能把旧表当作唯一真值。</li>
+<li>对能够直接按代码关联的县，比较BEA与Census的2020、2024人口，计算绝对差和相对差，并分别用BEA人口、Census人口重算BEA总收入的人均值；与BEA发布人均值核对并解释单位及发布值四舍五入。2024年绝对相对人口差排名前20（分母为Census人口、并列按FIPS升序），逐项定位来源，不将差异自动写成原始数据错误。</li>
+<li>从CAINC4核验总收入与净劳动收入、财产收入、转移收入的加总关系，并计算2020—2024总收入、人均收入和人口增长。两端总收入及三分项、两端两套人口均为正且有值、两表总收入一致，才进入增长贡献排名；不满足的行逐条留排除原因，不把(D)/(NA)/(NM)或其他不可解析标记填0。</li>
+<li>在上一步可比集合中给出两种“2020至2024名义人均收入增长率”前20：一份使用BEA人口、一份使用Census人口。每份按未四舍五入增长率降序、FIPS升序。分析前20集合和排名变化，列每县净劳动收入、财产收入、转移收入对总收入增量的贡献百分点（允许负贡献），并把总收入增幅拆成对数收入变化减对数人口变化；零/负值不做对数。说明名义增长不能当作通胀调整后的生活水平改善。</li>
+</ol>
+<h2>交付</h2>
+<p>在 <code>/app/output/</code> 交付 <code>audit.xlsx</code>（覆盖与例外、跨表核验、人口差异、双口径排名、增长贡献）、结论在前的中文 <code>memo.docx</code>、完整 <code>results.json</code>、离线复现 <code>analysis.py</code>。保留源文件名、FIPS、LineCode、年份和原始CSV行号。脚本命令 <code>python analysis.py --input /app/input_files --output /app/output</code>，支持标准库、openpyxl、python-docx、lxml，不修改输入，不编造地域对照或缺失数值。</p>
+</article><article id="task-GA-REAL-002"><h3>GA-REAL-002</h3><p><a href="task_statements/GA-REAL-002.md" download>instruction.md</a> (3791 bytes)</p><h1>审核Wesnoth忠诚派升级路线，找出表面数值比较会遗漏的代价</h1>
+<p>你为《The Battle for Wesnoth》的数值策划整理1.18.0版Loyalists阵营。团队需要一份真实配置依赖完整的招募/升级审查，决定哪些分支值得做后续游戏内测试。不能用编造敌军、权重或战斗胜率代替官方配置，也不要求在本题改游戏平衡。</p>
+<h2>真实来源</h2>
+<p><code>/app/input_files/</code> 保留官方Git仓库1.18.0 tag下的原始路径，含阵营、单位、移动类型、宏和相关实现。文件内容未经修改。图片/音频不在分析范围；缺少媒体不影响静态配置审查。官方 <code>data/tools/wesnoth</code> 中的WML读取工具也作为原件提供，可用于解析。不得直接执行来源中不相关的脚本。</p>
+<h2>工作范围</h2>
+<ol>
+<li>从 <code>data/multiplayer/factions/loyalists-default.cfg</code> 确定真实recruit与leader集合，区分可招募、可选领袖和升级可达单位。递归追踪全部recruit的advances_to，直到无常规升级，报告多分支、交汇、未解析ID及循环；不得把领袖列表直接当招募列表，或只读取human-loyalists目录遗漏法师/骑士/人鱼。</li>
+<li>为每个可达单位给出来源路径、ID、等级、种族、cost、HP、movement、movement_type、alignment、experience和直接武器。正确识别[unit_type]直接属性及真正[attack]，不把动画/filter_attack、文本引用或variation的字段重复当作基础武器。继承/宏不能当普通数值或静默填默认值；对确需展开的地方给出可核对的依赖说明。</li>
+<li>给每个可达单位列出flat、forest、village、shallow_water、deep_water的移动成本和防御配置，以及blade/pierce/impact/fire/cold/arcane抗性。沿实际movement_type关联公共默认，再应用单位自身覆盖；保留原始值与来源。解释防御值的方向、负值上限和抗性与承受伤害比例的区别；不要把缺失配置擅自写成0。确实需引擎规则才能解释的字段，引用随包实现，不伪称已运行引擎。</li>
+<li>对每条升级边计算HP、movement、cost和各直接武器的变化，按名称+攻击距离+伤害类型对齐武器，新增/删除武器单列。列出全部“HP上升但movement下降”的边及全部alignment改变的边。对每个招募起点到每个可达终点枚举不同简单升级路径，报告途中每个非终点的experience之和及最小值、对应路径；该和只是基础配置XP门槛，不包含击杀获益、经验倍率、traits或AMLA，不能称作真实升级耗时。</li>
+<li>审查所有可达单位的武器特殊能力和单位能力，沿官方宏定位定义。选择至少三条实际存在、会使“面板damage×number÷cost”排序失真的配置依赖，举真实单位与升级边说明。区分条件生效的charge、firststrike、magical等规则，不把特性名称当无条件数值奖励，不用静态数据推断完整对战胜率。</li>
+<li>做完整性核对：所有招募ID、升级边目标、movement_type、业务相关能力宏均有对应来源或明确未解析原因。备忘录推荐三个具体的游戏内验证问题，每个绑定实际分支、现有数值证据和需要实测的条件，不虚构现成测试日志。</li>
+</ol>
+<h2>交付</h2>
+<p>仅在 <code>/app/output/</code> 交付 <code>audit.xlsx</code>（单位目录、升级边、路径XP、地形抗性、能力依赖与覆盖）、中文 <code>memo.docx</code>、<code>results.json</code>、<code>analysis.py</code>。所有表与JSON保留源路径/标签/行号；排名/路径运算使用原始值。<code>python analysis.py --input /app/input_files --output /app/output</code> 离线重建另外三份文件。允许标准库、openpyxl、python-docx、lxml及随包官方WML读取工具；不能硬编码结果、修改输入或以原始配置不存在的游戏规则凑答案。</p>
+</article><article id="task-FIN-REAL-003"><h3>FIN-REAL-003</h3><p><a href="task_statements/FIN-REAL-003.md" download>instruction.md</a> (2600 bytes)</p><h1>银行风险变化诊断与尽调决策包</h1>
+<p>你将作为我们的高级财务分析师，完成一项明确为假设性的北新英格兰地区银行组合评估。管理层需要了解截至2025年6月30日，样本内银行的经营表现和财务风险如何演变，哪些机构值得优先跟进，以及有限的复核资源应投向何处。本次结论用于内部管理决策，不应外推为对全国银行业的判断。</p>
+<p>请交付regional_bank_risk_model.xlsx。工作簿应提供可复核的银行季度分析，清楚展示样本覆盖、机构对应关系、经营与风险指标、时间趋势、同类比较、组合变化归因、优先级依据和支持管理层复核的明细。模型应能说明组合结果的变化在多大程度上来自持续机构自身表现，又在多大程度上来自样本构成或规模权重变化。</p>
+<p>请交付operating_performance_diagnosis.docx。报告应形成完整判断，而不是简单排列若干比率或列出表现最差的银行。请综合盈利能力、资本承受力、信用质量、资金状况、贷款结构、增长和业务特征，指出主要变化驱动与持续落后机构。执行摘要请明确呈现样本整体资产回报率、非应计资产率、净核销率和总风险资本比率。对于重要变化，请提出并比较合理的竞争性解释，说明哪些解释获得现有证据支持、哪些仍需验证，不要把观察性归因表述为已经证明的因果关系。报告应给出可执行的组合层面和机构层面改进建议，并明确推荐管理层采用的优先行动方案。</p>
+<p>请交付priority_follow_up_brief.docx。该简报应选择一个有证据支持的优先跟进范围，逐家说明关注理由、需要管理层回答的问题、下一步资料请求、建议行动及后续监测重点。优先范围不设固定银行名单或固定数量，但选择必须能够从模型和报告中核验。</p>
+<p>评估期间为2022年3月31日至2025年6月30日。跟进方案应支持未来九十天的管理安排。请在全部交付物中清楚陈述结果所依赖的假设和限制。</p>
+<h2>输入原件</h2>
+<ul>
+<li><code>FDIC_RMS_Manual_3.2_Loans.pdf</code></li>
+<li><code>OCC_Rating_Credit_Risk.pdf</code></li>
+<li><code>fdic_api_documentation.html</code></li>
+<li><code>fdic_financials_VT_NH_ME_2022_2025.csv</code></li>
+<li><code>fdic_institutions_VT_NH_ME.csv</code></li>
+<li><code>financial_definitions.yaml</code></li>
+<li><code>institution_definitions.yaml</code></li>
+</ul>
+<p>本题为新拟分析委托；所有随题输入均为真实公开原件。这是基于所给快照的回顾分析，不是分析期末当时可得信息回测。输入路径为 <code>/app/input_files/</code>，交付路径为 <code>/app/output/</code>。</p>
+</article><article id="task-FIN-REAL-002"><h3>FIN-REAL-002 · 历史对照</h3><p><a href="task_statements/FIN-REAL-002.md" download>instruction.md</a> (3564 bytes)</p><h1>复核北新英格兰银行风险变化：趋势来自银行本身，还是样本变了？</h1>
+<p>你为银行业研究团队准备下一轮尽调清单。请分析真实FDIC快照中缅因、新罕布什尔和佛蒙特银行从2022Q1到2025Q2的信用风险和资本变化，解释总体趋势是否受到样本进出和权重口径影响。不要把筛查结果写成监管评级、银行倒闭预测或投资建议。</p>
+<h2>输入</h2>
+<p><code>fdic_financials_VT_NH_ME_2022_2025.csv</code>：官方API原始季度财务查询响应；<code>fdic_institutions_VT_NH_ME.csv</code>：官方机构查询响应；<code>FDIC_RMS_Manual_3.2_Loans.pdf</code> 和 <code>OCC_Rating_Credit_Risk.pdf</code>：原始监管手册。全部是真实下载文件，未插入模拟银行、账项或政策。</p>
+<p>分析的是下载快照回顾，不是2025年当时可得信息回测。机构表晚于财务窗口，不能把其中的当前存续状态当成过去每季度的状态。范围只限财务表实际出现的CERT；不能补出其缺失季度或虚构并购合并报表。</p>
+<h2>任务</h2>
+<ol>
+<li>检查CERT、CERT+REPDTE的唯一性、缺失和完整季度序列；关联机构表，列出未匹配、重复、名称/州别不一致和银行进出样本的记录。区分报告范围内无记录与银行不存在。财务数值单位和已给出比率须交代，不对ROA、NIMY等再次年化。</li>
+<li>建逐银行逐季度面板，保留资产、存款、账面权益、净/总贷款、房地产贷款、90天以上逾期资产、非应计资产，以及原始NCLNLSR、ROA、NIMY和RBCRWAJ。计算权益/资产、净贷款/存款、房地产贷款/总贷款和“90天以上逾期加非应计资产/总资产”筛查代理。分母非正时不生成比率。代理不是监管不良贷款率，也不能用账面权益/资产替代风险加权资本比率。</li>
+<li>对每个季度、每州及三州合计，同时给出全部实际报告银行、全14季度均有记录的固定样本两种结果。每组计算银行数、资产、存款、资产质量代理的分子合计/资产合计，以及该代理的银行等权均值、资产加权均值；证明后两种加权算法之间应有的对应关系。别把州均值再简单平均当三州结果。</li>
+<li>对2022Q1与2025Q2，另做仅保留机构快照ACTIVE=1的对照，列出被排除的真实CERT和资产，量化这一“当前存续过滤”会怎样改写端点变化。与全窗口固定样本区分，不暗示两者等价。若某种对照没有改变结果，如实报告零变化。</li>
+<li>形成截至2025Q2的前10尽调名单：限2024Q2与2025Q2两期均报告的银行，按资产质量代理的同比上升百分点降序，再按2025Q2代理降序、CERT数值升序。展示风险加权资本比率、账面权益/资产和贷款集中度在两期的变化，并从真实手册找到适用段落，分别说明这些字段能证明什么、仍缺什么证据。不能自造“监管红线”或自动认定风险等级。给出前三家逐家追查建议及资料清单。</li>
+</ol>
+<h2>交付</h2>
+<p>在 <code>/app/output/</code> 交付 <code>audit.xlsx</code>（含覆盖核对、季度面板、动态与固定样本、存续偏差、尽调名单）、中文 <code>memo.docx</code>、对应的 <code>results.json</code>、可离线复现的 <code>analysis.py</code>。金额保留原始千美元口径，百分比与百分点明确区分，排名使用未四舍五入数值。保留CSV来源行号及手册页码/章节，不以大段JSON代替业务意见。命令：<code>python analysis.py --input /app/input_files --output /app/output</code>。允许Python标准库、openpyxl、python-docx、lxml，不修改输入或硬编码答案。</p>
+</article><h2 id="instruction">金融新版题面</h2><p><a href="instruction.md" download>instruction.md</a> (2600 bytes)</p><h1>银行风险变化诊断与尽调决策包</h1>
+<p>你将作为我们的高级财务分析师，完成一项明确为假设性的北新英格兰地区银行组合评估。管理层需要了解截至2025年6月30日，样本内银行的经营表现和财务风险如何演变，哪些机构值得优先跟进，以及有限的复核资源应投向何处。本次结论用于内部管理决策，不应外推为对全国银行业的判断。</p>
+<p>请交付regional_bank_risk_model.xlsx。工作簿应提供可复核的银行季度分析，清楚展示样本覆盖、机构对应关系、经营与风险指标、时间趋势、同类比较、组合变化归因、优先级依据和支持管理层复核的明细。模型应能说明组合结果的变化在多大程度上来自持续机构自身表现，又在多大程度上来自样本构成或规模权重变化。</p>
+<p>请交付operating_performance_diagnosis.docx。报告应形成完整判断，而不是简单排列若干比率或列出表现最差的银行。请综合盈利能力、资本承受力、信用质量、资金状况、贷款结构、增长和业务特征，指出主要变化驱动与持续落后机构。执行摘要请明确呈现样本整体资产回报率、非应计资产率、净核销率和总风险资本比率。对于重要变化，请提出并比较合理的竞争性解释，说明哪些解释获得现有证据支持、哪些仍需验证，不要把观察性归因表述为已经证明的因果关系。报告应给出可执行的组合层面和机构层面改进建议，并明确推荐管理层采用的优先行动方案。</p>
+<p>请交付priority_follow_up_brief.docx。该简报应选择一个有证据支持的优先跟进范围，逐家说明关注理由、需要管理层回答的问题、下一步资料请求、建议行动及后续监测重点。优先范围不设固定银行名单或固定数量，但选择必须能够从模型和报告中核验。</p>
+<p>评估期间为2022年3月31日至2025年6月30日。跟进方案应支持未来九十天的管理安排。请在全部交付物中清楚陈述结果所依赖的假设和限制。</p>
+<h2>输入原件</h2>
+<ul>
+<li><code>FDIC_RMS_Manual_3.2_Loans.pdf</code></li>
+<li><code>OCC_Rating_Credit_Risk.pdf</code></li>
+<li><code>fdic_api_documentation.html</code></li>
+<li><code>fdic_financials_VT_NH_ME_2022_2025.csv</code></li>
+<li><code>fdic_institutions_VT_NH_ME.csv</code></li>
+<li><code>financial_definitions.yaml</code></li>
+<li><code>institution_definitions.yaml</code></li>
+</ul>
+<p>本题为新拟分析委托；所有随题输入均为真实公开原件。这是基于所给快照的回顾分析，不是分析期末当时可得信息回测。输入路径为 <code>/app/input_files/</code>，交付路径为 <code>/app/output/</code>。</p>
+<h2 id="inputs">七份真实输入原件</h2><p>所有文件保留原始字节。官方字段定义和两份监管手册同时属于题目参考材料。</p><details><summary>FDIC_RMS_Manual_3.2_Loans.pdf</summary><p><a href="input_files/FDIC_RMS_Manual_3.2_Loans.pdf" download>FDIC_RMS_Manual_3.2_Loans.pdf</a> (2085732 bytes)</p><iframe title="FDIC_RMS_Manual_3.2_Loans.pdf" loading="lazy" src="input_files/FDIC_RMS_Manual_3.2_Loans.pdf"></iframe><details><summary>来源 URL、下载记录与 SHA256</summary><p><a href="provenance/FDIC_RMS_Manual_3.2_Loans.pdf.json" download>FDIC_RMS_Manual_3.2_Loans.pdf.json</a> (1450 bytes)</p><pre>{
   &quot;name&quot;: &quot;FDIC_RMS_Manual_3.2_Loans.pdf&quot;,
   &quot;title&quot;: &quot;FDIC BankFind institutions + quarterly financials (VT/NH/ME, 2022Q1-2025Q2) + FDIC RMS Manual 3.2 Loans + OCC Rating Credit Risk -- FDIC_RMS_Manual_3.2_Loans.pdf&quot;,
   &quot;role&quot;: &quot;reference_doc&quot;,
@@ -27521,4 +27607,4 @@ Qwen设计审查原始status为revise，blocking_issues为空。不能自动把�
     }
   ],
   &quot;unverified_requirements&quot;: []
-}</pre></details><h2 id="pipeline">另外四题并行验证</h2><p>以下运行的是现有 REAL-002 版本；未重新生成难题，也不代表正式验收或三模型标定。</p><div class="scroll"><table><tr><td>领域</td><td>题号</td><td>模型</td><td>运行状态</td><td>已落盘文件</td></tr><tr><td>GO</td><td>GO-REAL-002</td><td>gpt-5.6-sol</td><td>running</td><td></td></tr><tr><td>LAW</td><td>LAW-REAL-002</td><td>gpt-5.6-sol</td><td>running</td><td></td></tr><tr><td>DA</td><td>DA-REAL-002</td><td>gpt-5.6-sol</td><td>running</td><td></td></tr><tr><td>GA</td><td>GA-REAL-002</td><td>gpt-5.6-sol</td><td>running</td><td></td></tr></table></div></main></body></html>
+}</pre></details><h2 id="pipeline">另外四题并行验证</h2><p>以下运行的是现有 REAL-002 版本；未重新生成难题，也不代表正式验收或三模型标定。</p><div class="scroll"><table><tr><td>领域</td><td>题号</td><td>模型</td><td>运行状态</td><td>已落盘文件</td></tr><tr><td>GO</td><td>GO-REAL-002</td><td>gpt-5.6-sol</td><td>running</td><td>analysis.py, results.json, memo.docx, audit.xlsx</td></tr><tr><td>LAW</td><td>LAW-REAL-002</td><td>gpt-5.6-sol</td><td>running</td><td></td></tr><tr><td>DA</td><td>DA-REAL-002</td><td>gpt-5.6-sol</td><td>running</td><td>analysis.py, results.json, memo.docx, audit.xlsx</td></tr><tr><td>GA</td><td>GA-REAL-002</td><td>gpt-5.6-sol</td><td>running</td><td></td></tr></table></div></main></body></html>
