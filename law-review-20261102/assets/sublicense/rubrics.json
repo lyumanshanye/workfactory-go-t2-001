@@ -1,0 +1,1023 @@
+[
+  {
+    "id": "R-01",
+    "description": "工作簿是否提供完整、空白、可扩展并可关联下游记录的请求登记和事实采集入口？",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-02",
+      "REQ-03"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "具有唯一请求ID或等价主键",
+      "采集安排、主体、权利或IP、产品或项目、Field、活动、地域、期限、层级和文件",
+      "支持Unknown、TBD或Not Yet Provided",
+      "正式成果无模拟交易或QA记录"
+    ],
+    "evidence": "检查请求登记及事实采集区域、可扩展记录结构、受控状态词典或功能等价机制以及关联键；接受单表、关联明细表及可靠的人工维护流程等价布局，不要求特定Excel功能。",
+    "numeric_tolerance": null,
+    "weight_reason": "可靠事实入口是全部后续判断的基础。",
+    "anchors": {
+      "0": "没有可用结构化入口，或以模拟交易代替空白模板。",
+      "1": "事实入口完整、可扩展、可关联、支持未知状态并保持空白。"
+    },
+    "levels": {
+      "0": "缺少结构化入口或含看似真实的虚构交易。",
+      "0.25": "只有名称和自由文本，无法支持主体、权利或范围判断。",
+      "0.5": "覆盖多数事实，但缺少多个重要字段、未知状态或关联主键。",
+      "0.75": "主要事实和关联完整，仅有少量非核心缺口。",
+      "1": "主体、权利、活动、范围、结构、状态和下游关联均完整。"
+    },
+    "acceptable_alternatives": [
+      "可采用单一规范化请求表或主表加关联明细表"
+    ],
+    "failure_examples": [
+      "没有拟议接受方或权利范围字段",
+      "预填某公司、产品和已批准日期"
+    ]
+  },
+  {
+    "id": "R-02",
+    "description": "工具是否准确实现公开可读的主体规则，并对Affiliate定义遮盖尾部设置可追溯的暂停机制？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-05",
+      "REQ-13",
+      "REQ-18"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "先识别主体是否为Novartis或Intellia",
+      "分别记录相对于Novartis和Intellia的关系",
+      "采集公开定义所需的控制事实、判断时点和证据",
+      "允许Party、Affiliate of指定合同方、Third Party和Unresolved",
+      "未确认Affiliate不会自动成为Third Party",
+      "识别Affiliate定义尾部[***]",
+      "投资基金结构或其他事实可能落入遮盖尾部时，建立定位至Section 1.1 Affiliate definition的专属依赖并保持Unresolved",
+      "不得声称已完整重构未知规则"
+    ],
+    "evidence": "查看工作簿中的主体资格、参照合同方、控制链、判断时点、证据、遮盖依赖和输出状态。本项评价主体法律控制是否正确实现；一般Word流程覆盖或操作说明遗漏仅在R-18评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "主体分类错误会传播至Third Party、Section 2.6和许可路径判断。",
+    "anchors": {
+      "0": "使用Affiliate或Third Party二选一，或忽略遮盖尾部并形成确定分类。",
+      "1": "准确实现公开规则，并对Affiliate定义遮盖尾部设置可追溯Unresolved依赖和暂停机制。"
+    },
+    "levels": {
+      "0": "无主体核验、默认归类或补造遮盖规则。",
+      "0.25": "只询问是否超过50%，不能识别合同当事方、相对关系或遮盖风险。",
+      "0.5": "识别主要身份和关系，但遗漏双向参照、判断时点或遮盖安全门。",
+      "0.75": "核心模型和遮盖安全门完整，仅有轻微证据或说明不足。",
+      "1": "当事方身份、双向关系、公开控制事实、时点、证据、遮盖依赖和不确定性均完整。"
+    },
+    "acceptable_alternatives": [
+      "可使用身份字段加两组相对关系字段",
+      "可使用逐主体逐参照方的关系表"
+    ],
+    "failure_examples": [
+      "把Novartis本身归为Third Party",
+      "对投资基金结构仅依据公开片段直接判定不是Affiliate并进一步判定为Third Party"
+    ]
+  },
+  {
+    "id": "R-03",
+    "description": "分流架构是否事实驱动、支持并行候选路径并防止路径间错误联动？",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "路径由事实而非交易名称触发",
+      "同一请求可建立多条候选路径",
+      "事实不足时保留Candidate或Unresolved",
+      "单一路径不可用不会关闭其他路径"
+    ],
+    "evidence": "检查工作簿的分流架构、路径关联及状态传播。本项评价分流控制本身；一般Word流程解释和状态名称映射仅在R-18评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "分流架构决定工具能否安全承载相邻安排。",
+    "anchors": {
+      "0": "只能选择一个由业务标签决定的路径。",
+      "1": "事实驱动、多路径、候选状态和独立传播均完整。"
+    },
+    "levels": {
+      "0": "无实质分流或任一路径失败即关闭请求。",
+      "0.25": "可人工选择路径但不能并行。",
+      "0.5": "支持并行但不确定性或独立状态有明显缺口。",
+      "0.75": "核心架构完整，仅有轻微说明不足。",
+      "1": "事实驱动、并行候选、不确定性和路径独立性均完整。"
+    },
+    "acceptable_alternatives": [
+      "可使用规则引擎、问答决策树或人工确认候选路径"
+    ],
+    "failure_examples": [
+      "标题含sublicense便只建立一个路径"
+    ]
+  },
+  {
+    "id": "R-04",
+    "description": "Sections 5.1和5.3的候选分许可路径、许可方向及明示交叉引用是否准确映射？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-06"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "建立Section 5.1.3并映射其对Section 2.6及适用Research Plan的明示关系",
+      "分别建立Sections 5.3.1(a)、5.3.1(b)、5.3.2、5.3.3和5.3.6",
+      "Section 5.3.6准确记录其对Sections 5.3.4和2.6的明示援引",
+      "正确记录许可方向、底层IP和适用产品或活动",
+      "Section 5.1.3不因一般推论自动套用Section 5.3.4",
+      "本项只评价适用关系和交叉引用映射，不评价已映射路径上的Section 5.3.4控制执行"
+    ],
+    "evidence": "检查路径库、许可方向、权利对象和明示引用。若5.3.6至5.3.4的映射缺失，仅在本项评价；R-09须以本项已经映射为适用的路径为前提，不得因同一映射缺失再次降低分数。",
+    "numeric_tolerance": null,
+    "weight_reason": "授权方向和交叉引用映射是后续控制适用性的基础。",
+    "anchors": {
+      "0": "遗漏多个主要路径、许可方向根本错误或系统性误连交叉引用。",
+      "1": "相关路径、方向、底层权利和明示引用均准确映射，且未把控制执行与适用映射混同。"
+    },
+    "levels": {
+      "0": "无可用权利路径或主要方向相反。",
+      "0.25": "仅列一般分许可概念，无法识别具体grant或明示引用。",
+      "0.5": "多数路径存在，但遗漏一个以上重要方向或明示引用。",
+      "0.75": "主要路径、方向和引用准确，仅有少量非核心映射不足。",
+      "1": "全部相关路径、方向、底层权利和明示交叉引用准确，并清楚限定本项只负责适用映射。"
+    },
+    "acceptable_alternatives": [
+      "可按产品类别进一步拆分路径",
+      "可使用规则表、路径主表或可追溯决策树表达同一适用关系"
+    ],
+    "failure_examples": [
+      "声称Section 5.3.4不适用于Section 5.3.6",
+      "仅因Section 5.1.3涉及分许可就自动套用Section 5.3.4"
+    ]
+  },
+  {
+    "id": "R-05",
+    "description": "Section 1.2(g)解释规则是否纳入相关条款审查且未机械过度扩张？",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-06",
+      "REQ-18"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "记录license通常包括sublicense且licensee通常包括sublicensee",
+      "检查相关限制、付款、责任或存续条款",
+      "保留上下文另有规定的边界",
+      "文本不足时进入法律解释状态"
+    ],
+    "evidence": "检查解释规则库、相关条款扫描和路径决定。",
+    "numeric_tolerance": null,
+    "weight_reason": "遗漏或误用会漏掉或错误扩张义务。",
+    "anchors": {
+      "0": "遗漏该规则或无条件扩张所有license措辞。",
+      "1": "规则、上下文例外、扫描和升级机制均准确。"
+    },
+    "levels": {
+      "0": "规则缺失或绝对化误用。",
+      "0.25": "只引用规则但不影响路径审查。",
+      "0.5": "可扫描但缺少上下文边界或决定追踪。",
+      "0.75": "核心控制完整，仅有轻微不足。",
+      "1": "规则准确、可追踪且非机械应用。"
+    },
+    "acceptable_alternatives": [
+      "可采用规则提示、条款清单或法律复核问题"
+    ],
+    "failure_examples": [
+      "认为所有license条款在任何上下文下必然覆盖sublicense"
+    ]
+  },
+  {
+    "id": "R-06",
+    "description": "Section 5.2.2直接许可路径是否正确处理共同所有权、Article IV及Section 5.4例外、付款保留和遮盖安全门？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-07",
+      "REQ-13"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "作为Collaboration Product Intellectual Property直接许可路径",
+      "核对具体IP、用途、产品、Field、活动和期限",
+      "核对Article IV可读限制及相关[***]",
+      "记录Section 5.4遮盖依赖",
+      "相关例外未解析时阻断该路径肯定授权",
+      "保留Article VII付款事项"
+    ],
+    "evidence": "查看直接许可路径、限制、依赖和路径安全门。",
+    "numeric_tolerance": null,
+    "weight_reason": "共同所有权和遮盖例外错误可能导致无依据授权。",
+    "anchors": {
+      "0": "遗漏路径或在相关例外未解析时自动授权。",
+      "1": "权利、限制、遮盖例外、付款和安全门完整。"
+    },
+    "levels": {
+      "0": "无路径或形成无限制授权。",
+      "0.25": "识别共同所有权但无实质安全门。",
+      "0.5": "有路径但遗漏重要限制、依赖或付款保留。",
+      "0.75": "核心逻辑准确，仅有轻微不足。",
+      "1": "全部权利、限制、依赖和安全门准确。"
+    },
+    "acceptable_alternatives": [
+      "可按HSC、CART和In Vivo拆分"
+    ],
+    "failure_examples": [
+      "因双方可grant licenses便自动Approved"
+    ]
+  },
+  {
+    "id": "R-07",
+    "description": "候选路径是否逐条保存底层许可的公开属性、遮盖属性、范围、层级和历史期限？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-06",
+      "REQ-18"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "每条路径记录许可方、被许可方、IP类别、产品或项目、Field、活动和地域",
+      "每条路径记录公开可读的排他性或非排他性及经济性质；未公开确认的属性为Unresolved",
+      "分别记录Research Term期间和其后期间的grant分支及允许接受方类别",
+      "仅在原文明确支持时记录层级；Section 5.3.3可记录multiple tiers，Sections 5.3.1(a)、5.3.1(b)、5.3.2和5.3.6中的相关[***]不得默认为单层或多层",
+      "记录Effective Date为2014-12-18及五年Research Term，并在未提前终止或修订的历史假设下推导2019-12-18",
+      "不据Research Term推断Agreement Term或全部产品许可终止",
+      "逐路径关联可能影响该grant属性、范围、期间或层级的[***]依赖，但Section 5.2.2的Article IV及Section 5.4依赖仅由R-06评价，Section 5.3.4条款内部依赖仅由R-09评价",
+      "保留Section 5.1.4公开文本中的异常交叉引用并升级解释"
+    ],
+    "evidence": "查看各候选路径的grant属性、范围、期间分支、接受方、层级、日期、其他底层grant遮盖依赖和异常引用。Section 5.2.2的Article IV及Section 5.4依赖遗漏不在本项重复评价；Section 5.3.4条款内部依赖遗漏也不在本项重复评价。粗略列出条款编号但不能据此核对授权属性，不足以获得高分。",
+    "numeric_tolerance": {
+      "expected_relationship": "2014-12-18的第五周年为2019-12-18，仅作为Section 2.1.2历史基线推导。",
+      "tolerance": "0 days",
+      "units": "calendar date"
+    },
+    "weight_reason": "底层grant属性、期间或层级错误会使未来授权范围核对失真。",
+    "anchors": {
+      "0": "仅列条款编号，或对关键grant属性、期间和层级作无依据推定。",
+      "1": "每条路径的方向、IP、产品、Field、活动、地域、排他性、经济性质、期间、接受方、层级、遮盖依赖和历史期限均按公开文本准确保存。"
+    },
+    "levels": {
+      "0": "无逐路径grant模型，或混同Research Term与Agreement Term并形成错误授权结论。",
+      "0.25": "只记录产品、Field或条款号，不能支持授权范围核对。",
+      "0.5": "覆盖多数基本范围，但遗漏多个公开grant属性、期间分支、接受方类别或遮盖属性。",
+      "0.75": "主要公开属性、期限和层级处理准确，仅有少量非核心属性或关联不足。",
+      "1": "全部可读grant属性、期间分支、层级差异、遮盖依赖、历史日期和异常引用均完整且不类推未知内容。"
+    },
+    "acceptable_alternatives": [
+      "可将grant属性拆入路径主表和权利属性子表",
+      "经济性质仅在原文可读时记录；无法从公开文本确认时应使用Unresolved而非推定"
+    ],
+    "failure_examples": [
+      "把Section 5.3.3的non-exclusive属性或multiple tiers类推至其他路径",
+      "把Sections 5.3.1(a)、5.3.1(b)、5.3.2或5.3.6的遮盖层级默认为单层",
+      "记录Research Term届满后全部产品许可均终止"
+    ]
+  },
+  {
+    "id": "R-08",
+    "description": "Section 2.6是否被实现为按被分包研究活动事实触发、可与许可路径并行且不被扩张为第三方普遍遵守整份主协议的横向控制？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-08"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "触发依据是Third Party执行一方在Collaboration中原应由该方履行的研究活动",
+      "Section 2.6控制可与相关许可或分许可路径并行，而不取代底层授权分析",
+      "核验第三方已与分包方订立书面协议",
+      "核验书面协议对另一方的Confidential Information、Materials和Know-How设有保护及使用、披露限制，且保护程度至少达到主协议要求",
+      "核验书面协议要求第三方及其人员将与被分包活动有关而创建、构思或开发的Patents、Know-How和Materials中的全部权利、所有权和权益转让给分包方",
+      "将成果权利转让和其他安排的充分性限定为使分包方能够像自行履行被分包活动一样遵守其自身在主协议下的义务所需的范围，包括相关Articles IV、V和VI要求",
+      "不得将Section 2.6改写为第三方对整份主协议承担一般性或全面遵守义务"
+    ],
+    "evidence": "检查工作簿中的研究活动触发问题、与候选许可路径的并行关联、书面协议核对项、Confidential Information、Materials和Know-How保护及使用或披露限制、第三方及其人员的相关成果权利转让，以及充分性判断的限定范围。接受横向规则表、条件子流程或关联行动清单；若工具要求第三方普遍遵守整份主协议，而不是核验足以使分包方就被分包活动履行其自身义务的具体安排，不得获得本项高分。",
+    "numeric_tolerance": null,
+    "weight_reason": "Section 2.6既不能被缩减为一般NDA，也不能被扩张为无来源的全面flow-down；准确的活动触发和具体保护、转让要求直接影响研究分包文件的可执行性。",
+    "anchors": {
+      "0": "遗漏Section 2.6、触发逻辑根本错误，或把该条款系统性改写为第三方必须普遍遵守整份主协议。",
+      "1": "按被分包研究活动准确触发并行控制，完整核验书面协议、信息和材料保护、相关成果权利转让及其限定目的，且明确避免全面flow-down扩张。"
+    },
+    "levels": {
+      "0": "无可用控制、触发对象错误，或要求第三方一般性承担整份主协议的全部义务。",
+      "0.25": "只要求NDA、保密条款或一般书面合同，未覆盖活动触发和相关成果权利转让。",
+      "0.5": "能够按研究活动触发并核验书面协议，且覆盖信息保护或成果权利转让中的一类，但另一类明显不完整，或没有把充分性限定到被分包活动和分包方自身履约需要。",
+      "0.75": "活动触发、并行适用、信息和材料保护及成果权利转让基本完整，但对保护程度、第三方人员、Articles IV至VI或禁止全面flow-down扩张的边界有少量不足。",
+      "1": "活动触发、并行路径、书面协议、至少同等的信息和材料保护、第三方及其人员的相关成果权利转让、限定目的和禁止全面flow-down扩张全部准确。"
+    },
+    "acceptable_alternatives": [
+      "可设计为横向规则表、条件子流程或与路径关联的合同条款核对清单",
+      "可用功能等价措辞表达分包方须能够像自行履行被分包活动一样遵守其自身义务，但不得据此要求第三方一般性承诺遵守整份主协议"
+    ],
+    "failure_examples": [
+      "产品相关第三方研究不生成Section 2.6核对",
+      "模板要求第三方遵守主协议的所有条款，却没有按Confidential Information、Materials、Know-How和相关成果权利转让分别核验",
+      "只要求第三方签署NDA，没有核对第三方及其人员对相关Patents、Know-How和Materials权利的转让"
+    ]
+  },
+  {
+    "id": "R-09",
+    "description": "对于已经准确映射为受Section 5.3.4约束的路径，其公开条件、内部遮盖依赖、授予后动作和持续责任是否正确实现？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-09",
+      "REQ-13"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "以R-04已建立的适用映射为前提，不因适用关系本身缺失再次扣分",
+      "核验公开可读的书面、从属、一致和适用义务下传条件",
+      "不创造普遍事前批准权",
+      "逐路径记录Section 5.3.4内[***]的相关性、取得状态和处理依据",
+      "相关遮盖未解析时不得肯定授权或Ready for Signature",
+      "5.3.4(b)仅在指定主体和上游条件适用时触发",
+      "适用时使用promptly而不补造天数",
+      "持续责任进入执行期监控"
+    ],
+    "evidence": "查看已映射适用路径上的Section 5.3.4控制、遮盖依赖、主体条件、授予后行动和持续责任。本项不因5.3.6至5.3.4映射本身缺失重复扣分；一般Word流程说明仅在R-18评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "在适用路径上错误实现公开条件或忽略内部遮盖会导致不安全放行。",
+    "anchors": {
+      "0": "对已映射适用路径创造事前同意权、忽略相关遮盖并放行，或系统性错误推广授予后动作。",
+      "1": "对全部已映射适用路径准确实现公开条件、内部依赖、主体限制、动作时点和持续责任。"
+    },
+    "levels": {
+      "0": "控制逻辑实质相反，或相关遮盖未解析仍自动放行。",
+      "0.25": "对适用路径只检查书面签署。",
+      "0.5": "覆盖多数公开条件，但缺少遮盖安全门、主体限制或持续责任中的重要部分。",
+      "0.75": "适用路径上的核心控制准确，仅有轻微任务或证据不足。",
+      "1": "全部公开条件、遮盖处理、主体限制、授予后动作、时点和持续责任闭环完整。"
+    },
+    "acceptable_alternatives": [
+      "通知和副本交付可作为独立签署后任务",
+      "可使用路径级检查表或规则驱动行动生成"
+    ],
+    "failure_examples": [
+      "公开条件完成后自动显示整条Section 5.3.4全部满足",
+      "把5.3.4(b)授予后动作推广至不符合主体或上游条件的路径"
+    ]
+  },
+  {
+    "id": "R-10",
+    "description": "Section 5.3.5(b)的上游合规条件是否按正确路径、主体、协议类别和证据管理？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-10"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "仅连接Sections 5.3.1(a)、5.3.2和5.3.3的Novartis方向路径",
+      "区分Key License Agreements和适用Included IP协议",
+      "记录相关性、取得状态及合规证据",
+      "覆盖Novartis、Affiliates和sublicensees",
+      "缺失相关条款时保持Unresolved",
+      "不向无关路径生成该依赖"
+    ],
+    "evidence": "查看上游合规区域、路径关联、主体方向和证据。",
+    "numeric_tolerance": null,
+    "weight_reason": "该条款直接限制相关Novartis许可及sublicensees。",
+    "anchors": {
+      "0": "遗漏5.3.5(b)或无条件套用于所有路径。",
+      "1": "适用路径、协议类别、主体、证据和依赖均准确。"
+    },
+    "levels": {
+      "0": "无上游合规控制。",
+      "0.25": "只列协议名称。",
+      "0.5": "识别主要路径但遗漏Included IP、sublicensee或相关性。",
+      "0.75": "核心完整，仅有轻微不足。",
+      "1": "路径、协议、主体、证据及依赖全部准确。"
+    },
+    "acceptable_alternatives": [
+      "可按每份上游协议建立独立记录"
+    ],
+    "failure_examples": [
+      "未取得上游资料仍标为Satisfied"
+    ]
+  },
+  {
+    "id": "R-11",
+    "description": "Section 12.7和Section 12.8是否形成可重复的事实、责任和条件性后果控制？",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-11"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "区分Affiliate履约、向Affiliate授予权利、assignment和delegation",
+      "记录主体资格证据和判断时点",
+      "记录Third Party successor及全部或实质全部资产或业务事实",
+      "记录Affiliate行为和遗漏责任",
+      "保留违规安排后果的条件性",
+      "记录assignment不解除已发生义务"
+    ],
+    "evidence": "查看Affiliate、assignment和delegation记录及责任字段。",
+    "numeric_tolerance": null,
+    "weight_reason": "Affiliate参与和转让不是无条件安全港。",
+    "anchors": {
+      "0": "把Affiliate或转让视为自动允许、自动禁止、免责或已经无效。",
+      "1": "主体、结构、责任、例外和持续义务均完整。"
+    },
+    "levels": {
+      "0": "无可用路径或绝对化错误。",
+      "0.25": "只询问是否Affiliate或assignment。",
+      "0.5": "识别部分事实但遗漏责任、delegation或条件性后果。",
+      "0.75": "主要事实和规则完整。",
+      "1": "全部关键事实、责任和条件边界可追踪。"
+    },
+    "acceptable_alternatives": [
+      "可将Affiliate和assignment拆成两个工作区"
+    ],
+    "failure_examples": [
+      "称通过Affiliate履约后原当事方不再负责"
+    ]
+  },
+  {
+    "id": "R-12",
+    "description": "正式通信流程是否区分发送、收讫、合同要件核验和法律效力，并准确控制Section 12.11适用通信？",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-12"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "先判断通信是否受Section 12.11约束并保存适用或不适用理由",
+      "分别维护发送状态、承运或追踪状态、签名收讫证据状态、合同发送要件核验状态和法律效力判断状态",
+      "适用时核验国际认可快递、收件签名、当时有效的指定地址和合同要求的副本收件人",
+      "记录最终发送版本、发送日期、承运或追踪信息和签名收讫证据",
+      "合同发送及收讫要件未闭环时不得显示合同执行闭环完成",
+      "已签收不得自动转化为终止、请求或其他程序已经法律生效",
+      "2014年地址仅为历史来源记录",
+      "不受Section 12.11约束的普通文件共享可记录理由后采用其他适用流程"
+    ],
+    "evidence": "查看通信分类、五类独立状态、方式和地址核验、规定副本收件人、版本、追踪、签名证据及法律效力判断。一般Word流程覆盖仅在R-18评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "发送或签收证据闭环与法律生效结论不同，混同会造成关键程序误判。",
+    "anchors": {
+      "0": "没有适用性判断，或把发送、签收、合同完成和法律生效压成单一Completed状态。",
+      "1": "适用性、发送、追踪、签名收讫、合同要件和法律效力形成相互独立且可追溯的控制。"
+    },
+    "levels": {
+      "0": "无可用控制，使用历史地址为当前地址，或一经签收即自动认定法律生效。",
+      "0.25": "只有通知任务和单一完成状态，未区分合同发送与法律效力。",
+      "0.5": "能够判断适用性并记录部分发送信息，但遗漏两个以上独立状态或关键合同要件。",
+      "0.75": "合同发送、收讫和效力状态基本分开，仅有少量证据或普通共享分流不足。",
+      "1": "五类状态、合同发送机制、当前地址、副本收件人、证据闭环、效力判断和普通共享替代流程全部完整。"
+    },
+    "acceptable_alternatives": [
+      "可使用独立Notice Log、通信子表或与Action记录关联的通信明细",
+      "状态名称可以不同，但必须清楚区分发送、追踪、签名证据、合同要件和法律效力"
+    ],
+    "failure_examples": [
+      "记录快递签收后自动把Termination Effective设为Yes",
+      "只有Completed一列，无法看出是否仅已发送、已签收或已完成法律效力核验"
+    ]
+  },
+  {
+    "id": "R-13",
+    "description": "Article XI各协议终止分支是否分别建立稳定、可追溯的事件登记？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-14",
+      "REQ-18"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "分别建立Sections 11.2.1、11.2.2、11.2.3、11.2.4(a)和11.2.4(b)",
+      "每个分支记录可发起主体、触发事实、公开程序、通知状态、生效状态、遮盖依赖和证据",
+      "记录11.2.3明示援引11.2.1(b)的关系",
+      "记录11.2.4公开触发类别并将遮盖期限和程序保持Unresolved",
+      "本项只评价Article XI事件登记，不评价Section 5.3.6、Section 12.5或后果传播"
+    ],
+    "evidence": "查看Article XI分支矩阵中的事件类型、主体、触发、程序、通知、生效状态、遮盖依赖、条款定位和证据。Section 5.3.6、Section 12.5及路径传播分别由R-21、R-22和R-15评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "Article XI分支具有不同主体、程序和后果，不能压成单一Termination状态。",
+    "anchors": {
+      "0": "只有通用Termination事件，无法区分主要Article XI分支。",
+      "1": "五个Article XI分支的主体、触发、程序、状态、遮盖依赖和证据均完整。"
+    },
+    "levels": {
+      "0": "单一Active或Terminated状态，或多数分支缺失。",
+      "0.25": "仅建立11.2.1或笼统终止记录。",
+      "0.5": "至少三个分支可区分，但遗漏其他分支或多个关键登记字段。",
+      "0.75": "五个分支均存在且主要字段完整，仅有少量非核心登记不足。",
+      "1": "五个分支的主体、触发、程序、状态、遮盖依赖、引用关系和证据全部完整。"
+    },
+    "acceptable_alternatives": [
+      "可使用事件主表加Article XI分支规则表",
+      "可将11.2.4(a)和11.2.4(b)作为独立事件类型或同一父类型下的两个明确子类型"
+    ],
+    "failure_examples": [
+      "只提供Material Breach和Other两个终止类别",
+      "为11.2.4(b)补造被遮盖的通知天数"
+    ]
+  },
+  {
+    "id": "R-14",
+    "description": "Section 11.2.1终止是否正确联动Section 12.2.3的仲裁期间自动中止？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-15"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "只对Section 11.2.1终止评估Section 12.2.3自动中止，并核验是否存在任何依据Section 12.2.2已经启动且仍在进行的仲裁",
+      "记录仲裁是否启动、是否仍在进行、自动中止是否适用、中止开始和解除依据及证据；不要求仲裁与终止具有额外业务关联",
+      "状态不明或仲裁进行状态无法确认时保持Unresolved；不得因判断仲裁与终止“不相关”而跳过自动中止",
+      "不把通知或拟生效日期直接当作最终生效"
+    ],
+    "evidence": "查看11.2.1事件的争议、仲裁、中止、解除和实际生效字段。",
+    "numeric_tolerance": null,
+    "weight_reason": "忽略自动中止会把未生效终止误作最终生效。",
+    "anchors": {
+      "0": "11.2.1通知一经记录即自动最终生效。",
+      "1": "适用范围、仲裁、中止、解除、证据和不确定状态均准确。"
+    },
+    "levels": {
+      "0": "遗漏自动中止或逻辑相反。",
+      "0.25": "只有自由文本提示且不影响状态。",
+      "0.5": "记录仲裁但遗漏其是否仍在进行、解除证据或Unresolved处理，或错误增加业务关联前提。",
+      "0.75": "核心联动准确，仅有轻微不足。",
+      "1": "11.2.1、仲裁、中止、解除和最终生效形成完整控制。"
+    },
+    "acceptable_alternatives": [
+      "可将中止作为独立事件并链接终止事件"
+    ],
+    "failure_examples": [
+      "因仲裁被内部标记为“不相关”而忽略Section 12.2.3，或在待决仲裁期间显示Termination Effective—Final"
+    ]
+  },
+  {
+    "id": "R-15",
+    "description": "在事件登记和生效状态已经单独确定后，是否依据对应分支逐个判断底层授权、存续清单及关联条件，并将结果限制在受影响路径？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-14"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "根据已经确定的具体事件状态选择对应后果分支；不在本项重复评价事件登记层的主体、触发或程序字段",
+      "逐个判断Sections 5.3.1(a)、5.3.1(b)、5.3.2、5.3.3和5.3.6等底层grant及其受影响范围",
+      "记录Available、Terminated、Suspended、Expired或Unresolved等路径级后果状态；对于Section 5.3.6事件，将相关权利和路径列为候选受影响对象，但在“terminate rights [***]”的精确对象、边界和后果未由完整适用文本或有文件依据的法律确认解决前保持范围和后果Unresolved，不得无依据全局传播，也不得断言影响必然仅限于这些路径",
+      "11.2.3连接11.2.1(b)，11.2.2和11.2.4按其各自公开存续或终止清单传播",
+      "Section 5.3.4仅作为关联条件而非独立授权；Section 11.3仅作为补充存续分析，不能替代具体底层grant、特定权利范围或事件传播判断"
+    ],
+    "evidence": "查看事件后的底层grant矩阵、分支选择和条款定位。",
+    "numeric_tolerance": null,
+    "weight_reason": "不同事件对底层授权和持续条件结果不同。",
+    "anchors": {
+      "0": "用一个终止状态决定全部路径或把5.3.4视为授权。",
+      "1": "分支、底层grant、关联条件和路径结果均可追踪。"
+    },
+    "levels": {
+      "0": "无路径级分析或统一结论。",
+      "0.25": "只列存续条款。",
+      "0.5": "分析部分grant但混同分支、把5.3.4当作独立授权，或对Section 5.3.6被遮盖的终止权利范围作确定化推断；事件登记层缺失本身不在本项重复扣分。",
+      "0.75": "主要分支和grant完整。",
+      "1": "后果、范围、授权、条件和证据全部完整。"
+    },
+    "acceptable_alternatives": [
+      "可使用规则矩阵、逐路径问卷或决定表"
+    ],
+    "failure_examples": [
+      "因Section 5.3.6特定权利事件而把全部协议标为Terminated，或反向断言被遮盖的“terminate rights [***]”必然仅影响某一组Section 5.3.6路径；又或因Section 5.3.4存续便单独显示分许可授权可用"
+    ]
+  },
+  {
+    "id": "R-16",
+    "description": "依赖引擎是否维持四个独立状态维度并合理汇总总体执行条件？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-13",
+      "REQ-16"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "依赖可标记Required、Not Applicable with Rationale、Unresolved和Satisfied",
+      "每项关联路径、动作、来源、责任功能和证据",
+      "分别维护四个要求的状态维度",
+      "证据状态不自动等同法律决定",
+      "一条路径阻断不传播至无关路径",
+      "只有相关关键依赖才汇总总体阻断"
+    ],
+    "evidence": "仅查看Excel中的Dependencies记录、四维状态、状态转换和汇总逻辑。本项评价工作簿实体功能，不评价Word是否解释这些状态；Word中的遗漏或失配只在R-18评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "依赖和状态引擎决定工具能否安全消费法律模块输出。",
+    "anchors": {
+      "0": "只有单一Blocked状态或任一缺失文件阻断全部请求。",
+      "1": "路径依赖、四维状态、独立传播和总体汇总准确。"
+    },
+    "levels": {
+      "0": "无机制或普遍全文件阻断。",
+      "0.25": "有依赖清单但无路径关联或独立状态。",
+      "0.5": "识别主要依赖但状态混同或传播错误。",
+      "0.75": "机制基本完整，仅有轻微问题。",
+      "1": "来源、路径、四维状态、传播边界和汇总全部准确。"
+    },
+    "acceptable_alternatives": [
+      "可使用不同状态名称，只要含义等价"
+    ],
+    "failure_examples": [
+      "Evidence Missing自动把Legal Decision改为Denied"
+    ]
+  },
+  {
+    "id": "R-17",
+    "description": "合同规则来源和具体决定是否形成可追溯闭环，而不替代行动执行管理？",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-17",
+      "REQ-18"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "区分所附协议、缺失文件、当前版本核验和内部运营控制",
+      "协议规则附准确section定位",
+      "未附内容保持待核实",
+      "决定关联事实、主体证据、路径、依赖和适用规则",
+      "可通过唯一ID连接相应审查、行动和证据记录",
+      "内部审批不预设无来源阈值或顺序",
+      "本项评价来源及决定追溯，不重复评价行动字段、到期管理、完成验证或交接接受"
+    ],
+    "evidence": "检查规则库、决定记录、来源分类、section定位和关联键。本项只评价规则与决定的来源追溯；行动执行、完成验证和交接字段由R-20评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "下游必须能从决定回溯事实和合同依据。",
+    "anchors": {
+      "0": "规则和决定无来源或无法回溯。",
+      "1": "来源分类、定位和决定关联完整。"
+    },
+    "levels": {
+      "0": "无可追溯结构。",
+      "0.25": "仅列条款名称，没有决定关联。",
+      "0.5": "多数决定可追踪，但缺少多个关键关联。",
+      "0.75": "主要闭环完整，仅有轻微不足。",
+      "1": "规则、事实、依赖、决定和证据全部可追溯。"
+    },
+    "acceptable_alternatives": [
+      "可采用唯一规则ID和决定ID关联"
+    ],
+    "failure_examples": [
+      "决定显示Approved但没有关联事实或条款"
+    ]
+  },
+  {
+    "id": "R-18",
+    "description": "Word说明是否与工作簿实际功能、状态词典和交接流程一致？",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-19"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx",
+      "Sublicense_Operations_Handoff.docx"
+    ],
+    "criterion": [
+      "覆盖启动、主体核验、并行分流、依赖相关性、版本和状态核验",
+      "解释四维状态和暂停条件",
+      "说明正式通信、证据、决定、行动管理和执行期交接",
+      "与工作簿状态名称一致或清楚映射",
+      "逐项对应责任功能、完成验证、持续义务、交接接受和未结事项的实际工作簿机制",
+      "不描述不存在的按钮或自动批准",
+      "正文不超过8页且不是全合同摘要"
+    ],
+    "evidence": "逐项比对Word正文与工作簿实际区域、字段、状态、行动和交接功能，并检查正文页数。纯粹的Word流程遗漏仅在本项评价；若Word对实体合同控制作相反描述，可在相应实体项评价法律错误，但不得因同一一般文档遗漏跨单元重复扣分。",
+    "numeric_tolerance": null,
+    "weight_reason": "错误说明会使结构正确的工作簿仍无法安全使用。",
+    "anchors": {
+      "0": "Word与工作簿实质不一致或仅为合同摘要。",
+      "1": "操作说明与实际功能、状态和交接完整一致。"
+    },
+    "levels": {
+      "0": "说明不可用或严重失配。",
+      "0.25": "只概述合同或角色。",
+      "0.5": "覆盖主要流程但遗漏多个关键状态或引用不存在功能。",
+      "0.75": "总体一致，仅有少量次要遗漏。",
+      "1": "全过程说明与工作簿功能和状态完全一致。"
+    },
+    "acceptable_alternatives": [
+      "可使用流程图、表格或分角色步骤"
+    ],
+    "failure_examples": [
+      "Word要求点击工作簿中不存在的Approve按钮"
+    ]
+  },
+  {
+    "id": "R-19",
+    "description": "两个成果是否真实可打开和编辑，且Excel的记录扩展及受控状态机制在技术上可持续使用，而不依赖缺失组件？",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-20"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx",
+      "Sublicense_Operations_Handoff.docx"
+    ],
+    "criterion": [
+      "文件名准确且为真实xlsx和docx",
+      "两个文件可由标准Office工具打开和编辑",
+      "Excel主要记录区具有明确的新增行、扩表或等价记录扩展机制",
+      "新增记录能够在技术上继续使用既有状态词典、关联键、公式、数据验证或有明确说明的人工维护机制",
+      "Word正文为可编辑文本而非不可编辑图片",
+      "核心流程不依赖未交付宏、外部链接、外部系统或其他缺失组件",
+      "本项不评价业务字段是否完整、状态法律含义是否正确、路径传播是否正确或行动交接闭环是否完整"
+    ],
+    "evidence": "只检查文件格式、可打开性、可编辑文本、记录区扩展方式、状态词典或关联机制在新增行中的技术延续，以及是否依赖未交付组件。业务字段完整性只在R-01评价；并行路径和传播规则只在R-03及R-16评价；行动与交接实体功能只在R-20评价。不得因同一业务内容缺失在本项再次降分。",
+    "numeric_tolerance": null,
+    "weight_reason": "artifact_spec必须可由下游实际消费。",
+    "anchors": {
+      "0": "至少一个核心文件不可打开、属于伪格式或不可编辑，因而无法作为Office成果消费。",
+      "1": "两个文件真实可打开和编辑，Excel记录扩展及状态或关联机制在技术上可持续使用，且核心流程无需缺失组件。"
+    },
+    "levels": {
+      "0": "至少一个核心文件不可打开、属于伪格式或不可编辑，无法进行基本消费。",
+      "0.25": "文件可以打开，但主要内容为静态图片或一次性布局，或新增记录机制的缺陷严重到使核心工作流实际上无法继续使用。",
+      "0.5": "文件基本可打开、编辑并增加记录，但新增记录不能可靠延续部分状态词典、关联键或既定维护机制，或人工维护步骤存在明显不足；核心工作流仍可在较多人工修正下使用，且不因业务字段或法律逻辑错误在本项降档。",
+      "0.75": "主要记录和状态机制可扩展，仅有少量技术或操作说明问题。",
+      "1": "格式、可打开性、编辑性、记录扩展、状态与关联机制的技术延续及独立消费性全部满足；自动机制与有清楚说明的可靠人工机制同等接受。"
+    },
+    "acceptable_alternatives": [
+      "可使用Excel Table、动态命名范围、数据验证、公式或等价结构",
+      "可以不使用公式或数据验证，但须提供可重复执行的受控状态词典、清楚的新增记录方法和人工一致性检查流程"
+    ],
+    "failure_examples": [
+      "新增第二条请求或路径后无法选择或维护与首条记录相同的状态语义",
+      "工作簿依赖未随成果交付的宏或外部系统才能完成核心审查流程"
+    ]
+  },
+  {
+    "id": "R-20",
+    "description": "工作簿是否提供可执行、可追溯的行动管理、完成验证和签署后交接机制？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-03",
+      "REQ-21"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "每项行动具有Action ID并关联Request ID、Path ID及适用Dependency ID",
+      "记录中性责任功能、触发条件和目标时点、到期日期或合同时点表达",
+      "具有受控动作状态并区分未开始、进行中、暂停、完成验证和不适用或功能等价状态",
+      "记录审查或批准依据、Evidence ID及完成验证人或责任功能",
+      "持续义务能够从决定或签署记录转入执行期监控",
+      "交接记录包含接收责任功能、交接接受状态、接受日期或待定状态及未结事项",
+      "完成、接受和持续监控状态不得因创建记录而自动显示已完成"
+    ],
+    "evidence": "仅查看Excel中的行动、证据、决定、持续义务和交接区域及其关联键、责任功能、时点、状态、验证和接受字段；接受合并表或关联表等价布局。本项不评价Word是否说明这些功能，Word操作说明及其与Excel的一致性只在R-18评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "行动闭环和执行交接是工具的核心法律运营价值，缺失时即使法律路径分析正确也无法可靠执行。",
+    "anchors": {
+      "0": "只有自由文本待办或决定结论，无法关联路径、责任、证据、完成验证或交接接受。",
+      "1": "行动从触发、责任、时点、依据、证据和验证到持续义务交接、接受及未结事项形成完整可追溯闭环。"
+    },
+    "levels": {
+      "0": "没有可用的行动或交接机制。",
+      "0.25": "仅有待办事项和负责人文本，缺少路径关联、证据和完成验证。",
+      "0.5": "行动记录基本可用，但责任、时点、依据、证据、持续义务或交接接受中缺少多个重要环节。",
+      "0.75": "行动和交接闭环基本完整，仅有少量状态、关联或未结事项字段不足。",
+      "1": "关联、责任、触发、时点、状态、依据、证据、完成验证、持续义务、交接接受和未结事项全部完整且可扩展。"
+    },
+    "acceptable_alternatives": [
+      "Actions、Obligations和Handoff可分表，也可使用一张带记录类型的规范化表",
+      "可以使用责任功能而非个人姓名，未来实际使用时再填写具体负责人"
+    ],
+    "failure_examples": [
+      "决定标为Approved后没有任何签署后通知、持续责任或交接记录入口",
+      "交接表只有Sent to Operations，没有接收功能、接受状态或未结事项"
+    ]
+  },
+  {
+    "id": "R-21",
+    "description": "Section 5.3.6的Intellia Other Patent Challenge是否作为特定权利事件独立登记，并对被遮盖的终止权利对象、边界和后果保留未决范围？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-14",
+      "REQ-13"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "建立独立于Article XI协议终止的事件类型",
+      "记录提出或收到的主张、涉及主体、候选受影响权利、通知或程序状态和证据",
+      "将被遮盖的触发、提前披露期限、行使期限、终止权利对象、范围、边界和其他程序保持Unresolved",
+      "将Section 5.3.6相关权利和路径列为候选受影响对象，但不得在缺少完整适用文本或有文件依据的法律确认时断言影响必然只限于这些对象",
+      "不得仅因事件登记就传播为协议整体终止或无关路径的确定后果"
+    ],
+    "evidence": "查看Section 5.3.6事件类型、主体、主张、候选受影响权利、程序、遮盖依赖、证据、范围状态和升级动作。本项评价事件登记及对未知范围的保留；事件对底层路径的具体传播实现由R-15评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "该事件可能改变特定权利但不是协议整体终止，错误分类会造成过度传播。",
+    "anchors": {
+      "0": "遗漏该事件，把它登记为协议整体终止，或将被遮盖的终止权利范围确定化为全局或仅限某组路径。",
+      "1": "特定权利事件、主体、程序、候选影响对象、范围未决状态、遮盖依赖、证据和禁止无依据传播的边界均准确。"
+    },
+    "levels": {
+      "0": "无事件类型、作为全协议终止处理，或确定化补造被遮盖的终止权利范围。",
+      "0.25": "仅有一般Patent Challenge标签，没有候选受影响权利、范围未决状态或遮盖依赖。",
+      "0.5": "识别特定事件和部分候选影响对象，但遗漏主体、程序、证据、范围未决状态或多个遮盖依赖。",
+      "0.75": "核心登记、候选范围和未决控制完整，仅有少量非核心字段不足。",
+      "1": "事件、主张、主体、候选影响对象、程序状态、被遮盖范围的Unresolved处理、证据和禁止无依据传播的边界全部完整。"
+    },
+    "acceptable_alternatives": [
+      "可作为通用Status Events表中的Specific Rights类型",
+      "可将候选受影响权利通过独立Event-to-Right或Event-to-Path关联表表达",
+      "在未取得完整适用文本时，可把候选对象标为Potentially Affected并将精确范围及后果标为Unresolved"
+    ],
+    "failure_examples": [
+      "一旦记录Intellia Other Patent Challenge便把Agreement Status改为Terminated",
+      "自行填写被遮盖的提前通知天数",
+      "断言“terminate rights [***]”只可能终止Section 5.3.6下某一已列路径，而未保留精确范围未决"
+    ]
+  },
+  {
+    "id": "R-22",
+    "description": "Section 12.5政府行为事件是否按国家或地域、受影响义务和协商状态独立登记？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-14"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "将事件范围记录为具体国家或地域而非默认全球",
+      "记录受影响的具体行为或义务及法律影响类型",
+      "记录善意协商状态、证据和路径关联",
+      "将被遮盖的协商期限保持Unresolved",
+      "区分暂停和终止候选结果，并要求实际行使及生效证据",
+      "不得自动改变全球协议状态或无关路径"
+    ],
+    "evidence": "查看Section 12.5事件中的地域、受影响义务、协商、遮盖期限、证据、候选措施和范围字段。本项评价事件登记和范围；路径后果传播由R-15评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "该条款具有地域和义务范围，全球化处理会错误关闭无关权利。",
+    "anchors": {
+      "0": "记录任一政府行为后即把全球协议或全部路径设为暂停或终止。",
+      "1": "地域、义务、协商、遮盖期限、证据和候选措施均准确且范围受控。"
+    },
+    "levels": {
+      "0": "无地域控制或系统性全局传播。",
+      "0.25": "只有Government Act事件名称，没有地域或受影响义务。",
+      "0.5": "记录地域和部分义务，但遗漏协商、遮盖期限、证据或候选措施边界。",
+      "0.75": "核心范围和程序完整，仅有少量非核心字段不足。",
+      "1": "国家或地域、受影响义务、协商状态、遮盖依赖、证据和候选措施全部完整且不全局化。"
+    },
+    "acceptable_alternatives": [
+      "可按国家建立多条事件记录，或使用一个事件加多条地域影响明细"
+    ],
+    "failure_examples": [
+      "某国法律限制一项义务后，工作簿把所有国家的全部路径标为Terminated",
+      "自行填入Section 12.5被遮盖的协商天数"
+    ]
+  },
+  {
+    "id": "R-23",
+    "description": "工作簿是否提供可扩展的其他路径状态事件类别，覆盖上游许可、新入许可权、Agreement Term组成事实和不可抗力延迟？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-22"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "Section 5.3.5(a)事件类别覆盖上游协议违约或违约通知、补救状态、终止或拟终止及重大限制，并关联受影响Novartis权利路径",
+      "Section 7.6.2(a)事件类别覆盖Intellia New In-Licensed Intellectual Property的通知、Novartis选举、Included、Excluded或Unresolved状态、适用财务依赖及受影响Novartis方向路径",
+      "Section 7.6.2(c)事件类别覆盖Novartis New In-Licensed Platform Intellectual Property的通知、Intellia选举、Included、Excluded或Unresolved状态、适用财务依赖及受影响Section 5.3.6方向路径",
+      "Sections 7.6.2(a)和(c)中被遮盖的选举期限或其他条件保持Unresolved，不得互相类推",
+      "Section 11.1记录付款义务到期和最后到期许可专利权两个Agreement Term组成事实，缺一时不得确定Agreement Term已经届满",
+      "Section 12.16记录不可抗力条件、通知、受影响的特定义务、延迟期间或待核实状态、合理恢复努力和证据",
+      "每类事件先记录与具体路径或动作的相关性，再生成复核、暂停或交接动作",
+      "任何上述事件均不得自动传播为协议整体终止"
+    ],
+    "evidence": "查看可扩展Status Events分类、来源条款、相关路径或动作、程序状态、证据和范围字段。应能分别观察到Section 5.3.5(a)上游许可事件、Section 7.6.2(a) Intellia新入许可权事件、Section 7.6.2(c) Novartis新入许可平台权利事件、Section 11.1期限组成事实和Section 12.16不可抗力事件；不要求预填实际事件。",
+    "numeric_tolerance": null,
+    "weight_reason": "这些事件可独立改变上游权利、IP范围、期限判断或特定义务履行状态，静态合规清单无法替代。",
+    "anchors": {
+      "0": "没有这些事件入口，或把任一事件自动视为协议整体终止。",
+      "1": "上游许可事件、两类方向相反的新入许可权事件、Agreement Term组成事实和不可抗力事件均可分别登记、判断相关性、关联证据和路径，并保持正确的范围及未决状态。"
+    },
+    "levels": {
+      "0": "缺少全部最低事件类别，遗漏Section 7.6.2(a)或(c)中的一整类方向事件且无功能等价覆盖，或存在系统性全局终止传播。",
+      "0.25": "仅有通用Other Event自由文本，不能表达具体来源、状态或范围。",
+      "0.5": "五个最低事件家族中有三个或四个具有可用结构，或五个家族均有名称但多个关键字段缺失；若Section 7.6.2(a)与Section 7.6.2(c)任一方向事件缺失且无功能等价覆盖，本档为最高可得档。",
+      "0.75": "五个事件家族均可用且主要范围正确，仅有少量程序、证据或行动关联不足。",
+      "1": "上游协议事件、Section 7.6.2(a)与(c)两类新入许可权事件、Agreement Term组成事实和不可抗力延迟的来源、状态、范围、证据、相关性和行动关联全部完整。"
+    },
+    "acceptable_alternatives": [
+      "可在统一事件表中使用受控Event Type，也可按类别建立子表",
+      "Section 7.6.2可用Included、Excluded、Election Pending或功能等价状态表达，但不得补造遮盖期限"
+    ],
+    "failure_examples": [
+      "上游许可终止通知只作为一般备注，不关联任何受影响路径或复核动作",
+      "只建立Section 7.6.2(a)的Intellia新入许可权事件，却没有Section 7.6.2(c)的Novartis新入许可平台权利事件",
+      "把Section 7.6.2(a)或(c)中被遮盖的选举期限补写为确定天数",
+      "仅因Research Term已经届满便把Agreement Term标为Expired",
+      "不可抗力记录一经创建即把整个协议标为Suspended"
+    ]
+  },
+  {
+    "id": "R-24",
+    "description": "适用协议版本、全部相关修订和当前合同状态是否形成肯定授权及签署准备状态之前的独立路径级安全门？",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-13",
+      "REQ-14",
+      "REQ-16",
+      "REQ-18"
+    ],
+    "deliverables": [
+      "Sublicense_Review_Workbook.xlsx"
+    ],
+    "criterion": [
+      "分别记录适用协议版本、后续修订、终止或存续资料以及当前合同状态的取得和法律核验状态",
+      "上述相关项目缺少证据、尚未审阅或仍为Unresolved时，任何依赖该合同基线的路径不得显示肯定授权、Approved、Ready for Signature或功能等价状态",
+      "版本和状态安全门与一般事件登记、事实依赖及法律决定状态可追溯关联",
+      "阻断只作用于依赖该合同基线且受该缺口影响的路径，不得无依据关闭独立或无关路径",
+      "取得文件、完成法律核验和解除阻断均须有责任功能、日期或待定状态及证据关联",
+      "本项只评价全局版本和当前状态放行门，不重复评价具体终止事件的主体、触发、程序或后果传播"
+    ],
+    "evidence": "查看Excel中的版本或合同状态核验记录、依赖关系、法律决定和总体执行准备状态。尝试观察在适用版本、相关修订或当前合同状态为Missing、Pending或Unresolved时，相关路径是否仍可能显示肯定授权或Ready for Signature；接受公式控制、数据验证、明确的人工放行检查或功能等价机制。",
+    "numeric_tolerance": null,
+    "weight_reason": "历史公开协议不能单独证明当前可授权或可签署；这是所有依赖该合同基线路径的关键放行门。",
+    "anchors": {
+      "0": "存在版本或当前状态字段，但在相关核验缺失或未决时仍允许相关路径显示肯定授权或Ready for Signature。",
+      "1": "适用版本、全部相关修订和当前状态均有证据化核验，并在未解决时可靠阻断相关路径的肯定授权和签署准备状态，同时不误伤无关路径。"
+    },
+    "levels": {
+      "0": "没有安全门，或历史公开版本被直接视为当前有效并允许放行。",
+      "0.25": "仅有提示或自由文本字段，不能阻止相关路径显示肯定授权或签署准备状态。",
+      "0.5": "能够阻止部分肯定结论，但遗漏修订、当前状态、证据、解除条件或路径级范围中的多个重要环节。",
+      "0.75": "核心安全门、证据和路径范围基本完整，仅有少量责任、日期或状态联动不足。",
+      "1": "版本、相关修订、当前状态、证据、责任、解除条件、路径级阻断和无关路径隔离全部完整。"
+    },
+    "acceptable_alternatives": [
+      "可使用单独Current Contract Baseline记录、路径级依赖或决定前强制核对项",
+      "可采用可靠的人工放行签核，而不要求自动公式，只要状态和证据关系明确且不可被误读为已完成"
+    ],
+    "failure_examples": [
+      "Current Agreement Status留空时，相关路径仍显示Ready for Signature",
+      "只核验了原始协议文件名，没有核验后续修订和终止或存续资料，却把Legal Decision设为Approved",
+      "任何版本缺口都自动关闭与该协议基线无关的独立路径"
+    ]
+  }
+]
