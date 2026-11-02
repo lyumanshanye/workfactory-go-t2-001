@@ -1,0 +1,157 @@
+﻿****Inserindo dados das pesquisa*****
+import excel "C:\Pastas\O CICLO DA VIDA ORGANIZACIONAL E OS COVENANTS\RBGN\Base\Base de dados - Ciclo vs covenants.xlsx", sheet("Base Geral") firstrow
+
+***Inserindo comonado de dados em painel****
+duplicates drop ID ANO, force
+xtset ID ANO
+
+encode Setor, gen(id_setor)
+drop Setor
+rename id_setor Setor
+
+**** transformando em variáveis numéricas****
+destring Ativototal, replace force
+destring Idade, replace force
+destring LucroLíquido , replace force
+destring EBIT , replace force
+destring TotEmFiCP , replace force
+destring TotEmFiLP , replace force
+destring DesFin , replace force
+destring Imobil , replace force
+destring RsReav , replace force
+destring LAIR , replace force
+destring EBITDA , replace force
+destring RecLíq , replace force
+destring Informa , replace force
+destring Possuecovenants , replace force
+
+****Exluindo missing values****
+drop if Ativototal==.
+drop if LucroLíquido==.
+drop if TotEmFiCP==.
+drop if TotEmFiLP==.
+drop if Imobil==.
+drop if RsReav==.
+drop if LAIR==.
+drop if RecLíq==.
+drop if CtaRec==.
+
+
+*****************************************************************
+***Eliminando as observações com PL negativo 
+******************************************************************
+*drop if PL<0
+
+****gerando as varáveis de controle e dos modelos de gerenciamento de resultados****
+gen lnAtivototal = log(Ativototal)
+gen EBITDA_L1= l.EBITDA
+gen TotEmFiCP_L1= l.TotEmFiCP
+gen TotEmFiLP_L1= l.TotEmFiLP
+gen Ativototal_t1= l.Ativototal
+gen varAtivo = Ativototal_t1 - Ativototal
+gen Cresc = varAtivo / Ativototal_t1
+gen Imobil_t1= l.Imobil
+gen RsReav_t1= l.RsReav
+gen AT = ( LucroLíquido - CxOper) / Ativototal_t1
+gen B1 = 1 / Ativototal_t1
+gen RecLíq_t1= l.RecLíq
+gen CtaRec_t1= l.CtaRec
+gen B2 = [( RecLíq - RecLíq_t1) - ( CtaRec - CtaRec_t1)] / Ativototal_t1
+gen B3 = Imobil / Ativototal_t1
+gen var_reclíquida = ( RecLíq_t1 - RecLíq) / Ativototal_t1
+gen var_PPE = ( Imobil_t1 - Imobil) / Ativototal_t1
+gen var_reclíquida_Kothare = ( RecLíq_t1 - RecLíq) / Ativototal_t1
+gen ALA = (PasCir + PasÑCir) / Ativototal
+gen LC = AtvCir / PasCir
+gen PO = TotEmFiCP + TotEmFiLP
+
+*****************************************************************
+***Eliminando as observações no qual as empresas não informaram se tinham ou não covenants 
+*****************************************************************
+drop if Informa==0
+
+*****************************************************************
+***Retirando as empresas que não possuem dívidas
+******************************************************************
+drop if PO==0
+
+*****************************************************************
+***Retirando as observações de 2009
+******************************************************************
+drop if ANO<2010
+
+*****************************************************************
+***Retirando as observações sem dados dos fluxos de caixas
+******************************************************************
+drop if CxOper==0
+drop if CxInvest==0
+drop if CxFinan==0
+
+***Winsorizando as variáveis de controle com 1%****
+winsor lnAtivototal, gen (lnAtivototal_w) p(0.01)
+winsor Idade, gen ( Idade_w) p(0.01)
+winsor Cresc, gen ( Cresc_w) p(0.01)
+winsor var_reclíquida, gen (var_reclíquida_w) p(0.01)
+winsor ALA, gen (ALA_w) p(0.01)
+winsor LC, gen (LC_w) p(0.01)
+
+**** gerando accruals com modelo Jones Modificado ****
+gen gerenciamento_accruals=.
+quietly levelsof ANO
+foreach i in `r(levels)' {
+quietly  reg  AT B1 B2 B3 if ANO==`i' , rob
+predict double erros_`i'  if ANO==`i'  , residuals
+ replace gerenciamento_accruals= erros_`i' if ANO==`i' & erros_`i'!=. 
+drop  erros_`i' 
+}
+univar gerenciamento_accruals
+
+
+gen Jones95m = abs(gerenciamento_accruals)
+
+***Winsorizando as variáveis de accruals com 1%****
+winsor gerenciamento_accruals, gen (accruals_JM95_w) p(0.01)
+winsor Jones95m, gen (Jones95m_w) p(0.01)
+
+*****************************************************************
+***Retirando as observações faltantes das variáveis de controle
+*****************************************************************
+
+drop if var_reclíquida_w==.
+drop if lnAtivototal_w==.
+drop if Idade_w==.
+drop if ALA_w==.
+
+
+*****************************************************************
+***Retirando as observações que não tem covenants financeiros
+*****************************************************************
+drop if CovenantsFinanceiros==0
+
+****gerando as estatísticas descritivas****
+tabstat QuebroualgumCovenant IntroeCrescvsMatur MaturvsShakeeDecl lnAtivototal_w accruals_JM95_w var_reclíquida_w LC_w, statistics( count mean sd min p25 p50 p75 max ) columns(statistics)
+count if Intro1
+count if Cresc2
+count if Matur3
+count if Shake
+count if Declínio
+
+
+*****Realizando teste da regressão logística*****
+logit QuebroualgumCovenant IntroeCrescvsMatur lnAtivototal_w ALA_w accruals_JM95_w var_reclíquida_w LC_w i.ANO
+lroc
+estat class
+fitstat
+estat gof
+estat gof, group(10)
+mfx, force
+logistic QuebroualgumCovenant IntroeCrescvsMatur lnAtivototal_w ALA_w accruals_JM95_w var_reclíquida_w LC_w i.ANO
+
+logit QuebroualgumCovenant MaturvsShakeeDecl lnAtivototal_w ALA_w accruals_JM95_w var_reclíquida_w LC_w i.ANO
+lroc
+estat class
+fitstat
+estat gof
+estat gof, group(10)
+mfx, force
+logistic QuebroualgumCovenant MaturvsShakeeDecl lnAtivototal_w ALA_w accruals_JM95_w var_reclíquida_w LC_w i.ANO
