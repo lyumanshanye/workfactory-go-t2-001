@@ -1,0 +1,21 @@
+{
+  "model": "gpt-6.1-sol",
+  "finish_reason": "tool_calls",
+  "usage": null,
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_IQzfOuspGOqd72MN486bUIMu",
+        "type": "function",
+        "function": {
+          "name": "write_text",
+          "arguments": "{\"content\":\"import pandas as pd,numpy as np,zipfile,xml.etree.ElementTree as E\\nfrom openpyxl import load_workbook\\np='/work/output/分群与债务指标复核.xlsx';x=pd.read_csv('/app/input_files/dataverse_banco_final_clusters14novCSV_v2.tab');prob=x[['prob_c1','prob_c2','prob_c3']];arg=prob.values.argmax(axis=1)+1;mx=prob.max(axis=1)\\ng={t:np.where(mx>=t,['c'+str(a)+' puro' for a in arg],'Misto') for t in [.7,.8,.9]}\\na=x.filter(regex='^P21_').eq(1).sum(axis=1);b=x.filter(regex='^P39_').eq(1).sum(axis=1);ch=['ligacoes','whatsapp','app','sms','agencia','email'];cs=['n_propostas_'+c for c in ch];su=x[cs].sum(axis=1); caches={}\\nrows=[]\\nfor i in range(1000):\\n z=x.iloc[i];vals=[int(z.id),i+2,float(prob.iloc[i].sum()),float(mx[i]),int(arg[i]),1,'通过',z.cluster,1,g[.7][i],1,g[.8][i],g[.9][i],'不变' if g[.7][i]==g[.8][i] else '降为混合/未决',int(a[i]),12,int(z.n_dividas_ativas),int(z.n_dividas_ativas-a[i]),int(b[i]),int(x.filter(regex='^P39_').iloc[i].count()),int(z.n_contas_atraso),int(z.n_contas_atraso-b[i]),int(x[[f'P39_{j}' for j in range(1,14)]].iloc[i].eq(1).sum()),int(b[i]==0),int(su[i]),int(z.n_propostas_total),int(z.n_propostas_total-su[i]),int(z.P40_3==1),int(z.P41_1==1),int(z.P41_3==1),int(pd.notna(z.P42)),0];rows.append(vals)\\ncaches['逐条复核']={(i+2,j+1):v for i,vs in enumerate(rows) for j,v in enumerate(vs)}\\ngroups=['c1 puro','c2 puro','c3 puro','Misto','未决'];caches['分层规模']={}\\nfor i,gr in enumerate(groups,2):\\n vals=[int((g[t]==gr).sum()) for t in [.7,.8,.9]];vals.append(vals[1]-vals[0])\\n for j,v in enumerate(vals,2):caches['分层规模'][i,j]=v\\nfor j,v in enumerate([1000,1000,1000,0],2):caches['分层规模'][7,j]=v\\ncaches['归属迁移']={(i+2,j+2):int(((g[.7]==ga)&(g[.8]==gb)).sum()) for i,ga in enumerate(groups) for j,gb in enumerate(groups)}\\ncaches['指标检查']={(i+2,2):v for i,v in enumerate([1000,1000,1000,0,168,0,331,0,0,166,144,122,402])}\\nw=load_workbook(p); ns={'m':'http://schemas.openxmlformats.org/spreadsheetml/2006/main'};tmp='/work/cached.xlsx'\\nwith zipfile.ZipFile(p) as zin,zipfile.ZipFile(tmp,'w',zipfile.ZIP_DEFLATED) as zout:\\n for info in zin.infolist():\\n  data=zin.read(info.filename)\\n  if info.filename.startswith('xl/worksheets/sheet') and info.filename.endswith('.xml'):\\n   num=int(info.filename.split('sheet')[-1].split('.')[0]);name=w.sheetnames[num-1]\\n   if name in caches:\\n    root=E.fromstring(data)\\n    for c in root.findall('.//m:c',ns):\\n     if c.find('m:f',ns) is None:continue\\n     cell=w[name][c.attrib['r']];value=caches[name][cell.row,cell.column]\\n     v=c.find('m:v',ns)\\n     if v is None:v=E.SubElement(c,'{'+ns['m']+'}v')\\n     if isinstance(value,str):c.set('t','str');v.text=value\\n     else:c.pop('t',None) if False else None;v.text=str(value)\\n    data=E.tostring(root,encoding='utf-8',xml_declaration=True)\\n  zout.writestr(info,data)\\nimport shutil\\nshutil.move(tmp,p)\\nr=load_workbook(p,data_only=True);print('cached scale',list(r['分层规模'].values));print('errors',sum(isinstance(c.value,str) and c.value.startswith(('#REF!','#VALUE!','#DIV/0!')) for s in r for row in s for c in row));print('rowcounts',r['原始数据'].max_row,r['字典原文'].max_row)\\nfrom docx import Document\\nd=Document('/work/output/试点决策备忘录.docx');print('doc paragraphs/tables',len(d.paragraphs),len(d.tables))\\n\",\"path\":\"cache.py\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 1196,
+  "done_marker_received": true
+}

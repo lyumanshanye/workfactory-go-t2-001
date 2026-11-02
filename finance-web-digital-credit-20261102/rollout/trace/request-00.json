@@ -1,0 +1,63 @@
+{
+  "model": "gpt-6.1-sol",
+  "messages": [
+    {
+      "role": "system",
+      "content": "你是独立接到工作委托的执行者。完成用户要求的实际文件，不仅说明做法。你没有参考答案或隐藏评分项。先使用工具读取真实输入；不得联网、安装软件或猜造未提供事实。工具环境有Python、pandas、numpy、openpyxl、python-docx、pypdf、pdftotext与LibreOffice。输入只读，持久工作区是/work。运行路径适配：本次将题面/app/output映射为/work/output，请把最终交付保存到/work/output，临时文件和脚本放/work其他位置。需要时执行并检查自己的结果，看到执行失败可自行修复。最终简短说明完成文件与未验证边界。"
+    },
+    {
+      "role": "user",
+      "content": "请为消费金融产品研究与客户支持团队审查一套公开调查分群资料，并准备一份条件化的客户教育或债务支持研究试点建议。附件来自同一个Harvard Dataverse资料页，包括匿名调查数据、变量字典和原始问卷。分析限于该调查的历史样本，不引入当前客户账户、征信记录或后续市场信息。\n\n请交付《分群与债务指标复核.xlsx》和《试点决策备忘录.docx》。工作簿应保留匿名记录与原始字段的可追溯关系，核验已发布分群标签与归属概率的关系，给出不同置信度要求下分层规模和归属变化的可复算比较。除资料原有基线外，至少评估80%的更严格门槛。请依据资料原有定义建立基线；如提出替代门槛或筛查规则，应明确其作者假设属性，并说明边界与未被稳定归类记录的处理，不能仅删除这些记录以改善结果。\n\n结合问卷和字典，核查你实际用于研究建议的债务、逾期和信贷报价指标；至少检查发布的活动债务数、逾期账户数和报价总数与相关原始题项的关系。分清原始题项、派生指标、条件作答、未选、多选及缺失；对编码或口径无法确认的地方保留证据和未决状态。请提供对相关样本群体的透明描述，并解释哪些指标能够支持建议，哪些需要先向数据发布者核实。不能仅因某个字段名称看起来正确，就把它当作已验证业务指标。\n\n备忘录应给负责人一份可作决定的建议：现有分层能否用于内部研究，哪些客户教育或债务支持需求值得先验证，试点实施之前还需取得什么，以及未来应如何评价试点。样本框、预算、实际招募条件和成效数据没有提供；可以提出有明确标签的方案与评价方法，但不得补造已审批预算、可联系客户、已完成实验或改善效果。匿名样本ID不能被冒称为本机构客户。\n\n请对样本覆盖、权重、类别含义和结果外推作恰当限制。类别归属概率不应被直接解释为违约概率，收到信贷报价不等于实际借款或获客转化。若源文件相互不一致，不通过猜选项、任意缩放、静默改码或把全部空白填零来消除问题。本次不作个人授信、定价或催收决定。\n\n使用input_files/下全部3份原始附件，交代各文件的作用。模型执行时输入对应只读/app/input_files/，最终两项成果保存至/app/output/。\n\n实际输入文件：\nCópia de 2024-089_Bacen_Questionario_Fletcher.pdf\ndataverse_banco_final_clusters14novCSV_v2.tab\ndataverse_dicionario_variaveis_v2.tab"
+    }
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "execute",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "write_text",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "temperature": 1,
+  "reasoning_effort": "medium",
+  "max_tokens": 18000,
+  "stream": true,
+  "stream_options": {
+    "include_usage": true
+  }
+}

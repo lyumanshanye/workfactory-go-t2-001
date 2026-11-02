@@ -1,0 +1,8 @@
+{
+  "diagnosis": "Gateway repeats the same full tool-call ID on every argument chunk. Initial collector concatenated the repeated IDs and sent an invalid oversized ID on turn 1; the resulting two HTTP502 responses do not measure solver ability.",
+  "corrective_action": "Treat a repeated identical ID as metadata; fail if identity changes. Preserve v1 and start clean v2.",
+  "actual_archived_stream_replay_passed": true,
+  "expected_call_id_length": 37,
+  "parsed_function": "execute",
+  "v1_classification": "invalid_harness_attempt_no_deliverables"
+}

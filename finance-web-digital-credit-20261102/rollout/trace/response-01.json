@@ -1,0 +1,21 @@
+{
+  "model": "gpt-6.1-sol",
+  "finish_reason": "tool_calls",
+  "usage": null,
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_swN7w5GonDWQLOWpsmer0lXP",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"mkdir -p /work/output; pdftotext -layout /app/input_files/*.pdf /work/question.txt; python - <<'PY'\\nimport pandas as pd\\nfrom pathlib import Path\\nfor p in Path('/app/input_files').glob('*.tab'):\\n d=pd.read_csv(p,sep='\\\\t');print(p.name,d.shape);print(d.head(3).to_string(index=False));print(d.columns.tolist())\\nPY\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 100,
+  "done_marker_received": true
+}
