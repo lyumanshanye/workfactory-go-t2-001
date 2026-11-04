@@ -1,0 +1,1967 @@
+{
+  "reference": {
+    "status": "completed",
+    "description": "参考解的独立AI交叉审阅；不是模型试做分，也非专家签署。",
+    "updated_at": "2026-11-04T10:28:24.198289+00:00",
+    "grader_note": "逐项检查真实交付与原始证据，允许有据的等价方法；未判定保持待判。",
+    "score": {
+      "value": 94.44444444444444,
+      "scale": 100,
+      "awarded": 272,
+      "total": 288
+    },
+    "checkpoints": [
+      {
+        "id": "LAW-01",
+        "criterion": "独立登记原件出处及版本",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "来源与口径表逐项列出论文DOI、数据DOI及使用的原件校验；与manifest一致，允许引用原始源记录。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "独立登记原件出处及版本"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "证据与复核工作簿.xlsx/来源与口径!A1:C12；review.py sheet(来源与口径)",
+            "text": "仅file/sha256/bytes三列，未逐项列论文DOI、数据DOI；递归子目录replication/replication.md也未登记。实际原件哈希存在，故不把此缺陷扩展为事实伪造。"
+          }
+        ],
+        "notes": "仅file/sha256/bytes三列，未逐项列论文DOI、数据DOI；递归子目录replication/replication.md也未登记。实际原件哈希存在，故不把此缺陷扩展为事实伪造。"
+      },
+      {
+        "id": "LAW-02",
+        "criterion": "正确区分案件与意见粒度",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "sc_data按project_case_id统计25610案件，按project_opinion_id统计37491意见；不能以意见行数称案件数。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "正确区分案件与意见粒度"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "audit_summary.json/sc_opinions,sc_cases；DOCX¶13–14",
+            "text": "37491意见、25610案件，独立原始sc_data流式计数一致。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-03",
+        "criterion": "核对标注覆盖",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "原标注2748行、2748唯一section，FORMAL329/GRAND551/NONE1868，计数吻合。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "核对标注覆盖"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "audit_summary.json/annotation_rows,annotation_unique_sections,annotation_class_counts；DOCX¶8–9",
+            "text": "2748唯一section，三类329/551/1868；独立计数一致。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-04",
+        "criterion": "数据连接基数可验证",
+        "weight": 10,
+        "status": "fail",
+        "awarded": 0,
+        "description": "给出reasoning/sc_data实际采用连接键，披露两侧唯一性及连接前后数量，禁止多对多扩张后均值。容许不同可靠键但需证据。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "数据连接基数可验证"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "review.py meta_by_id / keycounts / full join；audit_summary.json/reasoning_unique_opinion_keys",
+            "text": "键project_opinion_id给出，reasoning唯一36430且无未匹配；但未披露sc侧唯一键计数/验证，meta_by_id字典静默覆盖可能重复，无右表唯一性断言或连接基数对照表。审阅者独立核查实际sc无重复，故这不是实际多对多膨胀，只是冻结条款要求的披露/保障缺失。"
+          }
+        ],
+        "notes": "键project_opinion_id给出，reasoning唯一36430且无未匹配；但未披露sc侧唯一键计数/验证，meta_by_id字典静默覆盖可能重复，无右表唯一性断言或连接基数对照表。审阅者独立核查实际sc无重复，故这不是实际多对多膨胀，只是冻结条款要求的披露/保障缺失。"
+      },
+      {
+        "id": "LAW-05",
+        "criterion": "标注到原案连接异常有明细",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "以CAP case_id为键的未连接section和案件明细可重建，不将case连接成功等同某意见文本连接成功。参考35段/28案，容差0（按该CAP连接口径；不同可靠链接应给出差异明细）。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "标注到原案连接异常有明细"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "annotations_without_sc_case.csv；DOCX¶19–20,102",
+            "text": "35段/28案均有section/case明细，独立原件复算一致，并明确case连接不证明指定意见段落连接。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-06",
+        "criterion": "识别人类低置信标记",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "按原标注low_confidence统计101段，说明其为人类对分类边界的不确定，而非模型概率阈值或错误标签。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "识别人类低置信标记"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "audit_summary.json/annotation_low_n；DOCX¶6；工作簿关键核对",
+            "text": "101；明确为人类类别边界不确定，非softmax阈值，独立原标注计数一致。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-07",
+        "criterion": "解释FORMAL的法律边界",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "结合supplement1.1解释封闭规范、规则涵摄或文义体系等，并至少用一处具体判决推理支持；不把保守结果自动等同FORMAL。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "解释FORMAL的法律边界"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶6,41,56,96；case_analysis.json/3497408_24,11725850_55,541539_14",
+            "text": "依Codebook封闭规则体系，结合偏好/欺诈的法条关系、土地权利时间条件、上诉条款逐要件涵摄，未以政治保守结果判FORMAL。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-08",
+        "criterion": "解释GRAND的法律边界",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "结合supplement1.2解释社会经济后果/历史制度目的等开放论证，并用一处具体判决推理支持；不将grand译成案件重要程度。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "解释GRAND的法律边界"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶6,61,66,76,81；legal_case_audit.csv/raw_context",
+            "text": "历史制度目的、专利公共收益、铁路专业监管后果等具体文本均支持开放论证判断；不把grand当案件重要。原文上下文核验相符。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-09",
+        "criterion": "解释NONE的范围",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "依supplement1.3说明NONE可覆盖事实、程序、未展现两类风格或仅引先例，不能等同反形式主义或没有法律效力。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "解释NONE的范围"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶6,71,81,91,96",
+            "text": "NONE说明事实/程序/仅引先例及边界；对政府论点、国会听证材料具体区分，不把NONE当无效法律。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-10",
+        "criterion": "核实数值列语义",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "annotation_predictions prob_*含负数，独立核实其为未归一化输出；概率/熵计算使用数值稳定softmax或数学等价转换，不能直接拿原始值当概率。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "核实数值列语义"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶23；audit_summary.json/raw_named_prob_min,max；review.py/softmax",
+            "text": "原列范围-2.3556383..3.273199；减max后exp归一化，独立标注预测熵复算一致，非把logit直接当概率。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-11",
+        "criterion": "核实类别ID映射的证据边界",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "引用notebook或4_measure_formal定义0 FORMAL、1 GRAND、2 NONE；如未验证模型配置，不声称set枚举训练脚本足以证明任意权重标签顺序。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "核实类别ID映射的证据边界"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶23；原件supreme-court-data-main.zip/replication/replication.ipynb 与lr-measurement/4_measure_formal.py",
+            "text": "notebook明确列0 FORMAL/1 GRAND/2 NONE，4_measure_formal给正负计分；指出set枚举不足证权重顺序且未加载配置，没有越界主张。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-12",
+        "criterion": "按评估轮次报告独立指标",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "保留10个test_num，各907条；给出每组accuracy及macroF1，可核验父级交叉算范围accuracy0.776185226..0.814773980、macroF1 0.551887532..0.712677371，容差1e-6。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "按评估轮次报告独立指标"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "test_metrics.csv/test_num0..9；工作簿验证分组",
+            "text": "各907；独立重算accuracy范围0.7761852260198456..0.814773980154355、macroF1范围0.5518875322357842..0.7126773713512363，吻合。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-13",
+        "criterion": "计算混淆矩阵",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "至少给出可复算的逐评估组或明确指定组的3×3混淆矩阵，标明真实/预测轴与类别，矩阵行列和吻合所用样本。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "计算混淆矩阵"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "confusion_matrices.csv；工作簿混淆矩阵；review.py/metrics",
+            "text": "每组有true_class行及FORMAL/GRAND/NONE预测列，3x3矩阵计数与907一致。独立直接数三类组合通过。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-14",
+        "criterion": "宏平均与类别不平衡处理正确",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "macroF1为三类F1等权均值；说明1868 NONE占比影响整体准确率，未用weightedF1替代macroF1。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "宏平均与类别不平衡处理正确"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "review.py/metrics sum(f)/3；DOCX¶9,25；test_metrics.csv",
+            "text": "三类F1等权，明确类别不均衡和整体accuracy局限，没有weightedF1冒充macroF1。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-15",
+        "criterion": "重复预测影响有实测",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "9070预测涉及2695唯一section；保留重复协议，另报告合理唯一section聚合或按组分析敏感性，明确聚合结果证据性质。不能任取一行后声称唯一无争议验证。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "重复预测影响有实测"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶24；unique_section_sensitivity.csv；audit_summary.json/unique_section_sensitivity_metrics",
+            "text": "9070跨组预测、2695唯一段；均值softmax聚合得到accuracy0.79703154、macroF1 0.68950100，明确仅描述性敏感性非独立泛化。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-16",
+        "criterion": "披露未预测标注",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "2748标注中53唯一section没有prediction，给出明细；不把2695的指标默认为全部2748。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "披露未预测标注"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "annotations_without_predictions.csv；audit_summary.json/annotations_without_prediction；DOCX¶12",
+            "text": "53段明细，独立集合差一致；2695与2748不混淆。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-17",
+        "criterion": "按人类低置信分层评估",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "以明确的独立样本/重复处理口径报告低置信与其余段落样本数及至少一个性能指标；计数和指标可复算。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "按人类低置信分层评估"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "stratified_metrics.csv/low_confidence=True,False；工作簿分层",
+            "text": "唯一section均值softmax口径：96/2599，accuracy0.5/0.808003078；明示重复处理且空目录重跑一致。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-18",
+        "criterion": "按时期分层评估",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "明确三期边界和每期样本数，至少一个分类性能指标可复算；不把时期差异自动解释成时代因果效应。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "按时期分层评估"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "stratified_metrics.csv/1870–1919,1920–1969,1970–2024；DOCX¶25,35",
+            "text": "三期703/696/1296段，accuracy0.82503556/0.79741379/0.78163580；未推断时代因果，重跑一致。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-19",
+        "criterion": "复核熵差异的口径",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "明确独立样本和预测选择口径，复算LC/NLC熵均值及差；可复现notebook首行法或合理替代，但不能以替代结果冒称逐字复现论文0.789/0.539。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "复核熵差异的口径"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶25；audit_summary.json/notebook_entropy_reproduction",
+            "text": "首行去重2695段，LC96/NLC2599，熵0.788608024863045/0.5391040509572654、差0.2495039739057796；独立稳定softmax重算一致，明示行序依赖。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-20",
+        "criterion": "验证划分证据限制",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "指出所给材料未提供完整训练测试成员清单，不能确认病例级独立或宣称外部泛化验证；区分训练/留出/全量推断，准确保留论文自己声称的评估协议。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "验证划分证据限制"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶24,101,103；audit_summary.json/generalization_evidence",
+            "text": "保留Figure7自称10-fold，指出同段跨组、缺训练测试成员清单；不声称病例级无泄漏或独立部署外推。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-21",
+        "criterion": "年度趋势独立重建",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "从reasoning按year独立输出年度意见数、均值及分散度/区间，数值与原件可重算；不是直接粘贴作者图或以标注小样本代替全量意见。 参考reasoning=36430意见、24890案件，155年度（1870–2024），年度均值允许1e-6容差。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "年度趋势独立重建"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "annual_trends.csv；DOCX¶15–16,27–35",
+            "text": "36430意见/24890案件、155年度；输出意见数/均值/SEM，不用标注小样本代替。空目录复算CSV逐字节一致。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-22",
+        "criterion": "案件等权敏感性正确",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "在同年按案件先聚合意见再均值，比较意见等权与案件等权；明确两者估计对象，不能将重复记录去重当案件等权。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "案件等权敏感性正确"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "annual_trends.csv/case_equal_mean,n_cases；review.py/yearly；DOCX¶33–34",
+            "text": "同年按project_case_id先意见均值再案件均值，2024案件均值0.1896397666601221与意见0.12690907458775158不同；估计对象明确。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-23",
+        "criterion": "增加有解释力的替代口径",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "至少另做仅多数意见、明确长度权重代理或其他有法律/测量意义的口径，并解释它如何改变或不改变核心结论。不得声称原文长度代理即真实段落概率复现。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "增加有解释力的替代口径"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "annual_trends.csv/majority_only_mean,raw_length_weighted_proxy；DOCX¶27,34–35",
+            "text": "另给原type多数过滤及原文>200字符片段数长度代理，显式不等于全部段落概率重现，最大差与符号翻转已解释。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-24",
+        "criterion": "解释段落分数到意见标准化",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "据4_measure_formal或论文说明(pF-pG)*(pF+pG)、意见内均值及全样本标准化；说明不能用缺少全量段落概率的材料从头验证所有意见分数。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "解释段落分数到意见标准化"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶23,27,103；原件4_measure_formal.py",
+            "text": "(pF-pG)*(pF+pG)，意见内均值、全样本z标准化；明确缺原始全部段落概率无法从头复现全部分数。原始代码核验公式一致。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-25",
+        "criterion": "历史主张保持描述性界限",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "将Figure9趋势与实际年度/时期结果对应，不把标准分正负当绝对比例，也不将年代/意识形态相关性当因果作用。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "历史主张保持描述性界限"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶28–35；period_trends.csv；trend_sensitivity.json",
+            "text": "时代结果与先降后升描述对应，1980后非逐年单调；标准分不当比例，不推导年代/意识形态因果。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-26",
+        "criterion": "精读至少12不同案件",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "至少12不同案件，记录足以查证同案不同段未充数；不要求与参考解同一批ID。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "精读至少12不同案件"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "legal_case_audit.csv/section_id,case_name；DOCX¶38–97",
+            "text": "12不同CAP案ID，原始标注与sc意见元数据核查；没有同案多段充数。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-27",
+        "criterion": "精读取样跨时期",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "所选案件覆盖至少三个明确定义且有实际样本的历史时期；取样规则可解释，不能以目的样本估计总体错误率。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "精读取样跨时期"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶37；legal_case_audit.csv/year",
+            "text": "1870–1919、1920–1969、1970–2024各4案，明确目的样本不能估总体错误率。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-28",
+        "criterion": "精读覆盖模型分歧",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "有实际预测与专家标注不一致的段落并给对应记录；必须声明跨重复预测采用的分歧定义。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "精读覆盖模型分歧"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶37,40等预测投票；legal_case_audit.csv/available_prediction_votes；case_analysis.json",
+            "text": "真实专家与模型分歧样本确实存在，投票透明；但没有明确说明跨重复取“任一预测不同”“多数预测不同”或均值softmax不同中的哪种作为分歧定义。该条冻结边界明确要求声明，故严格不通过；不影响12案或人类低置信覆盖得分。"
+          }
+        ],
+        "notes": "真实专家与模型分歧样本确实存在，投票透明；但没有明确说明跨重复取“任一预测不同”“多数预测不同”或均值softmax不同中的哪种作为分歧定义。该条冻结边界明确要求声明，故严格不通过；不影响12案或人类低置信覆盖得分。"
+      },
+      {
+        "id": "LAW-29",
+        "criterion": "精读覆盖人类低置信",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "所选样本包含low_confidence原字段为TRUE的记录，不能以模型低分替代人类标记。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "精读覆盖人类低置信"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "legal_case_audit.csv/expert_low_confidence；DOCX每案低置信",
+            "text": "12案中11个原字段TRUE，独立对原标注核查；不是拿模型低概率代替。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-30",
+        "criterion": "逐案引用可回查",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "每案给案名、年代、section或原始意见ID及必要引文，可定位实际原件；原文引用存在且没有把清洗片段当完整原判决。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "逐案引用可回查"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "legal_case_audit.csv/section_id,citation,project_opinion_id,quoted_annotation,raw_context；DOCX¶39等",
+            "text": "每案案名/年代/ID/引文齐。12个quoted_annotation均等于原始标注、12个raw_context均是所指原意见真实子串；报告明确清洗片段不是原文段号/全文。JOHNSON定位有保留：原引文起句并不逐字存在该意见，但全文约第14000字符处确有同一管辖文义论证。接受此处已给出的清洗标注引用+真实意见同义论证为等价证据，不把60字符匹配当完全证明。详见grading_caveats。"
+          }
+        ],
+        "notes": "每案案名/年代/ID/引文齐。12个quoted_annotation均等于原始标注、12个raw_context均是所指原意见真实子串；报告明确清洗片段不是原文段号/全文。JOHNSON定位有保留：原引文起句并不逐字存在该意见，但全文约第14000字符处确有同一管辖文义论证。接受此处已给出的清洗标注引用+真实意见同义论证为等价证据，不把60字符匹配当完全证明。详见grading_caveats。"
+      },
+      {
+        "id": "LAW-31",
+        "criterion": "逐案法律解释具体",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "逐案说明文本实际使用的法律解释方法或NONE理由，涉及文义/目的/引用/事实叙述的具体片段；合理有据不同分类可得分，不能只重复模型标签。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "逐案法律解释具体"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶41,46,51,56,61,66,71,76,81,86,91,96；case_analysis.json",
+            "text": "12案逐案有具体规则、目的、历史、事实/程序或说话者分析及可争议标签，并非复述模型预测。允许合理不同标签。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-32",
+        "criterion": "论证归属经过核验",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "对样本区分多数/协同/异议及当事人论点与法院采纳理由；原字段冲突时查文本或明确未定，不能单凭预测把异议当holding。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "论证归属经过核验"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶42,47,62,67,72,77,82,87,92；case_analysis.json；原始opinion_text",
+            "text": "多数/异议/部分异议、当事人论点归属具体区分；Good Real Property原文结尾dissent from PartII验证冲突，Evans识别Government rests是政府主张，不冒作holding。JOHNSON引文定位保留见LAW30，不另重复扣分。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-33",
+        "criterion": "标注协议与上下文解释区分",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "说明专家标注隐藏案名、引文和上下文的协议，与律师完整阅读有不同判断对象；对边界标签不以专家标注不可质疑为唯一理由。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "标注协议与上下文解释区分"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶6,61,71,81,91,96",
+            "text": "明确原标注隐藏案名/相邻段/引文，协议标签和律师上下文解释不同，多案给NONE/GRAND及程序FORMAL边界而不奉专家标签绝对真值。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-34",
+        "criterion": "跨领域证据准确",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "保留论文报告200非statutory样本的证据，但指出当前输入没有可独立重算的该测试逐条结果，不夸称已证明所有法律领域适用。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "跨领域证据准确"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶101；audit_summary.json/generalization_evidence；原论文文本约600行",
+            "text": "准确保留200 non-statutory例证，同时承认逐条测试集/预测/划分不足独立复算，未宣称所有法域有效。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-35",
+        "criterion": "先例效力与风格分离",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "明示风格分数不能决定binding authority或后案有效性；在使用条件中要求律师核查意见地位。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "先例效力与风格分离"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶4,47,62,77,87,92,99",
+            "text": "明确风格指标不决定先例效力，引用前律师复核原判决/作者/意见地位，异议不作binding holding。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-36",
+        "criterion": "裁判结果预测与风格分离",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "不能由FORMAL/GRAND直接给胜诉预测，明确未验证的结果预测用途。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "裁判结果预测与风格分离"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶4,103",
+            "text": "明示不能预测胜诉，不主张未经验证的样本外胜诉率。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-37",
+        "criterion": "已知缺案范围审查",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "读取missing_data并给实际记录数/年代范围，说明登记只证明已知遗漏，不证明其他来源无缺案，联系历史覆盖限制。 参考97条，1871–2023。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "已知缺案范围审查"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "audit_summary.json/missing_registry_rows,missing_registry_year_range；工作簿已列遗漏；DOCX¶102",
+            "text": "97条、1871–2023；说明只证明已知遗漏、不证明无其他选择性缺案。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-38",
+        "criterion": "采纳决定由证据支持",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "决定明确，至少将实际分类误差、法律精读发现、验证边界各一项落实到允许或限制用途；有据更保守不采纳或不同合理结论可得分。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "采纳决定由证据支持"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶3–4,25,37–97,99–103",
+            "text": "附条件研究试用明确；分类不均衡/误漏、说话者与意见类型精读风险、缺领域外验证对应到筛选/描述性研究可用及对客/效力/胜诉用途限制。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-39",
+        "criterion": "上线条件可执行",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "至少给出限定应用范围、原判决/意见归属的律师复核、独立留出验证进入流程的负责环节或触发条件，不能只写谨慎使用。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "上线条件可执行"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶4,99–101",
+            "text": "限定法域/时期/法律问题；律师双重复核、原文及冲突项人工队列、每个领域病例级独立留出验证未通过仅研究，均可执行。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-40",
+        "criterion": "核心数表可重建",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "按运行说明从只读原件和空输出目录执行成功，关键年度/分类数表与提交值容差1e-6；法律人工判断允许单独JSON保存，无需自动推理。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "核心数表可重建"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "运行说明.txt；independent_check/recomputed/*；reproduction_comparison.json",
+            "text": "复制review.py与case_analysis.json到独立scratch，依说明从原件和全新输出目录成功执行；15份CSV/JSON逐字节相同；不是只接受作者selfcheck。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-41",
+        "criterion": "交付文件可读取",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "DOCX/XLSX结构完整、文件可打开，输出文件名和声明的程序入口对应。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "交付文件可读取"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "法律研究工具审查意见.docx、证据与复核工作簿.xlsx ZIP/XML；review.py输出",
+            "text": "DOCX103段、XLSX12页签，CRC完整、XML可读；程序入口及文件名对应。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-42",
+        "criterion": "未知事实不被补造",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "实际未知的split manifests、样本外结果、先例当前效力及商业客户背景没有伪造；可明确列未验证项。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "未知事实不被补造"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶2,24,101–103；audit_summary.json/full_paragraph_score_reproduction,generalization_evidence",
+            "text": "无虚构split manifests、独立样本外胜率、现行效力或客户背景，明确未知和AI研究版身份。"
+          }
+        ],
+        "notes": ""
+      }
+    ],
+    "downloads": [
+      {
+        "name": "annotations_without_predictions.csv",
+        "url": "law/reference/annotations_without_predictions.csv",
+        "bytes": 33449,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-1.html"
+      },
+      {
+        "name": "annotations_without_sc_case.csv",
+        "url": "law/reference/annotations_without_sc_case.csv",
+        "bytes": 3608,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-2.html"
+      },
+      {
+        "name": "annual_trends.csv",
+        "url": "law/reference/annual_trends.csv",
+        "bytes": 17749,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-3.html"
+      },
+      {
+        "name": "audit_summary.json",
+        "url": "law/reference/audit_summary.json",
+        "bytes": 3291,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-4.html"
+      },
+      {
+        "name": "confusion_matrices.csv",
+        "url": "law/reference/confusion_matrices.csv",
+        "bytes": 596,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-5.html"
+      },
+      {
+        "name": "duplicate_prediction_keys.csv",
+        "url": "law/reference/duplicate_prediction_keys.csv",
+        "bytes": 35,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-6.html"
+      },
+      {
+        "name": "label_conflicts.csv",
+        "url": "law/reference/label_conflicts.csv",
+        "bytes": 53,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-7.html"
+      },
+      {
+        "name": "legal_case_audit.csv",
+        "url": "law/reference/legal_case_audit.csv",
+        "bytes": 49380,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-8.html"
+      },
+      {
+        "name": "opinion_type_disagreements.csv",
+        "url": "law/reference/opinion_type_disagreements.csv",
+        "bytes": 445676,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-9.html"
+      },
+      {
+        "name": "period_trends.csv",
+        "url": "law/reference/period_trends.csv",
+        "bytes": 254,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-10.html"
+      },
+      {
+        "name": "stratified_metrics.csv",
+        "url": "law/reference/stratified_metrics.csv",
+        "bytes": 1323,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-11.html"
+      },
+      {
+        "name": "test_metrics.csv",
+        "url": "law/reference/test_metrics.csv",
+        "bytes": 2668,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-12.html"
+      },
+      {
+        "name": "trend_sensitivity.json",
+        "url": "law/reference/trend_sensitivity.json",
+        "bytes": 544,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-13.html"
+      },
+      {
+        "name": "unique_section_sensitivity.csv",
+        "url": "law/reference/unique_section_sensitivity.csv",
+        "bytes": 374164,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-14.html"
+      },
+      {
+        "name": "unmatched_reasoning.csv",
+        "url": "law/reference/unmatched_reasoning.csv",
+        "bytes": 37,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-15.html"
+      },
+      {
+        "name": "法律研究工具审查意见.docx",
+        "url": "law/reference/%E6%B3%95%E5%BE%8B%E7%A0%94%E7%A9%B6%E5%B7%A5%E5%85%B7%E5%AE%A1%E6%9F%A5%E6%84%8F%E8%A7%81.docx",
+        "bytes": 44310,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-16.html"
+      },
+      {
+        "name": "证据与复核工作簿.xlsx",
+        "url": "law/reference/%E8%AF%81%E6%8D%AE%E4%B8%8E%E5%A4%8D%E6%A0%B8%E5%B7%A5%E4%BD%9C%E7%B0%BF.xlsx",
+        "bytes": 280264,
+        "description": "参考解真实产物",
+        "preview_url": "law/previews/reference-17.html"
+      },
+      {
+        "name": "逐项评分原始JSON",
+        "url": "law/reference-grade.json"
+      }
+    ]
+  },
+  "solver": {
+    "status": "completed",
+    "description": "本轮模型交付的独立逐项审阅；未通过难度门槛。",
+    "updated_at": "2026-11-04T10:28:24.198289+00:00",
+    "grader_note": "逐项检查真实交付与原始证据，允许有据的等价方法；未判定保持待判。",
+    "score": {
+      "value": 78.81944444444444,
+      "scale": 100,
+      "awarded": 227,
+      "total": 288
+    },
+    "checkpoints": [
+      {
+        "id": "LAW-01",
+        "criterion": "独立登记原件出处及版本",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "来源与口径表逐项列出论文DOI、数据DOI及使用的原件校验；与manifest一致，允许引用原始源记录。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "独立登记原件出处及版本"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/来源；DOCX¶7,72",
+            "text": "仅原件名称、字节、用途，未逐项给论文/数据DOI、原件校验或明确引用对应manifest记录。列出manifest.json文件名不足以展示本条要求。"
+          }
+        ],
+        "notes": "可接受真正引用manifest中的来源校验记录；此交付未建立该对应，不据此认定输入伪造。"
+      },
+      {
+        "id": "LAW-02",
+        "criterion": "正确区分案件与意见粒度",
+        "weight": 7,
+        "status": "fail",
+        "awarded": 0,
+        "description": "sc_data按project_case_id统计25610案件，按project_opinion_id统计37491意见；不能以意见行数称案件数。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "正确区分案件与意见粒度"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/数据核对；DOCX¶7；review.py/counts",
+            "text": "给reasoning的36430意见/24890案件，未给sc_data的37491意见/25610案件。没有把reasoning计数写错为sc_data，但缺本条完整覆盖。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-03",
+        "criterion": "核对标注覆盖",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "原标注2748行、2748唯一section，FORMAL329/GRAND551/NONE1868，计数吻合。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "核对标注覆盖"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/数据核对 annotations=2748,annotation_id_duplicates=0；专家类别时期",
+            "text": "三期类别/LC分表可加总FORMAL329、GRAND551、NONE1868，2748唯一段。接受有用的分层表作为等价计数证据。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-04",
+        "criterion": "数据连接基数可验证",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "给出reasoning/sc_data实际采用连接键，披露两侧唯一性及连接前后数量，禁止多对多扩张后均值。容许不同可靠键但需证据。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "数据连接基数可验证"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/数据核对,异常排除；review.py/link,join",
+            "text": "project_opinion_id连接，sc_duplicates=0、r_duplicates=0、opinion_join=36430、sc_only=1061、case_id_mismatch=0；双方唯一性及连接基数明确，未扩张。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-05",
+        "criterion": "标注到原案连接异常有明细",
+        "weight": 7,
+        "status": "fail",
+        "awarded": 0,
+        "description": "以CAP case_id为键的未连接section和案件明细可重建，不将case连接成功等同某意见文本连接成功。参考35段/28案，容差0（按该CAP连接口径；不同可靠链接应给出差异明细）。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "标注到原案连接异常有明细"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/未进预测标注,未入趋势意见,异常排除；review.py",
+            "text": "提供53缺预测标注和1061缺趋势意见，但没有以CAP case_id审查标注到原案的35段/28案未连接明细；这些是不同连接问题。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-06",
+        "criterion": "识别人类低置信标记",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "按原标注low_confidence统计101段，说明其为人类对分类边界的不确定，而非模型概率阈值或错误标签。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "识别人类低置信标记"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/专家类别时期；DOCX¶5",
+            "text": "原标注LC按时期/类别分表加总101；文中将低置信归为人类分类不确定而非模型softmax门槛。接受表格分层总和。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-07",
+        "criterion": "解释FORMAL的法律边界",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "结合supplement1.1解释封闭规范、规则涵摄或文义体系等，并至少用一处具体判决推理支持；不把保守结果自动等同FORMAL。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "解释FORMAL的法律边界"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶5,35,39,59；case_analysis.json/notes",
+            "text": "封闭规则推演定义，结合总统授权界限、文本足以决定等真实法律片段支持，不把保守结果自动称FORMAL。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-08",
+        "criterion": "解释GRAND的法律边界",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "结合supplement1.2解释社会经济后果/历史制度目的等开放论证，并用一处具体判决推理支持；不将grand译成案件重要程度。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "解释GRAND的法律边界"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶5,23,27,43,47；逐案原文",
+            "text": "开放政策/社会/经济定义，立法目的、社会对司法独立依赖、联邦执法目的有具体论证，不以案件重要判GRAND。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-09",
+        "criterion": "解释NONE的范围",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "依supplement1.3说明NONE可覆盖事实、程序、未展现两类风格或仅引先例，不能等同反形式主义或没有法律效力。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "解释NONE的范围"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶5,23,35,51,63,67；case_analysis.json",
+            "text": "NONE解释包括未呈现清晰推理、事实/立法史转述、过渡与辩论铺垫，不等同没有法律效力或反形式主义。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-10",
+        "criterion": "核实数值列语义",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "annotation_predictions prob_*含负数，独立核实其为未归一化输出；概率/熵计算使用数值稳定softmax或数学等价转换，不能直接拿原始值当概率。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "核实数值列语义"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶8；XLSX/说明,折0逐段定位；review.py/logits,entropy",
+            "text": "说明prob_列有负数且非和为1，先减最大值softmax，再自然对数熵，数值稳定且等价。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-11",
+        "criterion": "核实类别ID映射的证据边界",
+        "weight": 7,
+        "status": "fail",
+        "awarded": 0,
+        "description": "引用notebook或4_measure_formal定义0 FORMAL、1 GRAND、2 NONE；如未验证模型配置，不声称set枚举训练脚本足以证明任意权重标签顺序。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "核实类别ID映射的证据边界"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶12；review.py",
+            "text": "引用意见计分公式，但没有核实/说明数字类别ID的0 FORMAL/1 GRAND/2 NONE证据及训练set枚举的边界。程序用命名列作熵，没有计算标签错配；本条是审计事项遗漏，非虚构映射。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-12",
+        "criterion": "按评估轮次报告独立指标",
+        "weight": 10,
+        "status": "fail",
+        "awarded": 0,
+        "description": "保留10个test_num，各907条；给出每组accuracy及macroF1，可核验父级交叉算范围accuracy0.776185226..0.814773980、macroF1 0.551887532..0.712677371，容差1e-6。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "按评估轮次报告独立指标"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/折级结果；review.py/metrics",
+            "text": "10个test_num且各907正确；但所有accuracy/macroF1只保留4位小数，不能满足冻结条款1e-6对账。例如test0 accuracy0.7872 vs原值0.7872105843439912。最大舍入误差约5e-5。仅本条按精度门槛扣，不扩展到宏F1方法或其他分层。"
+          }
+        ],
+        "notes": "这是展示/存储精度导致的冻结规则失败，非模型理解分类算法错误；若按正常4位展示容差接受，本条可得10权。"
+      },
+      {
+        "id": "LAW-13",
+        "criterion": "计算混淆矩阵",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "至少给出可复算的逐评估组或明确指定组的3×3混淆矩阵，标明真实/预测轴与类别，矩阵行列和吻合所用样本。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "计算混淆矩阵"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/混淆矩阵；review.py/confusion",
+            "text": "真class、预测predicted_label及计数构成9格 pooled 3x3；总9070，文中明确重复行非独立样本。接受已指定合并描述组，未要求固定test0。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-14",
+        "criterion": "宏平均与类别不平衡处理正确",
+        "weight": 7,
+        "status": "fail",
+        "awarded": 0,
+        "description": "macroF1为三类F1等权均值；说明1868 NONE占比影响整体准确率，未用weightedF1替代macroF1。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "宏平均与类别不平衡处理正确"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "review.py/metrics；XLSX/分类评估,专家类别时期；DOCX¶9",
+            "text": "macroF1确为三类F1等权且未用weightedF1；但缺1868 NONE占比如何抬高整体accuracy的解释，仅并列accuracy与macroF1不完成冻结条款要求。与LAW12舍入缺陷无关。"
+          }
+        ],
+        "notes": "指标算法正确；扣分限类别不均衡解读缺失。"
+      },
+      {
+        "id": "LAW-15",
+        "criterion": "重复预测影响有实测",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "9070预测涉及2695唯一section；保留重复协议，另报告合理唯一section聚合或按组分析敏感性，明确聚合结果证据性质。不能任取一行后声称唯一无争议验证。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "重复预测影响有实测"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶8–9；review.py/vote；XLSX/分类评估",
+            "text": "9070行2695段，按明确多数票作替代唯一section口径，accuracy0.7967、macroF1 0.6901；明确非独立外部样本。无需与参考均值softmax一致。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-16",
+        "criterion": "披露未预测标注",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "2748标注中53唯一section没有prediction，给出明细；不把2695的指标默认为全部2748。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "披露未预测标注"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶8；XLSX/未进预测标注,数据核对",
+            "text": "53条无prediction的section明细、数量正确，未假称覆盖全2748。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-17",
+        "criterion": "按人类低置信分层评估",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "以明确的独立样本/重复处理口径报告低置信与其余段落样本数及至少一个性能指标；计数和指标可复算。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "按人类低置信分层评估"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/熵和准确率,熵去重口径,分类评估；DOCX¶8–10",
+            "text": "同时给重复行描述(LC339/NLC8731)和唯一段(LC96/NLC2599)样本及性能，明确重复非独立；多数票唯一段指标是合理替代。"
+          }
+        ],
+        "notes": "正文称逐折去重但主要数字取重复行描述表，表格另列正确唯一段；应修正文案，未把描述均值当独立检验故不重复扣分。"
+      },
+      {
+        "id": "LAW-18",
+        "criterion": "按时期分层评估",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "明确三期边界和每期样本数，至少一个分类性能指标可复算；不把时期差异自动解释成时代因果效应。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "按时期分层评估"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/分类评估 group=period；专家类别时期；DOCX¶13–15",
+            "text": "三期1870–1936、1937–1980、1981–2024，样本与类别性能列齐且可复算；未将时期差异推成因果。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-19",
+        "criterion": "复核熵差异的口径",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "明确独立样本和预测选择口径，复算LC/NLC熵均值及差；可复现notebook首行法或合理替代，但不能以替代结果冒称逐字复现论文0.789/0.539。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "复核熵差异的口径"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/熵去重口径；DOCX¶10；review.py/entropy_unique",
+            "text": "唯一段首折口径LC96/NLC2599，均值0.7886080248630449/0.5391040509572654独立复算吻合；正文另报重复行0.778/.533并说不能声称复现论文置换，未冒称替代数即论文结果。"
+          }
+        ],
+        "notes": "正文把重复行结果称逐折去重易误导，应以工作簿清楚分列为准。没有额外声称独立p值。"
+      },
+      {
+        "id": "LAW-20",
+        "criterion": "验证划分证据限制",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "指出所给材料未提供完整训练测试成员清单，不能确认病例级独立或宣称外部泛化验证；区分训练/留出/全量推断，准确保留论文自己声称的评估协议。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "验证划分证据限制"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶8–10,69,71；XLSX/原评估报告",
+            "text": "区分本地10组重复测试与既有训练比例表、未知切分及不可从现有材料验证训练测试；不声称病例级独立或外部泛化。保留作者十折称谓。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-21",
+        "criterion": "年度趋势独立重建",
+        "weight": 10,
+        "status": "fail",
+        "awarded": 0,
+        "description": "从reasoning按year独立输出年度意见数、均值及分散度/区间，数值与原件可重算；不是直接粘贴作者图或以标注小样本代替全量意见。 参考reasoning=36430意见、24890案件，155年度（1870–2024），年度均值允许1e-6容差。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "年度趋势独立重建"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/年度趋势；review.py/annual",
+            "text": "155年、36430意见、24890案件、年度均值/数量计算正确且独立核验误差1.1e-16；但没有年度分散度/标准误/区间列。只给年度mean与n不完成冻结条款。"
+          }
+        ],
+        "notes": "并非历史均值错误；缺的是不确定性/分散度交付。"
+      },
+      {
+        "id": "LAW-22",
+        "criterion": "案件等权敏感性正确",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "在同年按案件先聚合意见再均值，比较意见等权与案件等权；明确两者估计对象，不能将重复记录去重当案件等权。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "案件等权敏感性正确"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/年度趋势 case_mean,cases；review.py/ca；DOCX¶12,16",
+            "text": "同年先案件内均值再案件等权，独立原件核验最大误差1.7e-16；2024为0.1896397666601221，与意见均值区别明确。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-23",
+        "criterion": "增加有解释力的替代口径",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "至少另做仅多数意见、明确长度权重代理或其他有法律/测量意义的口径，并解释它如何改变或不改变核心结论。不得声称原文长度代理即真实段落概率复现。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "增加有解释力的替代口径"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "XLSX/年度趋势 majority_mean,majority_n；分期口径；DOCX¶12–17",
+            "text": "仅majority替代口径、样本数及后期变动明确，不并per_curiam，确为具有法律意义的敏感性，不要求额外长度权重。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-24",
+        "criterion": "解释段落分数到意见标准化",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "据4_measure_formal或论文说明(pF-pG)*(pF+pG)、意见内均值及全样本标准化；说明不能用缺少全量段落概率的材料从头验证所有意见分数。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "解释段落分数到意见标准化"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶12；review.py注释；XLSX/说明",
+            "text": "公式(pF-pG)*(pF+pG)、意见内均值后标准化正确；明确reasoning仅最终zformal，缺全量段落概率，不能从头证明所有分数。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-25",
+        "criterion": "历史主张保持描述性界限",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "将Figure9趋势与实际年度/时期结果对应，不把标准分正负当绝对比例，也不将年代/意识形态相关性当因果作用。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "历史主张保持描述性界限"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶13–17；XLSX/年度趋势,分期口径",
+            "text": "给真实时代/年度结果且指出标准化零点不等同绝对主导、无唯一断点或因果结论。原论文确有1980后primary mode强描述，允许有据质疑。"
+          }
+        ],
+        "notes": "以时期平均负值批评论文“dominance”仍须谨慎：相对标准分不直接证明原始绝对比例；此处已说明零点限制，未按词句苛扣。"
+      },
+      {
+        "id": "LAW-26",
+        "criterion": "精读至少12不同案件",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "至少12不同案件，记录足以查证同案不同段未充数；不要求与参考解同一批ID。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "精读至少12不同案件"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "case_analysis.json/cases；XLSX/逐案精读",
+            "text": "12不同CAP案件ID；不是同案多段充数，与参考案例不同不影响得分。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-27",
+        "criterion": "精读取样跨时期",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "所选案件覆盖至少三个明确定义且有实际样本的历史时期；取样规则可解释，不能以目的样本估计总体错误率。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "精读取样跨时期"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶19；case_analysis.json/selection,cases",
+            "text": "覆盖1870–1936、1937–1980、1981–2024三期，明确目的样本非随机误差估计。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-28",
+        "criterion": "精读覆盖模型分歧",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "有实际预测与专家标注不一致的段落并给对应记录；必须声明跨重复预测采用的分歧定义。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "精读覆盖模型分歧"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶19；case_analysis.json/cases；XLSX/折0逐段定位",
+            "text": "固定test_num=0定义专家与模型不一致，12个记录均真不一致；跨重复选择口径明确。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-29",
+        "criterion": "精读覆盖人类低置信",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "所选样本包含low_confidence原字段为TRUE的记录，不能以模型低分替代人类标记。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "精读覆盖人类低置信"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "case_analysis.json/cases low_confidence；XLSX/逐案精读",
+            "text": "Maul、Gunther、Mergens至少三个原人类LC=True，字段来自真实标注，不拿模型熵代替。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-30",
+        "criterion": "逐案引用可回查",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "每案给案名、年代、section或原始意见ID及必要引文，可定位实际原件；原文引用存在且没有把清洗片段当完整原判决。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "逐案引用可回查"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "case_analysis.json/cases quote,offset,project_opinion_id,url；DOCX¶21等",
+            "text": "12案均给案名/年代/原意见ID/真实短引和0起字符位置。独立原件流式核对12/12引用在原文（空白归一化后）存在、offset正确、case_url一致。"
+          }
+        ],
+        "notes": "个别引文在单词中截断但不改变引文真实存在；不因此发明内容错误。"
+      },
+      {
+        "id": "LAW-31",
+        "criterion": "逐案法律解释具体",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "逐案说明文本实际使用的法律解释方法或NONE理由，涉及文义/目的/引用/事实叙述的具体片段；合理有据不同分类可得分，不能只重复模型标签。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "逐案法律解释具体"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶23,27,31,35,39,43,47,51,55,59,63,67；case_analysis.json/notes",
+            "text": "逐案具体说明立法史、权限规则、文义、政策功能、过渡或他方论点，并允许协议与上下文不同，不是只复述预测标签。"
+          }
+        ],
+        "notes": "部分解释偏短或以“可能”保留边界，未凭参考措辞判错；实际文本支持其关键论点。"
+      },
+      {
+        "id": "LAW-32",
+        "criterion": "论证归属经过核验",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "对样本区分多数/协同/异议及当事人论点与法院采纳理由；原字段冲突时查文本或明确未定，不能单凭预测把异议当holding。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "论证归属经过核验"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶21–67；case_analysis.json/cases,notes；原意见元数据",
+            "text": "准确保留多数/协同/异议；LegalTender、Bridges、Gunther、Mergens、BrandX异议和Intel协同均明确，未冒作多数holding；独立sc原字段/作者与reasoning类型相符。"
+          }
+        ],
+        "notes": "Maul/PublicCitizen/Intel的spec_opinion_type=special与concurrence同属特殊/协同归属，未形成实际多数/异议误认。"
+      },
+      {
+        "id": "LAW-33",
+        "criterion": "标注协议与上下文解释区分",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "说明专家标注隐藏案名、引文和上下文的协议，与律师完整阅读有不同判断对象；对边界标签不以专家标注不可质疑为唯一理由。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "标注协议与上下文解释区分"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶5,23,27,31等；case_analysis.json/protocol_note",
+            "text": "明确注释协议不能补入整份上下文，逐案分协议标签与律师上下文理由，未把专家标签当绝对真值。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-34",
+        "criterion": "跨领域证据准确",
+        "weight": 10,
+        "status": "fail",
+        "awarded": 0,
+        "description": "保留论文报告200非statutory样本的证据，但指出当前输入没有可独立重算的该测试逐条结果，不夸称已证明所有法律领域适用。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "跨领域证据准确"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶71；XLSX/说明,原评估报告",
+            "text": "仅说跨领域须另测，没有保留论文已有200非statutory样本检验的正面证据与其当前材料无法逐条复算的具体界限；把领域外证据写得过空。"
+          }
+        ],
+        "notes": "并未夸大迁移能力，扣分是漏读/漏述已有证据。"
+      },
+      {
+        "id": "LAW-35",
+        "criterion": "先例效力与风格分离",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "明示风格分数不能决定binding authority或后案有效性；在使用条件中要求律师核查意见地位。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "先例效力与风格分离"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶4,35,43,55,59,70–71",
+            "text": "风格不决定binding authority、现行效力；律师须查多数/协同/异议及后续权威资料，意见地位为上线复核条件。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-36",
+        "criterion": "裁判结果预测与风格分离",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "不能由FORMAL/GRAND直接给胜诉预测，明确未验证的结果预测用途。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "裁判结果预测与风格分离"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶4,71",
+            "text": "不得当裁判结论/正确性、无现行法判断；未验证胜诉或结果预测用途不获授权。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-37",
+        "criterion": "已知缺案范围审查",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "读取missing_data并给实际记录数/年代范围，说明登记只证明已知遗漏，不证明其他来源无缺案，联系历史覆盖限制。 参考97条，1871–2023。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "已知缺案范围审查"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶7；XLSX/作者缺失记录",
+            "text": "97条原登记完整逐行提供，year字段可核验范围1871–2023；明确不应作全部缺案数。接受完整含年代登记+数量+界限说明为等价证据。"
+          }
+        ],
+        "notes": "未单独打印min/max年代总结，作为改进项，不因原表保留范围信息而硬扣。"
+      },
+      {
+        "id": "LAW-38",
+        "criterion": "采纳决定由证据支持",
+        "weight": 10,
+        "status": "pass",
+        "awarded": 10,
+        "description": "决定明确，至少将实际分类误差、法律精读发现、验证边界各一项落实到允许或限制用途；有据更保守不采纳或不同合理结论可得分。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "采纳决定由证据支持"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶2–4,9–10,19–67,69–71",
+            "text": "附条件研究试用明确，分类误漏/低置信、真实精读意见归属、训练切分和迁移限制支撑允许研究及禁止排他法律筛选等用途。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-39",
+        "criterion": "上线条件可执行",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "至少给出限定应用范围、原判决/意见归属的律师复核、独立留出验证进入流程的负责环节或触发条件，不能只写谨慎使用。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "上线条件可执行"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶69–71",
+            "text": "研究管理员版本锁定、双人盲评独立新案/测试固定、律师强制精读冲突和无法定位、事前漏检门槛未达停用排序，负责环节与触发条件明确。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-40",
+        "criterion": "核心数表可重建",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "按运行说明从只读原件和空输出目录执行成功，关键年度/分类数表与提交值容差1e-6；法律人工判断允许单独JSON保存，无需自动推理。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "核心数表可重建"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "运行说明.txt；review.py；legal_solver_independent_check/recomputed,reproduction.log",
+            "text": "复制solver代码和notes到独立scratch，限120秒从只读原件/新空输出成功重建。所有19个非来源表XML逐字节一致、case JSON一致，核心年度独立核验机器精度。"
+          }
+        ],
+        "notes": "来源表因输入目录/原件manifest清单差异不完全字节相同，不影响核心数表；未当环境故障扣分。"
+      },
+      {
+        "id": "LAW-41",
+        "criterion": "交付文件可读取",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "DOCX/XLSX结构完整、文件可打开，输出文件名和声明的程序入口对应。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "交付文件可读取"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX72段与XLSX20页签ZIP/XML；输出文件名/运行说明",
+            "text": "Office结构完整可读，实际输出与入口一致，并非只凭文件存在。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "LAW-42",
+        "criterion": "未知事实不被补造",
+        "weight": 7,
+        "status": "pass",
+        "awarded": 7,
+        "description": "实际未知的split manifests、样本外结果、先例当前效力及商业客户背景没有伪造；可明确列未验证项。",
+        "sources": [
+          {
+            "location": "public/instruction.txt；input_files/paper.pdf，supplement.pdf，Dataverse原件及代码；private/reference输出用于数值核对",
+            "text": "未知事实不被补造"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "DOCX¶8–12,68–71；运行说明",
+            "text": "没有伪造未知split、全量段落重推断、外部胜诉率、现行先例有效性或商业客户。实际引用均核实来自原件。"
+          }
+        ],
+        "notes": ""
+      }
+    ],
+    "downloads": [
+      {
+        "name": "case_analysis.json",
+        "url": "law/output/case_analysis.json",
+        "bytes": 25801,
+        "description": "本次gpt-6-sol实际交付",
+        "preview_url": "law/previews/solver-1.html"
+      },
+      {
+        "name": "requirements.txt",
+        "url": "law/output/requirements.txt",
+        "bytes": 34,
+        "description": "本次gpt-6-sol实际交付",
+        "preview_url": "law/previews/solver-2.html"
+      },
+      {
+        "name": "review.py",
+        "url": "law/output/review.py",
+        "bytes": 23275,
+        "description": "本次gpt-6-sol实际交付",
+        "preview_url": "law/previews/solver-3.html"
+      },
+      {
+        "name": "法律研究工具审查意见.docx",
+        "url": "law/output/%E6%B3%95%E5%BE%8B%E7%A0%94%E7%A9%B6%E5%B7%A5%E5%85%B7%E5%AE%A1%E6%9F%A5%E6%84%8F%E8%A7%81.docx",
+        "bytes": 44457,
+        "description": "本次gpt-6-sol实际交付",
+        "preview_url": "law/previews/solver-4.html"
+      },
+      {
+        "name": "证据与复核工作簿.xlsx",
+        "url": "law/output/%E8%AF%81%E6%8D%AE%E4%B8%8E%E5%A4%8D%E6%A0%B8%E5%B7%A5%E4%BD%9C%E7%B0%BF.xlsx",
+        "bytes": 174042,
+        "description": "本次gpt-6-sol实际交付",
+        "preview_url": "law/previews/solver-5.html"
+      },
+      {
+        "name": "运行说明.txt",
+        "url": "law/output/%E8%BF%90%E8%A1%8C%E8%AF%B4%E6%98%8E.txt",
+        "bytes": 1148,
+        "description": "本次gpt-6-sol实际交付",
+        "preview_url": "law/previews/solver-6.html"
+      },
+      {
+        "name": "逐项评分原始JSON",
+        "url": "law/solver-grade.json"
+      }
+    ]
+  }
+}

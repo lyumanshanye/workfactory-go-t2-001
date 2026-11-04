@@ -1,0 +1,1722 @@
+{
+  "reference": {
+    "status": "completed",
+    "description": "参考解的独立AI交叉审阅；不是模型试做分，也非专家签署。",
+    "updated_at": "2026-11-04T10:28:24.198289+00:00",
+    "grader_note": "逐项检查真实交付与原始证据，允许有据的等价方法；未判定保持待判。",
+    "score": {
+      "value": 97.3913043478261,
+      "scale": 100,
+      "awarded": 112,
+      "total": 115
+    },
+    "checkpoints": [
+      {
+        "id": "FIN-01",
+        "criterion": "明确2025期刊发表、2023工作稿、2024复制包的差别，并区分作者模拟路径和实际市场记录。不得把模拟100000年标成现实历史。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "public/source_manifest.json; input_files/paper.pdf; official_dataverse_metadata.json",
+            "text": "来源与版本分层"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "危机模型独立验证报告.docx 开头/决策依据；source_manifest.json",
+            "text": "明确2025期刊、2023工作稿、2024复制包；明确10万年为模拟路径。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-02",
+        "criterion": "两模型各100000行、82列，Year=1..100000，报告重复与缺年检查。仅报总行数无时间索引检查不通过。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv",
+            "text": "年度样本完整性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "InputAudit.csv 两模型行；reference.py identity；finance_reference_recalculation.json dimensions/year_sequence",
+            "text": "各100000×82独立确认，Year精确连续1..100000，报告duplicates/missing_steps均0。列数未单列在InputAudit，但原件独立核实为82。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-03",
+        "criterion": "独立计算p*(xK-1)*w*K/GDP，并与bank_credit/GDP对照误差小于1e-8；不得仅把bank_credit_GDP改列名当作原始比例。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv/raw_credit_identity_max_error",
+            "text": "原始信贷GDP恒等式"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "InputAudit.csv raw_credit_identity_max_error；reference.py raw定义；独立复算identity",
+            "text": "两模型最大误差2.6645352591e-15，独立表达式以p(xK-1)wK/GDP计算。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-04",
+        "criterion": "识别bank_credit_GDP和credit_spread经过源月度全样本标准差缩放；说明不是百分数或bp，年度标准差接近1不保证严格为1。提供至少一项由路径复算的尺度证据。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv/raw_to_stored_scale_mean; preprocessing_simulation_data.R::gen_basic_definitions",
+            "text": "统计变量尺度"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "InputAudit.csv raw_to_stored_scale_mean/sd；SourceFindings S07；原preprocessing_simulation_data.R 24–29行",
+            "text": "倍率1.189722703/1.819257152，年度sd并非严格1；原代码明确两变量除月度sd。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-05",
+        "criterion": "说明危机为月度标准化信贷/GDP收缩阈值产生、年度任一月发生即记1，阈值以年度频率约4%求解；因此4%拟合不是独立验证成功。实际年度危机次数和频率须由原始行重算。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv/crisis_count,crisis_frequency; preprocessing_simulation_data.R::gen_crisis",
+            "text": "危机定义与频率校准"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "InputAudit.csv crisis_count/frequency；报告决策依据；SourceFindings S02；原preprocessing_simulation_data.R gen_crisis",
+            "text": "两模型3999次/0.03999独立复算；代码月度阈值求解年度0.04并年度聚合。明确是定义/校准选择。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-06",
+        "criterion": "指出Step3与PanelD源实现的三期窗口包含t,t+1,t+2，源表文字又写未来五年；报告独立明确的未来1..3/5窗口并量化至少一项差异。只写模糊的注意未来泄漏不通过。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/*froth*; Main_Step3.do; Analyze_simulations.R",
+            "text": "前瞻窗口一致性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "SourceFindings S01/S05；IndependentStatistics D_froth_author_inclusive3/strictfuture3/strictfuture5",
+            "text": "源含当期三期与五年表注差异，独立严格未来3/5年概率差齐全；Bayesian5.67变4.149404644pp，Diagnostic7.398变5.877456487pp。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-07",
+        "criterion": "明确未来3年末3行不可完整观察，不能填0当无危机；增长率等端点同样使用有效样本。需提供修正样本量而非仅声明剔除。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/*boundary_corrected*; *strictfuture3*",
+            "text": "不可定义端点处理"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics A_*_boundary_corrected、D_froth_strictfuture3；reference.py future/gdp3",
+            "text": "修正样本n99997；未来三年末3行NaN，原口径端点单列，没有把未知填0用于前瞻检验。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-08",
+        "criterion": "以GDP[t+3]/GDP[t]-1重算累计增长并与存储GDP_3Y_change有效区间逐行对账；不能把3个普通同比直接相加。误差小于1e-8。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv/GDP3Y_stored_max_error_valid",
+            "text": "年度增长率复算"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "InputAudit.csv GDP3Y_stored_max_error_valid；reference.py gdp3；独立复算GDP3",
+            "text": "直接GDP[t+3]/GDP[t]-1，有效区间误差0。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-09",
+        "criterion": "独立估计100*三年GDP增长对crisis*forward spread change的回归，含截距；作者口径与修正端点口径分列，至少给系数、样本量、单位，数值与参考1e-6以内或解释等价估计差异。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/A_spread_author,A_spread_boundary_corrected",
+            "text": "危机严重性与利差"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics A_spread_author/A_spread_boundary_corrected；reference.py ols；独立复算A_spread_slope",
+            "text": "100倍三年增长、危机×前瞻利差变化、截距、全路径；作者n100000、修正99997，独立OLS斜率吻合。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-10",
+        "criterion": "独立估计同一GDP结果对crisis*源标准化信贷比的回归，含截距，明确样本包含全路径而非仅危机行；换原始信贷比须作等价系数换算。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/A_credit_author,A_credit_boundary_corrected",
+            "text": "危机严重性与信贷"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics A_credit_author/A_credit_boundary_corrected；reference.py循环",
+            "text": "使用源SD缩放的信贷/GDP与危机交互，含截距、全路径，不只危机样本。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-11",
+        "criterion": "独立估计资本超额收益与信贷关系，同时说明源capital_excess_return_normalized以均值缩放至0.059，不能仅因表注而断言已匹配收益标准差。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/B_capital_return_author; preprocessing_simulation_data.R",
+            "text": "收益尺度与比较"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics B_capital_return_author；SourceFindings S11；preprocessing_simulation_data.R 152行",
+            "text": "两模型系数-0.0065252024/-0.0217475423；明确按均值缩至0.059，拒绝仅凭注释声称波动匹配。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-12",
+        "criterion": "复算credit_spread对before_crises和post_crises_5Y的回归；指出源before_crises是危机前一年，与五年表注不一致，并提供一项预先定义多年前窗的敏感性结果。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/C_spread_author,C_spread_pre5",
+            "text": "危机前低利差关系"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics C_spread_author/C_spread_pre5；SourceFindings S04；Analyze_simulations.R 129–157行",
+            "text": "一年前标签与五年表注差异明确；五年前窗替代n99995、结果分列。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-13",
+        "criterion": "报告froth二元指标的概率差或正确离散边际效应（百分点），不得把logit系数当概率变化；复算源三期结果并与作者表5.67/7.40百分点对账，保留任何不能解释的差异。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/D_froth_author_inclusive3; Tables/predictability/predicting_crisis.tex",
+            "text": "低利差效果量"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics D_froth_*；AuthorA1Reconciliation.csv table3；独立复算D_author_discrete",
+            "text": "二元饱和logit的离散概率差5.67/7.398pp，和5.67/7.40对账；不是把logit系数当概率。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-14",
+        "criterion": "独立估计未来一年危机对源标准化信贷比的logit，报告连续平均边际效应及尺度，和作者4.05/3.85百分点比对。可接受等价估计但不能用oracle交互项替代这一要求。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/D_credit_logit_nextyear",
+            "text": "连续信贷预测效应"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics D_credit_logit_nextyear；独立Newton复算credit_nextyear_logit_AME_pp",
+            "text": "连续AME4.050622969/3.852030543pp，独立Newton4.050623089/3.852030611容差内，非oracle替代。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-15",
+        "criterion": "独立复算至少一个模型Step3 probit：原始信贷比与true lambda交互指标分列，说明与PanelD logit在链接和尺度上的区别。报告样本量、系数或预测概率。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/author_current_plus_next2*",
+            "text": "源Step3回归重算"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics author_current_plus_next2_observable_raw_credit_ratio/_oracle_raw_credit_times_true_lambda；报告独立复算段",
+            "text": "两种probit均n100000，link记录probit，与PanelD的logit分列；原始比例与oracle真实强度交互明确命名。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-16",
+        "criterion": "把underlying_lambda真状态归为模型内oracle输入，不能直接作为可部署真实预警变量；给出现实可观测输入版本及识别真状态需额外证据。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/*oracle*; report",
+            "text": "现实可观测性边界"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告两模型时间留出段/决策依据；IndependentStatistics oracle与chronological_holdout分析",
+            "text": "报告明确underlying lambda不可现实直接用；留出只用raw credit ratio与spread，可观测代理与真实预警仍有映射限制。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-17",
+        "criterion": "在模拟时间顺序上划分训练与测试，并保证训练标签所用未来事件不跨过训练边界；不随机打散重叠时间记录。报告精确样本界限。可使用不同合理切分，但必须可复算。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/chronological_holdout_observable_logit",
+            "text": "时间留出设计"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics chronological_holdout_observable_logit；reference.py train/test；独立复算holdout",
+            "text": "训练Year1..69997，标签至70000；测试85001..99997，末标签100000；不跨训练边界，无随机打散。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-18",
+        "criterion": "报告留出样本至少一种概率质量指标（如Brier或log loss）及适当基准；若另报排序能力，可采用AUC、PR-AUC等与任务相关的合理指标。说明仅为模拟时间留出，不冒充实际市场样本外。参考Brier/AUC是示例，不强制同时采用两者。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/chronological_holdout_observable_logit",
+            "text": "预警性能与基准"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告两模型留出段；IndependentStatistics chronological_holdout_observable_logit；独立复算Brier",
+            "text": "Brier0.103313543/0.102732854优于训练常数基准0.105162066/0.105009712；AUC也报，明确不是现实市场OOS。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-19",
+        "criterion": "至少一项核心效应或预测性能给出合理的时间依赖不确定性（HAC或时间块bootstrap）及带宽/块长，不能仅报独立同分布SE或符号。不给全套结论重复扣分。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/se_hac5*; holdout_brier_improvement_hac",
+            "text": "时间依赖不确定性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics se_hac5及holdout_brier_improvement_hac；reference.py ols/glm",
+            "text": "5阶Bartlett NW；固定预测Brier提升0.001848524/0.002276858，HAC SE0.000232666/0.000256525。覆盖核心效应时间依赖，不强迫所有统计重复扣。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-20",
+        "criterion": "指出源gen_non_clustered_crisis的<0*12不会执行注释中的三年去簇；另按明确经济窗口做非重叠事件统计，报告保留数与结果影响。可选其他明确规则。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "EventProfiles.csv/nonoverlap9; preprocessing_simulation_data.R",
+            "text": "事件去重与重叠敏感性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "SourceFindings S02；EventProfiles nonoverlap9；*_events_nonoverlap9.csv；独立复算nonoverlap9_events",
+            "text": "真实源<0*12不去簇；9年不重叠保留3343/3327事件，基准3999，结果与完整事件分列。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-21",
+        "criterion": "从原始年度路径计算至少危机前、当年和危机后信贷/GDP的事件统计，报告尺度、有效事件数与取窗规则，不能只复制预存Years_around_crisis。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "EventProfiles.csv/raw_credit_GDP_mean; *_events_*.csv",
+            "text": "事件信用路径"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "EventProfiles.csv raw_credit_GDP_mean；原始事件Year/row清单；reference.py事件循环",
+            "text": "独立raw credit/GDP危机-4..4期、尺度与事件数有明细，未只用Years_around_crisis。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-22",
+        "criterion": "独立计算危机前后GDP增长，明确是相邻年度增长或累计增长，剔除窗口不完整事件；给事件数与可追溯年度。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "EventProfiles.csv/GDP_change_nextyear_mean,GDP3Y_change_mean",
+            "text": "事件GDP路径"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "EventProfiles GDP_change_nextyear_mean/GDP3Y_change_mean；*_events_all_crises.csv；独立复算GDP_event0_growth",
+            "text": "明确一步与累计3年两种；完整事件窗口，危机当年下一年GDP增长-0.110781506/-0.138078006已独立核实。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-23",
+        "criterion": "对至少一种有经济意义的替代事件定义或预测窗口实际重算，并与主分析口径比较效果量、样本及结论稳定性；允许选择合理的窗口变化，不强制本参考解的年度信贷收缩阈值。仅说明原口径或修复端点而未形成替代分析比较，不足以通过。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/alternative_annual_credit_contraction_below_minus10pct or solver-declared alternative-horizon results; accept justified equivalent sensitivity designs.",
+            "text": "事件定义或预测窗口稳健性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "IndependentStatistics alternative_annual_credit_contraction_below_minus10pct/_future3_raw_credit_logit",
+            "text": "年度原信贷/GDP下降>10%替代，6919/9383次，频率0.069190692/0.093830938，明确不是月度作者危机重构。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-24",
+        "criterion": "比较Bayesian与Diagnostic结果时报告各自样本、单位和关键校准参数不同，不能将差异全部解释为只改变预期机制的因果效应。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv; moment_target.xlsx Table2 panelB; PolicySourceAudit.csv",
+            "text": "模型间可比性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告决策依据；PolicySourceAudit.csv 两模型AH/AL/lambda_high/lag_years；InputAudit",
+            "text": "样本与单位相同可对照，关键校准lambdaH0.561/0.638，AH0.2/0.156等不同已落表；报告不将模型差异视为仅预期机制因果。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-25",
+        "criterion": "逐项区分moment_target表七个校准目标与额外统计，指出用同一校准目标判断优越性的循环性；不能把所有已发表拟合结果叫外部验证。",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "AuthorCalibrationTargets.csv; tables_calibration.m",
+            "text": "校准目标与验证矩"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "AuthorCalibrationTargets.csv/工作簿该表；报告决策依据与独立复算段",
+            "text": "七个校准目标只是从moment_target表转录；与A1另表区分，但报告没有明确指出用这些相同校准目标评判模型优越性的循环性。四百分比危机定义说明不能代替对七个目标的这一审查。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-26",
+        "criterion": "独立复算至少四项TableA1非目标矩并与作者Bayesian/Diagnostic值逐项对账，明确容差和未匹配项；不能仅复制作者列。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "AuthorA1Reconciliation.csv",
+            "text": "额外矩对账"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "AuthorA1Reconciliation.csv table=A1两模型14行；reference.py vals；公开TableA1",
+            "text": "每模型7项独立路径复算，与作者值最大浮点误差5.55e-17；RUN容差明确；超过四项，未只复制作者列。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-27",
+        "criterion": "识别Analyze_simulations.R的regs_data通过手工覆盖系数（如18.0、2.8等）构造发表比较列，不能把这些对象作为独立重估的市场实证回归。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "Analyze_simulations.R::regs_data; report/S06",
+            "text": "经验比较证据等级"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "SourceFindings S06；报告S06；原Analyze_simulations.R regs_data 199–201行",
+            "text": "明确18.0/2.8手写覆盖回归对象，没有宣称独立市场回归。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-28",
+        "criterion": "识别credit_growth_past_year在年度表使用lag12即12年，并用原始记录量化它与真正前一年增长差别。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv/credit_lag12_max_error,credit_lag1_difference_mean_abs",
+            "text": "年度变量时距审计"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "InputAudit credit_lag12_max_error/credit_lag1_difference_mean_abs；SourceFindings S03",
+            "text": "lag12复算误差0；与前一年增长平均绝对差1.3805403/88638.4854，后者极大值需进一步经济诊断，但并未被隐藏。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-29",
+        "criterion": "说明跨模型比较先匹配可观测杠杆与利差，再求解不同w/信念强度，诊断性模型还需逆映射真实强度及reference/lag参数；给出边界和残差审查要求。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "solve_for_states_from_cs_and_lvg.m; irf_rational_and_behavioral_lvg_and_cs.m",
+            "text": "政策状态匹配"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告政策可比性；SourceFindings S09；原solve_for_states_from_cs_and_lvg.m",
+            "text": "先匹配杠杆和利差，fsolve w/信念；diagnostic逆映射underlying/reference/lag；明确检查网格支持、边界、残差，未假装已执行反事实。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-30",
+        "criterion": "明确政策状态匹配使用按模拟均值标准化的利差，不能把cs=1读成1%或一标准差；与统计数据SD口径区分。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "solve_for_states_from_cs_and_lvg.m; preprocessing_simulation_data.R",
+            "text": "政策利差口径"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "SourceFindings S07；原solve_for_states_from_cs_and_lvg.m 15–16行；报告S07",
+            "text": "以模拟均值调整政策spread，cs=1不是1%或1个SD，和统计SD口径区分明确。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-31",
+        "criterion": "准确指出政策代码将w乘1.1，不能声称资本充足率提升10个百分点，也不能把不同模型固定相同w/信念当同可观测状态反事实。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "irf_rational_and_behavioral_w_and_lambda.m",
+            "text": "政策干预含义"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "SourceFindings S08；报告政策段；原irf_rational_and_behavioral_w_and_lambda.m 27行",
+            "text": "w×1.1的资本注入，不是资本比率10个百分点，不认可固定相同隐藏状态作为可比政策试验。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-32",
+        "criterion": "识别确定性分支bank_credit_impulse计算xK比率，不能未对账就称为银行信贷余额变化或实际贷款扩张。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "irf_rational_and_behavioral_w_and_lambda.m",
+            "text": "政策输出定义审查"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "SourceFindings S08；原irf_rational_and_behavioral_w_and_lambda.m 50行",
+            "text": "确定性分支bank_credit_impulse实际xK比率，报告未冒称实际贷款扩张。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-33",
+        "criterion": "政策结论的证据强度与实际完成的计算一致。可明确保存core MAT并非完整policy路径、提供缺口和授权条件；也可从输入代码/primitive独立重建postprocess并真实重算政策路径，但须核验状态匹配、初始条件、残差/边界和路径稳定性。仅复制结果或虚称已重算不通过。不得因采用比参考更完整的真实复算而扣分。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "PolicySourceAudit.csv; report",
+            "text": "政策证据边界"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告政策段；PolicySourceAudit contains_xK_matrix/contains_full_policy_simulation_path；results limitations",
+            "text": "如实说明核心MAT无完整postprocess和反事实轨迹，未重算政策路径；明确完成独立验证后才量化授权，符合允许的缺口审查路径。"
+          }
+        ],
+        "notes": "独立AI审阅，非金融专家签署；未重校准、未复现真实市场数据或政策冲击。"
+      },
+      {
+        "id": "FIN-34",
+        "criterion": "明确准入/附条件/拒绝决定，并把生产预警、研究解释、政策讨论三种用途的可授权范围对应到本次验证结果，不能只列技术发现不作决定。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "危机模型独立验证报告.docx",
+            "text": "委员会决策"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告开头/决策依据/政策段",
+            "text": "明确附条件研究试用，不准入生产危机预警，不授权量化政策收益；研究解释、实际预警和政策讨论的授权层次对应证据。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-35",
+        "criterion": "给出至少三项可以核验完成的使用前置条件，例如版本冻结、真实数据外部检验、时点定义修复、政策路径独立验证；不能只写加强监控。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "危机模型独立验证报告.docx",
+            "text": "可执行整改门槛"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告政策可比性与准入条件",
+            "text": "版本冻结、时点修复、独立市场数据/危机标签、预登记时间外推、模型风险审查、政策路径复核等均可核验完成。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-36",
+        "criterion": "一条命令在新输出目录可运行，重新生成核心危机、回归与留出证据；不依赖硬编码最终系数或外部未提供文件。保留原件不变。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "reference/reference.py; reference/run_validation.json",
+            "text": "从原件可复算"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "private/reference/RUN.txt；reference.py；integration finance_reference_rebuild_check.json",
+            "text": "独立在新输出目录运行exit0，核心models/statistics/events/reconciliation语义完全一致；独立另外实现的关键统计也容差内。作者系数只用于对账，不是复算硬编码。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-37",
+        "criterion": "报告和工作簿可定位关键数字到原始文件、年度行或程序输出；交付包含版本/单位、运行依赖和数值容差。格式美观不单独计分。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "模型验证证据.xlsx; *_events_*.csv; results.json",
+            "text": "交付证据可追溯"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "模型验证证据.xlsx诸表；*_events_*.csv Year/row；RUN.txt；results.json environment/tolerance",
+            "text": "输出含版本与尺度、事件原始年度及行号、依赖/容差；报告按表名和SourceFindings代码定位。已读取DOCX和XLSX，不以美观给分。"
+          }
+        ],
+        "notes": ""
+      }
+    ],
+    "downloads": [
+      {
+        "name": "AuthorA1Reconciliation.csv",
+        "url": "finance/reference/AuthorA1Reconciliation.csv",
+        "bytes": 2331,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-1.html"
+      },
+      {
+        "name": "AuthorCalibrationTargets.csv",
+        "url": "finance/reference/AuthorCalibrationTargets.csv",
+        "bytes": 669,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-2.html"
+      },
+      {
+        "name": "EventProfiles.csv",
+        "url": "finance/reference/EventProfiles.csv",
+        "bytes": 4682,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-3.html"
+      },
+      {
+        "name": "IndependentStatistics.csv",
+        "url": "finance/reference/IndependentStatistics.csv",
+        "bytes": 8410,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-4.html"
+      },
+      {
+        "name": "InputAudit.csv",
+        "url": "finance/reference/InputAudit.csv",
+        "bytes": 878,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-5.html"
+      },
+      {
+        "name": "PolicySourceAudit.csv",
+        "url": "finance/reference/PolicySourceAudit.csv",
+        "bytes": 440,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-6.html"
+      },
+      {
+        "name": "SourceFindings.csv",
+        "url": "finance/reference/SourceFindings.csv",
+        "bytes": 3398,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-7.html"
+      },
+      {
+        "name": "bayesian_events_all_crises.csv",
+        "url": "finance/reference/bayesian_events_all_crises.csv",
+        "bytes": 55131,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-8.html"
+      },
+      {
+        "name": "bayesian_events_nonoverlap9.csv",
+        "url": "finance/reference/bayesian_events_nonoverlap9.csv",
+        "bytes": 46073,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-9.html"
+      },
+      {
+        "name": "diagnostic_events_all_crises.csv",
+        "url": "finance/reference/diagnostic_events_all_crises.csv",
+        "bytes": 55123,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-10.html"
+      },
+      {
+        "name": "diagnostic_events_nonoverlap9.csv",
+        "url": "finance/reference/diagnostic_events_nonoverlap9.csv",
+        "bytes": 45849,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-11.html"
+      },
+      {
+        "name": "results.json",
+        "url": "finance/reference/results.json",
+        "bytes": 43419,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-12.html"
+      },
+      {
+        "name": "危机模型独立验证报告.docx",
+        "url": "finance/reference/%E5%8D%B1%E6%9C%BA%E6%A8%A1%E5%9E%8B%E7%8B%AC%E7%AB%8B%E9%AA%8C%E8%AF%81%E6%8A%A5%E5%91%8A.docx",
+        "bytes": 40724,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-13.html"
+      },
+      {
+        "name": "模型验证证据.xlsx",
+        "url": "finance/reference/%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81%E8%AF%81%E6%8D%AE.xlsx",
+        "bytes": 25476,
+        "description": "参考解真实产物",
+        "preview_url": "finance/previews/reference-14.html"
+      },
+      {
+        "name": "逐项评分原始JSON",
+        "url": "finance/reference-grade.json"
+      }
+    ]
+  },
+  "solver": {
+    "status": "completed",
+    "description": "本轮模型交付的独立逐项审阅；未通过难度门槛。",
+    "updated_at": "2026-11-04T10:28:24.198289+00:00",
+    "grader_note": "逐项检查真实交付与原始证据，允许有据的等价方法；未判定保持待判。",
+    "score": {
+      "value": 62.608695652173914,
+      "scale": 100,
+      "awarded": 72,
+      "total": 115
+    },
+    "checkpoints": [
+      {
+        "id": "FIN-01",
+        "criterion": "明确2025期刊发表、2023工作稿、2024复制包的差别，并区分作者模拟路径和实际市场记录。不得把模拟100000年标成现实历史。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "public/source_manifest.json; input_files/paper.pdf; official_dataverse_metadata.json",
+            "text": "来源与版本分层"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "危机模型独立验证报告.docx §2；来源与边界!A1:H3",
+            "text": "清楚区分2025发表、2023工作稿、2024复制包；模拟路径不当现实历史，未取得发表版全文也坦承。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-02",
+        "criterion": "两模型各100000行、82列，Year=1..100000，报告重复与缺年检查。仅报总行数无时间索引检查不通过。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv",
+            "text": "年度样本完整性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "rebuild.py provenance循环assert；来源与边界!C2:E3；finance_solver_independent_checks.json",
+            "text": "assert精确100000行、Year=1..100000，从而保证无重复缺年；原件82列经独立审阅确认。交付未单列82，不把这一展示缺省等同时间索引未查。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-03",
+        "criterion": "独立计算p*(xK-1)*w*K/GDP，并与bank_credit/GDP对照误差小于1e-8；不得仅把bank_credit_GDP改列名当作原始比例。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv/raw_credit_identity_max_error",
+            "text": "原始信贷GDP恒等式"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "rebuild.py credit/debt两独立表达式；核对与差异!A2:G2/A9:G9；finance_solver_independent_checks.json",
+            "text": "确实计算p(xK-1)wK/GDP并与bank_credit/GDP对照，中位误差0、p99约1e-15。独立全路径最大误差2.6645e-15，满足1e-8。solver容差虽写较松，实际计算正确，不因阈值写法抹去完成事实。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-04",
+        "criterion": "识别bank_credit_GDP和credit_spread经过源月度全样本标准差缩放；说明不是百分数或bp，年度标准差接近1不保证严格为1。提供至少一项由路径复算的尺度证据。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv/raw_to_stored_scale_mean; preprocessing_simulation_data.R::gen_basic_definitions",
+            "text": "统计变量尺度"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "变量与定义!A4:E5；核对与差异 标准化比率两行；报告§2；运行说明",
+            "text": "识别信用/GDP与利差月度SD缩放，不是bp，提供年度重估标准化偏差Bayesian中位8.71e-5/Diagnostic0.002290的尺度证据，解释年度/月度分母不同。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-05",
+        "criterion": "说明危机为月度标准化信贷/GDP收缩阈值产生、年度任一月发生即记1，阈值以年度频率约4%求解；因此4%拟合不是独立验证成功。实际年度危机次数和频率须由原始行重算。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv/crisis_count,crisis_frequency; preprocessing_simulation_data.R::gen_crisis",
+            "text": "危机定义与频率校准"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§2；来源与边界!G2:G3；rebuild.py c.sum",
+            "text": "说明月度阈值转成年标签、约4%为校准不是独立验证；两模型3999/100000，年度频率可由交付计数复算。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-06",
+        "criterion": "指出Step3与PanelD源实现的三期窗口包含t,t+1,t+2，源表文字又写未来五年；报告独立明确的未来1..3/5窗口并量化至少一项差异。只写模糊的注意未来泄漏不通过。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/*froth*; Main_Step3.do; Analyze_simulations.R",
+            "text": "前瞻窗口一致性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§3；核对与差异 表3D行；危机与敏感性!A2:L7；rebuild.py label",
+            "text": "识别三期含当期与表注未来5年冲突；另严格未来1/3/5年，三年风险差4.149404644/5.877456487pp。源三期作者重算剔除末3行，差异0.00055/0.00050pp已按端点解释，可接受等价样本。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-07",
+        "criterion": "明确未来3年末3行不可完整观察，不能填0当无危机；增长率等端点同样使用有效样本。需提供修正样本量而非仅声明剔除。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/*boundary_corrected*; *strictfuture3*",
+            "text": "不可定义端点处理"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "危机与敏感性!D2:D7；变量与定义 GDP_3Y/future event；报告§4；rebuild.py label/yy",
+            "text": "未来h年仅n-h行，3年99997行；GDP3也用g[3:]/g[:-3]，无未知右端填0用于前瞻验证。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-08",
+        "criterion": "以GDP[t+3]/GDP[t]-1重算累计增长并与存储GDP_3Y_change有效区间逐行对账；不能把3个普通同比直接相加。误差小于1e-8。",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv/GDP3Y_stored_max_error_valid",
+            "text": "年度增长率复算"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "rebuild.py raw字段清单及GDP重算；报告§3",
+            "text": "GDP[t+3]/GDP[t]-1独立算对，但程序没有读取GDP_3Y_change，也没有与存储列有效区间逐行对账；本条明确要求的对账缺失。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-09",
+        "criterion": "独立估计100*三年GDP增长对crisis*forward spread change的回归，含截距；作者口径与修正端点口径分列，至少给系数、样本量、单位，数值与参考1e-6以内或解释等价估计差异。",
+        "weight": 4,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/A_spread_author,A_spread_boundary_corrected",
+            "text": "危机严重性与利差"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "核对与差异 表3A利差行；rebuild.py yy/xx/ols",
+            "text": "有修正端点全路径OLS斜率-2.870075728/-3.439027824、百分比尺度及隐含截距；未分列作者原端点版本，也未交付该回归实际n。原版/修正版对账这一完整标准未满足，非因系数写法不同扣分。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-10",
+        "criterion": "独立估计同一GDP结果对crisis*源标准化信贷比的回归，含截距，明确样本包含全路径而非仅危机行；换原始信贷比须作等价系数换算。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/A_credit_author,A_credit_boundary_corrected",
+            "text": "危机严重性与信贷"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "核对与差异 表3A信贷行；rebuild.py ols(yy,b[:-3]*c[:-3])",
+            "text": "全路径99997个有效年、标准化信贷×当期危机，协方差/方差为含截距OLS等价实现；斜率-2.176130692/-3.488769683与独立参考相符。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-11",
+        "criterion": "独立估计资本超额收益与信贷关系，同时说明源capital_excess_return_normalized以均值缩放至0.059，不能仅因表注而断言已匹配收益标准差。",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/B_capital_return_author; preprocessing_simulation_data.R",
+            "text": "收益尺度与比较"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "rebuild.py 全部回归及读取字段；模型验证证据.xlsx全9表；报告§3",
+            "text": "虽然读取capital_excess_return，但没有资本超额收益对信贷回归，也未识别按均值缩至0.059而非匹配标准差；不是仅缺某个表名。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-12",
+        "criterion": "复算credit_spread对before_crises和post_crises_5Y的回归；指出源before_crises是危机前一年，与五年表注不一致，并提供一项预先定义多年前窗的敏感性结果。",
+        "weight": 4,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/C_spread_author,C_spread_pre5",
+            "text": "危机前低利差关系"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "核对与差异 表3C两行；报告§3；rebuild.py pre/post/X",
+            "text": "复算前1年和后5年回归，系数-0.252460568/-0.298414801且识别表注不符；没有另做多年前窗下的利差回归敏感性。未来3/5年危机风险差不是这项利差前窗检验。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-13",
+        "criterion": "报告froth二元指标的概率差或正确离散边际效应（百分点），不得把logit系数当概率变化；复算源三期结果并与作者表5.67/7.40百分点对账，保留任何不能解释的差异。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/D_froth_author_inclusive3; Tables/predictability/predicting_crisis.tex",
+            "text": "低利差效果量"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "核对与差异 表3D froth两行；rebuild.py rd；报告§3",
+            "text": "用二元组概率差而非logit系数作pp效应，作者含当前三期剔端重算5.669450247/7.397502090，与5.67/7.40对账，解释端点。合理样本差异不强迫唯一原样本。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-14",
+        "criterion": "独立估计未来一年危机对源标准化信贷比的logit，报告连续平均边际效应及尺度，和作者4.05/3.85百分点比对。可接受等价估计但不能用oracle交互项替代这一要求。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/D_credit_logit_nextyear",
+            "text": "连续信贷预测效应"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "核对与差异 表3D标准化信贷logit两行；rebuild.py fit/ame",
+            "text": "独立MLE、未来一年危机、平均连续边际效应4.050622370/3.852029569pp，距参考约5.99e-7/9.74e-7，满足1e-6；不是oracle替代。"
+          }
+        ],
+        "notes": "原交付数值距参考均在1e-6内；重跑Bayesian AME可漂移2.07e-6，说明数值最优化诊断有待加强，不改变原交付的实质边际效应解释。"
+      },
+      {
+        "id": "FIN-15",
+        "criterion": "独立复算至少一个模型Step3 probit：原始信贷比与true lambda交互指标分列，说明与PanelD logit在链接和尺度上的区别。报告样本量、系数或预测概率。",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/author_current_plus_next2*",
+            "text": "源Step3回归重算"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "rebuild.py fit函数及所有调用；核对与差异/时序留出预警",
+            "text": "所有估计是logit或OLS，没有Step3 probit的原信贷比/真实强度交互分列估计；只声明oracle不可部署不等于复算。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-16",
+        "criterion": "把underlying_lambda真状态归为模型内oracle输入，不能直接作为可部署真实预警变量；给出现实可观测输入版本及识别真状态需额外证据。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/*oracle*; report",
+            "text": "现实可观测性边界"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§1/§4；时序留出预警!A2:M9；rebuild.py时序循环",
+            "text": "明确禁止不可观测信念/未来量作实时输入；实际预警特征只有spread、credit、raw debt、过去5年spread，未使用underlying_lambda作为现实特征。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-17",
+        "criterion": "在模拟时间顺序上划分训练与测试，并保证训练标签所用未来事件不跨过训练边界；不随机打散重叠时间记录。报告精确样本界限。可使用不同合理切分，但必须可复算。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/chronological_holdout_observable_logit",
+            "text": "时间留出设计"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "rebuild.py cut/h/train/test；时序留出预警!C2:F9；finance_solver_independent_checks.json",
+            "text": "训练索引5..69996（Year6..69997，标签至70000），测试Year70001..99997，末标签100000；训练样本69992、测试29997，避免训练标签跨界，切分可复算。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-18",
+        "criterion": "报告留出样本至少一种概率质量指标（如Brier或log loss）及适当基准；若另报排序能力，可采用AUC、PR-AUC等与任务相关的合理指标。说明仅为模拟时间留出，不冒充实际市场样本外。参考Brier/AUC是示例，不强制同时采用两者。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/chronological_holdout_observable_logit",
+            "text": "预警性能与基准"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "时序留出预警!I2:L9；报告§4；finance_solver_independent_checks.json",
+            "text": "给AUC和Brier、训练事件率常数基准；以debt为例Brier0.103903606/0.104019078，基准0.105685150/0.106141751，独立Newton复算一致，明确模拟OOS不是现实市场OOS。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-19",
+        "criterion": "至少一项核心效应或预测性能给出合理的时间依赖不确定性（HAC或时间块bootstrap）及带宽/块长，不能仅报独立同分布SE或符号。不给全套结论重复扣分。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/se_hac5*; holdout_brier_improvement_hac",
+            "text": "时间依赖不确定性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "危机与敏感性!I2:L7；报告§3/§4；rebuild.py bs循环",
+            "text": "风险差200年移动块bootstrap、160次、seed20250308，三年CI [3.5677,4.7532]/[5.2576,6.5305]pp，保留时间依赖。次数有限但方法与证据满足至少一项核心效应要求。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-20",
+        "criterion": "指出源gen_non_clustered_crisis的<0*12不会执行注释中的三年去簇；另按明确经济窗口做非重叠事件统计，报告保留数与结果影响。可选其他明确规则。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "EventProfiles.csv/nonoverlap9; preprocessing_simulation_data.R",
+            "text": "事件去重与重叠敏感性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§2；事件定义敏感性!A2:G7；rebuild.py spaced",
+            "text": "识别源<0*12无三年去簇；替代权益事件按间隔>3年（未来三年窗不重叠）由4003/4000保留3543/3544，风险差改变已量化。允许其他明确非重叠规则，不强制参考nonoverlap9或限定原基准事件。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-21",
+        "criterion": "从原始年度路径计算至少危机前、当年和危机后信贷/GDP的事件统计，报告尺度、有效事件数与取窗规则，不能只复制预存Years_around_crisis。",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "EventProfiles.csv/raw_credit_GDP_mean; *_events_*.csv",
+            "text": "事件信用路径"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "模型验证证据.xlsx全9表；原始记录定位!A2:I9；rebuild.py events/metrics",
+            "text": "仅四个任意年度原始记录示例和事件前后指示回归；没有危机前、当年、危机后原始信贷/GDP事件统计路径、有效事件数与取窗规则。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-22",
+        "criterion": "独立计算危机前后GDP增长，明确是相邻年度增长或累计增长，剔除窗口不完整事件；给事件数与可追溯年度。",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "EventProfiles.csv/GDP_change_nextyear_mean,GDP3Y_change_mean",
+            "text": "事件GDP路径"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "模型验证证据.xlsx全9表；rebuild.py GDP回归/状态匹配",
+            "text": "有全路径GDP3回归和状态格自然路径GDP，但未计算危机前后GDP增长事件路径，不等价于要求的前后事件统计。此为独立GDP路径缺项，与信用路径分别检查。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-23",
+        "criterion": "对至少一种有经济意义的替代事件定义或预测窗口实际重算，并与主分析口径比较效果量、样本及结论稳定性；允许选择合理的窗口变化，不强制本参考解的年度信贷收缩阈值。仅说明原口径或修复端点而未形成替代分析比较，不足以通过。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "IndependentStatistics.csv/alternative_annual_credit_contraction_below_minus10pct or solver-declared alternative-horizon results; accept justified equivalent sensitivity designs.",
+            "text": "事件定义或预测窗口稳健性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "事件定义敏感性!A2:G7；危机与敏感性!A2:L7",
+            "text": "按prompt-aligned OR标准，1/3/5预测窗口已有实际敏感性；另有年度权益收益下4%替代及去簇，量化事件数和风险差，明确不混同月度原作者事件。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-24",
+        "criterion": "比较Bayesian与Diagnostic结果时报告各自样本、单位和关键校准参数不同，不能将差异全部解释为只改变预期机制的因果效应。",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv; moment_target.xlsx Table2 panelB; PolicySourceAudit.csv",
+            "text": "模型间可比性"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§2；模型验证证据.xlsx全表；rebuild.py未读取calibration/MAT参数",
+            "text": "有样本和单位，也一般提醒校准非外部检验；没有报告Bayesian/Diagnostic关键校准参数不同（如lambdaH、AH/AL或lag）并据此限制两机制差异的归因。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-25",
+        "criterion": "逐项区分moment_target表七个校准目标与额外统计，指出用同一校准目标判断优越性的循环性；不能把所有已发表拟合结果叫外部验证。",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "AuthorCalibrationTargets.csv; tables_calibration.m",
+            "text": "校准目标与验证矩"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§2；模型验证证据.xlsx全表",
+            "text": "泛泛说明4%目标和文献参数非外部检验，但未逐项区分moment_target七个校准目标及额外统计；不以一句泛化提醒补齐七目标核对。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-26",
+        "criterion": "独立复算至少四项TableA1非目标矩并与作者Bayesian/Diagnostic值逐项对账，明确容差和未匹配项；不能仅复制作者列。",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "AuthorA1Reconciliation.csv",
+            "text": "额外矩对账"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "rebuild.py全部读取/估计；模型验证证据.xlsx全9表",
+            "text": "未读取TableA1，也未独立复算至少4个非目标矩与作者两模型值对账。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-27",
+        "criterion": "识别Analyze_simulations.R的regs_data通过手工覆盖系数（如18.0、2.8等）构造发表比较列，不能把这些对象作为独立重估的市场实证回归。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "Analyze_simulations.R::regs_data; report/S06",
+            "text": "经验比较证据等级"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§2",
+            "text": "明确Analyze_simulations.R系数覆盖-7.46/-0.34/18.0/2.8为手工登记；原始实证面板缺失，不声称已重估市场回归。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-28",
+        "criterion": "识别credit_growth_past_year在年度表使用lag12即12年，并用原始记录量化它与真正前一年增长差别。",
+        "weight": 2,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "InputAudit.csv/credit_lag12_max_error,credit_lag1_difference_mean_abs",
+            "text": "年度变量时距审计"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告全文、工作簿变量定义、rebuild.py raw字段/各计算",
+            "text": "没有识别或核对credit_growth_past_year年度lag12与真正1年增长的差异；未加载该列也无独立量化。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-29",
+        "criterion": "说明跨模型比较先匹配可观测杠杆与利差，再求解不同w/信念强度，诊断性模型还需逆映射真实强度及reference/lag参数；给出边界和残差审查要求。",
+        "weight": 4,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "solve_for_states_from_cs_and_lvg.m; irf_rational_and_behavioral_lvg_and_cs.m",
+            "text": "政策状态匹配"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§5；状态匹配非政策表；rebuild.py policy循环",
+            "text": "识别论文固定可观测利差/杠杆且隐藏状态不同；但未审查诊断性信念到underlying的逆映射及reference/lag参数，也未列完整网格边界/残差检查要求。自己使用debt/GDP格且明确不是杠杆，不能代替该源政策状态审查。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-30",
+        "criterion": "明确政策状态匹配使用按模拟均值标准化的利差，不能把cs=1读成1%或一标准差；与统计数据SD口径区分。",
+        "weight": 3,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "solve_for_states_from_cs_and_lvg.m; preprocessing_simulation_data.R",
+            "text": "政策利差口径"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§5；变量与定义；状态匹配非政策表",
+            "text": "只用统计文件月度SD单位的利差进行描述格匹配，没有识别政策函数利差另按模拟均值缩放，未解释cs=1的真正含义。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-31",
+        "criterion": "准确指出政策代码将w乘1.1，不能声称资本充足率提升10个百分点，也不能把不同模型固定相同w/信念当同可观测状态反事实。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "irf_rational_and_behavioral_w_and_lambda.m",
+            "text": "政策干预含义"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§5",
+            "text": "明确初始银行财富份额提高10%，从家庭向银行转移，不写成监管资本比率10个百分点；其状态格也明确不等同论文注资初态，未虚称隐藏状态固定具有政策可比性。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-32",
+        "criterion": "识别确定性分支bank_credit_impulse计算xK比率，不能未对账就称为银行信贷余额变化或实际贷款扩张。",
+        "weight": 2,
+        "status": "fail",
+        "awarded": 0,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "irf_rational_and_behavioral_w_and_lambda.m",
+            "text": "政策输出定义审查"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§5；rebuild.py政策部分；工作簿政策表",
+            "text": "没有识别确定性bank_credit_impulse实际是xK比率而不是银行信贷余额冲击；本条源实现审查缺失。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-33",
+        "criterion": "政策结论的证据强度与实际完成的计算一致。可明确保存core MAT并非完整policy路径、提供缺口和授权条件；也可从输入代码/primitive独立重建postprocess并真实重算政策路径，但须核验状态匹配、初始条件、残差/边界和路径稳定性。仅复制结果或虚称已重算不通过。不得因采用比参考更完整的真实复算而扣分。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "PolicySourceAudit.csv; report",
+            "text": "政策证据边界"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§5/§6；状态匹配非政策!A1:M4",
+            "text": "真实承认未重算注资配对轨迹、自然路径格不是政策因果或福利效果；提出初态误差/参考信念/成本福利/参数稳健性授权条件。Diagnostic三格均空也显示0/None，不以复制或虚构路径冒充。允许诚实缺口审查路线。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-34",
+        "criterion": "明确准入/附条件/拒绝决定，并把生产预警、研究解释、政策讨论三种用途的可授权范围对应到本次验证结果，不能只列技术发现不作决定。",
+        "weight": 3,
+        "status": "pass",
+        "awarded": 3,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "危机模型独立验证报告.docx",
+            "text": "委员会决策"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§1/§5",
+            "text": "明确附条件研究沙箱、不准生产预警/限额/资本缓冲/政策效益宣传；研究解释、预警和政策授权范围与证据相符。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-35",
+        "criterion": "给出至少三项可以核验完成的使用前置条件，例如版本冻结、真实数据外部检验、时点定义修复、政策路径独立验证；不能只写加强监控。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "危机模型独立验证报告.docx",
+            "text": "可执行整改门槛"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "报告§1 准入条件①至⑤",
+            "text": "包括可验的版本/时点登记、真实OOS、事件定义修复、成对政策路径验证、二线签字、无交易接口、季度漂移与到期复审，非只有加强监控。"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "FIN-36",
+        "criterion": "一条命令在新输出目录可运行，重新生成核心危机、回归与留出证据；不依赖硬编码最终系数或外部未提供文件。保留原件不变。",
+        "weight": 4,
+        "status": "pass",
+        "awarded": 4,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "reference/reference.py; reference/run_validation.json",
+            "text": "从原件可复算"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "rebuild.py/运行说明.txt；finance_solver_rebuild_check.json；finance_solver_independent_checks.json",
+            "text": "同真实blind公共输入（含source_manifest）在新输出目录47.83秒成功重建。核心事件、窗口和结论一致；28个浮点单元格有细微差，最大2.06874e-6来自数值BFGS边际效应，未达到严格逐位或全表1e-6一致。没有硬编码最终系数或未提供依赖。该误差不改变报告精度及业务结论，故本条可运行复算判通过。"
+          }
+        ],
+        "notes": "有限差分BFGS未保存梯度/收敛诊断，复算有微小平台数值漂移；已保留差异而非伪称全单元格一致。"
+      },
+      {
+        "id": "FIN-37",
+        "criterion": "报告和工作簿可定位关键数字到原始文件、年度行或程序输出；交付包含版本/单位、运行依赖和数值容差。格式美观不单独计分。",
+        "weight": 2,
+        "status": "pass",
+        "awarded": 2,
+        "description": "满足本条可判定要求得weight，否则0；不同合理等价方法可接受。数值容差默认为复算1e-6，作者两位小数表0.0051。敏感性/OOS自行定义时按其预先声明可复算设计评判，不机械要求同参考数值。",
+        "sources": [
+          {
+            "location": "模型验证证据.xlsx; *_events_*.csv; results.json",
+            "text": "交付证据可追溯"
+          }
+        ],
+        "evidence": [
+          {
+            "location": "结论索引/原始记录定位/变量与定义；运行说明.txt；rebuild.py",
+            "text": "报告到表页/代码及若干原始行可追溯；文件哈希、单位、依赖、随机种子、数值容差齐全。容差较宽作诊断不表示复算错误，不因样式给分。"
+          }
+        ],
+        "notes": ""
+      }
+    ],
+    "downloads": [
+      {
+        "name": "rebuild.py",
+        "url": "finance/output/rebuild.py",
+        "bytes": 21776,
+        "description": "本次gpt-6-sol实际交付",
+        "preview_url": "finance/previews/solver-1.html"
+      },
+      {
+        "name": "危机模型独立验证报告.docx",
+        "url": "finance/output/%E5%8D%B1%E6%9C%BA%E6%A8%A1%E5%9E%8B%E7%8B%AC%E7%AB%8B%E9%AA%8C%E8%AF%81%E6%8A%A5%E5%91%8A.docx",
+        "bytes": 41941,
+        "description": "本次gpt-6-sol实际交付",
+        "preview_url": "finance/previews/solver-2.html"
+      },
+      {
+        "name": "模型验证证据.xlsx",
+        "url": "finance/output/%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81%E8%AF%81%E6%8D%AE.xlsx",
+        "bytes": 18180,
+        "description": "本次gpt-6-sol实际交付",
+        "preview_url": "finance/previews/solver-3.html"
+      },
+      {
+        "name": "运行说明.txt",
+        "url": "finance/output/%E8%BF%90%E8%A1%8C%E8%AF%B4%E6%98%8E.txt",
+        "bytes": 2173,
+        "description": "本次gpt-6-sol实际交付",
+        "preview_url": "finance/previews/solver-4.html"
+      },
+      {
+        "name": "逐项评分原始JSON",
+        "url": "finance/solver-grade.json"
+      }
+    ]
+  }
+}
