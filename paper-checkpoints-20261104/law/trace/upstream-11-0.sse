@@ -1,0 +1,450 @@
+event: response.created
+data: {"type":"response.created","response":{"id":"resp_0c8cb9a16bf0e43f016aeb056377a88190a15bae0199e77961","object":"response","created_at":1793787235,"status":"in_progress","access_programs":null,"background":false,"completed_at":null,"content_filters":null,"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"gpt-6-sol","moderation":null,"output":[],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"auto","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":null,"user":null,"metadata":{}},"sequence_number":0}
+
+event: response.in_progress
+data: {"type":"response.in_progress","response":{"id":"resp_0c8cb9a16bf0e43f016aeb056377a88190a15bae0199e77961","object":"response","created_at":1793787235,"status":"in_progress","access_programs":null,"background":false,"completed_at":null,"content_filters":null,"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"gpt-6-sol","moderation":null,"output":[],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"auto","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":null,"user":null,"metadata":{}},"sequence_number":1}
+
+event: response.output_item.added
+data: {"type":"response.output_item.added","item":{"id":"rs_0c8cb9a16bf0e43f016aeb05646c088190ab1ea704b758e921","type":"reasoning","content":[],"encrypted_content":"gAAAAABq6wVkqCOunIrtIMSDvl_KjbhRRwDLjYcPPa6b3aFqQpZWnxVjMl2Wo2bX2Uc3RLNdEfS1HCNFaMUULbi6NhGCKVNLzZmAUn70lO-9Im4EX1QAH3xjK0Srnte_9F3prwe8spmE2i9_rJMhZa5HgtxEC3DQwUoPPN_GgsnwGy2_WM_GroSgvgl-5sqJSVqayvcEvWSJklDzY4hpYuOOwKewgZ9Zn5xeSPH-TeqNTvRom_RlI7GFB9UA7stDrvJ9lntSEc2uPaoNCUEav6TgeILZ-dcV6O0q6t661GT8z8E_gxTm-GovqO7t-R2JBoqQwAdhp-JVN14oXioFC0FbJfH1ZipF7ujj83KsYrf2HSLQFls7qmGOxRImPmlmgfK-nCroIWAQA0AHqwbzFaq-s7ITqtzpx4pS-BVoC8kWYhDExGBmRsrLxtAct0M37I8MydLZktUVvrAvh2yfxEk2VGGokcgre5SiiTkrTL8DSbdpTVa2eH7hGgrhBThdscMB3LGLJt6qJwP2QcV3s5osAa2vvpzqlPe2bcoCy0cuFqJ9N0QLsMzaWLuy8OtINIS7jbVrLVh7nBRfK_aVJA8tCgw0uexSrn1uTlTg7Frc76WZQBehBKHwmISutzVaQ0aS9aaZbtB74xem0fsK9p5__WvRNP72CS4eIwYr7eVKhuzTIxNdsIjLna8NiLZ9RnEvBHPqM24iOd-UYI2UW2xdcEDmQ5gHYdQxbxPM_TWW9RHCRVAFNfOuAv3EqeXplpMbv-J2CKIbCrArGv_Rk7-0qs0Gtoyuk-DNvgST-HprxicYvZoTEbWTcf7OOrSfGXsPWo4JjLKkecpuBE_J2R-2k7z8j40GZQfZSXpkHYPX3HlCwClUAyHMj237pwY8JK3PKzbp2QkFHnSvBZGDU_flzn4n25wfxD9zZGlW6H_9ORC0tYHt8TJfz5yhKa__o5IeYeCN1-wE7udWlqfQz5N5BkjIFeJAJsrhMIIFBf-srEux6miu8CrkIWrMZ9SrQQgd7sixOMGTS_KQppXUtv0TNRaDweX79JHAzjwASDuD6y4nTUXaLvdu6Rma3pGSfOcs-eekP0fnfcyfVxJ2g_4m5ISrnn20aO_BZU5jYg6dY0siJyYvUtwasPKcJEEneX2vbJ8nhO5P","summary":[]},"output_index":0,"sequence_number":2}
+
+event: response.output_item.done
+data: {"type":"response.output_item.done","item":{"id":"rs_0c8cb9a16bf0e43f016aeb05646c088190ab1ea704b758e921","type":"reasoning","content":[],"encrypted_content":"gAAAAABq6wVkVOhT2nZjlurm6H2bWnQai5geNuVIwpAeGO9eqLGGU6Qs53lEy1oAbg0mGchU0b3cjMYoEOAFPdyD5IIskypFomYOgefqlrtWPe1WC8DW_K3lWZJ6FluAEe18CHXtIu1M8hSSGBOs-xfjN36YV3TZ353d2H21jgBhfK0pqN7Wl8nT602_GZzV6S5CL2StLpIiroHBhwLzfSg78x_uk5NtVtg1hwE9DV9P3xj7ztcgNLA-eKN39ymgnjqXo9oZOkTxw8l5R-LqoM9klvT0HBPwEmxyHfFIBKylRRAPYDKYknmKRIvaTmZeFnN0jDcwow0pJo3ycPTQiseZY2lo-z2SITIJWSzZeDU6wrZs3YpFs_faXEO-t7O9iP5UOL9KNaRg_F1GeUj7gjUH34f8fAotWOqEQ0E-n3vUlhMkG_Q7p28nMaTWlSSsg-iW0aZnDw0NczYcjPK22YJWCz5qdg621bCqXZ24WgjFH8JJ-DjQE-gJNUYWqDXFnoV1rWN1fGN_x1kan5ls2CHt6yCX94SGd7aR9JbOfHSxZkPjXDJOqPEnuWkJYpMV6X1G6tgTc_zbFV569xatQ3tUEiU_ycFHrPBsFhJnCUxHisd_-55q-BIGvLB3GkN8s8vj2RlunZyH2M7QA4L6KM3vd5WzcVtDxHHoiUc4ZlwIQ6-jhPmq5a6SNV1vboVfScv9etUEegUSJ0Og7ZbRgLUNODWdEr8AsF07yFPMFypTXSc0N6n-8I2art4u4TOak1tK5aHcFb4rbyy7pOteZDLENbb6LAuIkMBclv25TA7UHCZZBYZSFzeK1rtTrOvGl379d-DnBM3zCJPq-dFVpOUSwADjcbv0m54D4tNfxCDJRMVfqe_YEAFJbWSVUZ-Oqn768g8P8D__sYzfSKIFTI1oP9c8IBjfdhzNVSwMsPdXwMrJz_CpW0bvvUGSqojWZUZT7r7TttRc106HUYXFuV4fIP6BwPbeS9x4NkPZCI4Pu6X1dKaO1RrV--MU46XALdt6vwrOhrzqrXVy0HTPQ59ioRBosMkQ2YwyOXYJASMjCyHdPr6YFZQEj2yg-IGfcO7Oz9s4BsWsFn9W1V-HyhBbWNKKpHBga9fe2Gppt-Rt5xVAWVF0xRV4I6sA1ZS98hgmOPsj7WYCMgJd0DwFeJfwrpqgjHiKYjV3bdflU1SR9YNnau96HruKdLlM52KGk4YBwxoBYtbdIuSiY5eIIp5KH2QwaumadGY1tPzW4eG8nc6_T5ZnlXQdxAAHbYQV1Za1dAUAHDa8nOes4ZpMIku0d605FAmkX2u4uTukiZvtJm3wgS3Fzkbvk_ej7f0R8W1dPCcDUDr08eAbl7sxphU_WpnVbkwIjQ5aRWoN5JZJpcBnx74rW3t8TXum5PmH8Y1fvRNpHDZjTrchAyuRRfy2umo5PJ-I3OsBQib-eIzOVZq-bC_S1lw0_LMpZaytrG5GyckTtCW0EW8bXkteM3MzzVF1gm7Q2DZTmIGjTJK2uLvOCbJ7HjTHXNy2iV2H_KZrAX3IfC54VrlWteX5kquIFBsMSBKYrA==","summary":[]},"output_index":0,"sequence_number":3}
+
+event: response.output_item.added
+data: {"type":"response.output_item.added","item":{"id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","type":"function_call","status":"in_progress","arguments":"","call_id":"call_o8QDYQD65d72BvE5Rq4NaRHG","name":"write_text"},"output_index":1,"sequence_number":4}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"{\"","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"62KOyrcBDDITcF","output_index":1,"sequence_number":5}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"path","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"7QdHrTnwJPBg","output_index":1,"sequence_number":6}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\":\"","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"ArMMZS1l9Jd7W","output_index":1,"sequence_number":7}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"output","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"5w70kaPMJr","output_index":1,"sequence_number":8}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"/c","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"ChAZeflhjwuy4g","output_index":1,"sequence_number":9}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"ase","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"gl2ub9Sj3V3i1","output_index":1,"sequence_number":10}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"_analysis","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"FFYFwfN","output_index":1,"sequence_number":11}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":".json","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"nsp9gjHDmpd","output_index":1,"sequence_number":12}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\",\"","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"BPoTbNKcbMacN","output_index":1,"sequence_number":13}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"content","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"9zoQjTKqf","output_index":1,"sequence_number":14}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\":\"","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"y2NeemLhwDhvP","output_index":1,"sequence_number":15}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"{\\","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"txEiJwWsE8tods","output_index":1,"sequence_number":16}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"n","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"g8k43iJwf2aSVxe","output_index":1,"sequence_number":17}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" ","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"9JEsdV1coqkZl3T","output_index":1,"sequence_number":18}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" \\\"","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"DMONy78SrViwI","output_index":1,"sequence_number":19}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"notes","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"HZZmYQDthRz","output_index":1,"sequence_number":20}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\": {\\","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"oqiMlDkQ7u","output_index":1,"sequence_number":21}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"n   ","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"dH0Rimw1JGlz","output_index":1,"sequence_number":22}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" \\\"113","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"7F6ZBwNkGA","output_index":1,"sequence_number":23}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"41980","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"uHPg1qGmSLW","output_index":1,"sequence_number":24}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"_23","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"1z4GKZ0PLyNBD","output_index":1,"sequence_number":25}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\": {","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"rRgxXlybzM9","output_index":1,"sequence_number":26}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\"legal","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"me7IuskMw","output_index":1,"sequence_number":27}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"_reason\\\":\\\"关注","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"u7","output_index":1,"sequence_number":28}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"立法要","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"4JTLyjaKYskL9","output_index":1,"sequence_number":29}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"处理的现实","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"8nwrH2ZRh29","output_index":1,"sequence_number":30}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"条件而非","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"OQ0G3Se0I0Ch","output_index":1,"sequence_number":31}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"抽象理论","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"BLH78HCFCOyn","output_index":1,"sequence_number":32}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"；须读","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"oyIwGqiHvi6N2","output_index":1,"sequence_number":33}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"其对法规覆盖","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"PaH1k8JoF8","output_index":1,"sequence_number":34}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"范围的论证","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"UHgNa9badIQ","output_index":1,"sequence_number":35}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"。\\\", \\\"protocol","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"Y","output_index":1,"sequence_number":36}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"_note\\\":\\\"GRAND可","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"","output_index":1,"sequence_number":37}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"依现实目的","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"7AljMdWR4il","output_index":1,"sequence_number":38}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"编码；","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"zKojB6Ou3RhAt","output_index":1,"sequence_number":39}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"NONE反映孤段","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"h7mcjycx","output_index":1,"sequence_number":40}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"难见完整推论\\\",","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"C18rHMc","output_index":1,"sequence_number":41}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" \\\"impact\\\":\\\"","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"nK","output_index":1,"sequence_number":42}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"旧案功能性解释容易","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"FXUW6XR","output_index":1,"sequence_number":43}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"被漏检。\\\"},\\","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"HCC2PnK","output_index":1,"sequence_number":44}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"n","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"dmZvoZN1CUXbM3F","output_index":1,"sequence_number":45}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"    \\\"3672856_34","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"","output_index":1,"sequence_number":46}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\": {\\\"legal_reason\\\":\\\"从","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"N52wgXo","output_index":1,"sequence_number":47}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"税种概念及定义厘清","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"g6rDpMC","output_index":1,"sequence_number":48}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"类别，定义本身","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"qnBYp2phc","output_index":1,"sequence_number":49}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"不证明整个裁判仅由规则机械","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"AW0","output_index":1,"sequence_number":50}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"推出","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"3OMZnlPQuMejpH","output_index":1,"sequence_number":51}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"。\\\", \\\"protocol_note\\\":\\\"FORMAL依分类","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"qlAMlROR56Yepw","output_index":1,"sequence_number":52}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"词义可接受；","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"b8luQYKYNm","output_index":1,"sequence_number":53}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"模型NONE可能因其为铺","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"EoSb","output_index":1,"sequence_number":54}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"垫。\\\", \\\"impact\\\":\\\"概念","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"iQhe4TCbjVJ","output_index":1,"sequence_number":55}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"段落不宜独立作案件筛选","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"lFx5r","output_index":1,"sequence_number":56}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"。\\\"},\\n","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"EdKa6n1XA","output_index":1,"sequence_number":57}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"    \\\"81100_69\\\": {\\\"legal_reason\\\":\\\"所","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"KrBxFBQRr","output_index":1,"sequence_number":58}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"引国务","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"lBZtPkpXaNzsV","output_index":1,"sequence_number":59}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"卿沟通涉及立法背景；事实","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"uDQS","output_index":1,"sequence_number":60}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"性转述不必然","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"Qb7cf8T2l9","output_index":1,"sequence_number":61}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"构成政策式推理。\\\", \\\"protocol_note\\\":\\\"GR","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"2UL6jPT99OImH0","output_index":1,"sequence_number":62}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"AND依","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"lmFMnihtegyB","output_index":1,"sequence_number":63}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"历史目的解释可以成立；NONE依纯叙","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"t67I2NU6oVjgvX","output_index":1,"sequence_number":64}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"述亦可成立。","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"GL9uFtBqgr","output_index":1,"sequence_number":65}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\", \\\"impact\\\":\\\"低置信立法","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"pUYV4aILAf","output_index":1,"sequence_number":66}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"史应回看完整意见。\\\"},\\n    \\\"3612156_","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"Q7G","output_index":1,"sequence_number":67}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"42\\\": {\\\"legal_reason\\\":\\\"针对诉讼不中止","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"pvZYGTHDRsSEOLh","output_index":1,"sequence_number":68}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"的法条目的释义，非单","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"43VRb9","output_index":1,"sequence_number":69}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"纯程序叙述。\\\", \\\"protocol_note\\\":\\\"GRAND依立法目的可复","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"UsSsz4","output_index":1,"sequence_number":70}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"现；NONE因","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"wqHOMGUn5","output_index":1,"sequence_number":71}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"短句归纳可理解。","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"b3iuUxBe","output_index":1,"sequence_number":72}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\", \\\"impact\\\":\\\"历史措辞与OCR降低稳定","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"ve9","output_index":1,"sequence_number":73}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"性。\\\"},\\n    \\\"693194","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"MDTBMuqqfQJX","output_index":1,"sequence_number":74}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"2_17\\\": {\\\"legal_reason\\\":\\\"承认从严","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"","output_index":1,"sequence_number":75}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"解释刑法的一般规则，但其后可能转向适","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"PihBbDJAWutjlw","output_index":1,"sequence_number":76}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"用理由；不能只凭规则开头","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"IGXy","output_index":1,"sequence_number":77}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"定义立场。\\\", \\\"protocol_note\\\":\\\"GRAND取全段","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"ADId60OaA6j","output_index":1,"sequence_number":78}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"转折；FORMAL取严格解释法则，两种均需查后","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"fLnES9iOh","output_index":1,"sequence_number":79}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"文。\\\", \\\"impact\\\":\\\"规则与目的并列须强制精读","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"p","output_index":1,"sequence_number":80}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"。\\\"},\\n    \\\"5655150_280\\\": {\\\"legal_reason\\\":\\\"涉及法定","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"iRJb0sy5SKMw","output_index":1,"sequence_number":81}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"货币条款的合宪","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"6AtbFc85P","output_index":1,"sequence_number":82}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"性讨论，异议意见不能充当法院多数","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"","output_index":1,"sequence_number":83}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"裁判理由。\\\", \\\"protocol_note\\\":\\\"FORMAL依宪","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"BftYPsZ99KL","output_index":1,"sequence_number":84}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"法规则推断可接受；NONE可能因本段为意见过","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"ixTqU1QxO0","output_index":1,"sequence_number":85}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"渡。\\\", \\\"impact\\\":\\\"案件层面不可把异","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"NLEbu","output_index":1,"sequence_number":86}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"议当作holding。\\\"},\\n    \\\"3385333_19\\\": {\\\"legal_reason","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"dxf90P7u6e90","output_index":1,"sequence_number":87}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\":\\\"立法用语owner的范围与","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"F2qyDYxQccwrE3","output_index":1,"sequence_number":88}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"主张相对，取决于词义还是立法","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"6e","output_index":1,"sequence_number":89}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"目标。\\\", \\\"protocol_note\\\":\\\"GRAND取目的考虑；","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"hLdhzWTNdw","output_index":1,"sequence_number":90}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"FORMAL取字词分析，需保留争议。\\\", \\\"impact\\\":\\\"早期","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"PeEOQjq2O41","output_index":1,"sequence_number":91}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"词义段不适合自动排他筛选。\\\"},\\n    \\\"113411","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"K","output_index":1,"sequence_number":92}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"77_13\\\": {\\\"legal_reason\\\":\\\"总统命令与国会授权的界限","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"kXjsoU3","output_index":1,"sequence_number":93}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"是实质法律判断，多数意见上下文限制行政","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"d8qFXUtxrAd1F","output_index":1,"sequence_number":94}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"权。\\\", \\\"protocol_note\\\":\\\"FORMAL按权限规则可","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"h8P8zdnPDW","output_index":1,"sequence_number":95}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"复现；NONE若仅孤段罗列","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"mU4","output_index":1,"sequence_number":96}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"命令不足。\\\", \\\"impact\\\":\\\"精读应追踪","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"s1CkL","output_index":1,"sequence_number":97}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"授权基础而非风格分。\\\"},\\n    \\\"","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"MUKZrgsws9","output_index":1,"sequence_number":98}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"6139418_72\\\": {\\\"legal_reason\\\":\\\"社会对独立司法的依赖属于制度后","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"CPxtT0ImVQ90QWc","output_index":1,"sequence_number":99}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"果论，但文本是异议，不能当多数见","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"","output_index":1,"sequence_number":100}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"解。\\\", \\\"protocol_note\\\":\\\"GRAND依社会价值","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"jIw0lBvKIirg","output_index":1,"sequence_number":101}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"可复现；NONE若仅一般前言","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"K0","output_index":1,"sequence_number":102}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"亦可接受。\\\", \\\"impact\\\":\\\"制度价值与判决效力须区分","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"cFi5yUOLoLsGIO","output_index":1,"sequence_number":103}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"。\\\"},\\n    \\\"11644460_32\\\": {\\\"legal_reason\\\":\\\"联邦","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"tUEjsxQHP4mCYD","output_index":1,"sequence_number":104}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"官员被侵害","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"WEmQd0bpz0O","output_index":1,"sequence_number":105}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"罪的主观要件","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"PzHA0hlLhE","output_index":1,"sequence_number":106}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"与联邦执法目的相连，应核对完整论证。\\\", \\\"","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"Y2gvuSJW","output_index":1,"sequence_number":107}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"protocol_note\\\":\\\"GRAND重目的；NONE认为反诘","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"beSOyFHIlDPSH","output_index":1,"sequence_number":108}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"只是否认对","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"V72YHza2dT1","output_index":1,"sequence_number":109}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"方而未正面","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"j1aDTkKxBZe","output_index":1,"sequence_number":110}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"展开。\\\", \\\"impact\\\":\\\"刑法","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"NNId58HF3K","output_index":1,"sequence_number":111}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"语境的筛选不能凭模型","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"pZZ1js","output_index":1,"sequence_number":112}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"漏报排除。\\\"},\\n    \\\"131","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"GzEdaFvcRAfX","output_index":1,"sequence_number":113}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"3717_86\\\": {\\\"legal_reason\\\":\\\"参议员对法条交叉援引","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"oomcoUJ","output_index":1,"sequence_number":114}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"的关切是一段立法史证据","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"mfXet","output_index":1,"sequence_number":115}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"，单段不直接规定法条含义。\\\", \\\"protocol_note\\\":\\\"NONE因仅转述；GRAND","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"sCjtfWwADAF1c","output_index":1,"sequence_number":116}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"因用于目的解释。\\\", \\\"impact\\\":\\\"低置信、异议与立法史","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"P5KAcfUIrFYyL","output_index":1,"sequence_number":117}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"交叉，必须复核。\\\"},\\n    \\\"12122490_155\\\": {\\\"legal_reason\\\":\\\"","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"k8UGQQH9","output_index":1,"sequence_number":118}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"强调宪法问题加重法规解释","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"MfuU","output_index":1,"sequence_number":119}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"争议；异议作者批评多数而非赞同","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"5","output_index":1,"sequence_number":120}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"多数理由。\\\", \\\"protocol_note\\\":\\\"FORMAL依解释优先顺序","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"uHLInV","output_index":1,"sequence_number":121}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"；GRAND依宪法回避权衡，均需上下文。\\\", \\\"impact\\\":\\\"不得","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"vSgPuYhiQ","output_index":1,"sequence_number":122}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"拿异议风格冒充判决权威","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"6PnN4","output_index":1,"sequence_number":123}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"。\\\"},\\n    \\\"5861465_62\\\": {\\\"legal_reason\\\":\\\"协同意见明确主张","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"t4Py1n9u6","output_index":1,"sequence_number":124}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"文本足以决定结论，孤段也","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"Lnrq","output_index":1,"sequence_number":125}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"可辨别其自","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"Fr6RYulEtEf","output_index":1,"sequence_number":126}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"述方法。","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"1bV3SWO7I2cc","output_index":1,"sequence_number":127}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\", \\\"protocol_note\\\":\\\"FORMAL文本约束","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"LXASP04HBvPLJv","output_index":1,"sequence_number":128}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"明显；GRAND可能被对","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"WuoC","output_index":1,"sequence_number":129}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"其他解释方法的评论误导。\\\", \\\"impact","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"ZL2qqlqw","output_index":1,"sequence_number":130}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\":\\\"短协同意见不得放大为多数意见标签。","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"K1FXJn3zYV","output_index":1,"sequence_number":131}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\"},\\n    \\\"6215707_64\\\": {\\\"legal_reason\\\":\\\"围绕狭","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"SBXg7ySIWZx9EH4","output_index":1,"sequence_number":132}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"义解释例外的司法自我约束展开；","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"w","output_index":1,"sequence_number":133}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"格言与政策考","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"obO15RGYPJ","output_index":1,"sequence_number":134}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"量并列。\\\",","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"muSC9UPNS","output_index":1,"sequence_number":135}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" \\\"protocol_note\\\":\\\"NONE因是司法职能","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"8","output_index":1,"sequence_number":136}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"评论；FORMAL因约束性解释原则。","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"wHbZmSxaBwvDBE","output_index":1,"sequence_number":137}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\", \\\"impact\\\":\\\"工具难区","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"5HUaBSyMJ8O","output_index":1,"sequence_number":138}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"分阐述法律规则与修辞","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"IL2IKx","output_index":1,"sequence_number":139}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"。\\\"},\\n    \\\"8210237_68\\\": {\\\"legal_reason\\\":\\\"对offer","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"qMcHyomc1xr","output_index":1,"sequence_number":140}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"的字典","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"Wtias2ks7Acpr","output_index":1,"sequence_number":141}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"歧义进行批判是异议论证的一部分，不能只抓字典词形","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"WuGvnGwp","output_index":1,"sequence_number":142}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"判断立场。\\\", \\\"protocol_note\\\":\\\"NONE为辩论铺垫","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"kOAHFnrivl","output_index":1,"sequence_number":143}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"；FORMAL可能由词","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"KWHTS","output_index":1,"sequence_number":144}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"典词汇诱发。\\\", \\\"impact\\\":\\\"词汇触发错误与异议身份限制律师检索价值。","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"lkpDi","output_index":1,"sequence_number":145}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\\"}\\n  }\\n}\"}","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","obfuscation":"ecd","output_index":1,"sequence_number":146}
+
+event: response.function_call_arguments.done
+data: {"type":"response.function_call_arguments.done","arguments":"{\"path\":\"output/case_analysis.json\",\"content\":\"{\\n  \\\"notes\\\": {\\n    \\\"11341980_23\\\": {\\\"legal_reason\\\":\\\"关注立法要处理的现实条件而非抽象理论；须读其对法规覆盖范围的论证。\\\", \\\"protocol_note\\\":\\\"GRAND可依现实目的编码；NONE反映孤段难见完整推论\\\", \\\"impact\\\":\\\"旧案功能性解释容易被漏检。\\\"},\\n    \\\"3672856_34\\\": {\\\"legal_reason\\\":\\\"从税种概念及定义厘清类别，定义本身不证明整个裁判仅由规则机械推出。\\\", \\\"protocol_note\\\":\\\"FORMAL依分类词义可接受；模型NONE可能因其为铺垫。\\\", \\\"impact\\\":\\\"概念段落不宜独立作案件筛选。\\\"},\\n    \\\"81100_69\\\": {\\\"legal_reason\\\":\\\"所引国务卿沟通涉及立法背景；事实性转述不必然构成政策式推理。\\\", \\\"protocol_note\\\":\\\"GRAND依历史目的解释可以成立；NONE依纯叙述亦可成立。\\\", \\\"impact\\\":\\\"低置信立法史应回看完整意见。\\\"},\\n    \\\"3612156_42\\\": {\\\"legal_reason\\\":\\\"针对诉讼不中止的法条目的释义，非单纯程序叙述。\\\", \\\"protocol_note\\\":\\\"GRAND依立法目的可复现；NONE因短句归纳可理解。\\\", \\\"impact\\\":\\\"历史措辞与OCR降低稳定性。\\\"},\\n    \\\"6931942_17\\\": {\\\"legal_reason\\\":\\\"承认从严解释刑法的一般规则，但其后可能转向适用理由；不能只凭规则开头定义立场。\\\", \\\"protocol_note\\\":\\\"GRAND取全段转折；FORMAL取严格解释法则，两种均需查后文。\\\", \\\"impact\\\":\\\"规则与目的并列须强制精读。\\\"},\\n    \\\"5655150_280\\\": {\\\"legal_reason\\\":\\\"涉及法定货币条款的合宪性讨论，异议意见不能充当法院多数裁判理由。\\\", \\\"protocol_note\\\":\\\"FORMAL依宪法规则推断可接受；NONE可能因本段为意见过渡。\\\", \\\"impact\\\":\\\"案件层面不可把异议当作holding。\\\"},\\n    \\\"3385333_19\\\": {\\\"legal_reason\\\":\\\"立法用语owner的范围与主张相对，取决于词义还是立法目标。\\\", \\\"protocol_note\\\":\\\"GRAND取目的考虑；FORMAL取字词分析，需保留争议。\\\", \\\"impact\\\":\\\"早期词义段不适合自动排他筛选。\\\"},\\n    \\\"11341177_13\\\": {\\\"legal_reason\\\":\\\"总统命令与国会授权的界限是实质法律判断，多数意见上下文限制行政权。\\\", \\\"protocol_note\\\":\\\"FORMAL按权限规则可复现；NONE若仅孤段罗列命令不足。\\\", \\\"impact\\\":\\\"精读应追踪授权基础而非风格分。\\\"},\\n    \\\"6139418_72\\\": {\\\"legal_reason\\\":\\\"社会对独立司法的依赖属于制度后果论，但文本是异议，不能当多数见解。\\\", \\\"protocol_note\\\":\\\"GRAND依社会价值可复现；NONE若仅一般前言亦可接受。\\\", \\\"impact\\\":\\\"制度价值与判决效力须区分。\\\"},\\n    \\\"11644460_32\\\": {\\\"legal_reason\\\":\\\"联邦官员被侵害罪的主观要件与联邦执法目的相连，应核对完整论证。\\\", \\\"protocol_note\\\":\\\"GRAND重目的；NONE认为反诘只是否认对方而未正面展开。\\\", \\\"impact\\\":\\\"刑法语境的筛选不能凭模型漏报排除。\\\"},\\n    \\\"1313717_86\\\": {\\\"legal_reason\\\":\\\"参议员对法条交叉援引的关切是一段立法史证据，单段不直接规定法条含义。\\\", \\\"protocol_note\\\":\\\"NONE因仅转述；GRAND因用于目的解释。\\\", \\\"impact\\\":\\\"低置信、异议与立法史交叉，必须复核。\\\"},\\n    \\\"12122490_155\\\": {\\\"legal_reason\\\":\\\"强调宪法问题加重法规解释争议；异议作者批评多数而非赞同多数理由。\\\", \\\"protocol_note\\\":\\\"FORMAL依解释优先顺序；GRAND依宪法回避权衡，均需上下文。\\\", \\\"impact\\\":\\\"不得拿异议风格冒充判决权威。\\\"},\\n    \\\"5861465_62\\\": {\\\"legal_reason\\\":\\\"协同意见明确主张文本足以决定结论，孤段也可辨别其自述方法。\\\", \\\"protocol_note\\\":\\\"FORMAL文本约束明显；GRAND可能被对其他解释方法的评论误导。\\\", \\\"impact\\\":\\\"短协同意见不得放大为多数意见标签。\\\"},\\n    \\\"6215707_64\\\": {\\\"legal_reason\\\":\\\"围绕狭义解释例外的司法自我约束展开；格言与政策考量并列。\\\", \\\"protocol_note\\\":\\\"NONE因是司法职能评论；FORMAL因约束性解释原则。\\\", \\\"impact\\\":\\\"工具难区分阐述法律规则与修辞。\\\"},\\n    \\\"8210237_68\\\": {\\\"legal_reason\\\":\\\"对offer的字典歧义进行批判是异议论证的一部分，不能只抓字典词形判断立场。\\\", \\\"protocol_note\\\":\\\"NONE为辩论铺垫；FORMAL可能由词典词汇诱发。\\\", \\\"impact\\\":\\\"词汇触发错误与异议身份限制律师检索价值。\\\"}\\n  }\\n}\"}","item_id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","output_index":1,"sequence_number":147}
+
+event: response.output_item.done
+data: {"type":"response.output_item.done","item":{"id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","type":"function_call","status":"completed","arguments":"{\"path\":\"output/case_analysis.json\",\"content\":\"{\\n  \\\"notes\\\": {\\n    \\\"11341980_23\\\": {\\\"legal_reason\\\":\\\"关注立法要处理的现实条件而非抽象理论；须读其对法规覆盖范围的论证。\\\", \\\"protocol_note\\\":\\\"GRAND可依现实目的编码；NONE反映孤段难见完整推论\\\", \\\"impact\\\":\\\"旧案功能性解释容易被漏检。\\\"},\\n    \\\"3672856_34\\\": {\\\"legal_reason\\\":\\\"从税种概念及定义厘清类别，定义本身不证明整个裁判仅由规则机械推出。\\\", \\\"protocol_note\\\":\\\"FORMAL依分类词义可接受；模型NONE可能因其为铺垫。\\\", \\\"impact\\\":\\\"概念段落不宜独立作案件筛选。\\\"},\\n    \\\"81100_69\\\": {\\\"legal_reason\\\":\\\"所引国务卿沟通涉及立法背景；事实性转述不必然构成政策式推理。\\\", \\\"protocol_note\\\":\\\"GRAND依历史目的解释可以成立；NONE依纯叙述亦可成立。\\\", \\\"impact\\\":\\\"低置信立法史应回看完整意见。\\\"},\\n    \\\"3612156_42\\\": {\\\"legal_reason\\\":\\\"针对诉讼不中止的法条目的释义，非单纯程序叙述。\\\", \\\"protocol_note\\\":\\\"GRAND依立法目的可复现；NONE因短句归纳可理解。\\\", \\\"impact\\\":\\\"历史措辞与OCR降低稳定性。\\\"},\\n    \\\"6931942_17\\\": {\\\"legal_reason\\\":\\\"承认从严解释刑法的一般规则，但其后可能转向适用理由；不能只凭规则开头定义立场。\\\", \\\"protocol_note\\\":\\\"GRAND取全段转折；FORMAL取严格解释法则，两种均需查后文。\\\", \\\"impact\\\":\\\"规则与目的并列须强制精读。\\\"},\\n    \\\"5655150_280\\\": {\\\"legal_reason\\\":\\\"涉及法定货币条款的合宪性讨论，异议意见不能充当法院多数裁判理由。\\\", \\\"protocol_note\\\":\\\"FORMAL依宪法规则推断可接受；NONE可能因本段为意见过渡。\\\", \\\"impact\\\":\\\"案件层面不可把异议当作holding。\\\"},\\n    \\\"3385333_19\\\": {\\\"legal_reason\\\":\\\"立法用语owner的范围与主张相对，取决于词义还是立法目标。\\\", \\\"protocol_note\\\":\\\"GRAND取目的考虑；FORMAL取字词分析，需保留争议。\\\", \\\"impact\\\":\\\"早期词义段不适合自动排他筛选。\\\"},\\n    \\\"11341177_13\\\": {\\\"legal_reason\\\":\\\"总统命令与国会授权的界限是实质法律判断，多数意见上下文限制行政权。\\\", \\\"protocol_note\\\":\\\"FORMAL按权限规则可复现；NONE若仅孤段罗列命令不足。\\\", \\\"impact\\\":\\\"精读应追踪授权基础而非风格分。\\\"},\\n    \\\"6139418_72\\\": {\\\"legal_reason\\\":\\\"社会对独立司法的依赖属于制度后果论，但文本是异议，不能当多数见解。\\\", \\\"protocol_note\\\":\\\"GRAND依社会价值可复现；NONE若仅一般前言亦可接受。\\\", \\\"impact\\\":\\\"制度价值与判决效力须区分。\\\"},\\n    \\\"11644460_32\\\": {\\\"legal_reason\\\":\\\"联邦官员被侵害罪的主观要件与联邦执法目的相连，应核对完整论证。\\\", \\\"protocol_note\\\":\\\"GRAND重目的；NONE认为反诘只是否认对方而未正面展开。\\\", \\\"impact\\\":\\\"刑法语境的筛选不能凭模型漏报排除。\\\"},\\n    \\\"1313717_86\\\": {\\\"legal_reason\\\":\\\"参议员对法条交叉援引的关切是一段立法史证据，单段不直接规定法条含义。\\\", \\\"protocol_note\\\":\\\"NONE因仅转述；GRAND因用于目的解释。\\\", \\\"impact\\\":\\\"低置信、异议与立法史交叉，必须复核。\\\"},\\n    \\\"12122490_155\\\": {\\\"legal_reason\\\":\\\"强调宪法问题加重法规解释争议；异议作者批评多数而非赞同多数理由。\\\", \\\"protocol_note\\\":\\\"FORMAL依解释优先顺序；GRAND依宪法回避权衡，均需上下文。\\\", \\\"impact\\\":\\\"不得拿异议风格冒充判决权威。\\\"},\\n    \\\"5861465_62\\\": {\\\"legal_reason\\\":\\\"协同意见明确主张文本足以决定结论，孤段也可辨别其自述方法。\\\", \\\"protocol_note\\\":\\\"FORMAL文本约束明显；GRAND可能被对其他解释方法的评论误导。\\\", \\\"impact\\\":\\\"短协同意见不得放大为多数意见标签。\\\"},\\n    \\\"6215707_64\\\": {\\\"legal_reason\\\":\\\"围绕狭义解释例外的司法自我约束展开；格言与政策考量并列。\\\", \\\"protocol_note\\\":\\\"NONE因是司法职能评论；FORMAL因约束性解释原则。\\\", \\\"impact\\\":\\\"工具难区分阐述法律规则与修辞。\\\"},\\n    \\\"8210237_68\\\": {\\\"legal_reason\\\":\\\"对offer的字典歧义进行批判是异议论证的一部分，不能只抓字典词形判断立场。\\\", \\\"protocol_note\\\":\\\"NONE为辩论铺垫；FORMAL可能由词典词汇诱发。\\\", \\\"impact\\\":\\\"词汇触发错误与异议身份限制律师检索价值。\\\"}\\n  }\\n}\"}","call_id":"call_o8QDYQD65d72BvE5Rq4NaRHG","name":"write_text"},"output_index":1,"sequence_number":148}
+
+event: response.completed
+data: {"type":"response.completed","response":{"id":"resp_0c8cb9a16bf0e43f016aeb056377a88190a15bae0199e77961","object":"response","created_at":1793787235,"status":"completed","access_programs":null,"background":false,"completed_at":1793787248,"content_filters":[{"blocked":false,"source_type":"prompt","content_filter_raw":[],"content_filter_results":{},"content_filter_offsets":{"start_offset":0,"end_offset":114318,"check_offset":0}}],"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"gpt-6-sol","moderation":null,"output":[{"id":"rs_0c8cb9a16bf0e43f016aeb05646c088190ab1ea704b758e921","type":"reasoning","content":[],"encrypted_content":"gAAAAABq6wVwTCiwnVZoHWGYFt30_8HnBwVjVQ0NQjojv7u8bLGCb2srmzscf-PL5122B6ZpeZlCbRmBd4KYOBbGiSv7qO3qLgZdJswOb7rr0DPGXrRMptCPkgoh-8J_cMN-LV5k9ole-MtZw-AMnt5nxgzDFBSUvQUlybyKG0CIqIAr9WOJFmitRT6Wn2yRuqV-XtPvk36SQyBzPuMNHbS3f074moVzNgm_q1d9qnzOKUBXxapezKBGOc6zH5DIIZlSHZn0NOrBUDYrcKg3z_ET3dg_ApxsGLCVoO168ZmoL6crXerDuD6z_Tf-3N8lZ-xjgkgAKZ0fQ3n9HqZjtvUVPXZdKZp4d9MIwsMMYMLWc4JzcPZtwODkC4BCfiS50pUF4edRvX02bJW8kH5_tJsLuYlGJqzGo40Qz5Av67zthEiprGJmlYfbmKfv0gd1FKG5TNa2C2gIjRp04dNkxeBxMryof1NDOmfwDMORdcKoLJ8FS_AnW9nKmwLoqmakzOwpshloje_AHxVISiyNoChhvd1zuT71w5NO-qrgHahUqKGkZz2kR2gfjPRqXHYVN93DLUbg_qL4iOf0CYTqEZ9We1mJRfIXj3v38t498DaAp5ZsPy0ZrI6Ro7iRFLrZqn7g5VIwarKBCAXs1WIWTsqsPzB0nXVGx_02xvhLAxvsXvt2JOEP7eYJ8VigIL7q3L0UYJ3oMQHkim4CKz-5c-U-cHBQhlpLLu71_nP4gkaBY07dYQGBjC3sLJBcTFy1kAMyo9kMsMC9SSjURlmbOYlzDrXE0BYn3OJyLgDgYkoA4aaWrhSrvkd1nCbRcC_tS_7s7ZJc1jdMLALHcCvw-If9kMWaPtGuirenNDTp-UZbe9SdPwISpnlORCy4eBUPDQE4QuAtTxnujF9Vh532XRmVTspjz--hilKMB0_Z4Dsa3D92NQJJfYXAU8_iYFYylo7UfZgA_o-3KomcG1EjPxHSPFoxSdFkT33fYjdUgSRv98IioOgUEwVu7nzMDZtlHpgj9E6yyXJNIgZ1ubt4KkDT8FHsO_AkfAROhc5OMRnBD8opj1JX8I4I8QDeOIV_zXIYhRI3UN8JUX-aEjEfv2X1QURzGxCfnd_ASwEX_kuXvuJz-XaZk0N1hEDbBPlNQCdg20vMPm9s4mbCTlIq-ErDP4bMPOm_pOfb1KLM2b2W-nqBzD3RybkoyuHCgvkVMKB9jtCBuRue4fHX9g7wu21P6KPwlmuO_iRcgCatrxKRIHCvBmwwaO8QBvj-9lc4Ry7nQNHvR8nK7CPVy_iY6qiVHuDzP38CcnXjI9WINdZ0J5H4Pd4xCta5x_EYZ3Dxla_3ZYjfdH09lsuiegzxVuEewqfggoDVZqjNCPoi9I3SYPY5UceTDYTzPiLcjMSvMIj8wT8tG3w9OvbsCk8Z65BV0MSCYdtWBB7u6lHvR3ti7K8k5a0aVGywBFIUVZ73xRAQW0y_1AmpqUzBgSFXZ_XaS4yXoS24clNxHtjgL53tLQx5gh5FbL-rZaG2840FtNM3R8Zq_Bk1-14xbQBN0ovaoZLAomjFAA==","summary":[]},{"id":"fc_0c8cb9a16bf0e43f016aeb0564a12c81908759614a8d4d83ad","type":"function_call","status":"completed","arguments":"{\"path\":\"output/case_analysis.json\",\"content\":\"{\\n  \\\"notes\\\": {\\n    \\\"11341980_23\\\": {\\\"legal_reason\\\":\\\"关注立法要处理的现实条件而非抽象理论；须读其对法规覆盖范围的论证。\\\", \\\"protocol_note\\\":\\\"GRAND可依现实目的编码；NONE反映孤段难见完整推论\\\", \\\"impact\\\":\\\"旧案功能性解释容易被漏检。\\\"},\\n    \\\"3672856_34\\\": {\\\"legal_reason\\\":\\\"从税种概念及定义厘清类别，定义本身不证明整个裁判仅由规则机械推出。\\\", \\\"protocol_note\\\":\\\"FORMAL依分类词义可接受；模型NONE可能因其为铺垫。\\\", \\\"impact\\\":\\\"概念段落不宜独立作案件筛选。\\\"},\\n    \\\"81100_69\\\": {\\\"legal_reason\\\":\\\"所引国务卿沟通涉及立法背景；事实性转述不必然构成政策式推理。\\\", \\\"protocol_note\\\":\\\"GRAND依历史目的解释可以成立；NONE依纯叙述亦可成立。\\\", \\\"impact\\\":\\\"低置信立法史应回看完整意见。\\\"},\\n    \\\"3612156_42\\\": {\\\"legal_reason\\\":\\\"针对诉讼不中止的法条目的释义，非单纯程序叙述。\\\", \\\"protocol_note\\\":\\\"GRAND依立法目的可复现；NONE因短句归纳可理解。\\\", \\\"impact\\\":\\\"历史措辞与OCR降低稳定性。\\\"},\\n    \\\"6931942_17\\\": {\\\"legal_reason\\\":\\\"承认从严解释刑法的一般规则，但其后可能转向适用理由；不能只凭规则开头定义立场。\\\", \\\"protocol_note\\\":\\\"GRAND取全段转折；FORMAL取严格解释法则，两种均需查后文。\\\", \\\"impact\\\":\\\"规则与目的并列须强制精读。\\\"},\\n    \\\"5655150_280\\\": {\\\"legal_reason\\\":\\\"涉及法定货币条款的合宪性讨论，异议意见不能充当法院多数裁判理由。\\\", \\\"protocol_note\\\":\\\"FORMAL依宪法规则推断可接受；NONE可能因本段为意见过渡。\\\", \\\"impact\\\":\\\"案件层面不可把异议当作holding。\\\"},\\n    \\\"3385333_19\\\": {\\\"legal_reason\\\":\\\"立法用语owner的范围与主张相对，取决于词义还是立法目标。\\\", \\\"protocol_note\\\":\\\"GRAND取目的考虑；FORMAL取字词分析，需保留争议。\\\", \\\"impact\\\":\\\"早期词义段不适合自动排他筛选。\\\"},\\n    \\\"11341177_13\\\": {\\\"legal_reason\\\":\\\"总统命令与国会授权的界限是实质法律判断，多数意见上下文限制行政权。\\\", \\\"protocol_note\\\":\\\"FORMAL按权限规则可复现；NONE若仅孤段罗列命令不足。\\\", \\\"impact\\\":\\\"精读应追踪授权基础而非风格分。\\\"},\\n    \\\"6139418_72\\\": {\\\"legal_reason\\\":\\\"社会对独立司法的依赖属于制度后果论，但文本是异议，不能当多数见解。\\\", \\\"protocol_note\\\":\\\"GRAND依社会价值可复现；NONE若仅一般前言亦可接受。\\\", \\\"impact\\\":\\\"制度价值与判决效力须区分。\\\"},\\n    \\\"11644460_32\\\": {\\\"legal_reason\\\":\\\"联邦官员被侵害罪的主观要件与联邦执法目的相连，应核对完整论证。\\\", \\\"protocol_note\\\":\\\"GRAND重目的；NONE认为反诘只是否认对方而未正面展开。\\\", \\\"impact\\\":\\\"刑法语境的筛选不能凭模型漏报排除。\\\"},\\n    \\\"1313717_86\\\": {\\\"legal_reason\\\":\\\"参议员对法条交叉援引的关切是一段立法史证据，单段不直接规定法条含义。\\\", \\\"protocol_note\\\":\\\"NONE因仅转述；GRAND因用于目的解释。\\\", \\\"impact\\\":\\\"低置信、异议与立法史交叉，必须复核。\\\"},\\n    \\\"12122490_155\\\": {\\\"legal_reason\\\":\\\"强调宪法问题加重法规解释争议；异议作者批评多数而非赞同多数理由。\\\", \\\"protocol_note\\\":\\\"FORMAL依解释优先顺序；GRAND依宪法回避权衡，均需上下文。\\\", \\\"impact\\\":\\\"不得拿异议风格冒充判决权威。\\\"},\\n    \\\"5861465_62\\\": {\\\"legal_reason\\\":\\\"协同意见明确主张文本足以决定结论，孤段也可辨别其自述方法。\\\", \\\"protocol_note\\\":\\\"FORMAL文本约束明显；GRAND可能被对其他解释方法的评论误导。\\\", \\\"impact\\\":\\\"短协同意见不得放大为多数意见标签。\\\"},\\n    \\\"6215707_64\\\": {\\\"legal_reason\\\":\\\"围绕狭义解释例外的司法自我约束展开；格言与政策考量并列。\\\", \\\"protocol_note\\\":\\\"NONE因是司法职能评论；FORMAL因约束性解释原则。\\\", \\\"impact\\\":\\\"工具难区分阐述法律规则与修辞。\\\"},\\n    \\\"8210237_68\\\": {\\\"legal_reason\\\":\\\"对offer的字典歧义进行批判是异议论证的一部分，不能只抓字典词形判断立场。\\\", \\\"protocol_note\\\":\\\"NONE为辩论铺垫；FORMAL可能由词典词汇诱发。\\\", \\\"impact\\\":\\\"词汇触发错误与异议身份限制律师检索价值。\\\"}\\n  }\\n}\"}","call_id":"call_o8QDYQD65d72BvE5Rq4NaRHG","name":"write_text"}],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"default","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":{"input_tokens":36749,"input_tokens_details":{"cache_write_tokens":6689,"cached_tokens":30057},"output_tokens":1314,"output_tokens_details":{"reasoning_tokens":16},"total_tokens":38063},"user":null,"metadata":{}},"sequence_number":149}
+

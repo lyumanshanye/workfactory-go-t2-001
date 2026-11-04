@@ -1,0 +1,1363 @@
+{
+  "status": "reference_computations_complete_not_expert_certified",
+  "models": {
+    "bayesian": {
+      "identity": {
+        "model": "bayesian",
+        "n": 100000,
+        "year_min": 1.0,
+        "year_max": 100000.0,
+        "duplicate_years": 0,
+        "missing_year_steps": 0,
+        "crisis_count": 3999,
+        "crisis_frequency": 0.03999,
+        "credit_spread_sd_annual": 0.999916497849836,
+        "stored_credit_ratio_sd_annual": 1.0000232597779626,
+        "raw_credit_ratio_mean": 3.931359069254941,
+        "raw_to_stored_scale_mean": 1.189722703228691,
+        "raw_to_stored_scale_sd": 2.6993307716802743e-16,
+        "raw_credit_identity_max_error": 2.6645352591003757e-15,
+        "credit_lag12_max_error": 0.0,
+        "credit_lag1_difference_mean_abs": 1.3805402967178042,
+        "future5_label_disagreements": 7278,
+        "GDP3Y_stored_max_error_valid": 0.0,
+        "GDP3Y_tail_padded_zero_rows": 3,
+        "R_vs_Stata_terminal_label_disagreements": 0,
+        "last_two_crisis_values": [
+          0.0,
+          0.0
+        ]
+      },
+      "chronological_holdout": {
+        "model": "bayesian",
+        "analysis": "chronological_holdout_observable_logit",
+        "train_n": 69997,
+        "train_last_year": 69997.0,
+        "test_n": 14997,
+        "test_first_year": 85001.0,
+        "test_last_year": 99997.0,
+        "test_event_rate": 0.1194238847769554,
+        "brier": 0.10331354256564054,
+        "baseline_brier": 0.10516206608196567,
+        "auc": 0.6059525926534756,
+        "interpretation": "out-of-time on simulated path only; not market out-of-sample"
+      }
+    },
+    "diagnostic": {
+      "identity": {
+        "model": "diagnostic",
+        "n": 100000,
+        "year_min": 1.0,
+        "year_max": 100000.0,
+        "duplicate_years": 0,
+        "missing_year_steps": 0,
+        "crisis_count": 3999,
+        "crisis_frequency": 0.03999,
+        "credit_spread_sd_annual": 1.0008916800804228,
+        "stored_credit_ratio_sd_annual": 1.0008135172597687,
+        "raw_credit_ratio_mean": 4.255963222892034,
+        "raw_to_stored_scale_mean": 1.8192571517976426,
+        "raw_to_stored_scale_sd": 2.6003439901271854e-16,
+        "raw_credit_identity_max_error": 2.6645352591003757e-15,
+        "credit_lag12_max_error": 0.0,
+        "credit_lag1_difference_mean_abs": 88638.4854294176,
+        "future5_label_disagreements": 7294,
+        "GDP3Y_stored_max_error_valid": 0.0,
+        "GDP3Y_tail_padded_zero_rows": 3,
+        "R_vs_Stata_terminal_label_disagreements": 0,
+        "last_two_crisis_values": [
+          0.0,
+          0.0
+        ]
+      },
+      "chronological_holdout": {
+        "model": "diagnostic",
+        "analysis": "chronological_holdout_observable_logit",
+        "train_n": 69997,
+        "train_last_year": 69997.0,
+        "test_n": 14997,
+        "test_first_year": 85001.0,
+        "test_last_year": 99997.0,
+        "test_event_rate": 0.11922384476895379,
+        "brier": 0.10273285429783645,
+        "baseline_brier": 0.1050097118252329,
+        "auc": 0.6195435184775887,
+        "interpretation": "out-of-time on simulated path only; not market out-of-sample"
+      }
+    }
+  },
+  "statistics": [
+    {
+      "model": "bayesian",
+      "analysis": "A_spread_author",
+      "n": 100000,
+      "coef": {
+        "intercept": 0.4352468904523585,
+        "crisis_x_forward_spread_change": -2.870071007403406
+      },
+      "se_hac5": {
+        "intercept": 0.018732748834952424,
+        "crisis_x_forward_spread_change": 0.02469106832343946
+      }
+    },
+    {
+      "model": "bayesian",
+      "analysis": "A_credit_author",
+      "n": 100000,
+      "coef": {
+        "intercept": 0.440909825729376,
+        "crisis_x_scaled_credit": -2.176127066810269
+      },
+      "se_hac5": {
+        "intercept": 0.018700676488394644,
+        "crisis_x_scaled_credit": 0.018360473075758013
+      }
+    },
+    {
+      "model": "bayesian",
+      "analysis": "A_spread_boundary_corrected",
+      "n": 99997,
+      "coef": {
+        "intercept": 0.4352604823639936,
+        "crisis_x_forward_spread_change": -2.870075727671845
+      },
+      "se_hac5": {
+        "intercept": 0.018733378134888026,
+        "crisis_x_forward_spread_change": 0.024691079704727406
+      }
+    },
+    {
+      "model": "bayesian",
+      "analysis": "A_credit_boundary_corrected",
+      "n": 99997,
+      "coef": {
+        "intercept": 0.4409236038538107,
+        "crisis_x_scaled_credit": -2.176130691922065
+      },
+      "se_hac5": {
+        "intercept": 0.018701305765409414,
+        "crisis_x_scaled_credit": 0.018360481016245447
+      }
+    },
+    {
+      "model": "bayesian",
+      "analysis": "B_capital_return_author",
+      "n": 100000,
+      "coef": {
+        "intercept": 0.08056209479525944,
+        "scaled_credit": -0.0065252024186005005
+      },
+      "se_hac5": {
+        "intercept": 0.0012469357834204214,
+        "scaled_credit": 0.00034107221628773565
+      }
+    },
+    {
+      "model": "bayesian",
+      "analysis": "C_spread_author",
+      "n": 100000,
+      "coef": {
+        "intercept": 4.831321132878277,
+        "pre1": -0.2524605680750193,
+        "post5": 1.3701885105160332
+      },
+      "se_hac5": {
+        "intercept": 0.005918452812136688,
+        "pre1": 0.007503882675520212,
+        "post5": 0.008314846742913464
+      }
+    },
+    {
+      "model": "bayesian",
+      "analysis": "C_spread_pre5",
+      "n": 99995,
+      "coef": {
+        "intercept": 4.865263757364292,
+        "pre_future5": -0.21555392295687392,
+        "post5": 1.362178015573161
+      },
+      "se_hac5": {
+        "intercept": 0.006793699336260922,
+        "pre_future5": 0.007875791183122328,
+        "post5": 0.008426661336402996
+      }
+    },
+    {
+      "model": "bayesian",
+      "analysis": "D_froth_author_inclusive3",
+      "n": 100000,
+      "discrete_AME_pp": 5.670000000000002,
+      "froth_probability": 0.14832,
+      "nonfroth_probability": 0.09162,
+      "froth_median": 4.642906159835712
+    },
+    {
+      "model": "bayesian",
+      "analysis": "D_froth_strictfuture3",
+      "n": 99997,
+      "discrete_AME_pp": 4.149404644278658,
+      "froth_probability": 0.14072,
+      "nonfroth_probability": 0.09922595355721343,
+      "froth_median": 4.642906159835712
+    },
+    {
+      "model": "bayesian",
+      "analysis": "D_froth_strictfuture5",
+      "n": 99995,
+      "discrete_AME_pp": 5.504304830483051,
+      "froth_probability": 0.22456,
+      "nonfroth_probability": 0.1695169516951695,
+      "froth_median": 4.642906159835712
+    },
+    {
+      "model": "bayesian",
+      "analysis": "D_credit_logit_nextyear",
+      "ame_pp": 4.050622968750218,
+      "n": 99999,
+      "coef": [
+        -6.997525088205462,
+        1.0644836803296613
+      ],
+      "se_hac5": [
+        0.13041561752218198,
+        0.03461776725381377
+      ],
+      "score_gradient_max": 3.5247004933565774e-10,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "logit",
+      "ame": [
+        0.040506229687502185
+      ]
+    },
+    {
+      "model": "bayesian",
+      "analysis": "author_current_plus_next2_observable_raw_credit_ratio",
+      "n": 100000,
+      "coef": [
+        -2.8145031752654286,
+        0.3907791009832113
+      ],
+      "se_hac5": [
+        0.048353220881558516,
+        0.01098229144394328
+      ],
+      "score_gradient_max": 1.1625764018141638e-11,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "probit",
+      "ame": [
+        0.07479689566063588
+      ]
+    },
+    {
+      "model": "bayesian",
+      "analysis": "author_current_plus_next2_oracle_raw_credit_times_true_lambda",
+      "n": 100000,
+      "coef": [
+        -1.394585856305757,
+        0.5047149664016027
+      ],
+      "se_hac5": [
+        0.008531521081231067,
+        0.006887747666251624
+      ],
+      "score_gradient_max": 5.025743798203753e-10,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "probit",
+      "ame": [
+        0.0908308617493818
+      ]
+    },
+    {
+      "model": "bayesian",
+      "analysis": "strict_future3_observable_raw_credit_ratio",
+      "n": 99997,
+      "coef": [
+        -2.191305306854896,
+        0.2469209967016251
+      ],
+      "se_hac5": [
+        0.03576778150703029,
+        0.008196731505816759
+      ],
+      "score_gradient_max": 1.2148607048657245e-11,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "probit",
+      "ame": [
+        0.04815588782801053
+      ]
+    },
+    {
+      "model": "bayesian",
+      "analysis": "strict_future3_oracle_raw_credit_times_true_lambda",
+      "n": 99997,
+      "coef": [
+        -1.2254250533798612,
+        0.151447488211496
+      ],
+      "se_hac5": [
+        0.008407551559840548,
+        0.007528131337060072
+      ],
+      "score_gradient_max": 8.355165399536861e-11,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "probit",
+      "ame": [
+        0.030072262073122004
+      ]
+    },
+    {
+      "model": "bayesian",
+      "analysis": "alternative_annual_credit_contraction_below_minus10pct",
+      "n": 99999,
+      "event_count": 6919,
+      "frequency": 0.06919069190691907,
+      "interpretation": "Analyst sensitivity from start-of-year snapshots; not a reconstruction of monthly author crises."
+    },
+    {
+      "model": "bayesian",
+      "analysis": "alternative_event_future3_raw_credit_logit",
+      "ame_pp": -2.9608496895039327,
+      "n": 99997,
+      "coef": [
+        -0.7270713932048743,
+        -0.20020316677337693
+      ],
+      "se_hac5": [
+        0.035466156503415135,
+        0.008755261276744553
+      ],
+      "score_gradient_max": 8.145908139498783e-12,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "logit",
+      "ame": [
+        -0.02960849689503933
+      ]
+    },
+    {
+      "model": "bayesian",
+      "analysis": "chronological_holdout_observable_logit",
+      "train_n": 69997,
+      "train_last_year": 69997.0,
+      "test_n": 14997,
+      "test_first_year": 85001.0,
+      "test_last_year": 99997.0,
+      "test_event_rate": 0.1194238847769554,
+      "brier": 0.10331354256564054,
+      "baseline_brier": 0.10516206608196567,
+      "auc": 0.6059525926534756,
+      "interpretation": "out-of-time on simulated path only; not market out-of-sample"
+    },
+    {
+      "model": "bayesian",
+      "analysis": "holdout_brier_improvement_hac",
+      "mean_improvement": 0.001848523516325138,
+      "se_hac5": 0.0002326657415936856,
+      "n": 14997
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "A_spread_author",
+      "n": 100000,
+      "coef": {
+        "intercept": 0.5850420453890242,
+        "crisis_x_forward_spread_change": -3.4390215505531145
+      },
+      "se_hac5": {
+        "intercept": 0.022907507283743876,
+        "crisis_x_forward_spread_change": 0.027614833011641225
+      }
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "A_credit_author",
+      "n": 100000,
+      "coef": {
+        "intercept": 0.5887917962563828,
+        "crisis_x_scaled_credit": -3.488763325093823
+      },
+      "se_hac5": {
+        "intercept": 0.022893924968804595,
+        "crisis_x_scaled_credit": 0.026638932026154652
+      }
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "A_spread_boundary_corrected",
+      "n": 99997,
+      "coef": {
+        "intercept": 0.5850603249354734,
+        "crisis_x_forward_spread_change": -3.4390278240252075
+      },
+      "se_hac5": {
+        "intercept": 0.022908269942956687,
+        "crisis_x_forward_spread_change": 0.027614873921016008
+      }
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "A_credit_boundary_corrected",
+      "n": 99997,
+      "coef": {
+        "intercept": 0.5888101943908647,
+        "crisis_x_scaled_credit": -3.4887696828214
+      },
+      "se_hac5": {
+        "intercept": 0.022894687525221585,
+        "crisis_x_scaled_credit": 0.026638974645399063
+      }
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "B_capital_return_author",
+      "n": 100000,
+      "coef": {
+        "intercept": 0.10987611737572418,
+        "scaled_credit": -0.021747542340976308
+      },
+      "se_hac5": {
+        "intercept": 0.004055711077804867,
+        "scaled_credit": 0.0014548223402231803
+      }
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "C_spread_author",
+      "n": 100000,
+      "coef": {
+        "intercept": 5.090889077555892,
+        "pre1": -0.2984148010841711,
+        "post5": 1.3311737122845098
+      },
+      "se_hac5": {
+        "intercept": 0.005878938817108584,
+        "pre1": 0.007698768072239194,
+        "post5": 0.008169665144872334
+      }
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "C_spread_pre5",
+      "n": 99995,
+      "coef": {
+        "intercept": 5.134674590302896,
+        "pre_future5": -0.27190004421546327,
+        "post5": 1.3202417996798999
+      },
+      "se_hac5": {
+        "intercept": 0.0067342648677575796,
+        "pre_future5": 0.007519689926847658,
+        "post5": 0.008300614787520623
+      }
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "D_froth_author_inclusive3",
+      "n": 100000,
+      "discrete_AME_pp": 7.397999999999999,
+      "froth_probability": 0.15696,
+      "nonfroth_probability": 0.08298,
+      "froth_median": 4.927618404767283
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "D_froth_strictfuture3",
+      "n": 99997,
+      "discrete_AME_pp": 5.877456487389243,
+      "froth_probability": 0.14936,
+      "nonfroth_probability": 0.09058543512610756,
+      "froth_median": 4.927618404767283
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "D_froth_strictfuture5",
+      "n": 99995,
+      "discrete_AME_pp": 8.464452045204517,
+      "froth_probability": 0.23944,
+      "nonfroth_probability": 0.1547954795479548,
+      "froth_median": 4.927618404767283
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "D_credit_logit_nextyear",
+      "ame_pp": 3.8520305427133272,
+      "n": 99999,
+      "coef": [
+        -5.848166511240675,
+        1.0133124467504158
+      ],
+      "se_hac5": [
+        0.1171238199042689,
+        0.041184725464377236
+      ],
+      "score_gradient_max": 2.8332724278909297e-10,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "logit",
+      "ame": [
+        0.03852030542713327
+      ]
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "author_current_plus_next2_observable_raw_credit_ratio",
+      "n": 100000,
+      "coef": [
+        -2.3312472532374144,
+        0.2476207984948618
+      ],
+      "se_hac5": [
+        0.03634905953997272,
+        0.00710804036600587
+      ],
+      "score_gradient_max": 3.162798892123592e-10,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "probit",
+      "ame": [
+        0.047189432329851
+      ]
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "author_current_plus_next2_oracle_raw_credit_times_true_lambda",
+      "n": 100000,
+      "coef": [
+        -1.377748394069693,
+        0.44911850304325207
+      ],
+      "se_hac5": [
+        0.008369757689498193,
+        0.005860485475134916
+      ],
+      "score_gradient_max": 5.802412528302381e-11,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "probit",
+      "ame": [
+        0.07978090385123073
+      ]
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "strict_future3_observable_raw_credit_ratio",
+      "n": 99997,
+      "coef": [
+        -1.9088820518001088,
+        0.161435135239383
+      ],
+      "se_hac5": [
+        0.0275110059599143,
+        0.00546043530530886
+      ],
+      "score_gradient_max": 5.912799754222009e-10,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "probit",
+      "ame": [
+        0.03140833490219394
+      ]
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "strict_future3_oracle_raw_credit_times_true_lambda",
+      "n": 99997,
+      "coef": [
+        -1.2223914074036906,
+        0.14073805938943895
+      ],
+      "se_hac5": [
+        0.00824154340018649,
+        0.006013418724350855
+      ],
+      "score_gradient_max": 4.038416375378466e-11,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "probit",
+      "ame": [
+        0.027906479865490157
+      ]
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "alternative_annual_credit_contraction_below_minus10pct",
+      "n": 99999,
+      "event_count": 9383,
+      "frequency": 0.09383093830938309,
+      "interpretation": "Analyst sensitivity from start-of-year snapshots; not a reconstruction of monthly author crises."
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "alternative_event_future3_raw_credit_logit",
+      "ame_pp": -2.322103983924318,
+      "n": 99997,
+      "coef": [
+        -0.744268768857899,
+        -0.14237788484866684
+      ],
+      "se_hac5": [
+        0.02530059379456992,
+        0.005616255442797515
+      ],
+      "score_gradient_max": 6.520658891963538e-10,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully.",
+      "link": "logit",
+      "ame": [
+        -0.023221039839243177
+      ]
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "chronological_holdout_observable_logit",
+      "train_n": 69997,
+      "train_last_year": 69997.0,
+      "test_n": 14997,
+      "test_first_year": 85001.0,
+      "test_last_year": 99997.0,
+      "test_event_rate": 0.11922384476895379,
+      "brier": 0.10273285429783645,
+      "baseline_brier": 0.1050097118252329,
+      "auc": 0.6195435184775887,
+      "interpretation": "out-of-time on simulated path only; not market out-of-sample"
+    },
+    {
+      "model": "diagnostic",
+      "analysis": "holdout_brier_improvement_hac",
+      "mean_improvement": 0.0022768575273964396,
+      "se_hac5": 0.0002565251860733565,
+      "n": 14997
+    }
+  ],
+  "event_profiles": [
+    {
+      "model": "bayesian",
+      "scheme": "all_crises",
+      "event_time": -4,
+      "n_events": 3999,
+      "credit_spread_mean": 4.89578900436355,
+      "raw_credit_GDP_mean": 4.19754314847956,
+      "GDP_change_nextyear_mean": 0.002992377988612979,
+      "credit_change_nextyear_mean": 0.21152960314126884,
+      "GDP3Y_change_mean": 0.0142705312380037
+    },
+    {
+      "model": "bayesian",
+      "scheme": "all_crises",
+      "event_time": -3,
+      "n_events": 3999,
+      "credit_spread_mean": 4.878754868360789,
+      "raw_credit_GDP_mean": 4.2259198663101545,
+      "GDP_change_nextyear_mean": 0.004493522464466393,
+      "credit_change_nextyear_mean": 0.23168318117741302,
+      "GDP3Y_change_mean": 0.01696531534476201
+    },
+    {
+      "model": "bayesian",
+      "scheme": "all_crises",
+      "event_time": -2,
+      "n_events": 3999,
+      "credit_spread_mean": 4.82223600401815,
+      "raw_credit_GDP_mean": 4.309976551527349,
+      "GDP_change_nextyear_mean": 0.0069358465773602255,
+      "credit_change_nextyear_mean": 0.1140374863038922,
+      "GDP3Y_change_mean": -0.09968287605993911
+    },
+    {
+      "model": "bayesian",
+      "scheme": "all_crises",
+      "event_time": -1,
+      "n_events": 3999,
+      "credit_spread_mean": 4.7022083677004245,
+      "raw_credit_GDP_mean": 4.4470292140732655,
+      "GDP_change_nextyear_mean": 0.005485396406339041,
+      "credit_change_nextyear_mean": 0.026848277861202547,
+      "GDP3Y_change_mean": -0.08509330771917534
+    },
+    {
+      "model": "bayesian",
+      "scheme": "all_crises",
+      "event_time": 0,
+      "n_events": 3999,
+      "credit_spread_mean": 4.621646992978938,
+      "raw_credit_GDP_mean": 4.517147192479601,
+      "GDP_change_nextyear_mean": -0.11078150614399924,
+      "credit_change_nextyear_mean": -0.7982367950259618,
+      "GDP3Y_change_mean": -0.0780425031464746
+    },
+    {
+      "model": "bayesian",
+      "scheme": "all_crises",
+      "event_time": 1,
+      "n_events": 3999,
+      "credit_spread_mean": 7.45109794911823,
+      "raw_credit_GDP_mean": 1.0136611082051026,
+      "GDP_change_nextyear_mean": 0.02328098900292123,
+      "credit_change_nextyear_mean": 3.5634650220596504,
+      "GDP3Y_change_mean": 0.04472261023002078
+    },
+    {
+      "model": "bayesian",
+      "scheme": "all_crises",
+      "event_time": 2,
+      "n_events": 3999,
+      "credit_spread_mean": 6.690824567003296,
+      "raw_credit_GDP_mean": 2.235437923556604,
+      "GDP_change_nextyear_mean": 0.013199860235271152,
+      "credit_change_nextyear_mean": 0.7884184975755447,
+      "GDP3Y_change_mean": 0.023828105379402047
+    },
+    {
+      "model": "bayesian",
+      "scheme": "all_crises",
+      "event_time": 3,
+      "n_events": 3999,
+      "credit_spread_mean": 6.2717622553227725,
+      "raw_credit_GDP_mean": 2.91822499183836,
+      "GDP_change_nextyear_mean": 0.00779764786515288,
+      "credit_change_nextyear_mean": 0.6211169223832758,
+      "GDP3Y_change_mean": 0.011941939578856624
+    },
+    {
+      "model": "bayesian",
+      "scheme": "all_crises",
+      "event_time": 4,
+      "n_events": 3999,
+      "credit_spread_mean": 5.934894390013561,
+      "raw_credit_GDP_mean": 3.3272619319041428,
+      "GDP_change_nextyear_mean": 0.0028523463381529726,
+      "credit_change_nextyear_mean": 0.4563894013825692,
+      "GDP3Y_change_mean": 0.006216948465722132
+    },
+    {
+      "model": "bayesian",
+      "scheme": "nonoverlap9",
+      "event_time": -4,
+      "n_events": 3343,
+      "credit_spread_mean": 4.710146037927627,
+      "raw_credit_GDP_mean": 4.394645043546844,
+      "GDP_change_nextyear_mean": 0.003962966829568477,
+      "credit_change_nextyear_mean": 0.061600155074723856,
+      "GDP3Y_change_mean": 0.012371400915048635
+    },
+    {
+      "model": "bayesian",
+      "scheme": "nonoverlap9",
+      "event_time": -3,
+      "n_events": 3343,
+      "credit_spread_mean": 4.675860293601268,
+      "raw_credit_GDP_mean": 4.4180297455340485,
+      "GDP_change_nextyear_mean": 0.0036170565961673685,
+      "credit_change_nextyear_mean": 0.051812097905448766,
+      "GDP3Y_change_mean": 0.012661575063681789
+    },
+    {
+      "model": "bayesian",
+      "scheme": "nonoverlap9",
+      "event_time": -2,
+      "n_events": 3343,
+      "credit_spread_mean": 4.642679555389277,
+      "raw_credit_GDP_mean": 4.445167122811031,
+      "GDP_change_nextyear_mean": 0.00480374437054696,
+      "credit_change_nextyear_mean": 0.06657042688639128,
+      "GDP3Y_change_mean": -0.10142561752301527
+    },
+    {
+      "model": "bayesian",
+      "scheme": "nonoverlap9",
+      "event_time": -1,
+      "n_events": 3343,
+      "credit_spread_mean": 4.5853620545445315,
+      "raw_credit_GDP_mean": 4.49060416761144,
+      "GDP_change_nextyear_mean": 0.004209107191662269,
+      "credit_change_nextyear_mean": 0.012505662189823439,
+      "GDP3Y_change_mean": -0.08354854082005293
+    },
+    {
+      "model": "bayesian",
+      "scheme": "nonoverlap9",
+      "event_time": 0,
+      "n_events": 3343,
+      "credit_spread_mean": 4.544154181849625,
+      "raw_credit_GDP_mean": 4.51673389174245,
+      "GDP_change_nextyear_mean": -0.1094801234177758,
+      "credit_change_nextyear_mean": -0.7891570764207447,
+      "GDP3Y_change_mean": -0.07467148062782483
+    },
+    {
+      "model": "bayesian",
+      "scheme": "nonoverlap9",
+      "event_time": 1,
+      "n_events": 3343,
+      "credit_spread_mean": 7.414131807566924,
+      "raw_credit_GDP_mean": 1.0561148764919355,
+      "GDP_change_nextyear_mean": 0.024810846156705018,
+      "credit_change_nextyear_mean": 3.546614701061418,
+      "GDP3Y_change_mean": 0.04746480692662885
+    },
+    {
+      "model": "bayesian",
+      "scheme": "nonoverlap9",
+      "event_time": 2,
+      "n_events": 3343,
+      "credit_spread_mean": 6.64117905399915,
+      "raw_credit_GDP_mean": 2.319894458329804,
+      "GDP_change_nextyear_mean": 0.013927338037869708,
+      "credit_change_nextyear_mean": 0.7505865417314694,
+      "GDP3Y_change_mean": 0.02540188481481344
+    },
+    {
+      "model": "bayesian",
+      "scheme": "nonoverlap9",
+      "event_time": 3,
+      "n_events": 3343,
+      "credit_spread_mean": 6.226588397639624,
+      "raw_credit_GDP_mean": 3.00989684274853,
+      "GDP_change_nextyear_mean": 0.00823927063680169,
+      "credit_change_nextyear_mean": 0.5961701873992217,
+      "GDP3Y_change_mean": 0.013550417313135549
+    },
+    {
+      "model": "bayesian",
+      "scheme": "nonoverlap9",
+      "event_time": 4,
+      "n_events": 3343,
+      "credit_spread_mean": 5.885273447214923,
+      "raw_credit_GDP_mean": 3.4123470233431563,
+      "GDP_change_nextyear_mean": 0.0032661026227950706,
+      "credit_change_nextyear_mean": 0.47397563923863706,
+      "GDP3Y_change_mean": 0.007243227075236068
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "all_crises",
+      "event_time": -4,
+      "n_events": 3999,
+      "credit_spread_mean": 5.0938527454622715,
+      "raw_credit_GDP_mean": 4.738616327583713,
+      "GDP_change_nextyear_mean": 0.0031981418389070517,
+      "credit_change_nextyear_mean": -4619.6796796820445,
+      "GDP3Y_change_mean": 0.01845351830315239
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "all_crises",
+      "event_time": -3,
+      "n_events": 3999,
+      "credit_spread_mean": 5.089605107828488,
+      "raw_credit_GDP_mean": 4.749623113076353,
+      "GDP_change_nextyear_mean": 0.0062155061976495,
+      "credit_change_nextyear_mean": 2414.1649722854613,
+      "GDP3Y_change_mean": 0.023645184681455413
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "all_crises",
+      "event_time": -2,
+      "n_events": 3999,
+      "credit_spread_mean": 5.028006707579816,
+      "raw_credit_GDP_mean": 4.8815097424735665,
+      "GDP_change_nextyear_mean": 0.00925380674630355,
+      "credit_change_nextyear_mean": 54903.030354524286,
+      "GDP3Y_change_mean": -0.12296850340063818
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "all_crises",
+      "event_time": -1,
+      "n_events": 3999,
+      "credit_spread_mean": 4.909646856297714,
+      "raw_credit_GDP_mean": 5.104442044491391,
+      "GDP_change_nextyear_mean": 0.008119592144810912,
+      "credit_change_nextyear_mean": -2063.918751402701,
+      "GDP3Y_change_mean": -0.13173655026554817
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "all_crises",
+      "event_time": 0,
+      "n_events": 3999,
+      "credit_spread_mean": 4.824340559154501,
+      "raw_credit_GDP_mean": 5.250920411988298,
+      "GDP_change_nextyear_mean": -0.13807800608419474,
+      "credit_change_nextyear_mean": -1.0000015497757642,
+      "GDP3Y_change_mean": -0.09456017011154708
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "all_crises",
+      "event_time": 1,
+      "n_events": 3999,
+      "credit_spread_mean": 7.725121301147619,
+      "raw_credit_GDP_mean": -1.013369708976131e-05,
+      "GDP_change_nextyear_mean": -0.0007361385126436253,
+      "credit_change_nextyear_mean": 77393.92947287287,
+      "GDP3Y_change_mean": 0.065972374369189
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "all_crises",
+      "event_time": 2,
+      "n_events": 3999,
+      "credit_spread_mean": 7.249352487784637,
+      "raw_credit_GDP_mean": 0.5516494009224714,
+      "GDP_change_nextyear_mean": 0.05113276102734628,
+      "credit_change_nextyear_mean": 141935.8050112475,
+      "GDP3Y_change_mean": 0.07311626456343118
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "all_crises",
+      "event_time": 3,
+      "n_events": 3999,
+      "credit_spread_mean": 6.279498805071935,
+      "raw_credit_GDP_mean": 2.890352164965857,
+      "GDP_change_nextyear_mean": 0.015288683536698352,
+      "credit_change_nextyear_mean": 523.930617528741,
+      "GDP3Y_change_mean": 0.023209065459221703
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "all_crises",
+      "event_time": 4,
+      "n_events": 3999,
+      "credit_spread_mean": 5.981538296975321,
+      "raw_credit_GDP_mean": 3.6232676655876754,
+      "GDP_change_nextyear_mean": 0.006281500980146059,
+      "credit_change_nextyear_mean": 3441.8134441418497,
+      "GDP3Y_change_mean": 0.01091228587434159
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "nonoverlap9",
+      "event_time": -4,
+      "n_events": 3327,
+      "credit_spread_mean": 4.886508745305708,
+      "raw_credit_GDP_mean": 5.120687344790177,
+      "GDP_change_nextyear_mean": 0.0044649724618499136,
+      "credit_change_nextyear_mean": 624.1543446693104,
+      "GDP3Y_change_mean": 0.014828277762152566
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "nonoverlap9",
+      "event_time": -3,
+      "n_events": 3327,
+      "credit_spread_mean": 4.868639937453899,
+      "raw_credit_GDP_mean": 5.125165056759463,
+      "GDP_change_nextyear_mean": 0.004859807533468248,
+      "credit_change_nextyear_mean": 336.42622315639653,
+      "GDP3Y_change_mean": 0.015810088179901222
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "nonoverlap9",
+      "event_time": -2,
+      "n_events": 3327,
+      "credit_spread_mean": 4.83471841220878,
+      "raw_credit_GDP_mean": 5.161485298684588,
+      "GDP_change_nextyear_mean": 0.005534023812598156,
+      "credit_change_nextyear_mean": -475.99446744328134,
+      "GDP3Y_change_mean": -0.12829261614975523
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "nonoverlap9",
+      "event_time": -1,
+      "n_events": 3327,
+      "credit_spread_mean": 4.791919665752605,
+      "raw_credit_GDP_mean": 5.210550178884413,
+      "GDP_change_nextyear_mean": 0.00534761445462699,
+      "credit_change_nextyear_mean": -2906.4843379083445,
+      "GDP3Y_change_mean": -0.13341397972038044
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "nonoverlap9",
+      "event_time": 0,
+      "n_events": 3327,
+      "credit_spread_mean": 4.754677259986591,
+      "raw_credit_GDP_mean": 5.242089472951591,
+      "GDP_change_nextyear_mean": -0.13771425877515853,
+      "credit_change_nextyear_mean": -1.0000005738441888,
+      "GDP3Y_change_mean": -0.09214731009225802
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "nonoverlap9",
+      "event_time": 1,
+      "n_events": 3327,
+      "credit_spread_mean": 7.696988827973702,
+      "raw_credit_GDP_mean": -4.283464929285107e-06,
+      "GDP_change_nextyear_mean": -0.0003295826661813593,
+      "credit_change_nextyear_mean": 95221.62201752148,
+      "GDP3Y_change_mean": 0.06986204060891182
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "nonoverlap9",
+      "event_time": 2,
+      "n_events": 3327,
+      "credit_spread_mean": 7.220528035957408,
+      "raw_credit_GDP_mean": 0.568310680589018,
+      "GDP_change_nextyear_mean": 0.05306071848134337,
+      "credit_change_nextyear_mean": 169794.3653288338,
+      "GDP3Y_change_mean": 0.07836321048869163
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "nonoverlap9",
+      "event_time": 3,
+      "n_events": 3327,
+      "credit_spread_mean": 6.25041984347642,
+      "raw_credit_GDP_mean": 2.97555213105495,
+      "GDP_change_nextyear_mean": 0.016792782856001928,
+      "credit_change_nextyear_mean": 1313.645875436468,
+      "GDP3Y_change_mean": 0.027153289085553343
+    },
+    {
+      "model": "diagnostic",
+      "scheme": "nonoverlap9",
+      "event_time": 4,
+      "n_events": 3327,
+      "credit_spread_mean": 5.936147242084439,
+      "raw_credit_GDP_mean": 3.745105632596636,
+      "GDP_change_nextyear_mean": 0.00791999149485672,
+      "credit_change_nextyear_mean": 4232.3123968982045,
+      "GDP3Y_change_mean": 0.013462111114266788
+    }
+  ],
+  "reconciliation": [
+    {
+      "model": "bayesian",
+      "table": "A1",
+      "metric": "vol(liquidity premium)",
+      "recomputed": 0.006058236459506087,
+      "published": 0.006058236459506087,
+      "difference": 0.0
+    },
+    {
+      "model": "bayesian",
+      "table": "A1",
+      "metric": "vol(risk-free rate)",
+      "recomputed": 0.007327682699988083,
+      "published": 0.007327682699988083,
+      "difference": 0.0
+    },
+    {
+      "model": "bayesian",
+      "table": "A1",
+      "metric": "vol(annual bank equity return)",
+      "recomputed": 0.15652278958888055,
+      "published": 0.1565227895888806,
+      "difference": -5.551115123125783e-17
+    },
+    {
+      "model": "bayesian",
+      "table": "A1",
+      "metric": "vol(investment yearly growth rate)",
+      "recomputed": 0.03382303064635753,
+      "published": 0.03382303064635753,
+      "difference": 0.0
+    },
+    {
+      "model": "bayesian",
+      "table": "A1",
+      "metric": "vol(consumption growth return)",
+      "recomputed": 0.015507199857481162,
+      "published": 0.01550719985748116,
+      "difference": 1.734723475976807e-18
+    },
+    {
+      "model": "bayesian",
+      "table": "A1",
+      "metric": "mean(risk free rate)",
+      "recomputed": 0.07362127060399166,
+      "published": 0.07362127060399166,
+      "difference": 0.0
+    },
+    {
+      "model": "bayesian",
+      "table": "A1",
+      "metric": "average total Sharpe ratio of capital return",
+      "recomputed": 0.4825926474237538,
+      "published": 0.4825926474237538,
+      "difference": 0.0
+    },
+    {
+      "model": "diagnostic",
+      "table": "A1",
+      "metric": "vol(liquidity premium)",
+      "recomputed": 0.008769631580994287,
+      "published": 0.008769631580994287,
+      "difference": 0.0
+    },
+    {
+      "model": "diagnostic",
+      "table": "A1",
+      "metric": "vol(risk-free rate)",
+      "recomputed": 0.007212547591322827,
+      "published": 0.007212547591322827,
+      "difference": 0.0
+    },
+    {
+      "model": "diagnostic",
+      "table": "A1",
+      "metric": "vol(annual bank equity return)",
+      "recomputed": 0.15930136018091548,
+      "published": 0.1593013601809155,
+      "difference": -2.7755575615628914e-17
+    },
+    {
+      "model": "diagnostic",
+      "table": "A1",
+      "metric": "vol(investment yearly growth rate)",
+      "recomputed": 0.044392236676495965,
+      "published": 0.04439223667649596,
+      "difference": 6.938893903907228e-18
+    },
+    {
+      "model": "diagnostic",
+      "table": "A1",
+      "metric": "vol(consumption growth return)",
+      "recomputed": 0.017856581654212954,
+      "published": 0.01785658165421295,
+      "difference": 3.469446951953614e-18
+    },
+    {
+      "model": "diagnostic",
+      "table": "A1",
+      "metric": "mean(risk free rate)",
+      "recomputed": 0.036845238201942014,
+      "published": 0.03684523820194202,
+      "difference": -6.938893903907228e-18
+    },
+    {
+      "model": "diagnostic",
+      "table": "A1",
+      "metric": "average total Sharpe ratio of capital return",
+      "recomputed": 0.4080132484227284,
+      "published": 0.4080132484227284,
+      "difference": 0.0
+    },
+    {
+      "model": "bayesian",
+      "table": "3",
+      "metric": "A_spread_author",
+      "recomputed": -2.870071007403406,
+      "published": -2.87,
+      "difference": -7.100740340604261e-05
+    },
+    {
+      "model": "bayesian",
+      "table": "3",
+      "metric": "A_credit_author",
+      "recomputed": -2.176127066810269,
+      "published": -2.18,
+      "difference": 0.0038729331897311425
+    },
+    {
+      "model": "bayesian",
+      "table": "3",
+      "metric": "B_capital_return_author",
+      "recomputed": -0.0065252024186005005,
+      "published": -0.01,
+      "difference": 0.0034747975813994997
+    },
+    {
+      "model": "bayesian",
+      "table": "3",
+      "metric": "C_spread_author",
+      "recomputed": -0.2524605680750193,
+      "published": -0.25,
+      "difference": -0.0024605680750193204
+    },
+    {
+      "model": "bayesian",
+      "table": "3",
+      "metric": "D_froth_author_inclusive3",
+      "recomputed": 5.670000000000002,
+      "published": 5.67,
+      "difference": 1.7763568394002505e-15
+    },
+    {
+      "model": "bayesian",
+      "table": "3",
+      "metric": "D_credit_logit_nextyear",
+      "recomputed": 4.050622968750218,
+      "published": 4.05,
+      "difference": 0.000622968750218611
+    },
+    {
+      "model": "diagnostic",
+      "table": "3",
+      "metric": "A_spread_author",
+      "recomputed": -3.4390215505531145,
+      "published": -3.44,
+      "difference": 0.00097844944688541
+    },
+    {
+      "model": "diagnostic",
+      "table": "3",
+      "metric": "A_credit_author",
+      "recomputed": -3.488763325093823,
+      "published": -3.49,
+      "difference": 0.001236674906177182
+    },
+    {
+      "model": "diagnostic",
+      "table": "3",
+      "metric": "B_capital_return_author",
+      "recomputed": -0.021747542340976308,
+      "published": -0.02,
+      "difference": -0.0017475423409763075
+    },
+    {
+      "model": "diagnostic",
+      "table": "3",
+      "metric": "C_spread_author",
+      "recomputed": -0.2984148010841711,
+      "published": -0.3,
+      "difference": 0.001585198915828867
+    },
+    {
+      "model": "diagnostic",
+      "table": "3",
+      "metric": "D_froth_author_inclusive3",
+      "recomputed": 7.397999999999999,
+      "published": 7.4,
+      "difference": -0.002000000000001556
+    },
+    {
+      "model": "diagnostic",
+      "table": "3",
+      "metric": "D_credit_logit_nextyear",
+      "recomputed": 3.8520305427133272,
+      "published": 3.85,
+      "difference": 0.0020305427133271436
+    }
+  ],
+  "source_findings": [
+    {
+      "id": "S01",
+      "source": "Main_Step3.do",
+      "finding": "crisis3y uses t,t+1,t+2; partial terminal horizons left at zero unless an observed crisis occurs. This differs from strict future t+1..t+3.",
+      "consequence": "Report both conventions; omit censored terminal records for prospective labels."
+    },
+    {
+      "id": "S02",
+      "source": "Model/Codes_Model/preprocessing_simulation_data.R::gen_crisis",
+      "finding": "Monthly threshold tuned to 4% annual crisis frequency; gen_non_clustered_crisis condition is index-crisis_last<0*12.",
+      "consequence": "Frequency is a definition/calibration choice; code does not enforce advertised 3-year non-consecutive crises."
+    },
+    {
+      "id": "S03",
+      "source": "Model/Codes_Model/preprocessing_simulation_data.R::processing_simulation_data",
+      "finding": "credit_growth_past_year uses lag 12 on annual table; GDP/credit forward-growth tails are padded zeros.",
+      "consequence": "Variable name is misleading (12 years); omit undefined tails for new calculations."
+    },
+    {
+      "id": "S04",
+      "source": "Model/Analyze_simulations.R::Table3 Panel C",
+      "finding": "Regression uses before_crises (one-year-before); output note says five-year-before.",
+      "consequence": "Reconcile model code/label and separately estimate a stated prospective five-year definition."
+    },
+    {
+      "id": "S05",
+      "source": "Model/Analyze_simulations.R::Table3 Panel D",
+      "finding": "Source computes 3-period window including t while table heading/footnote says next five years; froth is current spread below full-path median.",
+      "consequence": "Distinguish replication from prospective warning validation and retrospective threshold estimation."
+    },
+    {
+      "id": "S06",
+      "source": "Model/Analyze_simulations.R::regs_data",
+      "finding": "Empirical comparator coefficients are assigned constants to model regression objects (e.g.18.0/2.8). No underlying empirical estimation sample in these objects.",
+      "consequence": "May cite author/literature comparator; cannot label independently reproduced real-data regressions."
+    },
+    {
+      "id": "S07",
+      "source": "Model/Codes_Model/gen_basic_definitions (within preprocessing_simulation_data.R); solve_for_states_from_cs_and_lvg.m",
+      "finding": "Statistical credit spread is divided by full-path SD; policy-state routines divide equilibrium spread by simulated mean.",
+      "consequence": "Policy target cs=1 denotes mean-normalized spread, not one SD or 1% spread."
+    },
+    {
+      "id": "S08",
+      "source": "Model/Codes_Model/irf_rational_and_behavioral_w_and_lambda.m",
+      "finding": "Intervention changes w to 1.1*w; deterministic branch bank_credit_impulse uses ratio of xK (leverage), not full bank credit balance.",
+      "consequence": "Do not describe this variable as realized credit growth or a capital-ratio regulation effect without reconciling definition."
+    },
+    {
+      "id": "S09",
+      "source": "Model/Codes_Model/solve_for_states_from_cs_and_lvg.m; irrational_lambda.m",
+      "finding": "Match leverage and mean-normalized spreads first; solve nonlinear w/believed lambda; diagnostic case maps believed lambda back to underlying with reference and lag parameters. Residual/bounds checked in author code.",
+      "consequence": "Same observed leverage/spread does not imply same w, beliefs or underlying state; changing theta at fixed state is not comparable policy evidence."
+    },
+    {
+      "id": "S10",
+      "source": "Model/solutions/baseline_rational.mat,baseline_behavioral.mat",
+      "finding": "Serialized core grids contain p/kappap/credit_spread/par but not full post-processed leverage grids or counterfactual trajectories.",
+      "consequence": "Source review supports policy mechanism audit; current independent reference does not reproduce equilibrium/recapitalization paths."
+    },
+    {
+      "id": "S11",
+      "source": "Model/Codes_Model/preprocessing_simulation_data.R; Model/Analyze_simulations.R",
+      "finding": "capital_excess_return_normalized scales by its sample mean to 0.059; table note describes matching standard deviation.",
+      "consequence": "Audit implementation separately from economic comparability; cannot infer a matched return volatility solely from the note."
+    }
+  ],
+  "policy_snapshot_audit": [
+    {
+      "file": "baseline_rational.mat",
+      "p_shape": [
+        60,
+        10
+      ],
+      "saved_fields": "p_matrix,kappap_matrix,par,errors,credit_spread",
+      "lambda_low": 0.001,
+      "lambda_high": 0.561,
+      "lag_years": 1.0,
+      "AH": 0.2,
+      "AL": 0.17,
+      "contains_xK_matrix": false,
+      "contains_full_policy_simulation_path": false,
+      "maximum_saved_equilibrium_residual": 0.5383526291762983
+    },
+    {
+      "file": "baseline_behavioral.mat",
+      "p_shape": [
+        60,
+        10
+      ],
+      "saved_fields": "p_matrix,kappap_matrix,par,errors,credit_spread",
+      "lambda_low": 0.001,
+      "lambda_high": 0.638,
+      "lag_years": 2.0,
+      "AH": 0.156,
+      "AL": 0.132,
+      "contains_xK_matrix": false,
+      "contains_full_policy_simulation_path": false,
+      "maximum_saved_equilibrium_residual": 0.19258500367070142
+    }
+  ],
+  "elapsed_seconds": 2.5081308521330357,
+  "environment": {
+    "python": "3.12.12",
+    "numpy": "2.5.4",
+    "pandas": "3.1.0"
+  },
+  "tolerance": {
+    "identity_absolute": 1e-08,
+    "reported_table_rounded_coefficient": 0.0051,
+    "recomputed_float_absolute": 1e-06
+  },
+  "limitations": [
+    "No monthly path simulation reconstruction; original monthly inputs deliberately outside commission scope.",
+    "No independently reproduced real-market empirical panel or equilibrium-policy intervention.",
+    "No claim of >=40 minute solver time, >=50 steps, or <=40/100 blind grade; these require independent rollout."
+  ]
+}

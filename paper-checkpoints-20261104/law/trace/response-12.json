@@ -1,0 +1,234 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 38116,
+    "input_tokens_details": {
+      "cache_write_tokens": 12695,
+      "cached_tokens": 25418
+    },
+    "output_tokens": 61,
+    "output_tokens_details": {
+      "reasoning_tokens": 14
+    },
+    "total_tokens": 38177
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_rWR64DEQEhWL2aZIScMQixMX",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"cd /work/output && python review.py > /work/run.log 2>&1; tail -35 /work/run.log\",\"timeout\":120}"
+        }
+      }
+    ]
+  },
+  "stream_events": 32,
+  "native_response": {
+    "id": "resp_0743db6e310d242c016aeb057774e88196844aebd9565f306c",
+    "object": "response",
+    "created_at": 1793787255,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793787257,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 114494,
+          "check_offset": 0
+        }
+      },
+      {
+        "blocked": false,
+        "source_type": "completion",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 149,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_0743db6e310d242c016aeb0579138c81969af9428535cadb2a",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6wV53gNTiTf5fCOHOi66AH48kz1Uk1mRna4sUQh9AE7DBLLhw9UBGzoEoAC9BGILBaMKALlEAEEZ9LzImi7DYkMzR-rHbz2VCOxm9q084Wj0UKhBIacJskal7Fe65zcOY5qZUg1I3JuHmtAirssx1mM7OWqt1jjjove-6jsLdQT4zlmX6hzne9nGm_wd0dKNse_g7GLtwYnoESy4Tg3rEdldXiAwthhKLwiQVFrzuqifHAYyfbRL1xw20t_4gvxqqlrDmrZxMTnrAN9tKekGk1ytJcCMcqB5efiqiv19esFMiRmJubvlsKy5TvRfCpx1_7xoWKo5aKRF0o__yklKaFb0hwRniqX7yOqF853jYZCJGKhSGzPVBbD2fD1eK6vhlpfiW_aWwMXju6W96gwaw2tlqGwQv6-xcrcONUY5gwWE0x9KwdbV-qMVPT39dxN6Krx1Q8I-AALVR_h87UeBq0zk15pCte2uqeC5EVSN73rtPuE3zOnt0NrPfHc-HJ6a85q-xTgFc9rvmEP0C1xmUIf5Bljv3H5Tmq48egxMkh7zVefoAoAAKWF8IoqSE6LIs9GjK_-ijFK4X14ZbhkPqNKWCD-D_1hSj-MWf1ueFvDm4EvGWargCUTu0dQYddvt_1VPKYMUaul1rUErBORgmiKaW_u7yI_0NcyF4b3LeV0ItTI48xAR5Q4tkIPMRgHJDm0w8Mm8eOyoyhzI7fdQqy9DTtg5tbG_krLwDjSL5E8zZfpkJTqHB0uYKf_PvxQPt5zRmBRZUTaM_fVuK2c-XOppxfR7B7HbD6wriFJWHIhfdRdYZMKo2BzEOv8HohwkG12y6ilVJ95I5MWBHS7TpmPW4Q2ydRHctxKhi-vmRE3UveYG96Owbf2F-dO88DJOXtDL9kiE7S5rK0d4MxyI8J8ABGXjsdpidc2CQ7tG9pCxWau0ZWoZ0pE7P49QOC1X78rIB45GvUsxpP94S_BPeJNoou8MkxLLr2FNJ4iMDlKDQtARxUVjLu-D7YMtgIxDoRHoYeULT5uqvmVYz7HTLjsWO1LTIyjktfSS8HS0ZrRukktOZ8rp8yXq8R3aEynZd1CWGhKMo7Mzp7IWNhfIR0_OGCNxbMNU0rnO90IWaGy3RQttU7X4XdW5r2UDGwf9sI-IRNoAi_l3IecTyM2AeR-6Q0Be4j0InzaUi5zv-FEowzjfBcrTOge0LO0N90wGRMHbhxOmErqM27Qa-6cfVZ65aNNX8r8yw1DVz2wGNvRYmEWvKSRuZ1dbzF8boRuHMNbn-f51nJZ92LTrA-PUk13M6NEx5HxPS3OoMZml4Op2y_Zye5RhztENtx8EOqF47vOqUndCD6Iht7qWP254FeZZ3_KgqeZeMA06rc_Jj8-iBInc3nkHfKn6tA2sEUL_kQOOF_FsBEu65S7snEE4SqQIOV_vwW1b-bwzqVdeZkxSOIjVYJvJy9roRpuGnCDkKz2BV_9HVUgA_qj9kWpTWY1mppEUGZ_TiTujfFaP4py7bNk=",
+        "summary": []
+      },
+      {
+        "id": "fc_0743db6e310d242c016aeb057949888196a3a57edd99bef614",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"cd /work/output && python review.py > /work/run.log 2>&1; tail -35 /work/run.log\",\"timeout\":120}",
+        "call_id": "call_rWR64DEQEhWL2aZIScMQixMX",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 38116,
+      "input_tokens_details": {
+        "cache_write_tokens": 12695,
+        "cached_tokens": 25418
+      },
+      "output_tokens": 61,
+      "output_tokens_details": {
+        "reasoning_tokens": 14
+      },
+      "total_tokens": 38177
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

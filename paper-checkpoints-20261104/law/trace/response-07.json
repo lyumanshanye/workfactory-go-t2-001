@@ -1,0 +1,177 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 24978,
+    "input_tokens_details": {
+      "cache_write_tokens": 12811,
+      "cached_tokens": 12164
+    },
+    "output_tokens": 446,
+    "output_tokens_details": {
+      "reasoning_tokens": 66
+    },
+    "total_tokens": 25424
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_8CkUJdWDSL0d9HDzZ8926Akt",
+        "type": "function",
+        "function": {
+          "name": "write_text",
+          "arguments": "{\"path\":\"probe.py\",\"content\":\"import pandas as pd,re\\np='/app/input_files/'\\nids=['11341980_23','3672856_34','81100_69','3612156_42','6931942_17','5655150_280','3385333_19','11341177_13','6139418_72','11644460_32','1313717_86','12122490_155','5861465_62','6215707_64','8210237_68']\\na=pd.read_csv(p+'legal_reasoning_annotations.csv'); sel=a[a.section_id.isin(ids)].copy();sel['cid']=sel.section_id.str.split('_').str[0];print(sel[['section_id','name','paragraph']].to_string(index=False,max_colwidth=80))\\nfor f in ['sc_data.csv','reasoning.csv']:\\n print('\\\\n',f)\\n for ch in pd.read_csv(p+f,chunksize=3500,usecols=['case_url','case_name','opinion_text','opinion_type','project_opinion_id','year']):\\n  m=ch[ch.case_url.str.extract(r'/cases/(\\\\d+)/',expand=False).isin(sel.cid)]\\n  for _,r in m.iterrows():\\n   q=sel[sel.cid==re.search(r'/cases/(\\\\d+)/',r.case_url).group(1)].iloc[0];text=str(r.opinion_text);phrase=str(q.paragraph)[:85]; pos=text.find(phrase);print(q.section_id,r.project_opinion_id,r.opinion_type,'length',len(text),'pos',pos,'first',text[:65].replace('\\\\n',' '))\\n\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 76,
+  "native_response": {
+    "id": "resp_03ee349a6504ebec016aeb04f95e5c81938d1c3af52ffb7048",
+    "object": "response",
+    "created_at": 1793787129,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793787134,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {},
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 94687,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_03ee349a6504ebec016aeb04fa74b08193a774403a0d7d3a51",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6wT-9chtlHvHZdEyqHcghJT48HXfyAY7GWj2PH6KX6LtOfWIZYImx4szFhEiCdo1hLJ_tih48iwtLhP9LN_nKrjMMyChd8KdkbOiZPOF0aSZqlq95kY-ozwVHzMvJiU1JRbv7ffSl4fZrBDg-2cMEPpcZdK-An_iZTK8GgasBwT3xdVkyu1fb06fJp4wvrrIG1udOrUEOHNSnpJH4GhzgKmnQtNg7CrPndnhnsLg7BwGXYcYdn-RSusOkGST8CZyZcuczIrZIojwT9Ffi77O1n44M_ThkeVuAIOdJDobk6djihm8-VFwmntXWFVTLr2GPo-kcqHUUso6yLYVHQFsqOIrGfWPBBumI7SepDdw-eIgCpPU4T3bPdDHFmbLKRE_79zQXs5zcOEgG3ravm7NZoAc68pcyAhVAcs-jNaaefrR1qJbxWWrnfK0dNmqKkqKtx9u1WOciPn0NkAfOpEYwfFo6hbmT8DlreTJaJjrd0HlSgRVSY0_YZAimX5eJF-0v_D-krsCYaPkVL560OeIHB7Dy8OIXvozLyOV39dthI4-kfqR64uWYPCRotmRvnO6QTCzzak6M3nzKElopS3I5LzbGLIxJhq8jYMkToVh3OYkvoHo27QBAfBe_4WjzrzTNpRlOFbYDjBcJE8o2wwHWrBbquBQ-amOE-h4Ep4oTYAvw_t-qIKDyd_ypYvUJFGYYmPDnM_GIhpjpJHYuD4tNkZkj_waVjVzb_hulwPr429njFtCplNA7Ui8h_K_g5hTyd84Z2txqeXQIZZVOaUNLBhqS_wxKxl0PLS9btSKQtXCf3DoE8YGTWMlikrGzx6uYHljDo1r-PQyJdbbR-dJKQaNQefx8Uy5qHox6q0fD0krbtcXdRgoNOcuuaT1WL0Cqef7vGBkMVsKKVsMujtTNwi16nTVpziN19qiyvY90rkbgd0wNcRO4cnQm4eHyJ7ZzMibn0Fwyt5SGxVps8iDqDyyAUfx1ji7fqPPR1QzdtkHGcfODzG7YabESd3NXtaOoDn6a_-FxTrfZVRK6_fwO6CsegQRs37enhxd1uOuvOTmx2i7Nw6rUdpQR3KKrW-_syRGj_0QLNdn0majT-cVkHU1WP7zgEjuSb64s5aTeKvy7x9V-ew21erCuUmvZc-UV1OygEsQcZu45kgMkrG3x_Yz5pEVbODwVgTroNMW6ByUqtMOFydqrHtNyCJW5AMOAJMzn9Z8NUIMtpkkGNDNCUQaME2GnxEVGeBq_JPlFnBA9zeVWVEVIdJErR4UA3ts4oFPLo1AH6T6lKBGPpnSAjoW6SMfDnK3pppBNsHJ2CRGX7eehS3wP3mlMRqjyHxVDZz759c_8OxhmsOlXhK4LZxQ8kUbxvYMqXEKgFB3O2KTDiAtKWITbzm-iOKzihv9o-MOlwlkCHx_ndpjZo5Gm4csqnXSVrO3J9l3sYFh9mCa4Y4orRnPxse4fgu89QZiHwAWHN5_gNisj04eXad8VmBLBwI4ghaTZgSEmcET4vjhOClgArgQUhtW8wAanqI6eRhBcgleVPONCMpA2BziPSlK4XJWG9MnV_0OLXY7cRMTwLYAZwp5VzCnrna8SWcm5XAU9m3p1yAr6AzFcwJNrKeuvUx15Tntezj0D3C7Rw1EjdJ69d2lo_tSMTgnwYn84mKq2zh_zhpr0OXVJ_7arvhMMV7_THk7jnXXLLXefhuHUim4MQhX8ygX8w3boUWKavdDZfg6taRNryyvFMa6UO702QCl2FHyNKhDv_ZboqqQSMFBYp2zMv7sLklE20McaND8WMvQPHNzKJv85ICXkgsYxfzJ94JZIZcd9kkdisTheUwq5rD-uyBWsBhhlrY2UYOS-LfWzQLwC0qEVueNilyehiTiCiuCLGAJyDQQZ-bcF140XX7-Ne_vnR1MO5nw-40nrIKHW116-HoGRiA69Qu1aamyclTTK9oLA2z3H1AZWrdQTg97ktPXwH9a6NmfQihxz57qZxSfcfKoxKzGwC04N527NjPlVZ3DnQSK1wq8kkLvffF12ms2N4xtFeKrU5WaMSksBiJSZiHeZa7M0U3u7iSFNYg4X0tQ3WHnj08rNtcsI8p2E-KYVjd2upAyDKzl3E0jmwm3wH3BkGEwMygdQ6BIFRO1_lIKZV_faQk0498BtU4QYhUVzY9z8-1UI4VRT9rRAb0SnTQge6R5tSLdooURTFTv-29E7Y7m9p59Sl0=",
+        "summary": []
+      },
+      {
+        "id": "fc_03ee349a6504ebec016aeb04fb6cd08193b925cba282b1f8ea",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"path\":\"probe.py\",\"content\":\"import pandas as pd,re\\np='/app/input_files/'\\nids=['11341980_23','3672856_34','81100_69','3612156_42','6931942_17','5655150_280','3385333_19','11341177_13','6139418_72','11644460_32','1313717_86','12122490_155','5861465_62','6215707_64','8210237_68']\\na=pd.read_csv(p+'legal_reasoning_annotations.csv'); sel=a[a.section_id.isin(ids)].copy();sel['cid']=sel.section_id.str.split('_').str[0];print(sel[['section_id','name','paragraph']].to_string(index=False,max_colwidth=80))\\nfor f in ['sc_data.csv','reasoning.csv']:\\n print('\\\\n',f)\\n for ch in pd.read_csv(p+f,chunksize=3500,usecols=['case_url','case_name','opinion_text','opinion_type','project_opinion_id','year']):\\n  m=ch[ch.case_url.str.extract(r'/cases/(\\\\d+)/',expand=False).isin(sel.cid)]\\n  for _,r in m.iterrows():\\n   q=sel[sel.cid==re.search(r'/cases/(\\\\d+)/',r.case_url).group(1)].iloc[0];text=str(r.opinion_text);phrase=str(q.paragraph)[:85]; pos=text.find(phrase);print(q.section_id,r.project_opinion_id,r.opinion_type,'length',len(text),'pos',pos,'first',text[:65].replace('\\\\n',' '))\\n\"}",
+        "call_id": "call_8CkUJdWDSL0d9HDzZ8926Akt",
+        "name": "write_text"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 24978,
+      "input_tokens_details": {
+        "cache_write_tokens": 12811,
+        "cached_tokens": 12164
+      },
+      "output_tokens": 446,
+      "output_tokens_details": {
+        "reasoning_tokens": 66
+      },
+      "total_tokens": 25424
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

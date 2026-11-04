@@ -1,0 +1,234 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 18363,
+    "input_tokens_details": {
+      "cache_write_tokens": 16867,
+      "cached_tokens": 1493
+    },
+    "output_tokens": 342,
+    "output_tokens_details": {
+      "reasoning_tokens": 29
+    },
+    "total_tokens": 18705
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_yQup67QR7B2fDnQmgVdhnBaH",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"python - <<'PY'\\nimport pandas as pd,numpy as np\\np='/app/input_files/'; a=pd.read_csv(p+'legal_reasoning_annotations.csv');b=pd.read_csv(p+'annotation_predictions.csv');print('ann',a['class'].value_counts(dropna=False),a.section_id.nunique(),a.duplicated('section_id').sum());print('pred',b['class'].value_counts(dropna=False),b.section_id.nunique(),b.duplicated('section_id').sum(),b.test_num.value_counts().head());print('pred vals',b[['prob_GRAND','prob_NONE','prob_FORMAL']].describe().to_string());print('year annotated',a.year.describe());print('join',b.section_id.isin(a.section_id).sum());print('eval',pd.read_csv(p+'eval_crossfold_output.csv').groupby(['model','percentage']).agg({'macro_f1':['mean','count']}).to_string());print('low',b.low_confidence.value_counts());print('sample disagreements');m=a.merge(b.drop_duplicates('section_id'),on='section_id',suffixes=('_a','_b'));m=m[m.class_a!=m.predicted_label]; print(m[['section_id','name','year','class_a','predicted_label','low_confidence_a']].iloc[::max(1,len(m)//25)].to_string(index=False,max_colwidth=35))\\nPY\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 72,
+  "native_response": {
+    "id": "resp_0f083e4fa69f4701016aeb04df344c819591c2f91dbdf69c39",
+    "object": "response",
+    "created_at": 1793787103,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793787107,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 69849,
+          "check_offset": 0
+        }
+      },
+      {
+        "blocked": false,
+        "source_type": "completion",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 1226,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_0f083e4fa69f4701016aeb04e07b088195866f612b80fed508",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6wTjkEzXhu3YuGotXUsDzM1JTv1AAUFsrscAXoLzO9jrFRK5L5LI8mPQPs4Dtfz-04sUpZr0DWLLPiPTmoRljRoz2ULpCFebkJmaHBYjlZdMoVUiHaTM3TtrYirkS3qgsBNQlEvNseZC-BVRSJ6YKBD_5iIR3CL6FNaFVFm9WiKpSi8hg2fZ3fuVmp0s23RUdx8sDcgMj7PgCU5gc10ZJ2Y_tQujxLJm7GW-Z3dDrZzJupMx8pYG2OMMh0mXWZrR9XY4mrklW-AEp4FqZyWqX-R9RTmYWB2oxMTYfmtJ4G9qvrGx1OjjATJ1HZtUBKuQ3cF232SON_Uckl1JxJcs68rPcNzSRSNrsOQ4Vonihyb1DSVbYJMa_71rywq4ysvFYGDCoRt6jjYei0bnT_ZCr5aIof3d0Dv5IYUZotuiHLaU0x4DnOFBXMlW2ojP5hOcqSQ3_dXLNZTKZVFeGGlkVIhPmPKSncrHCOmaogdYHu-oco-1i5jtVGI_HuC06SzBIg7JnU6SFIytlYwNsasGTGVoGRfki75z4lKcrG4xWQD4iZk3CaN3f-pXZbNYo-AiGXZKkWACc5FNqdvQuuVnk2Xz1BuN2cg-98o4PVGJ18KfKnCh6oMIUAV-jZLPQL6M3Xb0I8HSy1JTy7rlP0pUi13e2SqTBWWfzP29Pk1rBdmVAnCf0gc0-uQ_uzui38j8JJlM9KsoP3NJLEN7quG3DGG1UXmnojGisxBRCARRSKjI5b7rYXfxUcaSCOWBsYr4K1P1n15feEhR9rKfOKln3b9NsbMxVVNC_W2mYY18KAEKBDjpuxk8sYKFvtbWLZ_Czg8v5sfxnKwE-LiWOyCuPb8d42p4HMi3WhIHZqgwN6K76oFMPmNP3-exdBOKHDlYGVpvDOaoQOUiMvBie7ELb1yb1oIwciBpC-XqcdtkAeAjl1hzEnbERgCuOLVAXl2tZ5dGctFxOBhyB_mYkp5oSZ4hvI8J4ag1z7Y3Odj22b85s5fSWLSX7_lonSli-dFoDGwefot76m7EZyLMTvQyX70e2cvtlkwcZBhAnw3CpZC9jyk0NmycyTw66ZtJjnDx4B7BBZETfYT8_F2lok8rh1bWNpnJvejl_-KtWPNJ1sLok_VqlTWkgLug6BfPJoJQg3bIiA35RxZ2u9XcLhD-_g0ZA4YLMA5sf9f-qQR6rmTHC0YJSFPUn39Grl3kpcJMYi4UykG4ZqGugUvVAh40_tB8jWHbpwZyY8HTPh2WxNg4qMeNzPrRz5GFrCvmP7OnGpynYNjtDUbh-vPRU41LHIwR5ILyCz6c7rxq6J94y-Fe7czjuNZ1vC0cBrUguHxb3Fx06CCB2xIK8ZXniO0Lj4sDXGqHQCSETO4KdlUtQwnELmXbGxqG1jEabi72MKlJbHuZtGe_6oiUY_Corv2VEufZt3KM9BfcrZvnzVkO9xTpEmF2O9LUVQjOQRfbqgRQb-XCJqACQ8bUMLKrIqm-Q8c0Rg-75K91rZwA-YiiG7uVurf_ElObsqz0K4OpMcumVACrslPgkj-YSEPbyMQzo7Q93kmURfWSEDQOqlfR-8IdzLnl70o2bEDawpdMstS0et5_U1r9h4bISkztWnf5QFWyiUzMp9c2EIfQgvJL1BNPOW9o2v7drusZQ2jshTke4ZdB5PNnQMq2sMHQaTvyoPNmIcnguKhs1hm9LJ6LsWfzBv-TbQ-D0WkQEoObJuaW2ResY6Iw0sggk9Ojq9_h1D39wQ==",
+        "summary": []
+      },
+      {
+        "id": "fc_0f083e4fa69f4701016aeb04e10384819590f43e082de87811",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"python - <<'PY'\\nimport pandas as pd,numpy as np\\np='/app/input_files/'; a=pd.read_csv(p+'legal_reasoning_annotations.csv');b=pd.read_csv(p+'annotation_predictions.csv');print('ann',a['class'].value_counts(dropna=False),a.section_id.nunique(),a.duplicated('section_id').sum());print('pred',b['class'].value_counts(dropna=False),b.section_id.nunique(),b.duplicated('section_id').sum(),b.test_num.value_counts().head());print('pred vals',b[['prob_GRAND','prob_NONE','prob_FORMAL']].describe().to_string());print('year annotated',a.year.describe());print('join',b.section_id.isin(a.section_id).sum());print('eval',pd.read_csv(p+'eval_crossfold_output.csv').groupby(['model','percentage']).agg({'macro_f1':['mean','count']}).to_string());print('low',b.low_confidence.value_counts());print('sample disagreements');m=a.merge(b.drop_duplicates('section_id'),on='section_id',suffixes=('_a','_b'));m=m[m.class_a!=m.predicted_label]; print(m[['section_id','name','year','class_a','predicted_label','low_confidence_a']].iloc[::max(1,len(m)//25)].to_string(index=False,max_colwidth=35))\\nPY\"}",
+        "call_id": "call_yQup67QR7B2fDnQmgVdhnBaH",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 18363,
+      "input_tokens_details": {
+        "cache_write_tokens": 16867,
+        "cached_tokens": 1493
+      },
+      "output_tokens": 342,
+      "output_tokens_details": {
+        "reasoning_tokens": 29
+      },
+      "total_tokens": 18705
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

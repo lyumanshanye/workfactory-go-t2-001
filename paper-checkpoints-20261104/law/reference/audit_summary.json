@@ -1,0 +1,112 @@
+{
+  "annotation_rows": 2748,
+  "annotation_unique_sections": 2748,
+  "annotation_unique_cases": 2079,
+  "annotation_class_counts": {
+    "FORMAL": 329,
+    "GRAND": 551,
+    "NONE": 1868
+  },
+  "annotation_low_n": 101,
+  "prediction_rows": 9070,
+  "prediction_unique_sections": 2695,
+  "prediction_test_nums": {
+    "0": 907,
+    "1": 907,
+    "2": 907,
+    "3": 907,
+    "4": 907,
+    "5": 907,
+    "6": 907,
+    "7": 907,
+    "8": 907,
+    "9": 907
+  },
+  "prediction_duplicate_section_test_keys": 0,
+  "annotations_without_prediction": 53,
+  "prediction_label_conflicts": 0,
+  "raw_named_prob_min": -2.3556383,
+  "raw_named_prob_max": 3.273199,
+  "unique_section_sensitivity_metrics": {
+    "n": 2695,
+    "accuracy": 0.7970315398886827,
+    "FORMAL_support": 327,
+    "FORMAL_precision": 0.584,
+    "FORMAL_recall": 0.44648318042813456,
+    "FORMAL_f1": 0.5060658578856153,
+    "GRAND_support": 539,
+    "GRAND_precision": 0.6333333333333333,
+    "GRAND_recall": 0.7402597402597403,
+    "GRAND_f1": 0.6826347305389222,
+    "NONE_support": 1829,
+    "NONE_precision": 0.8831955922865014,
+    "NONE_recall": 0.8764352104975396,
+    "NONE_f1": 0.8798024149286496,
+    "macro_f1": 0.689501001117729
+  },
+  "unique_section_sensitivity_note": "Mean softmax over available repeated predictions for each section; descriptive robustness, not independent test ensemble generalization.",
+  "notebook_entropy_reproduction": {
+    "method": "first row per section, reproduces notebook drop_duplicates order; not unbiased ensemble",
+    "n": 2695,
+    "low_n": 96,
+    "nonlow_n": 2599,
+    "low_entropy_mean": 0.788608024863045,
+    "nonlow_entropy_mean": 0.5391040509572654,
+    "difference": 0.2495039739057796,
+    "permutation_p_seed20261104": 9.999000099990002e-05
+  },
+  "sc_opinions": 37491,
+  "sc_cases": 25610,
+  "sc_year_range": [
+    1870,
+    2024
+  ],
+  "annotated_cases_missing_sc": 28,
+  "annotated_paragraphs_missing_sc": 35,
+  "reasoning_rows": 36430,
+  "reasoning_unique_opinion_keys": 36430,
+  "reasoning_cases": 24890,
+  "reasoning_unmatched": 0,
+  "sc_without_reasoning": 1061,
+  "opinion_type_disagreements": 5249,
+  "missing_registry_rows": 97,
+  "missing_registry_year_range": [
+    1871,
+    2023
+  ],
+  "period_results": [
+    {
+      "period": "1870–1919",
+      "n": 11990,
+      "mean_zformal": 0.33590532656875655,
+      "n_cases": 11235
+    },
+    {
+      "period": "1920–1969",
+      "n": 10759,
+      "mean_zformal": -0.09063133502323255,
+      "n_cases": 7563
+    },
+    {
+      "period": "1970–1979",
+      "n": 3528,
+      "mean_zformal": -0.3738229841816951,
+      "n_cases": 1609
+    },
+    {
+      "period": "1980–2024",
+      "n": 10153,
+      "mean_zformal": -0.1707431147297756,
+      "n_cases": 4483
+    },
+    {
+      "period": "2010–2024",
+      "n": 2367,
+      "mean_zformal": 0.13395633543159138,
+      "n_cases": 1046
+    }
+  ],
+  "reference_sample_cases": 12,
+  "full_paragraph_score_reproduction": "not claimed; published local inventory lacks original all-paragraph predictions, no retraining required",
+  "generalization_evidence": "paper reports 200 nonstatutory annotations; corresponding raw annotated test set and split manifests are not in supplied inventory; cannot independently reproduce or certify deployment transportability"
+}

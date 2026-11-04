@@ -1,0 +1,234 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 27133,
+    "input_tokens_details": {
+      "cache_write_tokens": 27130,
+      "cached_tokens": 0
+    },
+    "output_tokens": 190,
+    "output_tokens_details": {
+      "reasoning_tokens": 20
+    },
+    "total_tokens": 27323
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_tqVX7a3XforbFAtP4y5y24yo",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"sed -n '230,260p;1520,1620p' /work/paper.txt; grep -inE 'capital injection|capital requirement|countercyclical|10%|2025' /work/paper.txt | tail -35; python - <<'PY'\\nfrom docx import Document\\nx=Document('/input/ReadMe.docx');print('\\\\n'.join(p.text for p in x.paragraphs)[:5000])\\nPY\\ncat /input/Main_Step1.m | head -70; grep -inE 'inject|policy|capital|baseline|10%' /input/Model/Codes_Model/irf_rational_and_behavioral_w_and_lambda.m | head -35\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 57,
+  "native_response": {
+    "id": "resp_04abf006cfc243a0016aeb04d93db08197b1d960c5ebc8e6c5",
+    "object": "response",
+    "created_at": 1793787097,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793787100,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 90107,
+          "check_offset": 0
+        }
+      },
+      {
+        "blocked": false,
+        "source_type": "completion",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 551,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_04abf006cfc243a0016aeb04da86b88197a7839ad543897bb9",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6wTc17UVDSWC9v5UzxM968egLyefpT0Xel1KmvCsMgbqvlUGx0nOM1AI3Vqyz5AL1crhgxOBGuTUfikQ9vySaySeOFLNYa8Mcgvv8EJ8HGxLHdXu5p9R4HpcuNVHZYIMn9w45PV8Hu8DjbpbCXQVD9epEgJjPdqSpRe1Qk9iy2LxrSlOIUJgMWojxqQQMRzOL1JvcAn8wvnyzopNOV-qGxuc9fJNJ_oBQB9MGlQ-jukrFioxFkiRhNYku_2blFUwC9USxtbu03_JyN81GgIEGAYOZFsVgxW60XySIPRKLeYwWVe9NDIaGY4y1-zYPGtTPKeqKHiG01K8vHYj5eaofGAds_bYuZnSzer4cKeloN771j3cV1nBWnac6mGia8xPy7jDiooTbALBG-wJrsZPUM0wYtwuDm_zdqFlRY4dgFjMJSDaDJp8CFxPw_WduC_J8kbsme8GuIgRp3S40NEkji-3Pt1G5jLrxXq1yERt2mBI3IZscL166wy0cyqp5e0tdi_sqi77uluWXqrj2D2ft5tKV3ffx13wDb1Vyfz8dLpwca4Hk2BW2mBsTJTAcMm4bX04YIwCsi2MOSmAYCi0OJLkpe19jV1do2yikJgIOhqCuLLIv6OPN4SXk1gEl5yh1m_oQLjgRnNxVs7cFFa02dhvc8j_TDfKT7udnJeLX2I7pW06aGZ2tOGxVWF5J8j60-UTbwEFs81ptcXZ5CTLy0voWmSxow5e7YgarjZsu7WR-sM5YqLFyPi4gj836SsYnj2DI7QXxGQ-Di-Psgba6DyNyMMAm8apax29COVCvWv1nWfAC34UypLRv1IygEwTC2bL5gglw9vuLg99OMRnv46_xqBowbUzds4F92YX-7VbWbJF7nPdJiFJmCfyZRjY86onQ74BegDfpR6jQ326DIoR0owx6mWvPk7VtiJ9Rlzo_Mmte-z6RlWxhlebMY2FH3ADInA5IWE4RJX6iTbuRxqaUzb-RrOz8jnjKA0_Y6jt2v9U7axMV_edmSeiEyi5BpuvnmjASniAH7G3Iyep9D9sRolwAoqWd9itERhHWUmfrNtfZkPfGsSK2qmQDvtFNMyonVO8zr0dQEYO1bqTV9vF6g9BiF18pgKdC-EkwVKfbkDb9jwlrkoOOUPbrQbrcL6m7XXXlF-IP_h372Q5yQgx9C4V7ML_HjN6sXdi4yv11w2F0wiQoIwqyKZfYp83ObkbZt_9c0xtnvETrYxbccvDGPpNckA5Klee51ERVNIYBoR6Z6xpawYBeqYumDHXhe4YuOg_Qfy89EFM2Qt7RU-BiCR_yzHtwPWdY9oljtTlxHEfHe5G3ZR0dcKMuVmEQyR-GFYLPY_xPDf0dMDwhkNmt-0v5jqR1tS-gCmvMgtD-I3DlvG4zx0UJHgvVVRbQYPofIR9T-IGUK1PF9TN9XlfxNj5g3_4aaiBc1R1rgUKTmmH4iHUUJOfvCtdP7E4gTGfv0SyiOH54maRuAjI8F_G1-VutSKQ7MajZeRJMx1IQztnSHBa48vTh1mXfrCLgHa5Z3zDMW_Z1hDF1MuVG-i0sZf8OnUC5MOoXRvipBKGV3pAS2Ivc56mIzxBtC7awZzo505OWAALPb44rToPslIfwQ==",
+        "summary": []
+      },
+      {
+        "id": "fc_04abf006cfc243a0016aeb04dac2348197aa2b64f8920f6663",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"sed -n '230,260p;1520,1620p' /work/paper.txt; grep -inE 'capital injection|capital requirement|countercyclical|10%|2025' /work/paper.txt | tail -35; python - <<'PY'\\nfrom docx import Document\\nx=Document('/input/ReadMe.docx');print('\\\\n'.join(p.text for p in x.paragraphs)[:5000])\\nPY\\ncat /input/Main_Step1.m | head -70; grep -inE 'inject|policy|capital|baseline|10%' /input/Model/Codes_Model/irf_rational_and_behavioral_w_and_lambda.m | head -35\"}",
+        "call_id": "call_tqVX7a3XforbFAtP4y5y24yo",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 27133,
+      "input_tokens_details": {
+        "cache_write_tokens": 27130,
+        "cached_tokens": 0
+      },
+      "output_tokens": 190,
+      "output_tokens_details": {
+        "reasoning_tokens": 20
+      },
+      "total_tokens": 27323
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 43076,
+    "input_tokens_details": {
+      "cache_write_tokens": 717,
+      "cached_tokens": 42356
+    },
+    "output_tokens": 658,
+    "output_tokens_details": {
+      "reasoning_tokens": 25
+    },
+    "total_tokens": 43734
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_PGCfD4XhZYJslyEvFqd3RLXW",
+        "type": "function",
+        "function": {
+          "name": "write_text",
+          "arguments": "{\"path\":\"output/运行说明.txt\",\"content\":\"独立验证复算说明（中文）\\n\\n在带有输入文件的本地环境执行（不写入输入目录）：\\npython /任意位置/rebuild.py --input /输入目录 --output /全新空输出目录\\n例：python /work/output/rebuild.py --input /input --output /work/new_audit\\n自动创建输出目录，生成《危机模型独立验证报告.docx》和《模型验证证据.xlsx》；已有同名文件会被覆盖，请选择全新目录。本次执行使用 /input 和 /work/output；代码不读取现成证据文件，不从网络取数据。\\n\\n依赖：Python 3，numpy、pandas、scipy、openpyxl、python-docx。pandas.read_stata 原生读取 .dta；无需 MATLAB/Stata/R 或 sklearn。随机种子 np.random.default_rng(20250308)，仅用于200年移动块自助抽样（每个模型/窗口160次）；优化使用 scipy.optimize.minimize(BFGS)，并非随机拟合。币种/金额未从输入定义，不作金额解释；GDP增长以百分比（×100），概率效应与区间以百分点（×100），利差、bank_credit_GDP 为作者按月度全路径标准差缩放的单位；debt=p*(xK−1)*w*K/GDP 为原始比率。\\n\\n核对容差：表3A系数绝差<0.10，表3C<0.015，表3D froth风险差<1.0百分点，信贷Logit平均边际效应<0.2百分点；年度比率交叉核对仅作为诊断，标准化年度/作者月度标准差不可强制严格相等。作者表值按显示的两位小数对账；不以容差证明源代码/实证面板被完整复现。字段/路径哈希及逐项容差参见工作簿。年度末端未来h年剔除，样本内阈值用于作者对账，训练期阈值/缩放用于时序留出。时间留出不是独立真实市场验证。\\n\\n输入要求：--input 下含 Model/simulated data/bayesian_full_yearly.dta、diagnostic_full_yearly.dta 以及 source_manifest.json；报告引用的论文/源码/表格见原输入目录，程序不写输入。程序不复算月度危机认定、均衡或真实实证系数。运行完成可用 openpyxl 检查工作簿是否包含“来源与边界”“核对与差异”“危机与敏感性”“事件定义敏感性”“时序留出预警”“状态匹配非政策”等页。\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 98,
+  "native_response": {
+    "id": "resp_0346d209c28cbae9016aeb05c7cd508197a065ba4af40593b7",
+    "object": "response",
+    "created_at": 1793787335,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793787343,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {},
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 116705,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_0346d209c28cbae9016aeb05c8d680819788aef4d08d74927a",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6wXPCGPeor8JNtmN_6mGdvI-4FXKZMiuX2x_dl3YqG1ngcUtqfXGDOOgavvVfL2KEty4Lu_K0PfqD3zhmSDhcUGVHU5yiIj-GG3s7LkKRESQMArEL_YqzBF44Xa8lQFlkVyysDb4tnOxEIRl36guTKg35xpcsJMM5yCMqofeYGfoBLMM7w-xd0-Ksz81h_OE5hqdx9fYF-pPfXWfJVUtA1ZdX0xx0g1N-OMKnwWKQQcIDNy4UxuXgCVy23RWi112NI-urxJ6PpFhq73bzNlNa8hrpzQt08Qba7bSatr1f7eNB_0uJ9kq8vZTHrz3aR0eo0DWe7MD3RHwdyHLzyvj749ngCLBmbaB9TUKs4QNRF14mlNRjTI2WZn7NrVQzOBqPhsYBsdMMm3o8gfaMxLOw_XYHBGMcAF6VktN7EPLD8SX03-PImzJh7vp7UP_6caon6Nd3AftzM9YZDy9mhBp5FmQ5YpRjPDvUxzy28qIlZFG3mK1zSVhpdEuMtnOdogB9x14kk_1Voc-NSBN9de1bYlOOlAh5LD6gNSvE4WuJh4-okyk-2YJK7DH_EAZ8zIgLL16elAbVkE8Hql_GWfCnaXRCs98OFr6tkWGH_DjpS0uW_56haeOxKKdiCT92f-krucUo2wTpINs-G61XA8riZmXaqTDErWqNtEczVx2dAHcCvZZLdhzzebOqaSjGErOS84u1du6iVCQ7r_Vnm3jjkCIFXmhJysKb6AjhwPHEYGiRSxpy7rPBXDM0EMbMHY9yzP_uIVldjbhSqgY6jlHvDw7ZnCUlVNDgOUzPeDnVXLVxTv5wnT0NrLcPcXxR0o9JMVTOHD478KPi1-Lwb2NAFZXlJq7rz6OCPHuBjxNGu5bM851taRSXwYPDEuweVvMPAcZTZDtL6lI34cy6mNNwyxOM4fd53OWjYcyfFZ1PPnXRNU7KRrbhk8oq4qFSgqwflAMRvn8aYhx1yB8gO9Mtwv75Rs0NW0NOpKOLbnCCPuVfG1caHQr-vL2v7LiWCj0dvN_NgXOf30NzMHRIMIoftn0NIxPi3YUzdTiFB37sfN1kUyyl-7k7MnA4g2aJYd8hT9d-GtKvKjVXm8ll1XBhGxL15fw_rMXf8rK9EzG7R5MH0IyvBRegHeXCig-Pdqsp0y0Y3FvUdmxU1h4TXhWQ_mqUNxiEejbZFKvziIo6DC2RPwticy__d1VjmJ-Vv7qjaf6eR9BdMNCGFyfNu2vZU5DxaMBt5dVu9rgXiNpSbRp6KqIIUWbnoujenSY2DJqvjOJiA1E0GMFumoLlWVv0ZuAvpMI6lSjtON1aj08bfRZb9M778EPXRUBqqcTaY03FJfoTYdLftHguMCjaliRhssvnqp0EHk9v_eRCsnKpGhNZcwzgkXIyDJX7uG5YlWPKXDtRzenQP1HHCRAGPlUdDRIJFt0z9rLhQGLiKG0A3jPqRt-HV6CQv30RDr41S_WU884ckTdeLKiMdDQ5EyA9J3DSOn1muxyCyBgxWRi1na_ctJ9mOgWviszBLkBexe6d-xQH7ejTK7M8NqKDr0SGNh5yP6TZmXM063Tr1j22F9hIXTxffzqss5xMBcHV7ayWLFMF-QOc9x_xCIuSi02fm4F6-wSh42P8PXPEzjVNK0Q7gw6u2XAjvqKW3uA5c0dvmgEb3lPJNawi23LrtAyUS4gXw==",
+        "summary": []
+      },
+      {
+        "id": "fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"path\":\"output/运行说明.txt\",\"content\":\"独立验证复算说明（中文）\\n\\n在带有输入文件的本地环境执行（不写入输入目录）：\\npython /任意位置/rebuild.py --input /输入目录 --output /全新空输出目录\\n例：python /work/output/rebuild.py --input /input --output /work/new_audit\\n自动创建输出目录，生成《危机模型独立验证报告.docx》和《模型验证证据.xlsx》；已有同名文件会被覆盖，请选择全新目录。本次执行使用 /input 和 /work/output；代码不读取现成证据文件，不从网络取数据。\\n\\n依赖：Python 3，numpy、pandas、scipy、openpyxl、python-docx。pandas.read_stata 原生读取 .dta；无需 MATLAB/Stata/R 或 sklearn。随机种子 np.random.default_rng(20250308)，仅用于200年移动块自助抽样（每个模型/窗口160次）；优化使用 scipy.optimize.minimize(BFGS)，并非随机拟合。币种/金额未从输入定义，不作金额解释；GDP增长以百分比（×100），概率效应与区间以百分点（×100），利差、bank_credit_GDP 为作者按月度全路径标准差缩放的单位；debt=p*(xK−1)*w*K/GDP 为原始比率。\\n\\n核对容差：表3A系数绝差<0.10，表3C<0.015，表3D froth风险差<1.0百分点，信贷Logit平均边际效应<0.2百分点；年度比率交叉核对仅作为诊断，标准化年度/作者月度标准差不可强制严格相等。作者表值按显示的两位小数对账；不以容差证明源代码/实证面板被完整复现。字段/路径哈希及逐项容差参见工作簿。年度末端未来h年剔除，样本内阈值用于作者对账，训练期阈值/缩放用于时序留出。时间留出不是独立真实市场验证。\\n\\n输入要求：--input 下含 Model/simulated data/bayesian_full_yearly.dta、diagnostic_full_yearly.dta 以及 source_manifest.json；报告引用的论文/源码/表格见原输入目录，程序不写输入。程序不复算月度危机认定、均衡或真实实证系数。运行完成可用 openpyxl 检查工作簿是否包含“来源与边界”“核对与差异”“危机与敏感性”“事件定义敏感性”“时序留出预警”“状态匹配非政策”等页。\"}",
+        "call_id": "call_PGCfD4XhZYJslyEvFqd3RLXW",
+        "name": "write_text"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 43076,
+      "input_tokens_details": {
+        "cache_write_tokens": 717,
+        "cached_tokens": 42356
+      },
+      "output_tokens": 658,
+      "output_tokens_details": {
+        "reasoning_tokens": 25
+      },
+      "total_tokens": 43734
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

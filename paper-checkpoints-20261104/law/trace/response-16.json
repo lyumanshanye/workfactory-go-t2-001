@@ -1,0 +1,234 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 41873,
+    "input_tokens_details": {
+      "cache_write_tokens": 21339,
+      "cached_tokens": 20531
+    },
+    "output_tokens": 322,
+    "output_tokens_details": {
+      "reasoning_tokens": 33
+    },
+    "total_tokens": 42195
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_dhuy5HluEHbTTpmP6SzBJkFi",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"python - <<'PY'\\nimport pandas as pd\\np='/app/input_files/';a=pd.read_csv(p+'legal_reasoning_annotations.csv').set_index('section_id');ids=['11341980_23','3672856_34','3385333_19'];found={}\\nfor ch in pd.read_csv(p+'reasoning.csv',chunksize=3000,usecols=['case_url','opinion_text','project_opinion_id']):\\n for sid in ids:\\n  m=ch[ch.case_url.eq(a.loc[sid,'url'])]\\n  for _,r in m.iterrows():\\n   t=r.opinion_text; q=a.loc[sid,'paragraph']; key=q[:35];pos=t.lower().find(key.lower());\\n   if pos<0:\\n    import difflib\\n    z=difflib.SequenceMatcher(None,t.lower(),q[:65].lower(),autojunk=False).find_longest_match(0,len(t),0,65);pos=z.a; length=z.size\\n   else:length=35\\n   if length>found.get(sid,(0,))[0]:found[sid]=(length,r.project_opinion_id,pos,t[max(0,pos-90):pos+260])\\nprint(found)\\nPY\",\"timeout\":120}"
+        }
+      }
+    ]
+  },
+  "stream_events": 70,
+  "native_response": {
+    "id": "resp_0d6fccceea7ed5c5016aeb05a371a48190b547dbb4f0226deb",
+    "object": "response",
+    "created_at": 1793787299,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793787303,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 127353,
+          "check_offset": 0
+        }
+      },
+      {
+        "blocked": false,
+        "source_type": "completion",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 983,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_0d6fccceea7ed5c5016aeb05a4f2488190962e9c5e0defb246",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6wWnOCwmR9kDZx6cRpXRcdZaxe1CptsHeMSWKJo-u0UHOC528x5wFswQcadCT-oZx2fMWXkeaNQO919upTzx7QYGZdEYdz1v4y6ZLWl7NbRWiT4E2VJdJATFf_Rcv9BYvPKbFY8cx2gI7n-HS6MFr2eHvecn-kQGvrkLshV9bvh0Dxr1p7lfMdnYHDk717DIkCSY-g3l8h9PYDgcbYjy3NX11vv9QxNIj5yhd6gcK50NhqbaHcLPmfyVA0mYX-3UyYxnBlpwMrhbYaFawlEmSyskuZSw-_G_OBWmre3JuQLwa2QDDp9TSPzMxu10X6hPpUVwaAQDIdEoE-KFR5-_f_fn0xn-JIgJavkWfo0SuWdK4LGad0OFjugpU_LQLafVo9UH_VIu1_Yff3pKY8kaogD2sg3qe8fJyQk7NER8yBFQiRerZkC8s0tS3_lhAMXGXM8pVDIHX6PUociPv0CAFdhGPqH_MG4c25H3QyqZ5Dr43yAJVJPe_AROKCGFBPXTcG0Ue-yW0_6wpgV6bYctLwVZCcuHADLzUPKt339sL3eA1CSibB70ns8BoNANKUNbbtAF4NKecmAaPe9IuI0-ceggxn0PH15Li1ICdLYaQGnzi4an60iqsw0HP0Ixxbf1BIWx49vUTwFhO3WpAvlQBxo8RE5zrf5DmRSIjVCH-TAl878JEs3b9fc4EpJxdXztSOFVuLrH1njDi77SKZLaPd8bhaGgpf8_pZRPZkBS7YKKBmk77PqoIWEEBgc1RJ-OpitXx-zAwWYfMCd7_TBTNV9uoeQPMHGxk72ndkkgIO8xH3pHPY1j05PYrYBwaMxZkZQE_nU1IDQNzLOT0VYNMA1EidA17FMBzWlOfeMCzLMB32l18Mr2C_Ltrwv8xR7DRl3QHo4QKKrIZXf5fh63IApAqFJWCaWST3hQUN0egKyNfE2JqXN-nLNSx0VARR7aslBSTqq_qzBUqZiXwfV9u7I7QlFYO_hBHogr92rtvh7bzHAE1TKtY7OL_OJVoys_tnZZ49Gd3vLqcXL1ufc-HpyCP7xXjuULbNo_39dXYCYH7lm-WrTeFxvWD6V0zgp8TWuUMt56sG4oxYiOOswzQUyjCGyF3uXoG5_Cox_6hrb2iFS7EhwOsLoAhzebK6A4lhF38uwvaaoU361fDdcDJXdApkLeZzUkQVy0JrEOBAdC6VxRHxiWm0cbtY4JxnXU7A19JT_JwuvGheq36V4OFdBWJUKdZyFJ9NU62V2lmViEYrrOFxfDvnaQTjo1pLSMOXklcA91zvP5VLvb_agabLPMKCax34qLY1KWkVRvM5svVVvhk9i686C2uomJBOKnAtwfLQEj-259HsSZKr2yMsLozmhEvNcTYe3K6A7sH8k8R4gez1TExB2pLzyZhwSTjaJnmesiEK6vlG_XWJCkZHJ2SGWOgaCpzDMe78kSC1_nJ5-BogottzC6EQ2lBlj2okWxFPsRYnv5kJGYkC3gxkUhGeGnqaEXXx7T8BVmGED9oJaMamSB8RaBH2YcYM_zOqTcuKtwz8lblN5EFbW6Kn6U9C2SEtejTi-UZyCgcoYLCxopuwjqnL3Rzd3AmsFfsoYPAb0uyg8m0I5WGlLH7GjvqCElusNbZzIhQlwQuwAk4DRvkECs0-7Z_LsF2RHV5WgItPv4or0vna2rD3gMLyEJxnMXo96Gz6_tnAwfWRjpqJTTPespY7E_5lK0H6lvTTpMJzgONvUX3cd6uoalmU6L3oJqK8AGT9A4uFmOg1Fgw1d9OINQX3Yilk3KQM3QIb0GwF0z-bNjvKwiS0pfW-qoVQ==",
+        "summary": []
+      },
+      {
+        "id": "fc_0d6fccceea7ed5c5016aeb05a54734819095f8e06a56cc9b24",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"python - <<'PY'\\nimport pandas as pd\\np='/app/input_files/';a=pd.read_csv(p+'legal_reasoning_annotations.csv').set_index('section_id');ids=['11341980_23','3672856_34','3385333_19'];found={}\\nfor ch in pd.read_csv(p+'reasoning.csv',chunksize=3000,usecols=['case_url','opinion_text','project_opinion_id']):\\n for sid in ids:\\n  m=ch[ch.case_url.eq(a.loc[sid,'url'])]\\n  for _,r in m.iterrows():\\n   t=r.opinion_text; q=a.loc[sid,'paragraph']; key=q[:35];pos=t.lower().find(key.lower());\\n   if pos<0:\\n    import difflib\\n    z=difflib.SequenceMatcher(None,t.lower(),q[:65].lower(),autojunk=False).find_longest_match(0,len(t),0,65);pos=z.a; length=z.size\\n   else:length=35\\n   if length>found.get(sid,(0,))[0]:found[sid]=(length,r.project_opinion_id,pos,t[max(0,pos-90):pos+260])\\nprint(found)\\nPY\",\"timeout\":120}",
+        "call_id": "call_dhuy5HluEHbTTpmP6SzBJkFi",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 41873,
+      "input_tokens_details": {
+        "cache_write_tokens": 21339,
+        "cached_tokens": 20531
+      },
+      "output_tokens": 322,
+      "output_tokens_details": {
+        "reasoning_tokens": 33
+      },
+      "total_tokens": 42195
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

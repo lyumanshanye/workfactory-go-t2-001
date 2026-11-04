@@ -1,0 +1,227 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 38491,
+    "input_tokens_details": {
+      "cache_write_tokens": 375,
+      "cached_tokens": 38113
+    },
+    "output_tokens": 74,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 38565
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_4OS0ael18dvx1OqQyURvJXj0",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"sed -i 's/to_numpy(dtype=float);logits/to_numpy(dtype=float).copy();logits/' /work/output/review.py; cd /work/output && python review.py > /work/run.log 2>&1; tail -30 /work/run.log\",\"timeout\":120}"
+        }
+      }
+    ]
+  },
+  "stream_events": 39,
+  "native_response": {
+    "id": "resp_0f69593813323729016aeb057ec48c8190ac6641b6e95cc993",
+    "object": "response",
+    "created_at": 1793787262,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793787264,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 115756,
+          "check_offset": 0
+        }
+      },
+      {
+        "blocked": false,
+        "source_type": "completion",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 209,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "fc_0f69593813323729016aeb058043a48190b69031c6e42adbc1",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"sed -i 's/to_numpy(dtype=float);logits/to_numpy(dtype=float).copy();logits/' /work/output/review.py; cd /work/output && python review.py > /work/run.log 2>&1; tail -30 /work/run.log\",\"timeout\":120}",
+        "call_id": "call_4OS0ael18dvx1OqQyURvJXj0",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 38491,
+      "input_tokens_details": {
+        "cache_write_tokens": 375,
+        "cached_tokens": 38113
+      },
+      "output_tokens": 74,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 38565
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

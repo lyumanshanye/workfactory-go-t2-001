@@ -1,0 +1,426 @@
+{
+  "graded_at_utc": "2026-11-04T10:10:06.747361+00:00",
+  "task_path": "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/quality20_v2/research/hardening_40min_20261104T085949Z/new_paper_tasks_20261104T093734Z/FIN-CRISIS-VALIDATION-2025-001/versions/v2_20261104T094710Z",
+  "reviewer": "legal_new_paper_task agent cross-reviewing finance task; independent of finance author",
+  "review_type": "independent_AI_reference_artifact_review_with_separate_numerical_recalculation",
+  "expert_signed": false,
+  "API_used": false,
+  "rubrics_sha256": "9fb074906ca78b73832c42ec2cb526719023285428ce25853904aac85c256ba1",
+  "score_scale": "0..100",
+  "awarded_weight": 112,
+  "total_positive_weight": 115,
+  "score": 97.3913043478261,
+  "internal_suggested_reference_target": 85,
+  "internal_target_met": true,
+  "target_origin": "internal calibration, not a finance taskbook gold-score requirement",
+  "rubric_results": [
+    {
+      "id": "FIN-01",
+      "criterion": "明确2025期刊发表、2023工作稿、2024复制包的差别，并区分作者模拟路径和实际市场记录。不得把模拟100000年标成现实历史。",
+      "weight": 2,
+      "binary_hit": 1,
+      "awarded_weight": 2,
+      "evidence_location": "危机模型独立验证报告.docx 开头/决策依据；source_manifest.json",
+      "finding": "明确2025期刊、2023工作稿、2024复制包；明确10万年为模拟路径。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-02",
+      "criterion": "两模型各100000行、82列，Year=1..100000，报告重复与缺年检查。仅报总行数无时间索引检查不通过。",
+      "weight": 2,
+      "binary_hit": 1,
+      "awarded_weight": 2,
+      "evidence_location": "InputAudit.csv 两模型行；reference.py identity；finance_reference_recalculation.json dimensions/year_sequence",
+      "finding": "各100000×82独立确认，Year精确连续1..100000，报告duplicates/missing_steps均0。列数未单列在InputAudit，但原件独立核实为82。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-03",
+      "criterion": "独立计算p*(xK-1)*w*K/GDP，并与bank_credit/GDP对照误差小于1e-8；不得仅把bank_credit_GDP改列名当作原始比例。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "InputAudit.csv raw_credit_identity_max_error；reference.py raw定义；独立复算identity",
+      "finding": "两模型最大误差2.6645352591e-15，独立表达式以p(xK-1)wK/GDP计算。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-04",
+      "criterion": "识别bank_credit_GDP和credit_spread经过源月度全样本标准差缩放；说明不是百分数或bp，年度标准差接近1不保证严格为1。提供至少一项由路径复算的尺度证据。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "InputAudit.csv raw_to_stored_scale_mean/sd；SourceFindings S07；原preprocessing_simulation_data.R 24–29行",
+      "finding": "倍率1.189722703/1.819257152，年度sd并非严格1；原代码明确两变量除月度sd。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-05",
+      "criterion": "说明危机为月度标准化信贷/GDP收缩阈值产生、年度任一月发生即记1，阈值以年度频率约4%求解；因此4%拟合不是独立验证成功。实际年度危机次数和频率须由原始行重算。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "InputAudit.csv crisis_count/frequency；报告决策依据；SourceFindings S02；原preprocessing_simulation_data.R gen_crisis",
+      "finding": "两模型3999次/0.03999独立复算；代码月度阈值求解年度0.04并年度聚合。明确是定义/校准选择。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-06",
+      "criterion": "指出Step3与PanelD源实现的三期窗口包含t,t+1,t+2，源表文字又写未来五年；报告独立明确的未来1..3/5窗口并量化至少一项差异。只写模糊的注意未来泄漏不通过。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "SourceFindings S01/S05；IndependentStatistics D_froth_author_inclusive3/strictfuture3/strictfuture5",
+      "finding": "源含当期三期与五年表注差异，独立严格未来3/5年概率差齐全；Bayesian5.67变4.149404644pp，Diagnostic7.398变5.877456487pp。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-07",
+      "criterion": "明确未来3年末3行不可完整观察，不能填0当无危机；增长率等端点同样使用有效样本。需提供修正样本量而非仅声明剔除。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "IndependentStatistics A_*_boundary_corrected、D_froth_strictfuture3；reference.py future/gdp3",
+      "finding": "修正样本n99997；未来三年末3行NaN，原口径端点单列，没有把未知填0用于前瞻检验。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-08",
+      "criterion": "以GDP[t+3]/GDP[t]-1重算累计增长并与存储GDP_3Y_change有效区间逐行对账；不能把3个普通同比直接相加。误差小于1e-8。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "InputAudit.csv GDP3Y_stored_max_error_valid；reference.py gdp3；独立复算GDP3",
+      "finding": "直接GDP[t+3]/GDP[t]-1，有效区间误差0。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-09",
+      "criterion": "独立估计100*三年GDP增长对crisis*forward spread change的回归，含截距；作者口径与修正端点口径分列，至少给系数、样本量、单位，数值与参考1e-6以内或解释等价估计差异。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "IndependentStatistics A_spread_author/A_spread_boundary_corrected；reference.py ols；独立复算A_spread_slope",
+      "finding": "100倍三年增长、危机×前瞻利差变化、截距、全路径；作者n100000、修正99997，独立OLS斜率吻合。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-10",
+      "criterion": "独立估计同一GDP结果对crisis*源标准化信贷比的回归，含截距，明确样本包含全路径而非仅危机行；换原始信贷比须作等价系数换算。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "IndependentStatistics A_credit_author/A_credit_boundary_corrected；reference.py循环",
+      "finding": "使用源SD缩放的信贷/GDP与危机交互，含截距、全路径，不只危机样本。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-11",
+      "criterion": "独立估计资本超额收益与信贷关系，同时说明源capital_excess_return_normalized以均值缩放至0.059，不能仅因表注而断言已匹配收益标准差。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "IndependentStatistics B_capital_return_author；SourceFindings S11；preprocessing_simulation_data.R 152行",
+      "finding": "两模型系数-0.0065252024/-0.0217475423；明确按均值缩至0.059，拒绝仅凭注释声称波动匹配。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-12",
+      "criterion": "复算credit_spread对before_crises和post_crises_5Y的回归；指出源before_crises是危机前一年，与五年表注不一致，并提供一项预先定义多年前窗的敏感性结果。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "IndependentStatistics C_spread_author/C_spread_pre5；SourceFindings S04；Analyze_simulations.R 129–157行",
+      "finding": "一年前标签与五年表注差异明确；五年前窗替代n99995、结果分列。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-13",
+      "criterion": "报告froth二元指标的概率差或正确离散边际效应（百分点），不得把logit系数当概率变化；复算源三期结果并与作者表5.67/7.40百分点对账，保留任何不能解释的差异。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "IndependentStatistics D_froth_*；AuthorA1Reconciliation.csv table3；独立复算D_author_discrete",
+      "finding": "二元饱和logit的离散概率差5.67/7.398pp，和5.67/7.40对账；不是把logit系数当概率。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-14",
+      "criterion": "独立估计未来一年危机对源标准化信贷比的logit，报告连续平均边际效应及尺度，和作者4.05/3.85百分点比对。可接受等价估计但不能用oracle交互项替代这一要求。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "IndependentStatistics D_credit_logit_nextyear；独立Newton复算credit_nextyear_logit_AME_pp",
+      "finding": "连续AME4.050622969/3.852030543pp，独立Newton4.050623089/3.852030611容差内，非oracle替代。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-15",
+      "criterion": "独立复算至少一个模型Step3 probit：原始信贷比与true lambda交互指标分列，说明与PanelD logit在链接和尺度上的区别。报告样本量、系数或预测概率。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "IndependentStatistics author_current_plus_next2_observable_raw_credit_ratio/_oracle_raw_credit_times_true_lambda；报告独立复算段",
+      "finding": "两种probit均n100000，link记录probit，与PanelD的logit分列；原始比例与oracle真实强度交互明确命名。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-16",
+      "criterion": "把underlying_lambda真状态归为模型内oracle输入，不能直接作为可部署真实预警变量；给出现实可观测输入版本及识别真状态需额外证据。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "报告两模型时间留出段/决策依据；IndependentStatistics oracle与chronological_holdout分析",
+      "finding": "报告明确underlying lambda不可现实直接用；留出只用raw credit ratio与spread，可观测代理与真实预警仍有映射限制。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-17",
+      "criterion": "在模拟时间顺序上划分训练与测试，并保证训练标签所用未来事件不跨过训练边界；不随机打散重叠时间记录。报告精确样本界限。可使用不同合理切分，但必须可复算。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "IndependentStatistics chronological_holdout_observable_logit；reference.py train/test；独立复算holdout",
+      "finding": "训练Year1..69997，标签至70000；测试85001..99997，末标签100000；不跨训练边界，无随机打散。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-18",
+      "criterion": "报告留出样本至少一种概率质量指标（如Brier或log loss）及适当基准；若另报排序能力，可采用AUC、PR-AUC等与任务相关的合理指标。说明仅为模拟时间留出，不冒充实际市场样本外。参考Brier/AUC是示例，不强制同时采用两者。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "报告两模型留出段；IndependentStatistics chronological_holdout_observable_logit；独立复算Brier",
+      "finding": "Brier0.103313543/0.102732854优于训练常数基准0.105162066/0.105009712；AUC也报，明确不是现实市场OOS。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-19",
+      "criterion": "至少一项核心效应或预测性能给出合理的时间依赖不确定性（HAC或时间块bootstrap）及带宽/块长，不能仅报独立同分布SE或符号。不给全套结论重复扣分。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "IndependentStatistics se_hac5及holdout_brier_improvement_hac；reference.py ols/glm",
+      "finding": "5阶Bartlett NW；固定预测Brier提升0.001848524/0.002276858，HAC SE0.000232666/0.000256525。覆盖核心效应时间依赖，不强迫所有统计重复扣。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-20",
+      "criterion": "指出源gen_non_clustered_crisis的<0*12不会执行注释中的三年去簇；另按明确经济窗口做非重叠事件统计，报告保留数与结果影响。可选其他明确规则。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "SourceFindings S02；EventProfiles nonoverlap9；*_events_nonoverlap9.csv；独立复算nonoverlap9_events",
+      "finding": "真实源<0*12不去簇；9年不重叠保留3343/3327事件，基准3999，结果与完整事件分列。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-21",
+      "criterion": "从原始年度路径计算至少危机前、当年和危机后信贷/GDP的事件统计，报告尺度、有效事件数与取窗规则，不能只复制预存Years_around_crisis。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "EventProfiles.csv raw_credit_GDP_mean；原始事件Year/row清单；reference.py事件循环",
+      "finding": "独立raw credit/GDP危机-4..4期、尺度与事件数有明细，未只用Years_around_crisis。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-22",
+      "criterion": "独立计算危机前后GDP增长，明确是相邻年度增长或累计增长，剔除窗口不完整事件；给事件数与可追溯年度。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "EventProfiles GDP_change_nextyear_mean/GDP3Y_change_mean；*_events_all_crises.csv；独立复算GDP_event0_growth",
+      "finding": "明确一步与累计3年两种；完整事件窗口，危机当年下一年GDP增长-0.110781506/-0.138078006已独立核实。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-23",
+      "criterion": "除基准作者阈值外，至少一项有经济含义的事件定义变化，并量化事件数、频率或主要效应；不得声称年度替代定义严格重构了月度危机。参考采用年度原信贷比收缩>10%。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "IndependentStatistics alternative_annual_credit_contraction_below_minus10pct/_future3_raw_credit_logit",
+      "finding": "年度原信贷/GDP下降>10%替代，6919/9383次，频率0.069190692/0.093830938，明确不是月度作者危机重构。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-24",
+      "criterion": "比较Bayesian与Diagnostic结果时报告各自样本、单位和关键校准参数不同，不能将差异全部解释为只改变预期机制的因果效应。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "报告决策依据；PolicySourceAudit.csv 两模型AH/AL/lambda_high/lag_years；InputAudit",
+      "finding": "样本与单位相同可对照，关键校准lambdaH0.561/0.638，AH0.2/0.156等不同已落表；报告不将模型差异视为仅预期机制因果。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-25",
+      "criterion": "逐项区分moment_target表七个校准目标与额外统计，指出用同一校准目标判断优越性的循环性；不能把所有已发表拟合结果叫外部验证。",
+      "weight": 3,
+      "binary_hit": 0,
+      "awarded_weight": 0,
+      "evidence_location": "AuthorCalibrationTargets.csv/工作簿该表；报告决策依据与独立复算段",
+      "finding": "七个校准目标只是从moment_target表转录；与A1另表区分，但报告没有明确指出用这些相同校准目标评判模型优越性的循环性。四百分比危机定义说明不能代替对七个目标的这一审查。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-26",
+      "criterion": "独立复算至少四项TableA1非目标矩并与作者Bayesian/Diagnostic值逐项对账，明确容差和未匹配项；不能仅复制作者列。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "AuthorA1Reconciliation.csv table=A1两模型14行；reference.py vals；公开TableA1",
+      "finding": "每模型7项独立路径复算，与作者值最大浮点误差5.55e-17；RUN容差明确；超过四项，未只复制作者列。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-27",
+      "criterion": "识别Analyze_simulations.R的regs_data通过手工覆盖系数（如18.0、2.8等）构造发表比较列，不能把这些对象作为独立重估的市场实证回归。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "SourceFindings S06；报告S06；原Analyze_simulations.R regs_data 199–201行",
+      "finding": "明确18.0/2.8手写覆盖回归对象，没有宣称独立市场回归。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-28",
+      "criterion": "识别credit_growth_past_year在年度表使用lag12即12年，并用原始记录量化它与真正前一年增长差别。",
+      "weight": 2,
+      "binary_hit": 1,
+      "awarded_weight": 2,
+      "evidence_location": "InputAudit credit_lag12_max_error/credit_lag1_difference_mean_abs；SourceFindings S03",
+      "finding": "lag12复算误差0；与前一年增长平均绝对差1.3805403/88638.4854，后者极大值需进一步经济诊断，但并未被隐藏。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-29",
+      "criterion": "说明跨模型比较先匹配可观测杠杆与利差，再求解不同w/信念强度，诊断性模型还需逆映射真实强度及reference/lag参数；给出边界和残差审查要求。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "报告政策可比性；SourceFindings S09；原solve_for_states_from_cs_and_lvg.m",
+      "finding": "先匹配杠杆和利差，fsolve w/信念；diagnostic逆映射underlying/reference/lag；明确检查网格支持、边界、残差，未假装已执行反事实。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-30",
+      "criterion": "明确政策状态匹配使用按模拟均值标准化的利差，不能把cs=1读成1%或一标准差；与统计数据SD口径区分。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "SourceFindings S07；原solve_for_states_from_cs_and_lvg.m 15–16行；报告S07",
+      "finding": "以模拟均值调整政策spread，cs=1不是1%或1个SD，和统计SD口径区分明确。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-31",
+      "criterion": "准确指出政策代码将w乘1.1，不能声称资本充足率提升10个百分点，也不能把不同模型固定相同w/信念当同可观测状态反事实。",
+      "weight": 2,
+      "binary_hit": 1,
+      "awarded_weight": 2,
+      "evidence_location": "SourceFindings S08；报告政策段；原irf_rational_and_behavioral_w_and_lambda.m 27行",
+      "finding": "w×1.1的资本注入，不是资本比率10个百分点，不认可固定相同隐藏状态作为可比政策试验。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-32",
+      "criterion": "识别确定性分支bank_credit_impulse计算xK比率，不能未对账就称为银行信贷余额变化或实际贷款扩张。",
+      "weight": 2,
+      "binary_hit": 1,
+      "awarded_weight": 2,
+      "evidence_location": "SourceFindings S08；原irf_rational_and_behavioral_w_and_lambda.m 50行",
+      "finding": "确定性分支bank_credit_impulse实际xK比率，报告未冒称实际贷款扩张。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-33",
+      "criterion": "政策结论的证据强度与实际完成的计算一致。可明确保存core MAT并非完整policy路径、提供缺口和授权条件；也可从输入代码/primitive独立重建postprocess并真实重算政策路径，但须核验状态匹配、初始条件、残差/边界和路径稳定性。仅复制结果或虚称已重算不通过。不得因采用比参考更完整的真实复算而扣分。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "报告政策段；PolicySourceAudit contains_xK_matrix/contains_full_policy_simulation_path；results limitations",
+      "finding": "如实说明核心MAT无完整postprocess和反事实轨迹，未重算政策路径；明确完成独立验证后才量化授权，符合允许的缺口审查路径。",
+      "uncertainty": "独立AI审阅，非金融专家签署；未重校准、未复现真实市场数据或政策冲击。"
+    },
+    {
+      "id": "FIN-34",
+      "criterion": "明确准入/附条件/拒绝决定，并把生产预警、研究解释、政策讨论三种用途的可授权范围对应到本次验证结果，不能只列技术发现不作决定。",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "报告开头/决策依据/政策段",
+      "finding": "明确附条件研究试用，不准入生产危机预警，不授权量化政策收益；研究解释、实际预警和政策讨论的授权层次对应证据。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-35",
+      "criterion": "给出至少三项可以核验完成的使用前置条件，例如版本冻结、真实数据外部检验、时点定义修复、政策路径独立验证；不能只写加强监控。",
+      "weight": 2,
+      "binary_hit": 1,
+      "awarded_weight": 2,
+      "evidence_location": "报告政策可比性与准入条件",
+      "finding": "版本冻结、时点修复、独立市场数据/危机标签、预登记时间外推、模型风险审查、政策路径复核等均可核验完成。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-36",
+      "criterion": "一条命令在新输出目录可运行，重新生成核心危机、回归与留出证据；不依赖硬编码最终系数或外部未提供文件。保留原件不变。",
+      "weight": 4,
+      "binary_hit": 1,
+      "awarded_weight": 4,
+      "evidence_location": "private/reference/RUN.txt；reference.py；integration finance_reference_rebuild_check.json",
+      "finding": "独立在新输出目录运行exit0，核心models/statistics/events/reconciliation语义完全一致；独立另外实现的关键统计也容差内。作者系数只用于对账，不是复算硬编码。",
+      "uncertainty": null
+    },
+    {
+      "id": "FIN-37",
+      "criterion": "报告和工作簿可定位关键数字到原始文件、年度行或程序输出；交付包含版本/单位、运行依赖和数值容差。格式美观不单独计分。",
+      "weight": 2,
+      "binary_hit": 1,
+      "awarded_weight": 2,
+      "evidence_location": "模型验证证据.xlsx诸表；*_events_*.csv Year/row；RUN.txt；results.json environment/tolerance",
+      "finding": "输出含版本与尺度、事件原始年度及行号、依赖/容差；报告按表名和SourceFindings代码定位。已读取DOCX和XLSX，不以美观给分。",
+      "uncertainty": null
+    }
+  ],
+  "independent_verification": [
+    "finance_reference_recalculation.json (separate Newton/logit, raw counts/identities, GDP,OLS,event windows,holdout Brier)",
+    "finance_reference_rebuild_check.json (new output directory reproduction)",
+    "finance_reference_rebuild/ (rebuilt artifacts)"
+  ],
+  "remaining_issues": [
+    {
+      "severity": "reference_omission",
+      "rubric": "FIN-25",
+      "finding": "未明确阐述七个校准目标拟合的循环性；已按冻结rubric扣3分。"
+    },
+    {
+      "severity": "prompt_rubric_alignment",
+      "rubric": "FIN-23",
+      "finding": "题干要求事件定义或预测窗口的敏感性（或），但FIN-23独立强制替代事件定义；本参考两者都完成，得分不受影响，盲测前应修复版本或宽容解释，不能暗扣合理只做窗口敏感性的答案。",
+      "status": "resolved_by_parent_prompt_aligned_rubric_before_blind_solve",
+      "resolution": "private/rubrics.prompt_aligned.json，保留原冻结版；本独立交叉审查确认仅FIN-23变更，权重和参考得分不变。"
+    },
+    {
+      "severity": "nonblocking_economic_diagnostic",
+      "finding": "Diagnostic年度credit growth有极大值，PolicySourceAudit保存均衡最大残差约0.538/0.193；参考诚实给出值并拒绝政策授权，但后续可加强这些数值含义的解释，不能仅看复算吻合就当经济有效。"
+    },
+    {
+      "severity": "method_fairness",
+      "finding": "FIN-18已允许Brier/log loss合理指标及等价替代，没有暗中强制AUC+Brier双指标；事件窗口和时间切分允许合理替代。源基准回归具体审查由原代码可追溯，但应保持等价方法边界。"
+    }
+  ],
+  "acceptance_limits": "此分数只评参考解按冻结37项的完成度，不是模型盲测得分、40分钟/50步验证，也不是专业金融专家验收。未修改任务包。",
+  "prompt_aligned_rubrics_sha256": "f2081b07669437a7ce77188c30d97fbaede4ef6fad877154ee1befd5229835b4",
+  "aligned_rubric_review": {
+    "changed_ids": [
+      "FIN-23"
+    ],
+    "review": "允许事件定义或预测窗口实际敏感性，修正题干或条件对齐；参考两类都已完成，FIN-23仍binary_hit=1、得3分，不改变112/115结果。",
+    "score_unchanged": true,
+    "score": 97.3913043478261,
+    "blind_grade_should_use": "private/rubrics.prompt_aligned.json"
+  }
+}

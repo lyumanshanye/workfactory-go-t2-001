@@ -1,0 +1,472 @@
+{
+  "task_id": "LAW-JURIS-AUDIT-2026-001",
+  "artifact_type": "independent_ai_solver_rubric_grade",
+  "graded_at_utc": "2026-11-04T10:26:33.117643+00:00",
+  "model_run_directory": "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/quality20_v2/research/hardening_40min_20261104T085949Z/new_paper_tasks_20261104T093734Z/integration_review_20261104T095042Z/blind_runs/LAW-JURIS-AUDIT-2026-001",
+  "evaluated_output_directory": "workspace/output",
+  "rubric_path": "/inspire/hdd2/project/special-project-1/public/yelv/research/合成工作类数据和移动coding数据/工作类任务/forcodex/quality20_v2/research/hardening_40min_20261104T085949Z/new_paper_tasks_20261104T093734Z/LAW-JURIS-AUDIT-2026-001_v2_20261104T094558Z/private/rubrics.json",
+  "rubric_sha256": "a877fb46131a87ea603b4ae9af8e447f02677e702ec035f3b623f4f862af1bec",
+  "reviewer": "Independent AI cross-reviewer; did not author legal task or reference. Not legal-expert acceptance.",
+  "method": "Read actual DOCX72 paragraphs, XLSX20 sheets, solver review.py and all 12 case_analysis records. Independently checked 12 quotations/character offsets/case URLs/opinion types against original sc_data and reasoning; independently recomputed all annual opinion/case means. Reran copied solver program in separate scratch with a 120-second cap and compared output tables. No API calls, no reference-output substitution.",
+  "scores": [
+    {
+      "id": "LAW-01",
+      "criterion": "独立登记原件出处及版本",
+      "weight": 3,
+      "binary_hit": 0,
+      "awarded_weight": 0,
+      "evidence_location": "XLSX/来源；DOCX¶7,72",
+      "finding": "仅原件名称、字节、用途，未逐项给论文/数据DOI、原件校验或明确引用对应manifest记录。列出manifest.json文件名不足以展示本条要求。",
+      "uncertainty": "可接受真正引用manifest中的来源校验记录；此交付未建立该对应，不据此认定输入伪造。"
+    },
+    {
+      "id": "LAW-02",
+      "criterion": "正确区分案件与意见粒度",
+      "weight": 7,
+      "binary_hit": 0,
+      "awarded_weight": 0,
+      "evidence_location": "XLSX/数据核对；DOCX¶7；review.py/counts",
+      "finding": "给reasoning的36430意见/24890案件，未给sc_data的37491意见/25610案件。没有把reasoning计数写错为sc_data，但缺本条完整覆盖。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-03",
+      "criterion": "核对标注覆盖",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "XLSX/数据核对 annotations=2748,annotation_id_duplicates=0；专家类别时期",
+      "finding": "三期类别/LC分表可加总FORMAL329、GRAND551、NONE1868，2748唯一段。接受有用的分层表作为等价计数证据。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-04",
+      "criterion": "数据连接基数可验证",
+      "weight": 10,
+      "binary_hit": 1,
+      "awarded_weight": 10,
+      "evidence_location": "XLSX/数据核对,异常排除；review.py/link,join",
+      "finding": "project_opinion_id连接，sc_duplicates=0、r_duplicates=0、opinion_join=36430、sc_only=1061、case_id_mismatch=0；双方唯一性及连接基数明确，未扩张。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-05",
+      "criterion": "标注到原案连接异常有明细",
+      "weight": 7,
+      "binary_hit": 0,
+      "awarded_weight": 0,
+      "evidence_location": "XLSX/未进预测标注,未入趋势意见,异常排除；review.py",
+      "finding": "提供53缺预测标注和1061缺趋势意见，但没有以CAP case_id审查标注到原案的35段/28案未连接明细；这些是不同连接问题。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-06",
+      "criterion": "识别人类低置信标记",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "XLSX/专家类别时期；DOCX¶5",
+      "finding": "原标注LC按时期/类别分表加总101；文中将低置信归为人类分类不确定而非模型softmax门槛。接受表格分层总和。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-07",
+      "criterion": "解释FORMAL的法律边界",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶5,35,39,59；case_analysis.json/notes",
+      "finding": "封闭规则推演定义，结合总统授权界限、文本足以决定等真实法律片段支持，不把保守结果自动称FORMAL。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-08",
+      "criterion": "解释GRAND的法律边界",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶5,23,27,43,47；逐案原文",
+      "finding": "开放政策/社会/经济定义，立法目的、社会对司法独立依赖、联邦执法目的有具体论证，不以案件重要判GRAND。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-09",
+      "criterion": "解释NONE的范围",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶5,23,35,51,63,67；case_analysis.json",
+      "finding": "NONE解释包括未呈现清晰推理、事实/立法史转述、过渡与辩论铺垫，不等同没有法律效力或反形式主义。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-10",
+      "criterion": "核实数值列语义",
+      "weight": 10,
+      "binary_hit": 1,
+      "awarded_weight": 10,
+      "evidence_location": "DOCX¶8；XLSX/说明,折0逐段定位；review.py/logits,entropy",
+      "finding": "说明prob_列有负数且非和为1，先减最大值softmax，再自然对数熵，数值稳定且等价。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-11",
+      "criterion": "核实类别ID映射的证据边界",
+      "weight": 7,
+      "binary_hit": 0,
+      "awarded_weight": 0,
+      "evidence_location": "DOCX¶12；review.py",
+      "finding": "引用意见计分公式，但没有核实/说明数字类别ID的0 FORMAL/1 GRAND/2 NONE证据及训练set枚举的边界。程序用命名列作熵，没有计算标签错配；本条是审计事项遗漏，非虚构映射。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-12",
+      "criterion": "按评估轮次报告独立指标",
+      "weight": 10,
+      "binary_hit": 0,
+      "awarded_weight": 0,
+      "evidence_location": "XLSX/折级结果；review.py/metrics",
+      "finding": "10个test_num且各907正确；但所有accuracy/macroF1只保留4位小数，不能满足冻结条款1e-6对账。例如test0 accuracy0.7872 vs原值0.7872105843439912。最大舍入误差约5e-5。仅本条按精度门槛扣，不扩展到宏F1方法或其他分层。",
+      "uncertainty": "这是展示/存储精度导致的冻结规则失败，非模型理解分类算法错误；若按正常4位展示容差接受，本条可得10权。"
+    },
+    {
+      "id": "LAW-13",
+      "criterion": "计算混淆矩阵",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "XLSX/混淆矩阵；review.py/confusion",
+      "finding": "真class、预测predicted_label及计数构成9格 pooled 3x3；总9070，文中明确重复行非独立样本。接受已指定合并描述组，未要求固定test0。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-14",
+      "criterion": "宏平均与类别不平衡处理正确",
+      "weight": 7,
+      "binary_hit": 0,
+      "awarded_weight": 0,
+      "evidence_location": "review.py/metrics；XLSX/分类评估,专家类别时期；DOCX¶9",
+      "finding": "macroF1确为三类F1等权且未用weightedF1；但缺1868 NONE占比如何抬高整体accuracy的解释，仅并列accuracy与macroF1不完成冻结条款要求。与LAW12舍入缺陷无关。",
+      "uncertainty": "指标算法正确；扣分限类别不均衡解读缺失。"
+    },
+    {
+      "id": "LAW-15",
+      "criterion": "重复预测影响有实测",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶8–9；review.py/vote；XLSX/分类评估",
+      "finding": "9070行2695段，按明确多数票作替代唯一section口径，accuracy0.7967、macroF1 0.6901；明确非独立外部样本。无需与参考均值softmax一致。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-16",
+      "criterion": "披露未预测标注",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "DOCX¶8；XLSX/未进预测标注,数据核对",
+      "finding": "53条无prediction的section明细、数量正确，未假称覆盖全2748。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-17",
+      "criterion": "按人类低置信分层评估",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "XLSX/熵和准确率,熵去重口径,分类评估；DOCX¶8–10",
+      "finding": "同时给重复行描述(LC339/NLC8731)和唯一段(LC96/NLC2599)样本及性能，明确重复非独立；多数票唯一段指标是合理替代。",
+      "uncertainty": "正文称逐折去重但主要数字取重复行描述表，表格另列正确唯一段；应修正文案，未把描述均值当独立检验故不重复扣分。"
+    },
+    {
+      "id": "LAW-18",
+      "criterion": "按时期分层评估",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "XLSX/分类评估 group=period；专家类别时期；DOCX¶13–15",
+      "finding": "三期1870–1936、1937–1980、1981–2024，样本与类别性能列齐且可复算；未将时期差异推成因果。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-19",
+      "criterion": "复核熵差异的口径",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "XLSX/熵去重口径；DOCX¶10；review.py/entropy_unique",
+      "finding": "唯一段首折口径LC96/NLC2599，均值0.7886080248630449/0.5391040509572654独立复算吻合；正文另报重复行0.778/.533并说不能声称复现论文置换，未冒称替代数即论文结果。",
+      "uncertainty": "正文把重复行结果称逐折去重易误导，应以工作簿清楚分列为准。没有额外声称独立p值。"
+    },
+    {
+      "id": "LAW-20",
+      "criterion": "验证划分证据限制",
+      "weight": 10,
+      "binary_hit": 1,
+      "awarded_weight": 10,
+      "evidence_location": "DOCX¶8–10,69,71；XLSX/原评估报告",
+      "finding": "区分本地10组重复测试与既有训练比例表、未知切分及不可从现有材料验证训练测试；不声称病例级独立或外部泛化。保留作者十折称谓。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-21",
+      "criterion": "年度趋势独立重建",
+      "weight": 10,
+      "binary_hit": 0,
+      "awarded_weight": 0,
+      "evidence_location": "XLSX/年度趋势；review.py/annual",
+      "finding": "155年、36430意见、24890案件、年度均值/数量计算正确且独立核验误差1.1e-16；但没有年度分散度/标准误/区间列。只给年度mean与n不完成冻结条款。",
+      "uncertainty": "并非历史均值错误；缺的是不确定性/分散度交付。"
+    },
+    {
+      "id": "LAW-22",
+      "criterion": "案件等权敏感性正确",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "XLSX/年度趋势 case_mean,cases；review.py/ca；DOCX¶12,16",
+      "finding": "同年先案件内均值再案件等权，独立原件核验最大误差1.7e-16；2024为0.1896397666601221，与意见均值区别明确。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-23",
+      "criterion": "增加有解释力的替代口径",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "XLSX/年度趋势 majority_mean,majority_n；分期口径；DOCX¶12–17",
+      "finding": "仅majority替代口径、样本数及后期变动明确，不并per_curiam，确为具有法律意义的敏感性，不要求额外长度权重。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-24",
+      "criterion": "解释段落分数到意见标准化",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶12；review.py注释；XLSX/说明",
+      "finding": "公式(pF-pG)*(pF+pG)、意见内均值后标准化正确；明确reasoning仅最终zformal，缺全量段落概率，不能从头证明所有分数。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-25",
+      "criterion": "历史主张保持描述性界限",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶13–17；XLSX/年度趋势,分期口径",
+      "finding": "给真实时代/年度结果且指出标准化零点不等同绝对主导、无唯一断点或因果结论。原论文确有1980后primary mode强描述，允许有据质疑。",
+      "uncertainty": "以时期平均负值批评论文“dominance”仍须谨慎：相对标准分不直接证明原始绝对比例；此处已说明零点限制，未按词句苛扣。"
+    },
+    {
+      "id": "LAW-26",
+      "criterion": "精读至少12不同案件",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "case_analysis.json/cases；XLSX/逐案精读",
+      "finding": "12不同CAP案件ID；不是同案多段充数，与参考案例不同不影响得分。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-27",
+      "criterion": "精读取样跨时期",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "DOCX¶19；case_analysis.json/selection,cases",
+      "finding": "覆盖1870–1936、1937–1980、1981–2024三期，明确目的样本非随机误差估计。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-28",
+      "criterion": "精读覆盖模型分歧",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "DOCX¶19；case_analysis.json/cases；XLSX/折0逐段定位",
+      "finding": "固定test_num=0定义专家与模型不一致，12个记录均真不一致；跨重复选择口径明确。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-29",
+      "criterion": "精读覆盖人类低置信",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "case_analysis.json/cases low_confidence；XLSX/逐案精读",
+      "finding": "Maul、Gunther、Mergens至少三个原人类LC=True，字段来自真实标注，不拿模型熵代替。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-30",
+      "criterion": "逐案引用可回查",
+      "weight": 10,
+      "binary_hit": 1,
+      "awarded_weight": 10,
+      "evidence_location": "case_analysis.json/cases quote,offset,project_opinion_id,url；DOCX¶21等",
+      "finding": "12案均给案名/年代/原意见ID/真实短引和0起字符位置。独立原件流式核对12/12引用在原文（空白归一化后）存在、offset正确、case_url一致。",
+      "uncertainty": "个别引文在单词中截断但不改变引文真实存在；不因此发明内容错误。"
+    },
+    {
+      "id": "LAW-31",
+      "criterion": "逐案法律解释具体",
+      "weight": 10,
+      "binary_hit": 1,
+      "awarded_weight": 10,
+      "evidence_location": "DOCX¶23,27,31,35,39,43,47,51,55,59,63,67；case_analysis.json/notes",
+      "finding": "逐案具体说明立法史、权限规则、文义、政策功能、过渡或他方论点，并允许协议与上下文不同，不是只复述预测标签。",
+      "uncertainty": "部分解释偏短或以“可能”保留边界，未凭参考措辞判错；实际文本支持其关键论点。"
+    },
+    {
+      "id": "LAW-32",
+      "criterion": "论证归属经过核验",
+      "weight": 10,
+      "binary_hit": 1,
+      "awarded_weight": 10,
+      "evidence_location": "DOCX¶21–67；case_analysis.json/cases,notes；原意见元数据",
+      "finding": "准确保留多数/协同/异议；LegalTender、Bridges、Gunther、Mergens、BrandX异议和Intel协同均明确，未冒作多数holding；独立sc原字段/作者与reasoning类型相符。",
+      "uncertainty": "Maul/PublicCitizen/Intel的spec_opinion_type=special与concurrence同属特殊/协同归属，未形成实际多数/异议误认。"
+    },
+    {
+      "id": "LAW-33",
+      "criterion": "标注协议与上下文解释区分",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶5,23,27,31等；case_analysis.json/protocol_note",
+      "finding": "明确注释协议不能补入整份上下文，逐案分协议标签与律师上下文理由，未把专家标签当绝对真值。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-34",
+      "criterion": "跨领域证据准确",
+      "weight": 10,
+      "binary_hit": 0,
+      "awarded_weight": 0,
+      "evidence_location": "DOCX¶71；XLSX/说明,原评估报告",
+      "finding": "仅说跨领域须另测，没有保留论文已有200非statutory样本检验的正面证据与其当前材料无法逐条复算的具体界限；把领域外证据写得过空。",
+      "uncertainty": "并未夸大迁移能力，扣分是漏读/漏述已有证据。"
+    },
+    {
+      "id": "LAW-35",
+      "criterion": "先例效力与风格分离",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶4,35,43,55,59,70–71",
+      "finding": "风格不决定binding authority、现行效力；律师须查多数/协同/异议及后续权威资料，意见地位为上线复核条件。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-36",
+      "criterion": "裁判结果预测与风格分离",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶4,71",
+      "finding": "不得当裁判结论/正确性、无现行法判断；未验证胜诉或结果预测用途不获授权。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-37",
+      "criterion": "已知缺案范围审查",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶7；XLSX/作者缺失记录",
+      "finding": "97条原登记完整逐行提供，year字段可核验范围1871–2023；明确不应作全部缺案数。接受完整含年代登记+数量+界限说明为等价证据。",
+      "uncertainty": "未单独打印min/max年代总结，作为改进项，不因原表保留范围信息而硬扣。"
+    },
+    {
+      "id": "LAW-38",
+      "criterion": "采纳决定由证据支持",
+      "weight": 10,
+      "binary_hit": 1,
+      "awarded_weight": 10,
+      "evidence_location": "DOCX¶2–4,9–10,19–67,69–71",
+      "finding": "附条件研究试用明确，分类误漏/低置信、真实精读意见归属、训练切分和迁移限制支撑允许研究及禁止排他法律筛选等用途。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-39",
+      "criterion": "上线条件可执行",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶69–71",
+      "finding": "研究管理员版本锁定、双人盲评独立新案/测试固定、律师强制精读冲突和无法定位、事前漏检门槛未达停用排序，负责环节与触发条件明确。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-40",
+      "criterion": "核心数表可重建",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "运行说明.txt；review.py；legal_solver_independent_check/recomputed,reproduction.log",
+      "finding": "复制solver代码和notes到独立scratch，限120秒从只读原件/新空输出成功重建。所有19个非来源表XML逐字节一致、case JSON一致，核心年度独立核验机器精度。",
+      "uncertainty": "来源表因输入目录/原件manifest清单差异不完全字节相同，不影响核心数表；未当环境故障扣分。"
+    },
+    {
+      "id": "LAW-41",
+      "criterion": "交付文件可读取",
+      "weight": 3,
+      "binary_hit": 1,
+      "awarded_weight": 3,
+      "evidence_location": "DOCX72段与XLSX20页签ZIP/XML；输出文件名/运行说明",
+      "finding": "Office结构完整可读，实际输出与入口一致，并非只凭文件存在。",
+      "uncertainty": null
+    },
+    {
+      "id": "LAW-42",
+      "criterion": "未知事实不被补造",
+      "weight": 7,
+      "binary_hit": 1,
+      "awarded_weight": 7,
+      "evidence_location": "DOCX¶8–12,68–71；运行说明",
+      "finding": "没有伪造未知split、全量段落重推断、外部胜诉率、现行先例有效性或商业客户。实际引用均核实来自原件。",
+      "uncertainty": null
+    }
+  ],
+  "summary": {
+    "pass_count": 34,
+    "fail_count": 8,
+    "earned_weight": 227,
+    "total_weight": 288,
+    "score_0_1": 0.7881944444444444,
+    "score_100": 78.81944444444444,
+    "normalized_score_0_1": 0.7881944444444444,
+    "normalized_score_100": 78.81944444444444,
+    "legal_sota_score_target": "strictly <0.70",
+    "legal_sota_score_target_met": false,
+    "time_or_step_acceptance_evaluated_here": false,
+    "difficulty_accepted": false,
+    "expert_signed": false
+  },
+  "no_duplicate_penalties": "Numeric display precision deducted only LAW12. Missing annual dispersion does not negate correct means/case weighting/sensitivity LAW22–25. Missing annotated-case linkage is not confused with the correct opinion linkage. Alternate case selection and majority-vote aggregation accepted.",
+  "sensitivity_analysis": {
+    "if_four_decimal_metric_display_accepted_instead_of_frozen_1e_6": {
+      "earned_weight": 237,
+      "score_0_1": 0.8229166666666666
+    },
+    "if_explicit_missing_registry_minmax_required_instead_of_full_table": {
+      "earned_weight": 220,
+      "score_0_1": 0.7638888888888888
+    }
+  },
+  "environment_notes": "Solver rerun succeeded; missing content is not attributed to unsupported material or tool faults. Model stopping is not equivalent to task correctness. Timing is to be taken from controller run records, not this grading/reproduction duration.",
+  "limitations": [
+    "AI judgement on legal interpretation and bundled binary criteria; not an expert signature.",
+    "Some rubric losses reflect strict disclosure/rounding requirements, not sustained legal reasoning difficulty.",
+    "Historical z-score sign cannot by itself identify absolute prevalence; solver acknowledges this but period-mean critique should be expressed more carefully."
+  ],
+  "evidence_files": [
+    "legal_solver_independent_check/workbook_extracted.json",
+    "legal_solver_independent_check/source_checks.json",
+    "legal_solver_independent_check/validation_summary.json",
+    "legal_solver_independent_check/reproduction.log"
+  ],
+  "original_task_and_solver_outputs_modified": false
+}

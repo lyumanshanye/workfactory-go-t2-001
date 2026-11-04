@@ -1,0 +1,294 @@
+event: response.created
+data: {"type":"response.created","response":{"id":"resp_0346d209c28cbae9016aeb05c7cd508197a065ba4af40593b7","object":"response","created_at":1793787335,"status":"in_progress","access_programs":null,"background":false,"completed_at":null,"content_filters":null,"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"gpt-6-sol","moderation":null,"output":[],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"auto","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":null,"user":null,"metadata":{}},"sequence_number":0}
+
+event: response.in_progress
+data: {"type":"response.in_progress","response":{"id":"resp_0346d209c28cbae9016aeb05c7cd508197a065ba4af40593b7","object":"response","created_at":1793787335,"status":"in_progress","access_programs":null,"background":false,"completed_at":null,"content_filters":null,"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"gpt-6-sol","moderation":null,"output":[],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"auto","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":null,"user":null,"metadata":{}},"sequence_number":1}
+
+event: response.output_item.added
+data: {"type":"response.output_item.added","item":{"id":"rs_0346d209c28cbae9016aeb05c8d680819788aef4d08d74927a","type":"reasoning","content":[],"encrypted_content":"gAAAAABq6wXIE7c6y7Oh06WHX6_1xUQNmN5BU8ri6_wxk0VZ-LZ3ZWlagQ7FVILP_TD6TO4N4O1BYcIHnrgR3tU2OLYxHPSz7sv2G1iB1h5PPRsmkn3tQCnFTpP5BKFeil8RKBygmTvnaUVfQhXWJjLHFI9OYmKvFsjo2A8517mffNJxvdOEriyeP39bs2MOQzYxI8SLbKGJtFrct9ZodL7_3BcQoQrLGdfHQe6zM76PjXvzMgc-BNa--BJw-48gonPGb23YX68R-cSNxAhJZzdJocfsxdPFHC2aTraoJx3M7v2AEIRi2HSFwAwUH1nRHz7TmEcvNDWzNa_Wg4Ch5J0fRAThtqPgS_JnF3j5nA1e0BdD2NvoDByK1wbNk0C67t8b5SsmE_LYrSNV16EkswpJ77QAGpzWcTFQgLg00p8ur0AXRApu0yU_SClpta1V4ZJQOxFYHRs1KMPPdMT12_pOA3-c8PDV9DeZ-VvI3LF9ycW6U_pUBbDMdd2OhrnJ_QV6Mq-7Z80RSs385yxpCKyN6flMngqL4Wf7-cBaeup5COnMbB9I8ju-eIaaDrWh_h0_H-46Oe45nE3TdfSbz9qvVrw5f6H_A_cNQ6sM6f-XP5My_wiERH8UMqoqYYJd1eHyx0PVVQtl6QUS1Kqk6wPfwtzTZK6s0bquKPnbre9YuXvMHbUA3K2LHxggSzRHk4-CNWATaiCb6Eo0JysXyIif9KPwM6M5SZw4auAW_vnHZaMsqjQgIwmLAWgLB1N9ZwOHC4q_JX8dTaaZDI9vdgVzNHVGtkJ-laJ-fWdsMDamHXZNFCD2SXeCOUiNQ0gSYEdbCA7cFkSoZzD_8xEQa3oz_Ywq6o6jp788pTs76AWE_wTbiohWH_9EPeBKvur56ynMn6s8AQSs8GVjcAWx9Gn33k1D9cF9Q66zPVFEfdPZ4htr2wGs2S1C4sr3F5P70JPVlmDGrf-_ZCoxXalbjz5q3IIu0bV2IHbCI9Sl6y8vzx3SSpwsOdJJIgF86m-xxEcCwfp6VGpLbWyBiB5WC6XxLLExkAzWiDndkyfnf86hfZUgjiZQzlVF22VsheWTumG-gmFnvve5qeQUUx_HQcrvMNdwoqLKtKzk3Q0VILx-zS7CGeut_2peO-fZUdISc5Gn-skoAm_9","summary":[]},"output_index":0,"sequence_number":2}
+
+event: response.output_item.done
+data: {"type":"response.output_item.done","item":{"id":"rs_0346d209c28cbae9016aeb05c8d680819788aef4d08d74927a","type":"reasoning","content":[],"encrypted_content":"gAAAAABq6wXJz4H-ZaEMP60xB_92Riao89x7Qw78Mwc6UbxiqpaOzcJBbEIdVhLT710hn9qHvcA5KuCtUMYkD7lh-mBhhoVwIghDrXndAoLo8KudbWZsT_ZigHDKW6TgsDTRZUCmPSo06iowYOtQw5Kp5fW0MGQG1DLlt15lYew77TJvdPDklP6wgSR3uHfjJ6GrF7Kly6ARIepjZe3e04rGtgke64SSt8aEO6Y_eTWnNKzlMuIvwifB_tvX7d0dUs9t3Ll_bIP4kr-gz73Rf3Ht8NkudXL8_TYSD6kcmny-XqxKEVh3zStuTF_o1K0ZKrPYAPRVS09UUSJDm85FeClSi7Bt8ndkMB1mcQVHU3mxJCysDFUSR2qyZs4m4KdBRsrNE_vgL9faBLE60fXn5goz4C2M5aRa6RG93DvJma5E7159ZhP08AZYkRHXx4y3qjjNcyuMnWWAH09gNLjMI5uDelKIVgb_cQoz13hjfk019leOwGQ5pQD0xH1aYSfcbbO9TFGchhDcVjRMR4GeOiFdDA3kS-6GTlhvEXSgTm0JCObnCp-mXnQzHudMzyZRw7Rq1xsDHqOYAArQjNlVSwiP9_MhFbWtVKzuPsGEu04zaTXe8WTuoi8JRthMR8ir5wJ-qLNIdkrSNXBEHGtH2DrWdd1y-Zi7oQbdIr37ozJwUR8tOclrNRWroc-6RR6bHzj-DsKkKJ0QWohWk75Hi41vOMzmmVzwNNc_LZ9nDtyswqZlBLhlYJlzFWA8GoWRexLO1YoI5-yPqf_cqDyIQegNME-e79Egh391m2mntNjOYzckRbC7R-xaW1ZbB5UX5f6r1iiM0g_rzmxJwhcRcF2kUSmkdJkhLCStylV319vTwufGfMh_5ufnpLrNHaRjvcum9tb9V2KKe-Xkm_dt8kwQCYj14292d_7AXsaAXvPB3Upt96xvzpuzFjTMS8_PgfES5vCzUjHSbMK_w6aI_845_wYo1DqkPQtaXePHyB9p_z9uNSe7P2zcFiSQ2frczGxbADzssl035j9U0KzBC0ytcFFjvIuzNUQc-h6qcnnaDlvl3XlET-4MEMVCHeXKuPqS1iGBqc14_nme3x3z-hVQQphvM99eDtX3X_cNYFkzjn718iAeppmGhQMnSPiEBwZBE3W27vcPYuxTUmSt2_1fbk-83dN9jSVJwOi5so4l0DnoHt1mKiqBiwkHrJsENKP8P3RWebw1WjVyn0aN7V5svxA1-rlnl_auIMzhBkUQJPZY6deiXY-WNmV1163VDmgjWGGPcVvlk_1Tse5s72fsKKphLVfbiVSYnnK4-LA8mXAfO5Iln8H5igPYm9U8rIHLIcuxaqUp7u196zSHAJt__j8ill_Y-16Wi_p4fI1dANbWRKBEUtDmGD1vNYN4xCiHK08e3XXTvfVDd_2iLGykukorz8JfyVhZq5Xikehee_hUsQlQmuwBuVn7LWzGGWp6maP_N9kBx4LrqXgrcrVo80sO8m4zwfmXwr27eDRWJknS6JMJqYyi_xSbqIk6kImsiXKEcQKuZfdiz8NAdHdQlHGk-OHs2aZOD9oikidpn5ueNS_h4yw2IgQLAsS7LPCqbkpb2cPqW6-d0gG4w3Mz-5FVbVPrdtmrlMHYtmn_LM_T0dIqKhmwEcxeej6Z-NShTbZfAXTuHgtusXw3KuVcqgb1DlhPNA==","summary":[]},"output_index":0,"sequence_number":3}
+
+event: response.output_item.added
+data: {"type":"response.output_item.added","item":{"id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","type":"function_call","status":"in_progress","arguments":"","call_id":"call_PGCfD4XhZYJslyEvFqd3RLXW","name":"write_text"},"output_index":1,"sequence_number":4}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"{\"","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"szVyLi1WMxp6Ex","output_index":1,"sequence_number":5}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"path","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"86tzcHdm7Dfv","output_index":1,"sequence_number":6}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\":\"","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"EqFcYeCyuOlCB","output_index":1,"sequence_number":7}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"output","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"jo6bVLD9Sb","output_index":1,"sequence_number":8}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"/","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"sfFkrDNnx2JWlIU","output_index":1,"sequence_number":9}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"运行","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"jYsif10UcFhaLx","output_index":1,"sequence_number":10}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"说明","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"MrQPTtOaH98G0M","output_index":1,"sequence_number":11}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":".txt","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"IwXVzOngjNKG","output_index":1,"sequence_number":12}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\",\"","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"ne6KlEs8ed4GZ","output_index":1,"sequence_number":13}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"content","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"1mFXWJUtV","output_index":1,"sequence_number":14}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\":\"","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"VB83aIS8R8mzL","output_index":1,"sequence_number":15}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"独","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"GCpSedM3MK9klH7","output_index":1,"sequence_number":16}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"立","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"Is2QiVkKNbccc4V","output_index":1,"sequence_number":17}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"验证","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"aBARsjo4E01okJ","output_index":1,"sequence_number":18}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"复","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"cvRGgaL9XGSzLz6","output_index":1,"sequence_number":19}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"算","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"UMMX3mEwTJ7rb6F","output_index":1,"sequence_number":20}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"说明（","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"APQlfpmssITKB","output_index":1,"sequence_number":21}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"中文）","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"awWFwiSpfaVNp","output_index":1,"sequence_number":22}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\n","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"GMVjkjQNawbvrB","output_index":1,"sequence_number":23}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\n在","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"9KOq0nUmBZLxc","output_index":1,"sequence_number":24}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"带有","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"97ibQ13Yfm5gQs","output_index":1,"sequence_number":25}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"输入文件","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"UK8hVADMtWZx","output_index":1,"sequence_number":26}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"的本","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"waXK8bF5B8SRhH","output_index":1,"sequence_number":27}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"地环境执行","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"eiUgaXwPWXo","output_index":1,"sequence_number":28}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"（不写","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"qIBOgqXhVNuiq","output_index":1,"sequence_number":29}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"入输入目录","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"jJpLGduuiYd","output_index":1,"sequence_number":30}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"）：\\n","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"XG7Ft9q6jFlY","output_index":1,"sequence_number":31}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"python /任","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"7QBL7fk","output_index":1,"sequence_number":32}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"意位置/re","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"Qx8XhpvJ8r","output_index":1,"sequence_number":33}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"build.py --input","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"","output_index":1,"sequence_number":34}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" /输入目录 --","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"7T0arNj","output_index":1,"sequence_number":35}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"output /全新","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"xmCUHU","output_index":1,"sequence_number":36}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"空输出目录\\n例","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"qqgimLnG","output_index":1,"sequence_number":37}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"：python /work/output","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"lH3j3vvMMaFP","output_index":1,"sequence_number":38}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"/rebuild.py --input","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"pP7iWyvP5FzLA","output_index":1,"sequence_number":39}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" /input --output /work","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"FCWdTunecF","output_index":1,"sequence_number":40}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"/new_audit","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"2zLxG4","output_index":1,"sequence_number":41}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\n自动创建输出目录，","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"5fevK","output_index":1,"sequence_number":42}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"生成《危机模型独立","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"NYphwmi","output_index":1,"sequence_number":43}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"验证","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"Z1gk3ICnISpmtx","output_index":1,"sequence_number":44}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"报告.docx》和《模型验证","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"Bx","output_index":1,"sequence_number":45}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"证据.xlsx》；已有同","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"hmZg","output_index":1,"sequence_number":46}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"名文件会被覆盖，请选择全","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"kHY1","output_index":1,"sequence_number":47}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"新目录。本次执行使用 /input 和","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"Bz980TNKyiR19","output_index":1,"sequence_number":48}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" /work/output；代码不","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"VNsY6LNtE31tD1Y","output_index":1,"sequence_number":49}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"读取现成证据文件，不","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"tJHLdl","output_index":1,"sequence_number":50}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"从网络取数据。\\n\\n依","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"4oqz","output_index":1,"sequence_number":51}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"赖：Python 3，numpy、pandas、","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"9U3z8ItT","output_index":1,"sequence_number":52}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"scipy、open","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"cQmUT8","output_index":1,"sequence_number":53}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"pyxl、python-docx。pandas.read_stata","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"2g6bYc53JefUh0","output_index":1,"sequence_number":54}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" 原生读取","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"Vm3LkBT8aan","output_index":1,"sequence_number":55}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" .dta；无需 MATLAB/Stata/R 或 sklearn。随机","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"FfApk1VTu9l1","output_index":1,"sequence_number":56}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"种子","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"Cyfa8bj7ydSzsD","output_index":1,"sequence_number":57}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" np.random.default_rng(20250308)，仅用于200年移动","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"GxzfLV","output_index":1,"sequence_number":58}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"块","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"s5lXbI2ukuN5Ho2","output_index":1,"sequence_number":59}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"自助抽样（每个模型/窗口160次）；优化","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"LahBDFe0CEAI","output_index":1,"sequence_number":60}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"使用","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"p7Hjjs14ANEJQz","output_index":1,"sequence_number":61}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" scipy.optimize.minimize(BFGS)，并非随机","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"R0c7UH2nLTo4O","output_index":1,"sequence_number":62}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"拟合。币","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"76Rfe0TsXcKt","output_index":1,"sequence_number":63}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"种/金额未从","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"UJz8Pf5uvU","output_index":1,"sequence_number":64}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"输入定义，不作","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"MlXWqjuQO","output_index":1,"sequence_number":65}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"金额解释；GDP增长以","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"EjVpQ","output_index":1,"sequence_number":66}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"百分比（×100），概率效应与区","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"","output_index":1,"sequence_number":67}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"间以百分点（×100），利差、bank_credit_GDP 为作者按月","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"IvE3jcpWcupW","output_index":1,"sequence_number":68}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"度全路径标准差缩放的单位；debt=p*(","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"pcVW3W8PBmf","output_index":1,"sequence_number":69}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"xK−1)*w*K/GDP 为原始比率。\\n","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"2Bl0NBuXKZ","output_index":1,"sequence_number":70}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\n核对容差：表3A系数绝差<","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"7","output_index":1,"sequence_number":71}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"0.10，表3C<0.015，表3D froth","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"JULOSsMZ","output_index":1,"sequence_number":72}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"风险差<1.0百分点，信贷Logit平均边际效应<0.2百分点；","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"","output_index":1,"sequence_number":73}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"年度比率交叉核对仅作为诊断，标准化年度/","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"pl4zpEcz9I6F","output_index":1,"sequence_number":74}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"作者月度标准差不可强制","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"j8pMi","output_index":1,"sequence_number":75}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"严格相等。作者表值按","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"tTBTCG","output_index":1,"sequence_number":76}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"显示的两位小数对账","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"Mr2T26c","output_index":1,"sequence_number":77}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"；不以容差证明源代码/实证面板被完整","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"hThYfevJ735Ma3","output_index":1,"sequence_number":78}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"复现。字段/路径哈希及逐项容差","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"L","output_index":1,"sequence_number":79}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"参见工作簿。年度末端未来h","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"5wq","output_index":1,"sequence_number":80}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"年剔除，样本内阈值用于作者对账，","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"","output_index":1,"sequence_number":81}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"训练期阈值/缩","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"CxACBy0iH","output_index":1,"sequence_number":82}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"放用于时序留出。时间留出不是独","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"q","output_index":1,"sequence_number":83}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"立真实市场验证。\\n","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"LfzfEo","output_index":1,"sequence_number":84}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\n输入要求：--input","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"aG","output_index":1,"sequence_number":85}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" 下含 Model/simulated data/bayesian_full_yearly.dta、diagnostic","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"R3cG","output_index":1,"sequence_number":86}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"_full_yearly.dta 以及 source_manifest.json；报告引用","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"DEq","output_index":1,"sequence_number":87}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"的论文/源码/表格见原输入目录","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"n","output_index":1,"sequence_number":88}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"，程序不写输入。程序不复算月度危机认定","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"5oAcbwRfBTdhU","output_index":1,"sequence_number":89}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"、均衡或真实实证系数。运行完成可","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"","output_index":1,"sequence_number":90}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"用 openpyxl 检查工作簿是否包含“","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"1hNFYqaQUvd","output_index":1,"sequence_number":91}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"来源与边界”“核对与差异”“危机与敏感性”“","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"rdH5ZA8V5X","output_index":1,"sequence_number":92}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"事件定义敏感性”“时序留出预警”“状态匹配非政策”等页","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"Z1sOK","output_index":1,"sequence_number":93}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"。\"}","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","obfuscation":"HJ3OWYUP3OVAT","output_index":1,"sequence_number":94}
+
+event: response.function_call_arguments.done
+data: {"type":"response.function_call_arguments.done","arguments":"{\"path\":\"output/运行说明.txt\",\"content\":\"独立验证复算说明（中文）\\n\\n在带有输入文件的本地环境执行（不写入输入目录）：\\npython /任意位置/rebuild.py --input /输入目录 --output /全新空输出目录\\n例：python /work/output/rebuild.py --input /input --output /work/new_audit\\n自动创建输出目录，生成《危机模型独立验证报告.docx》和《模型验证证据.xlsx》；已有同名文件会被覆盖，请选择全新目录。本次执行使用 /input 和 /work/output；代码不读取现成证据文件，不从网络取数据。\\n\\n依赖：Python 3，numpy、pandas、scipy、openpyxl、python-docx。pandas.read_stata 原生读取 .dta；无需 MATLAB/Stata/R 或 sklearn。随机种子 np.random.default_rng(20250308)，仅用于200年移动块自助抽样（每个模型/窗口160次）；优化使用 scipy.optimize.minimize(BFGS)，并非随机拟合。币种/金额未从输入定义，不作金额解释；GDP增长以百分比（×100），概率效应与区间以百分点（×100），利差、bank_credit_GDP 为作者按月度全路径标准差缩放的单位；debt=p*(xK−1)*w*K/GDP 为原始比率。\\n\\n核对容差：表3A系数绝差<0.10，表3C<0.015，表3D froth风险差<1.0百分点，信贷Logit平均边际效应<0.2百分点；年度比率交叉核对仅作为诊断，标准化年度/作者月度标准差不可强制严格相等。作者表值按显示的两位小数对账；不以容差证明源代码/实证面板被完整复现。字段/路径哈希及逐项容差参见工作簿。年度末端未来h年剔除，样本内阈值用于作者对账，训练期阈值/缩放用于时序留出。时间留出不是独立真实市场验证。\\n\\n输入要求：--input 下含 Model/simulated data/bayesian_full_yearly.dta、diagnostic_full_yearly.dta 以及 source_manifest.json；报告引用的论文/源码/表格见原输入目录，程序不写输入。程序不复算月度危机认定、均衡或真实实证系数。运行完成可用 openpyxl 检查工作簿是否包含“来源与边界”“核对与差异”“危机与敏感性”“事件定义敏感性”“时序留出预警”“状态匹配非政策”等页。\"}","item_id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","output_index":1,"sequence_number":95}
+
+event: response.output_item.done
+data: {"type":"response.output_item.done","item":{"id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","type":"function_call","status":"completed","arguments":"{\"path\":\"output/运行说明.txt\",\"content\":\"独立验证复算说明（中文）\\n\\n在带有输入文件的本地环境执行（不写入输入目录）：\\npython /任意位置/rebuild.py --input /输入目录 --output /全新空输出目录\\n例：python /work/output/rebuild.py --input /input --output /work/new_audit\\n自动创建输出目录，生成《危机模型独立验证报告.docx》和《模型验证证据.xlsx》；已有同名文件会被覆盖，请选择全新目录。本次执行使用 /input 和 /work/output；代码不读取现成证据文件，不从网络取数据。\\n\\n依赖：Python 3，numpy、pandas、scipy、openpyxl、python-docx。pandas.read_stata 原生读取 .dta；无需 MATLAB/Stata/R 或 sklearn。随机种子 np.random.default_rng(20250308)，仅用于200年移动块自助抽样（每个模型/窗口160次）；优化使用 scipy.optimize.minimize(BFGS)，并非随机拟合。币种/金额未从输入定义，不作金额解释；GDP增长以百分比（×100），概率效应与区间以百分点（×100），利差、bank_credit_GDP 为作者按月度全路径标准差缩放的单位；debt=p*(xK−1)*w*K/GDP 为原始比率。\\n\\n核对容差：表3A系数绝差<0.10，表3C<0.015，表3D froth风险差<1.0百分点，信贷Logit平均边际效应<0.2百分点；年度比率交叉核对仅作为诊断，标准化年度/作者月度标准差不可强制严格相等。作者表值按显示的两位小数对账；不以容差证明源代码/实证面板被完整复现。字段/路径哈希及逐项容差参见工作簿。年度末端未来h年剔除，样本内阈值用于作者对账，训练期阈值/缩放用于时序留出。时间留出不是独立真实市场验证。\\n\\n输入要求：--input 下含 Model/simulated data/bayesian_full_yearly.dta、diagnostic_full_yearly.dta 以及 source_manifest.json；报告引用的论文/源码/表格见原输入目录，程序不写输入。程序不复算月度危机认定、均衡或真实实证系数。运行完成可用 openpyxl 检查工作簿是否包含“来源与边界”“核对与差异”“危机与敏感性”“事件定义敏感性”“时序留出预警”“状态匹配非政策”等页。\"}","call_id":"call_PGCfD4XhZYJslyEvFqd3RLXW","name":"write_text"},"output_index":1,"sequence_number":96}
+
+event: response.completed
+data: {"type":"response.completed","response":{"id":"resp_0346d209c28cbae9016aeb05c7cd508197a065ba4af40593b7","object":"response","created_at":1793787335,"status":"completed","access_programs":null,"background":false,"completed_at":1793787343,"content_filters":[{"blocked":false,"source_type":"prompt","content_filter_raw":[],"content_filter_results":{},"content_filter_offsets":{"start_offset":0,"end_offset":116705,"check_offset":0}}],"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"gpt-6-sol","moderation":null,"output":[{"id":"rs_0346d209c28cbae9016aeb05c8d680819788aef4d08d74927a","type":"reasoning","content":[],"encrypted_content":"gAAAAABq6wXPCGPeor8JNtmN_6mGdvI-4FXKZMiuX2x_dl3YqG1ngcUtqfXGDOOgavvVfL2KEty4Lu_K0PfqD3zhmSDhcUGVHU5yiIj-GG3s7LkKRESQMArEL_YqzBF44Xa8lQFlkVyysDb4tnOxEIRl36guTKg35xpcsJMM5yCMqofeYGfoBLMM7w-xd0-Ksz81h_OE5hqdx9fYF-pPfXWfJVUtA1ZdX0xx0g1N-OMKnwWKQQcIDNy4UxuXgCVy23RWi112NI-urxJ6PpFhq73bzNlNa8hrpzQt08Qba7bSatr1f7eNB_0uJ9kq8vZTHrz3aR0eo0DWe7MD3RHwdyHLzyvj749ngCLBmbaB9TUKs4QNRF14mlNRjTI2WZn7NrVQzOBqPhsYBsdMMm3o8gfaMxLOw_XYHBGMcAF6VktN7EPLD8SX03-PImzJh7vp7UP_6caon6Nd3AftzM9YZDy9mhBp5FmQ5YpRjPDvUxzy28qIlZFG3mK1zSVhpdEuMtnOdogB9x14kk_1Voc-NSBN9de1bYlOOlAh5LD6gNSvE4WuJh4-okyk-2YJK7DH_EAZ8zIgLL16elAbVkE8Hql_GWfCnaXRCs98OFr6tkWGH_DjpS0uW_56haeOxKKdiCT92f-krucUo2wTpINs-G61XA8riZmXaqTDErWqNtEczVx2dAHcCvZZLdhzzebOqaSjGErOS84u1du6iVCQ7r_Vnm3jjkCIFXmhJysKb6AjhwPHEYGiRSxpy7rPBXDM0EMbMHY9yzP_uIVldjbhSqgY6jlHvDw7ZnCUlVNDgOUzPeDnVXLVxTv5wnT0NrLcPcXxR0o9JMVTOHD478KPi1-Lwb2NAFZXlJq7rz6OCPHuBjxNGu5bM851taRSXwYPDEuweVvMPAcZTZDtL6lI34cy6mNNwyxOM4fd53OWjYcyfFZ1PPnXRNU7KRrbhk8oq4qFSgqwflAMRvn8aYhx1yB8gO9Mtwv75Rs0NW0NOpKOLbnCCPuVfG1caHQr-vL2v7LiWCj0dvN_NgXOf30NzMHRIMIoftn0NIxPi3YUzdTiFB37sfN1kUyyl-7k7MnA4g2aJYd8hT9d-GtKvKjVXm8ll1XBhGxL15fw_rMXf8rK9EzG7R5MH0IyvBRegHeXCig-Pdqsp0y0Y3FvUdmxU1h4TXhWQ_mqUNxiEejbZFKvziIo6DC2RPwticy__d1VjmJ-Vv7qjaf6eR9BdMNCGFyfNu2vZU5DxaMBt5dVu9rgXiNpSbRp6KqIIUWbnoujenSY2DJqvjOJiA1E0GMFumoLlWVv0ZuAvpMI6lSjtON1aj08bfRZb9M778EPXRUBqqcTaY03FJfoTYdLftHguMCjaliRhssvnqp0EHk9v_eRCsnKpGhNZcwzgkXIyDJX7uG5YlWPKXDtRzenQP1HHCRAGPlUdDRIJFt0z9rLhQGLiKG0A3jPqRt-HV6CQv30RDr41S_WU884ckTdeLKiMdDQ5EyA9J3DSOn1muxyCyBgxWRi1na_ctJ9mOgWviszBLkBexe6d-xQH7ejTK7M8NqKDr0SGNh5yP6TZmXM063Tr1j22F9hIXTxffzqss5xMBcHV7ayWLFMF-QOc9x_xCIuSi02fm4F6-wSh42P8PXPEzjVNK0Q7gw6u2XAjvqKW3uA5c0dvmgEb3lPJNawi23LrtAyUS4gXw==","summary":[]},{"id":"fc_0346d209c28cbae9016aeb05c94a50819786ed027c832c54d2","type":"function_call","status":"completed","arguments":"{\"path\":\"output/运行说明.txt\",\"content\":\"独立验证复算说明（中文）\\n\\n在带有输入文件的本地环境执行（不写入输入目录）：\\npython /任意位置/rebuild.py --input /输入目录 --output /全新空输出目录\\n例：python /work/output/rebuild.py --input /input --output /work/new_audit\\n自动创建输出目录，生成《危机模型独立验证报告.docx》和《模型验证证据.xlsx》；已有同名文件会被覆盖，请选择全新目录。本次执行使用 /input 和 /work/output；代码不读取现成证据文件，不从网络取数据。\\n\\n依赖：Python 3，numpy、pandas、scipy、openpyxl、python-docx。pandas.read_stata 原生读取 .dta；无需 MATLAB/Stata/R 或 sklearn。随机种子 np.random.default_rng(20250308)，仅用于200年移动块自助抽样（每个模型/窗口160次）；优化使用 scipy.optimize.minimize(BFGS)，并非随机拟合。币种/金额未从输入定义，不作金额解释；GDP增长以百分比（×100），概率效应与区间以百分点（×100），利差、bank_credit_GDP 为作者按月度全路径标准差缩放的单位；debt=p*(xK−1)*w*K/GDP 为原始比率。\\n\\n核对容差：表3A系数绝差<0.10，表3C<0.015，表3D froth风险差<1.0百分点，信贷Logit平均边际效应<0.2百分点；年度比率交叉核对仅作为诊断，标准化年度/作者月度标准差不可强制严格相等。作者表值按显示的两位小数对账；不以容差证明源代码/实证面板被完整复现。字段/路径哈希及逐项容差参见工作簿。年度末端未来h年剔除，样本内阈值用于作者对账，训练期阈值/缩放用于时序留出。时间留出不是独立真实市场验证。\\n\\n输入要求：--input 下含 Model/simulated data/bayesian_full_yearly.dta、diagnostic_full_yearly.dta 以及 source_manifest.json；报告引用的论文/源码/表格见原输入目录，程序不写输入。程序不复算月度危机认定、均衡或真实实证系数。运行完成可用 openpyxl 检查工作簿是否包含“来源与边界”“核对与差异”“危机与敏感性”“事件定义敏感性”“时序留出预警”“状态匹配非政策”等页。\"}","call_id":"call_PGCfD4XhZYJslyEvFqd3RLXW","name":"write_text"}],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"default","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":{"input_tokens":43076,"input_tokens_details":{"cache_write_tokens":717,"cached_tokens":42356},"output_tokens":658,"output_tokens_details":{"reasoning_tokens":25},"total_tokens":43734},"user":null,"metadata":{}},"sequence_number":97}
+

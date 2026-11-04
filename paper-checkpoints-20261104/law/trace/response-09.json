@@ -1,0 +1,177 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 27104,
+    "input_tokens_details": {
+      "cache_write_tokens": 2126,
+      "cached_tokens": 24975
+    },
+    "output_tokens": 206,
+    "output_tokens_details": {
+      "reasoning_tokens": 119
+    },
+    "total_tokens": 27310
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_ch1D4mXLMfn7bmu5cfkvg222",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"grep -A28 '^ sc_data' /work/probe.log | tail -28; sed -n '390,465p' /work/paper.txt; sed -n '800,850p' /work/paper.txt; grep -n -i 'none\\\\|low confidence' /work/supp.txt | tail -20\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 43,
+  "native_response": {
+    "id": "resp_008ea5a8a3a92ddf016aeb051026108190af3e7cf5904ce88c",
+    "object": "response",
+    "created_at": 1793787152,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793787155,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {},
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 100838,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_008ea5a8a3a92ddf016aeb0511166c819081d7de0707bd8d18",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6wUTpT5xvgv4rSkBnQ7BSgn2oTHt8w9szOZVPImWsqFUApYfx3hW7k2lvgZWPLIW8YLx3nW9WIwljyD5e-oa15UMOg7r8-fZsTatAs3nqybIz_XzKlyHA9f62Kcq34KtjiBKRwouGMYjzTUW6gpl-aVPTb0d3EzM7lPA25Kf-rakv1YsgpK64MAzUe2XyyeOeo3kTjvcLRqw5MUXYogWlMv4WKGShqtlSQo4-xshBuShX0t31SvA6PvGpspvOHslcgT1sDIh8SEVvbFSuWREe9xxNkvNeFFCT_pIYffnD6lYWEFuUxs1zNUvl76gvzNWa4O3EU-GFTovVPvqQHvMyHFHJG_hJ2FPHYnKOHNeFNotDgSd2qmPVT3LwJ6eYJH71xIm6ZlfhzBgoFHTBailqLlzuygQx_WVdMIgJZ_XxFfkU-6RL9_lBKgoIyHqhQuH0TgYa56tw84Wrs5IIZXfvmGxuRt4U5q79ddmMSkiQMahdCdA6yKfB2JzYAODZ0ODHQO1_ti57DC8MBQLfxVEZoRZkkmVkUU5XaQGADVV382_gxKlLBtyCE448ZmO0d940m9uTcHphzesC_cKb0cPZQ7hoKCq9Pw3eIKWUcDOej0Z1BoaQoWovvDqvIhOprV1XKIX_v2LOvWgIHLMfAHcHQGci3Z62qqCsTbLlBeZpZU3B9ZCciBxBGShRBTzHOVs4kDAJcWqQOEhDlfIrVLQRDY1DNo_-fLGjMjY80V_jfntAmM5WdK2a-97iDDxJO6-pKR7gcsg9xudku1168ZcjPwcpALDlngxjreSPIfozi99-6rThLA8_FAqF-PBvkkIbI6pSCfKNcVOlBfqAubCQpj2dgKWEwnSQ26mPwfg4VcCeYQBbsQKnbA6iUsRR6K4Y8pI1NHhcifAYn1ovrvNis9Ic_dgOmlA0l54WFSenrOEcWJoCTvY4jbbgqBeOLxTvsJjyZlitKLTl0vCJsoRsG1dmnfc25FB7GygFs3es06wiV1xW1nAI2uHZFlJY8tKOvifx71sr3jNFFu-ZTbEdXH6NjXVnH3Y7JPQwUbs8ijH_2ZcDOFjDt0T3u8TwTKBYCvoVW-YagOcTlsFEhGPVfLPcTi6iJCQWLuKs6L-ONVswcNH-WUXONMN2xhhW0jnQLDu2ZTo3M8VVetnd9MNpYdmjN7uHoJQwZ-A3QT0Ndv689ZlYDJo3Xbe5as3BysupSZYYCRIRDaHVeXdayPim2DmOLb7Gr8tc_ddxK4G5jKQilWu3TkVtGkc3cuHqELOKl6BkkS3ELLF5aDUsF4D2-GvEKjMnzB9w4sRlsRBBwbown91lNw20UnHkZRmDnSL4o91RRMV-RQZyX6QmuStC8JntfHRuML_ii-GyXGREPof2TGJB3l901fXe2MYZBLDaqUQ0Xx-VXcRmm5iWyHqCLv20ek1GA6VayTAEkLP91O3wi5H_0OANF_e7RmQidTY5ecHwNkTruQ9mKhaQLWfxByavf3jGziw9ARRM3pNFqL5IpdrRzyYRvF5Y8gQpCuM3Dblg0B0fs1T8oBTVSi5qVnrXuJBaMIiXSV-hxiL4OR0xgzKvTRf_YBkK3YCL30HvUlhCAa4hgI294-2JP81uXmpazTmibuKyahToLfuOxTnaAjSZ6v5-ZPqRn1bvhz1lvKNkEIt1QGwZHxBHTUrKsi68pVOIYmBB5icFpK3TX-XlzeP2m79E3dZAL3cLfqejCuJtNlJrwXVcuht3wMC0f2hPhSOb-8je5qZnER5VWB9FeTlzB_gquVDDvAQN1OCWnjBzJuvcMAOMLO_jNldKjkNcJyafzk1qBp2AGJqOq-m4AHsHLbxraQbN29RUmfuTZ08EDssu-ny5y8DEIMNLJjP2CkA7G2ooPkccGoYJlA2dV5oWbgx0EK750uPJNIUnpHC3sR9teX_QoGxZp910JMPEpGJVRDW7_1NXtiRd0Eg0OJIQh1LKRLQhhLCu3C7mmOWnbqn87m1mZilW3STJHKXBzB_XjgnFQuXqRmlEVw46D5ooiI1lZKonpJUvZcJ8kYnCm3vZA2ZO4V9Jmttm28XNJiCtQ5sCiIlwTEhVRpIPTWfpAOneT3T6XctOg3SUYIzVv-M3u5YS00o-wYFpQeKF-MOIFjKuSGc0xikAITnt7YYfzQLYJi7vWfqLooFxUFbISju8Pq_UdaS1CRTbM4KHfxaEFjJ2YQRB4rHGiGwBAXS6B4eIwsuwzOAqLYsHYJ6hD-rNclBdc663sz4Iep4lKJ3VnPYSstiveaboV7HQLtmU07Dys_8mwqRNc-PzvXhopEF9Nup9Nt8wO56o56VE3OU1TlYl8JrBqUM667l_GidaA3TPKB2__oqXFEwXSMeEeFmOVG_MeO-nMCmaggfhTy97R9HjxTMg3cxytn0A8sEAxa3JcViKfQN0nvhngUXB_u9rtMH8lEYf8UMvE7mdDU9JJnE6GCz218Gm3LHX4WV9o9n4ZUeJJvdjX-RDeUmomuXZpc9EGIXfDUI2Xkgc0T2klnbfpIZLg3PwR_6l_wXFSvGfO2hU0RSrosovlSuMKQv8gBzp7zXe4Cj_FsareMgnIKIXyJsczjNphI9sKVIeWbqUtixCCxVnSUsRzZ48iv9tg-I5JcuzDcsWONANoW5m4ALzLHOStKHCbDn3cRXkI-lK7qz9ARnMAnEek9zkCY1dDAtfDr0EpKl0NYR2qfD4jDhc-q2cfVWh2gJKVBddAx1FPuuljRlh5L2Xy3P18mqAxtPetIL_EU6i5t9qOQ5KnUfSR2OaYq48x_VxAtATX0LIaaLhALxdD2Qj3f4tOANKfMwfwJB6Tmlb6_IBzW00HPb1jtWHeOp_qzeRM5pnEx_NOZ7-hw2ErfhaDbSRZJoYXsxVE5GllkkhibsWg==",
+        "summary": []
+      },
+      {
+        "id": "fc_008ea5a8a3a92ddf016aeb051306c48190ae5fd30a69ac3a13",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"grep -A28 '^ sc_data' /work/probe.log | tail -28; sed -n '390,465p' /work/paper.txt; sed -n '800,850p' /work/paper.txt; grep -n -i 'none\\\\|low confidence' /work/supp.txt | tail -20\"}",
+        "call_id": "call_ch1D4mXLMfn7bmu5cfkvg222",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 27104,
+      "input_tokens_details": {
+        "cache_write_tokens": 2126,
+        "cached_tokens": 24975
+      },
+      "output_tokens": 206,
+      "output_tokens_details": {
+        "reasoning_tokens": 119
+      },
+      "total_tokens": 27310
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

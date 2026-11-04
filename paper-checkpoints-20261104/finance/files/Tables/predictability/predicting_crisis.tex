@@ -1,0 +1,29 @@
+
+% Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
+% Date and time: Wed, May 29, 2024 - 10:33:24
+\begin{table}[!htbp] \centering 
+  \caption{Predicting Crises} 
+  \label{prediction of crises} 
+\begin{tabular}{@{\extracolsep{10pt}}lcccccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{8}{c}{\textit{Dependent variable: crisis$_{t+1\text{ to }t+5}$}} \\ 
+\cline{2-9} 
+\\[-1.8ex]
+ & \multicolumn{2}{c}{Static Belief} & \multicolumn{2}{c}{Bayesian} & \multicolumn{2}{c}{Diagnostic} & \multicolumn{2}{c}{Data} \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\ 
+\hline \\[-1.8ex] 
+ Froth$_t$ & $-$5.94 &  & 5.67 &  & 7.40 &  & 18.00 &  \\ 
+  &  &  &  &  &  &  &  &  \\ 
+  $(\frac{\text{bank credit}}{\text{GDP}})_t$ &  & 0.13 &  & 4.05 &  & 3.85 &  & 2.80 \\ 
+  &  &  &  &  &  &  &  &  \\ 
+ \hline \\[-1.8ex] 
+Observations &  &  &  &  &  &  & 528 & 1272 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\multicolumn{9}{p{0.95\textwidth}}{\footnotesize \textit{Note}: 
+  Froth in the model measures if the credit spread is below the median at date $t$.  In the data regression, froth measures if credit spread is below the median over $t-5$ to $t$ (see \cite{krishnamurthy2017credit}).  In both model and data we run a Logit regression of crisis occurring over the next 5 years on the froth measure and report the probability.  
+  Bank credit/GDP is the current ratio of bank credit over GDP.  The data regression of crisis over the next year on bank credit/GDP is from \cite{schularick2012credit}, and we report the probability of the crisis.
+}  
+\end{tabular} 
+\end{table} 

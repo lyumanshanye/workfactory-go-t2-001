@@ -1,0 +1,234 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 38996,
+    "input_tokens_details": {
+      "cache_write_tokens": 38993,
+      "cached_tokens": 0
+    },
+    "output_tokens": 117,
+    "output_tokens_details": {
+      "reasoning_tokens": 8
+    },
+    "total_tokens": 39113
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_KqujWyRg2NjZSmQSr0YoqMvw",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"python /work/rebuild.py --input /input --output /work/output > /work/runlog.txt 2>&1; tail -c 3500 /work/runlog.txt; ls -lh /work/output\",\"command\":\"python /work/rebuild.py --input /input --output /work/output > /work/runlog.txt 2>&1; tail -c 3500 /work/runlog.txt; ls -lh /work/output\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 47,
+  "native_response": {
+    "id": "resp_0ce7e4b4a2914136016aeb053675048193879bcf2d3ab82034",
+    "object": "response",
+    "created_at": 1793787190,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793787192,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 111355,
+          "check_offset": 0
+        }
+      },
+      {
+        "blocked": false,
+        "source_type": "completion",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 314,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_0ce7e4b4a2914136016aeb05380b248193954650c8af158032",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6wU4DBwa7iV-Dm0byZxRDjmK9gIQ-8Cz68zTZC0T0ivoVXOgI_gCf5BZ0FgQnEV84ag3I-ZgbVZ_DlTca9C6OsNnGwmsVaQ14Oj2hMQjBjkswRdHJXjYJ0dnv7-9UaeXq10rjn1P1iK0KvYMaCIRElIK-8RfKITUYdVGPH3OGFC3h24Kb3KNbPog0NfD78Rz2sTlFgLgmcAyXVgPWKRku6hOXdvKHpUN8AOuG1eHqlEvbtoq5eO1v_vZyGoUUl2GL8BukJ4t_agCv2vg8A4ZEZbMi4FeBFmPjDagi44tj76eHzetWs5M-3SZcneqWxCtLJNPoWBZjaeXoSBbxsXYfCU56oCPJK8eyQP-qxZn-n7h9kih_BiwPh8k185aP2AQQbkikv_4cNoTGN7c6VBRlOsZw6raJMvj_bPN7Y3acL6CIkKCg7_ueGnhy2rbf3eEYUPvdU9ZIG9zfecaKhlhUteyxk34nB5kjbM2kg6OZQPfbvdOgR1mvAdv4YnreMj8rJxbUIK2ayN78zvnEa15DXmoJlQD4GJ5ZCak_--RBt12ovYx5S6JR6f6VGKArTkGlV0_8bVt2jW702KdZ3IbDUZcMWIsSPV3vvR9AsheaFJk1UPp3DvMbY_5Au4lAJBU1ts5klhhPAifKHas9IqZi77PBXlp37uU4tcTk4sCh3_PkzdRBG24hJ2cbXXMvw7mXh6UrE3KDbgWn8hiZVJfyquVjLCCCuMMn66tpzuMC5D7M5N07HyuJWrUuPZfV1vtwIvYI-elopg5-82zjSfq0vl_DiaNpGb8wNIhHD8YHWOgvx-RqXT6WsajJUaYCj6RkFlzKQdToTmoei4dRi6uFxWBfnOGKtV4QN_AMJmMiu_oF53_3rcf2L80dqYI6UFyNxsZXhH_nILDr5Ba5pApA7XS2sRRrsHw9SaSID6sIh0VFU08yuSEbT3j5pwD8BFGqFNcvZSB4atKaHUe2Z8rLeRkvYx-9R8-Sxt03ZF2QoMV-l-YOARvrB5AadimJbUKLY8rD1h58-LcroWZTi9CQeX184irUjKoUrD4bllwGpV_AJnCvQh9EoaZSqBNoe5hQnDwxZs4PxJKKlasxFm4RaKr4udi8_lMghxla43wTJZIH1szvnXVp6rLdYJ6zDMHKMKyWQrR-B4JO6BuWAi9lJkqcuZRUEMHNlw45bSq39W-QXi9rCu6w_ez1zfQmV9r8CIWCQuqtT6xv61_7_OtFhvGkUJtBtWVZp2FRVBj3MEot6uAZ9afkinXSra3wn0bQiVXBzYaR3JCb6rpvU-JS8g33Wxcbz_llzF_ZPA9HIsTm0EgR5rqEeY7E-RaSdYOuuRrzLf3nHrSKSaSzSiX-7ESRqPrC0jm3ps0X9UFdGuIAvQosoaJ8jZOsqCkjK9nGulE8QFDhNHOVYGbnVJ0QeGSMIaKa4uiqGbcFgwd0Lws3V4=",
+        "summary": []
+      },
+      {
+        "id": "fc_0ce7e4b4a2914136016aeb0538318081938e0eef910a7bae90",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"python /work/rebuild.py --input /input --output /work/output > /work/runlog.txt 2>&1; tail -c 3500 /work/runlog.txt; ls -lh /work/output\",\"command\":\"python /work/rebuild.py --input /input --output /work/output > /work/runlog.txt 2>&1; tail -c 3500 /work/runlog.txt; ls -lh /work/output\"}",
+        "call_id": "call_KqujWyRg2NjZSmQSr0YoqMvw",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 38996,
+      "input_tokens_details": {
+        "cache_write_tokens": 38993,
+        "cached_tokens": 0
+      },
+      "output_tokens": 117,
+      "output_tokens_details": {
+        "reasoning_tokens": 8
+      },
+      "total_tokens": 39113
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

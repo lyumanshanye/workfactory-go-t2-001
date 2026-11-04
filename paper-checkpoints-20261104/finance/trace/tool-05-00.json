@@ -1,0 +1,23 @@
+{
+  "step": 5,
+  "tool_index": 0,
+  "name": "execute",
+  "started_at": "2026-11-04T10:13:15.623005+00:00",
+  "finished_at": "2026-11-04T10:13:51.307385+00:00",
+  "elapsed_seconds": 35.684,
+  "result": {
+    "returncode": 0,
+    "stdout": "written /work/output metrics [['Bayesian', 1, '严格未来 t+1..t+h', 99999, 3999, 3.9990399903999037, 50000, 1.9379393987879758, 1.7154553186138106, 2.182800820865738, 0.0, '200年移动块重抽160次; seed=20250308'], ['Bayesian', 3, '严格未来 t+1..t+h', 99997, 11997, 11.997359920797624, 50000, 4.149404644278658, 3.567695380519855, 4.753193292559445, 0.02001000500250125, '200年移动块重抽160次; seed=20250308'], ['Bayesian', 5, '严格未来 t+1..t+h', 99995, 19703, 19.703985199259964, 50000, 5.504304830483051, 4.514597135851926, 6.418767253172857, 0.09004502251125562, '200年移动块重抽160次; seed=20250308'], ['Diagnostic', 1, '严格未来 t+1..t+h', 99999, 3999, 3.9990399903999037, 50000, 2.497944998899978, 2.301485062880854, 2.703829448911732, 0.0, '200年移动块重抽160次; seed=20250308'], ['Diagnostic', 3, '严格未来 t+1..t+h', 99997, 11997, 11.997359920797624, 50000, 5.877456487389243, 5.25758410744652, 6.530522190481506, 0.01900950475237619, '200年移动块重抽160次; seed=20250308'], ['Diagnostic', 5, '严格未来 t+1..t+h', 99995, 19711, 19.711985599279963, 50000, 8.464452045204517, 7.608021497216494, 9.369311781885296, 0.0880440220110055, '200年移动块重抽160次; seed=20250308']] checks [['Diagnostic', 'bank_credit/GDP normalized: level', 0.002290473842687213, 0.002520414847384238, 0, 0.05, '不同计量：原比率/模型恒等式；标准化基于月度路径，年度重估不要求严格相等'], ['Diagnostic', '表3C 前一年spread回归系数（本算 / 表）', -0.2984148010841711, -0.3, 0.001585198915828867, 0.015, '允许预处理事件细节差异；代码 before_crises 仅前一年，表注称五年'], ['Diagnostic', '表3A GDP三年增长~危机×未来一年利差变动', -3.439027824025208, -3.44, 0.0009721759747920444, 0.1, '拟合/严重度描述，未来利差绝不可作为t时预警输入'], ['Diagnostic', '表3A GDP三年增长~危机×标准化信贷', -3.488769682821402, -3.49, 0.001230317178598117, 0.1, '回归量含当期危机，不是预警'], ['Diagnostic', '表3D froth边际效应；代码3年含当期（概率差）', np.float64(7.397502090125406), 7.4, np.float64(-0.0024979098745943062), 1.0, 'R glm crisis_next_3_year=rollsum(crisis,3)含t；表头/注释称未来5年；端点补零差异'], ['Diagnostic', '表3D 标准化信贷t预测t+1 logit AME 百分点/单位', 3.8520295690372075, 3.85, 0.0020295690372074127, 0.2, '独立MLE与平均边际效应；数值差异可因优化/窗口']]\ntotal 0\n-rw-r--r-- 1 worker worker 41K Nov  4 02:13 危机模型独立验证报告.docx\n-rw-r--r-- 1 worker worker 17K Nov  4 02:13 模型验证证据.xlsx\n",
+    "stderr": "",
+    "runtime": "linux_user_mount_pid_network_namespaces",
+    "uid": 1000,
+    "network": "private_namespace_no_interfaces",
+    "docker": false,
+    "isolation": "fresh minimal root, original inputs read-only, host home/run/project trees absent, no_new_privs",
+    "control_sha256": "f18f0557bbb71fc8b9880eb47daab8a04302b42f41b9d1ad27a07af61cffc761",
+    "proc_view": "absent",
+    "limits": "CPU/file-size/open-file limits and wall timeout; no Docker/cgroup memory acceptance claim; host /proc is never exposed",
+    "stdout_truncated": false,
+    "stderr_truncated": false
+  }
+}
