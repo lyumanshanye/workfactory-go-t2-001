@@ -1,0 +1,827 @@
+{
+  "status": "completed",
+  "kind": "static_estimate",
+  "description": "逐项估分；缺失或不满足的项目计零。",
+  "updated_at": "2026-11-04T11:41:50.291278+00:00",
+  "grader_note": "保留正确完成的项目；缺项计零；有争议的判断在对应条目中说明。",
+  "score": {
+    "value": 44.61538461538461,
+    "scale": 100,
+    "awarded": 58,
+    "total": 130
+  },
+  "checkpoints": [
+    {
+      "id": "FINANCE-R3-01",
+      "criterion": "版本与样本真实性",
+      "weight": 2,
+      "status": "pass",
+      "awarded": 2,
+      "description": "保留2023/2024/2025版本层次和模拟/实际市场证据区别。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-01",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "明确2023工作稿/2024复制包/2025发表及模拟非市场记录。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-02",
+      "criterion": "年度样本核对",
+      "weight": 2,
+      "status": "pass",
+      "awarded": 2,
+      "description": "两路径的维度、完整时间索引、重复/缺年可核查。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-02",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "两路径各100000行，代码assert完整Year=1..100000，无重复缺年。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-03",
+      "criterion": "信贷恒等式",
+      "weight": 3,
+      "status": "pass",
+      "awarded": 3,
+      "description": "由原始状态独立计算信贷/GDP并与银行信贷余额对照，异常定位真实。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-03",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "实际计算p(xK-1)wK/GDP并与bank_credit/GDP核对，旧独立误差约2.66e-15。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-04",
+      "criterion": "增长及衍生量对账",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "原始年度/三年增长与存储衍生量有效区间逐行对账，端点单列。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-04",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "独立算GDP三年增长，但未加载GDP_3Y_change作逐行对账。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-05",
+      "criterion": "尺度与信息时点",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "原比率、源标准化比率、利差、收益尺度和时点逐项与实际计算相符。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-05",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "信贷/利差尺度有核验，但遗漏收益按均值缩至0.059等必要定义，完整账本不足。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-06",
+      "criterion": "目标矩逐项登记",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "准确区分七个校准目标与额外检验，保留来源和数值单位。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-06",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "未逐项登记七个校准目标。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-07",
+      "criterion": "目标内拟合解释",
+      "weight": 4,
+      "status": "pass",
+      "awarded": 4,
+      "description": "不以同目标拟合充当独立外部成功，将此限制落实为可支持的具体主张。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-07",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "明确4%危机频率是校准目标，不能证明外部预警成功，并据此限制用途。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-08",
+      "criterion": "A1独立复算",
+      "weight": 4,
+      "status": "fail",
+      "awarded": 0,
+      "description": "两模型全部七项非目标矩均由路径独立算出，不能复制作者列。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-08",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "未读取/计算TableA1全部14个模型值。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-09",
+      "criterion": "A1差异账本",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "14项逐项对作者值/容差对账并处置任何不符，无错也如实给出完整账本。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-09",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "无TableA1完整差异账本。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-10",
+      "criterion": "校准参数差异",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "给出跨模型实际不同的关键校准参数，限制只归因预期机制的解释。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-10",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "未列跨模型关键校准参数差异及其对机制归因的影响。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-11",
+      "criterion": "GDP—利差完整估计",
+      "weight": 4,
+      "status": "fail",
+      "awarded": 0,
+      "description": "独立估计严重度/利差关系，原实现与前瞻/端点口径分列，给有效样本、单位和系数。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-11",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "有GDP—利差回归，但缺作者/修正口径分列及实际回归n。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-12",
+      "criterion": "GDP—信贷完整估计",
+      "weight": 4,
+      "status": "pass",
+      "awarded": 4,
+      "description": "独立估计严重度/信贷关系，含截距或等价去均值方法，说明全路径样本和尺度。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-12",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "独立全路径GDP—信贷回归及等价含截距估计，与旧参考一致。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-13",
+      "criterion": "收益—信贷关系",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "实际复算该关系并核实收益归一化口径，不只转录表注。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-13",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "未估计资本收益—信贷关系，未核实收益归一化。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-14",
+      "criterion": "危机前利差关系",
+      "weight": 4,
+      "status": "fail",
+      "awarded": 0,
+      "description": "独立估计源前窗/后窗回归并将多年前窗变化作真实敏感性，解释表注冲突。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-14",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "做了前1/后5年回归，但没有危机前窗口变化的实际敏感性。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-15",
+      "criterion": "低利差预测效应",
+      "weight": 4,
+      "status": "pass",
+      "awarded": 4,
+      "description": "分清链接系数和概率效果量，量化源窗口与严格未来窗口差异。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-15",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "实际计算低/高利差组概率差，比较含当期与严格未来窗口。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-16",
+      "criterion": "连续信贷预测效应",
+      "weight": 4,
+      "status": "pass",
+      "awarded": 4,
+      "description": "独立估计未来一年危机与信贷关系的效果量、尺度及作者对账。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-16",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "独立拟合连续信贷logit并计算平均边际效应，旧核对约1e-6。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-17",
+      "criterion": "Step3关系复核",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "复算源probit的原比率/真实强度交互，分别说明估计对象与可部署边界。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-17",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "旧代码只有logit/OLS，没有Step3两类probit。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-18",
+      "criterion": "源实证比较证据等级",
+      "weight": 3,
+      "status": "pass",
+      "awarded": 3,
+      "description": "识别手工覆盖比较系数，不能冒称真实市场回归独立复现。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-18",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "明确指出-7.46/-0.34/18/2.8手工覆盖，未冒称市场回归复现。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-19",
+      "criterion": "衍生时间尺度差异",
+      "weight": 2,
+      "status": "fail",
+      "awarded": 0,
+      "description": "核实年度lag12等与字段名称不一致的时间定义，量化影响。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-19",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "未核对credit_growth_past_year年度lag12问题。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-20",
+      "criterion": "信贷事件路径",
+      "weight": 4,
+      "status": "fail",
+      "awarded": 0,
+      "description": "给完整有效事件窗内危机前/当年/后信贷统计和可定位年度。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-20",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "没有完整危机前/当年/后信贷事件路径。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-21",
+      "criterion": "GDP事件路径",
+      "weight": 4,
+      "status": "fail",
+      "awarded": 0,
+      "description": "给完整事件窗内GDP增长路径，区分一步/累计增长。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-21",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "没有完整GDP事件路径；全路径回归不能替代。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-22",
+      "criterion": "事件定义敏感性",
+      "weight": 3,
+      "status": "pass",
+      "awarded": 3,
+      "description": "经济有意义的替代事件实际量化，不能冒称年度替代严格复原月度事件。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-22",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "实际用年度银行权益收益最差4%定义替代事件并量化，明确非月度原危机。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-23",
+      "criterion": "预测窗口敏感性",
+      "weight": 3,
+      "status": "pass",
+      "awarded": 3,
+      "description": "前瞻窗口变化实际量化，明确与事件定义变化是不同检验。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-23",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "实际做严格未来1/3/5年窗口变化。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-24",
+      "criterion": "事件重叠处理",
+      "weight": 3,
+      "status": "pass",
+      "awarded": 3,
+      "description": "量化重叠影响并按明确规则比较非重叠/去簇结果，不强制参考固定规则。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-24",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "实际量化重叠及间隔>3年去簇后结果，不只口头提醒。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-25",
+      "criterion": "无跨界留出",
+      "weight": 4,
+      "status": "pass",
+      "awarded": 4,
+      "description": "训练标签不跨边界、保持时间顺序、精确样本区间与代码相符。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-25",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "训练标签止于70000，测试Year70001..99997，真实切分防跨界。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-26",
+      "criterion": "变换及阈值拟合位置",
+      "weight": 4,
+      "status": "pass",
+      "awarded": 4,
+      "description": "每个数据依赖阈值/变换声明拟合段；区分无害线性单位变化与利用未来分布选择。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-26",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "实际预警变换在训练样本拟合，并说明月度全路径标准化的证据边界。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-27",
+      "criterion": "概率质量与基准",
+      "weight": 4,
+      "status": "pass",
+      "awarded": 4,
+      "description": "合适概率质量指标与真实基准，接受合理等价指标，不强制AUC+Brier双指标。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-27",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "实际计算AUC、Brier及训练事件率常数基准。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-28",
+      "criterion": "可执行操作点",
+      "weight": 4,
+      "status": "fail",
+      "awarded": 0,
+      "description": "选定预警操作点，实际给出漏报/误报及处理负担，并说明其用途。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-28",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "仅概率质量，未选择实际操作点并给漏报/误报/处理负担。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-29",
+      "criterion": "核心增量不确定性",
+      "weight": 4,
+      "status": "pass",
+      "awarded": 4,
+      "description": "对实际主张的增量给时间依赖不确定性和经济解释，不以任意一项区间替代所有关键授权理由。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-29",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "主张的低利差风险差有200年移动块bootstrap及区间，属于实际核心效应；本条未强制预警增量是唯一对象。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-30",
+      "criterion": "主张的相反证据",
+      "weight": 5,
+      "status": "pass",
+      "awarded": 5,
+      "description": "对关键结论列实际相反/限制证据，能支持的与未证实的主张不混同。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-30",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "有实际弱预测表现、窗口冲突、手工覆盖与非因果政策限制，作为相反/限制证据。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-31",
+      "criterion": "结果冲突改变授权",
+      "weight": 5,
+      "status": "fail",
+      "awarded": 0,
+      "description": "处置实际结果冲突并说明是否改变机制判断/操作点/用途；无冲突须完整核对证明。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-31",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "讨论冲突但未形成关键冲突实际改变具体方案/操作点/授权的完整对应；保守估计未满足，待复核。"
+        }
+      ],
+      "notes": "此项涉及判断边界，最终应由冻结后的标准复核。"
+    },
+    {
+      "id": "FINANCE-R3-32",
+      "criterion": "政策依赖链",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "从MAT实际字段追到后处理、状态匹配和轨迹所需量，区分已给/可重建/尚未建立。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-32",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "未从MAT实际字段建立后处理/状态/政策轨迹依赖链。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-33",
+      "criterion": "跨模型状态匹配",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "审查观测杠杆/利差到潜在状态与诊断性逆映射，说明边界/残差要求。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-33",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "未审查诊断性逆映射和边界/残差要求；自然分箱非该审查。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-34",
+      "criterion": "政策尺度和输出语义",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "审查均值/SD尺度、w变化及bank_credit_impulse真实经济量，不把xK误称余额。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-34",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "遗漏政策利差均值尺度及bank_credit_impulse实为xK等定义。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-35",
+      "criterion": "政策可识别与缺口",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "给现有可复算量并定位动态处理效应仍需哪些具体量，诚实不重算可得分但不能泛称缺数据。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-35",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "诚实承认未重算政策，但缺现有字段/可复算量到所缺具体状态量的完整定位。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-36",
+      "criterion": "具体准入决策",
+      "weight": 5,
+      "status": "fail",
+      "awarded": 0,
+      "description": "选择/否决具体预警方案，机制研究/生产预警/资本政策授权与本轮结论对应。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-36",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "有一般研究沙箱决策，但未选择/否决具体操作点方案；按新要求保守估计未满足，待复核。"
+        }
+      ],
+      "notes": "此项涉及判断边界，最终应由冻结后的标准复核。"
+    },
+    {
+      "id": "FINANCE-R3-37",
+      "criterion": "复现及样本追踪",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "空目录代码重建核心表并提供机器主张证据表、样本/事件定位和依赖。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-37",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "旧脚本可重建部分表，但缺新版完整模块/逐项估计样本及机器主张证据表。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-38",
+      "criterion": "原件安全与数值容差",
+      "weight": 2,
+      "status": "pass",
+      "awarded": 2,
+      "description": "不改原件，不伪造结果；按经济含义定容差，合理展示舍入不压分。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-38",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "旧版实际DOCX / XLSX / rebuild.py；前轮独立核对记录",
+          "text": "原件未改、无伪造结果；旧BFGS微差约2e-6不因展示精度压分。"
+        }
+      ],
+      "notes": ""
+    }
+  ],
+  "downloads": [
+    {
+      "name": "当前rubric原始JSON",
+      "url": "finance/rubrics.json"
+    },
+    {
+      "name": "静态估算逐项证据JSON",
+      "url": "finance/estimated-grade-r3.json"
+    },
+    {
+      "name": "旧版两类评分归档",
+      "url": "finance/previous-assessments.json"
+    }
+  ]
+}
