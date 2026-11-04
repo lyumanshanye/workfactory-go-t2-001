@@ -1,15 +1,15 @@
 {
   "assessment_type": "static_estimate_not_new_rollout",
-  "rubric_sha256": "7649279af5478f132a151bbc9d44b1ed25ae4471a90deb5215bffc90ba3e8d1a",
+  "rubric_sha256": "f0e8c01c94cbbe6df0a8aac1eaa900243f0cf43300fa290e1a3d16cfd6af2b24",
   "status": "completed",
   "kind": "static_estimate",
   "description": "逐项估分；缺失或不满足的项目计零。",
-  "updated_at": "2026-11-04T12:20:11.858848+00:00",
-  "grader_note": "保留正确完成的项目；缺项计零；有争议的判断在对应条目中说明。",
+  "updated_at": "2026-11-04T12:36:32.288269+00:00",
+  "grader_note": "按公开验收对象逐项估分：证据要求、核心内容、可重建性、来源适配及日志分别评价，同一缺项不机械重复扣分。",
   "score": {
-    "value": 23.970037453183522,
+    "value": 21.348314606741575,
     "scale": 100,
-    "awarded": 64,
+    "awarded": 57,
     "total": 267
   },
   "checkpoints": [
@@ -183,11 +183,11 @@
     },
     {
       "id": "LAW-R3-09",
-      "criterion": "容量约束",
+      "criterion": "固定批次与容量约束",
       "weight": 7,
       "status": "fail",
       "awarded": 0,
-      "description": "对每套规则计算人工队列容量，验证25%上限；若不满足如实判不可行。候选分母预先固定，无预测/未连接记录的处置须可追踪，不能事后删记录压低负担。",
+      "description": "以原始标注目录为候选全集，按案件固定互不交叉的开发/最终评估批次；两规则使用相同最终评估目录。逐批给N、floor(0.25*N)预算与人工触达的不同段落数。无预测/未连接候选仍计N并进入人工处理队列，不能删除缩分母。超预算如实报告亦可得本条计算与判断分。",
       "sources": [
         {
           "location": "当前rubrics.json / LAW-R3-09",
@@ -204,11 +204,11 @@
     },
     {
       "id": "LAW-R3-10",
-      "criterion": "并列与超额",
+      "criterion": "开发配置、并列与预算处置",
       "weight": 3,
       "status": "fail",
       "awarded": 0,
-      "description": "规则中并列排序和队列超额有固定可复算处置，不在看完结果后任意选例。",
+      "description": "规则参数在开发批次确定且保存配置，最终评估标签不参与调参；并列和预算超额处置可复算。人工触达按不同候选段落数计，重复阅读不重复计数。",
       "sources": [
         {
           "location": "当前rubrics.json / LAW-R3-10",
@@ -309,11 +309,11 @@
     },
     {
       "id": "LAW-R3-15",
-      "criterion": "低置信处置后果",
+      "criterion": "低置信子集的分流表现",
       "weight": 7,
       "status": "fail",
       "awarded": 0,
-      "description": "给出低置信处理怎样改变队列和覆盖的实测，不能只建议人工复核。",
+      "description": "只用部署可得字段运行既定规则后，实测两规则在人类低置信子集上的覆盖、漏排及负担，并与其他候选比较；不得把人类low_confidence作为免费分流输入。接受有据的相同表现，不强制出现差异。",
       "sources": [
         {
           "location": "当前rubrics.json / LAW-R3-15",
@@ -498,11 +498,11 @@
     },
     {
       "id": "LAW-R3-24",
-      "criterion": "逐案真实定位",
+      "criterion": "双引文与原文定位",
       "weight": 7,
-      "status": "pass",
-      "awarded": 7,
-      "description": "每案真实引文与意见/记录位置可回查，清洗文本与原文不混同。",
+      "status": "fail",
+      "awarded": 0,
+      "description": "12案各至少两处逐字英文引文，其中至少一处来自被标注段落之外的同一意见上下文；每处给原始project_opinion_id与Python字符串0起始[start,end)区间并可回查。清洗文本与原文定位保持对应，不将清洗后偏移冒充原文。此条评价引文/定位，其他独立完成的论证和案例覆盖不因同一缺引文机械重复扣分。",
       "sources": [
         {
           "location": "当前rubrics.json / LAW-R3-24",
@@ -511,8 +511,8 @@
       ],
       "evidence": [
         {
-          "location": "旧版实际DOCX / XLSX / review.py与case_analysis.json；前轮独立核对记录",
-          "text": "本条现有边界要求真实引文与可回查位置，旧版12案均有，保留此分。新版“两处引文/段外上下文”的更严要求尚未写入本条，不据此暗扣。"
+          "location": "实际case_analysis.json与DOCX逐案引文",
+          "text": "每案仅独立列一处引文和起点；nearby_original有上下文，但没有第二处独立引文及其原文[start,end)定位。按明确后的双引文边界计0，仅此证据项扣分，不机械扣案例覆盖等条目。"
         }
       ],
       "notes": ""
@@ -827,5 +827,6 @@
     }
   ],
   "prompt_revision": "leakage_cleanup_20261104T121827Z",
-  "review_note": "题面删除已知发现与解题路线提示；相应方法等价边界同步放宽。权重与现有交付估分不变，无新增rollout。"
+  "review_note": "双引文边界和独立工程验收对象已明确；未执行新rollout。",
+  "acceptance_revision": "acceptance_boundaries_20261104T123455Z"
 }

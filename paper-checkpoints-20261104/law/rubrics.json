@@ -135,12 +135,12 @@
     },
     {
       "id": "LAW-R3-09",
-      "criterion": "容量约束",
+      "criterion": "固定批次与容量约束",
       "weight": 7,
       "type": "binary",
       "dimension_1": "内容质量",
       "dimension_2": "规则设计",
-      "pass_boundary": "对每套规则计算人工队列容量，验证25%上限；若不满足如实判不可行。候选分母预先固定，无预测/未连接记录的处置须可追踪，不能事后删记录压低负担。",
+      "pass_boundary": "以原始标注目录为候选全集，按案件固定互不交叉的开发/最终评估批次；两规则使用相同最终评估目录。逐批给N、floor(0.25*N)预算与人工触达的不同段落数。无预测/未连接候选仍计N并进入人工处理队列，不能删除缩分母。超预算如实报告亦可得本条计算与判断分。",
       "source_of_requirement": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用",
       "change_type": "new_business_constraint",
       "equivalent_methods": "题面明确指定的三案必须覆盖；其余样本、方法及有据分类允许不同于参考。展示舍入不改变结论时不扣分。",
@@ -151,12 +151,12 @@
     },
     {
       "id": "LAW-R3-10",
-      "criterion": "并列与超额",
+      "criterion": "开发配置、并列与预算处置",
       "weight": 3,
       "type": "binary",
       "dimension_1": "内容质量",
       "dimension_2": "规则设计",
-      "pass_boundary": "规则中并列排序和队列超额有固定可复算处置，不在看完结果后任意选例。",
+      "pass_boundary": "规则参数在开发批次确定且保存配置，最终评估标签不参与调参；并列和预算超额处置可复算。人工触达按不同候选段落数计，重复阅读不重复计数。",
       "source_of_requirement": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用",
       "change_type": "new_delivery",
       "equivalent_methods": "题面明确指定的三案必须覆盖；其余样本、方法及有据分类允许不同于参考。展示舍入不改变结论时不扣分。",
@@ -231,12 +231,12 @@
     },
     {
       "id": "LAW-R3-15",
-      "criterion": "低置信处置后果",
+      "criterion": "低置信子集的分流表现",
       "weight": 7,
       "type": "binary",
       "dimension_1": "内容质量",
       "dimension_2": "规则设计",
-      "pass_boundary": "给出低置信处理怎样改变队列和覆盖的实测，不能只建议人工复核。",
+      "pass_boundary": "只用部署可得字段运行既定规则后，实测两规则在人类低置信子集上的覆盖、漏排及负担，并与其他候选比较；不得把人类low_confidence作为免费分流输入。接受有据的相同表现，不强制出现差异。",
       "source_of_requirement": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用",
       "change_type": "existing_deepened",
       "equivalent_methods": "题面明确指定的三案必须覆盖；其余样本、方法及有据分类允许不同于参考。展示舍入不改变结论时不扣分。",
@@ -375,12 +375,12 @@
     },
     {
       "id": "LAW-R3-24",
-      "criterion": "逐案真实定位",
+      "criterion": "双引文与原文定位",
       "weight": 7,
       "type": "binary",
       "dimension_1": "内容质量",
       "dimension_2": "法律判断",
-      "pass_boundary": "每案真实引文与意见/记录位置可回查，清洗文本与原文不混同。",
+      "pass_boundary": "12案各至少两处逐字英文引文，其中至少一处来自被标注段落之外的同一意见上下文；每处给原始project_opinion_id与Python字符串0起始[start,end)区间并可回查。清洗文本与原文定位保持对应，不将清洗后偏移冒充原文。此条评价引文/定位，其他独立完成的论证和案例覆盖不因同一缺引文机械重复扣分。",
       "source_of_requirement": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用",
       "change_type": "existing_preserved",
       "equivalent_methods": "题面明确指定的三案必须覆盖；其余样本、方法及有据分类允许不同于参考。展示舍入不改变结论时不扣分。",
@@ -629,5 +629,6 @@
     "versioning": "旧版分数不属于新版结果；只有冻结新版后重新隔离求解才计为新版盲测。",
     "readiness": "新参考解、来源逐项定位及数值容差核验完成之前，不冻结rubric，也不宣称已达到难度门槛。"
   },
-  "prompt_revision": "leakage_cleanup_20261104T121827Z"
+  "prompt_revision": "leakage_cleanup_20261104T121827Z",
+  "acceptance_revision": "acceptance_boundaries_20261104T123455Z"
 }

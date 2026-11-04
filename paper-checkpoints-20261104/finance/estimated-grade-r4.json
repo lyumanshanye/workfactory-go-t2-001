@@ -1,16 +1,16 @@
 {
   "assessment_type": "static_estimate_not_new_rollout",
   "version": "R4_execution_evidence",
-  "rubric_sha256": "17119c14fcc6c036f517c742fd20fa7bf0671d3282d25b63016634a8ee306ab6",
+  "rubric_sha256": "d85f90e3996b05d1ff6e3afed14d50adc0600cd0d47e65d7c77289b652c8b47c",
   "status": "completed",
   "kind": "static_estimate",
   "description": "逐项估分；缺失或不满足的项目计零。",
-  "updated_at": "2026-11-04T12:20:11.858848+00:00",
-  "grader_note": "按公开R4边界与权重估分；核心计算与运行验证占180/217权重。保留实际正确成果，不设置隐藏封顶。",
+  "updated_at": "2026-11-04T12:36:32.288269+00:00",
+  "grader_note": "按公开验收对象逐项估分：证据要求、核心内容、可重建性、来源适配及日志分别评价，同一缺项不机械重复扣分。",
   "score": {
-    "value": 27.649769585253456,
+    "value": 31.336405529953918,
     "scale": 100,
-    "awarded": 60,
+    "awarded": 68,
     "total": 217
   },
   "checkpoints": [
@@ -772,11 +772,11 @@
     },
     {
       "id": "FINANCE-R3-37",
-      "criterion": "空目录完整重建与样本追踪",
+      "criterion": "已交付模块的空目录重建",
       "weight": 8,
-      "status": "fail",
-      "awarded": 0,
-      "description": "交付可在空输出目录执行的统一入口，重建本题所有现有输入支持的核心统计、拟合与估计样本/事件定位，机器主张证据表可链接至实际产物。核心缺项明确列出而不是标为成功；安装证据、代码对应、执行清单和独立验收分别由39—42评价。",
+      "status": "pass",
+      "awarded": 8,
+      "description": "提供空输出目录统一入口，从只读原件与配置重建实际交付的数表及其记录对应，重建输出与报告/工作簿一致。核心模块未实现由其核心条目评价；若已交付模块可正确重建，不因同一核心缺项再扣本条。本条不要求复现尚未实现的模块，也不代替其内容验收。",
       "sources": [
         {
           "location": "当前rubrics.json / FINANCE-R3-37",
@@ -785,8 +785,8 @@
       ],
       "evidence": [
         {
-          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
-          "text": "旧脚本可重建部分表，但缺新版完整模块/逐项估计样本及机器主张证据表。"
+          "location": "前轮独立空目录重建记录；实际rebuild.py与交付XLSX",
+          "text": "已有独立执行记录：从原始输入在新输出目录重建已交付表格，47.83秒完成。细微BFGS浮点差不改变结论。A1/probit等缺项已由核心条目扣分，不再使可重建性项自动失败。"
         }
       ],
       "notes": ""
@@ -835,11 +835,11 @@
     },
     {
       "id": "FINANCE-R4-40",
-      "criterion": "作者代码到实现的可追溯适配",
+      "criterion": "已实现代码的来源与适配依据",
       "weight": 6,
       "status": "fail",
       "awarded": 0,
-      "description": "作者R/Stata统计与预测逻辑到Python模块有可核查的文件/函数对应，实际定义、必要修正和验证方法清楚。至少用源变量/样本/结果核验支撑适配正确；不能只贴作者文件名或声称已翻译。",
+      "description": "对已实现的作者R/Stata统计或预测逻辑给出源文件/函数到Python实现的可核查对应、必要修正和验证依据。只贴作者文件名或空泛声称翻译不通过。尚未实现模块由核心条目扣分，不仅因该模块不存在再次扣本条。",
       "sources": [
         {
           "location": "当前rubrics.json / FINANCE-R4-40",
@@ -848,19 +848,19 @@
       ],
       "evidence": [
         {
-          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
-          "text": "部分变量列有作者脚本名，但没有完整的作者模块/函数到实际Python实现、必要修正和验证结果对应；A1及Step3适配亦缺失。"
+          "location": "实际rebuild.py及变量/来源说明",
+          "text": "已实现的OLS、logit、事件和bootstrap模块，仍缺可核查的源函数到Python实现及必要修正/验证对应；不是因为未实现A1/probit而扣本条。"
         }
       ],
       "notes": ""
     },
     {
       "id": "FINANCE-R4-41",
-      "criterion": "两模型完整模块执行证据",
+      "criterion": "模块状态与运行日志可信度",
       "weight": 10,
       "status": "fail",
       "awarded": 0,
-      "description": "提供Bayesian、Diagnostic分别执行全部必做可计算模块的机器清单与日志，含配置/输入校验、阶段样本、输出位置、失败及重跑。模块范围为A1、Table3六类关系、Step3两设定、事件及敏感性、留出预警与增量检验。缺关键模块不能标为完整成功；本项评价执行覆盖与真实记录，不重复裁决其他条目的同一数值错误。",
+      "description": "提交两模型全部必做模块的状态清单，并为实际尝试运行的模块保存真实配置/输入校验、时间、样本、输出、失败和重跑记录。未实现/跳过须明确登记，不能伪称执行；如实记录缺项不扣日志分，其内容由核心条目评价。本条只因清单/日志缺失、不可核查或失真而不通过，不重复处罚核心数值错误。",
       "sources": [
         {
           "location": "当前rubrics.json / FINANCE-R4-41",
@@ -869,8 +869,8 @@
       ],
       "evidence": [
         {
-          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
-          "text": "实际脚本未执行A1、Step3 probit、完整事件路径等必做模块；没有可追溯的双模型完整执行清单，不能判为覆盖完整。"
+          "location": "实际交付文件及运行记录",
+          "text": "没有两模型各必做模块的机器状态清单和逐阶段可核查记录；未运行模块也未逐项登记。本条因记录缺失计0，不因核心模块未实现本身再次处罚。"
         }
       ],
       "notes": ""
@@ -912,5 +912,6 @@
     }
   ],
   "prompt_revision": "leakage_cleanup_20261104T121827Z",
-  "review_note": "题面删除已知发现与解题路线提示；相应方法等价边界同步放宽。权重与现有交付估分不变，无新增rollout。"
+  "review_note": "双引文边界和独立工程验收对象已明确；未执行新rollout。",
+  "acceptance_revision": "acceptance_boundaries_20261104T123455Z"
 }
