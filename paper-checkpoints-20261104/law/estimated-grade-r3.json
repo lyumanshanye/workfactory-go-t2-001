@@ -1,16 +1,16 @@
 {
   "assessment_type": "static_estimate_not_new_rollout",
-  "rubric_sha256": "f0e8c01c94cbbe6df0a8aac1eaa900243f0cf43300fa290e1a3d16cfd6af2b24",
+  "rubric_sha256": "8c2038a182a3b4b9a53cc414fe964e70c5d1dd50fe69f5f9d6488cc29d288784",
   "status": "completed",
   "kind": "static_estimate",
   "description": "逐项估分；缺失或不满足的项目计零。",
-  "updated_at": "2026-11-04T12:36:32.288269+00:00",
-  "grader_note": "按公开验收对象逐项估分：证据要求、核心内容、可重建性、来源适配及日志分别评价，同一缺项不机械重复扣分。",
+  "updated_at": "2026-11-04T12:54:14.690478+00:00",
+  "grader_note": "按明确的交付覆盖、固定任务配置和公开工程资格链逐项估分；保留已完成的实质工作，不因同一根源错误机械重复扣分。",
   "score": {
-    "value": 21.348314606741575,
+    "value": 20.578778135048232,
     "scale": 100,
-    "awarded": 57,
-    "total": 267
+    "awarded": 64,
+    "total": 311
   },
   "checkpoints": [
     {
@@ -187,7 +187,7 @@
       "weight": 7,
       "status": "fail",
       "awarded": 0,
-      "description": "以原始标注目录为候选全集，按案件固定互不交叉的开发/最终评估批次；两规则使用相同最终评估目录。逐批给N、floor(0.25*N)预算与人工触达的不同段落数。无预测/未连接候选仍计N并进入人工处理队列，不能删除缩分母。超预算如实报告亦可得本条计算与判断分。",
+      "description": "使用出题端case_split.csv固定划分，两规则使用相同evaluation目录；保留目录校验并逐批给N、floor(0.25*N)和人工触达数。无预测/未连接候选仍保留并计入人工队列。不得自选最终评估子集或改分组；超预算如实报告可得本条计算与判断分。",
       "sources": [
         {
           "location": "当前rubrics.json / LAW-R3-09",
@@ -208,7 +208,7 @@
       "weight": 3,
       "status": "fail",
       "awarded": 0,
-      "description": "规则参数在开发批次确定且保存配置，最终评估标签不参与调参；并列和预算超额处置可复算。人工触达按不同候选段落数计，重复阅读不重复计数。",
+      "description": "使用固定development批次确定参数并保存配置，evaluation标签不参与调参，固定分组不修改；并列及超额处置可复算。人工触达按不同候选段落数计。",
       "sources": [
         {
           "location": "当前rubrics.json / LAW-R3-10",
@@ -229,7 +229,7 @@
       "weight": 7,
       "status": "fail",
       "awarded": 0,
-      "description": "以相同唯一段落分母计算两规则FORMAL覆盖或漏排并保留记录定位。",
+      "description": "在固定evaluation目录上，以标注为FORMAL的候选总数作分母，计算两规则进入人工队列的覆盖率及漏排率，保留计数和记录定位。不得以全部候选N代替类别分母。",
       "sources": [
         {
           "location": "当前rubrics.json / LAW-R3-11",
@@ -250,7 +250,7 @@
       "weight": 7,
       "status": "fail",
       "awarded": 0,
-      "description": "以相同唯一段落分母计算两规则GRAND覆盖或漏排并保留记录定位。",
+      "description": "在固定evaluation目录上，以标注为GRAND的候选总数作分母，计算两规则进入人工队列的覆盖率及漏排率，保留计数和记录定位。不得以全部候选N代替类别分母。",
       "sources": [
         {
           "location": "当前rubrics.json / LAW-R3-12",
@@ -271,7 +271,7 @@
       "weight": 3,
       "status": "fail",
       "awarded": 0,
-      "description": "量化两规则中NONE占用的人工复核资源，未将NONE自动认定无价值。",
+      "description": "在固定evaluation目录量化标注NONE进入队列的数量，同时给其占队列及占总预算的比例；不把NONE自动当作法律无价值。零分母记NA和计数。",
       "sources": [
         {
           "location": "当前rubrics.json / LAW-R3-13",
@@ -810,6 +810,132 @@
         }
       ],
       "notes": ""
+    },
+    {
+      "id": "LAW-R5-39",
+      "criterion": "逐轮分类性能复算",
+      "weight": 7,
+      "status": "fail",
+      "awarded": 0,
+      "description": "每个作者评估轮次实际计算混淆计数、总体及类别性能，保留样本与逐记录对应。仅一张合并混淆矩阵或转录作者指标不通过；指标合理等价可接受，不要求参考唯一指标组合。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / LAW-R5-39",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际review.py、DOCX、XLSX、requirements与运行说明",
+          "text": "旧脚本有各轮性能，但只输出合并混淆矩阵；没有逐轮混淆计数，未满足本项完整交付。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "LAW-R5-40",
+      "criterion": "分类表现分层与解释",
+      "weight": 7,
+      "status": "pass",
+      "awarded": 7,
+      "description": "实际给类别、时期和人类置信度分层的样本量及分类性能，解释与整体差异的业务含义。此条评价分类器已有预测，不评价分流队列，后者由14/15评价；不要求必须出现显著差异。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / LAW-R5-40",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际review.py、DOCX、XLSX、requirements与运行说明",
+          "text": "旧工作簿实际提供类别、时期、人类置信度及交叉分层的样本支持数/准确率/类别指标，报告解释低置信差异；本条评价分类预测，不把未完成分流混入扣分。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "LAW-R5-41",
+      "criterion": "段落到意见的子集测量复算",
+      "weight": 10,
+      "status": "fail",
+      "awarded": 0,
+      "description": "从实际可对应的段落输出计算作者定义的测量和意见级聚合，保存段落/意见中间值、所用样本及参照集合，核查与发布结果的可比范围。只写公式或直接读取既有zformal不能代替本条；不强求不同覆盖集合的值相等。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / LAW-R5-41",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际review.py、DOCX、XLSX、requirements与运行说明",
+          "text": "旧报告只写作者测量公式并用发布的zformal做年度统计，没有实际生成段落到意见的子集测量中间值和聚合核查。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "LAW-R5-42",
+      "criterion": "作者预处理流程实际执行",
+      "weight": 10,
+      "status": "fail",
+      "awarded": 0,
+      "description": "对精读12案实际采用的完整意见运行作者预处理/拆段流程或有据适配，保存源码对应、实际命令、中间段落及连接/过滤异常。仅扫描原文取引文或另做统计不算完成；修复须有实际证据。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / LAW-R5-42",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际review.py、DOCX、XLSX、requirements与运行说明",
+          "text": "旧程序扫描原文定位引文，没有运行作者的清洗/拆段流程，也没有对应中间段落及源适配执行证据。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "LAW-R5-43",
+      "criterion": "环境与阶段执行证据",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "记录实际隔离环境配置或复用方式、关键依赖版本、真实阶段执行及失败信息。允许使用缓存和现成环境；仅requirements或未执行命令不够。不因业务数值错误机械扣日志分。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / LAW-R5-43",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际review.py、DOCX、XLSX、requirements与运行说明",
+          "text": "旧交付依赖清单未锁定版本，也未提供实际隔离环境配置与依赖可用性记录；已有代码运行不等于本条完整环境证据。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "LAW-R5-44",
+      "criterion": "独立结果验收",
+      "weight": 7,
+      "status": "fail",
+      "awarded": 0,
+      "description": "交付实际执行的检查入口，独立核对已实现核心结果的数值/记录关系及引文原文区间，保存比较值和失败；仅文件存在或复制被检值不通过。不要求另写整套业务实现。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / LAW-R5-44",
+          "text": "instruction.txt对应必交分析；原paper/代码/数据；由新reference验证后补具体引用"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际review.py、DOCX、XLSX、requirements与运行说明",
+          "text": "没有单独交付并实际执行的结果验收入口；事后独立评审者的复算不替代solver自身交付。"
+        }
+      ],
+      "notes": ""
     }
   ],
   "downloads": [
@@ -824,9 +950,14 @@
     {
       "name": "旧版两类评分归档",
       "url": "law/previous-assessments.json"
+    },
+    {
+      "name": "题面—Rubric覆盖对应",
+      "url": "law/requirement-coverage.json"
     }
   ],
   "prompt_revision": "leakage_cleanup_20261104T121827Z",
-  "review_note": "双引文边界和独立工程验收对象已明确；未执行新rollout。",
-  "acceptance_revision": "acceptance_boundaries_20261104T123455Z"
+  "review_note": "覆盖缺项、固定划分与工程最低资格已同步；此为实际旧交付的静态估分，未执行新rollout。",
+  "acceptance_revision": "acceptance_boundaries_20261104T123455Z",
+  "coverage_revision": "coverage_alignment_20261104T125145Z"
 }

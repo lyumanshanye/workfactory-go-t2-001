@@ -1,0 +1,917 @@
+{
+  "assessment_type": "static_estimate_not_new_rollout",
+  "version": "R4_execution_evidence",
+  "rubric_sha256": "d85f90e3996b05d1ff6e3afed14d50adc0600cd0d47e65d7c77289b652c8b47c",
+  "status": "completed",
+  "kind": "static_estimate",
+  "description": "逐项估分；缺失或不满足的项目计零。",
+  "updated_at": "2026-11-04T12:36:32.288269+00:00",
+  "grader_note": "按公开验收对象逐项估分：证据要求、核心内容、可重建性、来源适配及日志分别评价，同一缺项不机械重复扣分。",
+  "score": {
+    "value": 31.336405529953918,
+    "scale": 100,
+    "awarded": 68,
+    "total": 217
+  },
+  "checkpoints": [
+    {
+      "id": "FINANCE-R3-01",
+      "criterion": "版本与样本真实性",
+      "weight": 1,
+      "status": "pass",
+      "awarded": 1,
+      "description": "保留2023/2024/2025版本层次和模拟/实际市场证据区别。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-01",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "明确2023工作稿/2024复制包/2025发表及模拟非市场记录。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-02",
+      "criterion": "年度样本核对",
+      "weight": 2,
+      "status": "pass",
+      "awarded": 2,
+      "description": "两路径的维度、完整时间索引、重复/缺年可核查。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-02",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "两路径各100000行，代码assert完整Year=1..100000，无重复缺年。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-03",
+      "criterion": "信贷恒等式",
+      "weight": 3,
+      "status": "pass",
+      "awarded": 3,
+      "description": "由原始状态独立计算信贷/GDP并与银行信贷余额对照，异常定位真实。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-03",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "实际计算p(xK-1)wK/GDP并与bank_credit/GDP核对，旧独立误差约2.66e-15。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-04",
+      "criterion": "增长及衍生量对账",
+      "weight": 5,
+      "status": "fail",
+      "awarded": 0,
+      "description": "原始年度/三年增长与存储衍生量有效区间逐行对账，端点单列。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-04",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "独立算GDP三年增长，但未加载GDP_3Y_change作逐行对账。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-05",
+      "criterion": "尺度与信息时点",
+      "weight": 5,
+      "status": "fail",
+      "awarded": 0,
+      "description": "原比率、源标准化比率、利差、收益尺度和时点逐项与实际计算相符。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-05",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "信贷/利差尺度有核验，但遗漏收益按均值缩至0.059等必要定义，完整账本不足。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-06",
+      "criterion": "目标矩逐项登记",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "准确区分七个校准目标与额外检验，保留来源和数值单位。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-06",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "未逐项登记七个校准目标。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-07",
+      "criterion": "目标内拟合解释",
+      "weight": 1,
+      "status": "pass",
+      "awarded": 1,
+      "description": "不以同目标拟合充当独立外部成功，将此限制落实为可支持的具体主张。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-07",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "明确4%危机频率是校准目标，不能证明外部预警成功，并据此限制用途。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-08",
+      "criterion": "A1完整独立计算",
+      "weight": 10,
+      "status": "fail",
+      "awarded": 0,
+      "description": "分别由Bayesian、Diagnostic年度路径独立计算TableA1各七项，共14项，提交逐项样本、定义、单位、计算入口与机器结果。不能用发布表或硬编码最终值替代；数学等价方法可接受。此项验计算，作者对账另由09评价。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-08",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "未读取/计算TableA1全部14个模型值。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-09",
+      "criterion": "A1完整差异处置",
+      "weight": 8,
+      "status": "fail",
+      "awarded": 0,
+      "description": "在已生成数值上完成14项自算值/作者值/差异/容差/处置账本。超差须定位原因并给验证证据；无超差也须列全14项。本项只评价比较和处置工作，计算错误沿用根源错误规则，不对同一数值机械重复扣分。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-09",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "无TableA1完整差异账本。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-10",
+      "criterion": "校准参数差异",
+      "weight": 4,
+      "status": "fail",
+      "awarded": 0,
+      "description": "给出跨模型实际不同的关键校准参数，限制只归因预期机制的解释。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-10",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "未列跨模型关键校准参数差异及其对机制归因的影响。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-11",
+      "criterion": "GDP—利差完整估计",
+      "weight": 7,
+      "status": "fail",
+      "awarded": 0,
+      "description": "两个模型均独立估计GDP严重度—利差关系，给作者原实现与严格前瞻/端点口径的估计式、有效样本、单位、系数及对账；合理口径差异须有可复算证据。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-11",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "有GDP—利差回归，但缺作者/修正口径分列及实际回归n。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-12",
+      "criterion": "GDP—信贷完整估计",
+      "weight": 6,
+      "status": "pass",
+      "awarded": 6,
+      "description": "独立估计严重度/信贷关系，含截距或等价去均值方法，说明全路径样本和尺度。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-12",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "独立全路径GDP—信贷回归及等价含截距估计，与旧参考一致。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-13",
+      "criterion": "收益—信贷独立估计",
+      "weight": 7,
+      "status": "fail",
+      "awarded": 0,
+      "description": "两个模型均实际拟合资本收益—信贷关系，给有效样本、系数、尺度与作者对账，核实收益归一化对解释的影响；只读取或复述表注不通过。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-13",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "未估计资本收益—信贷关系，未核实收益归一化。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-14",
+      "criterion": "危机前利差关系",
+      "weight": 7,
+      "status": "fail",
+      "awarded": 0,
+      "description": "独立估计源前窗/后窗回归并将多年前窗变化作真实敏感性，解释表注冲突。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-14",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "做了前1/后5年回归，但没有危机前窗口变化的实际敏感性。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-15",
+      "criterion": "低利差预测效应",
+      "weight": 6,
+      "status": "pass",
+      "awarded": 6,
+      "description": "分清链接系数和概率效果量，量化源窗口与严格未来窗口差异。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-15",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "实际计算低/高利差组概率差，比较含当期与严格未来窗口。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-16",
+      "criterion": "连续信贷预测效应",
+      "weight": 6,
+      "status": "pass",
+      "awarded": 6,
+      "description": "独立估计未来一年危机与信贷关系的效果量、尺度及作者对账。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-16",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "独立拟合连续信贷logit并计算平均边际效应，旧核对约1e-6。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-17",
+      "criterion": "Step3四组probit实际拟合",
+      "weight": 10,
+      "status": "fail",
+      "awarded": 0,
+      "description": "对Bayesian与Diagnostic分别运行原始信贷/GDP及其与真实强度乘积两种源设定，共四组probit。提交有效样本、设计矩阵字段、拟合系数、收敛/数值诊断与源定义下概率输出；合理求解器和等价效果量可接受。不可用logit代替源probit核验，也不可把不可观测强度用于现实预警。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-17",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "旧代码只有logit/OLS，没有Step3两类probit。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-18",
+      "criterion": "源实证比较证据等级",
+      "weight": 2,
+      "status": "pass",
+      "awarded": 2,
+      "description": "识别手工覆盖比较系数，不能冒称真实市场回归独立复现。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-18",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "明确指出-7.46/-0.34/18/2.8手工覆盖，未冒称市场回归复现。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-19",
+      "criterion": "衍生时间尺度差异",
+      "weight": 6,
+      "status": "fail",
+      "awarded": 0,
+      "description": "核实年度lag12等与字段名称不一致的时间定义，量化影响。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-19",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "未核对credit_growth_past_year年度lag12问题。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-20",
+      "criterion": "信贷事件路径",
+      "weight": 7,
+      "status": "fail",
+      "awarded": 0,
+      "description": "给完整有效事件窗内危机前/当年/后信贷统计和可定位年度。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-20",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "没有完整危机前/当年/后信贷事件路径。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-21",
+      "criterion": "GDP事件路径",
+      "weight": 7,
+      "status": "fail",
+      "awarded": 0,
+      "description": "给完整事件窗内GDP增长路径，区分一步/累计增长。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-21",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "没有完整GDP事件路径；全路径回归不能替代。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-22",
+      "criterion": "事件定义敏感性",
+      "weight": 4,
+      "status": "pass",
+      "awarded": 4,
+      "description": "经济有意义的替代事件实际量化，不能冒称年度替代严格复原月度事件。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-22",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "实际用年度银行权益收益最差4%定义替代事件并量化，明确非月度原危机。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-23",
+      "criterion": "预测窗口敏感性",
+      "weight": 4,
+      "status": "pass",
+      "awarded": 4,
+      "description": "前瞻窗口变化实际量化，明确与事件定义变化是不同检验。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-23",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "实际做严格未来1/3/5年窗口变化。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-24",
+      "criterion": "事件重叠处理",
+      "weight": 5,
+      "status": "pass",
+      "awarded": 5,
+      "description": "量化重叠影响并按明确规则比较非重叠/去簇结果，不强制参考固定规则。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-24",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "实际量化重叠及间隔>3年去簇后结果，不只口头提醒。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-25",
+      "criterion": "无跨界留出",
+      "weight": 6,
+      "status": "pass",
+      "awarded": 6,
+      "description": "训练标签不跨边界、保持时间顺序、精确样本区间与代码相符。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-25",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "训练标签止于70000，测试Year70001..99997，真实切分防跨界。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-26",
+      "criterion": "变换及阈值拟合位置",
+      "weight": 5,
+      "status": "pass",
+      "awarded": 5,
+      "description": "每个数据依赖阈值/变换声明拟合段；区分无害线性单位变化与利用未来分布选择。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-26",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "实际预警变换在训练样本拟合，并说明月度全路径标准化的证据边界。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-27",
+      "criterion": "概率质量与基准",
+      "weight": 5,
+      "status": "pass",
+      "awarded": 5,
+      "description": "合适概率质量指标与真实基准，接受合理等价指标，不强制AUC+Brier双指标。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-27",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "实际计算AUC、Brier及训练事件率常数基准。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-28",
+      "criterion": "操作点的实际决策后果",
+      "weight": 7,
+      "status": "fail",
+      "awarded": 0,
+      "description": "在训练/开发段确定具体预警操作点，在时间留出集实际给事件基数、混淆计数、漏报、误报与处理负担，并与简单基准在可比资源或明确成本下比较。阈值只在测试集反复挑选不通过；不强制唯一阈值或成本。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-28",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "仅概率质量，未选择实际操作点并给漏报/误报/处理负担。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-29",
+      "criterion": "预警增量的时间依赖不确定性",
+      "weight": 8,
+      "status": "fail",
+      "awarded": 0,
+      "description": "对选定预警方案相对简单基准的至少一项关键增量，使用同一留出样本、配对的时间依赖推断，提交增量估计、区间、方法配置及结果明细，并量化一种合理关键设定变化下结论是否稳定。可以用概率质量改进或资源可比的操作收益；仅给低利差组风险差的区间不能替代预警相对基准的增量检验。增量不显著或为负亦可得分，须据此限制授权。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-29",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "实际仅对低/高利差组风险差做块bootstrap；未对留出集预警方案相对基准的增量作配对时间依赖区间，也无该增量的关键设定稳定性检验。R4已在题面明确此要求。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-30",
+      "criterion": "相反证据的定量核验",
+      "weight": 3,
+      "status": "pass",
+      "awarded": 3,
+      "description": "至少对一条实际关键主张，定位支持结果与挑战该主张的实际结果或可检验限制，保存可比对象、样本、数值/检验输出与出处，解释冲突来源或可支持范围。若未发现相反结果，提交已执行的相关压力检验及其数值，不能制造反例。只罗列泛化局限或引用“需要更多数据”不通过；是否改变授权由31/36另评。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-30",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "收紧后仍保留此分：报告§3及工作簿实际比较源含当期窗口与严格未来窗口。Bayesian风险差约5.66945对4.14940个百分点，Diagnostic约7.39750对5.87746；该压力比较支持对预警时点用途的具体限制。允许等价叙述，不要求必须用固定表格格式。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-31",
+      "criterion": "结果冲突的授权处置",
+      "weight": 4,
+      "status": "fail",
+      "awarded": 0,
+      "description": "把实际对账/效果差异对应到一条具体机制主张、预警选择或政策授权，说明保持/收窄/拒绝的决定及触发条件。无冲突可提交完整核对证明；不要求必须否决或必须发现论文错误。本项评价决策推理，不因30同一根源数值错误再次机械扣分。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-31",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "讨论冲突但未形成关键冲突实际改变具体方案/操作点/授权的完整对应；保守估计未满足，待复核。"
+        }
+      ],
+      "notes": "此项涉及判断边界，最终应由冻结后的标准复核。"
+    },
+    {
+      "id": "FINANCE-R3-32",
+      "criterion": "政策依赖链",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "从MAT实际字段追到后处理、状态匹配和轨迹所需量，区分已给/可重建/尚未建立。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-32",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "未从MAT实际字段建立后处理/状态/政策轨迹依赖链。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-33",
+      "criterion": "跨模型状态匹配",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "审查观测杠杆/利差到潜在状态与诊断性逆映射，说明边界/残差要求。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-33",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "未审查诊断性逆映射和边界/残差要求；自然分箱非该审查。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-34",
+      "criterion": "政策尺度和输出语义",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "审查均值/SD尺度、w变化及bank_credit_impulse真实经济量，不把xK误称余额。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-34",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "遗漏政策利差均值尺度及bank_credit_impulse实为xK等定义。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-35",
+      "criterion": "政策可识别与缺口",
+      "weight": 3,
+      "status": "fail",
+      "awarded": 0,
+      "description": "给现有可复算量并定位动态处理效应仍需哪些具体量，诚实不重算可得分但不能泛称缺数据。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-35",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "诚实承认未重算政策，但缺现有字段/可复算量到所缺具体状态量的完整定位。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-36",
+      "criterion": "具体准入决策",
+      "weight": 4,
+      "status": "fail",
+      "awarded": 0,
+      "description": "选择/否决具体预警方案，机制研究/生产预警/资本政策授权与本轮结论对应。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-36",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "有一般研究沙箱决策，但未选择/否决具体操作点方案；按新要求保守估计未满足，待复核。"
+        }
+      ],
+      "notes": "此项涉及判断边界，最终应由冻结后的标准复核。"
+    },
+    {
+      "id": "FINANCE-R3-37",
+      "criterion": "已交付模块的空目录重建",
+      "weight": 8,
+      "status": "pass",
+      "awarded": 8,
+      "description": "提供空输出目录统一入口，从只读原件与配置重建实际交付的数表及其记录对应，重建输出与报告/工作簿一致。核心模块未实现由其核心条目评价；若已交付模块可正确重建，不因同一核心缺项再扣本条。本条不要求复现尚未实现的模块，也不代替其内容验收。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-37",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "前轮独立空目录重建记录；实际rebuild.py与交付XLSX",
+          "text": "已有独立执行记录：从原始输入在新输出目录重建已交付表格，47.83秒完成。细微BFGS浮点差不改变结论。A1/probit等缺项已由核心条目扣分，不再使可重建性项自动失败。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R3-38",
+      "criterion": "原件与诚实性",
+      "weight": 1,
+      "status": "pass",
+      "awarded": 1,
+      "description": "原件只读，区分模拟与实际市场证据，不复制参考结果冒充运行，不编造缺失实验。合理展示舍入不单独扣分；无伪造是底线，不能替代任何运行或结果验收。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R3-38",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "原件未改、无伪造结果；旧BFGS微差约2e-6不因展示精度压分。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R4-39",
+      "criterion": "环境实际配置与依赖记录",
+      "weight": 4,
+      "status": "fail",
+      "awarded": 0,
+      "description": "提供隔离环境实际创建/配置及依赖可用性记录，包括Python/关键包版本、安装或缓存使用方式、真实执行命令和时间。允许复用现成隔离环境，无须人为重复下载；只列requirements或一条未执行的pip命令不通过。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R4-39",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "旧交付没有隔离环境配置/依赖版本和可用性实际记录；运行说明和可执行代码不等同本项安装/配置证据。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R4-40",
+      "criterion": "已实现代码的来源与适配依据",
+      "weight": 6,
+      "status": "fail",
+      "awarded": 0,
+      "description": "对已实现的作者R/Stata统计或预测逻辑给出源文件/函数到Python实现的可核查对应、必要修正和验证依据。只贴作者文件名或空泛声称翻译不通过。尚未实现模块由核心条目扣分，不仅因该模块不存在再次扣本条。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R4-40",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际rebuild.py及变量/来源说明",
+          "text": "已实现的OLS、logit、事件和bootstrap模块，仍缺可核查的源函数到Python实现及必要修正/验证对应；不是因为未实现A1/probit而扣本条。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R4-41",
+      "criterion": "模块状态与运行日志可信度",
+      "weight": 10,
+      "status": "fail",
+      "awarded": 0,
+      "description": "提交两模型全部必做模块的状态清单，并为实际尝试运行的模块保存真实配置/输入校验、时间、样本、输出、失败和重跑记录。未实现/跳过须明确登记，不能伪称执行；如实记录缺项不扣日志分，其内容由核心条目评价。本条只因清单/日志缺失、不可核查或失真而不通过，不重复处罚核心数值错误。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R4-41",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际交付文件及运行记录",
+          "text": "没有两模型各必做模块的机器状态清单和逐阶段可核查记录；未运行模块也未逐项登记。本条因记录缺失计0，不因核心模块未实现本身再次处罚。"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "FINANCE-R4-42",
+      "criterion": "独立产物验收入口",
+      "weight": 8,
+      "status": "fail",
+      "awarded": 0,
+      "description": "交付实际执行过的验收入口，从逐记录中间结果、独立重算或来源对账核查核心数表、样本边界及报告引用；保存检查对象、自算/被检值、容差和真实失败。不能只检查文件存在、复制被检表数值或预写通过。允许同项目分离的验证入口，不要求另一套重复业务实现。",
+      "sources": [
+        {
+          "location": "当前rubrics.json / FINANCE-R4-42",
+          "text": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。"
+        }
+      ],
+      "evidence": [
+        {
+          "location": "实际DOCX/XLSX/rebuild.py、运行轨迹及前轮独立数值核验",
+          "text": "未交付并实际执行分离的产物验收入口；既有独立评审者事后复算不属于solver自身的本项交付。"
+        }
+      ],
+      "notes": ""
+    }
+  ],
+  "downloads": [
+    {
+      "name": "当前R4 rubric原始JSON",
+      "url": "finance/rubrics.json"
+    },
+    {
+      "name": "逐项估分证据JSON",
+      "url": "finance/estimated-grade-r4.json"
+    },
+    {
+      "name": "权重与验收范围",
+      "url": "finance/r4-weight-summary.json"
+    }
+  ],
+  "prompt_revision": "leakage_cleanup_20261104T121827Z",
+  "review_note": "双引文边界和独立工程验收对象已明确；未执行新rollout。",
+  "acceptance_revision": "acceptance_boundaries_20261104T123455Z"
+}

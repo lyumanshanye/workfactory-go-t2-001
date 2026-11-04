@@ -696,7 +696,7 @@
       "type": "binary",
       "dimension_1": "指令遵循",
       "dimension_2": "可复现",
-      "pass_boundary": "提供空输出目录统一入口，从只读原件与配置重建实际交付的数表及其记录对应，重建输出与报告/工作簿一致。核心模块未实现由其核心条目评价；若已交付模块可正确重建，不因同一核心缺项再扣本条。本条不要求复现尚未实现的模块，也不代替其内容验收。",
+      "pass_boundary": "本条须先满足题面双模型工程资格链；链上数值不全正确不自动取消资格。提供空输出目录统一入口，从只读原件与配置重建实际交付的数表及其记录对应，重建输出与报告/工作簿一致。核心模块未实现由其核心条目评价；若已交付模块可正确重建，不因同一核心缺项再扣本条。本条不要求复现尚未实现的模块，也不代替其内容验收。",
       "source_of_requirement": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。",
       "change_type": "existing_deepened",
       "equivalent_methods": "接受题面范围内合理等价估计、留出比例、敏感性规则及有据不同结论，不以参考软件、指标组合或显示舍入判错。",
@@ -706,7 +706,8 @@
       "revision": "R4_execution_evidence",
       "evidence_requirement": "计算/实验项须有实际机器产物、输入样本与实现定位；专业判断须能追溯支持证据。按本条对象独立评价，不按篇幅、措辞或运行时长打分。",
       "weight_group": "核心计算与运行验证",
-      "prompt_leakage_review": "当前题面仅规定任务对象、交付及证据边界；发现、解释和实质结论由原件推导。等价方法按其是否回答任务目标评价。"
+      "prompt_leakage_review": "当前题面仅规定任务对象、交付及证据边界；发现、解释和实质结论由原件推导。等价方法按其是否回答任务目标评价。",
+      "engineering_prerequisite": "actual_dual_model_core_chain"
     },
     {
       "id": "FINANCE-R3-38",
@@ -734,7 +735,7 @@
       "type": "binary",
       "dimension_1": "内容质量",
       "dimension_2": "运行与结果验证",
-      "pass_boundary": "提供隔离环境实际创建/配置及依赖可用性记录，包括Python/关键包版本、安装或缓存使用方式、真实执行命令和时间。允许复用现成隔离环境，无须人为重复下载；只列requirements或一条未执行的pip命令不通过。",
+      "pass_boundary": "本条须先满足题面双模型工程资格链；链上数值不全正确不自动取消资格。提供隔离环境实际创建/配置及依赖可用性记录，包括Python/关键包版本、安装或缓存使用方式、真实执行命令和时间。允许复用现成隔离环境，无须人为重复下载；只列requirements或一条未执行的pip命令不通过。",
       "source_of_requirement": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。",
       "change_type": "new_explicit_execution_delivery",
       "equivalent_methods": "接受题面范围内合理等价估计、留出比例、敏感性规则及有据不同结论，不以参考软件、指标组合或显示舍入判错。",
@@ -744,7 +745,8 @@
       "revision": "R4_execution_evidence",
       "evidence_requirement": "计算/实验项须有实际机器产物、输入样本与实现定位；专业判断须能追溯支持证据。按本条对象独立评价，不按篇幅、措辞或运行时长打分。",
       "weight_group": "核心计算与运行验证",
-      "prompt_leakage_review": "当前题面仅规定任务对象、交付及证据边界；发现、解释和实质结论由原件推导。等价方法按其是否回答任务目标评价。"
+      "prompt_leakage_review": "当前题面仅规定任务对象、交付及证据边界；发现、解释和实质结论由原件推导。等价方法按其是否回答任务目标评价。",
+      "engineering_prerequisite": "actual_dual_model_core_chain"
     },
     {
       "id": "FINANCE-R4-40",
@@ -753,7 +755,7 @@
       "type": "binary",
       "dimension_1": "内容质量",
       "dimension_2": "运行与结果验证",
-      "pass_boundary": "对已实现的作者R/Stata统计或预测逻辑给出源文件/函数到Python实现的可核查对应、必要修正和验证依据。只贴作者文件名或空泛声称翻译不通过。尚未实现模块由核心条目扣分，不仅因该模块不存在再次扣本条。",
+      "pass_boundary": "本条须先满足题面双模型工程资格链；链上数值不全正确不自动取消资格。对已实现的作者R/Stata统计或预测逻辑给出源文件/函数到Python实现的可核查对应、必要修正和验证依据。只贴作者文件名或空泛声称翻译不通过。尚未实现模块由核心条目扣分，不仅因该模块不存在再次扣本条。",
       "source_of_requirement": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。",
       "change_type": "new_explicit_execution_delivery",
       "equivalent_methods": "接受题面范围内合理等价估计、留出比例、敏感性规则及有据不同结论，不以参考软件、指标组合或显示舍入判错。",
@@ -763,7 +765,8 @@
       "revision": "R4_execution_evidence",
       "evidence_requirement": "计算/实验项须有实际机器产物、输入样本与实现定位；专业判断须能追溯支持证据。按本条对象独立评价，不按篇幅、措辞或运行时长打分。",
       "weight_group": "核心计算与运行验证",
-      "prompt_leakage_review": "当前题面仅规定任务对象、交付及证据边界；发现、解释和实质结论由原件推导。等价方法按其是否回答任务目标评价。"
+      "prompt_leakage_review": "当前题面仅规定任务对象、交付及证据边界；发现、解释和实质结论由原件推导。等价方法按其是否回答任务目标评价。",
+      "engineering_prerequisite": "actual_dual_model_core_chain"
     },
     {
       "id": "FINANCE-R4-41",
@@ -772,7 +775,7 @@
       "type": "binary",
       "dimension_1": "内容质量",
       "dimension_2": "运行与结果验证",
-      "pass_boundary": "提交两模型全部必做模块的状态清单，并为实际尝试运行的模块保存真实配置/输入校验、时间、样本、输出、失败和重跑记录。未实现/跳过须明确登记，不能伪称执行；如实记录缺项不扣日志分，其内容由核心条目评价。本条只因清单/日志缺失、不可核查或失真而不通过，不重复处罚核心数值错误。",
+      "pass_boundary": "本条须先满足题面双模型工程资格链；链上数值不全正确不自动取消资格。提交两模型全部必做模块的状态清单，并为实际尝试运行的模块保存真实配置/输入校验、时间、样本、输出、失败和重跑记录。未实现/跳过须明确登记，不能伪称执行；如实记录缺项不扣日志分，其内容由核心条目评价。本条只因清单/日志缺失、不可核查或失真而不通过，不重复处罚核心数值错误。",
       "source_of_requirement": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。",
       "change_type": "new_explicit_execution_delivery",
       "equivalent_methods": "接受题面范围内合理等价估计、留出比例、敏感性规则及有据不同结论，不以参考软件、指标组合或显示舍入判错。",
@@ -782,7 +785,8 @@
       "revision": "R4_execution_evidence",
       "evidence_requirement": "计算/实验项须有实际机器产物、输入样本与实现定位；专业判断须能追溯支持证据。按本条对象独立评价，不按篇幅、措辞或运行时长打分。",
       "weight_group": "核心计算与运行验证",
-      "prompt_leakage_review": "当前题面仅规定任务对象、交付及证据边界；发现、解释和实质结论由原件推导。等价方法按其是否回答任务目标评价。"
+      "prompt_leakage_review": "当前题面仅规定任务对象、交付及证据边界；发现、解释和实质结论由原件推导。等价方法按其是否回答任务目标评价。",
+      "engineering_prerequisite": "actual_dual_model_core_chain"
     },
     {
       "id": "FINANCE-R4-42",
@@ -791,7 +795,7 @@
       "type": "binary",
       "dimension_1": "内容质量",
       "dimension_2": "运行与结果验证",
-      "pass_boundary": "交付实际执行过的验收入口，从逐记录中间结果、独立重算或来源对账核查核心数表、样本边界及报告引用；保存检查对象、自算/被检值、容差和真实失败。不能只检查文件存在、复制被检表数值或预写通过。允许同项目分离的验证入口，不要求另一套重复业务实现。",
+      "pass_boundary": "本条须先满足题面双模型工程资格链；链上数值不全正确不自动取消资格。交付实际执行过的验收入口，从逐记录中间结果、独立重算或来源对账核查核心数表、样本边界及报告引用；保存检查对象、自算/被检值、容差和真实失败。不能只检查文件存在、复制被检表数值或预写通过。允许同项目分离的验证入口，不要求另一套重复业务实现。",
       "source_of_requirement": "当前instruction.txt：实际运行、完整独立复算、稳健性、预警方案及交付验收；冻结前补齐独立参考解来源定位。",
       "change_type": "new_explicit_execution_delivery",
       "equivalent_methods": "接受题面范围内合理等价估计、留出比例、敏感性规则及有据不同结论，不以参考软件、指标组合或显示舍入判错。",
@@ -801,7 +805,8 @@
       "revision": "R4_execution_evidence",
       "evidence_requirement": "计算/实验项须有实际机器产物、输入样本与实现定位；专业判断须能追溯支持证据。按本条对象独立评价，不按篇幅、措辞或运行时长打分。",
       "weight_group": "核心计算与运行验证",
-      "prompt_leakage_review": "当前题面仅规定任务对象、交付及证据边界；发现、解释和实质结论由原件推导。等价方法按其是否回答任务目标评价。"
+      "prompt_leakage_review": "当前题面仅规定任务对象、交付及证据边界；发现、解释和实质结论由原件推导。等价方法按其是否回答任务目标评价。",
+      "engineering_prerequisite": "actual_dual_model_core_chain"
     }
   ],
   "warning": "新要求仅用于本修订，不用旧solver答卷重新评分后伪称新盲测结果。",
@@ -816,11 +821,35 @@
     "no_hidden_caps": "只按公开条目权重计分，无隐藏总分封顶；关键模块缺失按相应条目记录。",
     "execution_error_attribution": "核心内容、可重建性、来源适配和日志真实性按各自对象判断。核心模块缺失或错误不自动使37/40/41失败；有独立的入口失败、来源缺失、日志失真等才另扣。"
   },
-  "version": "R4.1_distinct_acceptance_objects",
+  "version": "R4.2_engineering_minimum_chain",
   "weight_groups": {
     "核心计算与运行验证": 180,
     "基础证据与专业判断": 37
   },
   "prompt_revision": "leakage_cleanup_20261104T121827Z",
-  "acceptance_revision": "acceptance_boundaries_20261104T123455Z"
+  "acceptance_revision": "acceptance_boundaries_20261104T123455Z",
+  "engineering_qualification": {
+    "required_for": [
+      "FINANCE-R3-37",
+      "FINANCE-R4-39",
+      "FINANCE-R4-40",
+      "FINANCE-R4-41",
+      "FINANCE-R4-42"
+    ],
+    "acceptable_chains": [
+      "both-model full A1",
+      "both-model same Table3 relationship",
+      "both-model same Step3 specification"
+    ],
+    "objects": [
+      "actual inputs/samples",
+      "calculation",
+      "output",
+      "source comparison",
+      "executed result verification"
+    ],
+    "numerical_errors_do_not_automatically_disqualify": true,
+    "no_chain_is_not_equivalent_to_installed_environment_or_logs": true
+  },
+  "coverage_revision": "coverage_alignment_20261104T125145Z"
 }
