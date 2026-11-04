@@ -1,0 +1,177 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 22074,
+    "input_tokens_details": {
+      "cache_write_tokens": 3677,
+      "cached_tokens": 18394
+    },
+    "output_tokens": 173,
+    "output_tokens_details": {
+      "reasoning_tokens": 84
+    },
+    "total_tokens": 22247
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_n4bEJ8zcp70S3NCty7CRTxdB",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"python - <<'PY'\\ns=open('/app/input_files/tableA2.prg').read();print(s[s.index('load fama'):s.index('lag_nw=')]);s=open('/app/input_files/tableA1.prg').read();print(s[s.index('r=y'):s.index('lag_nw=')])\\nPY\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 43,
+  "native_response": {
+    "id": "resp_0566f95e1fd26b42016aea224ee9c481968bd86f1a7cb99cb5",
+    "object": "response",
+    "created_at": 1793729102,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793729106,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {},
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 54638,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_0566f95e1fd26b42016aea2250bf6081969cd875195a7d3275",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6iJS-RyrEkfYQz3iQuqTUr3R3-mEglsMgaS3WQDxONVEuVkAGYhptVvMfhZb3ju6OKHP1kPBFyO_vK4kZKsLkqzHIQLfxVFEHkmePn3ZWqhCxiZnaTO9J209LwKwCHhyemKsE-Lf9keVSrC-f1XEg5cIsbzyqFNigy6TFPzVaIEmXFcNr88_88ZkQDVYBuulRyXGoCyqzfj06Kqo3ej3T-UQw4SVvhV5U12TSGspep_t2rBoZZkDYSPxNYfwJMlo0gDJLselVWpz0c4PuKjtxPcl0wTW3JGoSnPtFcDDxgjxfNP9cYL8vKer2uHKzmaP4VfHpGgROQTIyfhaY45YV3cz9UoNyQn-vVSQxXgDu3_gDUCfZoM29YSHYVnpYzdz-xjzoe5XYdvmuOxzyo7JsdzQfsRSdSJbOwtOFxOTek8UXBLL-x6reRWQKM4PzW1GCoGjVWdyr1Vb9WdMRCKnBtyrtayy3-uAlTXXu-E6XUqoGWkM7ybyp0-BCkl6hPUmrd2zLEqDGIbMglng0b39_u7P_oTpA5fyDd6fliCTx7s6jaOg0TlGCLdSPapIjs_Pzhh-ZtzV6H4BLgWCMOS3pEO4Q712EnXbUXR79Oq5WXUpMVyONq3v6k06zAwocHwhiOisG2ZCKQ1bPiftV28BHelT2Rill7sn9_s8lHC0bL8Rz8_DMLWe1bi2n3qV3IAsx5bK_0L5_FKp1V5OCrIbjPhvqk--T5qdBnyYACXrKA4mIch8YucEXoLOfzhwh6Zw03Js9XT5bmrsK8qnGr2H1zIyu3Ieq1NoLqItRDa3PY9OgTTnGeimpqt7B1KC5Q6sPDNgetlE_E73hb0NSD4eR4IhCTHxcKKIm5CXZy4lYH0PxKJ-69Ys40XolUU4yKnkmG2PCm3Xf9CQsv5ChCQ5Q1D88hs6ksCi2D36uOH_PXEr-Wza22zwenq3KKKE3AHBvdtqiXe_y1MUvx0fUkUfY2caTsfgNVk9Xet6134oC6f1LyabsDDPDVk0bagjVcKbXRGh50aSMwOZTKc3Opvaz_PmfwR-gvjIYPbOptbbj0wOUVEcyK84eXD74nqeRWIbM__H8H-uAXgB7rYAn-ab1avQm_eBlvZ-yqIr0o1OCWVx_Ow50sO5n7ChTLuPaR1aL7usyO46a4Z2RBIOIrT6klH7j5LJGTRjaxUfu9l0PBzXEBaGXVM1Njw8RADLsT-pa9wyUlGrK2-LkbUWeVpGyFwc_kWHopyzjs26CNoBDrFp7AY_1aDTOPDKZGXvnY4_RS99-9vFEJop7ZgLGJjcU-ftuqucliQxH-W_0AW8W1_DQeDfVSOqOvV5HZO36K8TNMQ4xEq3U0Mv5Eq5nmNNHS9JqrVtFV9ivsO3mO1FXjYBKUzjVEZunwsIkBFbLixBKV9TLZwQr2YbIcv2GV1s3rKwDGEadVr6_RTTkuAx9a5j6p9okuFtsr-ihRTUxU4NV53KdM0M6ZVpt9zGZ8StjD5b0FVdUyrXi-kbSOzdt0OkOF_fTBWkvFLJBrOfTAK41R1x4e9Sf-J5QBWyTlnPC-TA9Q29F8jfCBLQYokDdc4j3epQq5DpRaImz8tomzaKHmEIfpau6dp-I5C4gsBsZawTiV5hIQ04gQZqsJJjug1YM8GF-DEkiQk-Z7rNBY_xSRSIl8jeie6e2PK4M90VNsIsPoDup3M1GSDHNMC3zAaSvxsAp5rAhxGpKvDDnPuzXrapqZotPMNo_fPR8mW_ZQb_yHJe4ILbQKrhe9xO9C1eE8TKVYmTj8hBQ8PclLGFtPKzi_6StHhmc11ZK-MG8zDKK3EhVmALqM-KygfNh4Lr6HWai0R9vP7cWktAEMO4XIBClmyRPveHHiss-UpGtfvTNvjc-nq6y4ZJxqYDiBV459KLhrqXH9QnzE5D0XNEWSNqpC9VAYvrAj9QEwISjQ2mbv_9y_brm4PjVITXLWNvh4x_LPJc_lox0JBY0uyREaJZNf5GHuULSgEc1NgT3ywXTCOFsXQMv2sr9G8LAYx9oJGnjqoeowkhs3HnUyZj2aeNgHOyJYUpvVjUJYT4DhCsDXK0o73hA0GNa7Yp3yJuiZNe-nnrBK9H07KyVebi4kp87phkjYlp6ou6CZ8oHELn3KC0KETlsL3cu2AqiIcqXSqaMcRzPsCzklqlN5yWMUM7iBj8wGPZPsdYhodr5EA5TlcdYVyssPT7MmGtxS4GtAjrOE0PtIRlWf2jU3SLwUxpSeTtwAFzPEITXNQPQAQqDMTwTRW_Cg-dHvxVudTXeOGHj4ijJI4SpHdHDMc5Okd31h1xNrB1RO--oEQvw2xTP7-B5SD2T3eS-ivTRo2KUEo=",
+        "summary": []
+      },
+      {
+        "id": "fc_0566f95e1fd26b42016aea2251d9f88196a91b999e57c42cfc",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"python - <<'PY'\\ns=open('/app/input_files/tableA2.prg').read();print(s[s.index('load fama'):s.index('lag_nw=')]);s=open('/app/input_files/tableA1.prg').read();print(s[s.index('r=y'):s.index('lag_nw=')])\\nPY\"}",
+        "call_id": "call_n4bEJ8zcp70S3NCty7CRTxdB",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 22074,
+      "input_tokens_details": {
+        "cache_write_tokens": 3677,
+        "cached_tokens": 18394
+      },
+      "output_tokens": 173,
+      "output_tokens_details": {
+        "reasoning_tokens": 84
+      },
+      "total_tokens": 22247
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

@@ -1,0 +1,503 @@
+{
+  "task_id": "LAW-OPS-TRANSFER-032",
+  "grade_type": "single_model_development_review_existing_rubric",
+  "formal_expert_grade": false,
+  "rubric_count": 23,
+  "raw_weighted_points": 61.0,
+  "positive_weight_sum": 209,
+  "score_out_of_100": 29.1866,
+  "requested_model": "gpt-6-sol",
+  "returned_model": "gpt-6-sol",
+  "rubric_scores": [
+    {
+      "id": "R-01",
+      "score": 0.75,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落2、4、7、53",
+          "finding": "标明2016年历史公开版本、删节与后续版本限制，区分核心规则、相邻问题和不可读依赖，并否认批准用途。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "说明!B2:B6",
+          "finding": "提示历史版本和非批准用途，但未在开始录入前完整标识合同当事人、日期及SEC删节属性。"
+        }
+      ],
+      "reason": "主要范围边界准确；Excel可见入口的历史版本识别不及Word完整。",
+      "uncertainty": "无",
+      "weight": 7,
+      "weighted_points": 5.25
+    },
+    {
+      "id": "R-02",
+      "score": 0.5,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "节点!A2:O20、证据请求!A2:I20、分流!A2:H6",
+          "finding": "节点ID连接部分定位、材料和动作；但分流仅接入五个节点，许多节点结果不进入并行路径汇总。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落53",
+          "finding": "声明Excel使用印刷页码；节点表如节点!B4的“§1.12 p3”并非合同PDF PAGE 10定位。"
+        }
+      ],
+      "reason": "有统一ID雏形，合同页码体系及节点至结果的关联仍不稳定。",
+      "uncertainty": "无",
+      "weight": 7,
+      "weighted_points": 3.5
+    },
+    {
+      "id": "R-03",
+      "score": 0.25,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "总控!A1:K2、分流!C2:H6",
+          "finding": "接收区有事项和概况，但没有独立的主体关系、安排阶段及合并、股权、资产和合同移动结构字段；路径适用性靠人工选择。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "分流!H2:H6",
+          "finding": "可同时标记五条路径，但对适用性“Unknown”没有专门判断，输入该值后可继续进入候选判断。"
+        }
+      ],
+      "reason": "具备基本接件及并行行位，缺少非结论式、安全的统一结构事实激活机制。",
+      "uncertainty": "无",
+      "weight": 7,
+      "weighted_points": 1.75
+    },
+    {
+      "id": "R-04",
+      "score": 0,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "分流!G3:H3、节点!F4:K4",
+          "finding": "股权分支没有Third Party、严格超过50%及多数董事任命能力的三个独立输入；人工把条件确认填Yes即可得到候选路径。"
+        },
+        {
+          "artifact": "Intellia to Regeneron License, SEC.pdf",
+          "location": "PDF PAGE 10，§1.12(b)",
+          "finding": "原条款要求Third Party及其Affiliates同时满足受益所有权超过50%和多数董事任命能力。"
+        }
+      ],
+      "reason": "文字提及两项股权条件，但实际候选公式不能验证三条件AND关系。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 0
+    },
+    {
+      "id": "R-05",
+      "score": 0.5,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落6、12–13",
+          "finding": "写出事先书面同意、Affiliate及相关业务收购例外、原方持续责任、书面承接和void后果。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "分流!C2:H2、节点!F3:N3",
+          "finding": "没有分别记录承接主体、对本Agreement的明确引用、签署及生效；单一条件确认Yes可产生候选。"
+        }
+      ],
+      "reason": "主要规则得到表述，但书面承接的决定性要件未形成可验证的独立控制。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 5.0
+    },
+    {
+      "id": "R-06",
+      "score": 0.25,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落15–17",
+          "finding": "区分合同转让、控制权定义和仅由Affiliate履约，并提示原合同方保证。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "分流!G2:G4、节点!A3:A5",
+          "finding": "未设置功能性控制、非公司及外国投资核查，也未将§1.12(c)与§17.9(ii)的两种“实质全部”对象分字段证明。"
+        }
+      ],
+      "reason": "有基本路径区分，Affiliate特殊条件及两个不同范围测试未运营化。",
+      "uncertainty": "无",
+      "weight": 7,
+      "weighted_points": 1.75
+    },
+    {
+      "id": "R-07",
+      "score": 0.25,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落22–23",
+          "finding": "A01只概括请求IP清单、来源和使用记录，未按Materials、Patent Rights、Know-How、Confidential Information及商标建立不同关系判断。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "节点!I8、K8、N8",
+          "finding": "整项§1.17统一标为不可读依赖，没有逐资产关联具体删节，也无法对可读且相关条件已齐的资产给出有限候选。"
+        }
+      ],
+      "reason": "识别了Control问题，但资产类别、重新纳入关系与局部未知条件被扁平化。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 2.5
+    },
+    {
+      "id": "R-08",
+      "score": 0,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "节点!A2:A20、证据请求!A2:A20",
+          "finding": "没有§12.3(b)独立IP处置节点，亦无Intellia Know-How或Patent Rights授予、负担及冲突核查。"
+        },
+        {
+          "artifact": "Intellia to Regeneron License, SEC.pdf",
+          "location": "PDF PAGE 80，§12.3(b)及其后、§12.4之前",
+          "finding": "§12.3(b)可读限制之后另有关系不明的独立删节。"
+        }
+      ],
+      "reason": "独立IP处置限制实质遗漏，无法核查不涉及Agreement转让的IP负担。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 0
+    },
+    {
+      "id": "R-09",
+      "score": 0,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "节点!A2:A20、证据请求!A2:A20",
+          "finding": "A03仅笼统记录第三方许可；没有共同所有IP、权属类别和处置形式节点，也未请求共同所有协议。"
+        },
+        {
+          "artifact": "Intellia to Regeneron License, SEC.pdf",
+          "location": "PDF PAGE 70、77、57–58、61",
+          "finding": "§10.1(e)、§10.10、§7.3和§7.12分别涉及共同所有权及第三方协议限制。"
+        }
+      ],
+      "reason": "没有可处理共同所有或其他IP拟处置的具体相邻节点。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 0
+    },
+    {
+      "id": "R-10",
+      "score": 0.5,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落18–25",
+          "finding": "U01分包、U02再许可、A02 Materials分别列项，指出删节和不可自动允许。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "节点!I6:I9、分流!G5:H6",
+          "finding": "分包可读的付款责任及发明归属具体要求未完整列为独立核项；Materials的第三方用途和提供方同意亦未分字段控制。"
+        }
+      ],
+      "reason": "三项未被混同且总体保持升级，但可读条件的操作化不充分。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 5.0
+    },
+    {
+      "id": "R-11",
+      "score": 0.25,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落28–29、53",
+          "finding": "A04具体提出转让、迁址与预提税复核；排他仅被泛称相邻事项，末段还说明未系统运营化。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "节点!A2:A20",
+          "finding": "无§12.7(a)–(b)、不可读§12.7(d)或Third Party Acquisition的交易影响记录节点。"
+        }
+      ],
+      "reason": "税务升级有具体路径，排他影响缺少对应事实、材料和未决状态。",
+      "uncertainty": "无",
+      "weight": 7,
+      "weighted_points": 1.75
+    },
+    {
+      "id": "R-12",
+      "score": 0.5,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "证据请求!A1:I20",
+          "finding": "现有请求逐行关联节点、证明目的和缺失处置，并留取得状态及请求责任栏。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "证据请求!B3:H4、节点!H3:H4",
+          "finding": "多份材料被合并在单行，取得状态没有按各材料或各项证明目的分别联动节点结果。"
+        }
+      ],
+      "reason": "现有请求优于通用清单，但合并记录及未联动状态削弱了材料—判断链；未在此项重复扣除遗漏的IP节点。",
+      "uncertainty": "无",
+      "weight": 7,
+      "weighted_points": 3.5
+    },
+    {
+      "id": "R-13",
+      "score": 0.5,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落30–35、49",
+          "finding": "要求先判断信息身份，以来源和权属证据核查共同信息，并指出一般公开不证明细节或组合已公开。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "披露子项!D2:H2、Q2:V2",
+          "finding": "有分类依据和来源字段，但身份判断仅为Yes/No/Unknown，公式不核实其与具体身份类别或证据的对应关系。"
+        }
+      ],
+      "reason": "书面流程区分身份与候选依据，工作簿中的证据约束和冲突处理仍较弱。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 5.0
+    },
+    {
+      "id": "R-14",
+      "score": 0,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "披露子项!M2、U2:V2",
+          "finding": "实际探针将授权状态依次设为Unknown、未经确认和INVALID，U2设为已关闭，V2均返回“已关闭（人工确认，非授权）”。"
+        }
+      ],
+      "reason": "子项关闭结果未验证授权状态；“非授权”免责声明不能消除未经授权子项被记录为已关闭的实际绕过。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 0
+    },
+    {
+      "id": "R-15",
+      "score": 0.25,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落40–41、50",
+          "finding": "提示当前地址须核验、快递期限删节和送达须留证。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "执行!C1:L2、节点!I17",
+          "finding": "没有按亲送、快递、传真或email分别核查许可依据及收讫证据，也不能为非email方式记录email条件不适用。"
+        }
+      ],
+      "reason": "通知风险提示存在，但拟采用方式的条件和执行证据未形成可操作的分支流程。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 2.5
+    },
+    {
+      "id": "R-16",
+      "score": 0,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "节点!J3:N4",
+          "finding": "节点关闭公式允许G列条件满足为No时，只要填写事实、证据ID和律师确认ID且人工状态为已关闭，就输出已关闭。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "总控!K2",
+          "finding": "事项闸门计数节点已关闭或不适用；没有另行检查每条路径的缺失动作及关闭依据。"
+        }
+      ],
+      "reason": "可观察的节点关闭路径不要求条件满足或独立关闭依据，因此不符合全部已激活路径无未决的门槛。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 0
+    },
+    {
+      "id": "R-17",
+      "score": 0.5,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "说明!A1:B6、节点!D2:N20、分流!C2:H6",
+          "finding": "文件结构检查通过，存在本地公式和下拉验证；但分流结果与多数节点状态静态失联，关键身份及授权输入缺乏有效受控枚举。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落7、49",
+          "finding": "手册要求三轴及披露子项核查；相应Excel公式主要依赖人工结论字段，未实现手册所述部分具体核查。"
+        }
+      ],
+      "reason": "文件可编辑且基本结构稳定，但核心交互与跨文件操作承诺存在多个缺口；缓存None未被当作公式错误。",
+      "uncertainty": "未见完整的外部链接及命名范围检查结果；未据此认定其损坏",
+      "weight": 10,
+      "weighted_points": 5.0
+    },
+    {
+      "id": "R-04B",
+      "score": 0.25,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落6、14–15",
+          "finding": "文字提及合并交易后不再超过50%及资产全部或实质全部，但未明确资产测试包含当事方及其Affiliates的资产。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "分流!G3:H3",
+          "finding": "三个§1.12分支共用人工条件确认；没有可检验49.99%、50%、50.01%或Third Party入口的分支输入和公式。"
+        }
+      ],
+      "reason": "非股权分支仅有文字概述，数值边界和输入安全没有实现；股权AND问题仅在R-04评价。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 2.5
+    },
+    {
+      "id": "R-14B",
+      "score": 0,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "披露包!E2、披露子项!M2、U2:V2",
+          "finding": "混合包探针中另一子项Unknown时，包级正确显示阻断；但已观察到授权Unknown的子项可显示已关闭，包级公式只计数V列已关闭，故全部此类子项均可使包显示“均经人工关闭”。"
+        }
+      ],
+      "reason": "包级汇总对已识别的未决状态保守，却可继承子项关闭绕过，未始终保留未经授权子项的阻断状态。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 0
+    },
+    {
+      "id": "R-14C",
+      "score": 0.5,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "披露子项!A1:V1",
+          "finding": "具备包/子项ID、内容、来源、公开证据、受众、依据、保密、版本、必要范围和保护措施字段。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落34–39、49",
+          "finding": "主要描述§13.1(c)、§13.2和§13.5(a)–(b)；没有将§13.5(d)及§7.3(f)建成独立子项披露路径，也未分开§13.1(c)不同适用情境。"
+        }
+      ],
+      "reason": "子项记录框架较完整，但独立披露依据、适用性、删节期限及后续责任控制存在多个重要缺口。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 5.0
+    },
+    {
+      "id": "R-15B",
+      "score": 0.5,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落42–45",
+          "finding": "E02列明双方授权代表书面修改，E03列明具体条款引用及放弃方授权代表签署。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "节点!A18:A20、执行!B1:L2",
+          "finding": "没有特定Target的实际Co-Co Agreement替代路径或委员会无修改权限节点；执行公式亦不分别核查文件自身生效条件。"
+        }
+      ],
+      "reason": "amendment和waiver基本可辨，Co-Co及委员会权限两条路径未形成独立控制。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 5.0
+    },
+    {
+      "id": "R-15C",
+      "score": 0.25,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Playbook.docx",
+          "location": "段落10–13、46–47",
+          "finding": "提及§17.4、§17.10及§7.10，并明确进一步保证不是转让同意。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "执行!D1:L2、节点!A2:A20",
+          "finding": "未区分§17.11仅支持历史Agreement签署与后续文件自身的签署方式、生效条件；执行记录也无专门完整签署集和留档位置核查。"
+        }
+      ],
+      "reason": "有若干相邻执行提示，历史协议与后续文件的签署及生效证据链明显不足。",
+      "uncertainty": "无",
+      "weight": 10,
+      "weighted_points": 2.5
+    },
+    {
+      "id": "R-16B",
+      "score": 0.5,
+      "evidence": [
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "节点!I1:N20、交接!A1:J1",
+          "finding": "提供多数指定状态、逐节点限制和动作栏，以及未决问题、删节影响、决定、负责人及接手人交接栏。"
+        },
+        {
+          "artifact": "Transfer_Change_of_Control_Intake.xlsx",
+          "location": "节点!J2:K20、分流!C2:H6",
+          "finding": "新激活路径的Open状态需人工选择；公式可在没有逐项条件核查时显示候选，原因和下一步也未由状态自动保持。"
+        }
+      ],
+      "reason": "多路径记录及交接字段可用，但阶段解释和新激活路径的安全状态依赖人工维护。",
+      "uncertainty": "无",
+      "weight": 7,
+      "weighted_points": 3.5
+    }
+  ],
+  "major_findings": [
+    {
+      "rubric_ids": [
+        "R-04",
+        "R-04B"
+      ],
+      "finding": "§1.12没有实际可检验的三分支条件或50%边界；人工条件确认可直接生成候选。",
+      "evidence": "Transfer_Change_of_Control_Intake.xlsx｜分流!G3:H3；Intellia to Regeneron License, SEC.pdf｜PDF PAGE 10"
+    },
+    {
+      "rubric_ids": [
+        "R-08",
+        "R-09"
+      ],
+      "finding": "缺少独立的§12.3(b) Intellia IP处置及共同所有IP处置节点。",
+      "evidence": "Transfer_Change_of_Control_Intake.xlsx｜节点!A2:A20；合同PDF PAGE 80、70"
+    },
+    {
+      "rubric_ids": [
+        "R-14",
+        "R-14B"
+      ],
+      "finding": "实际探针显示授权Unknown、未经确认或无效的披露子项仍可被标为已关闭；包级汇总可继承该错误。",
+      "evidence": "Transfer_Change_of_Control_Intake.xlsx｜披露子项!M2、U2:V2；披露包!E2"
+    },
+    {
+      "rubric_ids": [
+        "R-16"
+      ],
+      "finding": "节点关闭公式容许条件满足为No时关闭，事项汇总未独立核查关闭依据。",
+      "evidence": "Transfer_Change_of_Control_Intake.xlsx｜节点!G3、J3:N3；总控!K2"
+    }
+  ],
+  "limitations": [
+    "评分依据为提供的完整作品抽取、合同PDF PAGE文本及所列实际探针；未把公式缓存None视为错误。",
+    "未获所有通知方式、执行文件及关闭情形的额外实际变异探针；相关分项依据可见字段与公式评价。"
+  ],
+  "rubric_spec_sha256": "f1cd4a4bf42e665240274f3d3afe328a303b1931c2b43fc580a2ddf820e86142",
+  "grading_seconds": 90.551,
+  "finished_at": "2026-11-04T07:15:08.499748+00:00"
+}

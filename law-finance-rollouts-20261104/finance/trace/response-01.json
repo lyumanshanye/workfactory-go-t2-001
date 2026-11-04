@@ -1,0 +1,177 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 985,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 134,
+    "output_tokens_details": {
+      "reasoning_tokens": 13
+    },
+    "total_tokens": 1119
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_z2VMavHE6b3d8hXn1mNboJtd",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"python - <<'PY'\\nimport os\\np='/app/input_files'\\nprint([(f,os.path.getsize(p+'/'+f)) for f in os.listdir(p)])\\nfor f in ['README.txt','table1.prg','table2.prg','tableA1.prg','tableA2.prg']:\\n print('\\\\n'+'='*20+f)\\n print(open(p+'/'+f,'rb').read().decode('latin1')[:26000])\\nPY\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 50,
+  "native_response": {
+    "id": "resp_0566f95e1fd26b42016aea2223d56481968f870417b44ca11a",
+    "object": "response",
+    "created_at": 1793729059,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793729062,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {},
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 1216,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_0566f95e1fd26b42016aea22254c288196829f22d297bec710",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6iImBm8G7K5mU9VF8kf2XFVB7bl8UgBsRLtEQu2Ozi9oq_wosYk59hZ0reY7dLviivCFRZ-U69qJ5YXZCXNkGTXj6edf56TaUKZ8e363TUg8iNTKBD1QrCaDn2KFqjAgUuMzgntonOYPxqC4Tie2xbcTMp3PrU3H4OY5YUAoJpDD-9swrTTSdbW728gBghVfSGLZ0JPOpON_UuhN3dFrgE-6k6NqQXzxO3oyXvsQ8FhaUnSwVfinMcgVAjwSd-CC-PwP72Fz29bgn9huqErU5HxomJjrz4osr5nhzuTavFUokm1oAEqHXisAroETIO5wLQwRTg90Gvw0f3vY7EJShDQ92MJHy6rBVYdSAQyIOJI45WSwtOs5hz43BwfpdMjDkCmrG09rN4Utc_ewFMBR8jJM85HBNkNoLtrmfDKOyHPO3yLVnNp8tmKSMGHCdxzc1BbdlREURA41tseV5M-2CJ8VEDvFBKAw1mPHUtBeBp74eXmUZgvvKPtGdLkomJG-wGdyeO9SktLsUN5YFMvlLe8eP8KiohR_fX70BHlWFkPMjvqeZSnSPzLAaTUwQqd4X2YaQoRGsu_mvwBbYGkRLffLSjcEEmvlP6BD_Q9MXJC6uVAvSboZ0Sl2UX8s69bZVJ8HiB23MD4kffw2cUAHZQ6dGHU_zOVXJbOZNl3ClbRPkCUxjF5hS7wpByZ0Bpg8Vkfo1cAl3HiFVlnDoXGIX7z_wXjQ2YuXl4vXpx_ReclP86A8OwJ8awqhAn3VvmV6MU_s0eG86bk6BFJ3JpUga9IT-Bd6oIY2nBj5YVLO8G8Jjb7eZIyUNx9V0beWIgo_nN5LyXD-hZuPxfnk1m34Qc1xIy_9-79SpYVQJbP38dbM7d9qcbDugwbMpLL_DbKstrzExaRF49uXAA98BdRPwOX081P_YMrZr42T2xYA-yJuHI6SWf26cPPLkIZ65c7z80lPRbAXFx-CeBqwErloNaJ8CgGKLq6fOxhkrZ9vakFOpakwwAo5bD81DS8NedICySRpbrhzp2ecYkyShu4uNn-nl2uNJ7YuzyhoJI18E7bLIiPaybbONCUWvtvhxZ6i8IfMSypzWzufrNbaqY8lUITJlti6mJwr23-w8EnepuqW8TT9TUlEf3NJ_we6IQwuFGkvOCHYk6Qp5UyQ8dkr2aHPQKTWXirgvl2jwaQDCCvRZ1BuGgKzkYAdTxT7HHzpWOPtaWlKaBqGhCYlE95SCeL7-5lf-Et5fjJL1iwSuLHWvJJ81x8bHs2vMVAsBzDEMo22AfK_w_idURx4wPSyR0BbjGss7gsguHi7vCdrtZixS402sBngFoQaH7Q97bmwmCeOmVkqUE5wtikR266rFHnDrlh5c98q4PM8cQTijFi1QJH1xbcYja1Wxv8Qd283mHeJX9Mj_wZxpXLnkfk-7XUSvzQ9NhaURX0zPmoTLGo4HCVtWCZrbM9s7t3LHHeDWDCWWAbh0VMLlWMAVv7dVVLDsQikyd9RqBslkKSrLqRI6ziSPNGcYqn4uCRIhsaHaD7l",
+        "summary": []
+      },
+      {
+        "id": "fc_0566f95e1fd26b42016aea222583448196911190a805ae8193",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"python - <<'PY'\\nimport os\\np='/app/input_files'\\nprint([(f,os.path.getsize(p+'/'+f)) for f in os.listdir(p)])\\nfor f in ['README.txt','table1.prg','table2.prg','tableA1.prg','tableA2.prg']:\\n print('\\\\n'+'='*20+f)\\n print(open(p+'/'+f,'rb').read().decode('latin1')[:26000])\\nPY\"}",
+        "call_id": "call_z2VMavHE6b3d8hXn1mNboJtd",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 985,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 134,
+      "output_tokens_details": {
+        "reasoning_tokens": 13
+      },
+      "total_tokens": 1119
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

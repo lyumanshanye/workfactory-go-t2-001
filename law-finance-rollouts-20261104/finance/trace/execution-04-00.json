@@ -1,0 +1,13 @@
+{
+  "returncode": 0,
+  "stdout": "load fama[59,5] = c:\\pack\\FF3a.txt  ;\n    @sa 53-02@\nsa=fama[2:51,5];\n\n@cpi not seasonally adjusted: monthly 01/52-12/10 - 708 obs.@\nload bls[708,3] = c:\\pack\\CPI.txt  ;\ncpi=bls[.,3];\n\n    @collecting december 52-02, then computing annual growth 53-02@\ncpa={};\ni=12; do while i<=612;\n    cpa=cpa|cpi[i];    \ni=i+12; endo;\ncpa=100*(cpa[2:rows(cpa)]-cpa[1:rows(cpa)-1])./cpa[1:rows(cpa)-1];\n\nsar=(1+sa/100)./(1+cpa/100);\n\n@--------------@\n\n@select r and f, and gross - per one@\n\nr=(y[.,2:9]/100);\nf=x[.,3]/100;\ngr=sar;\n\n@lags in newey-west @\n\nr=y[.,2:9];\nf=x[.,2];\nfno=x[.,3];\n\nr=r/100;\nf=f/100;\nfno=fno/100;\n\n@lags in newey-west @\n\n",
+  "stderr": "",
+  "runtime": "linux_user_mount_pid_network_namespaces",
+  "uid": 1000,
+  "network": "private_namespace_no_interfaces",
+  "docker": false,
+  "isolation": "fresh minimal root, original inputs read-only, host home/run/project trees absent, no_new_privs",
+  "control_sha256": "05ef1ab85e47874bfbc273ad5935d98c6a1c01f5bc4dc64d44e5b93d2cefbac9",
+  "proc_view": "absent",
+  "limits": "CPU/file-size/open-file limits and wall timeout; no Docker/cgroup memory acceptance claim; host /proc is never exposed"
+}

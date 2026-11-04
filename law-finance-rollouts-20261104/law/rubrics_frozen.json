@@ -1,0 +1,953 @@
+[
+  {
+    "id": "R-01",
+    "description": "成果是否准确界定历史版本、三层工作范围、删节处理和非批准用途。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-01",
+      "REQ-02"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "标识合同日期、当事人和SEC删节属性",
+      "说明未核实后续状态、第三方协议和当前通知信息",
+      "区分完整规则、相邻问题和不可读依赖",
+      "说明工具非穷尽、非批准和非正式法律或税务意见"
+    ],
+    "evidence": "查看Word范围说明及Excel开始录入前的可见说明；接受等价布局。",
+    "numeric_tolerance": null,
+    "weight_reason": "错误范围会污染全部下游使用。",
+    "anchors": {
+      "0": "声称已穷尽当前合同后果，或把删节版本当作当前完整协议。",
+      "1": "两个成果一致、准确地说明历史版本、三层范围和用途边界。"
+    },
+    "levels": {
+      "0": "范围实质错误。",
+      "0.25": "仅零散提及历史或删节。",
+      "0.5": "历史边界基本正确，但三层范围或用途边界不清。",
+      "0.75": "主要边界准确，仅一项重要限制不足。",
+      "1": "完整准确且跨文件一致。"
+    },
+    "acceptable_alternatives": [
+      "可使用historical public filing、issue spotting、opaque dependency等同义表述。"
+    ],
+    "failure_examples": [
+      "称工作簿覆盖所有交易相关合同后果。",
+      "将Schedule 17.3地址描述为已核实的当前通知地址。"
+    ]
+  },
+  {
+    "id": "R-02",
+    "description": "成果是否提供统一、系统级的节点追溯架构，使规则、限制、证据和结果能够互相回溯。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-03"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "实际编码节点具有稳定节点ID或等价唯一标识",
+      "节点提供合同定位、规则类别和限制字段",
+      "结果和动作可回溯至节点及其证据",
+      "不可读依赖字段能说明受影响判断或动作",
+      "未把机械检索清单冒充交付节点清单"
+    ],
+    "evidence": "检查Word节点索引或等价结构，以及Excel规则、结果、材料和动作之间的标识关联。本项不重复评价特定条款实体内容是否完整。",
+    "numeric_tolerance": null,
+    "weight_reason": "评价独立的系统级可追溯架构。",
+    "anchors": {
+      "0": "没有统一追溯结构，主要结果无法定位其合同依据或限制。",
+      "1": "所有实际编码节点均能在规则、证据、结果和动作之间稳定回溯。"
+    },
+    "levels": {
+      "0": "基本不可追溯。",
+      "0.25": "仅零散列出条款号。",
+      "0.5": "主要规则可定位，但节点、证据或结果关联不稳定。",
+      "0.75": "系统基本完整，仅少数关联缺失。",
+      "1": "完整、统一且可复核。"
+    },
+    "acceptable_alternatives": [
+      "可用规则ID、结构化表主键、命名范围或超链接实现。"
+    ],
+    "failure_examples": [
+      "结果显示律师复核，但无法判断由哪个节点或缺失材料触发。",
+      "把全部机械命中条款逐条放入工作簿，却没有业务节点关系。"
+    ]
+  },
+  {
+    "id": "R-03",
+    "description": "统一接收框架是否收集基础交易结构事实、允许相关路径并行激活，并在事项接收和路径激活层面安全处理Unknown、Not applicable和无效输入。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-04",
+      "REQ-05",
+      "REQ-22"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "收集问询标识、拟议安排类型、交易或安排阶段、相关主体及其关系",
+      "收集合并、股权、业务或资产处置及Agreement权利义务移动等基础结构事实",
+      "允许Agreement assignment、Change of Control、知识产权处置及相邻事项等多个路径同时开放或待核实",
+      "路径激活不依赖用户预先作出法律结论",
+      "统一接收区的基础输入支持Unknown、Not applicable、未选择和无效输入状态",
+      "空白、Unknown或无效的统一接收数据不得产生事项级通过、路径激活级通过或无需进一步处理的结果；Section 1.12各分支是否满足、Third Party条件及数值边界不在本项评价"
+    ],
+    "evidence": "检查Excel统一事项接收区、路径激活机制和Word接收步骤；以空白、Unknown、Not applicable、多个交易形式并存及无效的统一接收数据测试事项级和路径激活级行为。Section 1.12各分支的实体满足条件、Third Party入口和数值边界仅由R-04和R-04B评价；其他专门节点字段由对应实体rubric评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "评价统一接收和路径编排能力，不重复评价各实体节点的专门条件。",
+    "anchors": {
+      "0": "只有单一交易标签或要求用户先选择法律结论，不能并行激活相关路径，或空白、Unknown或无效的统一接收数据直接产生事项级或路径激活级通过。",
+      "1": "统一接收框架完整收集基础结构事实，可安全并行激活多个路径，并在事项接收和路径激活层面正确处理Unknown、Not applicable和无效输入。"
+    },
+    "levels": {
+      "0": "不能支持可靠接收或路径激活，或接收层输入可直接产生错误通过。",
+      "0.25": "仅有基础主体和单一交易类型，缺少并行路径或安全接收状态。",
+      "0.5": "基础接收可用，但路径并行、非结论式激活或接收层Unknown处理有多个缺口。",
+      "0.75": "主要接收和激活能力完整，仅一项重要控制不足。",
+      "1": "统一接收、并行激活和接收层安全输入行为完整可靠。"
+    },
+    "acceptable_alternatives": [
+      "路径可由公式、规则表、受控人工选择或其组合激活，但不得要求用户先断言合同结论。",
+      "基础结构字段可集中设置，也可分步展示。"
+    ],
+    "failure_examples": [
+      "用户必须先选择“构成Change of Control”才能进入相关核查。",
+      "只能选择一个交易路径，导致可能并行的assignment路径被覆盖。",
+      "统一接收区交易类型为空白时，事项级状态自动显示无需进一步处理。"
+    ]
+  },
+  {
+    "id": "R-04",
+    "description": "Section 1.12(b)股权交易分支是否把Third Party入口、超过50%的受益所有权和多数董事任命能力作为必须同时满足的条件。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-06"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "股权分支只有在收购方为Third Party、该Third Party及其Affiliates成为超过50%组合投票权的直接或间接受益所有人，并且取得任命董事会多数成员的能力时，才能形成该分支条件初步满足的候选结果；任一条件为No、空白、Unknown、无效或仅达到其中一项时均不得显示该分支满足。"
+    ],
+    "evidence": "检查Word中的Section 1.12(b)逻辑和Excel对应规则；分别测试51%且无多数董事任命能力、49%且有多数董事任命能力、51%且有多数董事任命能力但Third Party为Unknown，以及全部条件有证据支持的情形。",
+    "numeric_tolerance": "超过50%必须严格大于50.000%；不得通过四舍五入将50.000%视为超过50%。",
+    "weight_reason": "把Section 1.12(b)的AND关系误作OR会直接产生错误的控制权变化候选结论，因此独立计分，不得被其他分支或输入控制的正确性平均稀释。",
+    "anchors": {
+      "0": "存在任何可观察路径，使Third Party入口、超过50%的受益所有权或多数董事任命能力之一未满足、未知或无效时，仍显示Section 1.12(b)满足或等价确定性结果；包括把两个实体条件处理为OR。",
+      "1": "所有可观察路径均严格执行三项条件同时满足，且任一条件未满足、未知、空白或无效时不会显示该分支满足。"
+    },
+    "acceptable_alternatives": [
+      "可以将结果命名为初步匹配、候选触发或需律师确认，但不得在任一必要条件缺失时产生该候选结果。",
+      "可使用公式、规则表、决策树或受控人工确认，只要AND逻辑可验证。"
+    ],
+    "failure_examples": [
+      "收购方取得51%投票权但不能任命董事会多数成员，工作簿仍显示Change of Control股权分支满足。",
+      "董事任命能力为Unknown时，公式仅根据持股比例显示该分支满足。"
+    ]
+  },
+  {
+    "id": "R-05",
+    "description": "Section 17.9的assignment规则、承接、持续责任和违规后果是否准确。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-07"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "识别相应对方事先书面同意基线",
+      "准确处理Affiliate候选路径和原转让方持续责任",
+      "准确处理第三方取得合同相关业务候选路径",
+      "分别核查承接文书存在、主体、对本Agreement的明确引用、签署和生效状态",
+      "一般资产或负债承接不自动满足",
+      "疑似违规转让标记void风险和律师升级"
+    ],
+    "evidence": "检查Word分流和Excel文书、状态及动作；测试概括承接负债和明确书面承接两种情形。",
+    "numeric_tolerance": null,
+    "weight_reason": "这是Agreement assignment的核心规则。",
+    "anchors": {
+      "0": "未识别一般规则或输出相反结论。",
+      "1": "规则、候选路径、承接、持续责任和后果均准确。"
+    },
+    "levels": {
+      "0": "核心逻辑缺失或相反。",
+      "0.25": "只有一般规则或一个候选路径。",
+      "0.5": "主要路径存在，但承接或持续责任有多个缺口。",
+      "0.75": "基本完整，仅一项重要条件不足。",
+      "1": "完整准确。"
+    },
+    "acceptable_alternatives": [
+      "结果可称permitted-path candidate并保留律师确认。"
+    ],
+    "failure_examples": [
+      "所有Change of Control均写成无需同意。",
+      "概括承接负债即显示书面承接条件满足。"
+    ]
+  },
+  {
+    "id": "R-06",
+    "description": "Affiliate资格、Affiliate履约和两个“全部或实质全部”范围测试是否正确区分。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-08",
+      "REQ-09"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "核查功能性control和明示认定条件",
+      "处理公司、非公司、外国投资情形和双方互不构成Affiliate",
+      "未超过50%不自动输出非Affiliate",
+      "仅由Affiliate履约不自动视为assignment，并记录原合同方保证责任",
+      "1.12(c)和17.9(ii)使用不同判断对象、字段和证明目的",
+      "一项范围测试满足不自动满足另一项"
+    ],
+    "evidence": "检查Affiliate和范围测试节点；测试持股50%但有合同性管理控制、仅Affiliate履约以及仅出售合同相关业务情形。",
+    "numeric_tolerance": "恰好50%未达到more than fifty percent明示认定，但不得自动判非Affiliate；不得创造substantially all固定百分比。",
+    "weight_reason": "错误合并会同时污染assignment和Change of Control分析。",
+    "anchors": {
+      "0": "仅凭比例判断Affiliate，或把Affiliate履约和两个范围测试合并。",
+      "1": "资格、履约、保证责任和两个范围测试均准确区分。"
+    },
+    "levels": {
+      "0": "逻辑实质错误。",
+      "0.25": "只识别其中一个主题。",
+      "0.5": "主要规则存在，但特殊情形或范围分离有多个缺口。",
+      "0.75": "基本准确，仅一项重要不足。",
+      "1": "完整准确。"
+    },
+    "acceptable_alternatives": [
+      "50%但有治理控制时可输出Unknown并升级。"
+    ],
+    "failure_examples": [
+      "由Affiliate履约被自动登记为Agreement assignment。",
+      "出售合同相关业务自动视为出售集团全部资产。"
+    ]
+  },
+  {
+    "id": "R-07",
+    "description": "控制权变化后的Control核查是否按资产类别、来源、使用关系和与该节点相关的删节或外部依赖处理。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-10"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "区分Materials、Patent Rights、Know-How、Confidential Information和trademarks",
+      "记录初始排除类别及资产由收购第三方或其Affiliates拥有或in-license的时间和来源",
+      "核查控制权变化前已受Control的内容",
+      "分别核查合同活动产生、改进或衍生、选择提供或实际使用等可读重新纳入关系",
+      "不把Patent Rights、Know-How和Materials的重新纳入措辞无条件扩展至Confidential Information、trademarks或其他类别",
+      "逐资产节点记录具体[***]或外部依赖、其影响的条件以及受影响的结果或动作",
+      "仅与具体资产节点相关的未知条件阻止该节点形成候选结果；其他位置存在[***]不会自动使全部资产节点Unknown",
+      "可读条件完整且没有相关外部依赖时，可形成明确标注适用边界的有限候选路径"
+    ],
+    "evidence": "检查Word矩阵和Excel逐资产分类规则，按不同资产类别、取得时间、来源、基础许可、改进或衍生关系及实际使用事实测试；另测试某一不相关位置存在[***]但当前资产节点可读条件完整的情形。",
+    "numeric_tolerance": null,
+    "weight_reason": "这是控制权变化后许可范围的核心问题，既要防止无依据扩张，也要防止因不相关删节过度阻断。",
+    "anchors": {
+      "0": "将收购方全部资产统一排除、统一纳入或因Section 1.17任一删节而全部置为Unknown。",
+      "1": "逐资产准确处理来源和使用关系，将具体未知条件关联至受影响节点，并在条件足够时形成有边界的有限候选路径。"
+    },
+    "levels": {
+      "0": "完全扁平化、无依据确定结论或全局过度阻断。",
+      "0.25": "只有有限分类，未建立未知条件与资产节点的关联。",
+      "0.5": "主要类别可用，但来源、重新纳入、具体删节关联或有限候选结果有多个缺口。",
+      "0.75": "基本完整，仅一项重要资产关系或限制处理不足。",
+      "1": "完整、关联准确且不过度阻断。"
+    },
+    "acceptable_alternatives": [
+      "可用统一清单加资产类型列或按类型分表。",
+      "有限候选结果可称文本支持的候选范围、初步路径或等价名称，但须显示适用边界和律师复核状态。"
+    ],
+    "failure_examples": [
+      "将所有商标自动重新纳入Control。",
+      "仅因Section 1.17较早定义部分存在[***]，把一个可明确证明为控制权变化前已受Control的Patent Right统一标为无法分析。",
+      "不提示与当前资产来源直接相关的基础许可条件仍未取得。"
+    ]
+  },
+  {
+    "id": "R-08",
+    "description": "Section 12.3(b)的Intellia IP处置限制及其后关系不明的相邻删节是否被准确区分。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-11"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "限定12.3(b)可读规则对象为Intellia Know-How和Intellia Patent Rights",
+      "涵盖assign、transfer、convey、grant和encumber",
+      "记录受益主体、处置文件和潜在冲突或不利干扰",
+      "不以未发生Agreement assignment关闭节点",
+      "可对12.3(b)完整可读句子作有限规则化",
+      "另行标明12.3(b)之后、12.4之前存在编号和关系不明的未公开文字",
+      "不得称相邻删节为12.3(b)末尾条件或推定其内容"
+    ],
+    "evidence": "检查独立IP流程，并测试不转让Agreement但对相关IP设定担保或授予潜在冲突许可的情形；核对对相邻[***]的表述。",
+    "numeric_tolerance": null,
+    "weight_reason": "该独立限制直接影响资产和许可交易，且必须避免误述删节位置。",
+    "anchors": {
+      "0": "节点缺失、完全并入17.9，或把相邻[***]确定描述为12.3(b)条件。",
+      "1": "可读规则得到有限规则化，相邻删节的未知位置和关系被准确升级而未被补造。"
+    },
+    "levels": {
+      "0": "实质遗漏、错误结论或误述删节归属。",
+      "0.25": "仅泛称检查IP转移。",
+      "0.5": "主要可读对象存在，但独立路径、冲突分析或相邻删节表述有多个缺口。",
+      "0.75": "基本完整，仅一项重要处理不足。",
+      "1": "完整、准确且可验证。"
+    },
+    "acceptable_alternatives": [
+      "可将grant细分为许可、担保权益或其他授予。",
+      "可以更保守地把整体Section 12.3交给律师复核，但不能声称相邻删节属于12.3(b)。"
+    ],
+    "failure_examples": [
+      "因Agreement未转让而关闭IP负担核查。",
+      "写成Section 12.3(b)末尾被删节并因此无法读取其完整句子。"
+    ]
+  },
+  {
+    "id": "R-09",
+    "description": "其他或共同所有IP处置及第三方基础协议依赖是否形成具体相邻节点。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-12"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "记录IP所有者、共同所有状态和权利类别",
+      "记录assignment、许可、再许可、同意、负担或其他处置形式",
+      "识别Section 10.1(e)与共同所有IP处置相关且存在删节",
+      "识别Sections 10.10、7.3和7.12的第三方基础协议依赖",
+      "要求基础许可、共同所有协议、权属记录和拟议处置文件",
+      "缺少完整文本时只能输出不可读依赖、待文件或律师复核"
+    ],
+    "evidence": "检查Word相邻IP流程和Excel独立节点；测试不属于12.3(b)对象的共同所有IP拟许可情形。",
+    "numeric_tolerance": null,
+    "weight_reason": "防止工具在12.3(b)不适用时错误显示IP初筛已经完成。",
+    "anchors": {
+      "0": "遗漏该节点，或从删节的10.1(e)直接得出自由处置结论。",
+      "1": "所有权、处置、基础协议、材料、删节和升级均具体处理。"
+    },
+    "levels": {
+      "0": "实质遗漏或无依据确定结论。",
+      "0.25": "仅泛称检查其他IP。",
+      "0.5": "识别共同所有IP，但第三方协议、材料或删节处理有多个缺口。",
+      "0.75": "基本完整，仅一项重要依赖不足。",
+      "1": "完整且边界安全。"
+    },
+    "acceptable_alternatives": [
+      "可把10.1(e)、10.10、7.3和7.12设置为一个相邻IP矩阵或多个节点。"
+    ],
+    "failure_examples": [
+      "称共同所有人可在所有情况下自由assignment。",
+      "未要求查看适用第三方基础许可。"
+    ]
+  },
+  {
+    "id": "R-10",
+    "description": "分包、再许可和Materials交付是否作为三个部分不可读的独立相邻事项安全处理。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-13"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "分包节点记录可读的责任保留、付款责任和发明归属书面要求",
+      "再许可节点先核查适用许可是否可再许可及可读责任规则",
+      "Materials节点记录Third Party、用途和提供方事先书面同意基线",
+      "三个节点不相互替代且不自动视为Agreement assignment",
+      "分别标明7.2(b)、7.2(c)(i)和7.7(a)中的[***]影响完整条件",
+      "缺少完整条文或基础许可时不得输出permitted、consent satisfied或等价通过结果"
+    ],
+    "evidence": "检查Word和Excel三个节点；分别测试仅分包、仅再许可、仅交付Materials、完整条文不可得和基础许可未提供情形。",
+    "numeric_tolerance": null,
+    "weight_reason": "这些业务路径常并存，且部分条件不能被误装成完整许可。",
+    "anchors": {
+      "0": "节点混淆，或任一节点在删节或基础许可缺失时自动显示允许。",
+      "1": "三个节点独立记录可读条件，并始终保留具体不可读依赖和升级。"
+    },
+    "levels": {
+      "0": "实质错误或危险自动通过。",
+      "0.25": "只覆盖一个路径或仅泛称需律师复核。",
+      "0.5": "三个路径可辨，但多个可读条件或删节影响未准确记录。",
+      "0.75": "基本完整，仅一个重要条件或升级动作不足。",
+      "1": "完整、准确且安全。"
+    },
+    "acceptable_alternatives": [
+      "最终许可范围判断可一律保留负责律师确认。",
+      "可使用相邻事项候选而非允许或禁止标签。"
+    ],
+    "failure_examples": [
+      "只要是承包商就自动显示可再许可。",
+      "取得Materials提供方同意后即忽略7.7(a)后续删节并显示完整允许。"
+    ]
+  },
+  {
+    "id": "R-11",
+    "description": "税务和排他相邻影响是否具体识别并正确限制为升级事项。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-14"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "记录assignment或redomiciliation是否可能关联预提税复核",
+      "不自行计算未提供的税额或给出税务结论",
+      "核查交易是否改变12.7(a)-(b)所涉活动、合作或权利授予",
+      "区分可读排他条款和不可读12.7(d)",
+      "识别Third Party Acquisition只能从索引定位而正文不可读",
+      "记录税务或负责律师升级、材料和未解决状态"
+    ],
+    "evidence": "检查相邻影响区、材料请求、升级原因和关闭状态。",
+    "numeric_tolerance": "不得虚构税率、税额或不可读阈值。",
+    "weight_reason": "这些问题可能不改变assignment结论但影响交易处理。",
+    "anchors": {
+      "0": "完全遗漏，或直接给出无依据税务或排他结论。",
+      "1": "税务与排他问题均被具体识别、证据化并适当升级。"
+    },
+    "levels": {
+      "0": "实质遗漏或越界结论。",
+      "0.25": "仅泛称咨询税务或检查排他。",
+      "0.5": "两个主题可辨，但触发事实或不可读边界有多个缺口。",
+      "0.75": "基本完整，仅一项重要动作不足。",
+      "1": "完整且边界准确。"
+    },
+    "acceptable_alternatives": [
+      "可把税务复核交给税务团队，把排他复核交给负责律师。"
+    ],
+    "failure_examples": [
+      "redomiciliation被完全忽略。",
+      "因12.7(a)-(b)可读而声称已穷尽收购后的排他影响。"
+    ]
+  },
+  {
+    "id": "R-12",
+    "description": "对于成果已经提出或记录的材料请求，是否形成具体的节点—证明目的—状态—责任—缺失后动作链；特定实体节点或材料类别是否存在由对应实体rubric评价。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-15"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "对成果中实际存在的每项材料请求，记录其对应判断节点和具体证明目的",
+      "对成果中实际存在的每项材料请求，记录材料状态以及请求对象或责任人",
+      "对成果中实际存在的每项材料请求，将未取得状态连接至具体分流、阻断或升级动作",
+      "同一材料支持多个节点时，分别记录各节点的证明目的和缺失影响",
+      "披露、通知和权限证据若已被工具要求，应对应至具体执行节点",
+      "未来事项材料被标为待收集而非已存在",
+      "共同所有IP、基础许可、分包、再许可、Materials等特定节点及其所需材料是否被提出，由R-09、R-10或其他对应实体rubric评价；实体节点整体遗漏不得仅因同一遗漏在本项再次扣除材料类别覆盖分"
+    ],
+    "evidence": "检查Word和Excel中已经提出或记录的材料请求，评价其节点ID、证明目的、责任、状态及缺失后动作是否完整。若某一实体节点及其材料整体遗漏，应由对应实体rubric评价，本项不得再因相同遗漏评价材料类别覆盖；但其他已经存在的材料记录仍按其链路质量评分。",
+    "numeric_tolerance": null,
+    "weight_reason": "这是超越泛泛补查清单的关键。",
+    "anchors": {
+      "0": "成果虽提出材料请求，但这些请求普遍只是通用清单，无法关联节点、证明目的、责任或缺失后动作。",
+      "1": "成果中所有实际提出或记录的材料请求均具有完整、可追溯的节点、证明目的、状态、责任和缺失后动作链。"
+    },
+    "levels": {
+      "0": "现有材料请求基本都是不可追溯的通用清单。",
+      "0.25": "仅少量现有材料请求有关联或证明目的。",
+      "0.5": "多数现有核心材料可关联，但责任、状态或缺失后动作存在多个缺口。",
+      "0.75": "绝大多数现有材料记录形成完整链路，仅一类重要链路字段不足。",
+      "1": "所有现有材料请求均形成完整、可执行且不重复评价实体覆盖的证据链。"
+    },
+    "acceptable_alternatives": [
+      "同一文件可支持多个节点，但须分别记录证明目的。"
+    ],
+    "failure_examples": [
+      "已列出的交易文件请求只写“提供所有交易文件”，未说明支持哪个节点或证明什么。",
+      "基础许可已被列为所需材料，但未取得时没有对应状态、责任人或升级动作。",
+      "同一文件支持多个节点，但工具没有区分各节点的证明目的。"
+    ]
+  },
+  {
+    "id": "R-13",
+    "description": "披露分类是否安全区分信息身份确定与确定身份后的候选路径。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-16",
+      "REQ-17"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "区分Agreement terms、单方信息、共同信息、已公开信息和混合包",
+      "共同信息身份要求权属记录、双方确认或其他可定位证据",
+      "依据不足时不自动归类共同信息",
+      "身份Unknown时输出待文件、不可读依赖或律师复核",
+      "确定身份后的候选披露路径与身份判定分离",
+      "一般公开信息不自动证明具体组合信息公开"
+    ],
+    "evidence": "检查Word分类步骤和Excel分类依据字段；测试仅有不完整合同文字、双方书面确认、权属记录不一致和部分公开组合信息情形。",
+    "numeric_tolerance": null,
+    "weight_reason": "信息身份误判可能错误扩大披露权限。",
+    "anchors": {
+      "0": "从不完整合同文字或披露包标签自动推断信息身份。",
+      "1": "身份确定、证据、Unknown处理和后续候选路径全部清楚分离。"
+    },
+    "levels": {
+      "0": "分类逻辑实质错误。",
+      "0.25": "有信息标签但无分类依据。",
+      "0.5": "要求证据但身份和后续路径仍部分混用，或Unknown处理不足。",
+      "0.75": "基本完整，仅一种证据冲突或组合信息处理不足。",
+      "1": "完整、安全、可复核。"
+    },
+    "acceptable_alternatives": [
+      "可默认所有共同信息身份均需负责律师确认。"
+    ],
+    "failure_examples": [
+      "所有共同发明或报告自动被标记为共同Confidential Information。",
+      "一般新闻报道使完整组合资料自动被视为公开。"
+    ]
+  },
+  {
+    "id": "R-14",
+    "description": "披露内容子项的授权状态为空白、Unknown、待文件、条件未齐、未经确认或无效时，该子项自身是否始终阻止候选放行或允许披露结果。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-18",
+      "REQ-19"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "任一披露内容子项的授权状态为空白、Unknown、待文件、条件未齐、未经确认或无效时，该子项自身不得显示候选放行、允许披露、授权完成或等价通过结果。"
+    ],
+    "evidence": "对同一披露内容子项依次输入空白、Unknown、待文件、条件未齐、未经确认和无效值，仅检查该子项自身的结果及其公式或规则是否存在绕过路径。包级汇总、排序、空白未激活行和人工覆盖仅由R-14B评价。",
+    "numeric_tolerance": null,
+    "weight_reason": "未经确认的授权状态使具体披露子项获得放行结果会造成直接披露风险；包级汇总错误由R-14B独立评价。",
+    "anchors": {
+      "0": "存在任何可观察路径，使授权为空白、Unknown、待文件、条件未齐、未经确认或无效的披露子项自身获得候选放行、允许披露或授权完成结果。",
+      "1": "所有上述未决或无效授权状态均在子项自身结果中安全阻断，不存在子项级绕过路径。"
+    },
+    "acceptable_alternatives": [
+      "子项阻断结果可命名为待授权、律师复核、条件未齐、不可放行或等价明确未决状态。",
+      "可以要求负责律师最终确认全部披露子项。"
+    ],
+    "failure_examples": [
+      "授权状态为Unknown，但因为接收方签有NDA，该内容子项显示允许披露。",
+      "授权状态待文件时，该内容子项仍显示授权完成。"
+    ]
+  },
+  {
+    "id": "R-15",
+    "description": "正式通知流程是否按拟采用方式分别处理合同依据、email适用性、当前接收信息、期限以及发送或收讫证据。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-20"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "记录通知触发条款、目的、接收方、拟采用方式及该方式的合同依据",
+      "仅在拟采用email时要求定位允许email的具体条款；亲自递交、overnight courier或facsimile路径将email权限记录为Not applicable，而不是缺失或已满足",
+      "区分Schedule 17.3历史信息和经事项证据核验的当前接收信息",
+      "分别记录亲自递交的收讫、overnight courier的寄件与收讫、facsimile的电子确认，以及经具体条款允许的email发送或收讫证据",
+      "保留Section 17.3中被删节的快递视为送达Business Days为Unknown，不推定具体天数",
+      "证据不完整或适用条件未知时保持执行待证、待文件、不可读依赖或律师复核，不形成有效送达结论"
+    ],
+    "evidence": "检查Word通知流程和Excel通知记录；分别测试亲自递交、overnight courier、facsimile、普通email和具体条款明确允许的email。对非email方式确认email权限为Not applicable且不构成阻断；另测试历史地址未核实、仅有快递寄件凭证、亲自递交收讫、传真电子确认及被删节快递期限Unknown。",
+    "numeric_tolerance": "不得推定Section 17.3中被删节的快递送达Business Days数值。",
+    "weight_reason": "通知方式、地址和证据属于相互关联但可部分正确实现的运营控制，采用Gradient评价其专业完整性；把明显不完整通知确认有效送达另由非计分可用性检查判断。",
+    "anchors": {
+      "0": "通知方式未区分，email权限被错误要求于所有方式或完全不核查，且地址、期限或执行证据也无法可靠记录。",
+      "1": "各通知方式的适用条件、email条件适用性、当前接收信息、期限和执行证据均准确区分，未知条件保持未决。"
+    },
+    "levels": {
+      "0": "通知流程实质不可用或系统性误用email条件。",
+      "0.25": "仅列出通知方式，缺少多数地址、期限、证据或适用性控制。",
+      "0.5": "主要方式可辨，但email适用性、当前信息、期限或证据处理有多个重要缺口。",
+      "0.75": "流程基本完整，仅一个重要方式或证据控制不足。",
+      "1": "各方式、适用性、地址、期限、证据和未决处理均完整准确。"
+    },
+    "acceptable_alternatives": [
+      "最终有效送达判断可以统一保留负责律师确认。",
+      "非email方式下email权限可显示Not applicable、N/A或等价明确不适用状态。",
+      "仅有寄件证据时可以显示执行待证，但不得显示有效送达。"
+    ],
+    "failure_examples": [
+      "亲自递交已有收讫证据，但因没有email权限而被错误阻断。",
+      "向Schedule 17.3历史地址发送普通email后显示有效送达。",
+      "快递单号存在但收讫和被删节送达期限均未知，工作簿仍显示通知完成。"
+    ]
+  },
+  {
+    "id": "R-16",
+    "description": "事项是否仅在全部已激活路径均无未决问题且关闭证据和所需确认齐备时才能进入已关闭状态。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-22",
+      "REQ-23"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "只要任一已激活路径仍处于Open、待补事实、待文件、候选路径、条件未齐、律师复核、专家复核、不可读依赖、执行待证或其他未决状态，或者缺少关闭证据、负责律师或相应确认依据，事项及该路径均不得显示已关闭；已关闭必须同时保留关闭依据和确认记录。"
+    ],
+    "evidence": "同时激活两个以上路径，分别保留待文件、不可读依赖、执行待证或律师复核状态，并尝试关闭事项；检查公式、数据验证、人工覆盖和隐藏规则是否允许绕过。再测试全部未决事项解除且关闭证据和确认齐备的情形。",
+    "numeric_tolerance": null,
+    "weight_reason": "存在未决事项仍关闭会导致问询被错误归档和交接中断，因此作为独立关闭门槛计分，不得被状态标签或交接字段的完整性平均稀释。",
+    "anchors": {
+      "0": "存在任何可观察路径，使仍有未决状态、不可读依赖、缺失执行证据或缺少所需确认的事项或路径显示已关闭。",
+      "1": "所有关闭路径均要求全部已激活路径无未决事项且关闭证据和所需确认齐备，并保留可复核的关闭依据。"
+    },
+    "acceptable_alternatives": [
+      "可以设置事项级和路径级两层关闭，但两层均不得绕过各自未决事项。",
+      "可将最终关闭保留负责律师批准。"
+    ],
+    "failure_examples": [
+      "分包节点仍有不可读依赖，但事项级状态显示已关闭。",
+      "所有材料已收到但律师确认仍为空白，公式自动显示已关闭。"
+    ]
+  },
+  {
+    "id": "R-17",
+    "description": "Word和Excel是否在文件、公式、验证及跨文件层面技术稳定并可由下游直接消费。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-04",
+      "REQ-22"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "DOCX和XLSX可正常打开、编辑和保存",
+      "Excel关键枚举具有有效数据验证或等价受控输入",
+      "公式和规则无损坏引用、循环引用或静态失联结果",
+      "不依赖缺失外部工作簿、插件或强制宏",
+      "Word与Excel不存在实质矛盾的节点名称、状态定义或使用边界"
+    ],
+    "evidence": "使用openpyxl和LibreOffice检查文件结构、数据验证、公式、命名范围、隐藏区域中的损坏引用或外部链接、外部依赖及跨文件一致性。本项不评价测试残留、虚构事项、完成证据或删节猜测；这些仅由独立非计分可用性检查判断。",
+    "numeric_tolerance": null,
+    "weight_reason": "artifact_spec要求成果可由下游实际消费。",
+    "anchors": {
+      "0": "文件损坏、核心交互失效、依赖缺失资源或两个成果实质冲突。",
+      "1": "两个文件可直接使用、技术稳定、无缺失外部依赖且彼此一致。"
+    },
+    "levels": {
+      "0": "不可消费。",
+      "0.25": "可打开但有严重公式、验证或结构缺陷。",
+      "0.5": "主要区域可用，但存在多个技术或跨文件缺陷。",
+      "0.75": "核心稳定，仅一项重要技术缺口。",
+      "1": "完整可直接消费。"
+    },
+    "acceptable_alternatives": [
+      "可使用结构化表、命名范围、公式或无宏规则表。",
+      "不要求固定页数或品牌样式。"
+    ],
+    "failure_examples": [
+      "关键下拉引用损坏范围。",
+      "工作簿依赖未交付的外部文件计算结果。"
+    ]
+  },
+  {
+    "id": "R-04B",
+    "description": "Section 1.12的合并分支、资产分支、数值边界和非股权分支输入安全是否准确。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-06"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "合并或整合分支核查Third Party，并以交易前已发行投票证券在交易后是否不再代表超过50%的组合投票权为判断对象",
+      "资产分支核查Third Party，并以当事方及其Affiliates的全部或实质全部资产为判断对象",
+      "Section 1.12(a)交易后恰好50%满足该数值条件，50.01%不满足，49.99%满足",
+      "Section 1.12(b)恰好50%不满足超过50%的数值条件",
+      "空白、Unknown、非法文本百分比和无效枚举不产生确定性分支满足结果"
+    ],
+    "evidence": "检查Word各分支说明和Excel规则；测试1.12(a)的49.99%、50%、50.01%，1.12(b)的50%，Third Party为No或Unknown，以及资产范围事实缺失的情形。",
+    "numeric_tolerance": "不得通过四舍五入改变50.000%、50.01%或49.99%的合同边界。",
+    "weight_reason": "评价除股权AND关系外的独立Change of Control分支和边界实现；股权AND错误仅由R-04评价。",
+    "anchors": {
+      "0": "合并和资产分支均缺失或主要逻辑相反，或多个边界错误并可产生确定性结果。",
+      "1": "合并和资产分支、Third Party入口、全部数值边界及无效输入行为均准确。"
+    },
+    "levels": {
+      "0": "主要分支和边界实质错误。",
+      "0.25": "只有一个非股权分支基本可用。",
+      "0.5": "两个分支存在，但数值边界、判断对象或输入安全有多个缺口。",
+      "0.75": "主要逻辑正确，仅一项边界或无效输入处理不足。",
+      "1": "全部分支和测试准确。"
+    },
+    "acceptable_alternatives": [
+      "可使用百分比或小数输入，但单位和精度必须明确。",
+      "substantially all可以保持事实和律师判断，不得创造固定百分比。"
+    ],
+    "failure_examples": [
+      "合并后交易前证券恰好保留50%投票权却显示未满足1.12(a)。",
+      "资产分支只查看当事方自身资产而忽略其Affiliates资产。"
+    ]
+  },
+  {
+    "id": "R-14B",
+    "description": "混合披露包的包级结果是否始终采用所有内容子项中最保守的未决或阻断状态。",
+    "type": "Binary",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-19"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "披露包包含两个以上内容子项时，包级结果不得比任何子项的未决、阻断、待文件、条件未齐、律师复核、不可读依赖或未经授权状态更宽松；一个已获候选路径或已授权子项不得覆盖其他未决子项。"
+    ],
+    "evidence": "建立至少三个内容子项的抽象测试：一个已授权、一个待文件、一个律师复核；改变子项排序和状态后检查包级结果。确认空白行或未激活子项不会被错误当作通过，也不会覆盖真实未决子项。",
+    "numeric_tolerance": null,
+    "weight_reason": "包级错误汇总会把未审查内容一并放行，因此独立计分，不能由内容字段或单项路径的完整性平均抵消。",
+    "anchors": {
+      "0": "存在任何可观察路径，使包内仍有未决或阻断子项时包级结果显示候选放行、允许披露、已批准或更宽松状态。",
+      "1": "所有包级汇总路径均采用最保守的有效子项状态，且不存在排序、空白行或人工覆盖造成的放宽。"
+    },
+    "acceptable_alternatives": [
+      "可使用显式严重度映射、阻断标志、公式或受控人工确认实现。",
+      "包级状态可以比最保守子项更严格。"
+    ],
+    "failure_examples": [
+      "包中一个子项已授权、一个子项待文件，包级状态仍显示候选放行。",
+      "公式只读取第一行子项，导致后续律师复核子项未反映到包级状态。"
+    ]
+  },
+  {
+    "id": "R-14C",
+    "description": "披露内容子项、信息身份证据、独立合同路径、版本和保护措施是否形成可执行且可追溯的审查记录。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-18",
+      "REQ-19"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "每个内容子项独立记录信息类型、分类依据、来源或所有者以及拟披露内容本身或精确定位",
+      "每个内容子项独立记录既往公开证据、接收对象、披露目的和候选合同依据",
+      "每个内容子项独立记录保密安排、拟披露版本、必要范围、保护措施、进一步核查及其责任人或下一步",
+      "Section 13.1(c)按具体子项区分内部履约、诉讼、监管和依法强制披露的适用条件，不把Not applicable记为已满足",
+      "Section 13.1(d)仅用于已有证据支持其信息身份的内容，Section 13.2例外要求书面或电子证据",
+      "Sections 13.5(a)、13.5(b)、13.5(d)和7.3(f)保持独立，不串用对象、目的或被删节条件",
+      "研究附件不自动认定为Redacted Agreement，SEC来源标签不自动构成披露授权，被删节期限和对象限制保持Unknown"
+    ],
+    "evidence": "检查Word披露流程和Excel内容子项表、证据字段、适用性矩阵、版本记录及责任动作；接受等价字段名称和布局，但不得仅以包级字段替代内容子项记录。",
+    "numeric_tolerance": "不得为[***] years或[***] Business Days设置推定数值。",
+    "weight_reason": "评价披露审查记录和路径本身的专业完整性；授权Unknown阻断和包级最保守汇总分别由R-14和R-14B独立评价。",
+    "anchors": {
+      "0": "没有内容子项级审查，或主要披露路径、信息身份和版本控制被混为单一流程。",
+      "1": "内容子项字段、证据、独立路径、适用性、版本、保护措施和后续责任均完整可追溯。"
+    },
+    "levels": {
+      "0": "披露审查基本不可用。",
+      "0.25": "只有信息类型或接收对象清单，缺少大部分证据和动作字段。",
+      "0.5": "主要路径和内容子项存在，但字段、适用性或版本控制有多个重要缺口。",
+      "0.75": "流程基本完整，仅一类重要字段、路径区分或责任动作不足。",
+      "1": "完整、准确且可执行。"
+    },
+    "acceptable_alternatives": [
+      "可采用比合同文本更保守的内部审批政策，但须标明其为内部控制而非合同明文条件。",
+      "最终披露决定可以统一保留负责律师确认。"
+    ],
+    "failure_examples": [
+      "内容子项只有信息类型和接收对象，没有拟披露内容定位、来源或所有者和后续责任人。",
+      "把仅适用于依法强制披露的提前通知要求统一标记为所有接收人类别均已满足。"
+    ]
+  },
+  {
+    "id": "R-15B",
+    "description": "一般amendment、waiver、Co-Co特定替代和委员会决定是否作为不同权限路径准确处理。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-21"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "一般amendment路径核查书面形式、双方授权代表签署及适用文件自身的生效条件",
+      "waiver路径核查书面形式、对相关条款的具体引用及放弃方授权代表签署",
+      "Co-Co路径核查实际Co-Co Agreement、特定Target及被明确替代的条款，不将一般讨论材料视为替代",
+      "委员会决定、会议纪要和口头安排被记录为无权自行amend、modify或waive，而不是有效合同变更",
+      "单方文件或缺少适用权限要件的文件保持待文件、条件未齐或律师复核",
+      "各路径分别记录权限来源、文件状态、执行证据和负责律师确认"
+    ],
+    "evidence": "分别测试JSC纪要、口头侧函、单方amendment、双方授权代表签署的amendment、无具体条款引用的waiver、符合Section 17.2形式的waiver、未提供实际Co-Co Agreement以及明确特定Target和替代条款的Co-Co文件。按各路径独立评价，不因一个路径的局部缺陷自动否定其他正确路径。",
+    "numeric_tolerance": null,
+    "weight_reason": "四类执行路径具有不同权限和形式要求，适合按专业完整性分档；明显无效文件被确认生效另由独立非计分可用性检查判断。",
+    "anchors": {
+      "0": "权限路径基本混同，委员会决定、口头安排或缺少适用要件的文件可被普遍记录为有效变更。",
+      "1": "一般amendment、waiver、Co-Co特定替代和委员会无权限规则均独立、准确且可验证。"
+    },
+    "levels": {
+      "0": "权限路径实质混同或系统性产生错误生效结果。",
+      "0.25": "仅正确处理一种路径，其他路径缺失或明显错误。",
+      "0.5": "多数路径可辨，但两项以上关键形式、主体、授权或特定替代条件处理不足。",
+      "0.75": "主要路径准确，仅一项重要权限或形式控制不足。",
+      "1": "全部路径独立、准确并具有完整证据和复核控制。"
+    },
+    "acceptable_alternatives": [
+      "可将全部最终生效判断保留负责律师确认。",
+      "会议纪要或侧函可作为事实证据或待审文件记录，但不得自动作为有效修改或waiver。"
+    ],
+    "failure_examples": [
+      "JSC批准后工作簿自动把合同条款标为已修改。",
+      "只有一方签署的amendment被记录为已生效。",
+      "waiver未引用相关条款仍显示有效。",
+      "未提供实际Co-Co Agreement，仅凭谈判材料便记录特定条款已被替代。"
+    ]
+  },
+  {
+    "id": "R-15C",
+    "description": "完整协议、继受效力、历史Agreement签署形式、后续文件自身签署核查和进一步权利完善是否作为相邻执行控制准确处理。",
+    "type": "Gradient",
+    "weight": 10,
+    "requirement_refs": [
+      "REQ-21"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "识别侧函、口头安排或其他文件是否触及Sections 17.4和17.5，而不把其自动视为有效修改",
+      "记录Section 17.10下继受人或许可受让人效力与Section 17.9承接证据之间的衔接",
+      "Section 17.11仅作为历史Agreement自身采用counterparts及facsimile或PDF签署的直接依据",
+      "对amendment、waiver、承接文件、同意或其他后续文件，另行记录其自身条款、适用法律、完整签署集和负责律师确认，不仅凭Section 17.11确认签署方式或生效",
+      "Section 7.10用于识别必要或合理请求的进一步文书、权利证据或完善动作，但不作为独立交易批准、同意或无条件文件交付依据",
+      "各执行路径记录文件自身生效条件、证据状态、留档位置和下一步责任"
+    ],
+    "evidence": "检查Word执行控制矩阵和Excel文件、权限、签署、生效、留档及完善动作字段；测试历史Agreement的PDF签署、后续承接文件的PDF签名、缺少文件自身电子签署依据、继受人承接及进一步完善请求。",
+    "numeric_tolerance": null,
+    "weight_reason": "评价与通知和权限结论不同的相邻执行支持完整性；无效通知和无效修改被确认分别由R-15和R-15B独立评价。",
+    "anchors": {
+      "0": "未区分历史Agreement与后续文件，或把Section 7.10作为独立批准依据，导致执行支持框架实质错误。",
+      "1": "完整协议、继受、签署、后续文件自身核查、完善、留档和责任动作均准确可执行。"
+    },
+    "levels": {
+      "0": "执行支持框架实质错误。",
+      "0.25": "仅记录签署或留档勾选，缺少权限和文件自身核查。",
+      "0.5": "主要相邻控制可辨，但历史Agreement与后续文件、继受或完善动作有多个缺口。",
+      "0.75": "基本完整，仅一项重要执行支持不足。",
+      "1": "完整、准确且可形成执行证据链。"
+    },
+    "acceptable_alternatives": [
+      "后续文件可以采用电子、counterparts或PDF签署，但须有该文件自身条款、适用法律或负责律师确认依据。",
+      "进一步保证动作可以作为行动项而非独立法律结论。"
+    ],
+    "failure_examples": [
+      "仅援引Section 17.11便确认后续承接文件通过PDF签署且已生效。",
+      "援引Section 7.10直接认定对方必须批准交易。"
+    ]
+  },
+  {
+    "id": "R-16B",
+    "description": "对已激活路径的状态阶段、原因、下一步、升级和交接信息是否能够无歧义、独立并可解释地保留。",
+    "type": "Gradient",
+    "weight": 7,
+    "requirement_refs": [
+      "REQ-22",
+      "REQ-23"
+    ],
+    "deliverables": [
+      "Transfer_Change_of_Control_Playbook.docx",
+      "Transfer_Change_of_Control_Intake.xlsx"
+    ],
+    "criterion": [
+      "状态模型无歧义地区分未选择或不适用、Open、待补事实、待文件、候选路径、条件未齐、律师复核、专家复核、不可读依赖、执行待证和已关闭，或通过等价多维模型完整表达这些阶段",
+      "新激活且尚未完成核查的路径保持Open，不自动显示候选通过或无需处理",
+      "文本条件初步吻合但事实、文件、授权、执行证据或确认未齐时保持相应未决状态",
+      "每个已激活路径分别保留状态原因、缺失事项、下一步、负责人和关闭阻断，不因其他路径进展而被覆盖",
+      "交接记录保留未解决相邻问题、不可读文字影响、律师或专家决定、后续动作和交接对象",
+      "颜色不是状态或阻断信息的唯一载体"
+    ],
+    "evidence": "检查状态字典和字段组合；同时激活多个路径并分别设置Open、待文件、候选路径、不可读依赖、执行待证和律师复核，确认状态、原因和下一步不会相互覆盖。",
+    "numeric_tolerance": null,
+    "weight_reason": "评价状态表达和交接质量；未决事项是否能够错误进入已关闭由R-16单独评价。",
+    "anchors": {
+      "0": "只有批准或不批准等二元状态，或多个已激活路径共享并覆盖同一状态、原因和下一步。",
+      "1": "全部阶段均可无歧义表达，每个已激活路径独立保留原因、下一步、责任和交接信息。"
+    },
+    "levels": {
+      "0": "状态和交接不可解释。",
+      "0.25": "仅有少量状态标签，缺少原因、下一步或路径独立性。",
+      "0.5": "多数阶段可辨，但多个状态、路径独立性或交接字段存在重要缺口。",
+      "0.75": "主要阶段和路径记录完整，仅一项重要解释或交接控制不足。",
+      "1": "状态、原因、动作、责任和交接完整可靠。"
+    },
+    "acceptable_alternatives": [
+      "可采用单列状态，或路径状态、事项状态和执行状态等多维组合。",
+      "可使用等价状态名称，但每个指定阶段必须能被唯一表示。"
+    ],
+    "failure_examples": [
+      "新激活路径立即显示候选通过而不是Open。",
+      "一个路径进入律师复核后覆盖另一路径的待文件状态。",
+      "交接记录没有保留仍待取得的第三方基础许可。"
+    ]
+  }
+]

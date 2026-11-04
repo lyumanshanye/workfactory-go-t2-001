@@ -1,0 +1,150 @@
+event: response.created
+data: {"type":"response.created","response":{"id":"resp_08b67c10a27661b8016aea23d5a16881969687b47793397c8a","object":"response","created_at":1793729493,"status":"in_progress","access_programs":null,"background":false,"completed_at":null,"content_filters":null,"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"igpt-6-sol","moderation":null,"output":[],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"auto","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":null,"user":null,"metadata":{}},"sequence_number":0}
+
+event: response.in_progress
+data: {"type":"response.in_progress","response":{"id":"resp_08b67c10a27661b8016aea23d5a16881969687b47793397c8a","object":"response","created_at":1793729493,"status":"in_progress","access_programs":null,"background":false,"completed_at":null,"content_filters":null,"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"igpt-6-sol","moderation":null,"output":[],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"auto","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":null,"user":null,"metadata":{}},"sequence_number":1}
+
+event: response.output_item.added
+data: {"type":"response.output_item.added","item":{"id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","type":"function_call","status":"in_progress","arguments":"","call_id":"call_vkm4jbBsAYVUfDZuLIUkaZ5N","name":"execute"},"output_index":0,"sequence_number":2}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"{\"","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"BMNmGFQ06CWSuc","output_index":0,"sequence_number":3}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"command","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"Vk3YW0AKC","output_index":0,"sequence_number":4}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\":\"","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"VMSNndjrJ5fMn","output_index":0,"sequence_number":5}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"ls","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"rNBvlKZMRrUSIY","output_index":0,"sequence_number":6}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" -","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"l9xeKsUl19DJTF","output_index":0,"sequence_number":7}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"lh","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"8UGJOWdsRIELiB","output_index":0,"sequence_number":8}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" /","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"pIsPAu3tjVuafN","output_index":0,"sequence_number":9}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"app","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"eGh7VdQ6rAzyp","output_index":0,"sequence_number":10}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"/input","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"V9s0iDNDqd","output_index":0,"sequence_number":11}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"_files","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"NG3V2m3hyE","output_index":0,"sequence_number":12}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" &&","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"jLPnixYS0xM0X","output_index":0,"sequence_number":13}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" pdf","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"EZx5fidY5QFn","output_index":0,"sequence_number":14}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"info","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"b4EN4DqBpsNk","output_index":0,"sequence_number":15}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" '/","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"ApjKMaqE3t9Fs","output_index":0,"sequence_number":16}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"app","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"OhTUM74nDZpw0","output_index":0,"sequence_number":17}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"/input","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"SZ287MtyOQ","output_index":0,"sequence_number":18}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"_files/","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"LwpSmbzBo","output_index":0,"sequence_number":19}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"Intell","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"YSyWUhc2vY","output_index":0,"sequence_number":20}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"ia to","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"bUIo2ZHpyFV","output_index":0,"sequence_number":21}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" Regener","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"MJpIY6ED","output_index":0,"sequence_number":22}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"on License","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"5K8KQv","output_index":0,"sequence_number":23}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":", SEC","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"F6QtGmTcpkv","output_index":0,"sequence_number":24}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":".pdf'","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"Z2XH4HIXdBM","output_index":0,"sequence_number":25}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" | head -","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"uTk3ytK","output_index":0,"sequence_number":26}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"25 && pd","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"Ts17iVnw","output_index":0,"sequence_number":27}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"ftotext","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"nyMysTdFb","output_index":0,"sequence_number":28}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" -layout '/","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"k7qdt","output_index":0,"sequence_number":29}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"app/input_files","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"r","output_index":0,"sequence_number":30}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"/Intell","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"gqbDVUdRb","output_index":0,"sequence_number":31}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"ia to Regener","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"ZrY","output_index":0,"sequence_number":32}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"on License, SEC","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"f","output_index":0,"sequence_number":33}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":".pdf' /work","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"1V87L","output_index":0,"sequence_number":34}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"/source.txt && wc -","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"Abvl1beEwxmY4","output_index":0,"sequence_number":35}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"l /work/source.txt","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"5ofwr89TIN4LTE","output_index":0,"sequence_number":36}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" && grep -nEi","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"5C6","output_index":0,"sequence_number":37}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" 'assign|change of control","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"xYqLLF","output_index":0,"sequence_number":38}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"|merger","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"RxOxJFRrv","output_index":0,"sequence_number":39}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"|affiliate|subcontract|","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"RIlaHfZC6","output_index":0,"sequence_number":40}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"sublicens|notice|am","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"aWCqosPCLVNBC","output_index":0,"sequence_number":41}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"end","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"bwyhni2Xc8bGY","output_index":0,"sequence_number":42}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"|waiv|public|conf","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"U1eHjy0OnZudJ1s","output_index":0,"sequence_number":43}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"idential|tax|divest|","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"rpUMm6zfNjHC","output_index":0,"sequence_number":44}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"transfer' /work/source.txt | head","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"nc3usFIHbpF4Nwh","output_index":0,"sequence_number":45}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" -110\"}","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","obfuscation":"tJLNoYELj","output_index":0,"sequence_number":46}
+
+event: response.function_call_arguments.done
+data: {"type":"response.function_call_arguments.done","arguments":"{\"command\":\"ls -lh /app/input_files && pdfinfo '/app/input_files/Intellia to Regeneron License, SEC.pdf' | head -25 && pdftotext -layout '/app/input_files/Intellia to Regeneron License, SEC.pdf' /work/source.txt && wc -l /work/source.txt && grep -nEi 'assign|change of control|merger|affiliate|subcontract|sublicens|notice|amend|waiv|public|confidential|tax|divest|transfer' /work/source.txt | head -110\"}","item_id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","output_index":0,"sequence_number":47}
+
+event: response.output_item.done
+data: {"type":"response.output_item.done","item":{"id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","type":"function_call","status":"completed","arguments":"{\"command\":\"ls -lh /app/input_files && pdfinfo '/app/input_files/Intellia to Regeneron License, SEC.pdf' | head -25 && pdftotext -layout '/app/input_files/Intellia to Regeneron License, SEC.pdf' /work/source.txt && wc -l /work/source.txt && grep -nEi 'assign|change of control|merger|affiliate|subcontract|sublicens|notice|amend|waiv|public|confidential|tax|divest|transfer' /work/source.txt | head -110\"}","call_id":"call_vkm4jbBsAYVUfDZuLIUkaZ5N","name":"execute"},"output_index":0,"sequence_number":48}
+
+event: response.completed
+data: {"type":"response.completed","response":{"id":"resp_08b67c10a27661b8016aea23d5a16881969687b47793397c8a","object":"response","created_at":1793729493,"status":"completed","access_programs":null,"background":false,"completed_at":1793729495,"content_filters":[{"blocked":false,"source_type":"prompt","content_filter_raw":[],"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"jailbreak":{"detected":false,"filtered":false}},"content_filter_offsets":{"start_offset":0,"end_offset":2749,"check_offset":0}},{"blocked":false,"source_type":"completion","content_filter_raw":[],"content_filter_results":{"protected_material_code":{"detected":false,"filtered":false},"protected_material_text":{"detected":false,"filtered":false},"hate":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"}},"content_filter_offsets":{"start_offset":0,"end_offset":405,"check_offset":0}}],"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"igpt-6-sol","moderation":null,"output":[{"id":"fc_08b67c10a27661b8016aea23d6b1888196b18fffb3fb45aea5","type":"function_call","status":"completed","arguments":"{\"command\":\"ls -lh /app/input_files && pdfinfo '/app/input_files/Intellia to Regeneron License, SEC.pdf' | head -25 && pdftotext -layout '/app/input_files/Intellia to Regeneron License, SEC.pdf' /work/source.txt && wc -l /work/source.txt && grep -nEi 'assign|change of control|merger|affiliate|subcontract|sublicens|notice|amend|waiv|public|confidential|tax|divest|transfer' /work/source.txt | head -110\"}","call_id":"call_vkm4jbBsAYVUfDZuLIUkaZ5N","name":"execute"}],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"default","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":{"input_tokens":1993,"input_tokens_details":{"cache_write_tokens":0,"cached_tokens":1990},"output_tokens":135,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":2128},"user":null,"metadata":{}},"sequence_number":49}
+

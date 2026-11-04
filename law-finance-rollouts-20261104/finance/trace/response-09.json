@@ -1,0 +1,234 @@
+{
+  "model": "igpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 29679,
+    "input_tokens_details": {
+      "cache_write_tokens": 1317,
+      "cached_tokens": 28359
+    },
+    "output_tokens": 310,
+    "output_tokens_details": {
+      "reasoning_tokens": 177
+    },
+    "total_tokens": 29989
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_MDMPvDGtE7d8REVTpnuGGOlE",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"python - <<'PY'\\nfrom openpyxl import load_workbook\\nw=load_workbook('/work/output/外汇资产定价验证.xlsx',read_only=True)\\nfor r in list(w['检验总表'].values):\\n if r[0]=='GROSS' or (r[0]=='EZ' and r[1]=='reg'):print(r)\\nfor r in list(w['参数与标准误'].values):\\n if r[:3]==('GROSS','asym_u','CU'):print(r)\\nPY\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 51,
+  "native_response": {
+    "id": "resp_0cd55aa46192c8db016aea2346df388196954c045b483883f7",
+    "object": "response",
+    "created_at": 1793729350,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793729357,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "jailbreak": {
+            "detected": false,
+            "filtered": false
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 58919,
+          "check_offset": 0
+        }
+      },
+      {
+        "blocked": false,
+        "source_type": "completion",
+        "content_filter_raw": [],
+        "content_filter_results": {
+          "protected_material_code": {
+            "detected": false,
+            "filtered": false
+          },
+          "protected_material_text": {
+            "detected": false,
+            "filtered": false
+          },
+          "hate": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "sexual": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "violence": {
+            "filtered": false,
+            "severity": "safe"
+          },
+          "self_harm": {
+            "filtered": false,
+            "severity": "safe"
+          }
+        },
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 959,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "igpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_0cd55aa46192c8db016aea234a899081968f23d9387994a75d",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6iNNmy3SOBeqbJOoaNzaKZF5W134zZj0HkoY39iAhsdiz93B6JfilHhEeiu4ITGbPgjAU5W-af_9WCuR6p9ZTZX2WxUjMbZ-Wf_0-XPOFQJb1Go0XQP7h4IrCrNx2mgQ2CULEvHv5-n01w1cKLvCVQzu3HJYBBCY-3AqvWV8EOi7tAFmW4OzFXdHriEmtIoT0KsJWymHsfBY-aUykYIWHKo3_j-EGM6YrvLz8c4HbZioUJCFm2SE5LqAPRSy32_eq7FVqsiYukjycecmMKzI8XjY7VPNeiM5fuO-nFJ6ubSJgMUH6-lr3xrD8jB3yr4GQiWXza6iI4HMcJ5nk76PEAVlrArx1j1CuBF4cUT0GWq7wxxtdBzIuNcBjpRikjpc_eyAsmQHEjwAoJXTc1M8pvTi_4iAu6gY6XjCdjQWGv2dfeF2euB9cAvFr3pKfZYxUIHWkz0mCMHQHssubJVemM_2gpF24OByDnn-FI1BlKeBCE8fGM9eUOVRm688rTCDgbdOsqw_lXFKqeWXfjlQ-uqNWn-L6wMENAR2uJ4ebU-noXL5UdeC6JkddX17dms3wiu1vWfyu5FMMTAG43LGWkb-V819t43QvnZp1pprYvSQSMPuu3PhsNdNiWpZ3swxeOzymmhcv7-kBsqh7_vx3ip5MULqogWRVst_P5GWeUuEYwQibrCec5F7FzEWvvB4NJ-PibWZC-oah0RnGHgkyqDpHQCmk--_HB_69y4IoC7eZiWuTeDssYLA0HJzhEltFedAaklZS0gLYpcNUGcyBoBmVkkQKpoAMnUy0eAkRqalTDDRD7tZwxJKZCB2Fqd--3m0-zIn2K1ykf_USMoKs5_A1ZxpbPwVnm7mc69cshAERZCDJUOqad6wpZ1_Btw-jnFljxSnAnWTuGjZhGSafma0iYr9F19aVsKlJ3Mv4tYlTdOIzOYy9uDVs64oG8S8tV_o6seVjmnYCjOb9CI4exwMzhkcC_Dqx63XDVK1XnqoDPVYfQ8sjKkjZVHWMF-kmK-dWM-BF3NMWJNpQze5RAagoeqmHynwI7ZkKe91vhzIhxMjikdZiAKvCb8JhcauC41HDx6Gy3A79CZhI78Sn7zV937IhtG5w4eUjTD68O8GwOhrFJ81Ofz7LFQd6A1MwWfthVG2uTaU2i7frMBY92YQJrgkmSimQvc5nKv0zSadvNdGbYhDjC9jQ6omN7X6t3Z7VTaIE0X-JeemT1voTLF0W4He_mPu3YAGmSB-uXvVDMNqmDYmNfv4ZFPeRzNm-aMfVE3N9igiLiW-XylzIACyjsjGhXzfGSIL5rrxXFOoWV5FZEY-FwoI3zE-WGvITbjPl53lZupyEDPPkf21JU3_yDiRxi19sM97SZhobJrfJ_4tYlbhbewmOo5iTH-klZ5stJGW4UaizF1x2G1LCQIvbxqWklHCXTR7nwewD8hyUMn97btqwG-DmYhB4SWwjkLZE7NcC_ya4YZcUv2rqJZ-Vt4SOYgotpwE3sGicQBhKq303Xow69USEDJ8tqCuf6E4SJ4y9bFdyQ7rDYA0ch2q_HkQmzzkX3uarkiCACu8-yn9tolo4tQiZMqc4x0AdWe8Ildquisu_2rnuNVfu0LMpabqHFljAZug_TwgMBea6XYmE7pyhik4thbvBQoX2w_Kw12XCLVTVdnqhlvg2fxErOtcP_qxQ2ByV1CNBZE_BhnZFsBP88GlDVv4AXvwQi8dKHt4Us5go7tYdDkLNahtDgLgOVMRTgVHU4vaLcEt6k0-15u7wPMlStm_N4enE9g4_Z5XexgYvgsADkWgx3WrgP8iIZaRxis5a1SdGa5Goo6z2DScApKn1tZWaFg0hMuxIBwqxTdWh7-M-daLY57IRaJxAL5e26rcdUj8cn-Bl-EdzTTKWWwqOlTWbIgVrp2UZf37NF1UXEUKkEAyPoCieIy292REfbH_CdF5sFCHMhoSIeL_YM4Yc6VMjw7cOQTq-vK1Dl6CgTL40Z6aSZvaZSalRlgzeTtd5AVxu7YlwUdS2w6FMpzJBKvSMQmtPhG6AJ7Bp6RnV7dduzEXT7ctBaQ_3xgnaU7JcRmU2dZ37u308gPppCMrf6aDNMkSvPoIoyeedKt4NAOCRYslJgizjYAHf3pCSmDtKdPaVrMln0X0QLxvdui_HXtSZUAr8gc8pLCGv2w0bU6Xf7PeVv7G-NHsJf-piDDOMTU6G8gbXbwHrv_wDApl5l8VO5RDkOPWAZ_tFQPVyJqIaYJSNydpFUya3ifZJlxKHyoW8FxzGfuM0c_ovU8ctm_5QxQvnQLfYMIMX1HisNHL_0mdDLVfK5l1quUABLrqSvulXAp87LNb92bWxzkTmviQoXAtqTkG4KDXyhwRr936TfcwdiAaQ-Gr1b-M910QBH-O65QIgyExTe4kpxmb6ux9BXYyLgFFk-9uPp6sRoiiJeH8EsnnN_9hBOgkjoI1hBdgZk4GVkmNt4WSAiYnRNHbak2kvI7qmZ5t7RZRd4Q3TmTaLUtGyTSg_BArhKczti0HWoQtYbi_RIrgacXeIHyLutUwi3s3D1zS7rOfoe39HWN86g_cR46kG7pksOjWz7A_OSa8cRD1LvGWgJ6hHOxAj7zZOdc3TVGUXNrQYAmGHW0Jca80SeJ_wC3PW2kDQmSul040uUnKmyoLTaDNvUBu0-e0DdJQFjdAdekndsEA4-buhep8a6a622IzNg3wvNy3FHxW4zEdhENjio9COKhMaCYqBze3uVKdmxmgE_Yyzf2_T_IxHOmXajWw3tOauD0JBoS9mmY4XWKkWFNmXB0XKFuw4uihfrfQYmyXWbxkmJCRQ1bg0NltCFVLGcYPECn4UJ0Y0vzcTVOQaynHgRTtR_tbq2InKZTG6jlrm6C1-1vOQZz5G3LuFWUhGReqmJozBt_7YEoAYBXmLn2hiPxgddiZY6E7EpHe66utBnaOiWTo7YJojGE_y5gJzxRHp2TeLtcMWWZsV63lT0K2hhFaXN13rkjUhpMoKlk7lzCsxk0ENeVHUheakb3jOHZo6d7u4rozm4NxfJccWGha0Ab_LeEaYcNCurRqfZk_ImqB2776_ptBkQuHdgsRnnCmCTB4cdG0IJgmYF9F_dlYVnqR3dtUEp_sqgMsEPGm58DDhoYo21_47pWZS_qJR0XymGa_PTZufYHh007i1jx0rr8-OCEmgjsVXYtnVfs-M4I2wj1g7N6tCPFhRrCpY20upTWu7BlKVfp7-a50kyUybyL57h1pafQZFJPsI4GsvtsRw1dsqeHvh4-Z8n_eyiX-Yu7flSr8AG5k2e5lgdWHtQtMXIcOwheL4zoWJuqdL5vslp4Thzay4zybmd3QplmYjV4Nlo0Kv10=",
+        "summary": []
+      },
+      {
+        "id": "fc_0cd55aa46192c8db016aea234c35c08196b376c3d4e13dcd1d",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"python - <<'PY'\\nfrom openpyxl import load_workbook\\nw=load_workbook('/work/output/外汇资产定价验证.xlsx',read_only=True)\\nfor r in list(w['检验总表'].values):\\n if r[0]=='GROSS' or (r[0]=='EZ' and r[1]=='reg'):print(r)\\nfor r in list(w['参数与标准误'].values):\\n if r[:3]==('GROSS','asym_u','CU'):print(r)\\nPY\"}",
+        "call_id": "call_MDMPvDGtE7d8REVTpnuGGOlE",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 29679,
+      "input_tokens_details": {
+        "cache_write_tokens": 1317,
+        "cached_tokens": 28359
+      },
+      "output_tokens": 310,
+      "output_tokens_details": {
+        "reasoning_tokens": 177
+      },
+      "total_tokens": 29989
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

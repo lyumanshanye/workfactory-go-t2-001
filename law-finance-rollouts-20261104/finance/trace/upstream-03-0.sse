@@ -1,0 +1,150 @@
+event: response.created
+data: {"type":"response.created","response":{"id":"resp_0566f95e1fd26b42016aea2248b25c8196b7897f0bf706a69f","object":"response","created_at":1793729096,"status":"in_progress","access_programs":null,"background":false,"completed_at":null,"content_filters":null,"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"gpt-6-sol","moderation":null,"output":[],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"auto","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":null,"user":null,"metadata":{}},"sequence_number":0}
+
+event: response.in_progress
+data: {"type":"response.in_progress","response":{"id":"resp_0566f95e1fd26b42016aea2248b25c8196b7897f0bf706a69f","object":"response","created_at":1793729096,"status":"in_progress","access_programs":null,"background":false,"completed_at":null,"content_filters":null,"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"gpt-6-sol","moderation":null,"output":[],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"auto","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":null,"user":null,"metadata":{}},"sequence_number":1}
+
+event: response.output_item.added
+data: {"type":"response.output_item.added","item":{"id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","type":"function_call","status":"in_progress","arguments":"","call_id":"call_0kZ8cDCoOtdPZT8lGduzZZk0","name":"execute"},"output_index":0,"sequence_number":2}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"{\"","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"2whFIFCvrNqXPL","output_index":0,"sequence_number":3}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"command","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"sh13Lx19n","output_index":0,"sequence_number":4}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\":\"","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"ZtWLY7hjqA6Kv","output_index":0,"sequence_number":5}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"python","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"Qca1ur9fcR","output_index":0,"sequence_number":6}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" -","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"Nv8Vg0rYuVAorP","output_index":0,"sequence_number":7}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" <<","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"MWf0FCsovGdRY","output_index":0,"sequence_number":8}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"'","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"omZZvoS865LToW2","output_index":0,"sequence_number":9}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"PY","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"0LrRXUA3qBWB4D","output_index":0,"sequence_number":10}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"'\\","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"SDLcJ9o9PoFHSl","output_index":0,"sequence_number":11}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"n","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"WqsQjxngX6J5g5F","output_index":0,"sequence_number":12}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"from","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"xRd7BhfbaGy3","output_index":0,"sequence_number":13}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" pathlib","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"A9FsxWFs","output_index":0,"sequence_number":14}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" import","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"eq2zXT0lS","output_index":0,"sequence_number":15}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" Path","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"bdqHFsBhjju","output_index":0,"sequence_number":16}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"\\n","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"VgzcUpEy8piwEr","output_index":0,"sequence_number":17}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"for","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"FKTLcKLxcIDh4","output_index":0,"sequence_number":18}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" name in","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"T7xIkh0D","output_index":0,"sequence_number":19}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" ['table","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"HMBlh7M1","output_index":0,"sequence_number":20}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"A1","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"HQWOxJDpf9CCiu","output_index":0,"sequence_number":21}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":".prg","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"fR2N39oNe6fI","output_index":0,"sequence_number":22}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"','table","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"Cmj8JB8j","output_index":0,"sequence_number":23}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"A2","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"oDYouEBJXZtw35","output_index":0,"sequence_number":24}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":".prg","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"16qpQOZ9lxxu","output_index":0,"sequence_number":25}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"']:\\n","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"ys7e9LVDjIa","output_index":0,"sequence_number":26}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" s=(Path","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"fKQ36Sp4","output_index":0,"sequence_number":27}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"('/app/input","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"gmaO","output_index":0,"sequence_number":28}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"_files')/","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"hHqlWL7","output_index":0,"sequence_number":29}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"name).read","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"VTAFcD","output_index":0,"sequence_number":30}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"_bytes().decode","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"t","output_index":0,"sequence_number":31}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"('latin1');","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"EK9qN","output_index":0,"sequence_number":32}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" print('\\\\n',","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"TTt","output_index":0,"sequence_number":33}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"name)\\n print","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"l0p","output_index":0,"sequence_number":34}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"(s[s.index('","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"HMFr","output_index":0,"sequence_number":35}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"df","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"RR5g3buVKb9wGp","output_index":0,"sequence_number":36}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"=n-')-320","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"y7naZOj","output_index":0,"sequence_number":37}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":":s.index('df=n","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"gV","output_index":0,"sequence_number":38}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"-')+270]); i","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"kxYZ","output_index":0,"sequence_number":39}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"=s.index('","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"sasOtj","output_index":0,"sequence_number":40}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"proc  sdf_hp') if","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"8PzGKFeeAGmfKWf","output_index":0,"sequence_number":41}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" name=='tableA1.prg","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"6DnpqjXt6XQz9","output_index":0,"sequence_number":42}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"'","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"ILaJI91ouuBDHVV","output_index":0,"sequence_number":43}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":" else s.index('proc  sdf","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"olh7YTnS","output_index":0,"sequence_number":44}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"_h ('); print(s[i:i","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"n7vyrHgsbef6y","output_index":0,"sequence_number":45}
+
+event: response.function_call_arguments.delta
+data: {"type":"response.function_call_arguments.delta","delta":"+3200])\\nPY\"}","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","obfuscation":"tsB","output_index":0,"sequence_number":46}
+
+event: response.function_call_arguments.done
+data: {"type":"response.function_call_arguments.done","arguments":"{\"command\":\"python - <<'PY'\\nfrom pathlib import Path\\nfor name in ['tableA1.prg','tableA2.prg']:\\n s=(Path('/app/input_files')/name).read_bytes().decode('latin1'); print('\\\\n',name)\\n print(s[s.index('df=n-')-320:s.index('df=n-')+270]); i=s.index('proc  sdf_hp') if name=='tableA1.prg' else s.index('proc  sdf_h ('); print(s[i:i+3200])\\nPY\"}","item_id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","output_index":0,"sequence_number":47}
+
+event: response.output_item.done
+data: {"type":"response.output_item.done","item":{"id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","type":"function_call","status":"completed","arguments":"{\"command\":\"python - <<'PY'\\nfrom pathlib import Path\\nfor name in ['tableA1.prg','tableA2.prg']:\\n s=(Path('/app/input_files')/name).read_bytes().decode('latin1'); print('\\\\n',name)\\n print(s[s.index('df=n-')-320:s.index('df=n-')+270]); i=s.index('proc  sdf_hp') if name=='tableA1.prg' else s.index('proc  sdf_h ('); print(s[i:i+3200])\\nPY\"}","call_id":"call_0kZ8cDCoOtdPZT8lGduzZZk0","name":"execute"},"output_index":0,"sequence_number":48}
+
+event: response.completed
+data: {"type":"response.completed","response":{"id":"resp_0566f95e1fd26b42016aea2248b25c8196b7897f0bf706a69f","object":"response","created_at":1793729096,"status":"completed","access_programs":null,"background":false,"completed_at":1793729099,"content_filters":[{"blocked":false,"source_type":"prompt","content_filter_raw":[],"content_filter_results":{},"content_filter_offsets":{"start_offset":0,"end_offset":46288,"check_offset":0}}],"error":null,"frequency_penalty":0.0,"incomplete_details":null,"instructions":null,"max_output_tokens":18000,"max_tool_calls":null,"model":"gpt-6-sol","moderation":null,"output":[{"id":"fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd","type":"function_call","status":"completed","arguments":"{\"command\":\"python - <<'PY'\\nfrom pathlib import Path\\nfor name in ['tableA1.prg','tableA2.prg']:\\n s=(Path('/app/input_files')/name).read_bytes().decode('latin1'); print('\\\\n',name)\\n print(s[s.index('df=n-')-320:s.index('df=n-')+270]); i=s.index('proc  sdf_hp') if name=='tableA1.prg' else s.index('proc  sdf_h ('); print(s[i:i+3200])\\nPY\"}","call_id":"call_0kZ8cDCoOtdPZT8lGduzZZk0","name":"execute"}],"parallel_tool_calls":true,"presence_penalty":0.0,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":"24h","reasoning":{"context":"all_turns","effort":"medium","mode":"standard","summary":null},"safety_identifier":null,"service_tier":"default","store":false,"temperature":1.0,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tool_usage":{"image_gen":{"input_tokens":0,"input_tokens_details":{"image_tokens":0,"text_tokens":0},"output_tokens":0,"output_tokens_details":{"image_tokens":0,"text_tokens":0},"total_tokens":0},"web_search":{"num_requests":0}},"tools":[{"type":"function","description":"Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.","name":"execute","output_schema":null,"parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]},"strict":false},{"type":"function","description":"Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.","name":"write_text","output_schema":null,"parameters":{"type":"object","properties":{"path":{"type":"string"},"content":{"type":"string"}},"required":["path","content"]},"strict":false}],"top_logprobs":0,"top_p":0.98,"truncation":"disabled","usage":{"input_tokens":18397,"input_tokens_details":{"cache_write_tokens":18394,"cached_tokens":0},"output_tokens":132,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":18529},"user":null,"metadata":{}},"sequence_number":49}
+

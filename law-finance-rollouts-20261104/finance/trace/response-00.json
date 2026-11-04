@@ -1,0 +1,177 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 860,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 80,
+    "output_tokens_details": {
+      "reasoning_tokens": 15
+    },
+    "total_tokens": 940
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_HJvm01YR8PV9QvsWpM8mBiX5",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"ls -lh /input /app/input_files; for f in /app/input_files/*.prg /app/input_files/README.txt; do echo ==== $f; head -95 \\\"$f\\\"; done\",\"command_timeout\":120}"
+        }
+      }
+    ]
+  },
+  "stream_events": 38,
+  "native_response": {
+    "id": "resp_0566f95e1fd26b42016aea221c8bf4819699f1b4dc1be2aa8c",
+    "object": "response",
+    "created_at": 1793729052,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793729054,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {},
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 956,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "rs_0566f95e1fd26b42016aea221d8d9c8196b1f4a5d419bd6fb4",
+        "type": "reasoning",
+        "content": [],
+        "encrypted_content": "gAAAAABq6iIemfsMZ38YXVnwJsoIURyiLWpPePPZOXz6JE74JPYzlWj7x_3Xor_m2RJjLA6B_ikNMK6jm5T_E0pfQ1iCZj34AEm-7gxjss410OGURDrBXxDXG0UELEr_NpwZTdp4rKwj_A6cP_XkOHlEusGWXrxGwgNXuiiWR2mvo_6jtDGz5x6y3-UMejHxH-8ou1_1A2vGJjMEN80GZd2xRVPRpDUQZWzSMB8MdMMPNxaHUw2aBSAnfdJtGldaVHJGW2_y3wicBW0y8gG0JAhe8ZbbKK8dkq4qIBlrwVBMTgC86cX4RkVnJUbCaVb0TqOEoXPdd0B0aZICOCyp9UcVqxCj4UWsrRMLKip6LzCzf__wJV4OMJQOPdDsN70PzginccBVfC5clFVbzf4HmGdBaI-3SanWX3sWnkH8cW1n162ScerFp7vF9qItQXJ8dA77FDqYTr8FOqdV9cW8sdtOLoRtMMwo2H7eIuLV6gbu6xz6LTwyT9rkuZZ-R2PWvPJX19JAX6yLjIfU1UdHU-8l4v4coTj7koX_IW1MF5oz2YvFUMq2fiN0uyZEz-AX1K1ETNC1GH22UQWQ5Yw4hdurhrjINcU90wq2PJdkXMNBtAluftyI9pFm3GtOTjAqHFDxCuwwF5NHAY35TpHtAQJlslri4zFU7i_ICbuNlipqNHZ0SQmsdOJ5skm4AnIa6AzXZTKsDieJjdd-Tonyc89_6Kr8n7hPdm6Gm_qtWxMheVMP-F-xW2An7dlz7CKPNGiWcKXyZ2aBVZkjjJS3OQ50jRGXSu55ZyfvZ0EsWB2fXsEth00y5SJ4QWBGV4fPcVJdGAAyvzgug46_tlqiOpbP8cdfi9_gc1IP54a88DJDfgxIuvPTnNFVHHopx6JfDq1DUs8RlNisMQ9VeGlaJ0hP9L6g6XpmFd7L0KDfNT-MrxTJt3WZSGsU8wF1zf5Sqk67qUAQbisbtVr76NwOTIzq060VZw537vjgliZkJ8Ui1oqfxRDmoyfEp-kIAaLsq6C0Xt1GGa4rMTatPZm8sdQBf3pMIYYtRw8ac_IJXMgnMPNtYvtUjOeMCopdxeo8jB8KssyZ89XsBcK6bI0CzqD7pgXjedndbbaXXnOrvHN3FDVkKZJnGnE9Dqeg7MiyfrZSNqfH28dcOZ-WJJv2ioSA7OttyVFXbA7hdhQyr-jcrw_AnaHQ9_sBLBMpLv3zuTleqM3NT9y6bcBVD4i5mmhQdrjuPv3Te0_nENRvCT_UC576phMYRkB8uWiGTbEpGWR3x_uGmfez-vf4AiTx9Kn-uLnEw_nqQrS3auutvH1x0v65wwYFn0ZLXLq-4Rp4NFqmeJ28dqAZNzFuDhQ0eOv9P3IKazQWtw12LPNos6V5iduqrKoZwOK5_TZnWcPxr9WSQJaw6ATC53WO8cEuS-gKA3Z3AM3Hlmvuok-l_-7RL_Y9ae6VDZqey6_geZtq-fXU7mcrkrN4I-zRhny-Op5aITGftTYUKSYa3hDxRvh7DY4V7b-zmcOczWJu7Zz20YAN4479501B",
+        "summary": []
+      },
+      {
+        "id": "fc_0566f95e1fd26b42016aea221dd15881968a272d5d95c0a905",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"ls -lh /input /app/input_files; for f in /app/input_files/*.prg /app/input_files/README.txt; do echo ==== $f; head -95 \\\"$f\\\"; done\",\"command_timeout\":120}",
+        "call_id": "call_HJvm01YR8PV9QvsWpM8mBiX5",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 860,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 80,
+      "output_tokens_details": {
+        "reasoning_tokens": 15
+      },
+      "total_tokens": 940
+    },
+    "user": null,
+    "metadata": {}
+  }
+}

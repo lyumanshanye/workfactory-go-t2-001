@@ -1,0 +1,170 @@
+{
+  "model": "gpt-6-sol",
+  "finish_reason": "tool_calls",
+  "usage": {
+    "input_tokens": 18397,
+    "input_tokens_details": {
+      "cache_write_tokens": 18394,
+      "cached_tokens": 0
+    },
+    "output_tokens": 132,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 18529
+  },
+  "message": {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+      {
+        "id": "call_0kZ8cDCoOtdPZT8lGduzZZk0",
+        "type": "function",
+        "function": {
+          "name": "execute",
+          "arguments": "{\"command\":\"python - <<'PY'\\nfrom pathlib import Path\\nfor name in ['tableA1.prg','tableA2.prg']:\\n s=(Path('/app/input_files')/name).read_bytes().decode('latin1'); print('\\\\n',name)\\n print(s[s.index('df=n-')-320:s.index('df=n-')+270]); i=s.index('proc  sdf_hp') if name=='tableA1.prg' else s.index('proc  sdf_h ('); print(s[i:i+3200])\\nPY\"}"
+        }
+      }
+    ]
+  },
+  "stream_events": 50,
+  "native_response": {
+    "id": "resp_0566f95e1fd26b42016aea2248b25c8196b7897f0bf706a69f",
+    "object": "response",
+    "created_at": 1793729096,
+    "status": "completed",
+    "access_programs": null,
+    "background": false,
+    "completed_at": 1793729099,
+    "content_filters": [
+      {
+        "blocked": false,
+        "source_type": "prompt",
+        "content_filter_raw": [],
+        "content_filter_results": {},
+        "content_filter_offsets": {
+          "start_offset": 0,
+          "end_offset": 46288,
+          "check_offset": 0
+        }
+      }
+    ],
+    "error": null,
+    "frequency_penalty": 0.0,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": 18000,
+    "max_tool_calls": null,
+    "model": "gpt-6-sol",
+    "moderation": null,
+    "output": [
+      {
+        "id": "fc_0566f95e1fd26b42016aea224a51a08196b37efa5470fdefcd",
+        "type": "function_call",
+        "status": "completed",
+        "arguments": "{\"command\":\"python - <<'PY'\\nfrom pathlib import Path\\nfor name in ['tableA1.prg','tableA2.prg']:\\n s=(Path('/app/input_files')/name).read_bytes().decode('latin1'); print('\\\\n',name)\\n print(s[s.index('df=n-')-320:s.index('df=n-')+270]); i=s.index('proc  sdf_hp') if name=='tableA1.prg' else s.index('proc  sdf_h ('); print(s[i:i+3200])\\nPY\"}",
+        "call_id": "call_0kZ8cDCoOtdPZT8lGduzZZk0",
+        "name": "execute"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "presence_penalty": 0.0,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "24h",
+    "reasoning": {
+      "context": "all_turns",
+      "effort": "medium",
+      "mode": "standard",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": false,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tool_usage": {
+      "image_gen": {
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "image_tokens": 0,
+          "text_tokens": 0
+        },
+        "total_tokens": 0
+      },
+      "web_search": {
+        "num_requests": 0
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "description": "Execute a shell command in an isolated Linux environment. Original files are read-only at /input and /app/input_files; persistent writable workspace is /work. Commands have a 120 second limit. Read actual files, make native Office artifacts, and inspect execution results.",
+        "name": "execute",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "command"
+          ]
+        },
+        "strict": false
+      },
+      {
+        "type": "function",
+        "description": "Write UTF-8 text/code into a relative path inside /work. Use Python Office libraries to generate actual Office files.",
+        "name": "write_text",
+        "output_schema": null,
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        },
+        "strict": false
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 0.98,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 18397,
+      "input_tokens_details": {
+        "cache_write_tokens": 18394,
+        "cached_tokens": 0
+      },
+      "output_tokens": 132,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 18529
+    },
+    "user": null,
+    "metadata": {}
+  }
+}
